@@ -44,9 +44,15 @@
 
 /* End dragging */
 
+/* Dimming with opacity fades the text and whatever sits behind it toward the
+   same backdrop, so the ratio between them collapses whatever the colours are:
+   a #065f46 badge on white measures 7.68:1 at full strength and 3.36:1 at 0.65.
+   No palette can survive that, so the unavailable state is carried by colour,
+   which holds its ratio. 500 is the lightest stop that clears 4.5:1 on both
+   white and the #f9fafb this renders on. */
 li.frm_noallow.button,
 .frm_noallow {
-	opacity: 0.5;
+	color: var(--grey-500);
 }
 
 li.frm_noallow.button.frm_show_upgrade,

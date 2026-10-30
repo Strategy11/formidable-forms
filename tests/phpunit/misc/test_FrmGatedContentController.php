@@ -2,7 +2,13 @@
 
 /**
  * @group gated-content
+ *
+ * @covers FrmGatedContentAction
+ * @covers FrmGatedContentController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'gated-content' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmGatedContentAction::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmGatedContentController::class )]
 class test_FrmGatedContentController extends FrmUnitTest {
 
 	public function tearDown(): void {
@@ -17,7 +23,7 @@ class test_FrmGatedContentController extends FrmUnitTest {
 	 * Calling trigger() must generate a token and store it in a transient so that
 	 * [frm_gated_content] shortcodes on the same or a subsequent redirect request can use it.
 	 *
-	 * @covers FrmGatedContentController::trigger
+	 * @see FrmGatedContentController::trigger
 	 */
 	public function test_trigger_generates_and_caches_token() {
 		$action_id = wp_insert_post(
@@ -53,8 +59,8 @@ class test_FrmGatedContentController extends FrmUnitTest {
 	 * dispatch frm_trigger_gated_content_action for any gated content action that
 	 * has 'payment-success' in its event list, resulting in a token being generated.
 	 *
-	 * @covers FrmGatedContentAction::__construct
-	 * @covers FrmGatedContentController::trigger
+	 * @see FrmGatedContentAction::__construct
+	 * @see FrmGatedContentController::trigger
 	 */
 	public function test_payment_success_event_generates_token() {
 		$form_id = $this->factory->form->create();
@@ -104,7 +110,7 @@ class test_FrmGatedContentController extends FrmUnitTest {
 	 * get_post() silently resolved to an unrelated post — potentially a private one —
 	 * causing force_404() to fire on a perfectly valid archive page.
 	 *
-	 * @covers FrmGatedContentController::maybe_unlock_post
+	 * @see FrmGatedContentController::maybe_unlock_post
 	 */
 	public function test_maybe_unlock_post_skips_on_taxonomy_archive() {
 		$cat_id = $this->factory->category->create();
@@ -125,7 +131,7 @@ class test_FrmGatedContentController extends FrmUnitTest {
 	 * CPTs with a custom capability_type map that abstract name to e.g. `read_private_books`.
 	 * Users who have `read_private_books` but not `read_private_posts` were incorrectly blocked.
 	 *
-	 * @covers FrmGatedContentController::maybe_unlock_post
+	 * @see FrmGatedContentController::maybe_unlock_post
 	 */
 	public function test_maybe_unlock_post_respects_cpt_read_private_cap() {
 		register_post_type(
@@ -200,7 +206,7 @@ class test_FrmGatedContentController extends FrmUnitTest {
 	 * post the current user cannot read, even when gated content had nothing to do with it.
 	 * The has_gated_action_for_item() guard must short-circuit before that path.
 	 *
-	 * @covers FrmGatedContentController::maybe_unlock_post
+	 * @see FrmGatedContentController::maybe_unlock_post
 	 */
 	public function test_maybe_unlock_post_does_not_404_non_gated_private_post() {
 		// No gated content actions exist — this post is unrelated to gated content.
@@ -233,7 +239,7 @@ class test_FrmGatedContentController extends FrmUnitTest {
 	 * Verifies that the has_gated_action_for_item() guard does not accidentally suppress the
 	 * 404 for posts that are legitimately under gated content control.
 	 *
-	 * @covers FrmGatedContentController::maybe_unlock_post
+	 * @see FrmGatedContentController::maybe_unlock_post
 	 */
 	public function test_maybe_unlock_post_force_404s_gated_private_post_without_token() {
 		$post = $this->factory->post->create_and_get( array( 'post_status' => 'private' ) );
@@ -285,7 +291,7 @@ class test_FrmGatedContentController extends FrmUnitTest {
 	 * A gated content action with only 'create' in its event list must NOT generate
 	 * a token when the payment-success event fires.
 	 *
-	 * @covers FrmGatedContentController::trigger
+	 * @see FrmGatedContentController::trigger
 	 */
 	public function test_payment_success_event_skips_non_matching_action() {
 		$form_id  = $this->factory->form->create();

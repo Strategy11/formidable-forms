@@ -1,0 +1,222 @@
+{
+	"formidable-dashboard": {
+		"label_name_visible": {
+			"reason": "The WordPress sidebar collapse button accessible name does not contain its visible label.",
+			"maxViolations": 1
+		},
+		"svg_graphics_labelled": {
+			"reason": "Existing SVG icons and illustrations on this page have no accessible names.",
+			"maxViolations": 16
+		},
+		"text_contrast_sufficient": {
+			"reason": "The sidebar upgrade badge and dashboard plugin-update count do not meet minimum text contrast.",
+			"maxViolations": 2
+		}
+	},
+	"formidable-form-list": {
+		"label_content_exists": {
+			"reason": "Form-row checkbox labels have no descriptive text. The number depends on the forms in the list.",
+			"observedViolations": 1
+		},
+		"label_name_visible": {
+			"reason": "The WordPress sidebar collapse button accessible name does not contain its visible label.",
+			"maxViolations": 1
+		},
+		"svg_graphics_labelled": {
+			"reason": "Existing SVG icons and illustrations on this page have no accessible names.",
+			"maxViolations": 4
+		},
+		"table_headers_exists": {
+			"reason": "The existing list table does not identify its headers for IBM.",
+			"maxViolations": 1
+		},
+		"table_headers_related": {
+			"reason": "Checkbox header cells or the empty-table cell do not have the required header associations.",
+			"maxViolations": 2
+		},
+		"text_contrast_sufficient": {
+			"reason": "The sidebar upgrade badge does not meet minimum text contrast.",
+			"maxViolations": 1
+		}
+	},
+	"formidable-entries": {
+		"label_name_visible": {
+			"reason": "The WordPress sidebar collapse button accessible name does not contain its visible label.",
+			"maxViolations": 1
+		},
+		"svg_graphics_labelled": {
+			"reason": "Existing SVG icons and illustrations on this page have no accessible names.",
+			"maxViolations": 1
+		},
+		"table_headers_exists": {
+			"reason": "The existing list table does not identify its headers for IBM.",
+			"maxViolations": 1
+		},
+		"table_headers_related": {
+			"reason": "Checkbox header cells or the empty-table cell do not have the required header associations.",
+			"maxViolations": 1
+		},
+		"text_contrast_sufficient": {
+			"reason": "The sidebar upgrade badge does not meet minimum text contrast.",
+			"maxViolations": 1
+		}
+	},
+	"formidable-styles": {
+		"form_label_unique": {
+			"reason": "The regular field-shape control has more than one label.",
+			"maxViolations": 1
+		},
+		"label_content_exists": {
+			"reason": "Field-shape option labels and the custom-CSS toggle label have no descriptive text.",
+			"maxViolations": 5
+		},
+		"label_name_visible": {
+			"reason": "Four style value inputs use generic aria-label text that does not contain their visible labels.",
+			"maxViolations": 4
+		},
+		"label_ref_valid": {
+			"reason": "Field-shape and custom-CSS labels refer to IDs that do not identify valid controls.",
+			"maxViolations": 6
+		},
+		"svg_graphics_labelled": {
+			"reason": "Existing SVG icons and illustrations on this page have no accessible names.",
+			"maxViolations": 5
+		},
+		"text_contrast_sufficient": {
+			"reason": "The style-class prefix and preview submit button do not meet minimum text contrast.",
+			"maxViolations": 2
+		}
+	},
+	"formidable-applications": {
+		"label_name_visible": {
+			"reason": "The WordPress sidebar collapse button accessible name does not contain its visible label.",
+			"maxViolations": 1
+		},
+		"svg_graphics_labelled": {
+			"reason": "Application-gallery SVG icons have no accessible names. Totals can vary with the available applications.",
+			"observedViolations": 37
+		},
+		"text_contrast_sufficient": {
+			"reason": "Application actions, footer links and the sidebar upgrade badge have low contrast. Totals can vary with the gallery content.",
+			"observedViolations": 6
+		}
+	},
+	"formidable-form-templates": {
+		"element_tabbable_role_valid": {
+			"reason": "Template categories and cards use tabindex with listitem roles. Totals vary with the live template catalog.",
+			"observedViolations": 452
+		},
+		"label_name_visible": {
+			"reason": "The WordPress sidebar collapse button accessible name does not contain its visible label.",
+			"maxViolations": 1
+		},
+		"svg_graphics_labelled": {
+			"reason": "Existing SVG icons and illustrations on this page have no accessible names.",
+			"maxViolations": 8
+		},
+		"text_contrast_sufficient": {
+			"reason": "The sidebar upgrade badge and template-gallery badges have low contrast. Totals vary with the live catalog.",
+			"observedViolations": 3
+		}
+	},
+	"formidable-import": {
+		"label_name_visible": {
+			"reason": "The WordPress sidebar collapse button accessible name does not contain its visible label.",
+			"maxViolations": 1
+		},
+		"svg_graphics_labelled": {
+			"reason": "Existing SVG icons and illustrations on this page have no accessible names.",
+			"maxViolations": 1
+		},
+		"table_headers_exists": {
+			"reason": "The export selection table does not identify its headers for IBM.",
+			"maxViolations": 1
+		},
+		"text_contrast_sufficient": {
+			"reason": "The sidebar upgrade badge does not meet minimum text contrast.",
+			"maxViolations": 1
+		}
+	},
+	"formidable-settings": {
+		"label_name_visible": {
+			"reason": "The WordPress sidebar collapse button accessible name does not contain its visible label.",
+			"maxViolations": 1
+		},
+		"svg_graphics_labelled": {
+			"reason": "Existing SVG icons and illustrations on this page have no accessible names.",
+			"maxViolations": 18
+		},
+		"text_contrast_sufficient": {
+			"reason": "The sidebar upgrade badge does not meet minimum text contrast.",
+			"maxViolations": 1
+		}
+	},
+	"formidable-addons": {
+		"element_tabbable_role_valid": {
+			"reason": "Add-on categories and cards use tabindex with listitem roles. Totals vary with the live add-on catalog.",
+			"observedViolations": 67
+		},
+		"label_content_exists": {
+			"reason": "The three add-on filter toggle labels have no descriptive text.",
+			"maxViolations": 3
+		},
+		"label_name_visible": {
+			"reason": "The WordPress sidebar collapse button accessible name does not contain its visible label.",
+			"maxViolations": 1
+		},
+		"svg_graphics_labelled": {
+			"reason": "Add-on gallery SVG icons have no accessible names. Totals vary with the live add-on catalog.",
+			"observedViolations": 54
+		},
+		"text_contrast_sufficient": {
+			"reason": "The sidebar upgrade badge does not meet minimum text contrast.",
+			"maxViolations": 1
+		}
+	},
+	"formidable-smtp": {
+		"aria_complementary_labelled": {
+			"reason": "The SMTP page number illustrations use aside elements without complementary landmark labels.",
+			"maxViolations": 2
+		},
+		"label_name_visible": {
+			"reason": "The WordPress sidebar collapse button accessible name does not contain its visible label.",
+			"maxViolations": 1
+		},
+		"svg_graphics_labelled": {
+			"reason": "Existing SVG icons and illustrations on this page have no accessible names.",
+			"maxViolations": 5
+		},
+		"text_contrast_sufficient": {
+			"reason": "SMTP promotional text, controls and the sidebar upgrade badge do not meet minimum text contrast.",
+			"maxViolations": 10
+		}
+	},
+	"formidable-trash": {
+		"label_name_visible": {
+			"reason": "The WordPress sidebar collapse button accessible name does not contain its visible label.",
+			"maxViolations": 1
+		},
+		"svg_graphics_labelled": {
+			"reason": "Existing SVG icons and illustrations on this page have no accessible names.",
+			"maxViolations": 1
+		},
+		"table_headers_exists": {
+			"reason": "The existing list table does not identify its headers for IBM.",
+			"maxViolations": 1
+		},
+		"table_headers_related": {
+			"reason": "Checkbox header cells or the empty-table cell do not have the required header associations.",
+			"maxViolations": 1
+		},
+		"text_contrast_sufficient": {
+			"reason": "The sidebar upgrade badge does not meet minimum text contrast.",
+			"maxViolations": 1
+		}
+	},
+	"form-preview": {
+		"text_contrast_sufficient": {
+			"reason": "The Contact Us preview submit button does not meet minimum text contrast.",
+			"maxViolations": 1
+		}
+	}
+}

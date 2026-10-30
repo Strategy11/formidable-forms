@@ -17,7 +17,12 @@ class FrmStrpLiteHooksController {
 		// Actions.
 		add_action( 'frm_entry_form', 'FrmStrpLiteAuth::add_hidden_token_field' );
 		add_action( 'frm_enqueue_form_scripts', 'FrmStrpLiteActionsController::maybe_load_scripts' );
-		add_action( 'init', 'FrmStrpLiteConnectHelper::check_for_stripe_connect_webhooks' );
+
+		// Only hook this up on requests it can act on. Registering it unconditionally made
+		// WordPress autoload FrmStrpLiteConnectHelper on every front end page view.
+		if ( self::request_may_be_for_stripe_connect() ) {
+			add_action( 'init', 'FrmStrpLiteConnectHelper::check_for_stripe_connect_webhooks' );
+		}
 
 		// Filters.
 		add_filter( 'frm_saved_errors', 'FrmStrpLiteAppController::maybe_add_payment_error', 10, 2 );
@@ -53,6 +58,24 @@ class FrmStrpLiteHooksController {
 	}
 
 	/**
+	 * Could this request be a Stripe Connect return trip or one of the Connect AJAX actions?
+	 *
+	 * Used to keep FrmStrpLiteConnectHelper out of ordinary page views. The helper still runs
+	 * its own narrower checks, this only decides whether it is worth loading at all.
+	 *
+	 * @since 7.0
+	 *
+	 * @return bool
+	 */
+	private static function request_may_be_for_stripe_connect() {
+		// These two query arguments are also checked in FrmStrpLiteConnectHelper, by
+		// user_landed_on_the_return_url and user_landed_on_the_oauth_return_url.
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		return wp_doing_ajax() || isset( $_GET['frm_stripe_connect_return'] ) || isset( $_GET['frm_stripe_connect_return_oauth'] );
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+	}
+
+	/**
 	 * @return void
 	 */
 	public static function load_admin_hooks() {
@@ -82,6 +105,8 @@ class FrmStrpLiteHooksController {
 	 */
 	private static function load_ajax_hooks() {
 		$frm_strp_events_controller = new FrmStrpLiteEventsController();
+		add_action( 'wp_ajax_nopriv_frm_failed_payment', 'FrmStrpLiteAuth::check_payment_status' );
+		add_action( 'wp_ajax_frm_failed_payment', 'FrmStrpLiteAuth::check_payment_status' );
 		add_action( 'wp_ajax_nopriv_frm_strp_process_events', array( &$frm_strp_events_controller, 'process_connect_events' ) );
 		add_action( 'wp_ajax_frm_strp_process_events', array( &$frm_strp_events_controller, 'process_connect_events' ) );
 		add_action( 'wp_ajax_nopriv_frm_strp_amount', 'FrmStrpLiteAuth::update_intent_ajax' );

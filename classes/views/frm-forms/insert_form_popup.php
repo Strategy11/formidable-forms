@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<div class="media-frame-toolbar">
 							<div class="media-toolbar">
 								<div class="media-toolbar-secondary">
-									<input type="text" value="" id="frm_complete_shortcode"/>
+									<input type="text" value="" id="frm_complete_shortcode" aria-label="<?php esc_attr_e( 'Generated shortcode', 'formidable' ); ?>"/>
 								</div>
 								<div class="media-toolbar-primary search-form">
 									<a href="javascript:void(0);" class="button-primary button media-button-group" id="frm_insert_shortcode">

@@ -46,12 +46,13 @@ if ( FrmOnSubmitAction::$slug === $form_action->post_excerpt ) {
 				$action_control->get_field_id( 'post_status', '' ),
 				$action_control->get_field_name( 'post_status', '' ),
 				array(
-					'checked'     => $form_action->post_status === 'publish',
-					'on_label'    => 'publish',
-					'off_label'   => 'OFF',
-					'show_labels' => false,
-					'echo'        => true,
-					'div_class'   => 'frm-ml-xs',
+					'checked'         => $form_action->post_status === 'publish',
+					'on_label'        => 'publish',
+					'off_label'       => 'OFF',
+					'show_labels'     => false,
+					'echo'            => true,
+					'div_class'       => 'frm-ml-xs',
+					'aria-label-attr' => $form_action->post_title,
 				)
 			);
 			?>

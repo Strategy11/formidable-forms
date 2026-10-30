@@ -57,7 +57,7 @@ if ( $discount_link ) {
 						<?php FrmAddonsHelper::show_five_star_rating( '#FFD966' ); ?>
 					</div>
 					<div class="frm-testimonial__guarantee-icon">
-						<?php FrmAddonsHelper::guarantee_icon(); ?>
+						<?php FrmAddonsHelper::guarantee_icon( __( '100% No-Risk, Money Back Guarantee', 'formidable' ) ); ?>
 					</div>
 				</div>
 			</div>

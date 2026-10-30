@@ -165,7 +165,7 @@ class FrmFormMigratorsHelper {
 			}
 		} else {
 			?>
-			<a rel="<?php echo esc_attr( $install['package'] ); ?>" class="frm-install-addon button <?php echo esc_attr( $primary ); ?>" aria-label="<?php esc_attr_e( 'Install', 'formidable' ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
+			<a rel="<?php echo esc_attr( $install['package'] ); ?>" class="frm-install-addon button <?php echo esc_attr( $primary ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 			<?php
 			if ( $label === 'auto' ) {
 				/* translators: %s: Name of the plugin */

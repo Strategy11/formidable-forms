@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="frm-inbox-wrapper">
 	<div class="frm-tabs-navs">
-		<ul class="frm-flex-box">
+		<ul class="frm-flex-box" aria-label="<?php esc_attr_e( 'Inbox messages', 'formidable' ); ?>">
 			<li class="frm-active">
 				<?php
 				esc_html_e( 'Inbox', 'formidable' );

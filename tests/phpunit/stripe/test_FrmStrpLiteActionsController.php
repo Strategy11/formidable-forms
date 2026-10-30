@@ -2,12 +2,13 @@
 
 /**
  * @group stripe
+ *
+ * @covers FrmStrpLiteActionsController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'stripe' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmStrpLiteActionsController::class )]
 class test_FrmStrpLiteActionsController extends FrmUnitTest {
 
-	/**
-	 * @covers FrmStrpLiteActionsController::replace_email_shortcode
-	 */
 	public function test_replace_email_shortcode() {
 		$this->set_current_user_to_1();
 		$email_string = '[email]';
@@ -29,7 +30,7 @@ class test_FrmStrpLiteActionsController extends FrmUnitTest {
 	/**
 	 * A submission with no setup intent of its own must not look one up.
 	 *
-	 * @covers FrmStrpLiteActionsController::get_customer_id_from_posted_setup_intents
+	 * @see FrmStrpLiteActionsController::get_customer_id_from_posted_setup_intents
 	 */
 	public function test_get_customer_id_from_posted_setup_intents() {
 		$this->assertFalse( FrmStrpLiteActionsController::get_customer_id_from_posted_setup_intents( 9 ) );
@@ -47,7 +48,7 @@ class test_FrmStrpLiteActionsController extends FrmUnitTest {
 	/**
 	 * Two actions that differ only by trial length must not share a plan id.
 	 *
-	 * @covers FrmStrpLiteActionsController::create_plan_id
+	 * @see FrmStrpLiteActionsController::create_plan_id
 	 */
 	public function test_create_plan_id_includes_the_trial() {
 		$settings = array(
@@ -78,7 +79,7 @@ class test_FrmStrpLiteActionsController extends FrmUnitTest {
 	/**
 	 * A setting array without a trial value should still produce an id.
 	 *
-	 * @covers FrmStrpLiteActionsController::create_plan_id
+	 * @see FrmStrpLiteActionsController::create_plan_id
 	 */
 	public function test_create_plan_id_without_a_trial_setting() {
 		$settings = array(

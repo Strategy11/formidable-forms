@@ -79,7 +79,7 @@ input:focus + .frm_toggle .frm_toggle_slider {
 
 input:checked + .frm_toggle .frm_toggle_slider::before {
 	transform: translateX(16px);
-	content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none'%3E%3Cpath stroke='%234199FD' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m4.52 7.437 1.313 1.459L9.48 5.104'/%3E%3C/svg%3E");
+	content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none'%3E%3Cpath stroke='%23026EE8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m4.52 7.437 1.313 1.459L9.48 5.104'/%3E%3C/svg%3E");
 }
 
 input[disabled] + .frm_toggle_slider,

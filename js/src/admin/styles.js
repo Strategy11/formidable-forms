@@ -1,5 +1,18 @@
-import { __ } from '@wordpress/i18n';
 import frmStyleDependentUpdaterComponent from './components/dependent-updater-component';
+
+/**
+ * Reduces a typed value to the characters WordPress keeps in a post slug.
+ * Strips accents first so it agrees with PHP's sanitize_title(), which
+ * transliterates them (é to e) instead of dropping the letter outright.
+ *
+ * @param {string} name The typed class name.
+ * @return {string} The sanitized class name.
+ */
+const sanitizeStyleClassName = name => name
+	.normalize( 'NFD' )
+	.replace( /[̀-ͯ]/g, '' )
+	.toLowerCase()
+	.replace( /[^a-z0-9_-]+/g, '-' );
 
 /**
  * Represents the frmStyleOptions class.
@@ -7,15 +20,17 @@ import frmStyleDependentUpdaterComponent from './components/dependent-updater-co
  * @class
  */
 class frmStyleOptions {
+	cssEditorInstance = null;
+
+	cssInlineStyleElement = null;
+
+	cssEditorOptions = {
+		retryLimit: 5, // Stop after 5 retries.
+		retryInterval: 500, // Retry every 500ms.
+		retryCount: 0, // Count the number of retries.
+	};
+
 	constructor() {
-		this.success = frmDom.success;
-		this.cssEditorInstance = null;
-		this.cssInlineStyleElement = null;
-		this.cssEditorOptions = {
-			retryLimit: 5, // Stop after 5 retries.
-			retryInterval: 500, // Retry every 500ms.
-			retryCount: 0, // Count the number of retries.
-		};
 		this.init();
 		this.initHover();
 		this.initCustomCSSEditorInstance();
@@ -25,9 +40,114 @@ class frmStyleOptions {
 	 * Init the dependent
 	 */
 	init() {
+		this.initControlLabels();
+		this.initCopyStatus();
 		this.initColorPickerDependentUpdaterComponents();
-		this.initStyleClassCopyToClipboard( __( 'The class name has been copied.', 'formidable' ) );
+		this.initStyleClassRename();
 		this.toggleVisibilityOfCustomCSSEditor();
+	}
+
+	/**
+	 * Includes the visible setting heading in the names of its value and unit controls.
+	 *
+	 * @since 7.0
+	 * @return {void}
+	 */
+	initControlLabels() {
+		document.querySelectorAll( '.frm-style-item-heading' ).forEach( heading => {
+			const targetId = heading.dataset.sliderLabelFor || heading.htmlFor;
+			const target = document.getElementById( targetId );
+			const component = target?.closest( '.frm-style-component' );
+			if ( ! component ) {
+				return;
+			}
+
+			const name = heading.textContent.trim();
+			const radioGroup = component.querySelector( '.frm-radio-container' );
+			if ( radioGroup ) {
+				radioGroup.setAttribute( 'role', 'group' );
+				radioGroup.setAttribute( 'aria-label', name );
+				return;
+			}
+
+			component.querySelectorAll( 'input[aria-label], select[aria-label]' ).forEach( control => {
+				const label = control.getAttribute( 'aria-label' );
+				control.setAttribute( 'aria-label', control.id === targetId ? name : `${ name } ${ label }` );
+			} );
+		} );
+	}
+
+	/**
+	 * Creates the live region that announces a copy.
+	 * The tooltip is drawn with a pseudo element, which screen readers don't read, and the region
+	 * has to be in the document before its text changes for the change to be announced.
+	 *
+	 * @return {void}
+	 */
+	initCopyStatus() {
+		this.copyStatus = document.createElement( 'span' );
+		this.copyStatus.className = 'screen-reader-text';
+		this.copyStatus.setAttribute( 'role', 'status' );
+		document.body.append( this.copyStatus );
+	}
+
+	/**
+	 * Initializes renaming of the style class.
+	 * The class is editable in both the quick settings and the advanced settings. Only the quick
+	 * settings input is submitted, so every input mirrors whichever one is being typed in.
+	 * The warning only appears once the name actually changes.
+	 *
+	 * @return {void}
+	 */
+	initStyleClassRename() {
+		const components = document.querySelectorAll( '.frm-style-class-component' );
+		const inputs = [ ...document.querySelectorAll( '.frm-style-class-input' ) ];
+
+		if ( ! inputs.length ) {
+			return;
+		}
+
+		const originalName = inputs[ 0 ].value;
+		const descriptions = document.querySelectorAll( '.frm-style-class-description' );
+
+		const setName = name => {
+			inputs.forEach( input => {
+				if ( input.value !== name ) {
+					input.value = name;
+				}
+			} );
+			descriptions.forEach( description => description.classList.toggle( 'frm_hidden', name === originalName ) );
+		};
+
+		inputs.forEach( input => {
+			input.addEventListener( 'input', () => {
+				// An empty sanitized value saves as the unchanged original slug (get_post_name_to_save()),
+				// so keep the field showing that instead of a blank value nothing will actually save as.
+				setName( sanitizeStyleClassName( input.value ) || originalName );
+			} );
+
+			input.addEventListener( 'keydown', event => {
+				if ( 'Escape' === event.key ) {
+					setName( originalName );
+					return;
+				}
+
+				if ( 'Enter' === event.key ) {
+					// Don't submit the whole style form from this input.
+					event.preventDefault();
+				}
+			} );
+		} );
+
+		components.forEach( component => {
+			const copyButton = component.querySelector( '.frm-style-class-copy' );
+			const input = component.querySelector( '.frm-style-class-input' );
+			const confirmCopy = this.initCopyTooltip( copyButton );
+
+			copyButton?.addEventListener( 'click', () => {
+				this.copyToClipboard( `.frm_style_${ input.value }`, copyButton, confirmCopy );
+			} );
+		} );
 	}
 
 	/**
@@ -80,6 +200,7 @@ class frmStyleOptions {
 		const sanitizedCssScope = CSS.escape( cssScope );
 
 		this.cssEditorInstance.on( 'change', editor => {
+			// eslint-disable-next-line sonarjs/super-linear-regex -- regex kept as-is, not refactored
 			const value = editor.getValue().replace( /<[^>]*>/g, '' ).trim();
 			this.getInlineStyleElement().textContent = `.${ sanitizedCssScope } { ${ value } }`;
 		} );
@@ -157,31 +278,83 @@ class frmStyleOptions {
 	}
 
 	/**
-	 * Initializes the copy to clipboard functionality for style classes.
-	 * Adds a click event listener to the copyLabel element.
-	 * Copies the class name to the clipboard and displays a success message.
+	 * Sets up the tooltip on a copy control, and returns a function that confirms a copy in it.
 	 *
-	 * @param {string} successMessage The success message to display.
-	 * @return {void} Initializes the copy to clipboard functionality for style classes.
+	 * These are the same Bootstrap tooltips the rest of the admin uses. They render against the
+	 * body, so the sidebar can neither clip them nor paint over them, which a tooltip built out
+	 * of a pseudo element on the control cannot avoid.
+	 *
+	 * @param {HTMLElement} element The copy control.
+	 * @return {Function} Call it to confirm a copy on that control.
 	 */
-	initStyleClassCopyToClipboard( successMessage ) {
-		const labels = document.querySelectorAll( '.frm-copy-text' );
-		labels.forEach( label => {
-			label.addEventListener( 'click', event => {
-				const className = event.currentTarget.innerText;
+	initCopyTooltip( element ) {
+		const copiedTitle = element?.dataset.frmCopiedTip || '';
+		const announce = text => {
+			this.copyStatus.textContent = text;
+		};
 
-				if ( ! navigator.clipboard || ! navigator.clipboard.writeText ) {
-					if ( true === this.fallbackCopyToClipboard( className, event.currentTarget ) ) {
-						this.success( successMessage );
-					}
-					return;
+		if ( ! element || 'undefined' === typeof bootstrap ) {
+			return () => announce( copiedTitle );
+		}
+
+		// Read this before Bootstrap moves it to data-bs-original-title.
+		const defaultTitle = element.getAttribute( 'title' );
+		const options = { container: 'body', placement: 'top', trigger: 'hover focus' };
+		let tooltip = new bootstrap.Tooltip( element, options );
+		let showingCopied = false;
+
+		// Bootstrap 5.0 reads the title when the tooltip is built and has no setContent, so the
+		// wording is changed by replacing the instance rather than by updating it in place.
+		const retitle = title => {
+			tooltip.dispose();
+			element.setAttribute( 'title', title );
+			tooltip = new bootstrap.Tooltip( element, options );
+		};
+
+		const reset = () => {
+			if ( ! showingCopied ) {
+				return;
+			}
+			showingCopied = false;
+			retitle( defaultTitle );
+			announce( '' );
+		};
+
+		element.addEventListener( 'mouseleave', reset );
+		element.addEventListener( 'blur', reset );
+
+		return () => {
+			showingCopied = true;
+			retitle( copiedTitle );
+			tooltip.show();
+			announce( copiedTitle );
+		};
+	}
+
+	/**
+	 * Copies text to the clipboard, falling back when the Clipboard API is missing.
+	 *
+	 * @param {string}      text      The text to copy.
+	 * @param {HTMLElement} element   Used to position the fallback input element.
+	 * @param {Function}    onSuccess Called once the text is on the clipboard.
+	 * @return {void}
+	 */
+	copyToClipboard( text, element, onSuccess ) {
+		if ( ! navigator.clipboard || ! navigator.clipboard.writeText ) {
+			if ( true === this.fallbackCopyToClipboard( text, element ) ) {
+				onSuccess();
+			}
+			return;
+		}
+
+		navigator.clipboard.writeText( text ).then(
+			onSuccess,
+			() => {
+				if ( true === this.fallbackCopyToClipboard( text, element ) ) {
+					onSuccess();
 				}
-
-				navigator.clipboard.writeText( className ).then( () => {
-					this.success( successMessage );
-				} );
-			} );
-		} );
+			}
+		);
 	}
 
 	/**

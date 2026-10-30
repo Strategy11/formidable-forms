@@ -798,7 +798,7 @@ class FrmFormTemplatesController {
 	 */
 	public static function get_published_forms() {
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
-		return FrmForm::get_published_forms( $where );
+		return FrmForm::get_published_form_names( $where, array( 'include_description' => true ) );
 	}
 
 	/**

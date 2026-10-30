@@ -6,7 +6,13 @@
  * behavior the submodule now depends on Lite for.
  *
  * @group stripe
+ *
+ * @covers FrmPayPalLiteAppController
+ * @covers FrmTransLiteListHelper
  */
+#[\PHPUnit\Framework\Attributes\Group( 'stripe' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmPayPalLiteAppController::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmTransLiteListHelper::class )]
 class test_FrmTransLiteListHelper extends FrmUnitTest {
 
 	/**
@@ -67,7 +73,7 @@ class test_FrmTransLiteListHelper extends FrmUnitTest {
 	 * The Processor column is worth sorting by once more than one gateway is in use, and
 	 * the payments submodule made it sortable while Lite did not.
 	 *
-	 * @covers FrmTransLiteListHelper::get_sortable_columns
+	 * @see FrmTransLiteListHelper::get_sortable_columns
 	 */
 	public function test_get_sortable_columns_includes_paysys() {
 		$sortable = $this->make_helper()->get_sortable_columns();
@@ -76,9 +82,6 @@ class test_FrmTransLiteListHelper extends FrmUnitTest {
 		$this->assertSame( 'paysys', $sortable['paysys'], 'Sorting by Processor should order by the paysys column.' );
 	}
 
-	/**
-	 * @covers FrmTransLiteListHelper::get_sortable_columns
-	 */
 	public function test_get_sortable_columns_keeps_the_columns_it_already_offered() {
 		$sortable = $this->make_helper()->get_sortable_columns();
 
@@ -103,7 +106,7 @@ class test_FrmTransLiteListHelper extends FrmUnitTest {
 	 * Sorting drops the requested orderby straight into an ORDER BY clause, so a sortable
 	 * column that is not really in the schema is a SQL error rather than a cosmetic problem.
 	 *
-	 * @covers FrmTransLiteListHelper::get_sortable_columns
+	 * @see FrmTransLiteListHelper::get_sortable_columns
 	 */
 	public function test_every_sortable_column_exists_in_the_payment_schema() {
 		$columns = array_merge(
@@ -121,7 +124,7 @@ class test_FrmTransLiteListHelper extends FrmUnitTest {
 	 * This lookup is why the submodule no longer needs its own "paypal" special case: a
 	 * registered gateway supplies the label for any processor, not just PayPal.
 	 *
-	 * @covers FrmTransLiteListHelper::get_paysys_column
+	 * @see FrmTransLiteListHelper::get_paysys_column
 	 */
 	public function test_get_paysys_column_prefers_the_registered_gateway_label() {
 		$helper = $this->make_helper();
@@ -136,9 +139,6 @@ class test_FrmTransLiteListHelper extends FrmUnitTest {
 		$this->assertSame( 'Stripe', $this->get_paysys_column( $helper, $this->payment_row( 'stripe' ), $atts ), 'A stripe payment should be labelled Stripe.' );
 	}
 
-	/**
-	 * @covers FrmTransLiteListHelper::get_paysys_column
-	 */
 	public function test_get_paysys_column_falls_back_to_the_stored_value_for_an_unregistered_gateway() {
 		$atts = array( 'gateways' => array( 'stripe' => array( 'label' => 'Stripe' ) ) );
 
@@ -149,9 +149,6 @@ class test_FrmTransLiteListHelper extends FrmUnitTest {
 		);
 	}
 
-	/**
-	 * @covers FrmTransLiteListHelper::get_paysys_column
-	 */
 	public function test_get_paysys_column_falls_back_when_no_gateways_are_registered() {
 		$this->assertSame(
 			'manual',
@@ -166,7 +163,7 @@ class test_FrmTransLiteListHelper extends FrmUnitTest {
 	 * still registered with this label, so dropping it would silently turn every historic
 	 * PayPal row into "paypal".
 	 *
-	 * @covers FrmPayPalLiteAppController::add_gateway
+	 * @see FrmPayPalLiteAppController::add_gateway
 	 */
 	public function test_the_paypal_gateway_supplies_the_paypal_label() {
 		$gateways = FrmPayPalLiteAppController::add_gateway( array() );
@@ -179,7 +176,7 @@ class test_FrmTransLiteListHelper extends FrmUnitTest {
 	 * The paysys column reads the gateways out of the row arguments, and display_rows() is
 	 * the only thing that puts them there.
 	 *
-	 * @covers FrmTransLiteListHelper::display_rows
+	 * @see FrmTransLiteListHelper::display_rows
 	 */
 	public function test_the_registered_gateways_reach_the_paysys_column() {
 		if ( false === has_filter( 'frm_payment_gateways', 'FrmPayPalLiteAppController::add_gateway' ) ) {
@@ -197,9 +194,6 @@ class test_FrmTransLiteListHelper extends FrmUnitTest {
 		);
 	}
 
-	/**
-	 * @covers FrmTransLiteListHelper::get_table_query
-	 */
 	public function test_get_table_query() {
 		global $wpdb;
 
@@ -218,9 +212,6 @@ class test_FrmTransLiteListHelper extends FrmUnitTest {
 		$this->assertStringContainsString( 'i.form_id = ' . $form_id, $query );
 	}
 
-	/**
-	 * @covers FrmTransLiteListHelper::get_form_ids
-	 */
 	public function test_get_form_ids() {
 		$form               = $this->factory->form->create_and_get();
 		$entry              = $this->factory->entry->create_and_get( $this->factory->field->generate_entry_array( $form ) );

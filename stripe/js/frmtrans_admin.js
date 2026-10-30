@@ -4,6 +4,12 @@
 		const show = val === 'recurring';
 		slideOpts( this, show, '.frm_trans_sub_opts' );
 		toggleOpts( this, ! show, '.frm_gateway_no_recur' );
+
+		// Hiding the selected gateway would leave the tablist without a Tab stop.
+		const tablist = this.closest( '.frm_form_action_settings' ).querySelector( '.frm-long-icon-buttons[role="tablist"]' );
+		if ( tablist ) {
+			frmAdminBuild.syncTablistState( tablist );
+		}
 	}
 
 	function slideOpts( opt, show, c ) {
@@ -51,9 +57,7 @@
 			}
 		);
 
-		settings.get( 0 ).querySelectorAll( '[role="tab"]' ).forEach(
-			tab => tab.setAttribute( 'aria-selected', tab.htmlFor === this.id ? 'true' : 'false' )
-		);
+		frmAdminBuild.syncTablistState( this.closest( '[role="tablist"]' ) );
 
 		wp.hooks.doAction( 'frm_trans_toggled_gateway', { gateway, checked, settings } );
 
@@ -62,11 +66,25 @@
 		} );
 	}
 
+	function initGatewayTablists( container ) {
+		container.querySelectorAll( '.frm-long-icon-buttons[role="tablist"]' ).forEach(
+			tablist => {
+				if ( ! tablist.dataset.frmKeyboard ) {
+					tablist.dataset.frmKeyboard = '1';
+					frmAdminBuild.initTablistKeyboard( tablist );
+				}
+			}
+		);
+	}
+
 	function frmTransLiteAdminJS() {
 		return {
 			init() {
 				const actions = document.getElementById( 'frm_notification_settings' );
 				if ( actions ) {
+					initGatewayTablists( actions );
+					wp.hooks.addAction( 'frm_filled_form_action', 'frmtrans', inside => initGatewayTablists( inside[ 0 ] ) );
+					wp.hooks.addAction( 'frm_added_form_action', 'frmtrans', newAction => initGatewayTablists( newAction ) );
 					jQuery( actions ).on( 'change', '.frm_trans_type', toggleSub );
 
 					document.addEventListener(
@@ -129,8 +147,7 @@
 		// Prevent handleConfirmedClick from triggering when the current modal is closed so that it won't be run by other elements.
 		const unbindHandleConfirmedClick = e => {
 			if ( e.target.matches( '.ui-widget-overlay, .dismiss' ) ) {
-				// eslint-disable-next-line no-jquery/no-bind
-				jQuery( '#frm-confirmed-click' ).unbind( 'click', handleConfirmedClick );
+				jQuery( '#frm-confirmed-click' ).off( 'click', handleConfirmedClick );
 				document.removeEventListener( 'click', unbindHandleConfirmedClick );
 			}
 		};

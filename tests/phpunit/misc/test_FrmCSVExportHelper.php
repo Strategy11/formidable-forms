@@ -1,14 +1,17 @@
 <?php
 /**
  * @group csv
+ *
+ * @covers FrmCSVExportHelper
+ * @covers FrmCsvExportHelper
  */
+#[\PHPUnit\Framework\Attributes\Group( 'csv' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmCSVExportHelper::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmCsvExportHelper::class )]
 class test_FrmCSVExportHelper extends FrmUnitTest {
 
 	private $form;
 
-	/**
-	 * @covers FrmCsvExportHelper::csv_headings
-	 */
 	public function test_csv_headings() {
 		$this->set_form( FrmForm::getOne( 'all_field_types' ) );
 
@@ -70,9 +73,6 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmCsvExportHelper::csv_headings exports the fields in a section for an embedded form
-	 */
 	public function test_csv_headings_for_embedded_sections() {
 		$embedded_form    = $this->factory->form->create_and_get();
 		$section          = $this->factory->field->create_and_get(
@@ -137,9 +137,6 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 		return $headings;
 	}
 
-	/**
-	 * @covers FrmCSVExportHelper::generate_csv
-	 */
 	public function test_generate_csv() {
 		$form_id                 = $this->factory->form->create();
 		$text_field_id           = $this->factory->field->create(

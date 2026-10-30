@@ -6,6 +6,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmField {
 
 	/**
+	 * Version of the persistent field write hooks available to derived indexes.
+	 *
+	 * @since x.x
+	 */
+	const WRITE_HOOKS_VERSION = 1;
+
+	/**
 	 * @var bool
 	 */
 	public static $use_cache = true;
@@ -511,13 +518,22 @@ class FrmField {
 			return false;
 		}
 
+		$new_id = $wpdb->insert_id;
+
 		self::delete_form_transient( $new_values['form_id'] );
+
+		/**
+		 * Fires after a field is saved to the database.
+		 *
+		 * @since x.x
+		 *
+		 * @param int $new_id Created field ID.
+		 */
+		do_action( 'frm_field_created', $new_id );
 
 		if ( ! $return ) {
 			return false;
 		}
-
-		$new_id = $wpdb->insert_id;
 
 		if ( isset( $values['id'] ) ) {
 			$frm_duplicate_ids[ $values['id'] ] = $new_id;
@@ -810,6 +826,17 @@ class FrmField {
 			}
 		}
 
+		if ( false !== $query_results ) {
+			/**
+			 * Fires after a field update succeeds, including updates with unchanged values.
+			 *
+			 * @since x.x
+			 *
+			 * @param int $id Updated field ID.
+			 */
+			do_action( 'frm_field_updated', $id );
+		}
+
 		return $query_results;
 	}
 
@@ -849,7 +876,20 @@ class FrmField {
 
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_item_metas WHERE field_id=%d', $id ) );
 
-		return $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_fields WHERE id=%d', $id ) );
+		$result = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_fields WHERE id=%d', $id ) );
+
+		if ( $result ) {
+			/**
+			 * Fires after a field is deleted from the database.
+			 *
+			 * @since x.x
+			 *
+			 * @param int $id Deleted field ID.
+			 */
+			do_action( 'frm_field_destroyed', $id );
+		}
+
+		return $result;
 	}
 
 	/**
@@ -864,8 +904,9 @@ class FrmField {
 		delete_transient( 'frm_form_fields_' . $form_id . 'includeexclude' );
 		delete_transient( 'frm_form_fields_' . $form_id . 'excludeexclude' );
 
-		global $wpdb;
-		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->options . ' WHERE option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_' . $form_id . 'ex%', '_transient_frm_form_fields_' . $form_id . 'ex%', '_transient_timeout_frm_form_fields_' . $form_id . 'in%', '_transient_frm_form_fields_' . $form_id . 'in%' ) ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		if ( ! wp_using_ext_object_cache() ) {
+			self::delete_chunked_form_transients( $form_id );
+		}
 
 		FrmDb::cache_delete_group( 'frm_field' );
 
@@ -874,6 +915,35 @@ class FrmField {
 		if ( $form && $form->parent_form_id && (int) $form->parent_form_id !== $form_id ) {
 			self::delete_form_transient( $form->parent_form_id );
 		}
+	}
+
+	/**
+	 * Delete the extra chunks saved by set_field_transient() for large forms.
+	 *
+	 * The LIKE prefixes are escaped so the underscores are matched literally.
+	 * Unescaped, the leading underscore is a wildcard and MySQL scans the whole options table.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $form_id Form ID.
+	 *
+	 * @return void
+	 */
+	private static function delete_chunked_form_transients( $form_id ) {
+		global $wpdb;
+
+		$base_name = 'frm_form_fields_' . $form_id;
+
+		$wpdb->query(
+			$wpdb->prepare(
+				'DELETE FROM %i WHERE option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s',
+				$wpdb->options,
+				$wpdb->esc_like( '_transient_timeout_' . $base_name . 'ex' ) . '%',
+				$wpdb->esc_like( '_transient_' . $base_name . 'ex' ) . '%',
+				$wpdb->esc_like( '_transient_timeout_' . $base_name . 'in' ) . '%',
+				$wpdb->esc_like( '_transient_' . $base_name . 'in' ) . '%'
+			)
+		);
 	}
 
 	/**
@@ -1376,7 +1446,14 @@ class FrmField {
 	 * @return string[]
 	 */
 	public static function no_save_fields() {
-		return array( 'divider', 'end_divider', 'captcha', 'break', 'html', 'form', 'summary', FrmSubmitHelper::FIELD_TYPE );
+		/**
+		 * Filters the field types that do not store entry metadata.
+		 *
+		 * @since x.x
+		 *
+		 * @param string[] $field_types Display-only field types.
+		 */
+		return apply_filters( 'frm_no_save_fields', array( 'divider', 'end_divider', 'captcha', 'break', 'html', 'form', 'summary', FrmSubmitHelper::FIELD_TYPE ) );
 	}
 
 	/**

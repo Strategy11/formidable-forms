@@ -400,7 +400,7 @@ class FrmAppController {
 				$upgrade_link = FrmAppHelper::admin_upgrade_link( $utm );
 			}
 
-			$settings[] = '<a href="' . esc_url( $upgrade_link ) . '" target="_blank" rel="noopener"><b style="color:#1da867;font-weight:700;">' . esc_html( $label ) . '</b></a>';
+			$settings[] = '<a href="' . esc_url( $upgrade_link ) . '" target="_blank" rel="noopener"><b style="color:#065f46;font-weight:700;">' . esc_html( $label ) . '</b></a>';
 		}//end if
 
 		$settings[] = '<a href="' . esc_url( admin_url( 'admin.php?page=formidable' ) ) . '">' . esc_html__( 'Build a Form', 'formidable' ) . '</a>';
@@ -727,7 +727,8 @@ class FrmAppController {
 		$settings_js_vars = array(
 			'currencies' => FrmCurrencyHelper::get_currencies(),
 		);
-		wp_register_script( 'formidable_settings', $plugin_url . '/js/admin/settings.js', array(), $version, true );
+		wp_register_script( 'formidable_settings', $plugin_url . '/js/admin/settings.js', array( 'wp-i18n' ), $version, true );
+		wp_set_script_translations( 'formidable_settings', 'formidable' );
 		wp_localize_script( 'formidable_settings', 'frmSettings', $settings_js_vars );
 		wp_register_script( 'formidable-web-components', $plugin_url . '/js/formidable-web-components.js', $frm_components_dependencies, $version, true );
 
@@ -1018,7 +1019,20 @@ class FrmAppController {
 	}
 
 	/**
-	 * Unregister Popper if the registered version is outdated.
+	 * Check the popper handle again after other plugins have enqueued their scripts.
+	 * Most plugins register scripts on admin_enqueue_scripts, after admin_js() has run.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function maybe_replace_foreign_popper() {
+		self::maybe_deregister_popper1();
+	}
+
+	/**
+	 * Unregister Popper if another plugin replaced our copy.
+	 * The source is compared rather than the version, since a version can be empty or mislabeled.
 	 *
 	 * @since 6.26
 	 *
@@ -1027,13 +1041,13 @@ class FrmAppController {
 	private static function maybe_deregister_popper1() {
 		global $wp_scripts;
 
-		if ( ! array_key_exists( 'popper', $wp_scripts->registered ) ) {
+		if ( ! self::should_register_popper() || ! array_key_exists( 'popper', $wp_scripts->registered ) ) {
 			return;
 		}
 
 		$popper = $wp_scripts->registered['popper'];
 
-		if ( ! version_compare( $popper->ver, '2.0', '<' ) ) {
+		if ( $popper->src === FrmAppHelper::plugin_url() . '/js/popper.min.js' ) {
 			return;
 		}
 
@@ -1301,6 +1315,9 @@ class FrmAppController {
 		$tables[] = $wpdb->prefix . 'frm_forms';
 		$tables[] = $wpdb->prefix . 'frm_items';
 		$tables[] = $wpdb->prefix . 'frm_item_metas';
+		$tables[] = $wpdb->prefix . 'frm_payments';
+		$tables[] = $wpdb->prefix . 'frm_subscriptions';
+		$tables[] = $wpdb->prefix . 'frm_gated_tokens';
 
 		return $tables;
 	}

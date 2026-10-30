@@ -16,8 +16,8 @@ if ( ! defined( 'SCRIPT_DEBUG' ) ) {
 	define( 'SCRIPT_DEBUG', false );
 }
 
-if ( file_exists( __DIR__ . '/../vendor/autoload.php' ) ) {
-	include __DIR__ . '/../vendor/autoload.php';
+if ( file_exists( __DIR__ . '/../../vendor/autoload.php' ) ) {
+	include __DIR__ . '/../../vendor/autoload.php';
 }
 
 if ( false === getenv( 'WP_DEVELOP_DIR' ) ) {
@@ -29,6 +29,7 @@ if ( false === getenv( 'WP_DEVELOP_DIR' ) ) {
 require_once __DIR__ . '/base/frm_factory.php';
 
 // Include unit test base class
+require_once __DIR__ . '/base/FrmPHPUnitCompatibility.php';
 require_once __DIR__ . '/base/FrmUnitTest.php';
 require_once __DIR__ . '/base/FrmAjaxUnitTest.php';
 

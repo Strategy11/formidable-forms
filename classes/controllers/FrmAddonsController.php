@@ -18,11 +18,6 @@ class FrmAddonsController {
 	/**
 	 * @var string
 	 */
-	private static $request_addon_url;
-
-	/**
-	 * @var string
-	 */
 	protected static $plugin;
 
 	/**
@@ -37,8 +32,6 @@ class FrmAddonsController {
 		if ( ! FrmAppHelper::is_admin_page( 'formidable-addons' ) ) {
 			return;
 		}
-
-		self::$request_addon_url = 'https://connect.formidableforms.com/add-on-request/';
 
 		add_action( 'admin_enqueue_scripts', self::class . '::enqueue_assets', 15 );
 		add_filter( 'frm_show_footer_links', '__return_false' );
@@ -87,8 +80,7 @@ class FrmAddonsController {
 	 */
 	private static function get_js_variables() {
 		return array(
-			'proIsIncluded'   => FrmAppHelper::pro_is_included(),
-			'addonRequestURL' => self::$request_addon_url,
+			'proIsIncluded' => FrmAppHelper::pro_is_included(),
 		);
 	}
 
@@ -138,12 +130,11 @@ class FrmAddonsController {
 	public static function list_addons() {
 		FrmAppHelper::include_svg();
 
-		$view_path         = FrmAppHelper::plugin_path() . '/classes/views/addons/';
-		$installed_addons  = apply_filters( 'frm_installed_addons', array() );
-		$addons            = self::get_api_addons();
-		$errors            = array();
-		$license_type      = '';
-		$request_addon_url = self::$request_addon_url;
+		$view_path        = FrmAppHelper::plugin_path() . '/classes/views/addons/';
+		$installed_addons = apply_filters( 'frm_installed_addons', array() );
+		$addons           = self::get_api_addons();
+		$errors           = array();
+		$license_type     = '';
 
 		if ( isset( $addons['error'] ) ) {
 			$api          = new FrmFormApi();
@@ -181,7 +172,7 @@ class FrmAddonsController {
 	 * These are not installable plugins. The `built_in` flag gives them an active
 	 * status, keeps them unlocked, and limits the card footer to the docs link.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array<string,array<string,mixed>>
 	 */
@@ -223,7 +214,7 @@ class FrmAddonsController {
 	 * key, because API-sourced add-ons are keyed by a numeric download id
 	 * with the real slug in their `slug` field.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array<int|string,array<string,mixed>> $addons     The full addons array, keyed by slug or id.
 	 * @param string                                $slug       Normalized slug of the add-on to move.
@@ -263,7 +254,7 @@ class FrmAddonsController {
 	 * while a string key (built-in gateways, the fallback list) already is
 	 * the slug.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array<int|string,array<string,mixed>> $addons The full addons array, keyed by slug or id.
 	 * @param string                                $slug   Normalized slug to find.
@@ -291,7 +282,7 @@ class FrmAddonsController {
 	 * extend them are presented as their Pro/Legacy tiers until the API reflects
 	 * it. Names only — the add-ons keep their original excerpts.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array  $addon The addon array that will be modified by reference.
 	 * @param string $slug  The addon slug.
@@ -1603,11 +1594,18 @@ class FrmAddonsController {
 	 * @return string
 	 */
 	public static function connect_link() {
+		$user_id = get_current_user_id();
+
+		if ( ! self::user_can_connect_account( $user_id ) ) {
+			return '';
+		}
+
 		$auth = get_option( 'frm_connect_token' );
 
-		if ( ! $auth ) {
-			$auth = hash( 'sha512', wp_rand() );
+		if ( ! $auth || ! self::user_can_connect_account( (int) get_option( 'frm_connect_user' ) ) ) {
+			$auth = hash( 'sha512', wp_generate_password( 64, true, true ) );
 			update_option( 'frm_connect_token', $auth, false );
+			update_option( 'frm_connect_user', $user_id, false );
 		}
 
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title', 'formidable-settings' );
@@ -1626,6 +1624,23 @@ class FrmAddonsController {
 	}
 
 	/**
+	 * Check whether a user can authorize the account connection.
+	 *
+	 * @since 7.0
+	 *
+	 * @param int $user_id The user authorizing the account connection.
+	 *
+	 * @return bool
+	 */
+	private static function user_can_connect_account( $user_id ) {
+		if ( ! $user_id || ! user_can( $user_id, 'activate_plugins' ) ) {
+			return false;
+		}
+
+		return user_can( $user_id, 'install_plugins' ) || FrmAppHelper::pro_is_included() || self::is_installed( 'formidable-pro/formidable-pro.php' );
+	}
+
+	/**
 	 * Check the auth value for install permission.
 	 *
 	 * @since 4.08
@@ -1633,12 +1648,17 @@ class FrmAddonsController {
 	 * @return bool
 	 */
 	public static function can_install_addon_api() {
+		// The external callback uses the permissions of the user who initiated the connection.
+		if ( ! self::user_can_connect_account( (int) get_option( 'frm_connect_user' ) ) ) {
+			return false;
+		}
+
 		// Verify params present (auth & download link).
 		$post_auth = FrmAppHelper::get_param( 'token', '', 'request', 'sanitize_text_field' );
 		$post_url  = FrmAppHelper::get_param( 'file_url', '', 'request', 'sanitize_text_field' );
 
 		// The download link is not required if already installed.
-		$is_installed = FrmAppHelper::pro_is_included();
+		$is_installed = FrmAppHelper::pro_is_included() || self::is_installed( 'formidable-pro/formidable-pro.php' );
 		$file_missing = ! $is_installed && ! $post_url;
 
 		if ( ! $post_auth || $file_missing ) {
@@ -1658,15 +1678,24 @@ class FrmAddonsController {
 	 * @return array
 	 */
 	public static function install_addon_api() {
-		self::$plugin = FrmAppHelper::get_param( 'file_url', '', 'request', 'esc_url_raw' );
+		self::$plugin        = FrmAppHelper::get_param( 'file_url', '', 'request', 'esc_url_raw' );
+		$can_install_plugins = user_can( (int) get_option( 'frm_connect_user' ), 'install_plugins' );
 
 		// Delete so cannot replay.
 		delete_option( 'frm_connect_token' );
+		delete_option( 'frm_connect_user' );
 
 		// It's already installed and active.
 		$active = self::activate_plugin( 'formidable-pro/formidable-pro.php', false, false, true );
 
 		if ( is_wp_error( $active ) ) {
+			if ( ! $can_install_plugins ) {
+				return array(
+					'success' => false,
+					'message' => __( 'You do not have permission to install plugins.', 'formidable' ),
+				);
+			}
+
 			$response = self::maybe_download_and_activate();
 
 			if ( is_array( $response ) ) {

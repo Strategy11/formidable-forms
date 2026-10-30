@@ -92,7 +92,7 @@
 	}
 
 	.frm_wrap #frm_adv_info ul.category-tabs li.tabs {
-		border-bottom: 2px solid #5b9dd9;
+		border-bottom: 2px solid var(--primary-500);
 		padding-bottom: 8px;
 	}
 
@@ -128,7 +128,7 @@
 
 	#frm_style_preview .frm_floating_style_button:not(.frm_hidden) {
 		position: static;
-		display: inline-block;
+		display: inline-flex;
 	}
 
 	.frm_wrap .columns-2 .frm-right-panel {

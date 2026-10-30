@@ -268,6 +268,10 @@ class FrmForm {
 		$form_fields = array( 'form_key', 'name', 'description', 'status', 'parent_form_id' );
 		$new_values  = self::set_update_options( array(), $values, array( 'form_id' => $id ) );
 
+		if ( isset( $values['editable'] ) ) {
+			$new_values['editable'] = (int) ! empty( $values['editable'] );
+		}
+
 		foreach ( $values as $value_key => $value ) {
 			if ( $value_key && in_array( $value_key, $form_fields, true ) ) {
 				$new_values[ $value_key ] = 'name' === $value_key ? FrmAppHelper::truncate( $value, 255, 1, '', true ) : $value;
@@ -722,6 +726,15 @@ class FrmForm {
 
 		$id = $form->id;
 
+		/**
+		 * Fires before a form and its children are permanently deleted.
+		 *
+		 * @since x.x
+		 *
+		 * @param int $id The form ID being deleted.
+		 */
+		do_action( 'frm_before_destroy_form', $id );
+
 		// Disconnect the entries from this form
 		$entries = FrmDb::get_col( 'frm_items', array( 'form_id' => $id ) );
 
@@ -969,14 +982,60 @@ class FrmForm {
 	 * @return array|object Array of forms. A single form object is returned if $limit is set to 1.
 	 */
 	public static function get_published_forms( $query = array(), $limit = 999, $inc_children = 'exclude' ) {
+		self::add_published_forms_where( $query, $inc_children );
+		return self::getAll( $query, 'name', $limit );
+	}
+
+	/**
+	 * Get the id, name, key and parent form id of published forms, with an optional description, for lightweight lists.
+	 * This skips loading and unserializing the options column for every form.
+	 *
+	 * @since 7.0
+	 *
+	 * @param array $query Additional where conditions.
+	 * @param array $args  Query options, including include_description, inc_children (default 'exclude') and limit (default unlimited).
+	 *
+	 * @return array Array of objects with id, name, form_key, parent_form_id and optionally description properties.
+	 */
+	public static function get_published_form_names( $query = array(), $args = array() ) {
+		self::add_published_forms_where( $query, $args['inc_children'] ?? 'exclude' );
+
+		$columns = 'id, name, form_key, parent_form_id';
+
+		if ( ! empty( $args['include_description'] ) ) {
+			$columns .= ', description';
+		}
+
+		$results = FrmDb::get_results(
+			'frm_forms',
+			$query,
+			$columns,
+			array(
+				'order_by' => 'name',
+				'limit'    => $args['limit'] ?? '',
+			)
+		);
+
+		return wp_unslash( $results );
+	}
+
+	/**
+	 * Add the where conditions shared by all published form queries.
+	 *
+	 * @since 7.0
+	 *
+	 * @param array  $query        Where conditions, modified by reference.
+	 * @param string $inc_children Set to 'exclude' to skip child forms.
+	 *
+	 * @return void
+	 */
+	private static function add_published_forms_where( &$query, $inc_children ) {
 		$query['is_template'] = 0;
 		$query['status']      = array( null, '', 'published' );
 
 		if ( $inc_children === 'exclude' ) {
 			$query['parent_form_id'] = array( null, 0 );
 		}
-
-		return self::getAll( $query, 'name', $limit );
 	}
 
 	/**

@@ -10,7 +10,7 @@ class FrmAppHelper {
 	 *
 	 * @var int
 	 */
-	public static $db_version = 106;
+	public static $db_version = 107;
 
 	/**
 	 * Used by the API add-on.
@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.35';
+	public static $plug_version = '7.0';
 
 	/**
 	 * @var bool
@@ -330,7 +330,9 @@ class FrmAppHelper {
 		$atts     = array_merge( $defaults, $atts );
 
 		// phpcs:disable SlevomatCodingStandard.Files.LineLength.LineTooLong
-		return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 599.68 601.37" width="' . esc_attr( $atts['width'] ) . '" height="' . esc_attr( $atts['height'] ) . '">
+		// This logo is always decorative — every caller renders it next to its own accessible label
+		// or in a context where the logo itself conveys no unique information.
+		return '<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 599.68 601.37" width="' . esc_attr( $atts['width'] ) . '" height="' . esc_attr( $atts['height'] ) . '">
 			<path fill="' . esc_attr( $atts['orange'] ) . '" d="M289.6 384h140v76h-140z"/>
 			<path fill="' . esc_attr( $atts['fill'] ) . '" d="M400.2 147h-200c-17 0-30.6 12.2-30.6 29.3V218h260v-71zM397.9 264H169.6v196h75V340H398a32.2 32.2 0 0 0 30.1-21.4 24.3 24.3 0 0 0 1.7-8.7V264zM299.8 601.4A300.3 300.3 0 0 1 0 300.7a299.8 299.8 0 1 1 511.9 212.6 297.4 297.4 0 0 1-212 88zm0-563A262 262 0 0 0 38.3 300.7a261.6 261.6 0 1 0 446.5-185.5 259.5 259.5 0 0 0-185-76.8z"/>
 		</svg>';
@@ -371,6 +373,15 @@ class FrmAppHelper {
 				$icon = '<div style="height:39px"></div>';
 			}
 		}
+
+		// Every caller wraps this in a link that already carries its own accessible
+		// text (see admin-header.php / applications/header.php), so the icon itself
+		// is decorative and shouldn't need its own accessible name. svg_logo() already
+		// adds aria-hidden, but a filtered $new_icon from a third party may not.
+		if ( str_starts_with( $icon, '<svg' ) && ! preg_match( '/^<svg\b[^>]*\baria-hidden\b/', $icon ) ) {
+			$icon = str_replace( '<svg ', '<svg aria-hidden="true" ', $icon );
+		}
+
 		self::kses_echo( $icon, 'all' );
 	}
 
@@ -1088,9 +1099,11 @@ class FrmAppHelper {
 		remove_filter( 'frm_striphtml_allowed_tags', 'FrmAppHelper::add_allowed_submit_button_tags' );
 
 		if ( $included_button_action ) {
-			if ( str_contains( $html, '<input type="submit"' ) ) {
-				$pattern = '/(<input type="submit")([^>]*)(\/>)/';
-				$html    = preg_replace( $pattern, '$1$2[button_action] $3', $html, 1 );
+			// Since WordPress 7.2, wp_kses sorts attributes and drops the self-closing slash from void tags.
+			$input_pattern = '/(<input\b[^>]*\btype="submit"[^>]*?)(\s*\/?>)/';
+
+			if ( preg_match( $input_pattern, $html ) ) {
+				$html = preg_replace( $input_pattern, '$1 [button_action]$2', $html, 1 );
 			} else {
 				$pattern = '/(<button)(.*)(class=")(.*)(frm_button_submit)(.*)(")(.*)([^>]+)(>)/';
 				$html    = preg_replace( $pattern, '$1$2$3$4$5$6$7 [button_action]$8$9$10', $html, 1 );
@@ -1358,7 +1371,7 @@ class FrmAppHelper {
 	 *
 	 * @since 4.0.02
 	 *
-	 * @param string $class Icon classes. A class list without an SVG marker is treated as a font icon, which is deprecated since x.x.
+	 * @param string $class Icon classes. A class list without an SVG marker is treated as a font icon, which is deprecated since 7.0.
 	 * @param array  $atts
 	 *
 	 * @return string|null
@@ -1397,7 +1410,7 @@ class FrmAppHelper {
 		$icon = implode( ' ', $icon_classes );
 
 		if ( $is_font_icon && $icon_classes ) {
-			_deprecated_argument( __METHOD__, 'x.x', 'Font icons are deprecated. Pass the class of an icon in the SVG sprite instead.' );
+			_deprecated_argument( __METHOD__, '7.0', 'Font icons are deprecated. Pass the class of an icon in the SVG sprite instead.' );
 		}
 
 		// Replace icons that have been removed or renamed.
@@ -1411,7 +1424,7 @@ class FrmAppHelper {
 		$icon_name = $icon_classes ? $icon_classes[0] : '';
 
 		if ( isset( $deprecated[ $icon_name ] ) ) {
-			_deprecated_argument( __METHOD__, 'x.x', 'The ' . esc_html( $icon_name ) . ' icon is deprecated. Use ' . esc_html( $deprecated[ $icon_name ] ) . ' instead.' );
+			_deprecated_argument( __METHOD__, '7.0', 'The ' . esc_html( $icon_name ) . ' icon is deprecated. Use ' . esc_html( $deprecated[ $icon_name ] ) . ' instead.' );
 
 			$class = str_replace( $icon_name, $deprecated[ $icon_name ], $class );
 			$icon  = str_replace( $icon_name, $deprecated[ $icon_name ], $icon );
@@ -1786,6 +1799,7 @@ class FrmAppHelper {
 			'placeholder'   => $atts['placeholder'],
 			'class'         => $class,
 			'data-tosearch' => $atts['tosearch'],
+			'aria-label'    => $atts['text'],
 		);
 
 		if ( is_string( $atts['value'] ) ) {
@@ -4049,6 +4063,10 @@ class FrmAppHelper {
 
 			self::add_form_builder_modal_data( $admin_script_strings );
 
+			if ( self::is_form_builder_page() ) {
+				$admin_script_strings['currency'] = FrmCurrencyHelper::get_currency();
+			}
+
 			/**
 			 * @param array $admin_script_strings
 			 */
@@ -4163,24 +4181,89 @@ class FrmAppHelper {
 
 	/**
 	 * Returns whether or not the first errored input should be auto-focused (default true).
+	 * Auto-resolves to false for a form with the clickable error summary active, since the
+	 * summary takes focus instead (see should_focus_error_summary()).
 	 *
 	 * @since 5.2.05
 	 *
+	 * @param stdClass|null $form
+	 *
 	 * @return bool
 	 */
-	private static function should_focus_first_error() {
-		return (bool) apply_filters( 'frm_focus_first_error', true );
+	public static function should_focus_first_error( $form = null ) {
+		// Keyed off whether the summary will actually take focus, not merely whether it's
+		// active — otherwise filtering frm_focus_error_summary off leaves focus going
+		// nowhere instead of falling back to the first field.
+		$default = $form && self::should_focus_error_summary( $form ) ? false : true;
+
+		return (bool) apply_filters( 'frm_focus_first_error', $default, $form );
+	}
+
+	/**
+	 * Returns whether or not the clickable error summary should receive focus when it's
+	 * active for a form (default true). No effect when the summary isn't active.
+	 *
+	 * @since 7.0
+	 *
+	 * @param stdClass|null $form
+	 *
+	 * @return bool
+	 */
+	public static function should_focus_error_summary( $form = null ) {
+		if ( ! $form || ! FrmFormsHelper::is_error_summary_active_for_form( $form ) ) {
+			return false;
+		}
+
+		return (bool) apply_filters( 'frm_focus_error_summary', true, $form );
+	}
+
+	/**
+	 * Resolves which element should receive focus after a failed submission for a form:
+	 * the error summary, the first errored field, or neither. If a filter forces both
+	 * `frm_focus_first_error` and `frm_focus_error_summary` true for the same form, the
+	 * summary wins and a _doing_it_wrong() notice is triggered rather than silently
+	 * picking one.
+	 *
+	 * @since 7.0
+	 *
+	 * @param stdClass $form
+	 *
+	 * @return array{focus_first_error: bool, focus_error_summary: bool}
+	 */
+	public static function resolve_error_focus_target( $form ) {
+		$focus_error_summary = self::should_focus_error_summary( $form );
+		$focus_first_error   = self::should_focus_first_error( $form );
+
+		if ( $focus_error_summary && $focus_first_error ) {
+			_doing_it_wrong(
+				__METHOD__,
+				esc_html__( 'frm_focus_first_error and frm_focus_error_summary cannot both resolve true for the same form. The error summary takes priority.', 'formidable' ),
+				'7.0'
+			);
+			$focus_first_error = false;
+		}
+
+		return array(
+			'focus_first_error'   => $focus_first_error,
+			'focus_error_summary' => $focus_error_summary,
+		);
 	}
 
 	/**
 	 * Returns whether or not field errors should include role="alert" (default true).
+	 * Auto-resolves to false for a form with the clickable error summary active, since the
+	 * summary already announces the same errors and a duplicate role="alert" on each field
+	 * would announce them twice.
 	 *
 	 * @since 5.2.05
 	 *
+	 * @param stdClass|null $form
+	 *
 	 * @return bool
 	 */
-	public static function should_include_alert_role_on_field_errors() {
-		return (bool) apply_filters( 'frm_include_alert_role_on_field_errors', true );
+	public static function should_include_alert_role_on_field_errors( $form = null ) {
+		$default = $form && FrmFormsHelper::is_error_summary_active_for_form( $form ) ? false : true;
+		return (bool) apply_filters( 'frm_include_alert_role_on_field_errors', $default, $form );
 	}
 
 	/**
@@ -4964,7 +5047,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function validate_url_is_in_s3_bucket( $url, $expected_extension ) {
-		$file_is_in_expected_s3_bucket = str_starts_with( $url, 'https://s3.amazonaws.com/fp.strategy11.com' );
+		$file_is_in_expected_s3_bucket = str_starts_with( $url, 'https://s3.amazonaws.com/fp.strategy11.com/' );
 
 		if ( ! $file_is_in_expected_s3_bucket ) {
 			return false;
@@ -4974,6 +5057,12 @@ class FrmAppHelper {
 
 		if ( ! is_array( $parsed ) ) {
 			// URL is malformed.
+			return false;
+		}
+
+		$path = rawurldecode( $parsed['path'] );
+
+		if ( str_contains( $path, '\\' ) || preg_match( '#(?:^|/)\.\.?(?:/|$)#', $path ) ) {
 			return false;
 		}
 
@@ -5083,6 +5172,16 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Tooltip strings deferred on the form builder page and its ajax field-load request,
+	 * keyed for `frm_admin_js.tooltips`.
+	 *
+	 * @since 7.0
+	 *
+	 * @var array<string,string>
+	 */
+	private static $deferred_tooltips = array();
+
+	/**
 	 * Shows tooltip icon.
 	 *
 	 * @since 6.12
@@ -5093,7 +5192,7 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function tooltip_icon( $tooltip_text, $atts = array() ) {
-		$atts['title'] = $tooltip_text;
+		$atts = array_merge( $atts, self::get_tooltip_attr( $tooltip_text ) );
 
 		if ( isset( $atts['class'] ) ) {
 			$atts['class'] .= ' frm_help';
@@ -5107,6 +5206,88 @@ class FrmAppHelper {
 		</span>
 		<?php
 		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+	}
+
+	/**
+	 * Builds the attribute(s) a tooltip trigger needs for its text.
+	 *
+	 * On the form builder page, and in the `frm_load_field` ajax request that fills in its
+	 * fields in batches, the text is deferred to `frm_admin_js.tooltips` and only a lookup key
+	 * is printed inline, instead of baking every field's translated tooltip text into the
+	 * markup. The initial page load prints the collected strings through
+	 * `print_deferred_tooltips()` on `admin_footer`. That hook never fires on admin-ajax.php,
+	 * so `FrmFieldsController::load_field()` sends them back with its JSON response instead.
+	 * `admin.js` merges either one into `frm_admin_js.tooltips` and resolves each key back into
+	 * a real `title`.
+	 *
+	 * The key is a hash of the text rather than a per-request counter. A counter restarts in
+	 * every request, so two batches could hand the same key to different text, and whichever
+	 * merged last would win. A hash gives identical text the same key everywhere, which makes
+	 * the client-side merge safe to repeat and dedupes repeated strings for free.
+	 *
+	 * @since 7.0
+	 *
+	 * @param string $tooltip_text Tooltip text.
+	 *
+	 * @return array<string,string> Either `title` (everywhere else) or `data-tip-key` (the
+	 *                              builder page and its ajax field-load request).
+	 */
+	public static function get_tooltip_attr( $tooltip_text ) {
+		if ( ! self::should_defer_tooltips() ) {
+			return array( 'title' => $tooltip_text );
+		}
+
+		$key                             = 't' . substr( md5( $tooltip_text ), 0, 8 );
+		self::$deferred_tooltips[ $key ] = $tooltip_text;
+
+		return array( 'data-tip-key' => $key );
+	}
+
+	/**
+	 * Checks if this request can hand its tooltip strings to `frm_admin_js.tooltips`.
+	 *
+	 * `is_form_builder_page()` alone misses the `frm_load_field` and `frm_load_field_settings`
+	 * ajax requests because they never send `frm_action`. Other builder ajax requests are left out on purpose
+	 * since nothing ships their collected strings to the page.
+	 *
+	 * @since 7.0
+	 *
+	 * @return bool
+	 */
+	private static function should_defer_tooltips() {
+		if ( wp_doing_ajax() ) {
+			return in_array( self::get_post_param( 'action', '', 'sanitize_text_field' ), array( 'frm_load_field', 'frm_load_field_settings' ), true );
+		}
+
+		return self::is_form_builder_page( false );
+	}
+
+	/**
+	 * Gets the tooltip strings collected by `get_tooltip_attr()` so far in this request.
+	 *
+	 * @since 7.0
+	 *
+	 * @return array<string,string> Tooltip text keyed by its `data-tip-key`.
+	 */
+	public static function get_deferred_tooltips() {
+		return self::$deferred_tooltips;
+	}
+
+	/**
+	 * Prints the tooltip strings collected by `get_tooltip_attr()` during this page's render,
+	 * merged into the already-localized `frm_admin_js.tooltips` object.
+	 *
+	 * @since 7.0
+	 *
+	 * @return void
+	 */
+	public static function print_deferred_tooltips() {
+		if ( ! self::$deferred_tooltips ) {
+			return;
+		}
+
+		$js = 'window.frm_admin_js && ( window.frm_admin_js.tooltips = Object.assign( window.frm_admin_js.tooltips || {}, ' . wp_json_encode( self::$deferred_tooltips ) . ' ) );';
+		wp_add_inline_script( 'formidable_admin', $js, 'after' );
 	}
 
 	/**

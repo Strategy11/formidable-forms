@@ -65,13 +65,17 @@ form .frm_primary_label input {
 	margin-bottom: 0;
 }
 
-/* Add spacing between address field rows in form builder */
-#frm_builder_page .with_frm_style form .frm_combo_inputs_container > .form-field {
-	margin-top: 10px;
-}
-
-#frm_builder_page .with_frm_style form .frm_combo_inputs_container > .form-field:first-child {
-	margin-top: 0;
+/*
+ * Add spacing between combo field rows in the form builder (e.g. wrapped Address rows).
+ * Use grid row-gap rather than a per-item margin-top: margin-top based on DOM position
+ * broke a Name field's alignment, since a hidden sub-field (e.g. an unused Middle Name
+ * input) still counts as a DOM child, and the `[data-name-layout]` sub-field re-ordering
+ * uses the CSS `order` property, so DOM position doesn't reflect visual position either.
+ * A grid row-gap only affects space between actual visual rows, so it isn't tripped up
+ * by hidden or reordered sub-fields sharing a row.
+ */
+#frm_builder_page .with_frm_style form .frm_combo_inputs_container {
+	row-gap: 10px;
 }
 
 .frm_description,

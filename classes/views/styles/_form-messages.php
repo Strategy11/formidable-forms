@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<span class="frm-tabs-active-underline"></span>
 	</div>
 	<div class="frm-tabs-navs">
-		<ul class="frm-flex-box">
+		<ul class="frm-flex-box" aria-label="<?php esc_attr_e( 'Message types', 'formidable' ); ?>">
 			<li class="frm-active"><?php esc_html_e( 'Success', 'formidable' ); ?></li>
 			<li><?php esc_html_e( 'Error', 'formidable' ); ?></li>
 		</ul>
@@ -72,9 +72,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label
-							for="frm_success_font_size"
-							class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
+						<?php FrmSliderStyleComponent::style_item_heading( $style, 'success_font_size', 'frm_success_font_size-value', __( 'Font Size', 'formidable' ) ); ?>
 					</div>
 					<div class="frm7 frm_form_field">
 						<?php
@@ -148,9 +146,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm5 frm_form_field">
-						<label
-							for="frm_error_font_size"
-							class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
+						<?php FrmSliderStyleComponent::style_item_heading( $style, 'error_font_size', 'frm_error_font_size-value', __( 'Font Size', 'formidable' ) ); ?>
 					</div>
 					<div class="frm7 frm_form_field">
 						<?php

@@ -61,7 +61,11 @@
 }
 
 .frm-page-skeleton-cat-count {
-	color: var(--grey-400);
+
+	/* 400 reads at 2.46:1 on the sidebar's own #f9fafb, which is text-sized
+	   content, not a border or an icon. 500 is the lightest stop that clears
+	   4.5:1 on both that tint and white. */
+	color: var(--grey-500);
 }
 
 .frm-current {

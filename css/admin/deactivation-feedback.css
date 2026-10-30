@@ -77,7 +77,7 @@
 }
 
 #frm-deactivation-modal .frm_radio .frm_form_field textarea:focus {
-	border-color: #4199fd;
+	border-color: var(--primary-500);
 	box-shadow: none;
 }
 

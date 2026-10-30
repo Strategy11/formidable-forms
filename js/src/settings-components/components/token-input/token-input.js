@@ -20,8 +20,6 @@ import { addEventListeners } from './event-handlers';
  * @return {void}
  */
 function initTokenInputFields() {
-	findAndInitializeTokenFields();
-
 	/**
 	 * Initialize for newly added fields
 	 *
@@ -33,17 +31,16 @@ function initTokenInputFields() {
 	);
 
 	/**
-	 * Initialize for newly added fields via AJAX
+	 * Initialize token inputs for a field settings panel the first time it's shown,
+	 * including fields loaded in AJAX batches. Only adjust styling in the shown panel.
 	 *
-	 * @param {Event}       event           The frm_ajax_loaded_field event.
-	 * @param {HTMLElement} event.frmFields The added field objects being destructured from the event.
+	 * @param {Object}      obj             The field element that was selected.
+	 * @param {HTMLElement} fieldSettingsEl The field settings panel that was shown.
 	 */
-	document.addEventListener( 'frm_ajax_loaded_field', ( { frmFields } ) =>
-		frmFields.forEach( field => findAndInitializeTokenFields( field.id ) )
-	);
-
-	// Adjust styling for all token inputs when field settings are shown
-	wp.hooks.addAction( HOOKS.SHOW_FIELD_SETTINGS, 'formidable-token-input', adjustAllProxyInputStyles );
+	wp.hooks.addAction( HOOKS.SHOW_FIELD_SETTINGS, 'formidable-token-input', ( obj, fieldSettingsEl ) => {
+		findAndInitializeTokenFields( fieldSettingsEl.id.replace( 'frm-single-settings-', '' ) );
+		adjustAllProxyInputStyles( fieldSettingsEl );
+	} );
 }
 
 /**

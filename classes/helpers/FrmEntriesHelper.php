@@ -24,6 +24,11 @@ class FrmEntriesHelper {
 	const DRAFT_ENTRY_STATUS = 1;
 
 	/**
+	 * @since 7.0
+	 */
+	const SPAM_ENTRY_STATUS = 4;
+
+	/**
 	 * @param mixed         $fields
 	 * @param object|string $form
 	 * @param bool          $reset
@@ -34,13 +39,13 @@ class FrmEntriesHelper {
 	public static function setup_new_vars( $fields, $form = '', $reset = false, $args = array() ) {
 		remove_action( 'media_buttons', 'FrmFormsController::insert_form_button' );
 
-		$values = array(
+		$posted_key = FrmAppHelper::get_post_param( 'item_key', '', 'sanitize_title' );
+		$values     = array(
 			'name'        => '',
 			'description' => '',
-			'item_key'    => '',
+			'item_key'    => ! $reset && is_string( $posted_key ) ? $posted_key : '',
+			'fields'      => array(),
 		);
-
-		$values['fields'] = array();
 
 		if ( ! $fields ) {
 			return apply_filters( 'frm_setup_new_entry', $values );
@@ -128,11 +133,11 @@ class FrmEntriesHelper {
 			self::get_posted_value( $field, $new_value, $args );
 		}
 
-		if ( ! is_array( $new_value ) ) {
-			return str_replace( '"', '&quot;', $new_value );
+		if ( null === $new_value || is_array( $new_value ) ) {
+			return $new_value ?? '';
 		}
 
-		return $new_value;
+		return str_replace( '"', '&quot;', $new_value );
 	}
 
 	/**
@@ -220,7 +225,8 @@ class FrmEntriesHelper {
 	 * @return string
 	 */
 	public static function prepare_display_value( $entry, $field, $atts ) {
-		$field_value = $entry->metas[ $field->id ] ?? false;
+		$atts['entry'] = $entry;
+		$field_value   = $entry->metas[ $field->id ] ?? false;
 
 		if ( FrmAppHelper::pro_is_installed() ) {
 			$empty = ! $field_value;
@@ -265,6 +271,7 @@ class FrmEntriesHelper {
 		$field_value = array();
 
 		foreach ( $child_entries as $child_entry ) {
+			$atts['entry']   = $child_entry;
 			$atts['item_id'] = $child_entry->id;
 			$atts['post_id'] = $child_entry->post_id;
 
@@ -367,7 +374,9 @@ class FrmEntriesHelper {
 			$value = FrmAppHelper::kses( $value, 'all' );
 		}
 
-		return apply_filters( 'frm_display_value', $value, $field, $atts );
+		$value = apply_filters( 'frm_display_value', $value, $field, $atts );
+
+		return isset( $atts['entry'] ) && FrmSpamEntriesHelper::is_spam( $atts['entry'] ) ? FrmSpamEntriesHelper::escape_value( $value ) : $value;
 	}
 
 	/**
@@ -910,13 +919,8 @@ class FrmEntriesHelper {
 			return $status;
 		}
 
-		if ( ! $status ) {
-			// If the status is empty, let's default to 0.
-			return self::SUBMITTED_ENTRY_STATUS;
-		}
-
-		// If it has a value that isn't in the array, let's default to 1. There may be old entries that don't have a value for is_draft.
-		return self::DRAFT_ENTRY_STATUS;
+		// Empty statuses are submitted. Unknown nonempty statuses are treated as drafts for legacy entries.
+		return $status ? self::DRAFT_ENTRY_STATUS : self::SUBMITTED_ENTRY_STATUS;
 	}
 
 	/**
@@ -963,7 +967,7 @@ class FrmEntriesHelper {
 			$extended_entry_status = array();
 		}
 
-		return array_replace( $default_entry_statuses, $extended_entry_status );
+		return array_replace( $default_entry_statuses, $extended_entry_status, FrmSpamEntriesHelper::get_entry_status() );
 	}
 
 	/**

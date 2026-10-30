@@ -107,7 +107,23 @@ if ( $display['conf_field'] && ! is_callable( 'FrmProFieldsController::add_confi
 	<?php
 }//end if
 
+if ( isset( $values['deferred_settings'] ) ) {
+	ob_start();
+}
+
 FrmFieldsController::load_single_field_settings( compact( 'field', 'field_obj', 'values', 'display' ) );
+
+if ( isset( $values['deferred_settings'] ) ) {
+	$values['deferred_settings']->html = ob_get_clean();
+	$values['deferred_settings']->meta = array(
+		'name'    => $field['name'],
+		'type'    => $field['type'],
+		'key'     => $field['field_key'],
+		'order'   => $field['field_order'],
+		'classes' => $display['css'] ? $field['classes'] : null,
+		'align'   => $field['align'] ?? null,
+	);
+}
 
 if ( 'divider' === $field['type'] ) {
 	?>

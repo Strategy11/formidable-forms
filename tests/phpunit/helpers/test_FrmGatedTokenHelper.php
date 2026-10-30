@@ -2,7 +2,11 @@
 
 /**
  * @group gated-content
+ *
+ * @covers FrmGatedTokenHelper
  */
+#[\PHPUnit\Framework\Attributes\Group( 'gated-content' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmGatedTokenHelper::class )]
 class test_FrmGatedTokenHelper extends FrmUnitTest {
 
 	/**
@@ -73,9 +77,6 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 
 	// ── generate() ────────────────────────────────────────────────────────── //
 
-	/**
-	 * @covers FrmGatedTokenHelper::generate
-	 */
 	public function test_generate_returns_raw_token_string() {
 		$token = FrmGatedTokenHelper::generate( $this->action, (object) array( 'id' => 1 ), 'create' );
 
@@ -84,9 +85,6 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		$this->assertSame( 32, strlen( $token ) );
 	}
 
-	/**
-	 * @covers FrmGatedTokenHelper::generate
-	 */
 	public function test_generate_persists_hash_to_db() {
 		global $wpdb;
 
@@ -104,9 +102,6 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		$this->assertSame( $this->action_id, (int) $row->action_id );
 	}
 
-	/**
-	 * @covers FrmGatedTokenHelper::generate
-	 */
 	public function test_generate_caches_token_for_same_request() {
 		FrmGatedTokenHelper::generate( $this->action, (object) array( 'id' => 1 ), 'create' );
 
@@ -117,9 +112,6 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 
 	// ── validate_access_code() ───────────────────────────────────────────── //
 
-	/**
-	 * @covers FrmGatedTokenHelper::validate_access_code
-	 */
 	public function test_validate_access_code_returns_token_for_valid_item() {
 		$token = FrmGatedTokenHelper::generate( $this->action, (object) array( 'id' => 1 ), 'create' );
 
@@ -129,9 +121,6 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		);
 	}
 
-	/**
-	 * @covers FrmGatedTokenHelper::validate_access_code
-	 */
 	public function test_validate_access_code_returns_null_for_wrong_item_id() {
 		$token = FrmGatedTokenHelper::generate( $this->action, (object) array( 'id' => 1 ), 'create' );
 
@@ -147,9 +136,6 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		);
 	}
 
-	/**
-	 * @covers FrmGatedTokenHelper::validate_access_code
-	 */
 	public function test_validate_access_code_returns_null_for_wrong_item_type() {
 		$token = FrmGatedTokenHelper::generate( $this->action, (object) array( 'id' => 1 ), 'create' );
 
@@ -165,9 +151,6 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		);
 	}
 
-	/**
-	 * @covers FrmGatedTokenHelper::validate_access_code
-	 */
 	public function test_validate_access_code_returns_false_for_expired_token() {
 		global $wpdb;
 
@@ -191,9 +174,6 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 		);
 	}
 
-	/**
-	 * @covers FrmGatedTokenHelper::validate_access_code
-	 */
 	public function test_validate_access_code_returns_null_for_nonexistent_token() {
 		$this->assertNotInstanceOf(
 			\FrmGatedToken::class,
@@ -206,7 +186,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	/**
 	 * When no token source is present, get_valid_token() must return null.
 	 *
-	 * @covers FrmGatedTokenHelper::get_valid_token
+	 * @see FrmGatedTokenHelper::get_valid_token
 	 */
 	public function test_get_valid_token_returns_null_when_no_token_present() {
 		$result = FrmGatedTokenHelper::get_valid_token( FrmGatedItem::make( $this->item ) );
@@ -216,7 +196,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	/**
 	 * A raw token in the `access_code` URL param must be resolved and validated.
 	 *
-	 * @covers FrmGatedTokenHelper::get_valid_token
+	 * @see FrmGatedTokenHelper::get_valid_token
 	 */
 	public function test_get_valid_token_resolves_via_url_param() {
 		$_GET['access_code'] = FrmGatedTokenHelper::generate( $this->action, (object) array( 'id' => 1 ), 'create' );
@@ -230,7 +210,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	/**
 	 * A wrong item ID in the URL param must cause get_valid_token() to return null.
 	 *
-	 * @covers FrmGatedTokenHelper::get_valid_token
+	 * @see FrmGatedTokenHelper::get_valid_token
 	 */
 	public function test_get_valid_token_returns_null_for_url_param_with_wrong_item() {
 		$_GET['access_code'] = FrmGatedTokenHelper::generate( $this->action, (object) array( 'id' => 1 ), 'create' );
@@ -251,7 +231,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	/**
 	 * A hash stored in an frm_gc_* cookie must be resolved and validated.
 	 *
-	 * @covers FrmGatedTokenHelper::get_valid_token
+	 * @see FrmGatedTokenHelper::get_valid_token
 	 */
 	public function test_get_valid_token_resolves_via_cookie() {
 		$_COOKIE[ 'frm_gc_' . $this->item['type'] . '_' . $this->item['id'] ] = FrmGatedTokenHelper::generate( $this->action, (object) array( 'id' => 1 ), 'create' );
@@ -265,7 +245,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	/**
 	 * A token stored in the DB under the current user's ID must be found and validated.
 	 *
-	 * @covers FrmGatedTokenHelper::get_valid_token
+	 * @see FrmGatedTokenHelper::get_valid_token
 	 */
 	public function test_get_valid_token_resolves_via_user_db() {
 		$user_id = $this->factory->user->create();
@@ -286,7 +266,7 @@ class test_FrmGatedTokenHelper extends FrmUnitTest {
 	 * When no core source finds a token, the frm_obtain_gated_token filter fires and
 	 * its return value is used.
 	 *
-	 * @covers FrmGatedTokenHelper::get_valid_token
+	 * @see FrmGatedTokenHelper::get_valid_token
 	 */
 	public function test_get_valid_token_falls_back_to_filter() {
 		$raw_token  = FrmGatedTokenHelper::generate( $this->action, (object) array( 'id' => 1 ), 'create' );

@@ -2,12 +2,13 @@
 
 /**
  * @group welcome-tour
+ *
+ * @covers FrmWelcomeTourController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'welcome-tour' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmWelcomeTourController::class )]
 class test_FrmWelcomeTourController extends FrmUnitTest {
 
-	/**
-	 * @covers FrmWelcomeTourController::check_for_form_embeds
-	 */
 	public function test_check_for_form_embeds() {
 		$this->assertFalse( $this->check_for_form_embeds() );
 

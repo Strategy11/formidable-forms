@@ -19,7 +19,7 @@ describe( 'Add-Ons page', () => {
 		cy.get( '#addon-search-input' ).should( 'exist' );
 
 		cy.log( 'Validate add-ons categories' );
-		cy.get( 'li[data-category="all-items"]' ).within( () => {
+		cy.get( '.frm-page-skeleton-cat[data-category="all-items"]' ).within( () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'All Add-Ons' );
 			cy.get( '.frm-page-skeleton-cat-count' ).invoke( 'text' ).then( text => {
 				const count = parseInt( text );
@@ -27,7 +27,7 @@ describe( 'Add-Ons page', () => {
 			} );
 		} );
 
-		cy.get( 'li[data-category="automation"]' ).within( () => {
+		cy.get( '.frm-page-skeleton-cat[data-category="automation"]' ).within( () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'Automation' );
 			cy.get( '.frm-page-skeleton-cat-count' ).invoke( 'text' ).then( text => {
 				const count = parseInt( text );
@@ -35,7 +35,7 @@ describe( 'Add-Ons page', () => {
 			} );
 		} );
 
-		cy.get( 'li[data-category="crm"]' ).within( () => {
+		cy.get( '.frm-page-skeleton-cat[data-category="crm"]' ).within( () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'CRM' );
 			cy.get( '.frm-page-skeleton-cat-count' ).invoke( 'text' ).then( text => {
 				const count = parseInt( text );
@@ -43,7 +43,7 @@ describe( 'Add-Ons page', () => {
 			} );
 		} );
 
-		cy.get( 'li[data-category="data-collection"]' ).within( () => {
+		cy.get( '.frm-page-skeleton-cat[data-category="data-collection"]' ).within( () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'Data Collection' );
 			cy.get( '.frm-page-skeleton-cat-count' ).invoke( 'text' ).then( text => {
 				const count = parseInt( text );
@@ -51,7 +51,7 @@ describe( 'Add-Ons page', () => {
 			} );
 		} );
 
-		cy.get( 'li[data-category="data-management"]' ).within( () => {
+		cy.get( '.frm-page-skeleton-cat[data-category="data-management"]' ).within( () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'Data Management' );
 			cy.get( '.frm-page-skeleton-cat-count' ).invoke( 'text' ).then( text => {
 				const count = parseInt( text );
@@ -59,7 +59,7 @@ describe( 'Add-Ons page', () => {
 			} );
 		} );
 
-		cy.get( 'li[data-category="ecommerce"]' ).within( () => {
+		cy.get( '.frm-page-skeleton-cat[data-category="ecommerce"]' ).within( () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'Ecommerce' );
 			cy.get( '.frm-page-skeleton-cat-count' ).invoke( 'text' ).then( text => {
 				const count = parseInt( text );
@@ -67,7 +67,7 @@ describe( 'Add-Ons page', () => {
 			} );
 		} );
 
-		cy.get( 'li[data-category="email-sms-marketing"]' ).within( () => {
+		cy.get( '.frm-page-skeleton-cat[data-category="email-sms-marketing"]' ).within( () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'Email & SMS Marketing' );
 			cy.get( '.frm-page-skeleton-cat-count' ).invoke( 'text' ).then( text => {
 				const count = parseInt( text );
@@ -75,7 +75,7 @@ describe( 'Add-Ons page', () => {
 			} );
 		} );
 
-		cy.get( 'li[data-category="form-design-display"]' ).within( () => {
+		cy.get( '.frm-page-skeleton-cat[data-category="form-design-display"]' ).within( () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'Form Design & Display' );
 			cy.get( '.frm-page-skeleton-cat-count' ).invoke( 'text' ).then( text => {
 				const count = parseInt( text );
@@ -83,7 +83,7 @@ describe( 'Add-Ons page', () => {
 			} );
 		} );
 
-		cy.get( 'li[data-category="form-functionality"]' ).within( () => {
+		cy.get( '.frm-page-skeleton-cat[data-category="form-functionality"]' ).within( () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'Form Functionality' );
 			cy.get( '.frm-page-skeleton-cat-count' ).invoke( 'text' ).then( text => {
 				const count = parseInt( text );
@@ -91,7 +91,7 @@ describe( 'Add-Ons page', () => {
 			} );
 		} );
 
-		cy.get( 'li[data-category="marketing"]' ).within( () => {
+		cy.get( '.frm-page-skeleton-cat[data-category="marketing"]' ).within( () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'Marketing' );
 			cy.get( '.frm-page-skeleton-cat-count' ).invoke( 'text' ).then( text => {
 				const count = parseInt( text );
@@ -99,7 +99,7 @@ describe( 'Add-Ons page', () => {
 			} );
 		} );
 
-		cy.get( 'li[data-category="multilingual"]' ).within( () => {
+		cy.get( '.frm-page-skeleton-cat[data-category="multilingual"]' ).within( () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'Multilingual' );
 			cy.get( '.frm-page-skeleton-cat-count' ).invoke( 'text' ).then( text => {
 				const count = parseInt( text );
@@ -107,7 +107,7 @@ describe( 'Add-Ons page', () => {
 			} );
 		} );
 
-		cy.get( 'li[data-category="utilities"]' ).within( () => {
+		cy.get( '.frm-page-skeleton-cat[data-category="utilities"]' ).within( () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'Utilities' );
 			cy.get( '.frm-page-skeleton-cat-count' ).invoke( 'text' ).then( text => {
 				const count = parseInt( text );
@@ -117,7 +117,7 @@ describe( 'Add-Ons page', () => {
 
 		cy.log( 'Validate add-ons category plans' );
 
-		cy.get( 'li[data-category="basic"]' ).within( () => {
+		cy.get( '.frm-page-skeleton-cat[data-category="basic"]' ).within( () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'basic' );
 			cy.get( '.frm-page-skeleton-cat-count' ).invoke( 'text' ).then( text => {
 				const count = parseInt( text );
@@ -125,7 +125,7 @@ describe( 'Add-Ons page', () => {
 			} );
 		} );
 
-		cy.get( 'li[data-category="plus"]' ).within( () => {
+		cy.get( '.frm-page-skeleton-cat[data-category="plus"]' ).within( () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'plus' );
 			cy.get( '.frm-page-skeleton-cat-count' ).invoke( 'text' ).then( text => {
 				const count = parseInt( text );
@@ -133,7 +133,7 @@ describe( 'Add-Ons page', () => {
 			} );
 		} );
 
-		cy.get( 'li[data-category="business"]' ).within( () => {
+		cy.get( '.frm-page-skeleton-cat[data-category="business"]' ).within( () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'business' );
 			cy.get( '.frm-page-skeleton-cat-count' ).invoke( 'text' ).then( text => {
 				const count = parseInt( text );
@@ -141,7 +141,7 @@ describe( 'Add-Ons page', () => {
 			} );
 		} );
 
-		cy.get( 'li[data-category="elite"]' ).within( () => {
+		cy.get( '.frm-page-skeleton-cat[data-category="elite"]' ).within( () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'elite' );
 			cy.get( '.frm-page-skeleton-cat-count' ).invoke( 'text' ).then( text => {
 				const count = parseInt( text );
@@ -645,13 +645,6 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
 		} );
-
-		cy.get( 'div.frm-addons-request-addon' ).should( 'exist' ).within( () => {
-			cy.get( 'span' ).should( 'have.text', 'Not finding what you need?' );
-			cy.get( 'a.frm-font-semibold' ).should( 'have.text', 'Request Add-On' )
-				.and( 'have.attr', 'href', 'https://connect.formidableforms.com/add-on-request/' )
-				.and( 'have.attr', 'target', '_blank' );
-		} );
 	} );
 
 	it( 'should search for add-ons', () => {
@@ -668,6 +661,6 @@ describe( 'Add-Ons page', () => {
 		cy.get( '#frm-page-skeleton-empty-state > img' ).should( 'exist' );
 		cy.get( '.frm-page-skeleton-title' ).should( 'contain', 'No add-ons found' );
 		cy.get( '.frm-page-skeleton-text' ).should( 'contain', "Sorry, we didn't find any add-ons that match your criteria." );
-		cy.get( '#frm-page-skeleton-empty-state > .button' ).should( 'contain', 'Request Add-On' ).click();
+		cy.get( '#frm-page-skeleton-empty-state > .button' ).should( 'not.be.visible' );
 	} );
 } );
