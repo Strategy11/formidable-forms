@@ -16,6 +16,8 @@ const { addFieldSettingsMetadata, cacheFieldSettings, forgetFieldSettings, mater
 const { hydrateFieldPreviews, renderFieldPreviews, PENDING_PREVIEW_CLASS } = require( './fieldPreviews' );
 const { queueFieldSettings, startFieldSettingsQueue, isFieldSettingsPending, requestFieldSettingsNow, waitForFieldSettings, cancelFieldSettings } = require( './fieldSettingsLoader' );
 
+const fieldHtmlTemplate = document.createElement( 'template' );
+
 // Footer scripts can restore placeholders before add-ons inspect the builder's fields.
 hydrateFieldPlaceholders();
 
@@ -2951,6 +2953,7 @@ window.frmAdminBuildJS = function() {
 		return processFieldLoadBatch(
 			Object.entries( loadedFields ),
 			renderLoadedField,
+			insertLoadedFieldSlice,
 			initializeLoadedFieldSlice
 		);
 	}
@@ -2960,7 +2963,7 @@ window.frmAdminBuildJS = function() {
 	 *
 	 * @since 7.0
 	 * @param {Array} entry The field ID and its rendered HTML and type.
-	 * @return {Object|null} The inserted field, or null if its placeholder was deleted.
+	 * @return {Object|null} The detached field, or null if its placeholder was deleted.
 	 */
 	function renderLoadedField( entry ) {
 		const [ key, field ] = entry;
@@ -2972,21 +2975,62 @@ window.frmAdminBuildJS = function() {
 		dragDropObserver.unobserve( oldField );
 		dragDropAttachers.delete( oldField );
 		cacheFieldSettings( key, field.settingsHtml );
-		jQuery( oldField ).replaceWith( field.html );
-
-		const element = document.getElementById( `frm_field_id_${ key }` );
+		fieldHtmlTemplate.innerHTML = field.html;
+		const element = fieldHtmlTemplate.content.firstElementChild;
 		if ( ! element ) {
+			oldField.remove();
 			return null;
 		}
 		if ( field.settingsMeta ) {
 			addFieldSettingsMetadata( element, key, field.settingsMeta );
 		}
 		prepareLoadedFieldMarkup( element );
-		if ( element.classList.contains( 'edit_field_type_divider' ) ) {
-			element.querySelectorAll( 'ul.frm_sorting' ).forEach( setupSortableList );
-		}
-		lazyMakeDraggable( element );
-		return { id: key, type: field.type, element };
+		const fragment = document.createDocumentFragment();
+		fragment.append( fieldHtmlTemplate.content );
+		return { placeholder: oldField, fragment, id: key, type: field.type, element };
+	}
+
+	/**
+	 * Insert adjacent fields together when their placeholders share a parent.
+	 *
+	 * @since x.x
+	 * @param {Array} fields The detached fields and their placeholders.
+	 * @return {void}
+	 */
+	function insertLoadedFieldSlice( fields ) {
+		let group = [];
+		const insertGroup = () => {
+			if ( ! group.length ) {
+				return;
+			}
+
+			const fragment = document.createDocumentFragment();
+			// eslint-disable-next-line formidable/prefer-document-fragment -- move each detached field into the insertion fragment
+			group.forEach( field => fragment.append( field.fragment ) );
+			group[ 0 ].placeholder.replaceWith( fragment );
+			group.slice( 1 ).forEach( field => field.placeholder.remove() );
+			group.forEach( field => {
+				if ( field.element.classList.contains( 'edit_field_type_divider' ) ) {
+					field.element.querySelectorAll( 'ul.frm_sorting' ).forEach( setupSortableList );
+				}
+				lazyMakeDraggable( field.element );
+			} );
+			group = [];
+		};
+
+		fields.forEach( field => {
+			if ( ! field ) {
+				insertGroup();
+				return;
+			}
+
+			const previous = group[ group.length - 1 ];
+			if ( previous && ( previous.placeholder.parentElement !== field.placeholder.parentElement || previous.placeholder.nextElementSibling !== field.placeholder ) ) {
+				insertGroup();
+			}
+			group.push( field );
+		} );
+		insertGroup();
 	}
 
 	/**
