@@ -4038,6 +4038,7 @@ class FrmAppHelper {
 				'reserved_words'                     => __( 'See the list of reserved words in WordPress.', 'formidable' ),
 				'repeat_limit_min'                   => __( 'Please enter a Repeat Limit that is greater than 1.', 'formidable' ),
 				'checkbox_limit'                     => __( 'Please select a limit between 0 and 200.', 'formidable' ),
+				'save_too_large'                     => __( 'Your changes were not saved. The form may be larger than your server allows (post_max_size). Ask your host to raise this limit, then try again. Your edits are still on this page.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'install'                            => __( 'Install', 'formidable' ),
 				'active'                             => __( 'Active', 'formidable' ),
 				'installed'                          => __( 'Installed', 'formidable' ),

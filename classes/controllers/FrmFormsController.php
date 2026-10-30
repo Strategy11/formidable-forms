@@ -2323,6 +2323,45 @@ class FrmFormsController {
 	}
 
 	/**
+	 * PHP drops the whole body of a POST larger than post_max_size, so $_POST arrives empty.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function post_exceeds_max_size() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( 'POST' !== FrmAppHelper::get_server_value( 'REQUEST_METHOD' ) || ! empty( $_POST ) ) {
+			return false;
+		}
+
+		$limit = wp_convert_hr_to_bytes( (string) ini_get( 'post_max_size' ) );
+
+		return $limit > 0 && (int) FrmAppHelper::get_server_value( 'CONTENT_LENGTH' ) > $limit;
+	}
+
+	/**
+	 * Redraws the builder with a message, since update() never runs for an empty $_POST.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function show_post_max_size_error() {
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+
+		$message = sprintf(
+			/* translators: %1$s: The post_max_size limit, %2$s: Start link HTML, %3$s: end link HTML */
+			__( 'Your changes were not saved because the form is larger than the %1$s your server accepts (post_max_size). Ask your host to raise this limit, or %2$sread how to fix server limits%3$s.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			size_format( wp_convert_hr_to_bytes( (string) ini_get( 'post_max_size' ) ) ),
+			'<a href="' . esc_url( self::get_form_too_long_docs_url() ) . '" target="_blank" rel="noopener">',
+			'</a>'
+		);
+
+		self::get_edit_vars( FrmAppHelper::get_param( 'id', '', 'get', 'absint' ), array( 'post_max_size' => $message ) );
+	}
+
+	/**
 	 * Includes html that shows a message when the device is too small to use Formidable Forms admin pages.
 	 *
 	 * @since 6.20
@@ -2381,6 +2420,11 @@ class FrmFormsController {
 
 		add_action( 'frm_load_form_hooks', 'FrmHooksController::trigger_load_form_hooks' );
 		FrmAppHelper::trigger_hook_load( 'form' );
+
+		if ( in_array( $action, array( 'edit', 'update' ), true ) && self::post_exceeds_max_size() ) {
+			self::show_post_max_size_error();
+			return null;
+		}
 
 		switch ( $action ) {
 			case 'create':

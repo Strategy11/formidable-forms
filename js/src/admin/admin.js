@@ -8643,7 +8643,15 @@ window.frmAdminBuildJS = function() {
 				showFormSavedMessage( msg );
 				reloadIfAddonActivatedAjaxSubmitOnly();
 			},
-			error() {
+			error( xhr ) {
+				// PHP drops a request larger than post_max_size, so resubmitting would lose the edits too.
+				if ( 413 === xhr.status || ( 400 === xhr.status && '0' === xhr.responseText ) ) {
+					$thisEle.classList.remove( 'frm_loading_form', 'frm_loading_button' );
+					$thisEle.setAttribute( 'aria-busy', 'false' );
+					infoModal( frmAdminJs.save_too_large );
+					return;
+				}
+
 				triggerSubmit( document.getElementById( 'frm_js_build_form' ) );
 			}
 		} );
