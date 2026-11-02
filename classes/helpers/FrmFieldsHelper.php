@@ -29,8 +29,7 @@ class FrmFieldsHelper {
 		$field_count = FrmDb::get_var(
 			'frm_fields',
 			array( 'form_id' => $form_id ),
-			'field_order',
-			array( 'order_by' => 'field_order DESC' )
+			'MAX(field_order)'
 		);
 
 		$values['field_key']   = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_fields', 'field_key' );
