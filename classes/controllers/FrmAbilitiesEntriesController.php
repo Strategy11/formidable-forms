@@ -41,59 +41,78 @@ class FrmAbilitiesEntriesController {
 				'label'               => __( 'List Entries', 'formidable' ),
 				'description'         => __( 'Retrieve a list of Formidable entries (form submissions). Use list-forms to find the form_id.', 'formidable' ),
 				'category'            => FrmAbilitiesController::CATEGORY,
-				'input_schema'        => array(
-					'default'    => array(),
-					'type'       => 'object',
-					'properties' => array(
-						'form_id'    => array(
-							'type'        => array( 'string', 'integer' ),
-							'description' => __( 'Form ID or form_key to filter entries. Optional, returns entries from all forms if not provided.', 'formidable' ),
-						),
-						'page'       => array(
-							'type'        => 'integer',
-							'description' => __( 'Current page of the collection.', 'formidable' ),
-							'default'     => 1,
-						),
-						'page_size'  => array(
-							'type'        => 'integer',
-							'description' => __( 'Maximum number of items to return per page.', 'formidable' ),
-							'default'     => 25,
-						),
-						'order'      => array(
-							'type'        => 'string',
-							'description' => __( 'Order of results (asc or desc, case-insensitive).', 'formidable' ),
-							'default'     => 'asc',
-							'enum'        => array( 'asc', 'desc', 'ASC', 'DESC' ),
-						),
-						'order_by'   => array(
-							'type'        => 'string',
-							'description' => __( 'Field to order by (id, created_at, etc.).', 'formidable' ),
-							'default'     => 'id',
-						),
-						'search'     => array(
-							'type'        => 'string',
-							'description' => __( 'Search term to filter entries by field values.', 'formidable' ),
-						),
-						'start_date' => array(
-							'type'        => 'string',
-							'description' => __( 'Start date for filtering entries (YYYY-MM-DD format).', 'formidable' ),
-						),
-						'end_date'   => array(
-							'type'        => 'string',
-							'description' => __( 'End date for filtering entries (YYYY-MM-DD format).', 'formidable' ),
-						),
-						'is_draft'   => array(
-							'type'        => 'integer',
-							'enum'        => array( 0, 1, FrmSpamEntriesHelper::SPAM_ENTRY_STATUS ),
-							'description' => __( 'Filter by status: 0 submitted, 1 draft, 4 spam. Omitted returns submitted entries and drafts, not spam.', 'formidable' ),
-						),
-					),
-				),
+				'input_schema'        => self::get_list_entries_input_schema(),
 				'output_schema'       => self::get_list_entries_output_schema(),
 				'execute_callback'    => 'FrmAbilitiesEntriesController::execute_list_entries',
 				'permission_callback' => 'FrmAbilitiesEntriesController::can_list_entries',
 				'meta'                => FrmAbilitiesHelper::meta( true, false, true ),
 			)
+		);
+	}
+
+	/**
+	 * Build the input schema for the list entries ability.
+	 *
+	 * The search term is only applied when Pro is active, so it is only
+	 * advertised then. Without Pro an agent would send it and get every entry.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private static function get_list_entries_input_schema() {
+		$properties = array(
+			'form_id'    => array(
+				'type'        => array( 'string', 'integer' ),
+				'description' => __( 'Form ID or form_key to filter entries. Optional, returns entries from all forms if not provided.', 'formidable' ),
+			),
+			'page'       => array(
+				'type'        => 'integer',
+				'description' => __( 'Current page of the collection.', 'formidable' ),
+				'default'     => 1,
+			),
+			'page_size'  => array(
+				'type'        => 'integer',
+				'description' => __( 'Maximum number of items to return per page.', 'formidable' ),
+				'default'     => 50,
+			),
+			'order'      => array(
+				'type'        => 'string',
+				'description' => __( 'Order of results (asc or desc, case-insensitive).', 'formidable' ),
+				'default'     => 'desc',
+				'enum'        => array( 'asc', 'desc', 'ASC', 'DESC' ),
+			),
+			'order_by'   => array(
+				'type'        => 'string',
+				'description' => __( 'Field to order by (id, created_at, etc.).', 'formidable' ),
+				'default'     => 'created_at',
+			),
+			'start_date' => array(
+				'type'        => 'string',
+				'description' => __( 'Return entries created on or after this day (YYYY-MM-DD format, UTC).', 'formidable' ),
+			),
+			'end_date'   => array(
+				'type'        => 'string',
+				'description' => __( 'Return entries created on or before this day, including the whole day (YYYY-MM-DD format, UTC).', 'formidable' ),
+			),
+			'is_draft'   => array(
+				'type'        => 'integer',
+				'enum'        => array( 0, 1, FrmSpamEntriesHelper::SPAM_ENTRY_STATUS ),
+				'description' => __( 'Filter by status: 0 submitted, 1 draft, 4 spam. Omitted returns submitted entries and drafts, not spam.', 'formidable' ),
+			),
+		);
+
+		if ( class_exists( 'FrmProEntriesHelper' ) ) {
+			$properties['search'] = array(
+				'type'        => 'string',
+				'description' => __( 'Search term to filter entries by field values. Requires form_id.', 'formidable' ),
+			);
+		}
+
+		return array(
+			'default'    => array(),
+			'type'       => 'object',
+			'properties' => $properties,
 		);
 	}
 
@@ -330,12 +349,14 @@ class FrmAbilitiesEntriesController {
 			}
 		}
 
+		// FrmDb reads '>' and '<' as >= and <=, so both days are included.
 		if ( ! empty( $input['start_date'] ) ) {
 			$where['it.created_at >'] = gmdate( 'Y-m-d H:i:s', strtotime( $input['start_date'] ) );
 		}
 
 		if ( ! empty( $input['end_date'] ) ) {
-			$where['it.created_at <'] = gmdate( 'Y-m-d H:i:s', strtotime( $input['end_date'] ) );
+			// Compare against the last second of the day so the whole end day is included.
+			$where['it.created_at <'] = gmdate( 'Y-m-d 23:59:59', strtotime( $input['end_date'] ) );
 		}
 
 		if ( isset( $where['it.id'] ) && ! $where['it.id'] ) {
