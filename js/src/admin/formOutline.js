@@ -80,6 +80,10 @@ export function initFormOutline() {
 	};
 
 	const render = () => {
+		if ( ! isOutlineActive() ) {
+			return;
+		}
+
 		const query = search.value.trim().toLocaleLowerCase();
 		const pages = getPages();
 		const { tag, span } = frmDom;
@@ -182,13 +186,17 @@ export function initFormOutline() {
 			} );
 		} );
 
+		const resultCount = children.length;
 		const hasFields = pages.some( page => page.fields.length > 0 );
 		// A lone page with no sections gives nothing to jump to, so explain how to add some instead.
-		const hasOutline = pages.length > 1 || children.length > 1;
-		const noResults = query !== '' && children.length === 0;
+		const hasOutline = pages.length > 1 || resultCount > 1;
+		const noResults = query !== '' && resultCount === 0;
 		const showEmpty = noResults || ( query === '' && ! hasOutline );
-		const items = showEmpty ? [] : children;
-		list.replaceChildren( ...items );
+		const fragment = document.createDocumentFragment();
+		if ( ! showEmpty ) {
+			fragment.append( ...children );
+		}
+		list.replaceChildren( fragment );
 		emptyMessage.classList.toggle( 'frm_hidden', ! showEmpty );
 		search.parentElement.classList.toggle( 'frm_hidden', ! hasFields );
 		if ( noResults ) {
@@ -204,7 +212,7 @@ export function initFormOutline() {
 			status.textContent = sprintf( _n( '%d page', '%d pages', pages.length, 'formidable' ), pages.length );
 			return;
 		}
-		if ( children.length === 0 ) {
+		if ( resultCount === 0 ) {
 			status.textContent = __( 'No pages or fields found.', 'formidable' );
 			return;
 		}
@@ -218,11 +226,9 @@ export function initFormOutline() {
 		observer = new MutationObserver( () => {
 			clearTimeout( renderTimeout );
 			renderTimeout = setTimeout( () => {
-				// New pages add new sortable lists, so observe again even when the outline is hidden.
+				// New pages add new sortable lists that need to be observed while viewing the outline.
 				observeBuilder();
-				if ( isOutlineActive() ) {
-					render();
-				}
+				render();
 			}, 100 );
 		} );
 		builder.querySelectorAll( 'ul.frm_sorting' ).forEach( sortableList => {
@@ -237,12 +243,18 @@ export function initFormOutline() {
 		}
 	};
 
-	new MutationObserver( () => {
-		if ( isOutlineActive() ) {
-			render();
+	const updateOutline = () => {
+		clearTimeout( renderTimeout );
+		observer?.disconnect();
+		if ( ! isOutlineActive() ) {
+			return;
 		}
-	} ).observe( slide, { attributeFilter: [ 'class' ] } );
-	observeBuilder();
+		observeBuilder();
+		render();
+	};
+
+	new MutationObserver( updateOutline ).observe( slide, { attributeFilter: [ 'class' ] } );
+	updateOutline();
 	search.addEventListener( 'input', render );
 	list.addEventListener( 'click', event => {
 		const button = event.target.closest( 'button[data-field-id]' );
