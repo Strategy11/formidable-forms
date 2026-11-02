@@ -340,6 +340,11 @@ class FrmAbilitiesSubscriptionsController {
 	private static function build_list_query( $table, $input ) {
 		global $wpdb;
 
+		if ( ! FrmTransLiteAppHelper::payments_table_exists() ) {
+			// No gateway has been set up yet, so the table was never created.
+			return array();
+		}
+
 		list( $order_clause, $limit_clause ) = FrmAbilitiesHelper::prepare_order_and_limit( $input );
 
 		$table_name = $wpdb->prefix . $table;

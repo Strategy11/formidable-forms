@@ -119,6 +119,36 @@ class test_FrmAbilitiesSubscriptionsController extends FrmUnitTest {
 	}
 
 	/**
+	 * Without a gateway the frm_subscriptions table is never created. Listing must
+	 * return nothing without querying a missing table and logging an error.
+	 *
+	 * @see https://github.com/Strategy11/formidable-pro/issues/6860
+	 *
+	 * @return void
+	 */
+	public function test_list_subscriptions_returns_nothing_when_the_table_is_missing() {
+		global $wpdb;
+
+		delete_option( ( new FrmTransLiteDb() )->db_opt_name );
+
+		$missing_table = function ( $query ) use ( $wpdb ) {
+			return str_replace( $wpdb->prefix . 'frm_subscriptions', $wpdb->prefix . 'frm_missing_subscriptions', $query );
+		};
+		add_filter( 'query', $missing_table );
+
+		$suppress         = $wpdb->suppress_errors( true );
+		$wpdb->last_error = '';
+		$listed           = $this->execute( 'list-subscriptions', array() );
+		$last_error       = $wpdb->last_error;
+		$wpdb->suppress_errors( $suppress );
+
+		remove_filter( 'query', $missing_table );
+
+		$this->assertSame( array(), $listed );
+		$this->assertSame( '', $last_error, 'Listing should not query a table that does not exist.' );
+	}
+
+	/**
 	 * @return void
 	 */
 	public function test_list_subscriptions_filters_by_form() {
