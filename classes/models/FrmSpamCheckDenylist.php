@@ -429,11 +429,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * @return string
 	 */
 	protected function convert_values_to_string( $values ) {
-		if ( ! is_array( $values ) ) {
-			return $values;
-		}
-
-		// Keep unicode and slashes as typed. Escaped, á leaves "00e1" for entries like "1ster" to match.
+		// Keep unicode and slashes as typed. Escaped (\u00e1), the hex digits false-match entries like "1ster".
 		return (string) wp_json_encode( $values, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
 	}
 

@@ -672,7 +672,7 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 	}
 
 	/**
-	 * Accented characters are compared as typed. Escaped as á, they leave
+	 * Accented characters are compared as typed. Escaped as \u00e1, they leave
 	 * hex digits in the compared string that false-match entries like `1ster`.
 	 */
 	public function test_check_values_with_accented_text() {
