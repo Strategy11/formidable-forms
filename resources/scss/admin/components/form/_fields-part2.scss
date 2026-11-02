@@ -155,7 +155,7 @@
 	white-space: nowrap;
 }
 
-.frm_field_box:not(.edit_field_type_divider):hover > .frm_inner_field_container > label,
+.frm_field_box:not(.edit_field_type_divider):not(.edit_field_type_tabs):hover > .frm_inner_field_container > label,
 .frm_field_box .divider_section_only:hover > .frm_inner_field_container > label,
 li.ui-state-default.selected > .frm_inner_field_container > label {
 	max-width: calc(100% - 100px);

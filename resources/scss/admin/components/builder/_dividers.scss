@@ -101,7 +101,8 @@ li.selected .divider_section_only::before {
 	border-color: transparent;
 }
 
-.frm_sorting li.ui-state-default.edit_field_type_divider {
+.frm_sorting li.ui-state-default.edit_field_type_divider,
+.frm_sorting li.ui-state-default.edit_field_type_tabs {
 	overflow: visible;
 	position: relative;
 	padding: 0 0 0 20px;

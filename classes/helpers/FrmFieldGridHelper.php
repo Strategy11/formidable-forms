@@ -6,6 +6,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFieldGridHelper {
 
 	/**
+	 * Fields that end a list of fields: a section, or Pro's Tabs field.
+	 *
+	 * @var string[]
+	 */
+	const LIST_END_TYPES = array( 'end_divider', 'end_tabs' );
+
+	/**
 	 * @var bool
 	 */
 	private $parent_li;
@@ -46,9 +53,19 @@ class FrmFieldGridHelper {
 	private $section_helper;
 
 	/**
-	 * @var bool
+	 * False at the top of the form, otherwise the type of field this list belongs to.
+	 * True is the original value for a section's list.
+	 *
+	 * @var bool|string
 	 */
 	private $nested;
+
+	/**
+	 * The field type that closes section_helper.
+	 *
+	 * @var string
+	 */
+	private $closing_type = '';
 
 	/**
 	 * @var int
@@ -61,7 +78,7 @@ class FrmFieldGridHelper {
 	private $section_is_open = false;
 
 	/**
-	 * @param bool $nested
+	 * @param bool|string $nested False at the top of the form, or the type of field this list belongs to ('divider' or 'tabs').
 	 */
 	public function __construct( $nested = false ) {
 		$this->parent_li           = false;
@@ -78,12 +95,12 @@ class FrmFieldGridHelper {
 	public function set_field( $field ) {
 		$this->field = $field;
 
-		if ( $this->section_helper && 'end_divider' !== $field->type ) {
+		if ( $this->section_helper && $this->closing_type !== $field->type ) {
 			$this->section_helper->set_field( $field );
 			return;
 		}
 
-		if ( 'end_divider' === $field->type ) {
+		if ( in_array( $field->type, self::LIST_END_TYPES, true ) ) {
 			$this->field_layout_class = '';
 			$this->active_field_size  = $this->section_size;
 			$this->section_is_open    = false;
@@ -93,13 +110,29 @@ class FrmFieldGridHelper {
 			$this->active_field_size  = self::get_size_of_class( $this->field_layout_class );
 		}
 
-		if ( 'divider' !== $field->type || $this->nested ) {
+		if ( ! $this->can_open_list( $field->type ) ) {
 			return;
 		}
 
 		$this->section_size      = $this->active_field_size;
 		$this->active_field_size = 0;
-		$this->section_helper    = new self( true );
+		$this->section_helper    = new self( $field->type );
+		$this->closing_type      = 'tabs' === $field->type ? 'end_tabs' : 'end_divider';
+	}
+
+	/**
+	 * A section can start a list at the top of the form or inside a Tabs field. A Tabs field only at the top.
+	 *
+	 * @param string $type The field type.
+	 *
+	 * @return bool
+	 */
+	private function can_open_list( $type ) {
+		if ( 'tabs' === $type ) {
+			return ! $this->nested;
+		}
+
+		return 'divider' === $type && ( ! $this->nested || 'tabs' === $this->nested );
 	}
 
 	/**
@@ -143,7 +176,7 @@ class FrmFieldGridHelper {
 			$this->close_field_wrapper();
 		}
 
-		if ( false === $this->parent_li && 'end_divider' !== $this->field->type ) {
+		if ( false === $this->parent_li && ! in_array( $this->field->type, self::LIST_END_TYPES, true ) ) {
 			$this->begin_field_wrapper();
 		}
 
@@ -173,7 +206,7 @@ class FrmFieldGridHelper {
 			return false;
 		}
 
-		if ( 'end_divider' === $this->field->type ) {
+		if ( in_array( $this->field->type, self::LIST_END_TYPES, true ) ) {
 			return false;
 		}
 
@@ -231,14 +264,14 @@ class FrmFieldGridHelper {
 			return;
 		}
 
-		if ( 'divider' === $this->field->type ) {
+		if ( in_array( $this->field->type, array( 'divider', 'tabs' ), true ) ) {
 			$this->section_is_open = true;
 		}
 
 		if ( $this->section_helper ) {
 			$this->section_helper->sync_list_size();
 
-			if ( 'end_divider' === $this->field->type ) {
+			if ( $this->closing_type === $this->field->type ) {
 				$this->maybe_close_section_helper();
 			}
 
@@ -289,7 +322,7 @@ class FrmFieldGridHelper {
 	 * @return bool
 	 */
 	private function can_support_current_layout() {
-		if ( 'end_divider' === $this->field->type ) {
+		if ( in_array( $this->field->type, self::LIST_END_TYPES, true ) ) {
 			return true;
 		}
 		return $this->can_support_an_additional_layout( $this->field_layout_class );

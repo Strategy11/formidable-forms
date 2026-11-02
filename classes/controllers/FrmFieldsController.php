@@ -310,8 +310,9 @@ class FrmFieldsController {
 			return;
 		}
 
+		// Fields that open or close a list of fields are rendered in place, so the fields after them land inside the list.
 		$ajax_loading    = ! empty( $values['ajax_load'] );
-		$ajax_this_field = isset( $values['count'] ) && $values['count'] > 10 && ! in_array( $field_object->type, array( 'divider', 'end_divider' ), true );
+		$ajax_this_field = isset( $values['count'] ) && $values['count'] > 10 && ! in_array( $field_object->type, array( 'divider', 'end_divider', 'tabs', 'end_tabs' ), true );
 
 		if ( $ajax_loading && $ajax_this_field ) {
 			$li_classes = self::get_classes_for_builder_field( array(), $display, $field_obj );

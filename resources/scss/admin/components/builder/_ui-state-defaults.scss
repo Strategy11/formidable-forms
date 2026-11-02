@@ -17,11 +17,13 @@
 .frm_sorting li.ui-state-default.frm_not_divider:hover,
 .frm_sorting li.ui-state-default.ui-sortable-helper,
 .frm_sorting li.ui-state-default.edit_field_type_divider .divider_section_only:hover,
+.frm_sorting li.ui-state-default.edit_field_type_tabs > .divider_section_only:hover,
 .frm_sorting .repeat_section li.ui-state-default.edit_field_type_end_divider:hover,
 .frm_sorting li.ui-state-default.selected.edit_field_type_divider .divider_section_only,
 .frm_update_msg,
 .frm_sorting li.ui-state-default.frm_not_divider.selected,
-.frm_sorting li.ui-state-default.selected.edit_field_type_divider .divider_section_only {
+.frm_sorting li.ui-state-default.selected.edit_field_type_divider .divider_section_only,
+.frm_sorting li.ui-state-default.selected.edit_field_type_tabs > .divider_section_only {
 	border-color: var(--primary-500);
 	transition: 0.5s border-color ease-in-out;
 }
@@ -38,7 +40,8 @@
 	box-shadow: inset 0 0 2px 1px var(--blue-border);
 }
 
-.frm_sorting li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-show-hover {
+.frm_sorting li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-show-hover,
+.frm_sorting li.ui-state-default.selected.edit_field_type_tabs > .divider_section_only .frm-show-hover {
 	visibility: visible !important;
 	display: inline !important;
 }
@@ -285,7 +288,7 @@
  * The action icons sit at opacity 0 until the card is hovered or selected, so tabbing to Move or
  * More focused a control nobody could see. Focus reveals them the same way hover does.
  */
-#frm-show-fields li.frm_field_box:not(.edit_field_type_divider):focus-within > .frm_inner_field_container > .frm-show-hover {
+#frm-show-fields li.frm_field_box:not(.edit_field_type_divider):not(.edit_field_type_tabs):focus-within > .frm_inner_field_container > .frm-show-hover {
 	opacity: 1;
 }
 

@@ -34,7 +34,8 @@ li.sortable-placeholder {
 	bottom: 0;
 }
 
-.edit_field_type_divider + li.sortable-placeholder {
+.edit_field_type_divider + li.sortable-placeholder,
+.edit_field_type_tabs + li.sortable-placeholder {
 	box-shadow: 2px 5px 0 2px var(--primary-500);
 }
 

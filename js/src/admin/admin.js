@@ -1600,8 +1600,9 @@ window.frmAdminBuildJS = function() {
 		maybeOpenCollapsedPage( placeholder );
 
 		const $previousFieldContainer = ui.helper.parent();
-		const previousSection = ui.helper.get( 0 ).closest( 'ul.start_divider' );
-		const newSection = placeholder.closest( 'ul.start_divider' );
+		// A Tabs list is a start_divider list too, but its sections are not inside a section.
+		const previousSection = ui.helper.get( 0 ).closest( 'ul.start_divider:not(.start_tabs)' );
+		const newSection = placeholder.closest( 'ul.start_divider:not(.start_tabs)' );
 
 		if ( draggable.classList.contains( 'frm-new-field' ) ) {
 			insertNewFieldByDragging( draggable.id );
@@ -1736,7 +1737,8 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
-	 * Get the rows of a sortable list as a plain array, skipping the end divider.
+	 * Get the rows of a sortable list as a plain array, skipping the end divider and hidden rows.
+	 * Pro hides the rows of inactive section tabs, and a hidden row has no position to drop beside.
 	 *
 	 * @param {jQuery} $list The list to read the rows from.
 	 * @return {Array.<Element>} The rows that can accept a drop.
@@ -1746,7 +1748,7 @@ window.frmAdminBuildJS = function() {
 		if ( ! list ) {
 			return [];
 		}
-		return Array.from( list.children ).filter( row => ! row.classList.contains( 'edit_field_type_end_divider' ) );
+		return Array.from( list.children ).filter( row => ! row.hidden && ! row.classList.contains( 'edit_field_type_end_divider' ) );
 	}
 
 	/**
@@ -2518,6 +2520,11 @@ window.frmAdminBuildJS = function() {
 			return false;
 		}
 
+		const tabsRule = getTabsDropRule( draggable, droppable );
+		if ( null !== tabsRule ) {
+			return tabsRule;
+		}
+
 		const isSubmitBtn = draggable.classList.contains( 'edit_field_type_submit' );
 		const containSubmitBtn = ! draggable.classList.contains( 'form_field' ) && Boolean( draggable.querySelector( '.edit_field_type_submit' ) );
 
@@ -2619,6 +2626,55 @@ window.frmAdminBuildJS = function() {
 	 */
 	function isSectionFieldType( fieldType ) {
 		return 'divider' === fieldType || fieldType.startsWith( 'divider|' );
+	}
+
+	/**
+	 * Pro's Tabs field holds a list of sections, ul.start_tabs, which is also a start_divider list.
+	 * Only single sections go in it, nothing goes beside them, and a Tabs field only goes in the main list or one of its rows.
+	 *
+	 * @param {HTMLElement} draggable The field, field group or field list button being dragged.
+	 * @param {HTMLElement} droppable The list or field group under the cursor.
+	 * @return {boolean|null} Whether the drop is allowed, or null when the other rules decide.
+	 */
+	function getTabsDropRule( draggable, droppable ) {
+		const isNewField = draggable.classList.contains( 'frm-new-field' );
+		const draggableIsTabs = isNewField
+			? 'tabs' === draggable.id
+			: draggable.classList.contains( 'edit_field_type_tabs' ) || null !== draggable.querySelector( '.edit_field_type_tabs' );
+
+		if ( draggableIsTabs ) {
+			// The other rules still check the submit button position and how full the row is.
+			const isMainRow = 'frm-show-fields' === droppable.parentElement?.parentElement?.id;
+			return 'frm-show-fields' === droppable.id || isMainRow ? null : false;
+		}
+
+		if ( droppable.classList.contains( 'start_tabs' ) ) {
+			return isSingleSection( draggable, isNewField );
+		}
+
+		if ( droppable.parentElement?.parentElement?.classList.contains( 'start_tabs' ) ) {
+			// This is the row of a tab, and a tab is a section on its own.
+			return false;
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param {HTMLElement} draggable  The field, field group or field list button being dragged.
+	 * @param {boolean}     isNewField True when dragging from the field list.
+	 * @return {boolean} True for a section, or a field group that holds only a section.
+	 */
+	function isSingleSection( draggable, isNewField ) {
+		if ( isNewField ) {
+			return isSectionFieldType( draggable.id );
+		}
+
+		const fields = draggable.classList.contains( 'form-field' )
+			? [ draggable ]
+			: Array.from( draggable.querySelectorAll( ':scope > ul > li.form-field' ) );
+
+		return 1 === fields.length && fields[ 0 ].classList.contains( 'edit_field_type_divider' );
 	}
 
 	// Don't allow a new page break or hidden field in a field group.
@@ -3836,7 +3892,8 @@ window.frmAdminBuildJS = function() {
 		const regex = /id="(\S+)"/;
 		const match = regex.exec( msg );
 		const field = document.getElementById( match[ 1 ] );
-		const section = `#${ match[ 1 ] }.edit_field_type_divider ul.frm_sorting.start_divider`;
+		// A section's list, or a Tabs field's list and the lists of the sections in it.
+		const section = `#${ match[ 1 ] } ul.frm_sorting.start_divider`;
 		const $thisSection = jQuery( section );
 		const type = field.getAttribute( 'data-type' );
 
@@ -7143,7 +7200,9 @@ window.frmAdminBuildJS = function() {
 			const originalList = e.originalEvent.target.closest( 'ul.frm_sorting' );
 			if ( null !== originalList ) {
 				// prevent section click if clicking a field group within a section.
-				if ( originalList.classList.contains( 'edit_field_type_divider' ) || originalList.parentNode.parentNode.classList.contains( 'start_divider' ) ) {
+				// A section in a Tabs field sits in a row of the tabs list, which is a start_divider list too.
+				const groupList = originalList.parentNode.parentNode.classList;
+				if ( originalList.classList.contains( 'edit_field_type_divider' ) || ( groupList.contains( 'start_divider' ) && ! groupList.contains( 'start_tabs' ) ) ) {
 					return;
 				}
 			}
@@ -13432,6 +13491,7 @@ window.frmAdminBuildJS = function() {
 		handleInsertFieldByDraggingResponse,
 		handleAddFieldClickResponse,
 		syncLayoutClasses,
+		syncAfterDragAndDrop,
 		moveFieldSettings,
 		maybeCollapseSettings,
 	};

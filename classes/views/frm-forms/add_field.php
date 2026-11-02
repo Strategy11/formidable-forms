@@ -5,8 +5,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <li id="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" class="<?php echo esc_attr( $li_classes ); ?>" data-fid="<?php echo esc_attr( $field['id'] ); ?>" data-formid="<?php echo esc_attr( 'divider' === $field['type'] && isset( $field['form_select'] ) ? $field['form_select'] : $field['form_id'] ); ?>" data-ftype="<?php echo esc_attr( $display['type'] ); ?>" data-type="<?php echo esc_attr( $field['type'] ); ?>" <?php FrmAppHelper::array_to_html_params( $extra_field_attributes, true ); ?>>
 <?php
-if ( $field['type'] === 'divider' ) {
-	$icon_class = ! empty( $field['form_select'] ) ? 'frm_repeat_icon' : 'frm-form-title-style';
+// Sections, and Pro's Tabs field, hold a list of their own.
+$is_field_list = in_array( $field['type'], array( 'divider', 'tabs' ), true );
+
+if ( $is_field_list ) {
+	if ( 'tabs' === $field['type'] ) {
+		$icon_class = 'frm_tabs_icon';
+	} elseif ( ! empty( $field['form_select'] ) ) {
+		$icon_class = 'frm_repeat_icon';
+	} else {
+		$icon_class = 'frm-form-title-style';
+	}
 	FrmAppHelper::icon_by_class( "frmfont $icon_class frm-divider-icon" );
 	?>
 <div class="divider_section_only">
@@ -25,7 +34,7 @@ do_action( 'frm_extra_field_actions', $field['id'] );
 			(ID <?php echo esc_html( $field['id'] ); ?>)
 		</div>
 
-		<?php if ( $field['type'] === 'divider' ) : ?>
+		<?php if ( $is_field_list ) : ?>
 			<a href="#" class="frm-collapse-section" title="<?php esc_attr_e( 'Expand/Collapse Section', 'formidable' ); ?>">
 				<?php
 				FrmAppHelper::icon_by_class(
@@ -134,13 +143,23 @@ if ( 'divider' === $field['type'] ) {
 <ul class="start_divider frm_sorting frm_grid_container">
 	<?php
 	FrmAppHelper::icon_by_class( 'frmfont frm-circle frm-divider-icon' );
-} elseif ( 'end_divider' === $field['type'] ) {
+} elseif ( 'tabs' === $field['type'] ) {
+	// The tabs list is also a start_divider list, so it is set up and sorted like one. It only takes sections.
+	?>
+</div>
+<div class="frm_no_section_fields">
+	<p class="howto"><?php esc_html_e( 'Add Sections Here', 'formidable' ); ?></p>
+</div>
+<ul class="start_divider start_tabs frm_sorting frm_grid_container">
+	<?php
+	FrmAppHelper::icon_by_class( 'frmfont frm-circle frm-divider-icon' );
+} elseif ( in_array( $field['type'], array( 'end_divider', 'end_tabs' ), true ) ) {
 	?>
 </ul>
 	<?php
-}
+}//end if
 
-if ( $field['type'] !== 'divider' ) {
+if ( ! $is_field_list ) {
 	?>
 </li>
 	<?php

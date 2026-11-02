@@ -2,7 +2,8 @@
  * Components - Divider Icons
  */
 
-.edit_field_type_divider .frm-divider-icon.frmsvg {
+.edit_field_type_divider .frm-divider-icon.frmsvg,
+.edit_field_type_tabs .frm-divider-icon.frmsvg {
 	padding: 2px;
 	position: absolute;
 	left: -12px;
@@ -11,7 +12,8 @@
 	border-radius: 50%;
 }
 
-.edit_field_type_divider .start_divider .frm-divider-icon.frmsvg {
+.edit_field_type_divider .start_divider .frm-divider-icon.frmsvg,
+.edit_field_type_tabs .start_tabs > .frm-divider-icon.frmsvg {
 	height: 8px;
 	width: 8px;
 	padding: 0;
@@ -22,12 +24,16 @@
 }
 
 .edit_field_type_divider.selected .frm-divider-icon.frmsvg,
-.edit_field_type_divider:hover .frm-divider-icon.frmsvg {
+.edit_field_type_divider:hover .frm-divider-icon.frmsvg,
+.edit_field_type_tabs.selected > .frm-divider-icon.frmsvg,
+.edit_field_type_tabs:hover > .frm-divider-icon.frmsvg {
 	background: var(--primary-500);
 }
 
 .edit_field_type_divider.selected .start_divider .frm-divider-icon.frmsvg,
-.edit_field_type_divider:hover .start_divider .frm-divider-icon.frmsvg {
+.edit_field_type_divider:hover .start_divider .frm-divider-icon.frmsvg,
+.edit_field_type_tabs.selected .start_tabs > .frm-divider-icon.frmsvg,
+.edit_field_type_tabs:hover .start_tabs > .frm-divider-icon.frmsvg {
 	background-color: #fff;
 	color: var(--primary-500);
 }
@@ -53,6 +59,8 @@
 }
 
 .frm_sorting li.edit_field_type_divider:hover,
-.frm_sorting li.edit_field_type_divider.selected {
+.frm_sorting li.edit_field_type_divider.selected,
+.frm_sorting li.edit_field_type_tabs:hover,
+.frm_sorting li.edit_field_type_tabs.selected {
 	border-left-color: var(--primary-500);
 }
