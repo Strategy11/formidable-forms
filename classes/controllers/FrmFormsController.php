@@ -2742,12 +2742,14 @@ class FrmFormsController {
 	}
 
 	/**
+	 * Check if a draft form should be hidden. A draft form only renders on the preview page, for everyone.
+	 *
 	 * @param object $form
 	 *
 	 * @return bool
 	 */
 	private static function is_viewable_draft_form( $form ) {
-		return $form->status === 'draft' && current_user_can( 'frm_edit_forms' ) && ! FrmAppHelper::is_preview_page();
+		return $form->status === 'draft' && ! FrmAppHelper::is_preview_page();
 	}
 
 	/**
