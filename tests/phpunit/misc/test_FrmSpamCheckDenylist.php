@@ -673,6 +673,26 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 	}
 
 	/**
+	 * Accented characters are compared as typed. Escaped as á, they leave
+	 * hex digits in the compared string that false-match entries like `1ster`.
+	 */
+	public function test_check_values_with_accented_text() {
+		$values                                      = $this->default_values;
+		$values['item_meta'][ $this->text_field_id ] = 'Máster en Educación';
+		$spam_check                                  = new FrmSpamCheckDenylist( $values );
+
+		$this->assertFalse( $this->check_values_with( array( array( 'words' => array( '1ster' ) ) ), $spam_check ) );
+		$regex_denylist = array(
+			'words'    => array( '1ster' ),
+			'is_regex' => true,
+		);
+		$this->assertFalse( $this->check_values_with( array( $regex_denylist ), $spam_check ) );
+
+		// An accented denylist word matches the accented text it was written for.
+		$this->assertTrue( $this->check_values_with( array( array( 'words' => array( 'máster' ) ) ), $spam_check ) );
+	}
+
+	/**
 	 * Option fields hold values the site author wrote, and password fields hold
 	 * secrets, so fill_default_denylist_data() always adds them to the skipped
 	 * field types. A denylisted word in one of them is not spam.
