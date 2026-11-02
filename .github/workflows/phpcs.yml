@@ -18,7 +18,7 @@ jobs:
     name: Run PHPCS inspection
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.1.1
+      - uses: actions/checkout@v6
       # Install only what this job runs, instead of every require-dev package.
       # phpcs.xml references WordPress, WordPressVIPMinimum and SlevomatCodingStandard;
       # wpcs also pulls phpcsextra/phpcsutils and the dealerdirect installer that
