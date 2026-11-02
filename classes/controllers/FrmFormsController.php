@@ -2986,6 +2986,7 @@ class FrmFormsController {
 	 *
 	 * @since 2.05
 	 * @since 6.0 `$args['force_delay_redirect']` is added.
+	 * @since x.x `$args['on_submit_action']` is added.
 	 *
 	 * @param array $args {
 	 *     The args.
@@ -2996,6 +2997,7 @@ class FrmFormsController {
 	 *     @type string $action               The action event. Accepts `create` or `update`.
 	 *     @type array  $fields               The array of fields.
 	 *     @type int    $force_delay_redirect Force to show the message before redirecting in case redirect method runs.
+	 *     @type object $on_submit_action     The Confirmation action being run, when there is one.
 	 * }
 	 */
 	public static function run_success_action( $args ) {
@@ -3159,7 +3161,8 @@ class FrmFormsController {
 			FrmOnSubmitHelper::populate_on_submit_data( $args['form']->options );
 			self::run_success_action( $args );
 		} elseif ( 1 === count( $args['conf_method'] ) ) {
-			FrmOnSubmitHelper::populate_on_submit_data( $args['form']->options, reset( $args['conf_method'] ) );
+			$args['on_submit_action'] = reset( $args['conf_method'] );
+			FrmOnSubmitHelper::populate_on_submit_data( $args['form']->options, $args['on_submit_action'] );
 			$args['conf_method'] = $args['form']->options['success_action'];
 			self::run_success_action( $args );
 		} else {
@@ -3224,6 +3227,7 @@ class FrmFormsController {
 	private static function get_run_success_action_args( $args, $action ) {
 		$new_args = $args;
 
+		$new_args['on_submit_action'] = $action;
 		FrmOnSubmitHelper::populate_on_submit_data( $new_args['form']->options, $action, $args['action'] );
 
 		$opt                     = 'update' === $args['action'] ? 'edit_' : 'success_';
@@ -3254,7 +3258,24 @@ class FrmFormsController {
 
 		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( ! $post || $args['form']->options[ $opt . '_page_id' ] != $post->ID ) {
-			$page     = get_post( $args['form']->options[ $opt . '_page_id' ] );
+			$page = get_post( $args['form']->options[ $opt . '_page_id' ] );
+
+			/**
+			 * Allows replacing the output of a Confirmation action that shows page content.
+			 *
+			 * @since x.x
+			 *
+			 * @param string|null $output Return a string to show it instead of the page content.
+			 * @param WP_Post     $page   The selected post.
+			 * @param array       $args   See {@see FrmFormsController::run_success_action()}.
+			 */
+			$output = apply_filters( 'frm_on_submit_page_output', null, $page, $args );
+
+			if ( is_string( $output ) ) {
+				echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				return;
+			}
+
 			$old_post = $post;
 			$post     = $page;
 			$content  = apply_filters( 'frm_content', $page->post_content, $args['form'], $args['entry_id'] );
