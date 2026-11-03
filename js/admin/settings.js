@@ -10,6 +10,65 @@
 		document.addEventListener( 'change', handleChangeEvent );
 		document.addEventListener( 'keydown', handleKeyDownEvent );
 		document.addEventListener( 'click', handleClickEvent );
+		document.addEventListener( 'input', handleInputEvent );
+	}
+
+	function handleInputEvent( e ) {
+		if ( 'frm-settings-search' === e.target.id ) {
+			searchSettings( e.target.value );
+		}
+	}
+
+	/**
+	 * Filter the settings tabs and rows by the search term.
+	 *
+	 * Tabs without a match are hidden, and the first matching tab is opened
+	 * when the active tab has no match.
+	 *
+	 * @param {string} term Search term.
+	 * @return {void}
+	 */
+	function searchSettings( term ) {
+		const query = term.trim().toLowerCase();
+		const tabs = document.querySelectorAll( '.frm-form-setting-tabs > li' );
+		let firstMatch = null;
+		let activeMatches = false;
+
+		tabs.forEach( tab => {
+			const link = tab.querySelector( 'a' );
+			const href = link?.getAttribute( 'href' );
+			const panel = href ? document.querySelector( href ) : null;
+			if ( ! panel ) {
+				return;
+			}
+
+			const rows = Array.from( panel.querySelectorAll( '.frm_grid_container, h3, .frm_license_box' ) ).filter( row => ! row.parentElement.closest( '.frm_license_box' ) );
+			frmDom.util.highlightText( tab.querySelector( 'span' ), query );
+			const tabNameMatches = tab.textContent.toLowerCase().includes( query );
+			let matches = ! query || tabNameMatches;
+
+			rows.forEach( row => {
+				const labels = row.matches( 'h3, .frm_license_box' ) ? [ row ] : Array.from( row.querySelectorAll( 'label' ) );
+				const searchable = labels.length ? labels : [ row ];
+				const rowMatches = ! query || tabNameMatches || searchable.some( element => element.textContent.toLowerCase().includes( query ) );
+				row.classList.toggle( 'frm-search-hidden', ! rowMatches );
+				searchable.forEach( element => frmDom.util.highlightText( element, query ) );
+				matches = matches || rowMatches;
+			} );
+
+			tab.classList.toggle( 'frm-search-hidden', ! matches );
+			if ( matches && ! firstMatch ) {
+				firstMatch = link;
+			}
+			if ( matches && tab.classList.contains( 'active' ) ) {
+				activeMatches = true;
+			}
+		} );
+
+		document.getElementById( 'frm-settings-search-empty' ).classList.toggle( 'frm-search-hidden', !! firstMatch );
+		if ( firstMatch && ! activeMatches ) {
+			firstMatch.click();
+		}
 	}
 
 	function handleChangeEvent( e ) {
@@ -23,9 +82,17 @@
 	}
 
 	function handleKeyDownEvent( e ) {
-		switch ( e.key ) { // eslint-disable-line sonarjs/no-small-switch
+		switch ( e.key ) {
 			case ' ':
 				handleSpaceDownEvent( e );
+				break;
+			case 'Enter':
+				// Enter in the search box would submit the settings form.
+				if ( 'frm-settings-search' === e.target.id ) {
+					e.preventDefault();
+				}
+				break;
+			default:
 				break;
 		}
 	}

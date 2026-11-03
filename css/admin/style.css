@@ -558,3 +558,9 @@ body.rtl .frm-style-card-separator {
 		width: 18px !important;
 	}
 }
+
+.frm-white-body .frm-right-panel input.frm-style-search[type="search"] {
+	box-sizing: border-box;
+	width: 100%;
+	margin: 0 0 var(--gap-xs);
+}

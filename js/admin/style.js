@@ -61,6 +61,85 @@
 	}
 
 	/**
+	 * Filter the style settings by the search term.
+	 *
+	 * Sections without a match are hidden, and sections with a match are opened
+	 * until the search is cleared, when the original open sections are restored.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function initStyleSearch() {
+		const input = document.getElementById( 'frm-style-search' );
+		if ( ! input ) {
+			return;
+		}
+
+		const sections = document.querySelectorAll( '.styling_settings .control-section' );
+		const emptyMessage = document.getElementById( 'frm-style-search-empty' );
+
+		input.addEventListener( 'input', () => {
+			const query = input.value.trim().toLowerCase();
+			let found = false;
+
+			sections.forEach( section => {
+				const matches = filterStyleSection( section, query );
+				section.classList.toggle( 'frm-search-hidden', ! matches );
+				found = found || matches;
+			} );
+
+			emptyMessage.classList.toggle( 'frm-search-hidden', found );
+		} );
+	}
+
+	/**
+	 * Show the rows of a style section that match the query.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Element} section Accordion section.
+	 * @param {string}  query   Lowercase search term, empty to reset.
+	 * @return {boolean} True when the section has a match.
+	 */
+	function filterStyleSection( section, query ) {
+		const title = section.querySelector( '.accordion-section-title' );
+		const button = title?.querySelector( 'button' );
+		const labels = section.querySelectorAll( '.accordion-section-content label' );
+		const titleMatches = ! query || title.textContent.toLowerCase().includes( query );
+		let matches = titleMatches;
+
+		if ( undefined === section.dataset.frmWasOpen ) {
+			section.dataset.frmWasOpen = section.classList.contains( 'open' ) ? '1' : '0';
+		}
+
+		// Headings sit in a left column with the control in the column after it.
+		section.querySelectorAll( '.frm-style-item-heading' ).forEach( heading => {
+			const column = heading.closest( '.frm5' );
+			const rowMatches = titleMatches || heading.textContent.toLowerCase().includes( query );
+			column?.classList.toggle( 'frm-search-hidden', ! rowMatches );
+			column?.nextElementSibling?.classList.toggle( 'frm-search-hidden', ! rowMatches );
+			matches = matches || rowMatches;
+		} );
+
+		labels.forEach( label => {
+			matches = matches || label.textContent.toLowerCase().includes( query );
+			frmDom.util.highlightText( label, query );
+		} );
+		frmDom.util.highlightText( title, query );
+
+		const open = query ? matches : '1' === section.dataset.frmWasOpen;
+		section.classList.toggle( 'open', open );
+		button?.setAttribute( 'aria-expanded', open ? 'true' : 'false' );
+
+		if ( ! query ) {
+			delete section.dataset.frmWasOpen;
+		}
+
+		return matches;
+	}
+
+	/**
 	 * The "Quick Settings" swatches (Primary, Field Text, Field Border, Button Text) each summarize a single
 	 * underlying setting, but have no name attribute of their own, so they can't be found and updated by the
 	 * main reset loop in syncEditPageAfterResetAction(). This maps the setting key to that swatch's fixed id.
@@ -76,6 +155,7 @@
 
 	initCommonEventListeners();
 	initLabelFocus();
+	initStyleSearch();
 	initPreview();
 	fixWpAuthModal();
 

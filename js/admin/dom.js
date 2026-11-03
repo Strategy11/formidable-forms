@@ -414,6 +414,64 @@
 				);
 			};
 		},
+
+		/**
+		 * Wrap occurrences of the query inside an element with <mark>.
+		 *
+		 * Clears marks from a previous search first. Only text nodes are touched,
+		 * so icons and tooltips inside the element are left alone.
+		 *
+		 * @since x.x
+		 *
+		 * @param {Element|null} element Element to highlight.
+		 * @param {string}       query   Lowercase search term, empty to only clear.
+		 * @return {void}
+		 */
+		highlightText: ( element, query ) => {
+			if ( ! element ) {
+				return;
+			}
+
+			const marks = element.querySelectorAll( 'mark.frm-search-highlight' );
+			marks.forEach( mark => mark.replaceWith( document.createTextNode( mark.textContent ) ) );
+			if ( marks.length ) {
+				element.normalize();
+			}
+
+			if ( ! query ) {
+				return;
+			}
+
+			const walker = document.createTreeWalker( element, NodeFilter.SHOW_TEXT );
+			const nodes = [];
+			while ( walker.nextNode() ) {
+				if ( walker.currentNode.textContent.toLowerCase().includes( query ) ) {
+					nodes.push( walker.currentNode );
+				}
+			}
+
+			nodes.forEach( node => {
+				const text = node.textContent;
+				const lower = text.toLowerCase();
+				const fragment = document.createDocumentFragment();
+				let position = 0;
+				let index = lower.indexOf( query );
+
+				while ( index !== -1 ) {
+					fragment.append( text.slice( position, index ) );
+					const mark = document.createElement( 'mark' );
+					mark.className = 'frm-search-highlight';
+					mark.textContent = text.slice( index, index + query.length );
+					fragment.append( mark );
+					position = index + query.length;
+					index = lower.indexOf( query, position );
+				}
+
+				fragment.append( text.slice( position ) );
+				node.replaceWith( fragment );
+			} );
+		},
+
 		onClickPreventDefault: ( element, callback ) => {
 			const listener = event => {
 				event.preventDefault();
