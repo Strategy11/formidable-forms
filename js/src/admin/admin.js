@@ -14,6 +14,7 @@ const { renderDropdownPreview, updateComboSelectPreview, updateAddressPreview } 
 const { captureFieldSettings, applyFieldSettings, restoreFieldSettingValues } = require( './duplicateFieldSettings' );
 const { addFieldSettingsMetadata, cacheFieldSettings, forgetFieldSettings, materializeFieldSettings, materializeAllFieldSettings } = require( './deferredFieldSettings' );
 const { hydrateFieldPreviews, renderFieldPreviews, PENDING_PREVIEW_CLASS } = require( './fieldPreviews' );
+const { queueFieldPreview, renderFieldPreviewNow, forgetFieldPreview, setInitialFieldPreviews } = require( './fieldPreviewQueue' );
 const { queueFieldSettings, startFieldSettingsQueue, isFieldSettingsPending, requestFieldSettingsNow, waitForFieldSettings, cancelFieldSettings } = require( './fieldSettingsLoader' );
 
 const fieldHtmlTemplate = document.createElement( 'template' );
@@ -23,6 +24,8 @@ hydrateFieldPlaceholders();
 
 // Fields drawn from page data have their list items in place before anything scans the builder.
 const browserPreviewFieldIds = hydrateFieldPreviews();
+
+setInitialFieldPreviews( document.getElementById( 'frm-show-fields' )?.querySelectorAll( 'li.form-field' ) || [] );
 
 // Fields that are still waiting for their preview, either over ajax or from page data.
 const UNRENDERED_FIELD_SELECTOR = `.frm_field_loading, .${ PENDING_PREVIEW_CLASS }`;
@@ -2970,10 +2973,43 @@ window.frmAdminBuildJS = function() {
 
 		return processFieldLoadBatch(
 			Object.entries( loadedFields ),
-			renderLoadedField,
+			queueLoadedFieldPreview,
 			insertLoadedFieldSlice,
 			initializeLoadedFieldSlice
 		);
+	}
+
+	/**
+	 * Cache compatible AJAX previews until their placeholders approach the viewport.
+	 *
+	 * Specialized fields keep their existing initialization contract.
+	 *
+	 * @since x.x
+	 * @param {Array} entry The field ID and its rendered HTML and settings metadata.
+	 * @return {Object|null} A field to insert immediately, or null when queued or deleted.
+	 */
+	function queueLoadedFieldPreview( entry ) {
+		const [ key, field ] = entry;
+		if ( ! field.settingsMeta ) {
+			return renderLoadedField( entry );
+		}
+		const placeholder = document.getElementById( `frm_field_id_${ key }` );
+		if ( ! placeholder ) {
+			return null;
+		}
+		cacheFieldSettings( key, field.settingsHtml );
+		addFieldSettingsMetadata( placeholder, key, field.settingsMeta );
+		placeholderSpinnerObserver?.unobserve( placeholder );
+		placeholder.querySelector( '.frm_visible_spinner' )?.remove();
+		placeholder.classList.remove( 'frm_field_loading' );
+		placeholder.classList.add( PENDING_PREVIEW_CLASS );
+		placeholder.dataset.type = field.type;
+		queueFieldPreview( placeholder, () => {
+			const rendered = renderLoadedField( entry );
+			insertLoadedFieldSlice( [ rendered ] );
+			return rendered;
+		}, initializeLoadedFieldSlice );
+		return null;
 	}
 
 	/**
@@ -2999,8 +3035,21 @@ window.frmAdminBuildJS = function() {
 			oldField.remove();
 			return null;
 		}
-		if ( field.settingsMeta ) {
+		const metadata = oldField.querySelector( ':scope > .frm-deferred-settings-meta' );
+		if ( metadata ) {
+			const classes = metadata.querySelector( '.frm_classes' )?.value;
+			if ( classes !== undefined && classes !== field.settingsMeta.classes ) {
+				const previous = ( field.settingsMeta.classes || '' ).split( /\s+/ ).filter( Boolean );
+				const current = classes.split( /\s+/ ).filter( Boolean );
+				element.classList.remove( ...previous );
+				element.classList.add( ...current );
+			}
+			element.append( metadata );
+		} else if ( field.settingsMeta ) {
 			addFieldSettingsMetadata( element, key, field.settingsMeta );
+		}
+		if ( oldField.classList.contains( 'selected' ) ) {
+			element.classList.add( 'selected' );
 		}
 		prepareLoadedFieldMarkup( element );
 		const fragment = document.createDocumentFragment();
@@ -3059,6 +3108,7 @@ window.frmAdminBuildJS = function() {
 	 * @return {HTMLElement|null} The field settings panel, if the field has loaded.
 	 */
 	function ensureFieldSettings( fieldId ) {
+		renderFieldPreviewNow( fieldId );
 		const settings = materializeFieldSettings( fieldId, prepareLoadedFieldMarkup );
 		if ( ! settings && isFieldSettingsPending( fieldId ) ) {
 			// Finish the job once the settings arrive. See handleLoadedFieldSettings.
@@ -3193,6 +3243,14 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function ignoreLoadingFieldMouseEvent( event ) {
+		const pendingPreview = event.target.closest( `.${ PENDING_PREVIEW_CLASS }` );
+		if ( pendingPreview && event.type === 'click' ) {
+			event.preventDefault();
+			event.stopImmediatePropagation();
+			const rendered = renderFieldPreviewNow( pendingPreview.dataset.fid );
+			rendered?.element.click();
+			return;
+		}
 		// A drag helper lets the pointer reach placeholders, so let jQuery UI track the drag.
 		if ( document.body.classList.contains( 'frm-dragging' ) || ! event.target.closest( UNRENDERED_FIELD_SELECTOR ) ) {
 			return;
@@ -6411,6 +6469,7 @@ window.frmAdminBuildJS = function() {
 			},
 			success() {
 				forgetFieldSettings( fieldId );
+				forgetFieldPreview( fieldId );
 				cancelFieldSettings( fieldId );
 				fieldsAwaitingSettings.delete( String( fieldId ) );
 				const $thisField = jQuery( document.getElementById( `frm_field_id_${ fieldId }` ) );
@@ -9381,6 +9440,8 @@ window.frmAdminBuildJS = function() {
 	 */
 	function showFieldOptions( obj ) {
 		const fieldId = obj.getAttribute( 'data-fid' );
+		renderFieldPreviewNow( fieldId );
+		obj = document.getElementById( `frm_field_id_${ fieldId }` );
 		const fieldType = obj.getAttribute( 'data-type' );
 		hideActiveFieldSettings();
 
@@ -12384,6 +12445,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	return {
+		ensureFieldPreview: renderFieldPreviewNow,
 		init() {
 			initAddMyEmailAddress();
 			addAdminFooterLinks();

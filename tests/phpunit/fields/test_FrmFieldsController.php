@@ -133,7 +133,12 @@ class test_FrmFieldsController extends FrmUnitTest {
 			);
 			$placeholder = ob_get_clean();
 			$index       = count( $expected );
-			$this->assertSame( '<li data-frm-placeholder="' . $index . '"></li>', $placeholder );
+			$tag         = new WP_HTML_Tag_Processor( $placeholder );
+			$this->assertTrue( $tag->next_tag( 'li' ), 'The AJAX placeholder should be a list item.' );
+			$this->assertSame( (string) $index, $tag->get_attribute( 'data-frm-placeholder' ), 'The AJAX placeholder should preserve its manifest index.' );
+			$this->assertTrue( $tag->has_class( 'frm-preview-placeholder' ), 'The AJAX placeholder should reserve space before loading.' );
+			$height = 'html' === $type ? 194 : 89;
+			$this->assertSame( '--frm-preview-height:' . $height . 'px', $tag->get_attribute( 'style' ), 'The AJAX placeholder should reserve the expected card height.' );
 			$this->assertSame( (int) $field->id, $manifest->fields[ $index ][0] );
 			$definition = $manifest->definitions[ $manifest->fields[ $index ][1] ];
 			$this->assertStringContainsString( 'class="' . esc_attr( $definition[0] ) . '"', $legacy_html );

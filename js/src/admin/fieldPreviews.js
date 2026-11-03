@@ -9,6 +9,7 @@
  */
 
 import { addFieldSettingsMetadata } from './deferredFieldSettings';
+import { queueFieldPreview } from './fieldPreviewQueue';
 
 const MANIFEST_ID = 'frm-field-previews';
 const TEXT_INPUT_TYPES = new Set( [ 'text', 'email', 'url', 'number', 'phone' ] );
@@ -17,11 +18,6 @@ const TEXT_INPUT_TYPES = new Set( [ 'text', 'email', 'url', 'number', 'phone' ] 
  * Marks a list item whose preview has not been drawn yet.
  */
 export const PENDING_PREVIEW_CLASS = 'frm_field_preview_pending';
-
-/**
- * Target time spent drawing previews before the browser gets a frame to paint and handle input.
- */
-const RENDER_BUDGET = 4;
 
 let pendingPreviews = [];
 let template;
@@ -72,47 +68,30 @@ export function hydrateFieldPreviews() {
 }
 
 /**
- * Draw the hydrated previews in short slices, giving the browser a frame between slices.
+ * Queue hydrated previews for rendering as their placeholders approach the viewport.
  *
  * @since x.x
  * @param {Function} onRendered Called with the old and new list item of each preview drawn.
  * @param {Function} onSlice    Called with what onRendered returned for each preview in a slice.
- * @return {Promise<void>} Resolves once every preview has been drawn.
+ * @return {void}
  */
-export async function renderFieldPreviews( onRendered, onSlice ) {
+export function renderFieldPreviews( onRendered, onSlice ) {
 	const previews = pendingPreviews;
 	pendingPreviews = [];
-
-	let index = 0;
-	while ( index < previews.length ) {
-		// Wait for a frame first, so the page paints before the first slice too.
-		await waitForNextFrame();
-
-		const sliceStarted = performance.now();
-		const slice = [];
-		while ( index < previews.length && performance.now() - sliceStarted < RENDER_BUDGET ) {
-			const { placeholder, data } = previews[ index++ ];
-			if ( ! placeholder.isConnected ) {
-				continue;
-			}
+	previews.forEach( ( { placeholder, data } ) => {
+		queueFieldPreview( placeholder, () => {
 			const field = createField( template, data, strings );
+			field.className = placeholder.className;
+			field.classList.remove( PENDING_PREVIEW_CLASS );
 			// Keep the order input object, which drag and drop code caches, and any settings
 			// that were needed before the preview was drawn.
 			// eslint-disable-next-line formidable/prefer-document-fragment -- the field is not in the page yet
 			field.append( ...placeholder.querySelectorAll( ':scope > .frm-deferred-settings-meta, :scope > .frm-single-settings' ) );
 			const rendered = onRendered( placeholder, field );
 			placeholder.replaceWith( field );
-			slice.push( rendered );
-		}
-		onSlice( slice );
-	}
-}
-
-/**
- * @return {Promise<void>} Resolves after the next frame, in a new task so input can run first.
- */
-function waitForNextFrame() {
-	return new Promise( resolve => requestAnimationFrame( () => setTimeout( resolve, 0 ) ) );
+			return rendered;
+		}, onSlice );
+	} );
 }
 
 /**
