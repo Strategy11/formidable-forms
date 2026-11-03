@@ -9,6 +9,7 @@ const { initFieldListHoverPill } = require( './fieldListHoverPill' );
 const { initShowBoxIconSwap } = require( './showBoxIconSwap' );
 const { hydrateBuilderSelect, hydrateBuilderSelectsIn } = require( './sharedSelectOptions' );
 const { processFieldLoadBatch } = require( './fieldLoadBatch' );
+const { getFieldLoadBatch } = require( './fieldLoadWeights' );
 const { hydrateFieldPlaceholders } = require( './fieldPlaceholders' );
 const { renderDropdownPreview, updateComboSelectPreview, updateAddressPreview } = require( './fieldPreview' );
 const { captureFieldSettings, applyFieldSettings, restoreFieldSettingValues } = require( './duplicateFieldSettings' );
@@ -2856,25 +2857,18 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function loadFields( thisField ) {
-		const fieldIds = [];
-		const claimField = element => {
-			element.classList.add( 'frm_load_now' );
-			if ( element.classList.contains( 'frm_field_loading' ) ) {
-				fieldIds.push( element.dataset.fid );
+		const candidates = [];
+		let candidate = thisField;
+		while ( candidate && candidates.length < FIELD_LOAD_BATCH_SIZE ) {
+			if ( candidate.classList.contains( 'frm_field_loading' ) && ! candidate.classList.contains( 'frm_load_now' ) ) {
+				candidates.push( candidate.dataset.fid );
 			}
-		};
-
-		claimField( thisField );
-
-		let nextField = getNextField( thisField );
-		while ( nextField && fieldIds.length < FIELD_LOAD_BATCH_SIZE ) {
-			claimField( nextField );
-			nextField = getNextField( nextField );
+			candidate = getNextField( candidate );
 		}
+		const fieldIds = getFieldLoadBatch( candidates, FIELD_LOAD_BATCH_SIZE );
+		fieldIds.forEach( fieldId => document.getElementById( `frm_field_id_${ fieldId }` ).classList.add( 'frm_load_now' ) );
 
 		if ( ! fieldIds.length ) {
-			// There is nothing to ask the server for. The fields are flagged either way, so the
-			// queue carries on past them instead of offering them up again.
 			return;
 		}
 
@@ -7144,6 +7138,7 @@ window.frmAdminBuildJS = function() {
 
 		if ( setting !== undefined ) {
 			if ( fieldType.tagName === 'SELECT' ) {
+				hydrateBuilderSelect( fieldType );
 				fieldTypeName = fieldType.options[ fieldType.selectedIndex ].text.toLowerCase();
 			} else {
 				fieldTypeName = fieldTypeName.replace( '_', ' ' );
