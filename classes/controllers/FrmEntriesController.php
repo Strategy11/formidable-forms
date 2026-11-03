@@ -772,7 +772,12 @@ class FrmEntriesController {
 	public static function process_entry( $errors = '', $ajax = false ) {
 		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'absint' );
 
-		if ( FrmAppHelper::is_admin() || empty( $_POST ) || ! $form_id || ! isset( $_POST['item_key'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( FrmAppHelper::is_admin() || empty( $_POST ) || ! $form_id ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			return;
+		}
+
+		if ( ! isset( $_POST['item_key'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			self::maybe_add_input_limit_error( $form_id );
 			return;
 		}
 
@@ -836,6 +841,31 @@ class FrmEntriesController {
 			FrmFormsController::maybe_trigger_redirect( $form, $params, array( 'ajax' => $ajax ) );
 		}
 		unset( $_POST['frm_skip_cookie'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+	}
+
+	/**
+	 * PHP drops every input var past max_input_vars, including the item_key field printed after the fields.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $form_id
+	 *
+	 * @return void
+	 */
+	private static function maybe_add_input_limit_error( $form_id ) {
+		$max_vars = (int) ini_get( 'max_input_vars' );
+
+		if ( $max_vars < 1 || count( $_POST, COUNT_RECURSIVE ) < $max_vars ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			return;
+		}
+
+		global $frm_vars;
+
+		$frm_vars['created_entries'][ $form_id ] = array(
+			'errors' => array(
+				'form' => __( 'This form has more fields than the server accepts, so it could not be submitted. Please contact the site owner.', 'formidable' ),
+			),
+		);
 	}
 
 	/**
