@@ -430,6 +430,12 @@ class FrmStylesHelper {
 			$color = $hsl_to_hex;
 		}
 
+		$color = sanitize_hex_color_no_hash( $color );
+
+		if ( ! $color ) {
+			return 0;
+		}
+
 		self::fill_hex( $color );
 
 		$c_r = hexdec( substr( $color, 0, 2 ) );

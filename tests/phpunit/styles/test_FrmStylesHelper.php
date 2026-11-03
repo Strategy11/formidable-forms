@@ -182,6 +182,16 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		$this->assert_color_brightness( $red_brightness, 'ff0000' );
 		$this->assert_color_brightness( $green_brightness, '00ff00' );
 		$this->assert_color_brightness( $blue_brightness, '0000ff' );
+		$this->assert_color_brightness( $white_brightness, '#ffffff' );
+		$this->assert_color_brightness( $black_brightness, '#000000' );
+		$this->assert_color_brightness( $red_brightness, '#FF0000' );
+		$this->assert_color_brightness( $green_brightness, '#00ff00' );
+		$this->assert_color_brightness( $blue_brightness, '#0000ff' );
+		$this->assert_color_brightness( $white_brightness, '#fff' );
+		$this->assert_color_brightness( $black_brightness, '#000' );
+		$this->assert_color_brightness( $red_brightness, '#F00' );
+		$this->assert_color_brightness( $green_brightness, '0f0' );
+		$this->assert_color_brightness( $blue_brightness, '00f' );
 
 		// Test rgb colors.
 		$this->assert_color_brightness( $white_brightness, 'rgb(255, 255, 255)' );
@@ -220,6 +230,12 @@ class test_FrmStylesHelper extends FrmUnitTest {
 	 */
 	private function assert_color_brightness( $expected, $color ) {
 		$this->assertSame( $expected, FrmStylesHelper::get_color_brightness( $color ) );
+	}
+
+	public function test_get_color_brightness_with_invalid_hex() {
+		foreach ( array( '', '#', 'transparent', 'var(--color)', '#gggggg', '12', '12345', '#1234567' ) as $color ) {
+			$this->assertSame( 0, FrmStylesHelper::get_color_brightness( $color ), $color );
+		}
 	}
 
 	public function test_get_bottom_value() {
