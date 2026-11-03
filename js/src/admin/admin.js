@@ -11330,7 +11330,10 @@ window.frmAdminBuildJS = function() {
 		data = wp.hooks.applyFilters( hookName, data, filterArgs );
 
 		postAjax( data, function( response ) {
-			if ( response.redirect !== undefined ) {
+			if ( response.missing_addons?.length ) {
+				const { showTemplateDependencies } = require( './template-dependencies' );
+				showTemplateDependencies( response.missing_addons, () => installNewForm( form, action, button ) );
+			} else if ( response.redirect !== undefined ) {
 				const { redirect } = response;
 				if ( form.elements.redirect === undefined ) {
 					window.location = redirect;
