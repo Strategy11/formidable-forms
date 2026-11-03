@@ -417,8 +417,17 @@ class FrmFieldsController {
 		}
 
 		$placeholder        = count( $manifest->fields );
-		$manifest->fields[] = array( (int) $field->id, $index );
-		echo '<li data-frm-placeholder="' . esc_attr( $placeholder ) . '"></li>';
+		$height             = FrmBuilderPreviewHelper::get_placeholder_height( $field );
+		$layout_classes     = (string) FrmField::get_option( $field, 'classes' );
+		$manifest->fields[] = array( (int) $field->id, $index, $layout_classes );
+		$attributes         = array(
+			'data-frm-placeholder' => $placeholder,
+			'class'                => 'frm-preview-placeholder ' . $layout_classes,
+			'style'                => '--frm-preview-height:' . $height . 'px',
+		);
+		echo '<li ';
+		FrmAppHelper::array_to_html_params( $attributes, true );
+		echo '></li>';
 	}
 
 	/**
