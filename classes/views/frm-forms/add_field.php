@@ -7,6 +7,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php
 if ( $field['type'] === 'divider' ) {
 	$icon_class = ! empty( $field['form_select'] ) ? 'frm_repeat_icon' : 'frm-form-title-style';
+	/**
+	 * Filters the icon shown at the start of a builder container.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $icon_class The icon class without the frmfont marker.
+	 * @param array  $field      The builder field.
+	 */
+	$icon_class = apply_filters( 'frm_builder_container_icon', $icon_class, $field );
 	FrmAppHelper::icon_by_class( "frmfont $icon_class frm-divider-icon" );
 	?>
 <div class="divider_section_only">
