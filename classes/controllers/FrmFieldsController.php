@@ -312,6 +312,15 @@ class FrmFieldsController {
 
 		$ajax_loading    = ! empty( $values['ajax_load'] );
 		$ajax_this_field = isset( $values['count'] ) && $values['count'] > 10 && ! in_array( $field_object->type, array( 'divider', 'end_divider' ), true );
+		/**
+		 * Filters deferred loading for a builder field.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool $ajax_this_field Whether to defer rendering the field.
+		 * @param object $field_object The builder field.
+		 */
+		$ajax_this_field = apply_filters( 'frm_builder_field_ajax', $ajax_this_field, $field_object );
 
 		if ( $ajax_loading && $ajax_this_field ) {
 			$li_classes = self::get_classes_for_builder_field( array(), $display, $field_obj );

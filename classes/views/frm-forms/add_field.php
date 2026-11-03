@@ -2,10 +2,19 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+/**
+ * Filters the builder container presentation. Defaults preserve section markup.
+ *
+ * @since x.x
+ *
+ * @param string $container_type The presentation type.
+ * @param array $field The builder field.
+ */
+$container_type = apply_filters( 'frm_builder_container_type', $field['type'], $field );
 ?>
 <li id="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" class="<?php echo esc_attr( $li_classes ); ?>" data-fid="<?php echo esc_attr( $field['id'] ); ?>" data-formid="<?php echo esc_attr( 'divider' === $field['type'] && isset( $field['form_select'] ) ? $field['form_select'] : $field['form_id'] ); ?>" data-ftype="<?php echo esc_attr( $display['type'] ); ?>" data-type="<?php echo esc_attr( $field['type'] ); ?>" <?php FrmAppHelper::array_to_html_params( $extra_field_attributes, true ); ?>>
 <?php
-if ( $field['type'] === 'divider' ) {
+if ( $container_type === 'divider' ) {
 	$icon_class = ! empty( $field['form_select'] ) ? 'frm_repeat_icon' : 'frm-form-title-style';
 	/**
 	 * Filters the icon shown at the start of a builder container.
@@ -34,7 +43,7 @@ do_action( 'frm_extra_field_actions', $field['id'] );
 			(ID <?php echo esc_html( $field['id'] ); ?>)
 		</div>
 
-		<?php if ( $field['type'] === 'divider' ) : ?>
+		<?php if ( $container_type === 'divider' ) : ?>
 			<a href="#" class="frm-collapse-section" title="<?php esc_attr_e( 'Expand/Collapse Section', 'formidable' ); ?>">
 				<?php
 				FrmAppHelper::icon_by_class(
@@ -134,7 +143,17 @@ if ( isset( $values['deferred_settings'] ) ) {
 	);
 }
 
-if ( 'divider' === $field['type'] ) {
+/**
+ * Lets field providers render their builder child list, retaining the legacy fallback.
+ *
+ * @since x.x
+ *
+ * @param bool $handled Whether a provider rendered the child list boundary.
+ * @param array $field The builder field.
+ */
+$boundary_rendered = apply_filters( 'frm_builder_container_boundary', false, $field );
+
+if ( ! $boundary_rendered && 'divider' === $field['type'] ) {
 	?>
 </div>
 <div class="frm_no_section_fields">
@@ -143,13 +162,13 @@ if ( 'divider' === $field['type'] ) {
 <ul class="start_divider frm_sorting frm_grid_container">
 	<?php
 	FrmAppHelper::icon_by_class( 'frmfont frm-circle frm-divider-icon' );
-} elseif ( 'end_divider' === $field['type'] ) {
+} elseif ( ! $boundary_rendered && 'end_divider' === $field['type'] ) {
 	?>
 </ul>
 	<?php
 }
 
-if ( $field['type'] !== 'divider' ) {
+if ( $container_type !== 'divider' ) {
 	?>
 </li>
 	<?php
