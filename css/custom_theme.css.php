@@ -747,6 +747,13 @@ legend.frm_hidden{
 	order: -2;
 }
 
+/* Inside labels add padding above the input instead of rendering a label, so the spacer matches that padding. */
+.with_frm_style.frm_inline_inside .frm_submit.frm_flex::before {
+	box-sizing: border-box;
+	height: calc(0.5 * var(--field-height));
+	overflow: hidden;
+}
+
 <?php if ( $pro_is_installed ) { ?>
 .with_frm_style .frm_submit.frm_flex button.frm_button_submit ~ .frm_prev_page {
 	order: -1;

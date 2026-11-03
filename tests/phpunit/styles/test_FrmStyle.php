@@ -303,6 +303,7 @@ class test_FrmStyle extends FrmUnitTest {
 
 		$this->assertStringContainsString( $submit_selector . ' {align-items: flex-start;', $css );
 		$this->assertStringContainsString( $spacer_selector . ' {flex-basis: 100%;order: -2;}', $css );
+		$this->assertStringContainsString( '.with_frm_style.frm_inline_inside .frm_submit.frm_flex::before {box-sizing: border-box;height: calc(0.5 * var(--field-height));overflow: hidden;}', $css );
 	}
 
 	/**
