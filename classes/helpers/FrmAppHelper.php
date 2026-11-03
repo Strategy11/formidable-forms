@@ -1900,11 +1900,16 @@ class FrmAppHelper {
 	 *
 	 * @since 1.07.10
 	 *
-	 * @param bool|int|string $value The value to compare.
+	 * @param array|bool|int|string $value The value to compare.
 	 *
 	 * @return bool
 	 */
 	public static function is_true( $value ) {
+		if ( is_array( $value ) ) {
+			// An array is never a true flag, and casting one to a string triggers a warning.
+			return false;
+		}
+
 		return true === $value || '1' === (string) $value || 'true' === $value || 'yes' === $value;
 	}
 
