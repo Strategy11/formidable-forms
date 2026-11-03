@@ -31,6 +31,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		'field_border_style'  => '',
 		'field_weight'        => '',
 		'bg_color_active'     => '',
+		'border_color_active' => '',
 		'label_color'         => '',
 		'font_size'           => '',
 		'weight'              => '',
@@ -671,6 +672,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			),
 			'.Input:focus'        => array(
 				'backgroundColor' => $settings['bg_color_active'],
+				'borderColor'     => $settings['border_color_active'],
 			),
 			'.Label'              => array(
 				'fontFamily'   => $settings['font'],
