@@ -67,6 +67,12 @@ class FrmXMLController {
 			wp_die();
 		}
 
+		$missing_addons = FrmTemplateDependenciesHelper::get_missing_addons( $url );
+
+		if ( $missing_addons ) {
+			wp_send_json( array( 'missing_addons' => $missing_addons ) );
+		}
+
 		$response = wp_remote_get( $url );
 		$body     = wp_remote_retrieve_body( $response );
 		$xml      = simplexml_load_string( $body );
