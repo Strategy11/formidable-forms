@@ -9,9 +9,136 @@
 #[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldsController::class )]
 class test_FrmFieldsController extends FrmUnitTest {
 
+	/**
+	 * @var array<int,int> Preparation calls for each field in the current test.
+	 */
+	private $builder_setup_counts = array();
+
+	/**
+	 * @var object The original field object whose preparation is being counted.
+	 */
+	private $builder_test_field;
+
 	public function setUp(): void {
 		parent::setUp();
 		FrmHooksController::trigger_load_hook( 'load_form_hooks' );
+	}
+
+	public function test_builder_prepares_each_field_once() {
+		$form_id = $this->factory->form->create();
+		$types   = array( 'text', 'textarea', 'select', 'radio', 'checkbox', 'name', 'address' );
+
+		if ( FrmAppHelper::pro_is_installed() ) {
+			$types = array_merge( $types, array( 'time', 'date', 'lookup' ) );
+		}
+
+		add_filter( 'frm_setup_edit_fields_vars', array( $this, 'track_builder_field_setup' ), 10, 2 );
+
+		try {
+			foreach ( $types as $type ) {
+				$field = $this->factory->field->create_and_get(
+					array(
+						'form_id' => $form_id,
+						'type'    => $type,
+					)
+				);
+
+				$this->builder_test_field = $field;
+
+				for ( $render = 1; $render <= 2; ++$render ) {
+					ob_start();
+					FrmFieldsController::load_single_field(
+						$field,
+						array(
+							'id'         => $form_id,
+							'doing_ajax' => true,
+						)
+					);
+					$html = ob_get_clean();
+
+					$this->assertSame( $render, $this->builder_setup_counts[ $field->id ], $type . ' should be prepared once per render.' );
+					$this->assertStringContainsString( '<span class="frm_builder_field_name">Prepared field ' . $field->id . ' pass ' . $render . '</span>', $html );
+					$this->assertStringContainsString( 'value="Prepared field ' . $field->id . ' pass ' . $render . '"', $html );
+				}
+
+				FrmFieldsHelper::setup_edit_vars( $field );
+				$this->assertSame( 3, $this->builder_setup_counts[ $field->id ], 'Preparation outside the render must run its filters again.' );
+			}
+		} finally {
+			remove_filter( 'frm_setup_edit_fields_vars', array( $this, 'track_builder_field_setup' ) );
+		}
+	}
+
+	public function test_builder_clears_prepared_values_after_render_exception() {
+		$field                    = $this->factory->field->create_and_get( array( 'form_id' => $this->factory->form->create() ) );
+		$this->builder_test_field = $field;
+		add_filter( 'frm_setup_edit_fields_vars', array( $this, 'track_builder_field_setup' ), 10, 2 );
+		add_action( 'frm_extra_field_actions', array( $this, 'throw_builder_render_exception' ) );
+		ob_start();
+
+		try {
+			FrmFieldsController::load_single_field( $field, array( 'doing_ajax' => true ) );
+			$this->fail( 'The render should have thrown an exception.' );
+		} catch ( RuntimeException $exception ) {
+			$this->assertSame( 'Builder render interrupted.', $exception->getMessage() );
+		} finally {
+			ob_end_clean();
+			remove_action( 'frm_extra_field_actions', array( $this, 'throw_builder_render_exception' ) );
+			remove_filter( 'frm_setup_edit_fields_vars', array( $this, 'track_builder_field_setup' ) );
+		}
+
+		$this->assertSame( 1, $this->builder_setup_counts[ $field->id ] );
+		$prepared = FrmFieldsHelper::setup_edit_vars( $field );
+		$this->assertSame( $field->name, $prepared['name'], 'The interrupted render must not leave filtered values cached.' );
+	}
+
+	public function test_builder_cache_keeps_objects_and_ajax_contexts_separate() {
+		$field                    = $this->factory->field->create_and_get( array( 'form_id' => $this->factory->form->create() ) );
+		$this->builder_test_field = $field;
+		add_filter( 'frm_setup_edit_fields_vars', array( $this, 'track_builder_field_setup' ), 10, 2 );
+		$prepared = FrmFieldsHelper::setup_edit_vars( $field );
+		$previous = FrmFieldsHelper::set_builder_field_vars( $field, $prepared );
+
+		try {
+			$clone       = clone $field;
+			$clone->name = 'Independent preview';
+			$this->assertSame( 'Independent preview', FrmFieldsHelper::setup_edit_vars( $clone )['name'] );
+			$this->assertSame( $prepared, FrmFieldsHelper::setup_edit_vars( $field ) );
+			$ajax_values = FrmFieldsHelper::setup_edit_vars( $field, true );
+			$this->assertSame( 'Prepared field ' . $field->id . ' pass 2', $ajax_values['name'] );
+			$this->assertSame( $prepared, FrmFieldsHelper::setup_edit_vars( $field ), 'A different context must not replace the shared builder values.' );
+		} finally {
+			FrmFieldsHelper::set_builder_field_vars( $field, $previous );
+			remove_filter( 'frm_setup_edit_fields_vars', array( $this, 'track_builder_field_setup' ) );
+		}
+	}
+
+	/**
+	 * Count preparation passes and return a label that identifies the pass used by the markup.
+	 *
+	 * @param array  $values Prepared field values.
+	 * @param object $field  The source field object.
+	 *
+	 * @return array
+	 */
+	public function track_builder_field_setup( $values, $field ) {
+		if ( $field !== $this->builder_test_field ) {
+			return $values;
+		}
+
+		$id                                = (int) $values['id'];
+		$this->builder_setup_counts[ $id ] = ( $this->builder_setup_counts[ $id ] ?? 0 ) + 1;
+		$values['name']                    = 'Prepared field ' . $id . ' pass ' . $this->builder_setup_counts[ $id ];
+		return $values;
+	}
+
+	/**
+	 * Interrupt rendering after the builder starts sharing its prepared values.
+	 *
+	 * @return void
+	 */
+	public function throw_builder_render_exception() {
+		throw new RuntimeException( 'Builder render interrupted.' );
 	}
 
 	public function test_deferred_builder_settings_keep_preview_and_layout_inputs_available() {

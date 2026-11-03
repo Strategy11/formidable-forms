@@ -361,7 +361,13 @@ class FrmFieldsController {
 		$li_classes  = self::get_classes_for_builder_field( $field, $display, $field_obj );
 		$li_classes .= ' ui-state-default widgets-holder-wrap';
 
-		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field.php';
+		$previous_field_vars = FrmFieldsHelper::set_builder_field_vars( $field_object, $field );
+
+		try {
+			require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field.php';
+		} finally {
+			FrmFieldsHelper::set_builder_field_vars( $field_object, $previous_field_vars );
+		}
 	}
 
 	/**
