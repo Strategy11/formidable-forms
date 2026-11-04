@@ -2,7 +2,12 @@ describe( 'Form outline', { retries: 0 }, () => {
 	let formName;
 
 	const openOutline = () => {
-		cy.get( '#frm-builder-outline-tab' ).then( tab => tab[ 0 ].closest( 'li' ).click() );
+		cy.get( '#frm-builder-outline-toggle' ).then( toggle => {
+			if ( toggle.attr( 'aria-expanded' ) !== 'true' ) {
+				toggle[ 0 ].click();
+			}
+		} );
+		cy.get( '#frm-builder-outline' ).should( 'be.visible' );
 	};
 
 	const search = query => {
@@ -67,15 +72,21 @@ describe( 'Form outline', { retries: 0 }, () => {
 		} );
 	} );
 
-	it( 'shows empty states and finds fields by name only', () => {
-		openOutline();
-		cy.get( '.frm-builder-outline-empty-title' ).should( 'have.text', 'No fields yet' );
-		cy.get( '#frm-builder-outline .frm-search' ).should( 'have.class', 'frm_hidden' );
+	// Lite can't add a Page Break, so add one to the builder markup to split the form into pages.
+	const addPageBreak = () => {
+		cy.get( '#frm-show-fields' ).then( list => {
+			list[ 0 ].append( createField( list[ 0 ].ownerDocument, '90001', 'break', 'Next' ) );
+		} );
+	};
+
+	it( 'shows only once the form has pages and finds fields by name only', () => {
+		cy.get( '.frm-builder-outline' ).should( 'not.be.visible' );
 
 		addField( 'text' );
 		addField( 'html' );
+		cy.get( '.frm-builder-outline' ).should( 'not.be.visible' );
+		addPageBreak();
 		openOutline();
-		cy.get( '.frm-builder-outline-empty-title' ).should( 'have.text', 'No pages or sections yet' );
 
 		// Field previews print the label in a different code path, so check both.
 		[ false, true ].forEach( usePreviews => {
@@ -84,6 +95,7 @@ describe( 'Form outline', { retries: 0 }, () => {
 				cy.setCookie( 'frm_e2e_ajax_builder', '1' );
 				cy.reload();
 				cy.get( '.frm_field_preview_pending' ).should( 'not.exist' );
+				addPageBreak();
 				openOutline();
 			}
 
@@ -91,14 +103,13 @@ describe( 'Form outline', { retries: 0 }, () => {
 			search( 'text' );
 			cy.get( '.frm-builder-outline-field' ).should( 'have.length', 1 ).and( 'have.text', 'Text' );
 			search( 'collapsed' );
-			cy.get( '.frm-builder-outline-empty-title' ).should( 'have.text', 'No results' );
+			cy.get( '.frm-builder-outline-empty-title' ).should( 'have.text', 'No results for “collapsed”' );
 			search( 'html' );
 			cy.get( '.frm-builder-outline-field' ).should( 'have.length', 1 ).and( 'have.text', 'HTML' );
 		} );
 	} );
 
 	it( 'groups fields by page, lists sections and caps field results', () => {
-		openOutline();
 		cy.get( '#frm-show-fields' ).then( list => {
 			const doc = list[ 0 ].ownerDocument;
 			const fields = [];
@@ -113,11 +124,13 @@ describe( 'Form outline', { retries: 0 }, () => {
 			}
 			list[ 0 ].append( ...fields );
 		} );
+		openOutline();
 
 		cy.get( '.frm-builder-outline-page' ).should( 'have.length', 3 );
 		cy.get( '.frm-builder-outline-page' ).first().find( '.frm-builder-outline-label' ).should( 'have.text', 'Page 1: Item 1' );
-		cy.get( '.frm-builder-outline-page' ).first().find( '.frm-builder-outline-count' ).should( 'have.text', '30' );
-		cy.get( '.frm-builder-outline-page' ).eq( 1 ).find( '.frm-builder-outline-count' ).should( 'have.text', '21' );
+		// Counts leave out page breaks and sections.
+		cy.get( '.frm-builder-outline-page' ).first().find( '.frm-builder-outline-meta' ).should( 'have.text', '30 fields' );
+		cy.get( '.frm-builder-outline-page' ).eq( 1 ).find( '.frm-builder-outline-meta' ).should( 'have.text', '20 fields' );
 		cy.get( '.frm-builder-outline-section' ).should( 'have.length', 1 ).and( 'have.text', 'Contact details' );
 
 		search( 'contact' );
@@ -133,6 +146,11 @@ describe( 'Form outline', { retries: 0 }, () => {
 		cy.get( '.frm-builder-outline-field' ).should( 'have.length', 1 ).click();
 		cy.get( '#frm-show-fields li[data-fid="9042"]' ).should( 'have.class', 'frm-builder-outline-target' );
 		// Jumping to a field keeps the outline open.
-		cy.get( '#frm-builder-outline' ).parent().should( 'have.class', 'frm-active' );
+		cy.get( '#frm-builder-outline' ).should( 'be.visible' );
+
+		// Escape closes it and gives focus back to the button.
+		cy.get( '#frm-builder-outline-search-input' ).type( '{esc}' );
+		cy.get( '#frm-builder-outline' ).should( 'not.be.visible' );
+		cy.focused().should( 'have.id', 'frm-builder-outline-toggle' );
 	} );
 } );

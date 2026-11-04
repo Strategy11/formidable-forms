@@ -4,6 +4,8 @@ const PAGE_BREAK_TYPE = 'break';
 const SECTION_TYPE = 'divider';
 const HTML_FIELD_TYPE = 'html';
 const SUBMIT_TYPE = 'submit';
+// Layout pieces that sit in the field list but aren't fields people fill in.
+const STRUCTURE_TYPES = [ SECTION_TYPE, 'end_divider', PAGE_BREAK_TYPE, SUBMIT_TYPE ];
 const MAX_FIELD_RESULTS = 60;
 
 const getHeadingText = field => {
@@ -29,27 +31,29 @@ const getFieldText = field => {
 };
 
 /**
- * Add searchable page and field navigation to the form builder.
+ * Add a form outline to the builder: a button floating at the bottom right of the canvas that opens a popover
+ * to search and jump to pages, sections and fields.
  *
  * @since x.x
  * @return {void}
  */
 export function initFormOutline() {
-	const outline = document.getElementById( 'frm-builder-outline' );
+	const popover = document.getElementById( 'frm-builder-outline' );
+	const toggle = document.getElementById( 'frm-builder-outline-toggle' );
 	const builder = document.getElementById( 'frm-show-fields' );
-	if ( ! outline || ! builder ) {
+	if ( ! popover || ! toggle || ! builder ) {
 		return;
 	}
 
 	const search = document.getElementById( 'frm-builder-outline-search-input' );
-	const list = outline.querySelector( '.frm-builder-outline-list' );
-	const emptyMessage = outline.querySelector( '.frm-builder-outline-empty' );
+	const list = popover.querySelector( '.frm-builder-outline-list' );
+	const emptyMessage = popover.querySelector( '.frm-builder-outline-empty' );
 	const emptyTitle = emptyMessage.querySelector( '.frm-builder-outline-empty-title' );
 	const emptyText = emptyMessage.querySelector( '.frm-builder-outline-empty-text' );
-	const status = outline.querySelector( '.frm-builder-outline-status' );
-	// The tab navigator marks the panel's slide active, so watch that instead of the tab click.
-	const slide = outline.parentElement;
-	const isOutlineActive = () => slide.classList.contains( 'frm-active' );
+	const status = popover.querySelector( '.frm-builder-outline-status' );
+	const isOpen = () => ! popover.hidden;
+	const scroller = document.getElementById( 'post-body-content' );
+	let currentPageIndex = 0;
 	let observer;
 	let renderTimeout;
 
@@ -80,7 +84,7 @@ export function initFormOutline() {
 	};
 
 	const render = () => {
-		if ( ! isOutlineActive() ) {
+		if ( ! isOpen() ) {
 			return;
 		}
 
@@ -125,31 +129,28 @@ export function initFormOutline() {
 			}
 
 			const pageLabel = `${ sprintf( __( 'Page %1$d', 'formidable' ), page.index + 1 ) }: ${ page.title }`;
+			const fieldCount = page.fields.filter( field => ! STRUCTURE_TYPES.includes( field.dataset.type ) ).length;
 			const pageButton = tag( 'button', {
 				className: 'frm-builder-outline-page',
 				children: [
 					span( { className: 'frm-builder-outline-label', text: pageLabel } ),
-					span( { className: 'frm-builder-outline-count', text: String( page.fields.length ) } )
+					/* translators: %d: Number of fields on the page */
+					span( { className: 'frm-builder-outline-meta', text: sprintf( _n( '%d field', '%d fields', fieldCount, 'formidable' ), fieldCount ) } )
 				]
 			} );
 			pageButton.type = 'button';
 			pageButton.title = pageLabel;
-			pageButton.setAttribute(
-				'aria-label',
-				sprintf(
-					/* translators: %1$s: Page name, %2$d: Number of fields on the page */
-					_n( '%1$s, %2$d field', '%1$s, %2$d fields', page.fields.length, 'formidable' ),
-					pageLabel,
-					page.fields.length
-				)
-			);
+			if ( page.index === currentPageIndex && query === '' ) {
+				pageButton.setAttribute( 'aria-current', 'location' );
+			}
 			pageButton.dataset.fieldId = firstField.dataset.fid;
 			pageButton.dataset.pageIndex = page.index;
 			children.push( tag( 'li', { child: pageButton } ) );
 
 			matchingSections.forEach( field => {
 				const sectionText = getFieldText( field );
-				if ( ! sectionText ) {
+				// A page named after its first section would list that name twice in a row.
+				if ( ! sectionText || ( query === '' && field === firstField && sectionText === page.title ) ) {
 					return;
 				}
 
@@ -200,8 +201,9 @@ export function initFormOutline() {
 		emptyMessage.classList.toggle( 'frm_hidden', ! showEmpty );
 		search.parentElement.classList.toggle( 'frm_hidden', ! hasFields );
 		if ( noResults ) {
-			emptyTitle.textContent = __( 'No results', 'formidable' );
-			emptyText.textContent = __( 'No pages, sections or fields match your search.', 'formidable' );
+			/* translators: %s: The search text */
+			emptyTitle.textContent = sprintf( __( 'No results for “%s”', 'formidable' ), search.value.trim() );
+			emptyText.textContent = __( 'Try a page, section or field name.', 'formidable' );
 		} else if ( showEmpty ) {
 			emptyTitle.textContent = hasFields ? __( 'No pages or sections yet', 'formidable' ) : __( 'No fields yet', 'formidable' );
 			emptyText.textContent = hasFields
@@ -226,7 +228,7 @@ export function initFormOutline() {
 		observer = new MutationObserver( () => {
 			clearTimeout( renderTimeout );
 			renderTimeout = setTimeout( () => {
-				// New pages add new sortable lists that need to be observed while viewing the outline.
+				// New pages add new sortable lists that need to be observed while the outline is open.
 				observeBuilder();
 				render();
 			}, 100 );
@@ -246,16 +248,120 @@ export function initFormOutline() {
 	const updateOutline = () => {
 		clearTimeout( renderTimeout );
 		observer?.disconnect();
-		if ( ! isOutlineActive() ) {
+		if ( ! isOpen() ) {
 			return;
 		}
 		observeBuilder();
 		render();
 	};
 
-	new MutationObserver( updateOutline ).observe( slide, { attributeFilter: [ 'class' ] } );
-	updateOutline();
+	// Page 1's pill lives in the fake page above the fields, the others in the page break fields.
+	const getPagePills = () => Array.from( document.querySelectorAll( '#frm-fake-page .frm-collapse-page, #frm-show-fields li[data-type="break"] .frm-collapse-page' ) );
+	const getPillPage = pill => Number( pill.querySelector( '.frm-page-num' )?.textContent ) - 1;
+
+	const placePopover = () => {
+		const rect = toggle.getBoundingClientRect();
+		// Line up with the button's right edge, like a menu opened from it.
+		popover.style.right = `${ window.innerWidth - rect.right }px`;
+		// Open upward, so the list grows away from the button.
+		popover.style.bottom = `${ window.innerHeight - rect.top + 8 }px`;
+	};
+
+	// Track the page at the top of the canvas, so the outline can mark it.
+	const updateDock = () => {
+		const pills = getPagePills();
+		const { top } = scroller.getBoundingClientRect();
+		let index = -1;
+		pills.forEach( pill => {
+			if ( pill.offsetParent && pill.getBoundingClientRect().top < top + 8 ) {
+				index = Math.max( index, getPillPage( pill ) );
+			}
+		} );
+		const pages = getPages();
+		const pageChanged = currentPageIndex !== Math.max( index, 0 );
+		currentPageIndex = Math.max( index, 0 );
+		const page = pages[ currentPageIndex ];
+		const hasPages = pages.length > 1 && Boolean( page );
+		// The outline only earns its place once the form is split into pages.
+		toggle.parentElement.hidden = ! hasPages;
+		if ( ! hasPages ) {
+			if ( isOpen() ) {
+				setOpen( false );
+			}
+			return;
+		}
+		if ( isOpen() ) {
+			placePopover();
+			if ( pageChanged ) {
+				render();
+			}
+		}
+	};
+
+	let dockFrame;
+	const queueDockUpdate = () => {
+		window.cancelAnimationFrame( dockFrame );
+		dockFrame = window.requestAnimationFrame( updateDock );
+	};
+
+	const setOpen = open => {
+		popover.hidden = ! open;
+		toggle.setAttribute( 'aria-expanded', String( open ) );
+		toggle.classList.toggle( 'frm-active', open );
+		updateDock();
+		updateOutline();
+		if ( open ) {
+			search.focus();
+		}
+	};
+
+	toggle.addEventListener( 'click', () => setOpen( popover.hidden ) );
+	document.addEventListener( 'keydown', event => {
+		if ( event.key === 'Escape' && ! popover.hidden ) {
+			setOpen( false );
+			toggle.focus();
+		}
+	} );
+	// Not a modal: the builder stays usable, and clicking anywhere else closes the outline.
+	document.addEventListener( 'pointerdown', event => {
+		if ( ! popover.hidden && ! popover.contains( event.target ) && ! toggle.contains( event.target ) ) {
+			setOpen( false );
+		}
+	} );
+	scroller.addEventListener( 'scroll', queueDockUpdate, { passive: true } );
+	window.addEventListener( 'resize', queueDockUpdate );
+	// Page breaks load and move with the builder, so recheck the dock when they do.
+	new MutationObserver( queueDockUpdate ).observe( builder, { childList: true, subtree: true } );
+	updateDock();
 	search.addEventListener( 'input', render );
+	// Arrow keys move between the search box and the results, like a menu. Safari's Tab skips buttons by default.
+	popover.addEventListener( 'keydown', event => {
+		const items = Array.from( list.querySelectorAll( 'button[data-field-id]' ) );
+		if ( items.length === 0 ) {
+			return;
+		}
+		const index = items.indexOf( document.activeElement );
+		let next;
+		if ( event.key === 'ArrowDown' ) {
+			next = items[ Math.min( index + 1, items.length - 1 ) ];
+		} else if ( event.key === 'ArrowUp' ) {
+			next = index <= 0 ? search : items[ index - 1 ];
+		} else if ( event.key === 'Home' && index >= 0 ) {
+			[ next ] = items;
+		} else if ( event.key === 'End' && index >= 0 ) {
+			next = items[ items.length - 1 ];
+		} else if ( event.key === 'Enter' && document.activeElement === search ) {
+			// Jump to the top result.
+			items[ 0 ].click();
+			event.preventDefault();
+			return;
+		}
+		if ( next ) {
+			event.preventDefault();
+			next.focus();
+			next.scrollIntoView( { block: 'nearest' } );
+		}
+	} );
 	list.addEventListener( 'click', event => {
 		const button = event.target.closest( 'button[data-field-id]' );
 		if ( ! button ) {
@@ -274,7 +380,7 @@ export function initFormOutline() {
 		}
 
 		builder.querySelectorAll( '.frm-builder-outline-target' ).forEach( item => item.classList.remove( 'frm-builder-outline-target' ) );
-		// Don't select the field. That would switch to the Field Options tab and hide the outline.
+		// Don't select the field. That would open Field Options, and the outline stays open to jump again.
 		field.classList.add( 'frm-builder-outline-target' );
 		window.requestAnimationFrame( () => {
 			field.scrollIntoView( { behavior: 'smooth', block: 'start' } );
