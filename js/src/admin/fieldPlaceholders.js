@@ -13,10 +13,10 @@ export function hydrateFieldPlaceholders() {
 
 	const { fields, definitions } = JSON.parse( manifestElement.textContent );
 	fieldsContainer.querySelectorAll( 'li[data-frm-placeholder]' ).forEach( field => {
-		const [ fieldId, definitionIndex ] = fields[ field.dataset.frmPlaceholder ];
+		const [ fieldId, definitionIndex, layoutClasses = '' ] = fields[ field.dataset.frmPlaceholder ];
 		const [ className, formId, type ] = definitions[ definitionIndex ];
 		field.id = `frm_field_id_${ fieldId }`;
-		field.className = className;
+		field.className = `${ className } ${ layoutClasses }`;
 		field.dataset.fid = fieldId;
 		field.dataset.formid = formId;
 		field.dataset.ftype = type;
