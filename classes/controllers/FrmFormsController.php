@@ -2707,16 +2707,21 @@ class FrmFormsController {
 			$form = do_shortcode( $frm_settings->login_msg );
 		} else {
 			do_action( 'frm_pre_get_form', $form );
-			$form = self::get_form( $form, $title, $description, $atts );
+			$form_object = $form;
+			$form        = self::get_form( $form, $title, $description, $atts );
 
 			/**
 			 * Use this shortcode to check for external shortcodes that may span
 			 * across multiple fields in the customizable HTML
 			 *
 			 * @since 2.0.8
+			 * @since x.x The form object is passed as the second argument.
+			 *
+			 * @param string $form        Rendered form HTML.
+			 * @param object $form_object Form being rendered.
 			 */
-			$form = apply_filters( 'frm_filter_final_form', $form );
-		}
+			$form = apply_filters( 'frm_filter_final_form', $form, $form_object );
+		}//end if
 
 		return $form;
 	}
