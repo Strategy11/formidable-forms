@@ -127,7 +127,10 @@ class test_FrmEntriesController extends FrmUnitTest {
 	 * @covers FrmEntriesController::process_entry
 	 */
 	public function test_process_entry_ignores_array_form_id() {
-		$_POST['form_id']  = array( '1' );
+		global $frm_vars;
+
+		$form_id           = $this->factory->form->create();
+		$_POST['form_id']  = array( (string) $form_id );
 		$_POST['item_key'] = 'abc';
 
 		try {
@@ -136,6 +139,6 @@ class test_FrmEntriesController extends FrmUnitTest {
 			unset( $_POST['form_id'], $_POST['item_key'] );
 		}
 
-		$this->assertArrayNotHasKey( 'created_entries', $GLOBALS['frm_vars'] ?? array() );
+		$this->assertFalse( isset( $frm_vars['form_params'][ $form_id ] ), 'An array form_id should stop before the form is processed.' );
 	}
 }
