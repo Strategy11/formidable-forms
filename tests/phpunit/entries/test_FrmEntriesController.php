@@ -122,4 +122,20 @@ class test_FrmEntriesController extends FrmUnitTest {
 		$this->assertStringNotContainsString( 'Spam_source', $html );
 		$this->assertStringNotContainsString( 'Test_sample', $html );
 	}
+
+	/**
+	 * @covers FrmEntriesController::process_entry
+	 */
+	public function test_process_entry_ignores_array_form_id() {
+		$_POST['form_id']  = array( '1' );
+		$_POST['item_key'] = 'abc';
+
+		try {
+			FrmEntriesController::process_entry();
+		} finally {
+			unset( $_POST['form_id'], $_POST['item_key'] );
+		}
+
+		$this->assertArrayNotHasKey( 'created_entries', $GLOBALS['frm_vars'] ?? array() );
+	}
 }
