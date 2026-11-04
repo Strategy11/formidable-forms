@@ -772,12 +772,8 @@ class FrmEntriesController {
 	public static function process_entry( $errors = '', $ajax = false ) {
 		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'absint' );
 
-		// An array form_id (form_id[]=1) passes absint as an array, which breaks the array offsets below.
-		if ( is_array( $form_id ) ) {
-			return;
-		}
-
-		if ( FrmAppHelper::is_admin() || empty( $_POST ) || ! $form_id || ! isset( $_POST['item_key'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( FrmAppHelper::is_admin() || empty( $_POST ) || ! $form_id || is_array( $form_id ) || ! isset( $_POST['item_key'] ) ) {
 			return;
 		}
 
