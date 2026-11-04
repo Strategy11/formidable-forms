@@ -537,15 +537,7 @@ class FrmFieldsController {
 			}
 		}
 
-		/**
-		 * Filters the options parsed from the Bulk Edit Options text before they are displayed.
-		 *
-		 * @since x.x
-		 *
-		 * @param array $opts  One item per line, either a string or an array with 'label' and 'value'.
-		 * @param array $field The field the options belong to.
-		 */
-		$opts = apply_filters( 'frm_bulk_edit_options', $opts, $field );
+		$opts = FrmOptionGroupsController::bulk_edit_options( $opts, $field );
 
 		// Keep other options after bulk update.
 		if ( ! empty( $field['field_options']['other'] ) ) {
