@@ -312,6 +312,15 @@ class FrmFieldsController {
 
 		$ajax_loading    = ! empty( $values['ajax_load'] );
 		$ajax_this_field = isset( $values['count'] ) && $values['count'] > 10 && ! in_array( $field_object->type, array( 'divider', 'end_divider' ), true );
+		/**
+		 * Filters deferred loading for a builder field.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool $ajax_this_field Whether to defer rendering the field.
+		 * @param object $field_object The builder field.
+		 */
+		$ajax_this_field = apply_filters( 'frm_builder_field_ajax', $ajax_this_field, $field_object );
 
 		if ( $ajax_loading && $ajax_this_field ) {
 			$li_classes = self::get_classes_for_builder_field( array(), $display, $field_obj );
@@ -352,7 +361,13 @@ class FrmFieldsController {
 		$li_classes  = self::get_classes_for_builder_field( $field, $display, $field_obj );
 		$li_classes .= ' ui-state-default widgets-holder-wrap';
 
-		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field.php';
+		$previous_field_vars = FrmFieldsHelper::set_builder_field_vars( $field_object, $field );
+
+		try {
+			require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field.php';
+		} finally {
+			FrmFieldsHelper::set_builder_field_vars( $field_object, $previous_field_vars );
+		}
 	}
 
 	/**
@@ -408,8 +423,17 @@ class FrmFieldsController {
 		}
 
 		$placeholder        = count( $manifest->fields );
-		$manifest->fields[] = array( (int) $field->id, $index );
-		echo '<li data-frm-placeholder="' . esc_attr( $placeholder ) . '"></li>';
+		$height             = FrmBuilderPreviewHelper::get_placeholder_height( $field );
+		$layout_classes     = (string) FrmField::get_option( $field, 'classes' );
+		$manifest->fields[] = array( (int) $field->id, $index, $layout_classes );
+		$attributes         = array(
+			'data-frm-placeholder' => $placeholder,
+			'class'                => 'frm-preview-placeholder ' . $layout_classes,
+			'style'                => '--frm-preview-height:' . $height . 'px',
+		);
+		echo '<li ';
+		FrmAppHelper::array_to_html_params( $attributes, true );
+		echo '></li>';
 	}
 
 	/**
