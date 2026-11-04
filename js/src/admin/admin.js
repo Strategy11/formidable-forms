@@ -5,6 +5,7 @@
  */
 const { validateField } = require( './settings/validateField' );
 const { getRangeSettingsDefaults, validateNumberRangeSetting, validateStepSetting, validateRangeSettings } = require( './settings/validateRangeSettings' );
+const { initBuilderContext } = require( './builderContext' );
 const { initFieldListHoverPill } = require( './fieldListHoverPill' );
 const { initShowBoxIconSwap } = require( './showBoxIconSwap' );
 const { hydrateBuilderSelect, hydrateBuilderSelectsIn } = require( './sharedSelectOptions' );
@@ -7041,7 +7042,10 @@ window.frmAdminBuildJS = function() {
 			if ( null !== currentWrapper.querySelector( '.edit_field_type_break' ) ) {
 				break;
 			}
-			$fieldsForPage = $fieldsForPage.add( jQuery( currentWrapper ) );
+			// Keep the submit row visible when pages are collapsed in the builder.
+			if ( ! currentWrapper.matches( '.edit_field_type_submit' ) && ! currentWrapper.querySelector( '.edit_field_type_submit' ) ) {
+				$fieldsForPage = $fieldsForPage.add( jQuery( currentWrapper ) );
+			}
 			currentWrapper = currentWrapper.nextElementSibling;
 		} while ( null !== currentWrapper );
 
@@ -12696,6 +12700,7 @@ window.frmAdminBuildJS = function() {
 
 			document.querySelectorAll( '.field_type_list > li:not(.frm_show_upgrade):not(.frm_show_update)' ).forEach( makeDraggable );
 			initFieldListHoverPill();
+			initBuilderContext( fieldsContainer );
 
 			jQuery( 'ul.field_type_list, .field_type_list li, ul.frm_code_list, .frm_code_list li, .frm_code_list li a, #frm_adv_info #category-tabs li, #frm_adv_info #category-tabs li a' ).disableSelection();
 

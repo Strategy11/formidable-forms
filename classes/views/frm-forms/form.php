@@ -78,6 +78,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</ul>
 
 	<?php
+	$builder_context = array();
+
+	foreach ( $values['fields'] ?? array() as $context_field ) {
+		$builder_context[ $context_field->id ] = array(
+			'has_rules' => ! empty( $context_field->field_options['adv_logic_rules'] ),
+			'name'      => wp_strip_all_tags( $context_field->name ),
+			'options'   => array_intersect_key(
+				(array) $context_field->field_options,
+				array_flip( array( 'hide_field', 'hide_field_cond', 'hide_opt', 'hide_group', 'hide_compare_field', 'hide_compare_measure', 'enable_conditional_logic', 'show_hide', 'any_all', 'calc', 'calc_type', 'admin_only' ) )
+			),
+		);
+	}
+	wp_print_inline_script_tag(
+		wp_json_encode( $builder_context, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ),
+		array(
+			'id'   => 'frm-builder-context',
+			'type' => 'application/json',
+		)
+	);
+
 	if ( isset( $values['preview_manifest'] ) ) {
 		FrmBuilderPreviewHelper::print_manifest( $values['preview_manifest'] );
 	}
