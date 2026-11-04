@@ -4,6 +4,7 @@
  * Internal dependencies
  */
 const { validateField } = require( './settings/validateField' );
+const { syncFieldOrder, confirmFieldOrderSaved } = require( './fieldOrder' );
 const { getRangeSettingsDefaults, validateNumberRangeSetting, validateStepSetting, validateRangeSettings } = require( './settings/validateRangeSettings' );
 const { initFieldListHoverPill } = require( './fieldListHoverPill' );
 const { initShowBoxIconSwap } = require( './showBoxIconSwap' );
@@ -8258,73 +8259,10 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function updateFieldOrder() {
-		const self = this;
-
-		this.initOnceInAllInstances = function() {
-			if ( updateFieldOrder.prototype.orderFieldsObject !== undefined ) {
-				return;
-			}
-
-			// It will store the order input fields ( input[name="field_options[field_order_{fieldId}]"] ).
-			// It will help to reduce the DOM searches based on fieldId.
-			// The same object data is used across all "updateFieldOrder" instances.
-			updateFieldOrder.prototype.orderFieldsObject = {};
-
-			// Get the Form group that will handle the fields settings.
-			// Perform a single DOM search and use it across all "updateFieldOrder" instances.
-			updateFieldOrder.prototype.fieldSettingsForm = document.getElementById( 'frm-end-form-marker' ).closest( 'form' );
-		};
-
-		this.getFieldOrderInputById = function( fieldId, parent ) {
-			let field;
-			const { orderFieldsObject } = updateFieldOrder.prototype;
-			const { fieldSettingsForm } = updateFieldOrder.prototype;
-
-			if ( orderFieldsObject[ fieldId ] === undefined ) {
-				field = fieldSettingsForm.querySelector( `input[name="field_options[field_order_${ fieldId }]"]` );
-				if ( ! field ) {
-					field = parent.querySelector( `input[name="field_options[field_order_${ fieldId }]"]` );
-				}
-				orderFieldsObject[ fieldId ] = field;
-				return field;
-			}
-
-			return orderFieldsObject[ fieldId ];
-		};
-
-		this.initOnceInAllInstances();
 		renumberPageBreaks();
-
-		return ( function() {
-			let fieldId;
-			let field;
-			let currentOrder;
-			let newOrder;
-			let i;
-			let singleField;
-			const moveFieldsClass = new moveFieldSettings();
-			const fields = jQuery( 'li.frm_field_box', jQuery( '#frm-show-fields' ) );
-
-			for ( i = 0; i < fields.length; i++ ) {
-				fieldId = fields[ i ].getAttribute( 'data-fid' );
-				field = self.getFieldOrderInputById( fieldId, fields[ i ] );
-
-				// get current field order, make sure we don't get the "field" reference as the "field" value will get updated later.
-				currentOrder = field ? Number( field.value ) : null;
-				newOrder = i + 1;
-
-				if ( currentOrder != newOrder && null !== currentOrder ) {
-					field.value = newOrder;
-					singleField = ensureFieldSettings( fieldId );
-
-					// add field that needs to be moved to "updateFieldOrder.prototype.fieldSettingsForm"
-					moveFieldsClass.append( singleField );
-					fieldUpdated();
-				}
-			}
-			// move all appended fields
-			moveFieldsClass.moveFields();
-		}() );
+		if ( syncFieldOrder( builderForm ) ) {
+			fieldUpdated();
+		}
 	}
 
 	function toggleSectionHolder() {
@@ -8704,6 +8642,7 @@ window.frmAdminBuildJS = function() {
 
 		const $form = jQuery( builderForm );
 		const v = JSON.stringify( $form.serializeArray() );
+		const savedOrders = builderForm.querySelector( '[name="frm_field_order"]' )?.value;
 
 		jQuery( document.getElementById( 'frm_compact_fields' ) ).val( v );
 		jQuery.ajax( {
@@ -8711,6 +8650,7 @@ window.frmAdminBuildJS = function() {
 			url: ajaxurl,
 			data: { action: 'frm_save_form', frm_compact_fields: v, nonce: frmGlobal.nonce },
 			success( msg ) {
+				confirmFieldOrderSaved( builderForm, savedOrders );
 				afterFormSave( $thisEle );
 				showFormSavedMessage( msg );
 				reloadIfAddonActivatedAjaxSubmitOnly();
