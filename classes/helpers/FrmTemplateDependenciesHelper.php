@@ -284,11 +284,12 @@ class FrmTemplateDependenciesHelper {
 	 */
 	private static function get_dependency_action( $requirement, $addon ) {
 		$result = array(
-			'name'    => $addon ? $addon['title'] : $requirement,
-			'action'  => '',
-			'plugin'  => '',
-			'url'     => admin_url( 'admin.php?page=formidable-addons' ),
-			'message' => __( 'Install and activate this add-on before importing the template.', 'formidable' ),
+			'name'        => $addon ? $addon['title'] : $requirement,
+			'description' => $addon && ! empty( $addon['excerpt'] ) ? $addon['excerpt'] : '',
+			'action'      => '',
+			'plugin'      => '',
+			'url'         => admin_url( 'admin.php?page=formidable-addons' ),
+			'message'     => __( 'Install and activate this add-on before importing the template.', 'formidable' ),
 		);
 
 		if ( ! current_user_can( 'activate_plugins' ) ) {
