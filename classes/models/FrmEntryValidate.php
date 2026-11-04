@@ -55,7 +55,10 @@ class FrmEntryValidate {
 		$posted_fields = self::get_fields_to_validate( $values, $exclude );
 
 		// Pass exclude value to validate_field function so it can be used for repeating sections
-		$args = array( 'exclude' => $exclude );
+		$args = array(
+			'exclude'  => $exclude,
+			'entry_id' => self::is_new_submission( $values ) ? 0 : absint( $values['id'] ?? 0 ),
+		);
 
 		foreach ( $posted_fields as $posted_field ) {
 			self::validate_field( $posted_field, $errors, $values, $args );
@@ -164,7 +167,8 @@ class FrmEntryValidate {
 			'key_pointer'     => '',
 			// Exclude these field types from validation.
 			'exclude'         => array(),
-
+			// The entry being edited, or 0 for a new entry.
+			'entry_id'        => 0,
 		);
 		$args  = wp_parse_args( $args, $defaults );
 		$value = ! empty( $args['parent_field_id'] ) ? $values : ( $values['item_meta'][ $args['id'] ] ?? '' );
@@ -228,7 +232,7 @@ class FrmEntryValidate {
 			return;
 		}
 
-		$option_is_valid = self::option_is_valid( $posted_field, $value, $posted_field->options );
+		$option_is_valid = self::option_is_valid( $posted_field, $value, $posted_field->options, (int) $args['entry_id'] );
 
 		/**
 		 * @since 6.21
@@ -248,14 +252,16 @@ class FrmEntryValidate {
 	 * Validate that value matches one of the options for the field.
 	 *
 	 * @since 6.21
+	 * @since x.x Added the $entry_id parameter.
 	 *
 	 * @param stdClass     $field
 	 * @param array|string $value
 	 * @param array        $options
+	 * @param int          $entry_id The entry being edited, or 0 for a new entry.
 	 *
 	 * @return bool
 	 */
-	private static function option_is_valid( $field, $value, $options ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
+	private static function option_is_valid( $field, $value, $options, $entry_id = 0 ) {
 		if ( '' === $value ) {
 			return true;
 		}
@@ -297,32 +303,7 @@ class FrmEntryValidate {
 					$option_value = $option;
 				}
 
-				/**
-				 * @var string $current_value
-				 */
-				$match = trim( $current_value ) === trim( $option_value );
-
-				if ( $match ) {
-					break;
-				}
-
-				$match = trim( $current_value ) === trim( do_shortcode( $option_value ) );
-
-				if ( $match ) {
-					break;
-				}
-
-				$match = self::is_filtered_match( $current_value, $option_value );
-
-				if ( $match ) {
-					break;
-				}
-
-				if ( ! is_numeric( $current_value ) ) {
-					continue;
-				}
-
-				$match = (int) $current_value === (int) $option_value;
+				$match = self::value_matches_option( $current_value, $option_value );
 
 				if ( $match ) {
 					break;
@@ -330,11 +311,37 @@ class FrmEntryValidate {
 			}//end foreach
 
 			if ( ! $match ) {
-				return self::options_are_dynamic_based_on_hook( $field, $value );
+				return self::options_are_dynamic_based_on_hook( $field, $value, $entry_id );
 			}
 		}//end foreach
 
 		return true;
+	}
+
+	/**
+	 * Check if a posted value matches a single option value.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $current_value The posted value.
+	 * @param string $option_value  The option value to compare against.
+	 *
+	 * @return bool
+	 */
+	private static function value_matches_option( $current_value, $option_value ) {
+		if ( trim( $current_value ) === trim( $option_value ) ) {
+			return true;
+		}
+
+		if ( trim( $current_value ) === trim( do_shortcode( $option_value ) ) ) {
+			return true;
+		}
+
+		if ( self::is_filtered_match( $current_value, $option_value ) ) {
+			return true;
+		}
+
+		return is_numeric( $current_value ) && (int) $current_value === (int) $option_value;
 	}
 
 	/**
@@ -371,16 +378,27 @@ class FrmEntryValidate {
 	 * This is to help avoid issues where the options could be based on a URL param for example.
 	 *
 	 * @since 6.21
+	 * @since x.x Added the $entry_id parameter.
 	 *
 	 * @param object       $field_object The field object.
 	 * @param array|string $value        The value to validate.
+	 * @param int          $entry_id     The entry being edited, or 0 for a new entry.
 	 *
 	 * @return bool
 	 */
-	private static function options_are_dynamic_based_on_hook( $field_object, $value ) {
+	private static function options_are_dynamic_based_on_hook( $field_object, $value, $entry_id = 0 ) {
 		$values          = (array) $field_object;
 		$values['value'] = $value;
-		FrmFieldsHelper::prepare_new_front_field( $values, $field_object );
+
+		if ( $entry_id ) {
+			FrmFieldsHelper::prepare_edit_front_field( $values, $field_object, $entry_id );
+		} else {
+			FrmFieldsHelper::prepare_new_front_field( $values, $field_object );
+		}
+
+		if ( self::value_matches_prepared_options( $value, $values ) ) {
+			return true;
+		}
 
 		$separate_value = FrmField::get_option( $field_object, 'separate_value' );
 		$map_callback   = function ( $option ) use ( $separate_value ) {
@@ -396,6 +414,52 @@ class FrmEntryValidate {
 		$field_object_options = array_map( $map_callback, $field_object->options );
 
 		return $values_options !== $field_object_options;
+	}
+
+	/**
+	 * Check the posted value against the options after the setup hooks run, using the
+	 * same option values the field renders with. This includes the option key when a
+	 * hook sets use_key, which does not change the option list itself.
+	 *
+	 * @since x.x
+	 *
+	 * @param array|string $value  The value to validate.
+	 * @param array        $values The field array after the setup hooks run.
+	 *
+	 * @return bool
+	 */
+	private static function value_matches_prepared_options( $value, $values ) {
+		if ( empty( $values['options'] ) || ! is_array( $values['options'] ) ) {
+			return false;
+		}
+
+		foreach ( (array) $value as $current_value ) {
+			if ( ! self::value_matches_prepared_option( $current_value, $values ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $current_value The posted value.
+	 * @param array  $values        The field array after the setup hooks run.
+	 *
+	 * @return bool
+	 */
+	private static function value_matches_prepared_option( $current_value, $values ) {
+		foreach ( $values['options'] as $opt_key => $opt ) {
+			$option_value = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $values );
+
+			if ( is_scalar( $option_value ) && self::value_matches_option( $current_value, (string) $option_value ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
