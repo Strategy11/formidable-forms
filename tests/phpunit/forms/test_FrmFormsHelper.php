@@ -637,10 +637,10 @@ class test_FrmFormsHelper extends FrmUnitTest {
 	 * @covers FrmFormsHelper::replace_shortcodes
 	 */
 	public function test_replace_shortcodes_ignores_array_entry_param() {
-		$form       = new stdClass();
-		$form->name = 'Test';
+		$form           = new stdClass();
+		$form->name     = 'Test';
 		$form->form_key = 'test';
-		$_GET['entry'] = array( 'x' );
+		$_GET['entry']  = array( 'x' );
 
 		try {
 			$html = FrmFormsHelper::replace_shortcodes( '<legend>[entry_key]</legend>', $form );
