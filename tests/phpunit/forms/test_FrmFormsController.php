@@ -136,8 +136,7 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		ob_start();
 		FrmFormsController::route();
-		$html = ob_get_clean();
-
+		$html     = ob_get_clean();
 		$_SERVER  = $server;
 		$_GET     = $get;
 		$_POST    = $post;
