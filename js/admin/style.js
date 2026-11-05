@@ -1316,9 +1316,9 @@
 
 			targetInput.value = defaultValues[ key ];
 
-			if ( targetInput.classList.contains( 'wp-color-picker' ) ) {
+			if ( targetInput.classList.contains( 'hex' ) ) {
 				// Trigger a change event so the color pickers sync. Otherwise they stay the same color after reset.
-				jQuery( targetInput ).trigger( 'change' );
+				targetInput.dispatchEvent( new Event( 'frm:color-sync' ) );
 			}
 
 			syncQuickSettingsSwatch( key, defaultValues[ key ] );
@@ -1352,15 +1352,8 @@
 		// Stored hex colors have no leading '#'. PHP adds it at render time (FrmStylesHelper::get_color_output()); match that here.
 		const color = /^[0-9a-f]{3,8}$/i.test( value ) ? `#${ value }` : value;
 
-		// Keeps Iris's own internal color state correct for if the picker is opened again.
-		jQuery( swatch ).wpColorPicker( 'color', color );
-
-		// The swatch button's own background is blanked out by CSS in this UI (see .frm-style-component .wp-picker-container button),
-		// so its text label is the only part actually visible, and it needs to be updated directly.
-		const resultText = swatch.closest( '.wp-picker-container' )?.querySelector( '.wp-color-result-text' );
-		if ( resultText ) {
-			resultText.textContent = color;
-		}
+		swatch.value = color;
+		swatch.dispatchEvent( new Event( 'frm:color-sync' ) );
 	}
 
 	/**
@@ -1452,103 +1445,14 @@
 			document.getElementById( selector ).addEventListener( 'change', debouncedTextSquishCheck );
 		} );
 
-		function detectColorFormat( value ) {
-			if ( value.startsWith( 'rgba' ) ) {
-				return 'rgba';
-			}
-			if ( value.startsWith( 'rgb' ) ) {
-				return 'rgb';
-			}
-			if ( value.startsWith( 'hsla' ) ) {
-				return 'hsla';
-			}
-			if ( value.startsWith( 'hsl' ) ) {
-				return 'hsl';
-			}
-			return 'hex';
-		}
-
-		const nativeInputValueDescriptor = Object.getOwnPropertyDescriptor( HTMLInputElement.prototype, 'value' );
-
-		jQuery( 'input.hex' ).each( function() {
-			this.dataset.colorFormat = detectColorFormat( this.value );
-
-			// Prevent iris from overwriting non-hex formats with hex during color picking.
-			const input = this;
-			Object.defineProperty( input, 'value', {
-				get() {
-					return nativeInputValueDescriptor.get.call( this );
-				},
-				set( val ) {
-					const format = input.dataset.colorFormat;
-					if ( format && 'hex' !== format && /^#[0-9a-f]{3,8}$/i.test( val ) ) {
-						return;
-					}
-					nativeInputValueDescriptor.set.call( this, val );
-				},
-				configurable: true
-			} );
-		} ).on( 'keyup', function() {
-			const newFormat = detectColorFormat( this.value );
-			if ( this.dataset.colorFormat !== newFormat ) {
-				this.dataset.colorFormat = newFormat;
-				const container = this.closest( '.wp-picker-container' );
-				if ( container ) {
-					container.querySelector( '.wp-color-result-text' ).textContent = this.value;
-				}
-				debouncedColorChange( { target: this }, this.value );
-			}
-		} ).wpColorPicker( {
-			change( event, ui ) {
-				const input = event.target;
-				const format = input.dataset.colorFormat || 'hex';
-				let color;
-
-				trackUnsavedChange();
-
-				if ( ui.color._alpha < 1 ) {
-					input.dataset.colorFormat = 'rgba';
-					color = ui.color.toCSS( 'rgba' );
-				} else if ( 'hex' === format ) {
-					color = ui.color.toString();
-				} else {
-					color = ui.color.toCSS( format );
-				}
-
-				debouncedColorChange( event, color );
-
-				input.value = color;
-
-				if ( null !== input.getAttribute( 'data-alpha-color-type' ) ) {
+		document.querySelectorAll( 'input.hex' ).forEach( input => {
+			frmDom.colorPicker.init( input, {
+				change( event ) {
+					trackUnsavedChange();
+					debouncedColorChange( event, input.value );
 					debouncedPreviewUpdate();
-					return;
 				}
-
-				debouncedPreviewUpdate();
-			}
-		} ).each( function() {
-			// wpColorPicker() hides the original input and shows a `.wp-color-result` button
-			// instead - repoint any label pointing at this input's id so clicking/focusing it
-			// reaches the visible, interactive button rather than a hidden input.
-			const label = this.id ? document.querySelector( `label[for="${ this.id }"]` ) : null;
-			if ( ! label ) {
-				return;
-			}
-
-			const result = this.closest( '.wp-picker-container' )?.querySelector( '.wp-color-result' );
-			if ( ! result ) {
-				return;
-			}
-
-			result.id = `${ this.id }_visible`;
-			label.setAttribute( 'for', result.id );
-		} );
-		jQuery( '.wp-color-result-text' ).text( function( _, oldText ) {
-			const container = jQuery( this ).closest( '.wp-picker-container' );
-			if ( container !== undefined && container[ 0 ].parentElement.classList.contains( 'frm-colorpicker' ) ) {
-				return container[ 0 ].querySelector( '.wp-color-picker' ).value;
-			}
-			return oldText === 'Select Color' ? 'Select' : oldText;
+			} );
 		} );
 		jQuery( '#frm_styling_form .styling_settings, #frm_styling_form .frm-field-shape, #frm_styling_form input[name="frm_style_setting[post_content][base_font_size]"]' ).on( 'change', debouncedPreviewUpdate );
 

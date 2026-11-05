@@ -141,7 +141,7 @@ class FrmStylesController {
 		$version = FrmAppHelper::plugin_version();
 
 		if ( FrmAppHelper::is_style_editor_page( 'edit' ) ) {
-			wp_enqueue_style( 'wp-color-picker' );
+			wp_enqueue_style( 'wp-components' );
 		}
 
 		wp_enqueue_style( 'frm-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_css&frm_scope_custom_css=1' ), array(), $version );
@@ -588,6 +588,10 @@ class FrmStylesController {
 		$plugin_url      = FrmAppHelper::plugin_url();
 		$version         = FrmAppHelper::plugin_version();
 		$js_dependencies = array( 'wp-i18n', 'wp-hooks', 'formidable_dom' );
+
+		if ( FrmAppHelper::is_style_editor_page( 'edit' ) ) {
+			$js_dependencies[] = 'formidable-color-picker';
+		}
 
 		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::use_jquery_datepicker' ) && FrmProAppHelper::use_jquery_datepicker() ) {
 			$js_dependencies[] = 'jquery-ui-datepicker';

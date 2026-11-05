@@ -228,10 +228,7 @@ class frmStyleOptions {
 		} );
 
 		wp.hooks.addAction( 'frm_style_options_color_change', 'formidable', ( { event, value } ) => {
-			const container = event.target.closest( '.wp-picker-container' );
 			const id = event.target.getAttribute( 'id' );
-
-			container.querySelector( '.wp-color-result-text' ).innerText = value;
 
 			elements.forEach( element => {
 				if ( element.id === id ) {
