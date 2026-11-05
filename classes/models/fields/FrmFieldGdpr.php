@@ -23,6 +23,15 @@ class FrmFieldGdpr extends FrmFieldType {
 	protected $has_for_label = false;
 
 	/**
+	 * Consent is given once per entry, so it can't go in a repeater.
+	 *
+	 * @since x.x
+	 *
+	 * @var bool
+	 */
+	protected $allow_in_repeater = false;
+
+	/**
 	 * @since 6.19
 	 *
 	 * @var string

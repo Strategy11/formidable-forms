@@ -877,6 +877,11 @@ class FrmAppController {
 
 		wp_enqueue_style( 'formidable-settings-components' );
 		wp_enqueue_script( 'formidable-settings-components' );
+
+		if ( FrmAppHelper::needs_pro_builder_compat() ) {
+			// Pro versions released before these builder features moved to Pro still need Lite's copy.
+			wp_enqueue_script( 'formidable_admin_pro_compat', $plugin_url . '/js/formidable_admin_pro_compat.js', array( 'formidable_admin' ), $version, true );
+		}
 	}
 
 	/**

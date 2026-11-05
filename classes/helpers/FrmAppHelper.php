@@ -6,6 +6,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmAppHelper {
 
 	/**
+	 * Builder feature keys whose code moved from Lite to Pro.
+	 *
+	 * @since x.x
+	 *
+	 * @var string[]
+	 */
+	const PRO_BUILDER_FEATURES = array(
+		'calc_box',
+		'page_section_chrome',
+		'lookup_settings',
+		'repeater_settings',
+		'confirmation_field',
+		'field_logic_rows',
+		'logic_option_sync',
+	);
+
+	/**
 	 * Version of the database we are moving to.
 	 *
 	 * @var int
@@ -403,6 +420,41 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Get the builder features that Pro registers its own code for.
+	 *
+	 * @since x.x
+	 *
+	 * @return string[]
+	 */
+	public static function get_pro_builder_features() {
+		/**
+		 * Lets Pro list the builder features it handles, so Lite skips its own copy.
+		 *
+		 * @since x.x
+		 *
+		 * @param string[] $features Builder feature keys, like 'calc_box'.
+		 */
+		$features = apply_filters( 'frm_pro_builder_features', array() );
+
+		return is_array( $features ) ? array_values( array_filter( $features, 'is_string' ) ) : array();
+	}
+
+	/**
+	 * Check if Lite needs to load its copy of builder features for an older Pro version.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function needs_pro_builder_compat() {
+		if ( ! self::pro_is_installed() ) {
+			return false;
+		}
+
+		return (bool) array_diff( self::PRO_BUILDER_FEATURES, self::get_pro_builder_features() );
+	}
+
+	/**
 	 * Check if the Pro plugin is installed, whether authorized or not.
 	 *
 	 * @since 6.8.3
@@ -440,6 +492,17 @@ class FrmAppHelper {
 		}
 
 		return self::is_admin_page( 'formidable' ) && in_array( $action, $check_actions, true );
+	}
+
+	/**
+	 * Check if the current page is a form's settings page.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function is_form_settings_page() {
+		return self::is_admin_page( 'formidable' ) && 'settings' === self::simple_get( 'frm_action', 'sanitize_title' );
 	}
 
 	/**
@@ -3939,6 +4002,7 @@ class FrmAppHelper {
 			'loading'                       => __( 'Loading&hellip;', 'formidable' ),
 			'nonce'                         => wp_create_nonce( 'frm_ajax' ),
 			'proIncludesSliderJs'           => is_callable( 'FrmProFormsHelper::prepare_custom_currency' ),
+			'proBuilderFeatures'            => self::get_pro_builder_features(),
 			'inboxSlideIn'                  => FrmInbox::get_inbox_slide_in_value_for_js(),
 			'utmMedium'                     => self::get_utm_medium(),
 		);

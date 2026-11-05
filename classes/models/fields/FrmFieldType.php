@@ -105,6 +105,16 @@ abstract class FrmFieldType {
 	protected $aria_description_added = false;
 
 	/**
+	 * Can this field type be added to a repeater in the form builder?
+	 * Set it to false in a field type class to keep the field out of repeaters.
+	 *
+	 * @since x.x
+	 *
+	 * @var bool
+	 */
+	protected $allow_in_repeater = true;
+
+	/**
 	 * @var bool|null Whether or not draft fields should be hidden on the front end.
 	 */
 	private static $should_hide_draft_fields;
@@ -549,6 +559,17 @@ DEFAULT_HTML;
 			'blank',
 			'unique_msg',
 		);
+	}
+
+	/**
+	 * Check if this field type can be added to a repeater in the form builder.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public function allow_in_repeater() {
+		return $this->allow_in_repeater;
 	}
 
 	/**
