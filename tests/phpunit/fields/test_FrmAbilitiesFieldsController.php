@@ -308,6 +308,78 @@ class test_FrmAbilitiesFieldsController extends FrmUnitTest {
 	}
 
 	/**
+	 * The builder cleans a field's options through frm_clean_{type}_field_options_before_update
+	 * when it saves, so create-field has to run the same filter.
+	 *
+	 * @return void
+	 */
+	public function test_create_field_runs_the_type_clean_filter() {
+		add_filter( 'frm_clean_text_field_options_before_update', array( $this, 'clean_test_option' ), 10, 2 );
+
+		$created = $this->execute(
+			'create-field',
+			array(
+				'form_id'       => $this->form->id,
+				'type'          => 'text',
+				'field_options' => array( 'test_clean_option' => 'abc' ),
+			)
+		);
+
+		remove_filter( 'frm_clean_text_field_options_before_update', array( $this, 'clean_test_option' ), 10 );
+
+		$this->assertNotWPError( $created );
+
+		$stored = FrmField::getOne( $created['id'] );
+		$this->assertSame( 0, $stored->field_options['test_clean_option'] ?? null, 'The clean filter should run on a field created through MCP.' );
+	}
+
+	/**
+	 * update-field sends no type unless the caller changes it, and FrmField::update()
+	 * only cleans when it has one.
+	 *
+	 * @return void
+	 */
+	public function test_update_field_runs_the_type_clean_filter_without_a_type_in_the_input() {
+		$field = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $this->form->id,
+				'type'    => 'text',
+			)
+		);
+
+		add_filter( 'frm_clean_text_field_options_before_update', array( $this, 'clean_test_option' ), 10, 2 );
+
+		$updated = $this->execute(
+			'update-field',
+			array(
+				'id'            => $field->id,
+				'field_options' => array( 'test_clean_option' => 'abc' ),
+			)
+		);
+
+		remove_filter( 'frm_clean_text_field_options_before_update', array( $this, 'clean_test_option' ), 10 );
+
+		$this->assertNotWPError( $updated );
+
+		$stored = FrmField::getOne( $field->id );
+		$this->assertSame( 0, $stored->field_options['test_clean_option'] ?? null, 'The clean filter should run on a field updated through MCP.' );
+		$this->assertSame( $field->name, $stored->name, 'The stored name should be unchanged.' );
+	}
+
+	/**
+	 * @param array $values Field values.
+	 *
+	 * @return array
+	 */
+	public function clean_test_option( $values ) {
+		if ( isset( $values['field_options']['test_clean_option'] ) ) {
+			$values['field_options']['test_clean_option'] = absint( $values['field_options']['test_clean_option'] );
+		}
+
+		return $values;
+	}
+
+	/**
 	 * @return void
 	 */
 	public function test_permission_follows_the_frm_view_and_edit_and_delete_forms_capabilities() {
