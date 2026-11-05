@@ -13,6 +13,15 @@ class FrmFieldsHelper {
 	private static $context_is_safe_to_load_field_options_from_request_data;
 
 	/**
+	 * Prepared field arrays shared only while their builder markup is being rendered.
+	 *
+	 * @since x.x
+	 *
+	 * @var array<string,array>
+	 */
+	private static $builder_field_vars = array();
+
+	/**
 	 * @param string     $type
 	 * @param int|string $form_id
 	 *
@@ -29,8 +38,7 @@ class FrmFieldsHelper {
 		$field_count = FrmDb::get_var(
 			'frm_fields',
 			array( 'form_id' => $form_id ),
-			'field_order',
-			array( 'order_by' => 'field_order DESC' )
+			'MAX(field_order)'
 		);
 
 		$values['field_key']   = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_fields', 'field_key' );
@@ -74,8 +82,39 @@ class FrmFieldsHelper {
 	 * @return array
 	 */
 	public static function setup_edit_vars( $field, $doing_ajax = false ) {
+		if ( ! $doing_ajax && self::$builder_field_vars && is_object( $field ) ) {
+			$key = spl_object_hash( $field );
+
+			if ( isset( self::$builder_field_vars[ $key ] ) ) {
+				return self::$builder_field_vars[ $key ];
+			}
+		}
+
 		$values = self::field_object_to_array( $field );
 		return apply_filters( 'frm_setup_edit_field_vars', $values, array( 'doing_ajax' => $doing_ajax ) );
+	}
+
+	/**
+	 * Share prepared values during a builder render, returning the previous values to restore.
+	 *
+	 * @since x.x
+	 *
+	 * @param object     $field  The field object used by the builder and its field type handler.
+	 * @param array|null $values Prepared field values, or null to stop sharing them.
+	 *
+	 * @return array|null
+	 */
+	public static function set_builder_field_vars( $field, $values = null ) {
+		$key      = spl_object_hash( $field );
+		$previous = self::$builder_field_vars[ $key ] ?? null;
+
+		if ( null === $values ) {
+			unset( self::$builder_field_vars[ $key ] );
+		} else {
+			self::$builder_field_vars[ $key ] = $values;
+		}
+
+		return $previous;
 	}
 
 	/**
