@@ -80,6 +80,37 @@ class test_FrmFormsController extends FrmUnitTest {
 	 * @return void
 	 */
 	public function test_route_shows_post_max_size_error() {
+		$html = $this->route_oversized_post( 'edit' );
+
+		$this->assertStringContainsString( 'Your changes were not saved', $html );
+		$this->assertStringContainsString( 'post_max_size', $html );
+	}
+
+	/**
+	 * The form Settings tab posts frm_action=settings in the URL and update_settings in the body, so it needs the same message.
+	 *
+	 * @see https://github.com/Strategy11/formidable-pro/issues/6921
+	 *
+	 * @covers FrmFormsController::route
+	 *
+	 * @return void
+	 */
+	public function test_route_shows_post_max_size_error_on_settings() {
+		$html = $this->route_oversized_post( 'settings' );
+
+		$this->assertStringContainsString( 'Your changes were not saved', $html );
+		$this->assertStringContainsString( 'post_max_size', $html );
+		$this->assertStringContainsString( 'frm_form_settings', $html, 'The settings page should be redrawn' );
+	}
+
+	/**
+	 * Runs route() for an empty POST that is larger than post_max_size.
+	 *
+	 * @param string $action The frm_action in the URL.
+	 *
+	 * @return string The page output.
+	 */
+	private function route_oversized_post( $action ) {
 		$limit = wp_convert_hr_to_bytes( (string) ini_get( 'post_max_size' ) );
 
 		if ( $limit <= 0 ) {
@@ -98,21 +129,21 @@ class test_FrmFormsController extends FrmUnitTest {
 		$_POST                     = array();
 		$_GET                      = array(
 			'page'       => 'formidable',
-			'frm_action' => 'edit',
+			'frm_action' => $action,
 			'id'         => $form_id,
 		);
 		$_REQUEST                  = $_GET;
 
 		ob_start();
 		FrmFormsController::route();
-		$html     = ob_get_clean();
+		$html = ob_get_clean();
+
 		$_SERVER  = $server;
 		$_GET     = $get;
 		$_POST    = $post;
 		$_REQUEST = $request;
 
-		$this->assertStringContainsString( 'Your changes were not saved', $html );
-		$this->assertStringContainsString( 'post_max_size', $html );
+		return $html;
 	}
 
 	/**

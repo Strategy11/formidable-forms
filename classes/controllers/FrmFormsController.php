@@ -2341,13 +2341,15 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Redraws the builder with a message, since update() never runs for an empty $_POST.
+	 * Redraws the builder or the form settings with a message, since update() and update_settings() never run for an empty $_POST.
 	 *
 	 * @since x.x
 	 *
+	 * @param string $action The route action.
+	 *
 	 * @return void
 	 */
-	private static function show_post_max_size_error() {
+	private static function show_post_max_size_error( $action ) {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
 		$message = sprintf(
@@ -2357,8 +2359,16 @@ class FrmFormsController {
 			'<a href="' . esc_url( self::get_form_too_long_docs_url() ) . '" target="_blank" rel="noopener">',
 			'</a>'
 		);
+		$errors  = array( 'post_max_size' => $message );
+		$form_id = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
 
-		self::get_edit_vars( FrmAppHelper::get_param( 'id', '', 'get', 'absint' ), array( 'post_max_size' => $message ) );
+		if ( in_array( $action, array( 'settings', 'update_settings' ), true ) ) {
+			FrmOnSubmitHelper::maybe_migrate_submit_settings_to_action( $form_id );
+			self::get_settings_vars( $form_id, $errors );
+			return;
+		}
+
+		self::get_edit_vars( $form_id, $errors );
 	}
 
 	/**
@@ -2421,8 +2431,8 @@ class FrmFormsController {
 		add_action( 'frm_load_form_hooks', 'FrmHooksController::trigger_load_form_hooks' );
 		FrmAppHelper::trigger_hook_load( 'form' );
 
-		if ( in_array( $action, array( 'edit', 'update' ), true ) && self::post_exceeds_max_size() ) {
-			self::show_post_max_size_error();
+		if ( in_array( $action, array( 'edit', 'update', 'settings', 'update_settings' ), true ) && self::post_exceeds_max_size() ) {
+			self::show_post_max_size_error( $action );
 			return null;
 		}
 
