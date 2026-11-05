@@ -425,11 +425,12 @@ class FrmAbilitiesFieldsController {
 		}
 
 		$field_data = self::merge_field_options_with_existing( $field, $field_data );
-		$field_data = self::add_stored_type_for_cleaning( $field, $field_data );
 
 		if ( ! $field_data ) {
 			return new WP_Error( 'frm_no_update_data', __( 'No data provided to update.', 'formidable' ), array( 'status' => 400 ) );
 		}
+
+		$field_data = self::add_stored_values_for_cleaning( $field, $field_data );
 
 		$new_type      = ! empty( $field_data['type'] ) ? $field_data['type'] : $field->type;
 		$field_options = isset( $field_data['field_options'] ) && is_array( $field_data['field_options'] ) ? $field_data['field_options'] : (array) $field->field_options;
@@ -816,23 +817,22 @@ class FrmAbilitiesFieldsController {
 	}
 
 	/**
-	 * Add the stored type and name to an options update so FrmField::update() cleans it.
+	 * Give an update the type, name and options the builder always sends, so FrmField::update() cleans it.
 	 *
 	 * FrmField::update() only applies frm_clean_{type}_field_options_before_update
-	 * when the values include a type, which the builder always sends and a partial
-	 * ability update does not. The name goes along because some cleaners read it,
-	 * like the repeater one that renames the child form. Updates that do not touch
-	 * field_options are left alone, since the cleaners expect it to be present.
+	 * when the values include a type, which a partial ability update does not.
+	 * Cleaners also read name and field_options, like the repeater one that renames
+	 * the child form, so those are filled from the stored field when missing.
 	 *
 	 * @since x.x
 	 *
 	 * @param stdClass $field      The stored field object.
-	 * @param array    $field_data Field data to update.
+	 * @param array    $field_data Non-empty field data to update.
 	 *
 	 * @return array
 	 */
-	private static function add_stored_type_for_cleaning( $field, $field_data ) {
-		if ( empty( $field_data['field_options'] ) || ! empty( $field_data['type'] ) ) {
+	private static function add_stored_values_for_cleaning( $field, $field_data ) {
+		if ( ! empty( $field_data['type'] ) ) {
 			return $field_data;
 		}
 
@@ -840,6 +840,10 @@ class FrmAbilitiesFieldsController {
 
 		if ( ! isset( $field_data['name'] ) ) {
 			$field_data['name'] = $field->name;
+		}
+
+		if ( ! isset( $field_data['field_options'] ) ) {
+			$field_data['field_options'] = (array) $field->field_options;
 		}
 
 		return $field_data;

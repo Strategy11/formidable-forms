@@ -334,6 +334,39 @@ class test_FrmAbilitiesFieldsController extends FrmUnitTest {
 	}
 
 	/**
+	 * create-form builds inline fields through the same pipeline as create-field.
+	 *
+	 * @return void
+	 */
+	public function test_create_form_runs_the_type_clean_filter_on_inline_fields() {
+		add_filter( 'frm_clean_text_field_options_before_update', array( $this, 'clean_test_option' ), 10, 2 );
+
+		$created = $this->execute(
+			'create-form',
+			array(
+				'name'   => 'Inline Clean Form',
+				'fields' => array(
+					array(
+						'type'          => 'text',
+						'name'          => 'Inline',
+						'field_options' => array( 'test_clean_option' => 'abc' ),
+					),
+				),
+			)
+		);
+
+		remove_filter( 'frm_clean_text_field_options_before_update', array( $this, 'clean_test_option' ), 10 );
+
+		$this->assertNotWPError( $created );
+
+		$fields = FrmField::get_all_for_form( $created['id'] );
+		$this->assertCount( 1, $fields, 'The inline field should be created.' );
+
+		$stored = reset( $fields );
+		$this->assertSame( 0, $stored->field_options['test_clean_option'] ?? null, 'The clean filter should run on inline fields.' );
+	}
+
+	/**
 	 * The update-field ability sends no type unless the caller changes it, and
 	 * FrmField::update() only cleans when it has one.
 	 *
@@ -364,6 +397,56 @@ class test_FrmAbilitiesFieldsController extends FrmUnitTest {
 		$stored = FrmField::getOne( $field->id );
 		$this->assertSame( 0, $stored->field_options['test_clean_option'] ?? null, 'The clean filter should run on a field updated through MCP.' );
 		$this->assertSame( $field->name, $stored->name, 'The stored name should be unchanged.' );
+	}
+
+	/**
+	 * A default_value-only or name-only update still reaches the cleaners, with
+	 * the stored type, name and options they expect.
+	 *
+	 * @return void
+	 */
+	public function test_update_field_runs_the_type_clean_filter_for_a_top_level_only_update() {
+		$field = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $this->form->id,
+				'type'    => 'text',
+				'name'    => 'Stored Name',
+			)
+		);
+
+		$seen = array();
+		$spy  = function ( $values ) use ( &$seen ) {
+			$seen[] = $values;
+			return $values;
+		};
+
+		add_filter( 'frm_clean_text_field_options_before_update', $spy );
+
+		$this->execute(
+			'update-field',
+			array(
+				'id'            => $field->id,
+				'default_value' => 'abc',
+			)
+		);
+		$this->execute(
+			'update-field',
+			array(
+				'id'   => $field->id,
+				'name' => 'New Name',
+			)
+		);
+
+		remove_filter( 'frm_clean_text_field_options_before_update', $spy );
+
+		$this->assertCount( 2, $seen, 'The clean filter should run for each top level update.' );
+		$this->assertSame( 'Stored Name', $seen[0]['name'], 'A default_value update should carry the stored name.' );
+		$this->assertSame( 'New Name', $seen[1]['name'], 'A name update should keep the new name.' );
+		$this->assertIsArray( $seen[0]['field_options'], 'The cleaners expect field_options.' );
+
+		$stored = FrmField::getOne( $field->id );
+		$this->assertSame( 'New Name', $stored->name );
+		$this->assertSame( 'abc', $stored->default_value );
 	}
 
 	/**
