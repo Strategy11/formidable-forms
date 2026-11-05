@@ -334,8 +334,8 @@ class test_FrmAbilitiesFieldsController extends FrmUnitTest {
 	}
 
 	/**
-	 * update-field sends no type unless the caller changes it, and FrmField::update()
-	 * only cleans when it has one.
+	 * The update-field ability sends no type unless the caller changes it, and
+	 * FrmField::update() only cleans when it has one.
 	 *
 	 * @return void
 	 */

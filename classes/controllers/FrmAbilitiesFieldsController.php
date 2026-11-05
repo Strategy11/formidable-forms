@@ -574,7 +574,7 @@ class FrmAbilitiesFieldsController {
 		 * @param array $prepared Field data.
 		 * @param int   $id       Field ID, 0 for a field that has not been created yet.
 		 */
-		return apply_filters( 'frm_clean_' . $prepared['type'] . '_field_options_before_update', $prepared, 0 );
+		return (array) apply_filters( 'frm_clean_' . $prepared['type'] . '_field_options_before_update', $prepared, 0 );
 	}
 
 	/**
