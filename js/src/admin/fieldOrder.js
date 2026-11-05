@@ -48,7 +48,9 @@ export function syncFieldOrder( form ) {
 		return changed;
 	}
 	if ( ! input ) {
-		input = frmDom.tag( 'input', { type: 'hidden', name: 'frm_field_order' } );
+		input = document.createElement( 'input' );
+		input.type = 'hidden';
+		input.name = 'frm_field_order';
 		form.insertBefore( input, form.querySelector( '#frm-end-form-marker' ) );
 	}
 	input.value = JSON.stringify( orders );

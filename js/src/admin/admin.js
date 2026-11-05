@@ -8650,7 +8650,10 @@ window.frmAdminBuildJS = function() {
 			url: ajaxurl,
 			data: { action: 'frm_save_form', frm_compact_fields: v, nonce: frmGlobal.nonce },
 			success( msg ) {
-				confirmFieldOrderSaved( builderForm, savedOrders );
+				// An invalid save also returns 200 with the edit page, so keep the orders for the next save.
+				if ( 'string' === typeof msg && msg.startsWith( frmAdminJs.form_updated ) ) {
+					confirmFieldOrderSaved( builderForm, savedOrders );
+				}
 				afterFormSave( $thisEle );
 				showFormSavedMessage( msg );
 				reloadIfAddonActivatedAjaxSubmitOnly();
