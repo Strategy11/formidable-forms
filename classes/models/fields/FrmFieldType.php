@@ -1450,7 +1450,8 @@ DEFAULT_HTML;
 		}
 
 		if ( is_array( $value ) ) {
-			$value = implode( ', ', $value );
+			// Flatten first. A nested array in the request would otherwise trigger an "Array to string conversion" warning.
+			$value = implode( ', ', FrmAppHelper::array_flatten( $value, 'reset' ) );
 		}
 
 		return str_contains( $value, '&lt;' ) ? htmlentities( $value ) : $value;

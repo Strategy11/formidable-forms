@@ -122,4 +122,23 @@ class test_FrmEntriesController extends FrmUnitTest {
 		$this->assertStringNotContainsString( 'Spam_source', $html );
 		$this->assertStringNotContainsString( 'Test_sample', $html );
 	}
+
+	/**
+	 * @covers FrmEntriesController::process_entry
+	 */
+	public function test_process_entry_ignores_array_form_id() {
+		global $frm_vars;
+
+		$form_id           = $this->factory->form->create();
+		$_POST['form_id']  = array( (string) $form_id );
+		$_POST['item_key'] = 'abc';
+
+		try {
+			FrmEntriesController::process_entry();
+		} finally {
+			unset( $_POST['form_id'], $_POST['item_key'] );
+		}
+
+		$this->assertFalse( isset( $frm_vars['form_params'][ $form_id ] ), 'An array form_id should stop before the form is processed.' );
+	}
 }
