@@ -632,4 +632,33 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		$this->assertSame( 2, FrmFormsHelper::count_fields_without_submit( $fields ) );
 		$this->assertSame( 0, FrmFormsHelper::count_fields_without_submit( array() ) );
 	}
+
+	/**
+	 * Inside labels need their own class so the inline submit spacer matches the padding above the input.
+	 *
+	 * @see https://github.com/Strategy11/formidable-pro/issues/6894
+	 */
+	public function test_get_form_style_class_adds_inline_inside_class_for_inside_labels() {
+		$form  = array(
+			'submit_align' => 'inline',
+			'custom_style' => 1,
+			'fields'       => array(
+				array(
+					'type'  => 'text',
+					'label' => 'inside',
+				),
+			),
+		);
+		$class = FrmFormsHelper::get_form_style_class( $form );
+
+		$this->assertStringContainsString( ' frm_inline_form', $class );
+		$this->assertStringContainsString( ' frm_inline_top', $class );
+		$this->assertStringContainsString( ' frm_inline_inside', $class );
+
+		$form['fields'][0]['label'] = 'top';
+		$class                      = FrmFormsHelper::get_form_style_class( $form );
+
+		$this->assertStringContainsString( ' frm_inline_top', $class );
+		$this->assertStringNotContainsString( 'frm_inline_inside', $class );
+	}
 }
