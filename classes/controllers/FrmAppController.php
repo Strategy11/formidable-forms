@@ -914,7 +914,8 @@ class FrmAppController {
 			return;
 		}
 
-		wp_enqueue_style( 'wp-components' );
+		// Lite's disabled email color placeholders still use core's picker markup.
+		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_script( 'formidable_settings' );
 	}
 

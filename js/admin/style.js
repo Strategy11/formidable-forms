@@ -1439,6 +1439,8 @@
 		}, 200 );
 
 		const debouncedTextSquishCheck = debounce( textSquishCheck, 300 );
+		// Counts preview requests so a slow, outdated response cannot overwrite a newer preview.
+		let stylingRequest = 0;
 		initPosClass(); // It's important that this gets called before we add event listeners because it triggers change events.
 
 		[ 'frm_field_height', 'frm_field_font_size', 'frm_field_pad' ].forEach( selector => {
@@ -1476,6 +1478,7 @@
 				input => 'style_name' === input.name || 0 === input.name.indexOf( 'frm_style_setting[post_content]' )
 			);
 			const locStr = JSON.stringify( jQuery( styleInputs ).serializeArray() );
+			const request = ++stylingRequest;
 
 			jQuery.ajax( {
 				type: 'POST',
@@ -1486,6 +1489,9 @@
 					frm_style_setting: locStr
 				},
 				success: css => {
+					if ( request !== stylingRequest ) {
+						return;
+					}
 					handleChangeStylingSuccess( css );
 					setSelectPlaceholderColor();
 				}
