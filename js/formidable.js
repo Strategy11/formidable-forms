@@ -984,37 +984,51 @@ function frmFrontFormJS() {
 
 	/**
 	 * Set color for select placeholders.
+	 * The change listener is delegated so selects added after load are covered too.
 	 *
 	 * @since 6.5.1
 	 */
 	function setSelectPlaceholderColor() {
-		const selects = document.querySelectorAll( '.form-field select' );
-		const styleElement = document.querySelector( '.with_frm_style' );
+		applySelectPlaceholderColor( document );
+
+		documentOn( 'change', '.form-field select', function() {
+			changeSelectPlaceholderColor( this );
+		} );
+	}
+
+	/**
+	 * Apply the placeholder color to every select inside a container.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Document|HTMLElement} container The element to search for selects.
+	 * @return {void}
+	 */
+	function applySelectPlaceholderColor( container ) {
+		container.querySelectorAll( '.form-field select' ).forEach( changeSelectPlaceholderColor );
+	}
+
+	/**
+	 * Use the disabled text color while a select shows its placeholder option.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLSelectElement} select The select element.
+	 * @return {void}
+	 */
+	function changeSelectPlaceholderColor( select ) {
+		const styleElement = select.closest( '.with_frm_style' ) || document.querySelector( '.with_frm_style' );
 		const textColorDisabled = styleElement ? getComputedStyle( styleElement ).getPropertyValue( '--text-color-disabled' ).trim() : '';
-		// Exit if there are no select elements or the textColorDisabled property is missing
-		if ( ! selects.length || ! textColorDisabled ) {
+		if ( ! textColorDisabled ) {
 			return;
 		}
 
-		// Function to change the color of a select element
-		const changeSelectColor = function( select ) {
-			if ( select.options[ select.selectedIndex ] && hasClass( select.options[ select.selectedIndex ], 'frm-select-placeholder' ) ) {
-				select.style.setProperty( 'color', textColorDisabled, 'important' );
-			} else {
-				select.style.color = '';
-			}
-		};
-
-		// Use a loop to iterate through each select element
-		Array.prototype.forEach.call( selects, function( select ) {
-			// Apply the color change to each select element
-			changeSelectColor( select );
-
-			// Add an event listener for future changes
-			select.addEventListener( 'change', function() {
-				changeSelectColor( select );
-			} );
-		} );
+		const selectedOption = select.options[ select.selectedIndex ];
+		if ( selectedOption && hasClass( selectedOption, 'frm-select-placeholder' ) ) {
+			select.style.setProperty( 'color', textColorDisabled, 'important' );
+		} else {
+			select.style.color = '';
+		}
 	}
 
 	/**
@@ -1256,8 +1270,10 @@ function frmFrontFormJS() {
 						afterFormSubmittedBeforeReplace( object, response );
 
 						// Keep the field scripts returned with AJAX pages so their settings and libraries load.
-						const insertedContent = jQuery( jQuery.parseHTML( response.content, document, true ) );
+						const insertedNodes = jQuery.parseHTML( response.content, document, true );
+						const insertedContent = jQuery( insertedNodes );
 						replaceContent.replaceWith( insertedContent );
+						const newContainer = getInsertedFormContainer( insertedNodes );
 						focusFormMessage( insertedContent );
 
 						addUrlParam( response );
@@ -1272,7 +1288,7 @@ function frmFrontFormJS() {
 							frmThemeOverride_frmAfterSubmit( formReturned, pageOrder, response.content, object );
 						}
 
-						afterFormSubmitted( object, response );
+						afterFormSubmitted( object, response, newContainer, formID );
 					},
 					delay
 				);
@@ -1460,15 +1476,78 @@ function frmFrontFormJS() {
 		}
 	}
 
-	function afterFormSubmitted( object, response ) {
+	/**
+	 * Trigger the events that run after the AJAX response replaces the form.
+	 *
+	 * @param {HTMLElement}      object    The submitted form. It is detached from the page at this point.
+	 * @param {Object}           response  The response from submitting the form with AJAX.
+	 * @param {HTMLElement|null} container The new form element, or the new form wrapper when no form was returned.
+	 * @param {string}           formId    The submitted form id.
+	 * @return {void}
+	 */
+	function afterFormSubmitted( object, response, container, formId ) {
 		const tempDiv = document.createElement( 'div' );
 		tempDiv.innerHTML = response.content;
 		const formCompleted = tempDiv.querySelector( '.frm_message' );
 		if ( formCompleted ) {
 			jQuery( document ).trigger( 'frmFormComplete', [ object, response ] );
+			triggerFieldsInserted( container, formId, 'formComplete' );
 		} else {
 			jQuery( document ).trigger( 'frmPageChanged', [ object, response ] );
+			triggerFieldsInserted( container, formId, 'pageChanged' );
 		}
+	}
+
+	/**
+	 * Find the new form element in the nodes inserted from an AJAX response.
+	 * Falls back to the new form wrapper when the response has no form, like a success message.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Array} insertedNodes The nodes parsed from the response.
+	 * @return {HTMLElement|null} The new form element or wrapper.
+	 */
+	function getInsertedFormContainer( insertedNodes ) {
+		const elements = ( insertedNodes || [] ).filter( node => node.nodeType === Node.ELEMENT_NODE );
+
+		for ( const element of elements ) {
+			const form = element.matches( 'form' ) ? element : element.querySelector( 'form' );
+			if ( form ) {
+				return form;
+			}
+		}
+
+		return elements.find( element => element.classList.contains( 'frm_forms' ) ) || elements[ 0 ] || null;
+	}
+
+	/**
+	 * Let other scripts know that new field HTML is in the page.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement|null} container The new form element.
+	 * @param {string}           formId    The form id, or an empty string when unknown.
+	 * @param {string}           source    What inserted the fields, like 'pageChanged' or 'formComplete'.
+	 * @return {void}
+	 */
+	function triggerFieldsInserted( container, formId, source ) {
+		if ( ! container || ! container.isConnected || typeof window.CustomEvent !== 'function' ) {
+			return;
+		}
+
+		const formIdInput = container.querySelector( 'input[name="form_id"]' );
+		if ( formIdInput ) {
+			formId = formIdInput.value;
+		}
+
+		container.dispatchEvent( new CustomEvent( 'frmFieldsInserted', {
+			bubbles: true,
+			detail: {
+				container,
+				formId: formId ? String( formId ) : '',
+				source,
+			},
+		} ) );
 	}
 
 	/**
@@ -1847,22 +1926,19 @@ function frmFrontFormJS() {
 	 * @since 4.10.02
 	 */
 	function changeFocusWhenClickComboFieldLabel() {
-		let label;
+		documentOn( 'click', '.frm_form_field .frm_primary_label', function() {
+			const field = this.closest( '.frm_form_field' );
+			const inputsContainer = field.querySelector( '.frm_combo_inputs_container' );
 
-		const comboInputsContainer = document.querySelectorAll( '.frm_combo_inputs_container' );
-		comboInputsContainer.forEach( function( inputsContainer ) {
-			if ( ! inputsContainer.closest( '.frm_form_field' ) ) {
+			// Only the first primary label of the field that directly owns the combo inputs moves focus.
+			if ( ! inputsContainer || inputsContainer.closest( '.frm_form_field' ) !== field || field.querySelector( '.frm_primary_label' ) !== this ) {
 				return;
 			}
 
-			label = inputsContainer.closest( '.frm_form_field' ).querySelector( '.frm_primary_label' );
-			if ( ! label ) {
-				return;
+			const firstInput = inputsContainer.querySelector( '.frm_form_field:first-child input, .frm_form_field:first-child select, .frm_form_field:first-child textarea' );
+			if ( firstInput ) {
+				firstInput.focus();
 			}
-
-			label.addEventListener( 'click', function() {
-				inputsContainer.querySelector( '.frm_form_field:first-child input, .frm_form_field:first-child select, .frm_form_field:first-child textarea' ).focus();
-			} );
 		} );
 	}
 
@@ -2252,23 +2328,28 @@ function frmFrontFormJS() {
 		messageEl.insertAdjacentHTML( 'beforeend', ` ${ frmShowNewTabFallback.message }` );
 	}
 
+	/**
+	 * Use the custom invalid message for fields in any form, including forms and rows added after load.
+	 * The invalid event does not bubble, so one capturing listener on the document is used.
+	 *
+	 * @return {void}
+	 */
 	function setCustomValidityMessage() {
-		const forms = document.getElementsByClassName( 'frm-show-form' );
-		const { length } = forms;
+		document.addEventListener(
+			'invalid',
+			function( event ) {
+				const { target } = event;
 
-		for ( let index = 0; index < length; ++index ) {
-			forms[ index ].addEventListener(
-				'invalid',
-				function( event ) {
-					const { target } = event;
+				if ( ! target.closest || ! target.closest( '.frm-show-form' ) ) {
+					return;
+				}
 
-					if ( shouldUpdateValidityMessage( target ) ) {
-						target.setCustomValidity( target.dataset.invmsg );
-					}
-				},
-				true
-			);
-		}
+				if ( shouldUpdateValidityMessage( target ) ) {
+					target.setCustomValidity( target.dataset.invmsg );
+				}
+			},
+			true
+		);
 	}
 
 	function enableSubmitButtonOnBackButtonPress() {
@@ -2782,6 +2863,212 @@ function frmFrontFormJS() {
 		return `${ split[ 0 ] }${ currency.decimal_separator }${ split[ 1 ].substr( 0, currency.decimals ) }`;
 	}
 
+	/**
+	 * Debounce a function separately for each key. See frmDom.util.debounceByKey.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Function} func The function to debounce. It receives the arguments after the key, or the key when there are none.
+	 * @param {number}   wait Milliseconds to wait after the last call for a key.
+	 * @return {Function} run( key, ...args ), with run.cancel( key ) and run.flush( key ).
+	 */
+	function debounceByKey( func, wait = 100 ) {
+		const pending = new Map();
+		const call = args => func( ...args );
+		const run = ( key, ...args ) => {
+			clearTimeout( pending.get( key )?.timeout );
+			const callArgs = args.length ? args : [ key ];
+			pending.set( key, {
+				args: callArgs,
+				timeout: setTimeout( () => {
+					pending.delete( key );
+					call( callArgs );
+				}, wait )
+			} );
+		};
+		run.cancel = key => {
+			clearTimeout( pending.get( key )?.timeout );
+			pending.delete( key );
+		};
+		run.flush = key => {
+			const entry = pending.get( key );
+			if ( ! entry ) {
+				return;
+			}
+			run.cancel( key );
+			call( entry.args );
+		};
+		return run;
+	}
+
+	/**
+	 * Run a function at most once per animation frame, with the latest arguments.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Function} func The function to throttle.
+	 * @return {Function} The throttled function.
+	 */
+	function oncePerFrame( func ) {
+		let scheduled = false;
+		let latestArgs = [];
+		const schedule = 'function' === typeof window.requestAnimationFrame
+			? callback => window.requestAnimationFrame( callback )
+			: callback => setTimeout( callback, 16 );
+		return function( ...args ) {
+			latestArgs = args;
+			if ( scheduled ) {
+				return;
+			}
+			scheduled = true;
+			schedule( function() {
+				scheduled = false;
+				func( ...latestArgs );
+			} );
+		};
+	}
+
+	const fieldsReadyRegistrations = new Set();
+	let fieldsReadyListening = false;
+	let fieldsReadyRoots = null;
+
+	/**
+	 * Call init for each new element in the roots that matches the registration's selector.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Object}             registration The registration from onFieldsReady.
+	 * @param {Array<HTMLElement>} roots        The elements, or the document, to search.
+	 * @return {void}
+	 */
+	function scanFieldsReadyRegistration( registration, roots ) {
+		const { selector, init, teardown, seen } = registration;
+
+		if ( teardown ) {
+			seen.forEach( function( element ) {
+				if ( element.isConnected ) {
+					return;
+				}
+				seen.delete( element );
+				try {
+					teardown( element );
+				} catch ( error ) {
+					console.error( 'frmFrontForm.onFieldsReady teardown failed', error );
+				}
+			} );
+		}
+
+		roots.forEach( function( root ) {
+			const elements = Array.from( root.querySelectorAll( selector ) );
+			if ( root.matches && root.matches( selector ) ) {
+				elements.unshift( root );
+			}
+
+			elements.forEach( function( element ) {
+				if ( seen.has( element ) || ! fieldsReadyRegistrations.has( registration ) ) {
+					return;
+				}
+				seen.add( element );
+				try {
+					init( element );
+				} catch ( error ) {
+					console.error( 'frmFrontForm.onFieldsReady init failed', error );
+				}
+			} );
+		} );
+	}
+
+	/**
+	 * Run every pending scan, once for all the roots gathered in this tick.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function flushFieldsReadyScan() {
+		const roots = fieldsReadyRoots.has( document ) ? [ document ] : Array.from( fieldsReadyRoots ).filter( root => root.isConnected );
+		fieldsReadyRoots = null;
+		fieldsReadyRegistrations.forEach( function( registration ) {
+			scanFieldsReadyRegistration( registration, roots );
+		} );
+	}
+
+	/**
+	 * Queue a scan of new fields. Scans queued in the same tick run once.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Document|HTMLElement} root Where the new fields are.
+	 * @return {void}
+	 */
+	function queueFieldsReadyScan( root ) {
+		if ( ! fieldsReadyRoots ) {
+			fieldsReadyRoots = new Set();
+			Promise.resolve().then( flushFieldsReadyScan );
+		}
+		fieldsReadyRoots.add( root || document );
+	}
+
+	/**
+	 * Listen for every way fields enter the page, once for all registrations.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function listenForFieldsReady() {
+		if ( fieldsReadyListening ) {
+			return;
+		}
+		fieldsReadyListening = true;
+
+		document.addEventListener( 'frmFieldsInserted', function( event ) {
+			queueFieldsReadyScan( event.detail && event.detail.container );
+		} );
+
+		// Older Pro versions only fire these. Their payloads are not reliable, so the whole page is scanned.
+		jQuery( document ).on( 'frmPageChanged frmFormComplete frmAfterAddRow frmInPlaceEdit frm_after_start_over', function() {
+			queueFieldsReadyScan( document );
+		} );
+	}
+
+	/**
+	 * Initialize matching elements once, now and whenever fields are added to the page.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string}   selector         A CSS selector for the elements to initialize.
+	 * @param {Function} init             Called once with each matching element.
+	 * @param {Object}   options          Optional settings.
+	 * @param {Function} options.teardown Called with each initialized element that left the page, before the next scan.
+	 * @return {Function} Call it to stop initializing new elements.
+	 */
+	function onFieldsReady( selector, init, options = {} ) {
+		const teardown = 'function' === typeof options.teardown ? options.teardown : null;
+		const registration = {
+			selector,
+			init,
+			teardown,
+			// A Set keeps detached elements reachable so they can be torn down.
+			seen: teardown ? new Set() : new WeakSet()
+		};
+
+		fieldsReadyRegistrations.add( registration );
+		listenForFieldsReady();
+
+		if ( 'loading' === document.readyState ) {
+			document.addEventListener( 'DOMContentLoaded', function() {
+				scanFieldsReadyRegistration( registration, [ document ] );
+			}, { once: true } );
+		} else {
+			scanFieldsReadyRegistration( registration, [ document ] );
+		}
+
+		return function() {
+			fieldsReadyRegistrations.delete( registration );
+		};
+	}
+
 	return {
 		init() {
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
@@ -2804,11 +3091,13 @@ function frmFrontFormJS() {
 			initFloatingLabels();
 			maybeShowNewTabFallbackMessage();
 
-			jQuery( document ).on( 'frmAfterAddRow', setCustomValidityMessage );
 			setCustomValidityMessage();
 			jQuery( document ).on( 'frmFieldChanged', maybeClearCustomValidityMessage );
 
 			setSelectPlaceholderColor();
+			document.addEventListener( 'frmFieldsInserted', function( event ) {
+				applySelectPlaceholderColor( event.detail.container );
+			} );
 
 			// Elementor popup show event. Fix Elementor Popup && FF Captcha field conflicts
 			jQuery( document ).on( 'elementor/popup/show', frmRecaptcha );
@@ -3124,7 +3413,16 @@ function frmFrontFormJS() {
 		},
 
 		triggerCustomEvent,
-		documentOn
+		documentOn,
+
+		/**
+		 * Shared helpers for add-ons. Check for onFieldsReady before using any of them.
+		 *
+		 * @since x.x
+		 */
+		onFieldsReady,
+		debounceByKey,
+		oncePerFrame
 	};
 }
 

@@ -13,8 +13,12 @@ const { getFieldLoadBatch } = require( './fieldLoadWeights' );
 const { hydrateFieldPlaceholders } = require( './fieldPlaceholders' );
 const { renderDropdownPreview, updateComboSelectPreview, updateAddressPreview } = require( './fieldPreview' );
 const { captureFieldSettings, applyFieldSettings, restoreFieldSettingValues } = require( './duplicateFieldSettings' );
-const { addFieldSettingsMetadata, cacheFieldSettings, forgetFieldSettings, materializeFieldSettings, materializeAllFieldSettings } = require( './deferredFieldSettings' );
+const { addFieldSettingsMetadata, cacheFieldSettings, forgetFieldSettings, materializeFieldSettings, materializeAllFieldSettings, materializeLogicFieldSettings } = require( './deferredFieldSettings' );
 const { hydrateFieldPreviews, renderFieldPreviews, PENDING_PREVIEW_CLASS } = require( './fieldPreviews' );
+const { initBuilderPreviewSync, syncHtmlFieldPreview } = require( './builderPreviewSync' );
+const { initLivePreview, getSettingKey, clampToInputRange } = require( './livePreview' );
+const { createFieldReadiness, getFieldPreviewBody } = require( './fieldReadiness' );
+const { createRefreshFieldPreview } = require( './refreshFieldPreview' );
 const { queueFieldPreview, renderFieldPreviewNow, forgetFieldPreview, setInitialFieldPreviews } = require( './fieldPreviewQueue' );
 const { queueFieldSettings, startFieldSettingsQueue, isFieldSettingsPending, requestFieldSettingsNow, waitForFieldSettings, cancelFieldSettings } = require( './fieldSettingsLoader' );
 
@@ -358,19 +362,81 @@ window.frmAdminBuildJS = function() {
 	// Global settings
 	let s;
 
+	/**
+	 * Builder features whose code lives outside Lite core, keyed by feature name.
+	 * Pro registers its own versions. With an older Pro, Lite's compat bundle registers the original code.
+	 *
+	 * @since x.x
+	 * @type {Map<string, Object>}
+	 */
+	const builderFeatures = new Map();
+
+	/**
+	 * Calls that buildInit makes on a feature when the builder starts. A feature that registers
+	 * after buildInit already ran gets the same call when it registers.
+	 *
+	 * @since x.x
+	 * @type {Object<string, string>}
+	 */
+	const BUILDER_FEATURE_INIT_CALLS = {
+		page_section_chrome: 'toggleSectionHolder',
+	};
+	let builderInitialized = false;
+
+	/**
+	 * Register the code for a builder feature. The first registration for a key wins.
+	 *
+	 * @since x.x
+	 * @param {string} key  The feature key, like 'calc_box'.
+	 * @param {Object} impl An object of functions. It binds its own event handlers when it registers.
+	 * @return {boolean} True when this impl was registered.
+	 */
+	function registerBuilderFeature( key, impl ) {
+		if ( 'string' !== typeof key || ! impl || 'object' !== typeof impl || builderFeatures.has( key ) ) {
+			return false;
+		}
+
+		builderFeatures.set( key, impl );
+
+		const initCall = BUILDER_FEATURE_INIT_CALLS[ key ];
+		if ( builderInitialized && initCall ) {
+			callBuilderFeature( key, initCall );
+		}
+
+		return true;
+	}
+
+	/**
+	 * @since x.x
+	 * @param {string} key The feature key.
+	 * @return {boolean} True when code is registered for the feature.
+	 */
+	function hasBuilderFeature( key ) {
+		return builderFeatures.has( key );
+	}
+
+	/**
+	 * Call a function of a registered builder feature.
+	 *
+	 * @since x.x
+	 * @param {string} key    The feature key.
+	 * @param {string} fnName The function name in the registered impl.
+	 * @param {...*}   fnArgs Arguments for the function.
+	 * @return {*} The function's return value, or undefined when nothing is registered.
+	 */
+	function callBuilderFeature( key, fnName, ...fnArgs ) {
+		const impl = builderFeatures.get( key );
+		if ( ! impl || 'function' !== typeof impl[ fnName ] ) {
+			return;
+		}
+		return impl[ fnName ]( ...fnArgs );
+	}
+
 	function showElement( element ) {
 		if ( ! element[ 0 ] ) {
 			return;
 		}
 		element[ 0 ].style.display = '';
-	}
-
-	function empty( $obj ) {
-		if ( $obj !== null ) {
-			while ( $obj.firstChild ) {
-				$obj.firstChild.remove();
-			}
-		}
 	}
 
 	function addClass( $obj, className ) {
@@ -552,7 +618,7 @@ window.frmAdminBuildJS = function() {
 	 * Toggle a class on target elements when an anchor is clicked, or when a radio or checkbox has been selected.
 	 *
 	 * @param {Event} e Event with either the change or click type.
-	 * @return {false} Always returns false to prevent default behavior.
+	 * @return {false|undefined} False for links so the page doesn't jump. Inputs return nothing so their change event keeps bubbling.
 	 */
 	function hideShowItem( e ) {
 		/*jshint validthis:true */
@@ -601,7 +667,12 @@ window.frmAdminBuildJS = function() {
 			} );
 		}
 
-		return false;
+		// Links stop here so the page doesn't jump. Inputs keep bubbling so
+		// delegated listeners on the same setting, like data-frmpreview and the
+		// unsaved changes flag, still see the change.
+		if ( 'A' === this.nodeName ) {
+			return false;
+		}
 	}
 
 	function isUncheckedCheckbox( element ) {
@@ -932,7 +1003,7 @@ window.frmAdminBuildJS = function() {
 			b = this;
 		}
 
-		popCalcFields( b, false );
+		callBuilderFeature( 'calc_box', 'popCalcFields', b, false );
 
 		const cont = jQuery( b ).closest( '.frm_form_action_settings' );
 		const { target } = event;
@@ -1832,7 +1903,7 @@ window.frmAdminBuildJS = function() {
 
 	function syncAfterDragAndDrop() {
 		fixUnwrappedListItems();
-		toggleSectionHolder();
+		callBuilderFeature( 'page_section_chrome', 'toggleSectionHolder' );
 		maybeFixEndDividers();
 		maybeDeleteEmptyFieldGroups();
 		updateFieldOrder();
@@ -2256,7 +2327,7 @@ window.frmAdminBuildJS = function() {
 				nonce: frmGlobal.nonce
 			},
 			success() {
-				toggleSectionHolder();
+				callBuilderFeature( 'page_section_chrome', 'toggleSectionHolder' );
 				updateInSectionValue( fieldId, sectionId );
 			}
 		} );
@@ -2264,7 +2335,12 @@ window.frmAdminBuildJS = function() {
 
 	// Update the in_section field value
 	function updateInSectionValue( fieldId, sectionId ) {
-		document.getElementById( `frm_in_section_${ fieldId }` ).value = sectionId;
+		// The input may still be in a cached settings panel, which would otherwise keep the old section.
+		ensureFieldSettings( fieldId );
+		const inSectionInput = document.getElementById( `frm_in_section_${ fieldId }` );
+		if ( inSectionInput ) {
+			inSectionInput.value = sectionId;
+		}
 	}
 
 	/**
@@ -2402,7 +2478,7 @@ window.frmAdminBuildJS = function() {
 		if ( $siblings.length ) {
 			syncLayoutClasses( $siblings.first() );
 		}
-		toggleSectionHolder();
+		callBuilderFeature( 'page_section_chrome', 'toggleSectionHolder' );
 
 		if ( ! $siblings.length ) {
 			makeDroppable( replaceWith.get( 0 ).querySelector( 'ul.frm_sorting' ) );
@@ -2574,8 +2650,8 @@ window.frmAdminBuildJS = function() {
 		const droppableIsInsideOfARepeater = null !== droppable.closest( '.repeat_section' );
 
 		if ( droppableIsARepeater || droppableIsInsideOfARepeater ) {
-			const isGdpr = draggable.classList.contains( 'edit_field_type_gdpr' ) || draggable.id === 'gdpr';
-			if ( isGdpr ) {
+			// Field types that set $allow_in_repeater to false. See FrmFieldType::allow_in_repeater().
+			if ( '1' === draggable.dataset.norepeater ) {
 				return false;
 			}
 
@@ -3535,7 +3611,8 @@ window.frmAdminBuildJS = function() {
 						if ( null !== fieldOrder ) {
 							newRow.lastElementChild.setAttribute( 'frm-field-order', fieldOrder );
 						}
-						afterAddField( msg, false );
+						// The row handler in duplicateFieldGroup syncs field order once, after the last field arrives.
+						afterAddField( msg, false, true );
 						maybeDuplicateUnsavedSettings( settingsSnapshot, duplicatedFieldId );
 						setLayoutClassesForDuplicatedFieldInGroup( $field[ 0 ], document.getElementById( `frm_field_id_${ duplicatedFieldId }` ) );
 						jQuery( newRow ).trigger(
@@ -3563,7 +3640,7 @@ window.frmAdminBuildJS = function() {
 
 				afterAddField( msg, false );
 				maybeDuplicateUnsavedSettings( settingsSnapshot, duplicatedFieldId );
-				toggleOneSectionHolder( replaceWith.find( '.start_divider' ) );
+				callBuilderFeature( 'page_section_chrome', 'toggleOneSectionHolder', replaceWith.find( '.start_divider' ) );
 				$field[ 0 ].querySelector( '.frm-dropdown-menu.dropdown-menu-right' )?.classList.remove( 'show' );
 				setLayoutClassesForDuplicatedFieldInGroup( $field[ 0 ], document.getElementById( `frm_field_id_${ duplicatedFieldId }` ) );
 			}
@@ -3789,19 +3866,6 @@ window.frmAdminBuildJS = function() {
 		onFieldActionDropdownShow( true );
 	}
 
-	function changeSectionStyle( e ) {
-		const collapsedSection = e.target.closest( '.frm-section-collapsed' );
-		if ( ! collapsedSection ) {
-			return;
-		}
-
-		if ( e.type === 'show' ) {
-			collapsedSection.style.zIndex = 3;
-		} else {
-			collapsedSection.style.zIndex = 1;
-		}
-	}
-
 	function fillFieldActionDropdown( ul, isFieldGroup ) {
 		const classSuffix = isFieldGroup ? '_field_group' : '_field';
 		const options = [ getDeleteActionOption( isFieldGroup ), getDuplicateActionOption( isFieldGroup ) ];
@@ -3891,7 +3955,15 @@ window.frmAdminBuildJS = function() {
 		makeDraggable( wrapper, '.frm-move' );
 	}
 
-	function afterAddField( msg, addFocus ) {
+	/**
+	 * Prepare a field that was just added or duplicated.
+	 *
+	 * @param {string}  msg           The new field HTML.
+	 * @param {boolean} addFocus      Whether to scroll the new field into view.
+	 * @param {boolean} skipOrderSync True when the caller syncs field order once after a batch, like a duplicated row.
+	 * @return {void}
+	 */
+	function afterAddField( msg, addFocus, skipOrderSync = false ) {
 		const regex = /id="(\S+)"/;
 		const match = regex.exec( msg );
 		const field = document.getElementById( match[ 1 ] );
@@ -3922,7 +3994,7 @@ window.frmAdminBuildJS = function() {
 		} else {
 			const $parentSection = jQuery( field ).closest( 'ul.frm_sorting.start_divider' );
 			if ( $parentSection.length ) {
-				toggleOneSectionHolder( $parentSection );
+				callBuilderFeature( 'page_section_chrome', 'toggleOneSectionHolder', $parentSection );
 				toggled = true;
 			}
 		}
@@ -3940,8 +4012,10 @@ window.frmAdminBuildJS = function() {
 			updateLastRowFieldsOrder( JSON.parse( lastRowOrderInput.value ) );
 		}
 
-		// This also renumbers page breaks.
-		updateFieldOrder();
+		if ( ! skipOrderSync ) {
+			// This also renumbers page breaks.
+			updateFieldOrder();
+		}
 
 		if ( addFocus ) {
 			const bounding = field.getBoundingClientRect();
@@ -3961,12 +4035,12 @@ window.frmAdminBuildJS = function() {
 			}
 
 			if ( toggled === false ) {
-				toggleOneSectionHolder( $thisSection );
+				callBuilderFeature( 'page_section_chrome', 'toggleOneSectionHolder', $thisSection );
 			}
 		}
 
 		deselectFields();
-		initiateMultiselect();
+		initiateMultiselect( field );
 
 		fieldsContainer.classList.remove( 'frm-over-droppable' );
 
@@ -4058,348 +4132,6 @@ window.frmAdminBuildJS = function() {
 		if ( ! preventFieldGroups ) {
 			unselectFieldGroups();
 		}
-	}
-
-	function checkCalculationCreatedByUser() {
-		const calculation = this.value;
-		let warningMessage = checkMatchingParens( calculation );
-		warningMessage += checkShortcodes( calculation, this );
-
-		if ( warningMessage !== '' ) {
-			infoModal( `${ calculation }\n\n${ warningMessage }` );
-		}
-	}
-
-	/**
-	 * Checks a string for parens, brackets, and curly braces and returns a message if any unmatched are found.
-	 *
-	 * @param {string} formula The formula string to check.
-	 * @return {string} Warning message if unmatched delimiters found, empty string otherwise.
-	 */
-	function checkMatchingParens( formula ) {
-		const stack = [];
-		const formulaArray = formula.split( '' );
-		const { length } = formulaArray;
-		const opening = [ '{', '[', '(' ];
-		const closing = {
-			'}': '{',
-			')': '(',
-			']': '['
-		};
-		let hasUnmatchedClosing = false;
-		let msg = '';
-		let i;
-		let top;
-
-		for ( i = 0; i < length; i++ ) {
-			if ( opening.includes( formulaArray[ i ] ) ) {
-				stack.push( formulaArray[ i ] );
-				continue;
-			}
-			if ( Object.hasOwn( closing, formulaArray[ i ] ) ) {
-				top = stack.pop();
-				if ( top !== closing[ formulaArray[ i ] ] ) {
-					hasUnmatchedClosing = true;
-				}
-			}
-		}
-
-		if ( stack.length > 0 || hasUnmatchedClosing ) {
-			msg = `${ frmAdminJs.unmatched_parens }\n\n`;
-			return msg;
-		}
-
-		return '';
-	}
-
-	/**
-	 * Checks a calculation for shortcodes that shouldn't be in it and returns a message if found.
-	 *
-	 * @param {string}      calculation  The calculation formula.
-	 * @param {HTMLElement} inputElement The input element for the calculation.
-	 * @return {string}                  Warning message if invalid shortcodes found, empty string otherwise.
-	 */
-	function checkShortcodes( calculation, inputElement ) {
-		let msg = checkNonNumericShortcodes( calculation, inputElement );
-		msg += checkNonFormShortcodes( calculation );
-
-		return msg;
-	}
-
-	/**
-	 * Checks if a numeric calculation has shortcodes that output non-numeric strings and returns a message if found.
-	 *
-	 * @param {string}      calculation  The calculation formula.
-	 * @param {HTMLElement} inputElement The input element for the calculation.
-	 * @return {string} Warning message if non-numeric shortcodes found, empty string otherwise.
-	 */
-	function checkNonNumericShortcodes( calculation, inputElement ) {
-		let msg = '';
-
-		if ( isTextCalculation( inputElement ) ) {
-			return msg;
-		}
-
-		const nonNumericShortcodes = getNonNumericShortcodes();
-
-		if ( nonNumericShortcodes.test( calculation ) ) {
-			msg = `${ frmAdminJs.text_shortcodes }\n\n`;
-		}
-
-		return msg;
-	}
-
-	/**
-	 * Determines if the calculation input is from a text calculation.
-	 *
-	 * @param {HTMLElement} inputElement The calculation input element.
-	 */
-	function isTextCalculation( inputElement ) {
-		return jQuery( inputElement ).siblings( 'label[for^="calc_type"]' ).children( 'input' ).prop( 'checked' );
-	}
-
-	/**
-	 * Returns a regular expression of shortcodes that can't be used in numeric calculations.
-	 *
-	 * @return {RegExp} Pattern matching non-numeric shortcodes.
-	 */
-	function getNonNumericShortcodes() {
-		return /\[(date|time|email|ip)\]/;
-	}
-
-	/**
-	 * Checks if a string has any shortcodes that do not belong in forms and returns a message if any are found.
-	 *
-	 * @param {string} formula The formula string to check.
-	 * @return {string} Warning message if non-form shortcodes found, empty string otherwise.
-	 */
-	function checkNonFormShortcodes( formula ) {
-		const nonFormShortcodes = getNonFormShortcodes();
-		let msg = '';
-
-		if ( nonFormShortcodes.test( formula ) ) {
-			msg += `${ frmAdminJs.view_shortcodes }\n\n`;
-		}
-
-		return msg;
-	}
-
-	/**
-	 * Returns a regular expression of shortcodes that can't be used in forms but can be used in Views, Email
-	 * Notifications, and other Formidable areas.
-	 *
-	 * @return {RegExp} Pattern matching shortcodes not valid in forms.
-	 */
-	function getNonFormShortcodes() {
-		return /\[id\]|\[key\]|\[if\s\w+\]|\[foreach\s\w+\]|\[created-at(\s*)?/g;
-	}
-
-	function isCalcBoxType( box, listClass ) {
-		const list = jQuery( box ).find( '.frm_code_list' );
-		return 1 === list.length && list.hasClass( listClass );
-	}
-
-	function extractExcludedOptions( exclude ) {
-		const opts = [];
-		if ( ! Array.isArray( exclude ) ) {
-			return opts;
-		}
-
-		for ( let i = 0; i < exclude.length; i++ ) {
-			if ( exclude[ i ].startsWith( '[' ) ) {
-				opts.push( exclude[ i ] );
-				// remove it
-				exclude.splice( i, 1 );
-				// https://love2dev.com/blog/javascript-remove-from-array/#remove-from-array-splice-value
-				i--;
-			}
-		}
-
-		return opts;
-	}
-
-	function hasExcludedOption( field, excludedOpts ) {
-		ensureFieldSettings( field.fieldId );
-		let hasOption = false;
-		for ( let i = 0; i < excludedOpts.length; i++ ) {
-			const inputs = document.getElementsByName( getFieldOptionInputName( excludedOpts[ i ], field.fieldId ) );
-			// 2nd condition checks that there's at least one non-empty value
-			if ( inputs.length && jQuery( inputs[ 0 ] ).val() ) {
-				hasOption = true;
-				break;
-			}
-		}
-		return hasOption;
-	}
-
-	function getFieldOptionInputName( opt, fieldId ) {
-		const at = opt.indexOf( ']' );
-		return `field_options${ opt.substring( 0, at ) }_${ fieldId }${ opt.substring( at ) }`;
-	}
-
-	/**
-	 * Populates the calculation field list.
-	 *
-	 * @param {HTMLElement} element The calculation box element.
-	 * @param {boolean}     force   Whether to force the refresh.
-	 */
-	function popCalcFields( element, force ) {
-		const settingsBox = jQuery( element ).closest( '.frm-single-settings' );
-		const calc = settingsBox.find( '.frm-calc-field' );
-
-		if ( ! force && ( ! calc.length || calc.val() === '' || calc.is( ':hidden' ) ) ) {
-			return;
-		}
-
-		const isSummary = isCalcBoxType( element, 'frm_js_summary_list' );
-
-		const fieldId = settingsBox.find( 'input[name="frm_fields_submitted[]"]' ).val();
-
-		let box;
-		if ( force ) {
-			box = element;
-		} else {
-			box = document.getElementById( `frm-calc-box-${ fieldId }` );
-		}
-
-		const codeList = box.querySelector( '.frm_code_list' );
-		const exclude = getExcludeArray( codeList, isSummary );
-		const excludedOpts = extractExcludedOptions( exclude );
-
-		/**
-		 * Filters the fields offered in a calculation box.
-		 *
-		 * Add-ons that own a calculation type can drop fields it can't use. When
-		 * nothing is hooked in, every field is offered, matching the behavior
-		 * before calculation-type specific filtering existed.
-		 *
-		 * @param {Array}  fields The candidate fields.
-		 * @param {Object} args   Context with the box, code list, and isSummary flag.
-		 */
-		const fields = wp.hooks.applyFilters( 'frm_calc_field_list', getFieldList(), { box, codeList, isSummary } );
-		const list = document.getElementById( `frm-calc-list-${ fieldId }` );
-		list.innerHTML = '';
-
-		for ( let i = 0; i < fields.length; i++ ) {
-			if ( exclude?.includes( fields[ i ].fieldType ) ||
-				( excludedOpts.length && hasExcludedOption( fields[ i ], excludedOpts ) ) ) {
-				continue;
-			}
-
-			addCalcFieldLiToList( list, fieldId, fields[ i ].fieldId, fields[ i ].fieldName, fields[ i ].fieldType );
-
-			if ( ! isSummary ) {
-				// The summary field list is a list of fields to exclude, not a list of shortcodes, so field parts don't belong in it.
-				addFieldPartShortcodes( fields[ i ], fieldId, list );
-			}
-		}
-	}
-
-	/**
-	 * Lets the plugin that owns the calculation type add shortcodes for the individual
-	 * parts of a multi-part field, like [25 show=last] for a Name field.
-	 *
-	 * Nothing in Lite renders a calculation box, so Lite offers the extension point and
-	 * leaves the parts themselves to whichever plugin owns the calculation.
-	 *
-	 * @since 6.35
-	 *
-	 * @param {Object}      field   Field object containing fieldType, fieldId, and fieldName.
-	 * @param {string}      fieldId ID of the field the popup was opened for.
-	 * @param {HTMLElement} list    The 'ul' element that contains field shortcodes available for calculation.
-	 *
-	 * @return {void}
-	 */
-	function addFieldPartShortcodes( field, fieldId, list ) {
-		/**
-		 * Allows add-ons to add field part shortcodes to calculation popup.
-		 *
-		 * @since 6.35
-		 *
-		 * @param {Object}      hookArgs                      Arguments passed to the hook.
-		 * @param {Object}      hookArgs.field                Field object containing fieldType, fieldId, and fieldName.
-		 * @param {string}      hookArgs.fieldId              ID of the field triggering the popup.
-		 * @param {HTMLElement} hookArgs.list                 The 'ul' element containing field shortcodes.
-		 * @param {Function}    hookArgs.addCalcFieldLiToList Helper function: addCalcFieldLiToList(list, fieldId, code, label, fieldType).
-		 */
-		wp.hooks.doAction( 'frm_add_calc_field_shortcodes', { field, fieldId, list, addCalcFieldLiToList } );
-	}
-
-	/**
-	 * Adds a row to a calculation box's field shortcode list.
-	 *
-	 * @since 6.35
-	 *
-	 * @param {HTMLElement} list      The 'ul' element that contains field shortcodes available for calculation.
-	 * @param {string}      fieldId   ID of the field the popup was opened for.
-	 * @param {string}      code      The shortcode to insert, without the brackets.
-	 * @param {string}      label     The name shown for the row.
-	 * @param {string}      fieldType Type of the field the shortcode belongs to.
-	 *
-	 * @return {void}
-	 */
-	function addCalcFieldLiToList( list, fieldId, code, label, fieldType ) {
-		const anchor = a( {
-			className: 'frm_insert_code',
-			children: [
-				span( label ),
-				span( { className: 'frm-text-sm frm-text-grey-500', text: `[${ code }]` } )
-			],
-			data: { code }
-		} );
-
-		list.append(
-			tag( 'li', {
-				className: `frm-field-list-${ fieldId } frm-field-list-${ fieldType }`,
-				child: anchor
-			} )
-		);
-	}
-
-	/**
-	 * Gets the exclude array for the calculation box.
-	 *
-	 * @param {HTMLElement} codeList  The code list element.
-	 * @param {boolean}     isSummary Whether the calculation box is for a summary.
-	 * @return {Array} The exclude array.
-	 */
-	function getExcludeArray( codeList, isSummary ) {
-		const exclude = JSON.parse( codeList.getAttribute( 'data-exclude' ) );
-
-		if ( isSummary ) {
-			// includedExtras are those that are normally excluded from the summary but the form owner can choose to include,
-			// when they have been chosen to be included, then they can now be manually excluded in the calc box.
-			const includedExtras = getIncludedExtras();
-			if ( includedExtras.length ) {
-				for ( let i = 0; i < exclude.length; i++ ) {
-					if ( includedExtras.includes( exclude[ i ] ) ) {
-						// remove it
-						exclude.splice( i, 1 );
-						// https://love2dev.com/blog/javascript-remove-from-array/#remove-from-array-splice-value
-						i--;
-					}
-				}
-			}
-		}
-
-		return exclude;
-	}
-
-	function getIncludedExtras() {
-		const checked = [];
-		const checkboxes = document.getElementsByClassName( 'frm_include_extras_field' );
-
-		for ( let i = 0; i < checkboxes.length; i++ ) {
-			if ( checkboxes[ i ].checked ) {
-				checked.push( checkboxes[ i ].value );
-			}
-		}
-
-		return checked;
-	}
-
-	function rePopCalcFieldsForSummary() {
-		popCalcFields( jQuery( '.frm-inline-modal.postbox:has(.frm_js_summary_list)' )[ 0 ], true );
 	}
 
 	function getFieldList( fieldType ) {
@@ -4511,7 +4243,7 @@ window.frmAdminBuildJS = function() {
 
 	function liveChanges() {
 		/*jshint validthis:true */
-		const newValue = this.value;
+		const newValue = clampToInputRange( this, this.value );
 		const changes = document.getElementById( this.getAttribute( 'data-changeme' ) );
 		const att = this.getAttribute( 'data-changeatt' );
 
@@ -4556,45 +4288,21 @@ window.frmAdminBuildJS = function() {
 				changes.nextElementSibling.querySelector( '.frm_button_submit' ).textContent = newValue;
 			}
 		}
+
+		/**
+		 * Fires after a setting updated the builder preview.
+		 *
+		 * @since x.x
+		 *
+		 * @param {HTMLElement}   input   The setting input.
+		 * @param {HTMLElement[]} targets The updated preview elements.
+		 */
+		wp.hooks.doAction( 'frm_after_live_change', this, [ changes ] );
 	}
 
 	function updateSliderFieldPreview( field, att, newValue ) {
-		if ( frmGlobal.proIncludesSliderJs ) {
-			const hookName = 'frm_update_slider_field_preview';
-			const hookArgs = { field, att, newValue };
-			wp.hooks.doAction( hookName, hookArgs );
-			return;
-		}
-
-		// This functionality has been moved to pro since v5.4.3. This code should be removed eventually.
-		if ( 'value' === att ) {
-			if ( '' === newValue ) {
-				newValue = getSliderMidpoint( field );
-			}
-			field.value = newValue;
-		} else {
-			field.setAttribute( att, newValue );
-		}
-
-		if ( ! [ 'value', 'min', 'max' ].includes( att ) ) {
-			return;
-		}
-
-		if ( ( 'max' === att || 'min' === att ) && '' === getSliderDefaultValueInput( field.id ) ) {
-			field.value = getSliderMidpoint( field );
-		}
-
-		field.parentNode.querySelector( '.frm_range_value' ).textContent = field.value;
-	}
-
-	function getSliderDefaultValueInput( previewInputId ) {
-		return document.querySelector( `input[data-changeme="${ previewInputId }"][data-changeatt="value"]` ).value;
-	}
-
-	function getSliderMidpoint( sliderInput ) {
-		const max = parseFloat( sliderInput.getAttribute( 'max' ) );
-		const min = parseFloat( sliderInput.getAttribute( 'min' ) );
-		return ( ( max - min ) / 2 ) + min;
+		// Pro draws the slider preview. Every supported Pro version handles this action.
+		wp.hooks.doAction( 'frm_update_slider_field_preview', { field, att, newValue } );
 	}
 
 	function isSliderField( previewInput ) {
@@ -4676,61 +4384,6 @@ window.frmAdminBuildJS = function() {
 			if ( visibleCount === 0 ) {
 				$thisField.closest( '.frm_validation_msg' ).fadeOut( 'fast' );
 			}
-		}
-	}
-
-	//Fade confirmation field and validation option in or out
-	function addConf() {
-		/*jshint validthis:true */
-		const fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
-		const val = jQuery( this ).val();
-		const $thisField = jQuery( document.getElementById( `frm_field_id_${ fieldId }` ) );
-
-		toggleValidationBox( val !== '', `.frm_conf_details${ fieldId }` );
-
-		if ( val !== '' ) {
-			//Add default validation message if empty
-			const valMsg = jQuery( `.frm_validation_box .frm_conf_details${ fieldId } input` );
-			if ( valMsg.val() === '' ) {
-				valMsg.val( frmAdminJs.default_conf );
-			}
-
-			setConfirmationFieldDescriptions( fieldId );
-
-			//Add or remove class for confirmation field styling
-			if ( val === 'inline' ) {
-				$thisField.removeClass( 'frm_conf_below' ).addClass( 'frm_conf_inline' );
-			} else if ( val === 'below' ) {
-				$thisField.removeClass( 'frm_conf_inline' ).addClass( 'frm_conf_below' );
-			}
-			jQuery( `.frm-conf-box-${ fieldId }` ).removeClass( 'frm_hidden' );
-		} else {
-			jQuery( `.frm-conf-box-${ fieldId }` ).addClass( 'frm_hidden' );
-			setTimeout( function() {
-				$thisField.removeClass( 'frm_conf_inline frm_conf_below' );
-			}, 200 );
-		}
-	}
-
-	function setConfirmationFieldDescriptions( fieldId ) {
-		const fieldType = document.getElementsByName( `field_options[type_${ fieldId }]` )[ 0 ].value;
-
-		const fieldDescription = document.getElementById( `field_description_${ fieldId }` );
-		const hiddenDescName = `field_options[description_${ fieldId }]`;
-		const newValue = frmAdminJs[ `enter_${ fieldType }` ];
-		maybeSetNewDescription( fieldDescription, hiddenDescName, newValue );
-
-		const confFieldDescription = document.getElementById( `conf_field_description_${ fieldId }` );
-		const hiddenConfName = `field_options[conf_desc_${ fieldId }]`;
-		const newConfValue = frmAdminJs[ `confirm_${ fieldType }` ];
-		maybeSetNewDescription( confFieldDescription, hiddenConfName, newConfValue );
-	}
-
-	function maybeSetNewDescription( descriptionDiv, hiddenName, newValue ) {
-		if ( descriptionDiv.innerHTML === frmAdminJs.desc ) {
-			// Set the visible description value and the hidden description value
-			descriptionDiv.innerHTML = newValue;
-			document.getElementsByName( hiddenName )[ 0 ].value = newValue;
 		}
 	}
 
@@ -4946,12 +4599,6 @@ window.frmAdminBuildJS = function() {
 		}
 
 		return lastKey;
-	}
-
-	function toggleMultSel() {
-		/*jshint validthis:true */
-		const fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
-		toggleMultiSelect( fieldId, this.value );
 	}
 
 	function toggleMultiSelect( fieldId, value ) {
@@ -5201,7 +4848,8 @@ window.frmAdminBuildJS = function() {
 	 * Delete a field option.
 	 */
 	function deleteFieldOption() {
-		materializeAllFieldSettings( prepareLoadedFieldMarkup );
+		// Pro's frm_before_delete_field_option handler edits the logic rows that use this field.
+		materializeLogicFieldSettings( this.getAttribute( 'data-fid' ), prepareLoadedFieldMarkup );
 		const parentLi = this.parentNode;
 		const parentUl = parentLi.parentNode;
 
@@ -6367,7 +6015,7 @@ window.frmAdminBuildJS = function() {
 				deleteField( fieldId );
 			}
 		);
-		toggleSectionHolder();
+		callBuilderFeature( 'page_section_chrome', 'toggleSectionHolder' );
 	}
 
 	function deleteFieldConfirmed() {
@@ -6514,7 +6162,7 @@ window.frmAdminBuildJS = function() {
 						formEditorContainer.classList.remove( 'frm-has-fields' );
 						formEditorContainer.classList.add( 'frm-empty-fields' );
 					} else if ( $section.length ) {
-						toggleOneSectionHolder( $section );
+						callBuilderFeature( 'page_section_chrome', 'toggleOneSectionHolder', $section );
 					}
 
 					// prevent "More Options" tooltips from staying around after their target field is deleted.
@@ -6597,47 +6245,6 @@ window.frmAdminBuildJS = function() {
 		return lastChild?.classList.contains( 'frm_logic_row' ) ? lastChild : null;
 	}
 
-	function addFieldLogicRow() {
-		/*jshint validthis:true */
-		const trigger = this;
-		const id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
-		const formId = thisFormId;
-		const logicRows = document.getElementById( `frm_logic_row_${ id }` ).querySelectorAll( '.frm_logic_row' );
-		jQuery.ajax( {
-			type: 'POST',
-			url: ajaxurl,
-			data: {
-				action: 'frm_add_logic_row',
-				form_id: formId,
-				field_id: id,
-				nonce: frmGlobal.nonce,
-				meta_name: getNewRowId( logicRows, `frm_logic_${ id }_` ),
-				fields: getFieldList()
-			},
-			success( html ) {
-				jQuery( document.getElementById( `logic_${ id }` ) ).fadeOut( 'fast', function() {
-					const logicRow = document.getElementById( `frm_logic_row_${ id }` );
-					logicRow.insertAdjacentHTML( 'beforeend', html );
-
-					const newRow = getAppendedLogicRow( logicRow );
-					const logicRowText = newRow?.querySelector( '.frm-logic-rule-text' );
-					if ( logicRowText ) {
-						logicRowText.textContent = logicRow.dataset.ruleText;
-					}
-
-					const logicRows = logicRow.closest( '.frm_logic_rows' );
-					logicRows.style.height = 'auto';
-					jQuery( logicRows ).fadeIn( 'fast' );
-
-					if ( newRow ) {
-						triggerLogicRowEvent( 'frm_logic_row_added', newRow, logicRow, trigger );
-					}
-				} );
-			}
-		} );
-		return false;
-	}
-
 	function getNewRowId( rows, replace, defaultValue ) {
 		// Rows are not always in number order, for example when an add-on moves them, so use the highest number.
 		const numbers = Array.from( rows )
@@ -6648,34 +6255,6 @@ window.frmAdminBuildJS = function() {
 			return defaultValue !== undefined ? defaultValue : 0;
 		}
 		return Math.max( ...numbers ) + 1;
-	}
-
-	function addWatchLookupRow() {
-		/*jshint validthis:true */
-		const id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
-		const formId = thisFormId;
-		const lookupBlockRows = document.getElementById( `frm_watch_lookup_block_${ id }` ).children;
-
-		jQuery.ajax( {
-			type: 'POST',
-			url: ajaxurl,
-			data: {
-				action: 'frm_add_watch_lookup_row',
-				form_id: formId,
-				field_id: id,
-				row_key: getNewRowId( lookupBlockRows, `frm_watch_lookup_${ id }_` ),
-				nonce: frmGlobal.nonce
-			},
-			success( newRow ) {
-				const watchRowBlock = jQuery( document.getElementById( `frm_watch_lookup_block_${ id }` ) );
-				watchRowBlock.append( newRow );
-				watchRowBlock.fadeIn( 'slow' );
-
-				// Show the "Watch Lookup Fields" label if it was hidden
-				document.getElementById( `frm_watch_lookup_label_${ id }` )?.classList.remove( 'frm-force-hidden' );
-			}
-		} );
-		return false;
 	}
 
 	function resetOptionTextDetails() {
@@ -6801,10 +6380,6 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function onOptionTextBlur() {
-		let fieldIndex;
-		let settingId;
-		let setting;
-
 		const { oldValue, oldLabel, newValue, newLabel } = getChoiceOldAndNewValues( this );
 
 		if ( oldValue === newValue && oldLabel === newLabel ) {
@@ -6833,141 +6408,13 @@ window.frmAdminBuildJS = function() {
 			optionMap[ fieldId ][ originalValue ].value = newValue;
 		}
 
-		materializeAllFieldSettings( prepareLoadedFieldMarkup );
-		const fieldIds = [];
-		const rows = builderPage.querySelectorAll( '.frm_logic_row' );
-		const rowLength = rows.length;
-		for ( let rowIndex = 0; rowIndex < rowLength; rowIndex++ ) {
-			const row = rows[ rowIndex ];
-			const opts = row.querySelector( '.frm_logic_field_opts' );
-
-			if ( opts.value !== fieldId ) {
-				continue;
-			}
-
-			const logicId = row.id.split( '_' )[ 2 ];
-			const valueSelect = row.querySelector( `select[name="field_options[hide_opt_${ logicId }][]"]` );
-
-			let optionMatches;
-			if ( '' === oldValue ) {
-				optionMatches = [];
-			} else {
-				optionMatches = valueSelect.querySelectorAll( `option[value="${ oldValue }"]` );
-			}
-
-			let option;
-			if ( ! optionMatches.length ) {
-				optionMatches = valueSelect.querySelectorAll( `option[value="${ newValue }"]` );
-
-				if ( ! optionMatches.length ) {
-					if ( ! singleSettingsContainer.querySelector( '.frm_toggle_sep_values' )?.checked ) {
-						option = searchSelectByText( valueSelect, oldValue ); // Find conditional logic option with oldValue
-					}
-
-					if ( ! option ) {
-						option = document.createElement( 'option' );
-						valueSelect.append( option );
-					}
-				}
-			}
-
-			if ( optionMatches.length ) {
-				option = optionMatches[ optionMatches.length - 1 ];
-			}
-
-			option.setAttribute( 'value', newValue );
-			option.textContent = newLabel;
-
-			if ( ! fieldIds.includes( logicId ) ) {
-				fieldIds.push( logicId );
-			}
-		}
-
-		for ( fieldIndex in fieldIds ) {
-			if ( Object.hasOwn( fieldIds, fieldIndex ) ) {
-				settingId = fieldIds[ fieldIndex ];
-				setting = document.getElementById( `frm-single-settings-${ settingId }` );
-				moveFieldSettings( setting );
-			}
-		}
-	}
-
-	/**
-	 * Returns an option element that matches a string with its text content.
-	 *
-	 * @param {HTMLElement} selectElement The select element to search.
-	 * @param {string}      searchText    The text to search for.
-	 * @return {HTMLElement|null}               Matching option element or null.
-	 */
-	function searchSelectByText( selectElement, searchText ) {
-		const { options } = selectElement;
-
-		for ( let i = 0; i < options.length; i++ ) {
-			const option = options[ i ];
-			if ( searchText === option.textContent ) {
-				return option;
-			}
-		}
-
-		return null;
-	}
-
-	function updateGetValueFieldSelection() {
-		/*jshint validthis:true */
-		const fieldID = this.id.replace( 'get_values_form_', '' );
-		const fieldSelect = document.getElementById( `get_values_field_${ fieldID }` );
-		const fieldType = this.getAttribute( 'data-fieldtype' );
-
-		if ( this.value === '' ) {
-			fieldSelect.options.length = 1;
-		} else {
-			const formID = this.value;
-			jQuery.ajax( {
-				type: 'POST', url: ajaxurl,
-				data: {
-					action: 'frm_get_options_for_get_values_field',
-					form_id: formID,
-					field_type: fieldType,
-					nonce: frmGlobal.nonce
-				},
-				success( fields ) {
-					fieldSelect.innerHTML = fields;
-				}
-			} );
-		}
-	}
-
-	// Clear the Watch Fields option when Lookup field switches to "Text" option
-	function maybeClearWatchFields() {
-		/*jshint validthis:true */
-		let link;
-		let lookupBlock;
-		const fieldID = this.name.replace( 'field_options[data_type_', '' ).replace( ']', '' );
-
-		link = document.getElementById( `frm_add_watch_lookup_link_${ fieldID }` );
-		if ( ! link ) {
-			return;
-		}
-		link = link.parentNode;
-
-		if ( this.value === 'text' ) {
-			lookupBlock = document.getElementById( `frm_watch_lookup_block_${ fieldID }` );
-			if ( lookupBlock ) {
-				// Clear and hide the Watch Fields option
-				lookupBlock.innerHTML = '';
-				link.classList.add( 'frm_hidden' );
-
-				// Hide the Watch Fields row
-				link.previousElementSibling.style.display = 'none';
-				link.previousElementSibling.previousElementSibling.style.display = 'none';
-				link.previousElementSibling.previousElementSibling.previousElementSibling.style.display = 'none';
-			}
-		} else {
-			// Show the Watch Fields option
-			link.classList.remove( 'frm_hidden' );
-		}
-
-		toggleMultiSelect( fieldID, this.value );
+		callBuilderFeature( 'logic_option_sync', 'updateLogicRowsForChoiceEdit', {
+			fieldId,
+			oldValue,
+			newValue,
+			newLabel,
+			settingsContainer: singleSettingsContainer,
+		} );
 	}
 
 	// Number the pages and hide/show the first page as needed.
@@ -6993,98 +6440,6 @@ window.frmAdminBuildJS = function() {
 		}
 
 		wp.hooks.doAction( 'frm_renumber_page_breaks', pages );
-	}
-
-	// The fake field works differently than real fields.
-	function maybeCollapsePage() {
-		/*jshint validthis:true */
-		const field = jQuery( this ).closest( '.frm_field_box[data-ftype=break]' );
-		if ( field.length ) {
-			toggleCollapsePage( field );
-		} else {
-			toggleCollapseFakePage();
-		}
-	}
-
-	// Find all fields in a page and hide/show them
-	function toggleCollapsePage( field ) {
-		const toCollapse = getAllFieldsForPage( field.get( 0 ).parentNode.closest( 'li.frm_field_box' ).nextElementSibling );
-		togglePage( field, toCollapse );
-	}
-
-	function toggleCollapseFakePage() {
-		const topLevel = document.getElementById( 'frm-fake-page' );
-		const firstField = fieldsContainer.firstElementChild;
-		const toCollapse = getAllFieldsForPage( firstField );
-
-		if ( firstField.getAttribute( 'data-ftype' ) === 'break' ) {
-			// Don't collapse if the first field is a page break.
-			return;
-		}
-
-		togglePage( jQuery( topLevel ), toCollapse );
-	}
-
-	function getAllFieldsForPage( firstWrapper ) {
-		let $fieldsForPage;
-		let currentWrapper;
-
-		$fieldsForPage = jQuery();
-
-		if ( null === firstWrapper ) {
-			return $fieldsForPage;
-		}
-
-		currentWrapper = firstWrapper;
-
-		do {
-			if ( null !== currentWrapper.querySelector( '.edit_field_type_break' ) ) {
-				break;
-			}
-			$fieldsForPage = $fieldsForPage.add( jQuery( currentWrapper ) );
-			currentWrapper = currentWrapper.nextElementSibling;
-		} while ( null !== currentWrapper );
-
-		return $fieldsForPage;
-	}
-
-	function togglePage( field, toCollapse ) {
-		let i;
-		const fieldCount = toCollapse.length;
-		const slide = Math.min( fieldCount, 3 );
-
-		if ( field.hasClass( 'frm-page-collapsed' ) ) {
-			field.removeClass( 'frm-page-collapsed' );
-			toCollapse.removeClass( 'frm-is-collapsed' );
-			for ( i = 0; i < slide; i++ ) {
-				if ( i === slide - 1 ) {
-					jQuery( toCollapse[ i ] ).slideDown( 150, function() {
-						toCollapse.show();
-					} );
-				} else {
-					jQuery( toCollapse[ i ] ).slideDown( 150 );
-				}
-			}
-		} else {
-			field.addClass( 'frm-page-collapsed' );
-			toCollapse.addClass( 'frm-is-collapsed' );
-			for ( i = 0; i < slide; i++ ) {
-				if ( i === slide - 1 ) {
-					jQuery( toCollapse[ i ] ).slideUp( 150, function() {
-						toCollapse.css( 'cssText', 'display:none !important;' );
-					} );
-				} else {
-					jQuery( toCollapse[ i ] ).slideUp( 150 );
-				}
-			}
-		}
-	}
-
-	function maybeCollapseSection() {
-		/*jshint validthis:true */
-		const parentCont = this.parentNode.parentNode.parentNode.parentNode;
-
-		parentCont.classList.toggle( 'frm-section-collapsed' );
 	}
 
 	function maybeCollapseSettings() {
@@ -7256,66 +6611,12 @@ window.frmAdminBuildJS = function() {
 		autoExpandSettings( document.getElementById( `field_options_field_key_${ fieldId }` ) );
 	}
 
-	function toggleRepeatButtons() {
-		/*jshint validthis:true */
-		const $thisField = jQuery( this ).closest( '.frm_field_box' );
-		$thisField.find( '.repeat_icon_links' ).removeClass( 'repeat_format repeat_formatboth repeat_formattext' ).addClass( `repeat_format${ this.value }` );
-		if ( this.value === 'text' || this.value === 'both' ) {
-			$thisField.find( '.frm_repeat_text' ).show();
-			$thisField.find( '.repeat_icon_links a' ).addClass( 'frm_button' );
-		} else {
-			$thisField.find( '.frm_repeat_text' ).hide();
-			$thisField.find( '.repeat_icon_links a' ).removeClass( 'frm_button' );
-		}
-	}
-
-	function checkRepeatLimit() {
-		/*jshint validthis:true */
-		const val = this.value;
-		if ( val !== '' && ( val < 2 || val > 200 ) ) {
-			infoModal( frmAdminJs.repeat_limit_min );
-			this.value = '';
-		}
-	}
-
-	function checkCheckboxSelectionsLimit() {
-		/*jshint validthis:true */
-		const val = this.value;
-		if ( val !== '' && ( val < 1 || val > 200 ) ) {
-			infoModal( frmAdminJs.checkbox_limit );
-			this.value = '';
-		}
-	}
-
-	function updateRepeatText( obj, addRemove ) {
-		const $thisField = jQuery( obj ).closest( '.frm_field_box' );
-		$thisField.find( `.frm_${ addRemove }_form_row .frm_repeat_label` ).text( obj.value );
-	}
-
 	function fieldsInSection( id ) {
 		const children = [];
 		jQuery( document.getElementById( `frm_field_id_${ id }` ) ).find( 'li.frm_field_box:not(.no_repeat_section .edit_field_type_end_divider)' ).each( function() {
 			children.push( jQuery( this ).data( 'fid' ) );
 		} );
 		return wp.hooks.applyFilters( 'frm_builder_child_field_ids', children, id );
-	}
-
-	function toggleFormTax() {
-		/*jshint validthis:true */
-		const id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
-		const val = this.value;
-		const $showFields = document.getElementById( `frm_show_selected_fields_${ id }` );
-		const $showForms = document.getElementById( `frm_show_selected_forms_${ id }` );
-
-		jQuery( $showForms ).find( 'select' ).val( '' );
-		if ( val === 'form' ) {
-			$showForms.style.display = 'inline';
-			empty( $showFields );
-		} else {
-			$showFields.style.display = 'none';
-			$showForms.style.display = 'none';
-			getTaxOrFieldSelection( val, id );
-		}
 	}
 
 	function resetOptOnChange() {
@@ -7469,14 +6770,14 @@ window.frmAdminBuildJS = function() {
 		};
 
 		if ( false !== wp.hooks.applyFilters( 'frm_custom_reset_displayed_opts', false, hookArgs ) ) {
-			adjustConditionalLogicOptionOrders( fieldId );
+			callBuilderFeature( 'logic_option_sync', 'adjustConditionalLogicOptionOrders', fieldId );
 			// Return early if there is a custom reset displayed opts handler.
 			return;
 		}
 
 		if ( isSingleProductField( fieldId ) ) {
 			updateSingleProductLabel( fieldId );
-			adjustConditionalLogicOptionOrders( fieldId );
+			callBuilderFeature( 'logic_option_sync', 'adjustConditionalLogicOptionOrders', fieldId );
 			return;
 		}
 
@@ -7507,7 +6808,7 @@ window.frmAdminBuildJS = function() {
 			}
 		}
 
-		adjustConditionalLogicOptionOrders( fieldId );
+		callBuilderFeature( 'logic_option_sync', 'adjustConditionalLogicOptionOrders', fieldId );
 	}
 
 	/**
@@ -7719,107 +7020,6 @@ window.frmAdminBuildJS = function() {
 		resetDisplayedOpts( fieldId );
 	}
 
-	/**
-	 * Returns an object that has a value and label for new conditional logic option, for a given option value.
-	 *
-	 * @param {number} fieldId
-	 * @param {string} expectedOption The expected option value.
-	 * @return {Object} Object with value and label for the new option.
-	 */
-	function getNewConditionalLogicOption( fieldId, expectedOption ) {
-		const optionsContainer = document.getElementById( `frm_field_${ fieldId }_opts` );
-
-		const expectedOptionInput = optionsContainer.querySelector( `input[value="${ expectedOption }"]` );
-
-		if ( expectedOptionInput ) {
-			return getChoiceNewValueAndLabel( expectedOptionInput );
-		}
-
-		return { newValue: expectedOption, newLabel: expectedOption };
-	}
-
-	function adjustConditionalLogicOptionOrders( fieldId, type ) {
-		materializeAllFieldSettings( prepareLoadedFieldMarkup );
-		const rows = builderPage.querySelectorAll( '.frm_logic_row' );
-		const rowLength = rows.length;
-
-		const fieldOptions = wp.hooks.applyFilters( 'frm_conditional_logic_field_options', getFieldOptions( fieldId ), { type, fieldId } );
-		const optionLength = fieldOptions.length;
-
-		for ( let rowIndex = 0; rowIndex < rowLength; rowIndex++ ) {
-			const row = rows[ rowIndex ];
-			const opts = row.querySelector( '.frm_logic_field_opts' );
-
-			if ( opts.value != fieldId ) {
-				continue;
-			}
-
-			const logicId = row.id.split( '_' )[ 2 ];
-			const valueSelect = row.querySelector( `select[name="field_options[hide_opt_${ logicId }][]"]` );
-
-			for ( let optionIndex = optionLength - 1; optionIndex >= 0; optionIndex-- ) {
-				const expectedOption = fieldOptions[ optionIndex ];
-				let expectedOptionValue = document.getElementById( `frm_field_${ fieldId }_opts` ).querySelector( '.frm_option_key input[type="text"]' )?.value;
-				if ( ! expectedOptionValue ) {
-					expectedOptionValue = expectedOption;
-				}
-
-				const optionMatch = valueSelect.querySelector( `option[value="${ expectedOptionValue }"]` );
-
-				const { newValue, newLabel } = getNewConditionalLogicOption( fieldId, expectedOption );
-
-				const fieldChoices = document.querySelectorAll( `#frm_field_${ fieldId }_opts input[data-value-on-focus]` );
-				const expectedChoiceEl = Array.from( fieldChoices ).find( element => element.value === expectedOption );
-				if ( expectedChoiceEl ) {
-					const oldValue = expectedChoiceEl.dataset.valueOnFocus;
-					const hasMatch = oldValue && valueSelect.querySelector( `option[value="${ oldValue }"]` );
-					if ( hasMatch ) {
-						continue;
-					}
-				}
-				prependValueSelectWithOptionMatch( valueSelect, optionMatch, newValue, newLabel );
-			}
-
-			const optionMatch = valueSelect.querySelector( 'option[value=""]' );
-			if ( optionMatch !== null ) {
-				valueSelect.prepend( optionMatch );
-			}
-		}
-	}
-
-	function prependValueSelectWithOptionMatch( valueSelect, optionMatch, newValue, newLabel ) {
-		if ( optionMatch === null && ! valueSelect.querySelector( `option[value="${ newValue }"]` ) ) {
-			optionMatch = frmDom.tag( 'option', { text: newLabel } );
-			optionMatch.value = newValue;
-		}
-
-		valueSelect.prepend( optionMatch );
-	}
-
-	function getFieldOptions( fieldId ) {
-		ensureFieldSettings( fieldId );
-		const options = [];
-		const optsContainer = document.getElementById( `frm_field_${ fieldId }_opts` );
-
-		if ( ! optsContainer ) {
-			return options;
-		}
-		const listItems = optsContainer.querySelectorAll( '.frm_single_option' );
-		const { length } = listItems;
-
-		for ( let index = 0; index < length; index++ ) {
-			const li = listItems[ index ];
-
-			if ( li.classList.contains( 'frm_hidden' ) ) {
-				continue;
-			}
-
-			const input = li.querySelector( `.field_${ fieldId }_option` );
-			options.push( input.value );
-		}
-		return options;
-	}
-
 	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey, isProduct, classes ) {
 		let single = '';
 		const isOther = opt.key.includes( 'other' );
@@ -7942,7 +7142,12 @@ window.frmAdminBuildJS = function() {
 		const opts = [];
 		let imageUrl = '';
 
-		const optVals = jQuery( `input[name^="field_options[options_${ fieldId }]"]` ).filter( '[name$="[label]"], [name*="[other_"]' );
+		const optsContainer = document.getElementById( `frm_field_${ fieldId }_opts` );
+		if ( ! optsContainer ) {
+			return opts;
+		}
+
+		const optVals = jQuery( optsContainer ).find( `input[name^="field_options[options_${ fieldId }]"]` ).filter( '[name$="[label]"], [name*="[other_"]' );
 		const isProduct = isProductField( fieldId );
 		const showLabelWithImage = showingLabelWithImage( fieldId );
 		const hasImageOptions = imagesAsOptions( fieldId );
@@ -7953,13 +7158,15 @@ window.frmAdminBuildJS = function() {
 				continue;
 			}
 
+			// Read the sibling inputs from the option's own row.
+			const optionRow = optVals[ i ].closest( '.frm_single_option' ) || optsContainer;
 			saved = optVals[ i ].value;
 			label = saved;
 			key = optVals[ i ].name.replace( `field_options[options_${ fieldId }][`, '' ).replace( '[label]', '' ).replace( ']', '' );
 
 			if ( separateValues ) {
 				labelName = optVals[ i ].name.replace( '[label]', '[value]' );
-				saved = jQuery( `input[name="${ labelName }"]` ).val();
+				saved = optionRow.querySelector( `input[name="${ labelName }"]` )?.value;
 
 				if ( showValueAsLabel && '' === label ) {
 					label = '' !== saved ? saved : frm_admin_js.no_label;
@@ -7976,7 +7183,8 @@ window.frmAdminBuildJS = function() {
 			 */
 			label = frmAdminBuild.hooks.applyFilters( 'frm_choice_field_label', label, fieldId, optVals[ i ], hasImageOptions );
 
-			checked = getChecked( optVals[ i ].id );
+			const defaultInput = jQuery( optVals[ i ] ).siblings( 'input[type=checkbox]' );
+			checked = defaultInput.length && defaultInput.prop( 'checked' );
 
 			optObj = {
 				saved,
@@ -7987,7 +7195,7 @@ window.frmAdminBuildJS = function() {
 
 			if ( isProduct ) {
 				labelName = optVals[ i ].name.replace( '[label]', '[price]' );
-				optObj.price = jQuery( `input[name="${ labelName }"]` ).val();
+				optObj.price = optionRow.querySelector( `input[name="${ labelName }"]` )?.value;
 			}
 
 			opts.push( optObj );
@@ -8071,18 +7279,6 @@ window.frmAdminBuildJS = function() {
 		return labelNode;
 	}
 
-	function getChecked( id ) {
-		const field = jQuery( `#${ id }` );
-
-		if ( field.length === 0 ) {
-			return false;
-		}
-
-		const checkbox = field.siblings( 'input[type=checkbox]' );
-
-		return checkbox.length && checkbox.prop( 'checked' );
-	}
-
 	function removeDropdownOpts( field ) {
 		let i;
 		if ( field.options === undefined ) {
@@ -8142,7 +7338,8 @@ window.frmAdminBuildJS = function() {
 	function checkUniqueOpt( targetInput ) {
 		const settingsContainer = targetInput.closest( '.frm-single-settings' );
 		const fieldId = settingsContainer.getAttribute( 'data-fid' );
-		const areValuesSeparate = settingsContainer.querySelector( `[name="field_options[separate_value_${ fieldId }]"]` ).checked;
+		// The separate values setting is only there when Pro is active.
+		const areValuesSeparate = Boolean( settingsContainer.querySelector( `[name="field_options[separate_value_${ fieldId }]"]` )?.checked );
 
 		if ( areValuesSeparate && ! targetInput.name.endsWith( '[value]' ) ) {
 			return;
@@ -8158,102 +7355,6 @@ window.frmAdminBuildJS = function() {
 		if ( conflicts.length ) {
 			/* translators: %s: The detected option value. */
 			infoModal( sprintf( __( 'Duplicate option value "%s" detected', 'formidable' ), purifyHtml( targetInput.value ) ) );
-		}
-	}
-
-	function getFieldValues() {
-		/*jshint validthis:true */
-		let isTaxonomy;
-		const val = this.value;
-
-		if ( val ) {
-			const parentIDs = this.parentNode.id.replace( 'frm_logic_', '' ).split( '_' );
-			const fieldID = parentIDs[ 0 ];
-			const metaKey = parentIDs[ 1 ];
-			const valueField = document.getElementById( `frm_field_id_${ val }` );
-			if ( ! valueField ) {
-				// The condition checks something other than a field, like an add-on's option. Let the server render its value input.
-				frmGetFieldValues( val, fieldID, metaKey, this.getAttribute( 'data-type' ) );
-				return;
-			}
-
-			const valueFieldType = valueField.getAttribute( 'data-ftype' );
-			const fill = document.getElementById( `frm_show_selected_values_${ fieldID }_${ metaKey }` );
-			const optionName = `field_options[hide_opt_${ fieldID }][]`;
-			const optionID = `frm_field_logic_opt_${ fieldID }`;
-			let input = false;
-			let showSelect = valueFieldType === 'select' || valueFieldType === 'checkbox' || valueFieldType === 'radio';
-			const showText = valueFieldType === 'text' || valueFieldType === 'email' || valueFieldType === 'phone' || valueFieldType === 'url' || valueFieldType === 'number';
-
-			if ( showSelect ) {
-				isTaxonomy = document.getElementById( `frm_has_hidden_options_${ val }` );
-				if ( isTaxonomy ) {
-					// get the category options with ajax
-					showSelect = false;
-				}
-			}
-
-			if ( showSelect || showText ) {
-				const comparison = document.querySelector( `#frm_logic_${ fieldID }_${ metaKey } [name="field_options[hide_field_cond_${ fieldID }][]"]` ).value;
-				fill.innerHTML = '';
-				const creatingValuesDropdown = showSelect && ! [ 'LIKE', 'not LIKE', 'LIKE%', '%LIKE' ].includes( comparison );
-				if ( creatingValuesDropdown ) {
-					input = document.createElement( 'select' );
-				} else {
-					input = document.createElement( 'input' );
-					input.type = 'text';
-				}
-				input.name = optionName;
-				input.id = `${ optionID }_${ metaKey }`;
-				fill.append( input );
-
-				if ( creatingValuesDropdown ) {
-					const fillField = document.getElementById( input.id );
-					fillDropdownOpts( fillField, {
-						sourceID: val,
-						placeholder: '',
-						other: true
-					} );
-				}
-			} else {
-				const thisType = this.getAttribute( 'data-type' );
-				const callback = () => {
-					const event = new CustomEvent( 'frm_logic_options_loaded' );
-					event.frmData = { valueFieldType, fieldID, metaKey };
-					document.dispatchEvent( event );
-				};
-
-				frmGetFieldValues( val, fieldID, metaKey, thisType, undefined, callback );
-			}
-		}
-	}
-
-	function getFieldSelection() {
-		/*jshint validthis:true */
-		const formId = this.value;
-		if ( formId ) {
-			const fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
-			getTaxOrFieldSelection( formId, fieldId );
-		}
-	}
-
-	function getTaxOrFieldSelection( formId, fieldId ) {
-		if ( formId ) {
-			jQuery.ajax( {
-				type: 'POST',
-				url: ajaxurl,
-				data: {
-					action: 'frm_get_field_selection',
-					field_id: fieldId,
-					form_id: formId,
-					nonce: frmGlobal.nonce
-				},
-				success( msg ) {
-					const $selectedFields = jQuery( `#frm_show_selected_fields_${ fieldId }` );
-					$selectedFields.toggleClass( 'frm6', ! msg.includes( 'frm-inline-message' ) );
-					$selectedFields.html( msg ).show();
-				}
-			} );
 		}
 	}
 
@@ -8325,33 +7426,6 @@ window.frmAdminBuildJS = function() {
 			// move all appended fields
 			moveFieldsClass.moveFields();
 		}() );
-	}
-
-	function toggleSectionHolder() {
-		document.querySelectorAll( '.start_divider' ).forEach(
-			function( divider ) {
-				toggleOneSectionHolder( jQuery( divider ) );
-			}
-		);
-	}
-
-	function toggleOneSectionHolder( $section ) {
-		if ( ! $section.length ) {
-			return;
-		}
-
-		const $rows = $section.find( 'ul.frm_sorting' );
-		let sectionHasFields = false;
-		const { length } = $rows;
-		for ( let index = 0; index < length; ++index ) {
-			if ( 0 !== getFieldsInRow( jQuery( $rows.get( index ) ) ).length ) {
-				sectionHasFields = true;
-				break;
-			}
-		}
-
-		const noSectionFields = $section.parent().children( '.frm_no_section_fields' ).get( 0 );
-		noSectionFields.classList.toggle( 'frm_block', ! sectionHasFields );
 	}
 
 	function handleShowPasswordLiveUpdate() {
@@ -8582,7 +7656,7 @@ window.frmAdminBuildJS = function() {
 				box.setAttribute( 'data-fills', input.id.replace( '-proxy-input', '' ) );
 
 				if ( box.id.indexOf( 'frm-calc-box' ) === 0 ) {
-					popCalcFields( box, true );
+					callBuilderFeature( 'calc_box', 'popCalcFields', box, true );
 				}
 			}
 
@@ -9579,6 +8653,8 @@ window.frmAdminBuildJS = function() {
 
 		editor.targetElm.value = editor.getContent();
 		jQuery( editor.targetElm ).trigger( 'change' );
+		// A jQuery trigger skips native listeners, so update the HTML field preview here.
+		syncHtmlFieldPreview( editor.targetElm );
 	}
 
 	function isTinyMceActive() {
@@ -11729,26 +10805,6 @@ window.frmAdminBuildJS = function() {
 		document.addEventListener( 'click', clickListener );
 	}
 
-	function maybeChangeEmbedFormMsg() {
-		const fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
-		let fieldItem = document.getElementById( `frm_field_id_${ fieldId }` );
-		if ( ! fieldItem || 'form' !== fieldItem.dataset.type ) {
-			return;
-		}
-
-		fieldItem = jQuery( fieldItem );
-
-		if ( this.options[ this.selectedIndex ].value ) {
-			fieldItem.find( '.frm-not-set' )[ 0 ].classList.add( 'frm_hidden' );
-			const embedMsg = fieldItem.find( '.frm-embed-message' );
-			embedMsg.html( embedMsg.data( 'embedmsg' ) + this.options[ this.selectedIndex ].text );
-			fieldItem.find( '.frm-embed-field-placeholder' )[ 0 ].classList.remove( 'frm_hidden' );
-		} else {
-			fieldItem.find( '.frm-not-set' )[ 0 ].classList.remove( 'frm_hidden' );
-			fieldItem.find( '.frm-embed-field-placeholder' )[ 0 ].classList.add( 'frm_hidden' );
-		}
-	}
-
 	function handleModalDismiss( input ) {
 		const modalDismissers = document.querySelectorAll( '#frm_info_modal .dismiss, #frm_info_modal #frm-info-click, .ui-widget-overlay.ui-front' );
 		function onModalClose() {
@@ -12439,11 +11495,51 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
+	const fieldReadiness = createFieldReadiness( { ensureFieldSettings } );
+	const refreshFieldPreview = createRefreshFieldPreview( { getFieldPreviewBody } );
+
+	/**
+	 * Create a field over AJAX without placing it in the builder.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} fieldType            The field type.
+	 * @param {Object} options              Optional settings.
+	 * @param {Object} options.fieldOptions Field options to save with the new field.
+	 * @param {string} options.sectionId    The ID of the section or repeater to add the field to.
+	 * @param {number} options.hasBreak     1 when a page break should be added before the field.
+	 * @param {string} options.formId       The form to add the field to. Defaults to the section's form, or this form.
+	 * @return {Promise<string>} The new field's builder HTML.
+	 */
+	function requestNewField( fieldType, { fieldOptions = {}, sectionId = 0, hasBreak = 0, formId = '' } = {} ) {
+		let targetFormId = formId;
+		if ( ! targetFormId ) {
+			// A repeater's list item holds its child form ID.
+			targetFormId = sectionId ? document.getElementById( `frm_field_id_${ sectionId }` )?.dataset.formid : '';
+			targetFormId = targetFormId || thisFormId;
+		}
+
+		return new Promise( ( resolve, reject ) => {
+			jQuery.ajax( {
+				type: 'POST',
+				url: ajaxurl,
+				data: {
+					...getInsertNewFieldArgs( fieldType, sectionId, targetFormId, hasBreak ? 1 : 0 ),
+					field_options: fieldOptions,
+				},
+				success: resolve,
+				error: ( xhr, status, error ) => reject( new Error( `Failed to insert field: ${ fieldType } ${ error || status }` ) ),
+			} );
+		} );
+	}
+
 	return {
 		ensureFieldPreview: renderFieldPreviewNow,
 		init() {
 			initAddMyEmailAddress();
 			addAdminFooterLinks();
+			// Settings outside the builder, like on the form settings page, can use data-frmpreview too.
+			initLivePreview( { refreshFieldPreview } );
 
 			document.addEventListener( 'show.bs.dropdown', function() {
 				// Fixes issues with tooltips lingering after a dropdown is shown.
@@ -12722,56 +11818,31 @@ window.frmAdminBuildJS = function() {
 			renumberPageBreaks();
 
 			const $builderForm = jQuery( builderForm );
-			const builderArea = formEditorContainer;
 
-			// Formidable Pro can take over adding a condition row itself (see its builder.js) once
-			// it no longer needs this fallback for sites running an older, incompatible Pro version.
-			// Checked at click time, not here at setup time, since Pro's script may not have run yet.
-			$builderForm.on( 'click', '.frm_add_logic_row', function() {
-				if ( wp.hooks.applyFilters( 'frm_should_add_logic_row_in_lite', true ) ) {
-					return addFieldLogicRow.call( this );
-				}
-			} );
-
-			$builderForm.on( 'click', '.frm_add_watch_lookup_row', addWatchLookupRow );
-			$builderForm.on( 'change', '.frm_get_values_form', updateGetValueFieldSelection );
-			$builderForm.on( 'change', '.frm_logic_field_opts', getFieldValues );
 			$builderForm.on( 'frm-multiselect-changed', 'select[name^="field_options[admin_only_"]', adjustVisibilityValuesForEveryoneValues );
 
 			jQuery( document.getElementById( 'frm-insert-fields' ) ).on( 'click', '.frm_add_field', addFieldClick );
 			$newFields.on( 'click', '.frm_clone_field', duplicateField );
-			$builderForm.on( 'blur', 'input[id^="frm_calc"]', checkCalculationCreatedByUser );
 			$builderForm.on( 'change', 'input.frm_format_opt, input.frm_max_length_opt', toggleInvalidMsg );
-			$builderForm.on( 'change click', '[data-changeme]', liveChanges );
-			const previewInputHandlers = new WeakMap();
+			// Every setting with a preview fires input or change, so a click adds nothing but extra work.
+			$builderForm.on( 'change', '[data-changeme]', liveChanges );
+			const debouncedLiveChanges = frmDom.util.debounceByKey( input => liveChanges.call( input ), 100 );
 			builderForm.addEventListener( 'input', event => {
 				const input = event.target;
 				if ( input.matches( '[data-changeme]' ) ) {
-					if ( ! previewInputHandlers.has( input ) ) {
-						previewInputHandlers.set( input, debounce( liveChanges ) );
-					}
-					previewInputHandlers.get( input ).call( input );
+					debouncedLiveChanges( input );
 					fieldUpdated();
 				}
 			} );
+			// The change handler applies the final value. A preview update still waiting from typing
+			// must not run after it, or it would undo anything a change listener did to the preview.
+			builderForm.addEventListener( 'change', event => debouncedLiveChanges.cancel( event.target ), true );
 			frmDom.util.documentOn( 'change', '.frm-single-settings select[id^="address_type_"]', function() {
 				updateAddressPreview( this, liveChanges );
 			} );
 			$builderForm.on( 'click', 'input.frm_req_field', markRequired );
 			$builderForm.on( 'click', '.frm_mark_unique', markUnique );
 
-			$builderForm.on( 'change', '.frm_repeat_format', toggleRepeatButtons );
-			$builderForm.on( 'change', '.frm_repeat_limit', checkRepeatLimit );
-			$builderForm.on( 'change', '.frm_js_checkbox_limit', checkCheckboxSelectionsLimit );
-			$builderForm.on( 'input', 'input[name^="field_options[add_label_"]', function() {
-				updateRepeatText( this, 'add' );
-			} );
-			$builderForm.on( 'input', 'input[name^="field_options[remove_label_"]', function() {
-				updateRepeatText( this, 'remove' );
-			} );
-			$builderForm.on( 'change', 'select[name^="field_options[data_type_"]', maybeClearWatchFields );
-			jQuery( builderArea ).on( 'click', '.frm-collapse-page', maybeCollapsePage );
-			jQuery( builderArea ).on( 'click', '.frm-collapse-section', maybeCollapseSection );
 			$builderForm.on( 'click', '.frm-single-settings h3, .frm-single-settings h4.frm-collapsible', maybeCollapseSettings );
 			$builderForm.on( 'keydown', '.frm-single-settings h3, .frm-single-settings h4.frm-collapsible', function( event ) {
 				// If so, only proceed if the key pressed was 'Enter' or 'Space'
@@ -12780,8 +11851,6 @@ window.frmAdminBuildJS = function() {
 					maybeCollapseSettings.call( this, event );
 				}
 			} );
-
-			jQuery( builderArea ).on( 'show.bs.dropdown hide.bs.dropdown', changeSectionStyle );
 
 			$builderForm.on( 'change', '.frm_toggle_sep_values', toggleSepValues );
 			$builderForm.on( 'change', '.frm_toggle_image_options', toggleImageOptions );
@@ -12821,17 +11890,11 @@ window.frmAdminBuildJS = function() {
 			$builderForm.on( 'click', '.frm_add_opt', addFieldOption );
 			$builderForm.on( 'change', '.frm_single_option input', resetOptOnChange );
 			$builderForm.on( 'change', '.frm_image_id', resetOptOnChange );
-			$builderForm.on( 'change', '.frm_toggle_mult_sel', toggleMultSel );
 
 			$newFields.on( 'click', '.frm_primary_label', clickLabel );
 			$newFields.on( 'click', '.frm_description', clickDescription );
 			$newFields.on( 'click', 'li.ui-state-default:not(.frm_noallow)', clickVis );
 			$newFields.on( 'dblclick', 'li.ui-state-default', openAdvanced );
-			$builderForm.on( 'change', '.frm_tax_form_select', toggleFormTax );
-			$builderForm.on( 'change', 'select.conf_field', addConf );
-
-			$builderForm.on( 'change', '.frm_get_field_selection', getFieldSelection );
-
 			$builderForm.on( 'click', '.frm-show-inline-modal', maybeShowInlineModal );
 			$builderForm.on( 'keydown', '.frm-show-inline-modal', function( event ) {
 				const { key } = event;
@@ -12845,9 +11908,6 @@ window.frmAdminBuildJS = function() {
 			jQuery( document ).on( 'change', '[data-frmchange]', changeInputtedValue );
 
 			document.addEventListener( 'click', closeModalOnOutsideClick );
-
-			$builderForm.on( 'change', '.frm_include_extras_field', rePopCalcFieldsForSummary );
-			$builderForm.on( 'change', 'select[name^="field_options[form_select_"]', maybeChangeEmbedFormMsg );
 
 			jQuery( document ).on( 'submit', '#frm_js_build_form', buildSubmittedNoAjax );
 			jQuery( document ).on( 'change', '#frm_builder_page input:not(.frm-search-input):not(.frm-custom-grid-size-input), #frm_builder_page select, #frm_builder_page textarea', fieldUpdated );
@@ -12876,7 +11936,10 @@ window.frmAdminBuildJS = function() {
 			wp.hooks.addAction( 'frm_field_settings_loaded', 'formidableAdmin', hideEmptyEle );
 			maybeHideQuantityProductFieldOption();
 			handleNameFieldOnFormBuilder();
-			toggleSectionHolder();
+			initBuilderPreviewSync();
+			fieldReadiness.listen();
+			builderInitialized = true;
+			callBuilderFeature( 'page_section_chrome', 'toggleSectionHolder' );
 			handleShowPasswordLiveUpdate();
 			document.addEventListener( 'scroll', updateShortcodesPopupPosition, true );
 			document.addEventListener( 'change', handleBuilderChangeEvent );
@@ -13480,7 +12543,9 @@ window.frmAdminBuildJS = function() {
 		initModal,
 		infoModal,
 		offsetModalY,
-		adjustConditionalLogicOptionOrders,
+		adjustConditionalLogicOptionOrders( fieldId, type ) {
+			return callBuilderFeature( 'logic_option_sync', 'adjustConditionalLogicOptionOrders', fieldId, type );
+		},
 		addRadioCheckboxOpt,
 		installNewForm,
 		toggleAddonState,
@@ -13499,6 +12564,50 @@ window.frmAdminBuildJS = function() {
 		syncAfterDragAndDrop,
 		moveFieldSettings,
 		maybeCollapseSettings,
+
+		/**
+		 * Builder feature registry and the helpers that registered features use.
+		 *
+		 * @since x.x
+		 */
+		registerBuilderFeature,
+		hasBuilderFeature,
+		callBuilderFeature,
+		getFieldList,
+		ensureFieldSettings,
+		toggleValidationBox,
+		getNewRowId,
+		fieldsInSection,
+		materializeAllFieldSettings() {
+			materializeAllFieldSettings( prepareLoadedFieldMarkup );
+		},
+		materializeLogicFieldSettings( fieldId ) {
+			materializeLogicFieldSettings( fieldId, prepareLoadedFieldMarkup );
+		},
+		getFieldsInRow,
+		toggleMultiSelect,
+		triggerLogicRowEvent,
+		getAppendedLogicRow,
+		getChoiceNewValueAndLabel,
+
+		/**
+		 * Shared builder helpers for Pro and add-ons.
+		 * Check for onFieldSettingsReady before using any of them.
+		 *
+		 * @since x.x
+		 */
+		onFieldSettingsReady: fieldReadiness.onFieldSettingsReady,
+		onFieldPreviewReady: fieldReadiness.onFieldPreviewReady,
+		whenFieldSettingsReady: fieldReadiness.whenFieldSettingsReady,
+		refreshFieldPreview,
+		requestNewField,
+		getSettingKey,
+		getFieldPreviewBody,
+		fieldUpdated,
+		liveChanges( input ) {
+			// Callers pass the input, while event handlers call it with the input as this.
+			liveChanges.call( input?.nodeType ? input : this );
+		},
 	};
 };
 

@@ -766,6 +766,30 @@ class test_FrmAppHelper extends FrmUnitTest {
 		wp_dequeue_script( 'frm-quizzes-form-action' );
 	}
 
+	/**
+	 * @see FrmAppHelper::is_form_settings_page
+	 */
+	public function test_is_form_settings_page() {
+		global $pagenow;
+		$original_pagenow = $pagenow;
+		$pagenow          = 'admin.php'; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+
+		$_GET['page']       = 'formidable';
+		$_GET['frm_action'] = 'settings';
+		$this->assertTrue( FrmAppHelper::is_form_settings_page() );
+
+		$_GET['frm_action'] = 'edit';
+		$this->assertFalse( FrmAppHelper::is_form_settings_page(), 'The form builder is not the settings page.' );
+
+		$_GET['page']       = 'formidable-entries';
+		$_GET['frm_action'] = 'settings';
+		$this->assertFalse( FrmAppHelper::is_form_settings_page(), 'Another Formidable page with the same action is not the settings page.' );
+
+		$pagenow = $original_pagenow; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		unset( $_GET['page'], $_GET['frm_action'] );
+		$this->assertFalse( FrmAppHelper::is_form_settings_page() );
+	}
+
 	public function test_dequeue_extra_global_scripts_elsewhere() {
 		global $pagenow;
 		$original_pagenow = $pagenow;

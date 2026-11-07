@@ -21,9 +21,13 @@ export function addFieldSettingsMetadata( field, fieldId, metadata ) {
 	const container = frmDom.div( { className: 'frm-deferred-settings-meta' } );
 	container.hidden = true;
 	const inputs = Object.entries( metadataInputs ).flatMap( ( [ key, [ name, prefix ] ] ) => {
-		const value = metadata[ key ];
+		let value = metadata[ key ];
 		if ( value === null || value === undefined ) {
 			return [];
+		}
+		if ( key === 'type' && value === 'select' ) {
+			// Match the field type setting, which posts "dropdown" because some security tools flag "select" as SQL injection.
+			value = 'dropdown';
 		}
 		const input = frmDom.tag( 'input' );
 		input.type = 'hidden';
@@ -124,6 +128,20 @@ export function materializeFieldSettings( fieldId, initialize ) {
 	/**
 	 * Initialize controls after a deferred settings panel enters the DOM.
 	 *
+	 * Contract for code outside Lite that binds to settings panel controls:
+	 * - A panel that loads deferred is added later than page load, and only once. This
+	 *   happens when the field is selected, when code calls frmAdminBuild.ensureFieldSettings(),
+	 *   or when a choice edit needs the conditional logic rows that point at the edited field.
+	 * - This action is the only signal for that insert. It fires once per panel, after the
+	 *   saved layout and order values are restored and Lite's own markup preparation ran.
+	 * - The panel sits inside its field preview and is usually hidden. It is moved into the
+	 *   save form later, and frmShowedFieldSettings still fires each time it is shown.
+	 * - A field added or duplicated in this session arrives with its panel already in the
+	 *   page, so it never fires this action. Its insert is announced by the frm_added_field
+	 *   DOM event instead. Bind with delegated handlers, or initialize on this action and on
+	 *   frmShowedFieldSettings, and keep that initialization idempotent.
+	 * - No jQuery events and no frm_added_field event fire for this insert.
+	 *
 	 * @since x.x
 	 * @param {HTMLElement} settings The inserted field settings panel.
 	 */
@@ -142,4 +160,52 @@ export function materializeAllFieldSettings( initialize ) {
 	for ( const fieldId of pendingSettings.keys() ) {
 		materializeFieldSettings( fieldId, initialize );
 	}
+}
+
+/**
+ * Check whether cached settings HTML holds a conditional logic row that uses a field as its trigger.
+ *
+ * @since x.x
+ * @param {string} html    Cached settings panel HTML.
+ * @param {string} fieldId Numeric ID of the trigger field.
+ * @return {boolean} True when a logic row in the panel references the field.
+ */
+function hasLogicRowForField( html, fieldId ) {
+	if ( ! html.includes( 'frm_logic_row' ) || ! html.includes( `"${ fieldId }"` ) ) {
+		return false;
+	}
+
+	// A template parses the markup without running scripts or loading images.
+	const template = frmDom.tag( 'template' );
+	template.innerHTML = html;
+	return Array.from( template.content.querySelectorAll( '.frm_logic_row .frm_logic_field_opts' ) ).some(
+		select => select.value === fieldId
+	);
+}
+
+/**
+ * Restore only the cached panels whose conditional logic rows use a field as their trigger.
+ *
+ * Choice edits only need the logic rows that point at the edited field, so the
+ * rest of the deferred panels stay cached.
+ *
+ * @since x.x
+ * @param {string|number} fieldId    Numeric ID of the trigger field.
+ * @param {Function}      initialize Prepares newly inserted settings controls.
+ * @return {void}
+ */
+export function materializeLogicFieldSettings( fieldId, initialize ) {
+	const triggerId = String( fieldId );
+	const matches = [];
+	for ( const [ key, html ] of pendingSettings ) {
+		if ( hasLogicRowForField( html, triggerId ) ) {
+			matches.push( key );
+		}
+	}
+
+	if ( ! matches.length ) {
+		return;
+	}
+
+	matches.forEach( key => materializeFieldSettings( key, initialize ) );
 }

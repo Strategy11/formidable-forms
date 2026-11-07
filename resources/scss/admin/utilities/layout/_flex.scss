@@ -20,6 +20,12 @@
 	display: none;
 }
 
+// Elements toggled with the hidden attribute stay hidden even when a rule sets their display.
+.frm_wrap [hidden],
+.with_frm_style [hidden] {
+	display: none !important;
+}
+
 .frm-flex-box {
 	display: flex;
 	gap: var(--gap-sm);

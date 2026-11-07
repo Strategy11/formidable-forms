@@ -502,4 +502,12 @@ class test_FrmFieldType extends FrmUnitTest {
 		$this->assertSame( 'false', $shortcode_atts['aria-invalid-first'] );
 		$this->assertSame( 'true', $shortcode_atts['aria-invalid-last'] );
 	}
+
+	/**
+	 * @see FrmFieldType::allow_in_repeater
+	 */
+	public function test_allow_in_repeater() {
+		$this->assertTrue( FrmFieldFactory::get_field_type( 'text' )->allow_in_repeater() );
+		$this->assertFalse( FrmFieldFactory::get_field_type( 'gdpr' )->allow_in_repeater(), 'GDPR fields stay out of repeaters.' );
+	}
 }
