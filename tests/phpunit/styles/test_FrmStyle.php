@@ -301,4 +301,21 @@ class test_FrmStyle extends FrmUnitTest {
 		$this->assertGreaterThanOrEqual( (int) $before, (int) $version );
 		$this->assertLessThanOrEqual( (int) $after, (int) $version );
 	}
+
+	/**
+	 * Placeholders in a field with an error must use the Error > Field Text color, not the Read Only text color.
+	 *
+	 * @see https://github.com/Strategy11/formidable-pro/issues/6929
+	 */
+	public function test_generated_css_uses_error_color_for_placeholders_in_fields_with_errors() {
+		$css = $this->run_private_method(
+			array( new FrmStyle(), 'get_css_content' ),
+			array( FrmAppHelper::plugin_path() . '/css/custom_theme.css.php' )
+		);
+
+		$this->assertMatchesRegularExpression( '/\.frm_blank_field input::placeholder,[^{]*\{color:var\(--text-color-error\)/', $css );
+		$this->assertMatchesRegularExpression( '/\.frm_form_field input:invalid::placeholder,[^{]*\{color:var\(--text-color-error\)/', $css );
+		// Sub fields of a combo field without an error keep the normal placeholder color.
+		$this->assertMatchesRegularExpression( '/\.frm_form_field:not\(\.frm_blank_field\) input::placeholder,[^{]*\{color:var\(--text-color-disabled\)/', $css );
+	}
 }
