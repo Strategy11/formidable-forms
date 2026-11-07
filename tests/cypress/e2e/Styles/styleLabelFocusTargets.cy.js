@@ -10,17 +10,42 @@ describe( 'Style builder labels focus their visible/interactive control', () => 
 	it( 'Clicking a color picker\'s own label focuses the visible swatch button, not the hidden text input', () => {
 		cy.visit( '/wp-admin/admin.php?page=formidable-styles' );
 
-		// "Primary" in Quick Settings - the label wraps a color picker whose original text
-		// input gets hidden by wpColorPicker() in favor of a `.wp-color-result` button.
-		// style.js repoints the label's `for` to `{id}_visible` once wpColorPicker() inits,
-		// which happens before this query runs - so the selector must target the post-init id.
-		// Confirm the original input is hidden *before* interacting with it - clicking the
-		// swatch button intentionally reveals it again afterward as WP core's own manual hex
-		// entry field (color-picker.js `open()` un-hides `.wp-picker-input-wrap`), so asserting
-		// it stays hidden post-click would fail against WP's own by-design behavior.
+		// The original input lives inside the closed picker. Its label targets the swatch.
 		cy.get( '#frm_style_qsettings_submit_bg_color', { timeout: STYLES_PAGE_TIMEOUT } ).should( 'not.be.visible' );
 		cy.get( 'label[for="frm_style_qsettings_submit_bg_color_visible"]' ).click();
-		cy.focused().should( 'have.class', 'wp-color-result' );
+		cy.focused().should( 'have.class', 'frm-block-color-toggle' );
+	} );
+
+	it( 'Color pickers remain visible outside the scrolling settings panel', () => {
+		cy.viewport( 1280, 720 );
+		cy.visit( '/wp-admin/admin.php?page=formidable-styles&section=advanced-settings' );
+		cy.get( 'button[aria-label="Form Messages"]', { timeout: STYLES_PAGE_TIMEOUT } ).click();
+		cy.get( '#frm_success_bg_color_visible' ).scrollIntoView().click();
+		cy.get( '#frm_success_bg_color_picker' ).should( 'be.visible' ).then( panel => {
+			const [ element ] = panel;
+			const bounds = element.getBoundingClientRect();
+			const doc = element.ownerDocument;
+			const toolbarBottom = doc.getElementById( 'wpadminbar' ).getBoundingClientRect().bottom;
+			expect( bounds.top ).to.be.at.least( toolbarBottom );
+			expect( bounds.bottom ).to.be.at.most( doc.defaultView.innerHeight );
+			expect( element.contains( doc.elementFromPoint( bounds.left + 20, bounds.top + 20 ) ) ).to.equal( true );
+			expect( element.contains( doc.elementFromPoint( bounds.left + 20, bounds.bottom - 20 ) ) ).to.equal( true );
+		} );
+		cy.get( '#frm_success_bg_color_picker [role="combobox"]' ).click();
+		cy.get( '[role="listbox"]' ).parent().focus();
+		cy.get( '#frm_success_bg_color_picker' ).should( 'be.visible' );
+		cy.contains( '[role="option"]', 'RGB' ).click();
+		cy.get( '#frm_success_bg_color_picker' ).should( 'be.visible' );
+		cy.get( '#frm_success_bg_color' ).then( input => {
+			expect( input[ 0 ].form.id ).to.equal( 'frm_styling_form' );
+		} );
+		cy.get( '#frm_success_bg_color_picker .frm-block-color-clear' ).focus().type( '{esc}' );
+		cy.get( '#frm_success_bg_color_picker' ).should( 'not.exist' );
+		cy.get( '#frm_success_bg_color_visible' ).click();
+		cy.get( '#frm_success_bg_color_picker [role="combobox"]' ).click();
+		cy.get( 'body' ).trigger( 'pointerdown', { eventConstructor: 'PointerEvent' } );
+		cy.get( '#frm_success_bg_color_picker' ).should( 'not.exist' );
+		cy.get( '[role="listbox"]' ).should( 'not.exist' );
 	} );
 
 	it( 'Clicking a single-value slider\'s own label focuses the visible number input, not the hidden real input', () => {
