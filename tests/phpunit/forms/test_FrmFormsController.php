@@ -399,4 +399,51 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->assertStringContainsString( 'window.open("http://example.com"', $response );
 		$this->assertStringContainsString( 'target="_blank">Click here</a>', $response );
 	}
+
+	/**
+	 * A draft form placed on a page is hidden from everyone, logged out
+	 * visitors included. Only the preview page renders it.
+	 *
+	 * @see https://github.com/Strategy11/formidable-pro/issues/6861
+	 *
+	 * @covers FrmFormsController::show_form
+	 *
+	 * @return void
+	 */
+	public function test_show_form_hides_a_draft_form_outside_the_preview_page() {
+		global $pagenow;
+
+		$invalid   = __( 'Please select a valid form', 'formidable' );
+		$draft_id  = $this->factory->form->create( array( 'status' => 'draft' ) );
+		$published = $this->factory->form->create( array( 'status' => 'published' ) );
+		$draft_key = FrmForm::get_key_by_id( $draft_id );
+
+		foreach ( array( $draft_id, $published ) as $form_id ) {
+			$this->factory->field->create(
+				array(
+					'form_id' => $form_id,
+					'type'    => 'text',
+					'name'    => 'Draft check ' . $form_id,
+				)
+			);
+		}
+
+		wp_set_current_user( 0 );
+		$this->assertSame( $invalid, FrmFormsController::show_form( $draft_id ), 'A logged out visitor should not see a draft form.' );
+		$this->assertSame( $invalid, FrmFormsController::show_form( '', $draft_key ), 'A logged out visitor should not see a draft form loaded by key.' );
+		$this->assertStringContainsString( 'Draft check ' . $published, FrmFormsController::show_form( $published ), 'A published form should still render.' );
+
+		$this->set_current_user_to_1();
+		$this->assertSame( $invalid, FrmFormsController::show_form( $draft_id ), 'An editor should not see a draft form on a page either.' );
+
+		$previous_pagenow = $pagenow;
+		$pagenow          = 'admin-ajax.php'; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		$_GET['action']   = 'frm_forms_preview';
+		wp_set_current_user( 0 );
+		$preview = FrmFormsController::show_form( $draft_id );
+		$pagenow = $previous_pagenow; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		unset( $_GET['action'] );
+
+		$this->assertStringContainsString( 'Draft check ' . $draft_id, $preview, 'The preview page should still render a draft form.' );
+	}
 }
