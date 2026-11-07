@@ -24,6 +24,31 @@ class FrmEntry {
 	}
 
 	/**
+	 * Allow integrations to prevent entry storage and its associated actions.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $values Entry values, including the form ID.
+	 *
+	 * @return bool
+	 */
+	public static function allows_save( $values ) {
+		foreach ( array( 'form_id', 'parent_form_id' ) as $key ) {
+			if ( empty( $values[ $key ] ) ) {
+				continue;
+			}
+
+			$form = FrmForm::getOne( $values[ $key ] );
+
+			if ( $form && ! empty( $form->options['prevent_entry_storage'] ) ) {
+				return false;
+			}
+		}
+
+		return (bool) apply_filters( 'frm_allow_entry_save', true, $values );
+	}
+
+	/**
 	 * Create a new entry with some differences depending on type
 	 *
 	 * @param array  $values
@@ -32,6 +57,10 @@ class FrmEntry {
 	 * @return bool|int Entry ID.
 	 */
 	private static function create_entry( $values, $type ) {
+		if ( ! self::allows_save( $values ) ) {
+			return false;
+		}
+
 		$new_values = self::before_insert_entry_in_database( $values, $type );
 
 		// Don't check XML entries for duplicates
@@ -345,6 +374,12 @@ class FrmEntry {
 	 */
 	private static function update_entry( $id, $values, $update_type ) {
 		global $wpdb;
+
+		$entry = self::getOne( $id );
+
+		if ( ! self::allows_save( $values ) || ( $entry && ! self::allows_save( array( 'form_id' => $entry->form_id ) ) ) ) {
+			return false;
+		}
 
 		$update = self::before_update_entry( $id, $values, $update_type );
 
