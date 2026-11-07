@@ -1296,6 +1296,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 				$payment_action_by_id[ $payment_action->ID ] = $payment_action;
 				$settings_for_action['paypalLayout']         = ! empty( $payment_action->post_content['paypal_layout'] ) ? $payment_action->post_content['paypal_layout'] : 'card_and_checkout'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				$settings_for_action['logic_fields']         = self::get_logic_field_ids( $payment_action );
+				$settings_for_action['addressType']          = self::get_billing_address_type( $settings_for_action['address'] );
 				return $settings_for_action;
 			},
 			10,
@@ -1502,6 +1503,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			'nonce'                    => wp_create_nonce( 'frm_paypal_ajax' ),
 			'ajax'                     => esc_url_raw( FrmAppHelper::get_ajax_url() ),
 			'settings'                 => $action_settings,
+			'countryCodes'             => self::get_country_codes_for_js( $action_settings ),
 			'style'                    => self::get_style_for_js( $form_id ),
 			'buttonStyle'              => self::get_button_style_for_js( $action ),
 			'imagesUrl'                => FrmPayPalLiteAppHelper::plugin_url() . 'images/',
@@ -1512,6 +1514,49 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		);
 
 		wp_localize_script( 'formidable-paypal', 'frmPayPalVars', $paypal_vars );
+	}
+
+	/**
+	 * Get the address type of the field mapped as the billing address.
+	 *
+	 * @since x.x
+	 *
+	 * @param int|string $field_id
+	 *
+	 * @return string The address type, or an empty string when no address field is mapped.
+	 */
+	private static function get_billing_address_type( $field_id ) {
+		if ( ! $field_id ) {
+			return '';
+		}
+
+		$field = FrmField::getOne( $field_id );
+
+		if ( ! $field || 'address' !== $field->type ) {
+			return '';
+		}
+
+		return $field->field_options['address_type'] ?? 'international';
+	}
+
+	/**
+	 * The country name to code map is only needed when a mapped address can sit on an earlier page and
+	 * only has the country name left in a hidden input.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $action_settings
+	 *
+	 * @return array
+	 */
+	private static function get_country_codes_for_js( $action_settings ) {
+		foreach ( $action_settings as $setting ) {
+			if ( in_array( $setting['addressType'] ?? '', array( 'international', 'europe' ), true ) ) {
+				return FrmAddressesController::get_country_codes();
+			}
+		}
+
+		return array();
 	}
 
 	/**
