@@ -443,4 +443,11 @@ export default [
 			} ],
 		},
 	},
+	{
+		files: [ 'tests/js/style-live-preview.test.mjs' ],
+		rules: {
+			// The harness executes only function declarations from the checked-in styler.
+			'sonarjs/code-eval': 'off',
+		},
+	},
 ];

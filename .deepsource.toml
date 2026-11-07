@@ -39,6 +39,9 @@ test_patterns = [
 name = "php"
 enabled = true
 
+  [analyzers.meta]
+  bootstrap_files = ["vendor/autoload.php", "tests/analysis/wp-unit-test-case.php"]
+
 [[analyzers]]
 name = "javascript"
 enabled = true
