@@ -199,6 +199,23 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return $this->hcaptcha_api_url();
 		}
 
+		if ( 'turnstile' !== $active_mode ) {
+			/**
+			 * Filters the front end script URL for a captcha type registered with frm_captcha_settings_classes.
+			 *
+			 * @since x.x
+			 *
+			 * @param string $api_js_url  Script URL. Leave it empty to use the default.
+			 * @param string $active_mode The active captcha type.
+			 * @param array  $field       The captcha field.
+			 */
+			$api_js_url = apply_filters( 'frm_captcha_api_url', '', $active_mode, $this->field );
+
+			if ( is_string( $api_js_url ) && '' !== $api_js_url ) {
+				return $api_js_url;
+			}
+		}
+
 		return $this->turnstile_api_url();
 	}
 
@@ -633,7 +650,27 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 */
 	protected function send_api_check() {
 		$captcha_settings = FrmCaptchaFactory::get_settings_object();
-		$arg_array        = array(
+
+		/**
+		 * Short-circuits the remote check, so a captcha type can verify the response itself.
+		 *
+		 * Return an array shaped like a siteverify response, with a "success" boolean and
+		 * optional "error-codes". The codes are explained with the settings object's
+		 * get_error_code_messages(). Return null to send the usual remote request.
+		 *
+		 * @since x.x
+		 *
+		 * @param array|null              $response         Null to send the remote request.
+		 * @param FrmFieldCaptchaSettings $captcha_settings The active captcha type's settings.
+		 * @param array|object            $field            The captcha field.
+		 */
+		$response = apply_filters( 'frm_captcha_pre_api_check', null, $captcha_settings, $this->field );
+
+		if ( is_array( $response ) ) {
+			return array( 'body' => (string) wp_json_encode( $response ) );
+		}
+
+		$arg_array = array(
 			'body' => array(
 				'secret'   => $captcha_settings->secret,
 				'response' => FrmAppHelper::get_param( $captcha_settings->token_field, '', 'post', 'sanitize_text_field' ),

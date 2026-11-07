@@ -43,7 +43,20 @@ class FrmCaptchaFactory {
 			'turnstile' => 'FrmTurnstileSettings',
 		);
 
-		if ( ! isset( $settings_classes[ $active_captcha ] ) ) {
+		/**
+		 * Filters the captcha types, so an add-on can register its own.
+		 *
+		 * @since x.x
+		 *
+		 * @param array<string, string> $settings_classes Captcha type keyed to a FrmFieldCaptchaSettings child class name.
+		 */
+		$filtered_classes = apply_filters( 'frm_captcha_settings_classes', $settings_classes );
+
+		if ( is_array( $filtered_classes ) ) {
+			$settings_classes = array_merge( $filtered_classes, $settings_classes );
+		}
+
+		if ( ! isset( $settings_classes[ $active_captcha ] ) || ! is_subclass_of( $settings_classes[ $active_captcha ], 'FrmFieldCaptchaSettings' ) ) {
 			$active_captcha = 'recaptcha';
 		}
 
