@@ -6,6 +6,7 @@
 const { validateField } = require( './settings/validateField' );
 const { getRangeSettingsDefaults, validateNumberRangeSetting, validateStepSetting, validateRangeSettings } = require( './settings/validateRangeSettings' );
 const { initFieldListHoverPill } = require( './fieldListHoverPill' );
+const { setupOptionGroups, initOptionGroupLists, refreshOptionGroups, addGroupLineToBulkEdit } = require( './optionGroups' );
 const { initShowBoxIconSwap } = require( './showBoxIconSwap' );
 const { hydrateBuilderSelect, hydrateBuilderSelectsIn } = require( './sharedSelectOptions' );
 const { processFieldLoadBatch } = require( './fieldLoadBatch' );
@@ -4806,6 +4807,7 @@ window.frmAdminBuildJS = function() {
 				if ( key !== '000' ) {
 					const label = document.getElementsByName( `field_options[options_${ fieldId }][${ key }][label]` )[ 0 ];
 					if ( label !== undefined ) {
+						content += addGroupLineToBulkEdit( '', { optionEl: opts[ i ] } );
 						content += label.value;
 						if ( separate ) {
 							content += `|${ document.getElementsByName( `field_options[options_${ fieldId }][${ key }][value]` )[ 0 ].value }`;
@@ -9476,6 +9478,7 @@ window.frmAdminBuildJS = function() {
 			);
 		}
 
+		initOptionGroupLists( singleField );
 		wp.hooks.doAction( 'frmShowedFieldSettings', obj, singleField );
 		maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField );
 
@@ -12696,6 +12699,7 @@ window.frmAdminBuildJS = function() {
 
 			document.querySelectorAll( '.field_type_list > li:not(.frm_show_upgrade):not(.frm_show_update)' ).forEach( makeDraggable );
 			initFieldListHoverPill();
+			setupOptionGroups();
 
 			jQuery( 'ul.field_type_list, .field_type_list li, ul.frm_code_list, .frm_code_list li, .frm_code_list li a, #frm_adv_info #category-tabs li, #frm_adv_info #category-tabs li a' ).disableSelection();
 
@@ -13419,6 +13423,7 @@ window.frmAdminBuildJS = function() {
 				},
 				success( html ) {
 					document.getElementById( `frm_field_${ fieldId }_opts` ).innerHTML = html;
+					refreshOptionGroups( fieldId );
 					wp.hooks.doAction( 'frm_after_bulk_edit_opts', fieldId );
 					resetDisplayedOpts( fieldId );
 

@@ -561,6 +561,8 @@ class FrmFieldsController {
 			}
 		}
 
+		$opts = FrmOptionGroupsController::bulk_edit_options( $opts, $field );
+
 		// Keep other options after bulk update.
 		if ( ! empty( $field['field_options']['other'] ) ) {
 			$other_array = array();

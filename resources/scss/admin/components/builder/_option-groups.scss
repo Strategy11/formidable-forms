@@ -1,0 +1,193 @@
+/* Option groups: each group reads as one card with its heading on top. */
+.frm_sortable_field_opts {
+
+	.frm-option-in-group {
+		padding: 0 var(--gap-xs) 12px;
+		background-color: var(--primary-25);
+		border-right: 1px solid var(--primary-100);
+		border-left: 1px solid var(--primary-100);
+	}
+
+	/* The builder adds the drag handle to the start of each row later, so the heading is placed in reserved space instead of relying on child order. */
+	.frm-option-group-first {
+		position: relative;
+		padding-top: 44px;
+		border-top: 1px solid var(--primary-100);
+		border-top-left-radius: var(--small-radius);
+		border-top-right-radius: var(--small-radius);
+	}
+
+	.frm-option-group-last {
+
+		/* Lite resets every option row's margin with !important. */
+		margin-bottom: var(--gap-sm) !important;
+		border-bottom: 1px solid var(--primary-100);
+		border-bottom-left-radius: var(--small-radius);
+		border-bottom-right-radius: var(--small-radius);
+	}
+
+	&.frm-option-groups-selecting {
+
+		> li > input[type="radio"]:not(.frm-option-group-check),
+		> li > input[type="checkbox"]:not(.frm-option-group-check),
+		.frm_remove_tag,
+		.frm_add_opt {
+			display: none;
+		}
+	}
+}
+
+.frm-option-group-header {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	position: absolute;
+	top: var(--gap-xs);
+	right: var(--gap-xs);
+	left: var(--gap-xs);
+
+	> .frmsvg {
+		flex-shrink: 0;
+		width: 14px;
+		height: 14px;
+		color: var(--primary-500);
+	}
+}
+
+.frm_wrap .frm-option-group-header .frm-option-group-name {
+	flex: 1;
+	min-width: 0;
+	height: 28px;
+	min-height: 28px;
+	padding: 0 6px;
+	font-size: var(--text-sm);
+	font-weight: 600;
+	color: var(--grey-900);
+	background-color: transparent;
+	border: 1px solid transparent;
+	box-shadow: none;
+
+	&:hover {
+		border-color: var(--grey-300);
+	}
+
+	&:focus {
+		background-color: #fff;
+		border-color: var(--primary-500);
+	}
+}
+
+.frm-option-group-count {
+	font-size: var(--text-xs);
+	color: var(--grey-500);
+	white-space: nowrap;
+}
+
+.frm-option-group-remove {
+	display: inline-flex;
+	flex-shrink: 0;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	padding: 0;
+	color: var(--grey-500);
+	background: none;
+	border: 0;
+	border-radius: 6px;
+	cursor: pointer;
+
+	.frmsvg {
+		width: 12px;
+		height: 12px;
+	}
+
+	&:hover,
+	&:focus-visible {
+		color: var(--grey-900);
+		background-color: var(--primary-100);
+	}
+}
+
+.frm_wrap .frm-option-group-check {
+	margin-right: var(--gap-xs);
+}
+
+.frm-option-groups-controls {
+	margin-bottom: 12px;
+
+	/* The extra .button outranks Lite's ".wp-core-ui .button.frm-button-secondary", which loads later. */
+	.button.frm-option-groups-toggle[hidden] {
+		display: none;
+	}
+
+	.frm-option-groups-toggle .frmsvg {
+		width: 14px;
+		height: 14px;
+		margin-right: 6px;
+		vertical-align: -2px;
+	}
+}
+
+.frm-option-groups-bar {
+	display: grid;
+	gap: var(--gap-xs);
+	padding: 12px;
+	background-color: var(--primary-25);
+	border: 1px solid var(--primary-200);
+	border-radius: var(--small-radius);
+
+	&[hidden] {
+		display: none;
+	}
+}
+
+.frm-option-groups-bar-top {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+
+	button {
+		padding: 0;
+		font-size: var(--text-sm);
+		color: var(--primary-500);
+		background: none;
+		border: 0;
+		cursor: pointer;
+
+		&:disabled {
+			color: var(--grey-300);
+			cursor: default;
+		}
+	}
+}
+
+.frm-option-groups-count {
+	margin-right: auto;
+	font-weight: 600;
+	color: var(--grey-900);
+}
+
+.frm-option-groups-bar-form {
+	display: flex;
+	gap: var(--gap-xs);
+
+	.frm-option-groups-name {
+		flex: 1;
+		min-width: 0;
+	}
+
+	.frm-option-groups-apply {
+		flex-shrink: 0;
+	}
+}
+
+.frm-option-groups-tip,
+.frm-option-groups-bulk-hint {
+	font-size: var(--text-xs);
+	color: var(--grey-500);
+}
+
+.frm-option-groups-bulk-hint[hidden] {
+	display: none;
+}
