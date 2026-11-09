@@ -67,7 +67,8 @@ class FrmPayPalLiteAppHelper {
 		$name = preg_replace( '/[^\x20-\x7E]/', '', $name );
 		$name = substr( trim( $name ), 0, 64 );
 
-		return '' === $name ? __( 'Payment', 'formidable' ) : $name;
+		// Not translated on purpose: a translation could bring back non-ASCII characters.
+		return '' === $name ? 'Payment' : $name;
 	}
 
 	/**
