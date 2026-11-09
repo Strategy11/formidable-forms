@@ -19,11 +19,8 @@ describe( 'Submit press while fixing a field error', () => {
 			.click();
 		cy.get( 'li[data-ftype="text"] .frm_select_field > span' ).should( 'be.visible' ).and( 'contain', 'Field Settings' ).click();
 		cy.get( '.frm_field_list div[id^="frm-single-settings-"] .frm_req_field', { timeout: 10000 } ).should( 'be.visible' ).check();
-		cy.intercept( 'POST', '**/wp-admin/admin-ajax.php', req => {
-			if ( req.body?.includes( 'action=frm_save_form' ) ) {
-				req.alias = 'saveForm';
-			}
-		} );
+		// The builder's Update button posts the whole page, same as createNewForm() waits on.
+		cy.intercept( 'POST', '**/wp-admin/admin.php*' ).as( 'saveForm' );
 		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click();
 		cy.wait( '@saveForm' );
 
