@@ -4,9 +4,11 @@ describe( 'Submit press while fixing a field error', () => {
 
 	beforeEach( () => {
 		cy.login();
-		cy.visit( '/wp-admin/admin.php?page=formidable-form-templates' );
-		cy.get( '#frm-form-templates-create-form' ).click();
-		cy.get( '#text' ).should( 'contain.text', 'Text' ).click();
+		cy.visit( '/wp-admin/admin.php?page=formidable' );
+		cy.createNewForm();
+		cy.viewport( 1280, 720 );
+		cy.openForm();
+		cy.get( 'li[id="text"] a[title="Text"]' ).should( 'be.visible' ).click();
 
 		// Same field-row "more options" reveal as fieldsInFormBuilder-validation.cy.js.
 		cy.get( 'li[data-ftype="text"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons', { timeout: 10000 } )
@@ -51,5 +53,11 @@ describe( 'Submit press while fixing a field error', () => {
 		// A press dragged off the button never submits, so the deferred check must still run.
 		cy.get( 'body' ).trigger( 'mouseup', { button: 0 } );
 		cy.get( errorSelector ).should( 'not.exist' );
+	} );
+
+	afterEach( () => {
+		// Visit the list directly so a failed run still removes its form, as fieldsInFormBuilder-validation.cy.js does.
+		cy.visit( '/wp-admin/admin.php?page=formidable' );
+		cy.deleteForm();
 	} );
 } );
