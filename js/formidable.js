@@ -289,6 +289,9 @@ function frmFrontFormJS() {
 		return element.classList && element.classList.contains( targetClass );
 	}
 
+	let submitPressed = false;
+	const fieldsToValidateOnRelease = new Set();
+
 	/**
 	 * @param {HTMLElement} field
 	 */
@@ -301,8 +304,49 @@ function frmFrontFormJS() {
 			return;
 		}
 
-		// Removing stale errors is universal. Adding errors only happens when JS validation is enabled.
+		if ( submitPressed ) {
+			// Removing an error line moves Submit up, and a press that ends off the button is not a click.
+			fieldsToValidateOnRelease.add( field );
+			return;
+		}
+
+		validateChangedField( field, form );
+	}
+
+	/**
+	 * Removing stale errors is universal. Adding errors only happens when JS validation is enabled.
+	 *
+	 * @param {HTMLElement} field
+	 * @param {HTMLElement} form
+	 */
+	function validateChangedField( field, form ) {
 		validateField( field, hasClass( form, 'frm_js_validate' ) );
+	}
+
+	/**
+	 * @param {MouseEvent} event
+	 */
+	function onSubmitMouseDown( event ) {
+		if ( 0 !== event.button || ! event.target.closest || ! event.target.closest( '.frm-show-form [type="submit"], .frm-show-form .frm_button_submit' ) ) {
+			return;
+		}
+
+		submitPressed = true;
+		document.addEventListener( 'mouseup', onSubmitMouseUp, { once: true, capture: true } );
+	}
+
+	function onSubmitMouseUp() {
+		// Wait for the click event to be dispatched before the layout can change.
+		setTimeout( () => {
+			submitPressed = false;
+			fieldsToValidateOnRelease.forEach( field => {
+				const form = field.closest( 'form' );
+				if ( form ) {
+					validateChangedField( field, form );
+				}
+			} );
+			fieldsToValidateOnRelease.clear();
+		}, 0 );
 	}
 
 	/**
@@ -2790,6 +2834,8 @@ function frmFrontFormJS() {
 			jQuery( document ).on( 'change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', frmFrontForm.fieldValueChanged );
 
 			jQuery( document ).on( 'change', '.frm_verify[id^=field_]', onHoneypotFieldChange );
+
+			document.addEventListener( 'mousedown', onSubmitMouseDown, true );
 
 			jQuery( document ).on( 'click', 'a[data-frmconfirm]', confirmClick );
 
