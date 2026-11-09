@@ -61,11 +61,11 @@ class FrmPayPalLiteAppHelper {
 	 * @return string
 	 */
 	public static function get_wallet_display_name() {
-		$name = wp_strip_all_tags( FrmPayPalLiteConnectHelper::get_brand_name() );
+		$name = wp_specialchars_decode( wp_strip_all_tags( FrmPayPalLiteConnectHelper::get_brand_name() ), ENT_QUOTES );
 		$name = str_replace( array( '–', '—' ), '-', $name );
 		$name = remove_accents( $name );
 		$name = preg_replace( '/[^\x20-\x7E]/', '', $name );
-		$name = substr( trim( $name ), 0, 64 );
+		$name = trim( substr( $name, 0, 64 ) );
 
 		// Not translated on purpose: a translation could bring back non-ASCII characters.
 		return '' === $name ? 'Payment' : $name;

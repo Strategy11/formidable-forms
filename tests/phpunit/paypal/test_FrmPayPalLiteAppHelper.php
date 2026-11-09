@@ -42,15 +42,17 @@ class test_FrmPayPalLiteAppHelper extends FrmUnitTest {
 	 */
 	public static function wallet_display_name_provider() {
 		return array(
-			'plain ASCII is unchanged'    => array( 'My Store', 'My Store' ),
-			'en dash becomes a hyphen'    => array( 'Page – My Store', 'Page - My Store' ),
-			'em dash becomes a hyphen'    => array( 'Page — My Store', 'Page - My Store' ),
-			'accents are transliterated'  => array( 'Café Münster', 'Cafe Munster' ),
-			'other symbols are dropped'   => array( 'Shop ™ 日本', 'Shop' ),
-			'tags are stripped'           => array( '<b>Shop</b>', 'Shop' ),
-			'cut to 64 characters'        => array( str_repeat( 'a', 80 ), str_repeat( 'a', 64 ) ),
-			'empty falls back to a label' => array( '', 'Payment' ),
-			'all non-ASCII falls back'    => array( '日本', 'Payment' ),
+			'plain ASCII is unchanged'        => array( 'My Store', 'My Store' ),
+			'en dash becomes a hyphen'        => array( 'Page – My Store', 'Page - My Store' ),
+			'em dash becomes a hyphen'        => array( 'Page — My Store', 'Page - My Store' ),
+			'accents are transliterated'      => array( 'Café Münster', 'Cafe Munster' ),
+			'other symbols are dropped'       => array( 'Shop ™ 日本', 'Shop' ),
+			'tags are stripped'               => array( '<b>Shop</b>', 'Shop' ),
+			'entities are decoded'            => array( 'Joe&#039;s Pizza &amp; Pasta', "Joe's Pizza & Pasta" ),
+			'cut to 64 characters'            => array( str_repeat( 'a', 80 ), str_repeat( 'a', 64 ) ),
+			'trailing space after cut is cut' => array( str_repeat( 'a', 63 ) . ' b', str_repeat( 'a', 63 ) ),
+			'empty falls back to a label'     => array( '', 'Payment' ),
+			'all non-ASCII falls back'        => array( '日本', 'Payment' ),
 		);
 	}
 }
