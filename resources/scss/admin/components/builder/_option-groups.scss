@@ -1,86 +1,58 @@
-/* Option groups: each group reads as one card with its heading on top. */
+/*
+ * Option groups: each group is a block, with a heading bar on top and its options below.
+ * A group is a run of option rows, so the block is drawn on the rows: the first row carries the
+ * top edge and the heading, the last row the bottom edge, and the rows between the sides.
+ */
 .frm_sortable_field_opts {
 
 	.frm-option-in-group {
-		padding: 0 var(--gap-xs) 12px;
-		background-color: var(--primary-25);
-		border-right: 1px solid var(--primary-100);
-		border-left: 1px solid var(--primary-100);
+		padding-right: 8px;
+		padding-left: 8px;
+		background-color: #fff;
+		box-shadow: var(--box-shadow-xs);
+
+		/* Each row draws its own shadow, so the rows below the first cut theirs off at the top to avoid seams. */
+		&:not(.frm-option-group-first) {
+			clip-path: inset(0 -4px -4px);
+		}
 	}
 
 	/* The builder adds the drag handle to the start of each row later, so the heading is placed in reserved space instead of relying on child order. */
 	.frm-option-group-first {
 		position: relative;
-		padding-top: 44px;
-		border-top: 1px solid var(--primary-100);
-		border-top-left-radius: var(--small-radius);
-		border-top-right-radius: var(--small-radius);
+
+		/* The 53px heading, then 12px above the first option. */
+		padding-top: 65px;
+		border-top-left-radius: 12px;
+		border-top-right-radius: 12px;
 	}
 
 	.frm-option-group-last {
+		padding-bottom: 12px;
 
 		/* Lite resets every option row's margin with !important. */
-		margin-bottom: var(--gap-sm) !important;
-		border-bottom: 1px solid var(--primary-100);
-		border-bottom-left-radius: var(--small-radius);
-		border-bottom-right-radius: var(--small-radius);
+		margin-bottom: 8px !important;
+		border-bottom-left-radius: 12px;
+		border-bottom-right-radius: 12px;
 	}
 
-	&.frm-option-groups-selecting {
-
-		> li > input[type="radio"]:not(.frm-option-group-check),
-		> li > input[type="checkbox"]:not(.frm-option-group-check),
-		.frm_remove_tag,
-		.frm_add_opt {
-			display: none;
-		}
+	/* With one group there's nothing to merge it into. */
+	&.frm-option-groups-single .frm-option-group-remove {
+		display: none;
 	}
 }
 
 .frm-option-group-header {
 	display: flex;
 	align-items: center;
-	gap: 6px;
+	justify-content: space-between;
+	gap: var(--gap-xs);
 	position: absolute;
-	top: var(--gap-xs);
-	right: var(--gap-xs);
-	left: var(--gap-xs);
-
-	> .frmsvg {
-		flex-shrink: 0;
-		width: 14px;
-		height: 14px;
-		color: var(--primary-500);
-	}
-}
-
-.frm_wrap .frm-option-group-header .frm-option-group-name {
-	flex: 1;
-	min-width: 0;
-	height: 28px;
-	min-height: 28px;
-	padding: 0 6px;
-	font-size: var(--text-sm);
-	font-weight: 600;
-	color: var(--grey-900);
-	background-color: transparent;
-	border: 1px solid transparent;
-	box-shadow: none;
-
-	&:hover {
-		border-color: var(--grey-300);
-	}
-
-	&:focus {
-		background-color: #fff;
-		border-color: var(--primary-500);
-	}
-}
-
-.frm-option-group-count {
-	font-size: var(--text-xs);
-	color: var(--grey-500);
-	white-space: nowrap;
+	top: 0;
+	right: 0;
+	left: 0;
+	padding: 8px;
+	border-bottom: 1px solid var(--grey-200);
 }
 
 .frm-option-group-remove {
@@ -88,101 +60,98 @@
 	flex-shrink: 0;
 	align-items: center;
 	justify-content: center;
-	width: 24px;
-	height: 24px;
+	width: 28px;
+	height: 28px;
 	padding: 0;
-	color: var(--grey-500);
+	color: var(--error-500);
 	background: none;
 	border: 0;
 	border-radius: 6px;
 	cursor: pointer;
+	opacity: 0;
+	transition: opacity 0.12s ease, background-color 0.12s ease;
 
+	/* The trash artwork overflows its box, so this draws about as large as the design's 20px icon. */
 	.frmsvg {
-		width: 12px;
-		height: 12px;
+		width: 16px;
+		height: 16px;
 	}
 
 	&:hover,
 	&:focus-visible {
-		color: var(--grey-900);
-		background-color: var(--primary-100);
+		background-color: var(--error-25, #fffbfa);
 	}
 }
 
-.frm_wrap .frm-option-group-check {
-	margin-right: var(--gap-xs);
+/* Hovering anywhere in the group, or working inside its heading, shows the field and the remove button. */
+.frm-option-group-hover .frm-option-group-remove,
+.frm-option-group-header:focus-within .frm-option-group-remove {
+	opacity: 1;
 }
 
-.frm-option-groups-controls {
-	margin-bottom: 12px;
-
-	/* The extra .button outranks Lite's ".wp-core-ui .button.frm-button-secondary", which loads later. */
-	.button.frm-option-groups-toggle[hidden] {
-		display: none;
-	}
-
-	.frm-option-groups-toggle .frmsvg {
-		width: 14px;
-		height: 14px;
-		margin-right: 6px;
-		vertical-align: -2px;
-	}
+/* Bulk Edit's pencil, shown above the options, to match. */
+.frm-collapse-me .frm-bulk-edit-link .frmsvg {
+	width: 21px;
+	height: 21px;
 }
 
-.frm-option-groups-bar {
-	display: grid;
-	gap: var(--gap-xs);
-	padding: 12px;
-	background-color: var(--primary-25);
-	border: 1px solid var(--primary-200);
+/*
+ * Lite sizes every option row's text input with "#new_fields .frm_single_option input[type="text"]"
+ * and an !important width, so this repeats those selectors to outrank it.
+ */
+#new_fields .frm_single_option .frm-option-group-header input.frm-option-group-name,
+.frm_wrap .frm-option-group-header input.frm-option-group-name {
+	flex: 1 1 auto !important;
+	width: auto !important;
+	min-width: 0;
+	height: 36px;
+	min-height: 36px;
+	margin: 0;
+	padding: 6px 8px 6px 6px;
+	font-size: var(--text-md);
+	font-weight: 500;
+	line-height: 24px;
+	color: var(--grey-800);
+
+	/* Reads as a heading until the group is hovered or the name is being edited. */
+	background-color: transparent;
+	border: 1px solid transparent;
 	border-radius: var(--small-radius);
+	box-shadow: none;
+	transition: background-color 0.12s ease;
+
+	&:focus {
+		background-color: #fff;
+		border-color: var(--primary-500);
+	}
+}
+
+#new_fields .frm-option-group-hover .frm-option-group-header input.frm-option-group-name:not(:focus),
+.frm_wrap .frm-option-group-hover .frm-option-group-header input.frm-option-group-name:not(:focus) {
+	background-color: var(--grey-50);
+}
+
+/* With groups on, "Add Group" belongs to the list, so the line that closes the list moves below it. */
+.frm-single-settings ul.frm_sortable_field_opts.frm-option-groups-on {
+	padding-bottom: 0;
+	margin-bottom: 0;
+	border-bottom: 0;
+}
+
+.frm-option-groups-add-row {
+	padding-bottom: var(--gap-md, 16px);
+	margin-bottom: var(--gap-xs);
+	border-bottom: 1px solid var(--grey-200);
 
 	&[hidden] {
-		display: none;
+		display: none !important;
+	}
+
+	.frm-option-groups-add .frmsvg {
+		margin-right: 4px;
 	}
 }
 
-.frm-option-groups-bar-top {
-	display: flex;
-	align-items: center;
-	gap: 12px;
-
-	button {
-		padding: 0;
-		font-size: var(--text-sm);
-		color: var(--primary-500);
-		background: none;
-		border: 0;
-		cursor: pointer;
-
-		&:disabled {
-			color: var(--grey-300);
-			cursor: default;
-		}
-	}
-}
-
-.frm-option-groups-count {
-	margin-right: auto;
-	font-weight: 600;
-	color: var(--grey-900);
-}
-
-.frm-option-groups-bar-form {
-	display: flex;
-	gap: var(--gap-xs);
-
-	.frm-option-groups-name {
-		flex: 1;
-		min-width: 0;
-	}
-
-	.frm-option-groups-apply {
-		flex-shrink: 0;
-	}
-}
-
-.frm-option-groups-tip,
 .frm-option-groups-bulk-hint {
 	font-size: var(--text-xs);
 	color: var(--grey-500);
@@ -190,4 +159,19 @@
 
 .frm-option-groups-bulk-hint[hidden] {
 	display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.frm-option-group-remove,
+	.frm-option-group-header input.frm-option-group-name {
+		transition: none;
+	}
+}
+
+/* The setting above already leaves the gap; grid items' margins don't merge. */
+.frm_grid_container > p.frm-option-groups-setting {
+
+	/* Outranks ".frm_grid_container > p.frm_form_field", which gives every setting an 8px top margin. */
+	margin-top: 0 !important;
 }

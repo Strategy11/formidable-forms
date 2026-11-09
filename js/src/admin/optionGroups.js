@@ -1,26 +1,30 @@
 /**
  * WordPress dependencies
  */
-import { __, _n, sprintf } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Option groups for dropdown fields in the form builder.
  *
- * Each option row carries a hidden group input. Rows that share a group are kept next to each
- * other and shown under a heading that can be renamed or removed. Several options can be put
- * into a group at once from the selection bar, or with "## Group name" lines in Bulk Edit.
+ * An "Option groups" checkbox turns grouping on for a field. Turning it on puts every option in one
+ * group; "Add Group" starts another. Each group shows as a block with a heading that can be renamed
+ * and removed. Options move between groups by dragging them.
+ *
+ * Each option row carries a hidden group input, so a group is simply the run of rows that share a
+ * name. The heading lives inside the first row of its run. "## Group name" lines in Bulk Edit still
+ * read and write the same data.
  *
  * @since x.x
  */
 
 const BULK_EDIT_MARKER = '##';
 const GROUP_INPUT_SELECTOR = ':scope > .frm-option-group-input';
-const SELECTING_CLASS = 'frm-option-groups-selecting';
+const ENABLED_CLASS = 'frm-option-groups-on';
 
 const initializedLists = new WeakSet();
 const knownRows = new WeakSet();
 const observers = new WeakMap();
-const lastCheckedRows = new WeakMap();
+const pendingNewGroup = new WeakMap();
 
 /**
  * @param {HTMLElement} row An option list item.
@@ -85,6 +89,14 @@ function getGroupNames( list ) {
 }
 
 /**
+ * @param {HTMLElement} list The option list.
+ * @return {boolean} Whether grouping is on for the field.
+ */
+function isEnabled( list ) {
+	return list.classList.contains( ENABLED_CLASS );
+}
+
+/**
  * Splits the rows into runs of consecutive options that share a group.
  *
  * @param {HTMLElement} list The option list.
@@ -95,7 +107,7 @@ function getRuns( list ) {
 	let current = null;
 
 	Array.from( list.children ).forEach( child => {
-		if ( child.classList.contains( 'frm_option_template' ) || child.classList.contains( 'ui-sortable-helper' ) ) {
+		if ( child.classList.contains( 'frm_option_template' ) || child.classList.contains( 'ui-sortable-helper' ) || child.classList.contains( 'ui-sortable-placeholder' ) ) {
 			return;
 		}
 
@@ -110,6 +122,15 @@ function getRuns( list ) {
 	} );
 
 	return runs;
+}
+
+/**
+ * @param {HTMLElement} list The option list.
+ * @param {HTMLElement} row  A row in the list.
+ * @return {{group: string, rows: HTMLElement[]}|undefined} The run the row belongs to.
+ */
+function getRunOf( list, row ) {
+	return getRuns( list ).find( ( { rows } ) => rows.includes( row ) );
 }
 
 /**
@@ -130,14 +151,12 @@ function optionsChanged( list ) {
 }
 
 /**
- * @param {HTMLElement}   list The option list.
  * @param {HTMLElement[]} rows The rows in the group run.
- * @return {HTMLElement} The heading shown above the first option of a group.
+ * @return {HTMLElement} The heading shown at the top of a group block.
  */
-function buildGroupHeader( list, rows ) {
-	const { div, span, tag, svg, setAttributes } = frmDom;
+function buildGroupHeader( rows ) {
+	const { div, tag, svg, setAttributes } = frmDom;
 	const group = getGroup( rows[ 0 ] );
-
 	const nameInput = tag( 'input', {
 		className: 'frm-option-group-name',
 		data: { group },
@@ -150,14 +169,14 @@ function buildGroupHeader( list, rows ) {
 
 	const removeButton = tag( 'button', {
 		className: 'frm-option-group-remove',
-		child: svg( { href: '#frm_close_icon' } ),
+		child: svg( { href: '#frm_delete_icon' } ),
 	} );
 	setAttributes( removeButton, {
 		type: 'button',
-		title: __( 'Ungroup these options', 'formidable' ),
+		title: __( 'Remove group. Its options move to the group above.', 'formidable' ),
 		'aria-label': sprintf(
 			/* translators: %s: Option group name. */
-			__( 'Ungroup %s', 'formidable' ),
+			__( 'Remove group %s', 'formidable' ),
 			group
 		),
 	} );
@@ -165,120 +184,144 @@ function buildGroupHeader( list, rows ) {
 	return div( {
 		className: 'frm-option-group-header',
 		children: [
-			svg( { href: '#frm_folder_icon' } ),
 			nameInput,
-			span( {
-				className: 'frm-option-group-count',
-				text: sprintf(
-					/* translators: %d: Number of options in the group. */
-					_n( '%d option', '%d options', rows.length, 'formidable' ),
-					rows.length
-				),
-			} ),
 			removeButton,
 		],
 	} );
 }
 
 /**
- * Adds or removes the selection checkbox on a row.
- *
- * @param {HTMLElement} row       An option list item.
- * @param {boolean}     selecting Whether the list is in selection mode.
- * @return {void}
- */
-function syncRowCheckbox( row, selecting ) {
-	let checkbox = row.querySelector( ':scope > .frm-option-group-check' );
-
-	if ( ! selecting ) {
-		checkbox?.remove();
-		return;
-	}
-
-	if ( checkbox ) {
-		return;
-	}
-
-	const label = row.querySelector( 'input[name$="[label]"]' )?.value ?? '';
-	checkbox = frmDom.tag( 'input', { className: 'frm-option-group-check' } );
-	frmDom.setAttributes( checkbox, {
-		type: 'checkbox',
-		'aria-label': sprintf(
-			/* translators: %s: Option label. */
-			__( 'Select %s', 'formidable' ),
-			label
-		),
-	} );
-
-	const dragIcon = row.querySelector( ':scope > .frm-drag' );
-	if ( dragIcon ) {
-		dragIcon.after( checkbox );
-	} else {
-		row.prepend( checkbox );
-	}
-}
-
-/**
- * Redraws the group headings and row styling for a list.
+ * Redraws the group blocks for a list.
  *
  * @param {HTMLElement} list The option list.
  * @return {void}
  */
 function render( list ) {
-	const selecting = list.classList.contains( SELECTING_CLASS );
-
+	const enabled = isEnabled( list );
 	list.querySelectorAll( ':scope > li > .frm-option-group-header' ).forEach( header => header.remove() );
 
-	getRuns( list ).forEach( ( { group, rows } ) => {
-		rows.forEach( ( row, index ) => {
-			row.classList.toggle( 'frm-option-in-group', '' !== group );
-			row.classList.toggle( 'frm-option-group-first', '' !== group && 0 === index );
-			row.classList.toggle( 'frm-option-group-last', '' !== group && rows.length - 1 === index );
+	const runs = getRuns( list );
+	const groupedRuns = runs.filter( run => '' !== run.group );
+	list.classList.toggle( 'frm-option-groups-single', groupedRuns.length < 2 );
 
-			if ( getGroupInput( row ) ) {
-				syncRowCheckbox( row, selecting );
-			}
+	runs.forEach( run => {
+		const { group, rows } = run;
+		const inGroup = enabled && '' !== group;
+
+		rows.forEach( ( row, index ) => {
+			row.classList.toggle( 'frm-option-in-group', inGroup );
+			row.classList.toggle( 'frm-option-group-first', inGroup && 0 === index );
+			row.classList.toggle( 'frm-option-group-last', inGroup && rows.length - 1 === index );
 		} );
 
-		if ( '' !== group ) {
-			rows[ 0 ].append( buildGroupHeader( list, rows ) );
+		if ( inGroup ) {
+			rows[ 0 ].append( buildGroupHeader( rows ) );
 		}
 	} );
 
-	updateSelectionBar( list );
+	syncControls( list );
 }
 
 /**
- * Applies a group name to rows, keeping every group's options next to each other.
+ * Keeps the checkbox and the "Add Group" link in step with the list.
  *
- * @param {HTMLElement}   list The option list.
- * @param {HTMLElement[]} rows The rows to move, in list order.
- * @param {string}        name The group name. Empty removes the rows from their groups.
+ * @param {HTMLElement} list The option list.
  * @return {void}
  */
-function moveRowsToGroup( list, rows, name ) {
-	if ( ! rows.length ) {
-		return;
+function syncControls( list ) {
+	const { checkbox, addLink } = getControls( list );
+	checkbox.checked = isEnabled( list );
+	addLink.parentElement.hidden = ! isEnabled( list );
+}
+
+/**
+ * The "Option groups" checkbox and the "Add Group" link. They sit with the field's other option
+ * settings: the checkbox beside "Use separate values", the link beside 'Add "Other"'.
+ *
+ * @param {HTMLElement} list The option list.
+ * @return {{checkbox: HTMLInputElement, addLink: HTMLElement}} The controls, created when missing.
+ */
+function getControls( list ) {
+	const fieldId = getFieldId( list );
+	const container = list.parentElement;
+	let checkbox = document.getElementById( `frm-option-groups-enable-${ fieldId }` );
+	let addLink = document.getElementById( `frm-option-groups-add-${ fieldId }` );
+
+	if ( ! checkbox ) {
+		const { tag, span, setAttributes } = frmDom;
+		checkbox = tag( 'input', { id: `frm-option-groups-enable-${ fieldId }`, className: 'frm-option-groups-enable' } );
+		checkbox.type = 'checkbox';
+		const label = tag( 'label', {
+			className: 'frm-h-stack-xs',
+			children: [ checkbox, span( __( 'Option groups', 'formidable' ) ) ],
+		} );
+		setAttributes( label, { for: checkbox.id } );
+		// Full width, and no top margin: the options area is a grid, so margins don't merge and the
+		// setting above already leaves the gap.
+		const setting = tag( 'p', { className: 'frm12 frm_form_field frm-mb-sm frm-option-groups-setting', child: label } );
+
+		// Beside the other option settings, or right above the list without them.
+		// The query returns the settings and the list in page order, so the ones before the list come first.
+		const inOrder = Array.from( container.querySelectorAll( `:scope > p.frm_form_field, #${ list.id }` ) );
+		const siblings = inOrder.slice( 0, inOrder.indexOf( list ) );
+		const anchor = siblings.find( p => p.classList.contains( 'frm_sep_val_select' ) ) ?? siblings[ siblings.length - 1 ];
+		if ( anchor ) {
+			anchor.after( setting );
+		} else {
+			container.insertBefore( setting, container.firstChild );
+		}
 	}
 
-	const moving = new Set( rows );
-	let anchor = null;
+	if ( ! addLink ) {
+		const { tag, svg } = frmDom;
+		addLink = tag( 'a', {
+			id: `frm-option-groups-add-${ fieldId }`,
+			className: 'frm-small-add frm-option-groups-add',
+			children: [ svg( { href: '#frm_plus1_icon', classList: [ 'frm_add_tag', 'frm_svg13' ] } ), __( 'Add Group', 'formidable' ) ],
+		} );
+		addLink.href = '#';
+		addLink.setAttribute( 'role', 'button' );
 
-	if ( '' === name ) {
-		// Place ungrouped options right after the group they leave, so the group is not split.
-		const lastRun = getRuns( list ).findLast( run => '' !== run.group && run.rows.some( row => moving.has( row ) ) );
-		anchor = lastRun?.rows.findLast( row => ! moving.has( row ) ) ?? null;
+		// Its own row right under the groups. The 'Add "Other"' row shares its width with "Generate with AI".
+		list.after( frmDom.div( { className: 'frm-option-groups-add-row frm12 frm_form_field frm-flex frm-justify-end', child: addLink } ) );
+	}
+
+	return { checkbox, addLink };
+}
+
+/**
+ * @param {HTMLElement} list The option list.
+ * @return {string} "Group N", unused in this field.
+ */
+function nextGroupName( list ) {
+	const names = new Set( getGroupNames( list ) );
+	let number = names.size + 1;
+	/* translators: %d: Group number. */
+	const name = n => sprintf( __( 'Group %d', 'formidable' ), n );
+	while ( names.has( name( number ) ) ) {
+		number++;
+	}
+	return name( number );
+}
+
+/**
+ * Turns grouping on or off. On puts every option in one group; off removes every group.
+ *
+ * @param {HTMLElement} list    The option list.
+ * @param {boolean}     enabled Whether grouping should be on.
+ * @return {void}
+ */
+function setEnabled( list, enabled ) {
+	list.classList.toggle( ENABLED_CLASS, enabled );
+	const rows = getRows( list );
+
+	if ( enabled ) {
+		if ( ! rows.some( row => '' !== getGroup( row ) ) ) {
+			const name = nextGroupName( list );
+			rows.forEach( row => setGroup( row, name ) );
+		}
 	} else {
-		anchor = getRows( list ).findLast( row => getGroup( row ) === name && ! moving.has( row ) ) ?? null;
-	}
-
-	rows.forEach( row => setGroup( row, name ) );
-
-	if ( anchor ) {
-		anchor.after( ...rows );
-	} else if ( '' !== name ) {
-		// A new group starts where the first selected option was.
-		rows[ 0 ].after( ...rows.slice( 1 ) );
+		rows.forEach( row => setGroup( row, '' ) );
 	}
 
 	render( list );
@@ -286,194 +329,60 @@ function moveRowsToGroup( list, rows, name ) {
 }
 
 /**
+ * Starts a new group at the end with one empty option, and puts the cursor in its name.
+ *
  * @param {HTMLElement} list The option list.
- * @return {HTMLElement[]} The selected rows in list order.
+ * @return {void}
  */
-function getSelectedRows( list ) {
-	return getRows( list ).filter( row => row.querySelector( ':scope > .frm-option-group-check' )?.checked );
+function addGroup( list ) {
+	const rows = getRows( list );
+	const last = rows[ rows.length - 1 ];
+	const add = last?.querySelector( '.frm_add_opt' );
+	if ( ! add ) {
+		return;
+	}
+
+	const name = nextGroupName( list );
+	pendingNewGroup.set( list, name );
+
+	// The builder adds the option right after this row; the list observer then gives it the new group.
+	add.click();
+
+	window.setTimeout( () => {
+		const input = Array.from( list.querySelectorAll( '.frm-option-group-name' ) ).find( el => el.value === name );
+		input?.focus();
+		input?.select();
+	}, 0 );
 }
 
 /**
- * @param {HTMLElement} list      The option list.
- * @param {boolean}     selecting Whether to turn selection mode on.
+ * Removes a group. Its options join the group above, or the one below for the first group.
+ *
+ * @param {HTMLElement} list The option list.
+ * @param {HTMLElement} row  A row in the group.
  * @return {void}
  */
-function setSelecting( list, selecting ) {
-	list.classList.toggle( SELECTING_CLASS, selecting );
-	lastCheckedRows.delete( list );
-	render( list );
+function removeGroup( list, row ) {
+	const runs = getRuns( list ).filter( run => '' !== run.group );
+	const index = runs.findIndex( run => run.rows.includes( row ) );
+	if ( index < 0 || runs.length < 2 ) {
+		return;
+	}
 
-	const controls = getControls( list );
-	const toggle = controls.querySelector( '.frm-option-groups-toggle' );
-	toggle.hidden = selecting;
-	controls.querySelector( '.frm-option-groups-bar' ).hidden = ! selecting;
+	const target = runs[ index - 1 ] ?? runs[ index + 1 ];
+	const { rows } = runs[ index ];
+	rows.forEach( groupRow => setGroup( groupRow, target.group ) );
 
-	if ( selecting ) {
-		getRows( list )[ 0 ]?.querySelector( '.frm-option-group-check' )?.focus();
+	if ( index > 0 ) {
+		target.rows[ target.rows.length - 1 ].after( ...rows );
 	} else {
-		toggle.focus();
-	}
-}
-
-/**
- * @param {HTMLElement} list The option list.
- * @return {void}
- */
-function updateSelectionBar( list ) {
-	const controls = list.nextElementSibling?.classList.contains( 'frm-option-groups-controls' ) ? list.nextElementSibling : null;
-	if ( ! controls ) {
-		return;
+		target.rows[ 0 ].before( ...rows );
 	}
 
-	const count = getSelectedRows( list ).length;
-	controls.querySelector( '.frm-option-groups-count' ).textContent = sprintf(
-		/* translators: %d: Number of selected options. */
-		_n( '%d selected', '%d selected', count, 'formidable' ),
-		count
-	);
-	controls.querySelectorAll( '.frm-option-groups-apply, .frm-option-groups-ungroup' ).forEach( button => {
-		button.disabled = 0 === count;
-	} );
-
-	const datalist = controls.querySelector( 'datalist' );
-	datalist.replaceChildren( ...getGroupNames( list ).map( name => frmDom.tag( 'option', { text: name } ) ) );
-}
-
-/**
- * Builds the "Group options" button and the selection bar shown below the option list.
- *
- * @param {HTMLElement} list The option list.
- * @return {HTMLElement} The controls container.
- */
-function buildControls( list ) {
-	const { div, span, tag, svg, setAttributes } = frmDom;
-	const fieldId = getFieldId( list );
-	const datalistId = `frm-option-groups-list-${ fieldId }`;
-
-	const toggle = tag( 'button', {
-		className: 'button frm-button-secondary frm-rounded-6 frm-font-normal frm-py-2xs frm-px-xs frm-option-groups-toggle',
-		children: [
-			svg( { href: '#frm_folder_icon' } ),
-			span( __( 'Group options', 'formidable' ) ),
-		],
-	} );
-	toggle.type = 'button';
-
-	const nameInput = tag( 'input', { className: 'frm-option-groups-name' } );
-	setAttributes( nameInput, {
-		type: 'text',
-		placeholder: __( 'New or existing group', 'formidable' ),
-		'aria-label': __( 'Group name', 'formidable' ),
-		list: datalistId,
-	} );
-
-	const makeButton = ( className, text ) => {
-		const button = tag( 'button', { className, text } );
-		button.type = 'button';
-		return button;
-	};
-
-	const bar = div( {
-		className: 'frm-option-groups-bar',
-		children: [
-			div( {
-				className: 'frm-option-groups-bar-top',
-				children: [
-					span( { className: 'frm-option-groups-count' } ),
-					makeButton( 'frm-option-groups-ungroup', __( 'Ungroup', 'formidable' ) ),
-					makeButton( 'frm-option-groups-cancel', __( 'Done', 'formidable' ) ),
-				],
-			} ),
-			div( {
-				className: 'frm-option-groups-bar-form',
-				children: [
-					nameInput,
-					tag( 'datalist', { id: datalistId } ),
-					makeButton( 'button frm-button-primary frm-button-sm frm-option-groups-apply', __( 'Move to group', 'formidable' ) ),
-				],
-			} ),
-			span( {
-				className: 'frm-option-groups-tip',
-				text: __( 'Tip: Shift-click to select a range of options.', 'formidable' ),
-			} ),
-		],
-	} );
-	bar.hidden = true;
-	setAttributes( bar, {
-		role: 'group',
-		'aria-label': __( 'Group selected options', 'formidable' ),
-	} );
-
-	return div( {
-		className: 'frm-option-groups-controls frm12',
-		children: [ toggle, bar ],
-	} );
-}
-
-/**
- * @param {HTMLElement} list The option list.
- * @return {HTMLElement} The controls container, created when missing.
- */
-function getControls( list ) {
-	if ( list.nextElementSibling?.classList.contains( 'frm-option-groups-controls' ) ) {
-		return list.nextElementSibling;
-	}
-
-	const controls = buildControls( list );
-	list.after( controls );
-	return controls;
-}
-
-/**
- * Applies the typed group name to the selected options.
- *
- * @param {HTMLElement} list The option list.
- * @return {void}
- */
-function applyGroupFromBar( list ) {
-	const nameInput = getControls( list ).querySelector( '.frm-option-groups-name' );
-	const name = nameInput.value.trim();
-
-	if ( '' === name ) {
-		nameInput.focus();
-		return;
-	}
-
-	// Leave selection mode first. The builder preview treats a checked box in a row as the default.
-	const rows = getSelectedRows( list );
-	nameInput.value = '';
-	setSelecting( list, false );
-	moveRowsToGroup( list, rows, name );
-}
-
-/**
- * Selects every checkbox between the last clicked one and this one.
- *
- * @param {HTMLElement}      list     The option list.
- * @param {HTMLInputElement} checkbox The checkbox that was clicked.
- * @param {boolean}          isRange  Whether Shift was held.
- * @return {void}
- */
-function handleCheckboxClick( list, checkbox, isRange ) {
-	const row = checkbox.closest( 'li' );
-	const lastRow = lastCheckedRows.get( list );
-
-	if ( isRange && lastRow?.isConnected ) {
-		const rows = getRows( list );
-		const start = rows.indexOf( lastRow );
-		const end = rows.indexOf( row );
-		const [ from, to ] = start < end ? [ start, end ] : [ end, start ];
-
-		rows.slice( from, to + 1 ).forEach( rangeRow => {
-			const rangeCheckbox = rangeRow.querySelector( ':scope > .frm-option-group-check' );
-			if ( rangeCheckbox ) {
-				rangeCheckbox.checked = checkbox.checked;
-			}
-		} );
-	}
-
-	lastCheckedRows.set( list, row );
-	updateSelectionBar( list );
+	ignoreOwnMoves( list );
+	render( list );
+	optionsChanged( list );
+	target.rows[ 0 ].querySelector( '.frm-option-group-name' )?.focus();
 }
 
 /**
@@ -497,8 +406,9 @@ function renameGroupFromHeader( nameInput, isFinal ) {
 		return;
 	}
 
-	const run = getRuns( list ).find( ( { rows } ) => rows.includes( nameInput.closest( 'li' ) ) );
+	const run = getRunOf( list, nameInput.closest( 'li' ) );
 	run?.rows.forEach( row => setGroup( row, newName ) );
+
 	nameInput.dataset.group = newName;
 
 	if ( isFinal ) {
@@ -508,11 +418,23 @@ function renameGroupFromHeader( nameInput, isFinal ) {
 }
 
 /**
+ * Removing a group moves its options next to the group they join, with their new group already set,
+ * so the list observer must not treat that like a single option being dragged next to another group.
+ * Dropping its pending records does that.
+ *
+ * @param {HTMLElement} list The option list.
+ * @return {void}
+ */
+function ignoreOwnMoves( list ) {
+	observers.get( list )?.takeRecords();
+}
+
+/**
  * Gives new and moved options a sensible group after the list changes.
  *
- * An option added with a row's "+" button joins that row's group. An option dragged between two
- * options that agree, grouped or not, takes their group. Otherwise it keeps its group when it is
- * still next to it, or joins the group above it.
+ * An option added with a row's "+" button joins that row's group, or the group "Add Group" is
+ * starting. An option dragged between two options that agree takes their group. Otherwise it keeps
+ * its group when it is still next to it, or joins the group above it.
  *
  * @param {HTMLElement}      list    The option list.
  * @param {MutationRecord[]} records The list changes.
@@ -535,7 +457,12 @@ function adoptGroupsForAddedRows( list, records ) {
 			let group = getGroup( node );
 
 			if ( ! knownRows.has( node ) ) {
-				group = '' === group ? previousGroup : group;
+				if ( pendingNewGroup.has( list ) ) {
+					group = pendingNewGroup.get( list );
+					pendingNewGroup.delete( list );
+				} else {
+					group = '' === group ? previousGroup : group;
+				}
 			} else {
 				// At either end of the list, the only neighbor decides.
 				const above = previousRow ? previousGroup : getGroup( nextRow ?? node );
@@ -577,21 +504,15 @@ function initList( list ) {
 
 	initializedLists.add( list );
 	rememberRows( list );
+	list.classList.toggle( ENABLED_CLASS, getRows( list ).some( row => '' !== getGroup( row ) ) );
 	getControls( list );
 	render( list );
-
-	// Selecting options is not an edit, so keep it from marking the form as changed.
-	list.addEventListener( 'change', event => {
-		if ( event.target.matches( '.frm-option-group-check' ) ) {
-			event.stopPropagation();
-		}
-	} );
 
 	// Mutation callbacks already arrive batched, once per task, so the list can be redrawn right away.
 	// Rendering only changes the rows' contents, which this observer does not watch.
 	const observer = new MutationObserver( records => {
-		// Wait until jQuery UI finishes a drag. It inserts placeholders and clones while dragging.
-		if ( list.querySelector( ':scope > .ui-sortable-placeholder' ) ) {
+		// Wait until jQuery UI finishes a drag, and ignore the drop line of a group drag.
+		if ( list.querySelector( ':scope > .ui-sortable-placeholder, :scope > .frm-option-group-drop' ) ) {
 			return;
 		}
 
@@ -670,32 +591,63 @@ function maybeShowBulkEditHint( event ) {
 }
 
 /**
+ * @param {HTMLElement} target A clicked or focused element.
+ * @return {HTMLElement|null} The option list it belongs to, including its checkbox and "Add Group" link.
+ */
+function findList( target ) {
+	const inList = target.closest( '.frm_sortable_field_opts' );
+	if ( inList ) {
+		return inList;
+	}
+
+	const control = target.closest( '.frm-option-groups-enable, .frm-option-groups-add' );
+	if ( ! control ) {
+		return null;
+	}
+
+	const fieldId = control.id.replace( /^frm-option-groups-(enable|add)-/, '' );
+	return document.getElementById( `frm_field_${ fieldId }_opts` );
+}
+
+/**
+ * A group's options are separate rows, so hovering any of them marks the group's first row, which
+ * holds the heading. That shows the name field and the remove button.
+ *
+ * @param {MouseEvent} event The mouseover event.
+ * @return {void}
+ */
+function markHoveredGroup( event ) {
+	const row = event.target.closest( '.frm-option-in-group' );
+	const list = row?.parentElement;
+	const first = row ? getRunOf( list, row )?.rows[ 0 ] : null;
+
+	document.querySelectorAll( '.frm-option-group-hover' ).forEach( el => {
+		if ( el !== first ) {
+			el.classList.remove( 'frm-option-group-hover' );
+		}
+	} );
+	first?.classList.add( 'frm-option-group-hover' );
+}
+
+/**
  * @param {Event} event The click event.
  * @return {void}
  */
 function handleClick( event ) {
 	const { target } = event;
-	const list = target.closest( '.frm_sortable_field_opts' ) ?? target.closest( '.frm-option-groups-controls' )?.previousElementSibling;
+	const list = findList( target );
 
 	if ( ! list || ! initializedLists.has( list ) ) {
 		return;
 	}
 
-	if ( target.closest( '.frm-option-groups-toggle' ) ) {
-		setSelecting( list, true );
-	} else if ( target.closest( '.frm-option-groups-cancel' ) ) {
-		setSelecting( list, false );
-	} else if ( target.closest( '.frm-option-groups-apply' ) ) {
-		applyGroupFromBar( list );
-	} else if ( target.closest( '.frm-option-groups-ungroup' ) ) {
-		const rows = getSelectedRows( list );
-		setSelecting( list, false );
-		moveRowsToGroup( list, rows, '' );
+	const row = target.closest( 'li' );
+
+	if ( target.closest( '.frm-option-groups-add' ) ) {
+		event.preventDefault();
+		addGroup( list );
 	} else if ( target.closest( '.frm-option-group-remove' ) ) {
-		const run = getRuns( list ).find( ( { rows } ) => rows.includes( target.closest( 'li' ) ) );
-		moveRowsToGroup( list, run?.rows ?? [], '' );
-	} else if ( target.matches( '.frm-option-group-check' ) ) {
-		handleCheckboxClick( list, target, event.shiftKey );
+		removeGroup( list, row );
 	}
 }
 
@@ -704,17 +656,10 @@ function handleClick( event ) {
  * @return {void}
  */
 function handleKeydown( event ) {
-	if ( 'Enter' !== event.key ) {
-		return;
-	}
-
 	const { target } = event;
 
-	if ( target.matches( '.frm-option-groups-name' ) ) {
+	if ( 'Enter' === event.key && target.matches( '.frm-option-group-name' ) ) {
 		// Don't submit the builder form.
-		event.preventDefault();
-		applyGroupFromBar( target.closest( '.frm-option-groups-controls' ).previousElementSibling );
-	} else if ( target.matches( '.frm-option-group-name' ) ) {
 		event.preventDefault();
 		target.blur();
 	}
@@ -736,6 +681,8 @@ export function setupOptionGroups() {
 
 	builder.addEventListener( 'click', handleClick );
 	builder.addEventListener( 'keydown', handleKeydown );
+	builder.addEventListener( 'mouseover', markHoveredGroup );
+	builder.addEventListener( 'mouseleave', markHoveredGroup );
 	builder.addEventListener( 'input', event => {
 		if ( event.target.matches( '.frm-option-group-name' ) ) {
 			renameGroupFromHeader( event.target, false );
@@ -744,6 +691,13 @@ export function setupOptionGroups() {
 	builder.addEventListener( 'change', event => {
 		if ( event.target.matches( '.frm-option-group-name' ) ) {
 			renameGroupFromHeader( event.target, true );
+		} else if ( event.target.matches( '.frm-option-groups-enable' ) ) {
+			// Turning groups on or off is the edit; the builder doesn't need to see the checkbox itself.
+			event.stopPropagation();
+			const list = findList( event.target );
+			if ( list && initializedLists.has( list ) ) {
+				setEnabled( list, event.target.checked );
+			}
 		}
 	} );
 }
@@ -765,5 +719,6 @@ export function refreshOptionGroups( fieldId ) {
 	observers.get( list )?.takeRecords();
 	rememberRows( list );
 	initList( list );
+	list.classList.toggle( ENABLED_CLASS, getRows( list ).some( row => '' !== getGroup( row ) ) );
 	render( list );
 }
