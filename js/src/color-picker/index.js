@@ -1,7 +1,6 @@
 /**
  * Shared adapter for WordPress's block editor color picker.
  */
-import './style.scss';
 import { formatColor } from './format-color';
 
 const pickers = new WeakMap();
@@ -23,24 +22,28 @@ function init( input, options = {} ) {
 		return pickers.get( input );
 	}
 	const { div, span, tag } = frmDom;
-	const swatch = span( { className: 'frm-block-color-swatch' } );
-	const text = span( { className: 'frm-block-color-value' } );
-	const button = tag( 'button', {
+	const existing = input.closest( '.frm-block-color-picker' );
+	const swatch = existing?.querySelector( '.frm-block-color-swatch' ) || span( { className: 'frm-block-color-swatch' } );
+	const text = existing?.querySelector( '.frm-block-color-value' ) || span( { className: 'frm-block-color-value' } );
+	const button = existing?.querySelector( '.frm-block-color-toggle' ) || tag( 'button', {
 		className: 'frm-block-color-toggle',
 		children: [ swatch, text ],
 	} );
 	const mount = div();
 	const panel = div( { className: 'frm-block-color-panel', child: mount } );
 	const valueInput = tag( 'input', { className: 'frm-block-color-input' } );
-	const wrapper = div( { className: 'frm-block-color-picker' } );
+	const wrapper = existing || div( { className: 'frm-block-color-picker' } );
 	const clear = tag( 'button', {
 		className: 'frm-block-color-clear',
 		text: __( 'Clear', 'formidable' ),
 	} );
-	input.before( wrapper );
+	if ( ! existing ) {
+		input.before( wrapper );
+	}
 	button.type = 'button';
 	clear.type = 'button';
 	panel.hidden = true;
+	swatch.replaceChildren();
 	swatch.setAttribute( 'aria-hidden', 'true' );
 	wrapper.append( button, input );
 	panel.append( valueInput, clear );
@@ -79,6 +82,7 @@ function init( input, options = {} ) {
 		options.change?.( event, null );
 	};
 	const change = hex => {
+		// The format menu changes the display. Preserve the stored format when editing.
 		input.value = hex ? formatColor( hex, input.value ) : '';
 		input.dispatchEvent( new Event( 'input', { bubbles: true } ) );
 		input.dispatchEvent( new Event( 'change', { bubbles: true } ) );
@@ -87,7 +91,7 @@ function init( input, options = {} ) {
 		if ( wrapper.contains( target ) || panel.contains( target ) ) {
 			return true;
 		}
-		// WordPress renders the color format menu in its own portal.
+		// Newer WordPress versions render the format menu outside the picker panel.
 		const listbox = target.closest?.( '[role="listbox"]' ) ||
 			target.closest?.( '[role="presentation"]' )?.querySelector( '[role="listbox"]' );
 		if ( ! listbox?.id ) {

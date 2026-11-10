@@ -1,4 +1,5 @@
 .frm-block-color-picker {
+	display: block;
 	position: relative;
 	width: 100%;
 
@@ -18,6 +19,11 @@
 		cursor: pointer;
 	}
 
+	.frm-block-color-toggle:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
 	.frm-block-color-toggle:focus-visible {
 		outline: 2px solid var(--primary-500, #026ee8);
 		outline-offset: 2px;
@@ -28,6 +34,13 @@
 		height: 20px;
 		border: 1px solid #d0d5dd;
 		border-radius: 50%;
+	}
+
+	.frm-block-color-swatch svg {
+		display: block;
+		width: 100%;
+		height: 100%;
+		border-radius: inherit;
 	}
 
 	.frm-block-color-value {

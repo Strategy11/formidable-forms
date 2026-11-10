@@ -31,12 +31,20 @@ describe( 'Style builder labels focus their visible/interactive control', () => 
 			expect( element.contains( doc.elementFromPoint( bounds.left + 20, bounds.top + 20 ) ) ).to.equal( true );
 			expect( element.contains( doc.elementFromPoint( bounds.left + 20, bounds.bottom - 20 ) ) ).to.equal( true );
 		} );
-		cy.get( '#frm_success_bg_color_picker select' ).select( 'RGB' );
+		cy.get( '#frm_success_bg_color_picker' ).find( 'select, [role="combobox"][aria-label="Color format"]' ).then( control => {
+			if ( control[ 0 ].tagName === 'SELECT' ) {
+				cy.wrap( control ).select( 'RGB' ).should( 'have.value', 'rgb' );
+				return;
+			}
+			cy.wrap( control ).click();
+			cy.get( '#frm_success_bg_color_picker' ).should( 'not.have.attr', 'hidden' );
+			cy.get( '[role="listbox"]' ).should( 'be.visible' ).contains( '[role="option"]', 'RGB' ).click();
+			cy.wrap( control ).should( 'contain.text', 'RGB' );
+		} );
 		cy.get( '#frm_success_bg_color_picker' ).should( 'be.visible' );
 		cy.get( '#frm_success_bg_color' ).then( input => {
 			expect( input[ 0 ].form.id ).to.equal( 'frm_styling_form' );
 		} );
-		cy.get( '#frm_success_bg_color_picker select' ).should( 'have.value', 'rgb' );
 		cy.get( '#frm_success_bg_color_picker .frm-block-color-clear' ).focus().type( '{esc}' );
 		cy.get( '#frm_success_bg_color_picker' ).should( 'not.exist' );
 		cy.focused().should( 'have.id', 'frm_success_bg_color_visible' );
