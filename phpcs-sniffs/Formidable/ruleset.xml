@@ -98,4 +98,23 @@
 	<rule ref="Formidable.Security.EscapeInHtml" />
 	<rule ref="Formidable.Security.PreferWpSafeRedirect" />
 	<rule ref="Formidable.Security.UnescapedUrlInHtml" />
+	<!-- Opt in per plugin until existing violations have been cleaned across add-ons. -->
+	<rule ref="Formidable.CodeAnalysis.MergeAdjacentPhpBlocks">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Formidable.CodeAnalysis.PreferDbGetCol">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Formidable.CodeAnalysis.PreferDbPrepareArrayValues">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Formidable.CodeAnalysis.PreferHtmlParamsEchoMode">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Formidable.CodeAnalysis.PreferWpAttributeHelpers">
+		<severity>0</severity>
+	</rule>
+	<rule ref="Formidable.CodeAnalysis.SimplifyBooleanTernary">
+		<severity>0</severity>
+	</rule>
 </ruleset>

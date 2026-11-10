@@ -255,4 +255,23 @@
 
 	<!-- Custom Formidable sniffs (defined in phpcs-sniffs/Formidable/ruleset.xml) -->
 	<rule ref="Formidable" />
+	<!-- Enable new sniffs in Lite before rolling them out to the shared standard. -->
+	<rule ref="Formidable.CodeAnalysis.MergeAdjacentPhpBlocks">
+		<severity>5</severity>
+	</rule>
+	<rule ref="Formidable.CodeAnalysis.PreferDbGetCol">
+		<severity>5</severity>
+	</rule>
+	<rule ref="Formidable.CodeAnalysis.PreferDbPrepareArrayValues">
+		<severity>5</severity>
+	</rule>
+	<rule ref="Formidable.CodeAnalysis.PreferHtmlParamsEchoMode">
+		<severity>5</severity>
+	</rule>
+	<rule ref="Formidable.CodeAnalysis.PreferWpAttributeHelpers">
+		<severity>5</severity>
+	</rule>
+	<rule ref="Formidable.CodeAnalysis.SimplifyBooleanTernary">
+		<severity>5</severity>
+	</rule>
 </ruleset>

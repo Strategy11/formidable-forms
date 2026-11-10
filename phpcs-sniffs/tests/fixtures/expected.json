@@ -1,0 +1,29 @@
+{
+  "PreferHtmlParamsEchoMode": [
+    2,
+    3
+  ],
+  "MergeAdjacentPhpBlocks": [
+    2,
+    3
+  ],
+  "SimplifyBooleanTernary": [
+    2,
+    3
+  ],
+  "PreferDbPrepareArrayValues": [
+    2,
+    10,
+    11
+  ],
+  "PreferDbGetCol": [
+    2,
+    3
+  ],
+  "PreferWpAttributeHelpers": [
+    1,
+    2,
+    3,
+    4
+  ]
+}
