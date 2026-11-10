@@ -642,7 +642,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return array(
 				'body' => wp_json_encode(
 					FrmAltchaController::verify_response( $captcha_settings, $this->field )
-				)
+				),
 			);
 		}
 

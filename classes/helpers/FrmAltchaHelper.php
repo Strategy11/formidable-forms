@@ -143,22 +143,33 @@ class FrmAltchaHelper {
 	 * @return array{difficulty: string, expires: int, auto: string, hide_footer: int, display: string, widget_type: string, hide_logo: int}
 	 */
 	public static function sanitize_settings( $raw ) {
-		$defaults   = self::default_settings();
-		$difficulty = isset( $raw['difficulty'] ) && is_string( $raw['difficulty'] ) ? $raw['difficulty'] : '';
-		$auto       = isset( $raw['auto'] ) && is_string( $raw['auto'] ) ? $raw['auto'] : '';
-		$display    = isset( $raw['display'] ) && is_string( $raw['display'] ) ? $raw['display'] : '';
-		$type       = isset( $raw['widget_type'] ) && is_string( $raw['widget_type'] ) ? $raw['widget_type'] : '';
-		$expires    = isset( $raw['expires'] ) && is_numeric( $raw['expires'] ) ? (int) $raw['expires'] : $defaults['expires'];
+		$defaults = self::default_settings();
+		$expires  = isset( $raw['expires'] ) && is_numeric( $raw['expires'] ) ? (int) $raw['expires'] : $defaults['expires'];
 
 		return array(
-			'difficulty'  => array_key_exists( $difficulty, self::difficulty_levels() ) ? $difficulty : $defaults['difficulty'],
+			'difficulty'  => self::sanitize_choice( $raw['difficulty'] ?? '', self::difficulty_levels(), $defaults['difficulty'] ),
 			'expires'     => max( 1, min( 1440, $expires ) ),
-			'auto'        => array_key_exists( $auto, self::auto_modes() ) ? $auto : $defaults['auto'],
+			'auto'        => self::sanitize_choice( $raw['auto'] ?? '', self::auto_modes(), $defaults['auto'] ),
 			'hide_footer' => 1 === (int) ( $raw['hide_footer'] ?? 0 ) ? 1 : 0,
-			'display'     => array_key_exists( $display, self::display_modes() ) ? $display : $defaults['display'],
-			'widget_type' => array_key_exists( $type, self::widget_types() ) ? $type : $defaults['widget_type'],
+			'display'     => self::sanitize_choice( $raw['display'] ?? '', self::display_modes(), $defaults['display'] ),
+			'widget_type' => self::sanitize_choice( $raw['widget_type'] ?? '', self::widget_types(), $defaults['widget_type'] ),
 			'hide_logo'   => in_array( $raw['hide_logo'] ?? 0, array( 1, '1', true ), true ) ? 1 : 0,
 		);
+	}
+
+	/**
+	 * Validate a setting against its allowed choices.
+	 *
+	 * @since x.x
+	 *
+	 * @param mixed                     $value   Unsanitized setting value.
+	 * @param array<string, int|string> $choices Allowed setting choices.
+	 * @param string                    $default Default setting value.
+	 *
+	 * @return string
+	 */
+	private static function sanitize_choice( $value, $choices, $default ) {
+		return is_string( $value ) && array_key_exists( $value, $choices ) ? $value : $default;
 	}
 
 	/**
