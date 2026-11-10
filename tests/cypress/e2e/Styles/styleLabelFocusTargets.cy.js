@@ -31,21 +31,18 @@ describe( 'Style builder labels focus their visible/interactive control', () => 
 			expect( element.contains( doc.elementFromPoint( bounds.left + 20, bounds.top + 20 ) ) ).to.equal( true );
 			expect( element.contains( doc.elementFromPoint( bounds.left + 20, bounds.bottom - 20 ) ) ).to.equal( true );
 		} );
-		cy.get( '#frm_success_bg_color_picker [role="combobox"]' ).click();
-		cy.get( '[role="listbox"]' ).parent().focus();
-		cy.get( '#frm_success_bg_color_picker' ).should( 'be.visible' );
-		cy.contains( '[role="option"]', 'RGB' ).click();
+		cy.get( '#frm_success_bg_color_picker select' ).select( 'RGB' );
 		cy.get( '#frm_success_bg_color_picker' ).should( 'be.visible' );
 		cy.get( '#frm_success_bg_color' ).then( input => {
 			expect( input[ 0 ].form.id ).to.equal( 'frm_styling_form' );
 		} );
+		cy.get( '#frm_success_bg_color_picker select' ).should( 'have.value', 'rgb' );
 		cy.get( '#frm_success_bg_color_picker .frm-block-color-clear' ).focus().type( '{esc}' );
 		cy.get( '#frm_success_bg_color_picker' ).should( 'not.exist' );
+		cy.focused().should( 'have.id', 'frm_success_bg_color_visible' );
 		cy.get( '#frm_success_bg_color_visible' ).click();
-		cy.get( '#frm_success_bg_color_picker [role="combobox"]' ).click();
 		cy.get( 'body' ).trigger( 'pointerdown', { eventConstructor: 'PointerEvent' } );
 		cy.get( '#frm_success_bg_color_picker' ).should( 'not.exist' );
-		cy.get( '[role="listbox"]' ).should( 'not.exist' );
 	} );
 
 	it( 'Clicking a single-value slider\'s own label focuses the visible number input, not the hidden real input', () => {
