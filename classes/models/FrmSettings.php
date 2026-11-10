@@ -92,6 +92,15 @@ class FrmSettings {
 	public $active_captcha;
 
 	/**
+	 * Whether a CAPTCHA type has been saved since ALTCHA became available.
+	 *
+	 * @since x.x
+	 *
+	 * @var bool
+	 */
+	public $captcha_type_selected = false;
+
+	/**
 	 * Settings for reCAPTCHA.
 	 */
 
@@ -507,6 +516,37 @@ class FrmSettings {
 		if ( ! isset( $this->re_threshold ) ) {
 			$this->re_threshold = .5;
 		}
+
+		if ( ! $this->captcha_type_selected ) {
+			$this->maybe_default_to_altcha();
+		}
+	}
+
+	/**
+	 * Use ALTCHA for older settings whose active provider has no configured keys.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private function maybe_default_to_altcha() {
+		if ( 'altcha' === $this->active_captcha ) {
+			return;
+		}
+
+		$prefixes = array(
+			'recaptcha' => '',
+			'hcaptcha'  => 'hcaptcha_',
+			'turnstile' => 'turnstile_',
+		);
+
+		$prefix  = $prefixes[ $this->active_captcha ] ?? '';
+		$pubkey  = $prefix . 'pubkey';
+		$privkey = $prefix . 'privkey';
+
+		if ( empty( $this->$pubkey ) && empty( $this->$privkey ) ) {
+			$this->active_captcha = 'altcha';
+		}
 	}
 
 	/**
@@ -612,21 +652,22 @@ class FrmSettings {
 	 * @return void
 	 */
 	private function update_settings( $params ) {
-		$this->active_captcha    = $params['frm_active_captcha'];
-		$this->pubkey            = trim( $params['frm_pubkey'] );
-		$this->privkey           = trim( $params['frm_privkey'] );
-		$this->re_type           = $params['frm_re_type'];
-		$this->re_lang           = $params['frm_re_lang'];
-		$this->re_threshold      = floatval( $params['frm_re_threshold'] );
-		$this->hcaptcha_pubkey   = trim( $params['frm_hcaptcha_pubkey'] );
-		$this->hcaptcha_privkey  = trim( $params['frm_hcaptcha_privkey'] );
-		$this->turnstile_pubkey  = trim( $params['frm_turnstile_pubkey'] );
-		$this->turnstile_privkey = trim( $params['frm_turnstile_privkey'] );
-		$this->load_style        = $params['frm_load_style'];
-		$this->custom_css        = $params['frm_custom_css'];
-		$this->default_email     = $params['frm_default_email'];
-		$this->from_email        = $params['frm_from_email'];
-		$this->currency          = $params['frm_currency'];
+		$this->captcha_type_selected = true;
+		$this->active_captcha        = $params['frm_active_captcha'];
+		$this->pubkey                = trim( $params['frm_pubkey'] );
+		$this->privkey               = trim( $params['frm_privkey'] );
+		$this->re_type               = $params['frm_re_type'];
+		$this->re_lang               = $params['frm_re_lang'];
+		$this->re_threshold          = floatval( $params['frm_re_threshold'] );
+		$this->hcaptcha_pubkey       = trim( $params['frm_hcaptcha_pubkey'] );
+		$this->hcaptcha_privkey      = trim( $params['frm_hcaptcha_privkey'] );
+		$this->turnstile_pubkey      = trim( $params['frm_turnstile_pubkey'] );
+		$this->turnstile_privkey     = trim( $params['frm_turnstile_privkey'] );
+		$this->load_style            = $params['frm_load_style'];
+		$this->custom_css            = $params['frm_custom_css'];
+		$this->default_email         = $params['frm_default_email'];
+		$this->from_email            = $params['frm_from_email'];
+		$this->currency              = $params['frm_currency'];
 
 		if ( isset( $params['frm_spam_handling'] ) ) {
 			$this->spam_handling = FrmSpamEntriesHelper::sanitize_handling( $params['frm_spam_handling'] );

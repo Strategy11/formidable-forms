@@ -65,6 +65,12 @@ class FrmHooksController {
 		add_action( 'rest_api_init', 'FrmAppController::create_rest_routes', 0 );
 		add_filter( 'widget_text', 'do_shortcode' );
 
+		add_action( 'frm_enqueue_form_scripts', 'FrmAltchaController::maybe_enqueue_for_form' );
+		add_filter( 'frm_validate_entry', 'FrmAltchaController::claim_solution', 999, 2 );
+		add_filter( 'frm_usage_snapshot', 'FrmAltchaUsageHelper::add_snapshot_data' );
+		add_action( FrmAltchaReplayHelper::PURGE_HOOK, 'FrmAltchaReplayHelper::purge' );
+		add_action( 'frm_after_uninstall', 'FrmAltchaReplayHelper::uninstall' );
+
 		// Entries controller.
 		add_action( 'wp_loaded', 'FrmEntriesController::process_entry', 10, 0 );
 		add_action( 'frm_after_entry_processed', 'FrmEntriesController::delete_entry_after_save', 100 );
@@ -153,6 +159,7 @@ class FrmHooksController {
 	 * @return void
 	 */
 	public static function load_admin_hooks() {
+		add_action( 'frm_update_settings', 'FrmAltchaSettingsHelper::update' );
 		add_action( 'admin_menu', 'FrmAppController::menu', 1 );
 		add_filter( 'admin_body_class', 'FrmAppController::add_admin_class', 999 );
 		add_action( 'admin_notices', 'FrmAppController::pro_get_started_headline' );
@@ -267,6 +274,8 @@ class FrmHooksController {
 	 * @return void
 	 */
 	public static function load_ajax_hooks() {
+		add_action( 'wp_ajax_frm_altcha_challenge', 'FrmAltchaController::send_challenge' );
+		add_action( 'wp_ajax_nopriv_frm_altcha_challenge', 'FrmAltchaController::send_challenge' );
 		add_action( 'wp_ajax_frm_install', 'FrmAppController::ajax_install' );
 		add_action( 'wp_ajax_frm_uninstall', 'FrmAppController::uninstall' );
 		add_action( 'wp_ajax_frm_deauthorize', 'FrmAppController::deauthorize' );
