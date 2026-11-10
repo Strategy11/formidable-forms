@@ -92,10 +92,17 @@ class FrmAddonsController {
 			return;
 		}
 
-		$label = __( 'Add-Ons', 'formidable' );
+		$label = __( 'Add-ons / Boosts', 'formidable' );
 		$label = '<span style="color:#3FCA89">' . esc_html( $label ) . '</span>';
 
-		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Add-Ons', 'formidable' ), $label, 'frm_view_forms', 'formidable-addons', 'FrmAddonsController::list_addons' );
+		add_submenu_page(
+			'formidable',
+			'Formidable | ' . __( 'Add-ons / Boosts', 'formidable' ),
+			$label,
+			'frm_view_forms',
+			'formidable-addons',
+			'FrmAddonsController::list_addons'
+		);
 
 		// Remove default created subpage, make the page with highest priority as default.
 		remove_submenu_page( 'formidable', 'formidable' );
@@ -323,6 +330,8 @@ class FrmAddonsController {
 			)
 		);
 
+		$plans[] = 'boosts';
+
 		// Extract the elements to move
 		foreach ( $plans as $plan ) {
 			if ( ! isset( self::$categories[ $plan ] ) ) {
@@ -372,15 +381,18 @@ class FrmAddonsController {
 	 * @return void
 	 */
 	protected static function set_categories( &$addon ) {
-		if ( ! isset( $addon['categories'] ) ) {
+		$is_boost = FrmAddonsHelper::is_boost( $addon );
+
+		if ( ! $is_boost && ! isset( $addon['categories'] ) ) {
 			return;
 		}
 
+		$categories              = $is_boost ? array( __( 'Boosts', 'formidable' ) ) : $addon['categories'];
 		$addon['category-slugs'] = array();
 
-		foreach ( $addon['categories'] as $category ) {
+		foreach ( $categories as $category ) {
 			$category      = FrmFormsHelper::convert_legacy_package_names( $category );
-			$category_slug = sanitize_title( $category );
+			$category_slug = $is_boost ? 'boosts' : sanitize_title( $category );
 
 			// Add the slug to the new array.
 			$addon['category-slugs'][] = $category_slug;
@@ -424,7 +436,7 @@ class FrmAddonsController {
 		}
 
 		foreach ( $addons as $k => $addon ) {
-			if ( empty( $addon['excerpt'] ) && $k !== 'error' ) {
+			if ( $k !== 'error' && empty( $addon['excerpt'] ) && ! FrmAddonsHelper::is_boost( $addon ) ) {
 				unset( $addons[ $k ] );
 			}
 		}
@@ -1826,7 +1838,11 @@ class FrmAddonsController {
 			$upgrade_link .= '&utm_content=' . $addon['slug'];
 		}
 
-		if ( $addon && isset( $addon['categories'] ) && in_array( 'Solution', $addon['categories'], true ) ) {
+		if ( $addon && FrmAddonsHelper::is_boost( $addon ) ) {
+			$text         = ! empty( $atts['text'] ) ? $atts['text'] : __( 'Get Boost', 'formidable' );
+			$upgrade_link = ! empty( $addon['buy_url'] ) ? $addon['buy_url'] : $addon['link'];
+			self::prepare_addon_link( $upgrade_link );
+		} elseif ( $addon && isset( $addon['categories'] ) && in_array( 'Solution', $addon['categories'], true ) ) {
 			// Solutions will go to a separate page.
 			$upgrade_link = FrmAppHelper::admin_upgrade_link( 'addons', $addon['link'] );
 		}
@@ -1838,7 +1854,7 @@ class FrmAddonsController {
 		}
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
-		<a class="install-now button <?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
+		<a class="install-now button <?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank" rel="noopener" aria-label="<?php echo esc_attr( $text ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 			<?php echo esc_html( $text ); ?>
 		</a>
 		<?php

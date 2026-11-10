@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 		FrmAppHelper::get_admin_header(
 			array(
-				'label' => __( 'Formidable Add-Ons', 'formidable' ),
+				'label' => __( 'Add-ons / Boosts', 'formidable' ),
 			)
 		);
 		?>
@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					FrmAppHelper::show_search_box(
 						array(
 							'input_id'    => 'addon',
-							'placeholder' => __( 'Search Add-Ons', 'formidable' ),
+							'placeholder' => __( 'Search Add-ons / Boosts', 'formidable' ),
 							'tosearch'    => 'frm-searchable-addon',
 						)
 					);

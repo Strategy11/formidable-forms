@@ -17,6 +17,57 @@
 	grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
 }
 
+/* Keep each group with its matching cards when searching or filtering. */
+.frm-addons-section:not(:has(.frm-card-item:not(.frm_hidden))) {
+	display: none;
+}
+
+.frm-addons-section h2 {
+	margin: 0 0 var(--gap-sm);
+	font-size: var(--text-lg);
+}
+
+.frm-addons-section-description {
+	margin: 0 0 var(--gap-md);
+	color: var(--grey-600);
+}
+
+.frm-boosts-section {
+	padding: var(--gap-md);
+	border: 1px solid var(--primary-200);
+	border-radius: var(--medium-radius);
+	background: var(--primary-25);
+}
+
+.frm-boosts-section h2 {
+	margin-bottom: var(--gap-xs);
+}
+
+.frm-boosts-list {
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+}
+
+.frm-boosts-list .frm-card-item {
+	padding: var(--gap-sm);
+	gap: var(--gap-sm);
+	box-shadow: none;
+}
+
+.frm-boosts-list .frm-border-icon {
+	width: 32px;
+	height: 32px;
+	min-width: 32px;
+}
+
+.frm-boosts-list .frm-card-item > p,
+.frm-boosts-list .frm-page-skeleton-divider {
+	display: none;
+}
+
+#frm-addons-list .frm-list-grid-layout:not(.frm-boosts-list) {
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr));
+}
+
 #post-body-content[data-category="active-addons"] .frm-addons-request-addon,
 #post-body-content[data-category="available-addons"] .frm-addons-request-addon {
 	display: none;

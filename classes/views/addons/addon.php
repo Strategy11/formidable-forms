@@ -97,6 +97,8 @@ if ( ! is_array( $addon ) || $addon['slug'] === 'views' ) {
 				</a>
 				<?php
 			}
+		} elseif ( FrmAddonsHelper::is_boost( $addon ) && empty( $addon['url'] ) ) {
+			FrmAddonsController::addon_upgrade_link( $addon, $pricing );
 		} elseif ( ! empty( $addon['docs'] ) && ! FrmAddonsHelper::get_plan() ) {
 			$docs_label = ! empty( $addon['docs_label'] ) ? $addon['docs_label'] : __( 'View Docs', 'formidable' );
 			?>
