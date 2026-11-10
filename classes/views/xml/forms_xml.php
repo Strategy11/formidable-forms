@@ -38,6 +38,7 @@ while ( $next_set = array_splice( $item_ids, 0, 20 ) ) {
 
 		foreach ( $fields as $field ) {
 			FrmXMLHelper::prepare_field_for_export( $field );
+			$default_value_attributes = FrmXMLHelper::field_value_xml_attributes( $field );
 			?>
 		<field>
 			<id><?php echo absint( $field->id ); ?></id>
@@ -45,7 +46,7 @@ while ( $next_set = array_splice( $item_ids, 0, 20 ) ) {
 			<name><?php echo FrmXMLHelper::cdata( $field->name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></name>
 			<description><?php echo FrmXMLHelper::cdata( $field->description ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></description>
 			<type><?php echo FrmXMLHelper::cdata( $field->type ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></type>
-			<default_value><?php echo FrmXMLHelper::cdata( $field->default_value ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></default_value>
+			<default_value<?php FrmAppHelper::array_to_html_params( $default_value_attributes, true ); ?>><?php echo FrmXMLHelper::field_value_to_xml( $field->default_value, $field ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></default_value>
 			<field_order><?php echo absint( $field->field_order ); ?></field_order>
 			<form_id><?php echo absint( $field->form_id ); ?></form_id>
 			<required><?php echo absint( $field->required ); ?></required>

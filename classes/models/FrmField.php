@@ -527,9 +527,10 @@ class FrmField {
 		 *
 		 * @since x.x
 		 *
-		 * @param int $new_id Created field ID.
+		 * @param int   $new_id Created field ID.
+		 * @param array $new_values Stored field columns.
 		 */
-		do_action( 'frm_field_created', $new_id );
+		do_action( 'frm_field_created', $new_id, $new_values );
 
 		if ( ! $return ) {
 			return false;
@@ -816,7 +817,6 @@ class FrmField {
 			}
 			unset( $field );
 		}
-		unset( $values );
 
 		if ( $query_results ) {
 			wp_cache_delete( $id, 'frm_field' );
@@ -832,9 +832,10 @@ class FrmField {
 			 *
 			 * @since x.x
 			 *
-			 * @param int $id Updated field ID.
+			 * @param int   $id Updated field ID.
+			 * @param array $values Stored field columns.
 			 */
-			do_action( 'frm_field_updated', $id );
+			do_action( 'frm_field_updated', $id, $values );
 		}
 
 		return $query_results;

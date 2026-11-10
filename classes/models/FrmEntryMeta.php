@@ -351,6 +351,7 @@ class FrmEntryMeta {
 	 */
 	public static function get_entry_meta_by_field( $entry_id, $field_id ) {
 		global $wpdb;
+		$field_type = FrmField::get_type( $field_id );
 
 		if ( is_object( $entry_id ) ) {
 			$entry    = $entry_id;
@@ -363,7 +364,7 @@ class FrmEntryMeta {
 
 		if ( $cached && isset( $cached->metas ) && isset( $cached->metas[ $field_id ] ) ) {
 			$result = $cached->metas[ $field_id ];
-			return wp_unslash( $result );
+			return self::maybe_unslash_field_value( $result, $field_type );
 		}
 
 		$get_table = $wpdb->prefix . 'frm_item_metas';
@@ -378,11 +379,30 @@ class FrmEntryMeta {
 			$query['fi.field_key'] = $field_id;
 		}
 
-		$result     = FrmDb::get_var( $get_table, $query, 'meta_value' );
-		$field_type = FrmField::get_type( $field_id );
+		$result = FrmDb::get_var( $get_table, $query, 'meta_value' );
 		FrmFieldsHelper::prepare_field_value( $result, $field_type );
 
-		return wp_unslash( $result );
+		return self::maybe_unslash_field_value( $result, $field_type );
+	}
+
+	/**
+	 * Keep literal source backslashes when a field opts out of legacy unslashing.
+	 *
+	 * @since x.x
+	 *
+	 * @param mixed  $value Stored or cached field value.
+	 * @param string $type Field type.
+	 *
+	 * @return mixed
+	 */
+	private static function maybe_unslash_field_value( $value, $type ) {
+		/**
+		 * @since x.x
+		 *
+		 * @param bool   $unslash Whether the field value should be unslashed.
+		 * @param string $type Field type.
+		 */
+		return apply_filters( 'frm_should_unslash_entry_meta_value', true, $type ) ? wp_unslash( $value ) : $value;
 	}
 
 	/**
