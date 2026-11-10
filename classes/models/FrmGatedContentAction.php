@@ -246,7 +246,7 @@ class FrmGatedContentAction extends FrmFormAction {
 				static function ( $p ) {
 					return array(
 						'value' => (string) $p->ID,
-						'label' => $p->post_title,
+						'label' => FrmAppHelper::get_post_dropdown_label( $p ),
 					);
 				},
 				$posts

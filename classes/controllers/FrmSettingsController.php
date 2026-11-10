@@ -618,7 +618,7 @@ class FrmSettingsController {
 		foreach ( $pages as $page ) {
 			$results[] = array(
 				'value' => $page->ID,
-				'label' => $page->post_title,
+				'label' => FrmAppHelper::get_post_dropdown_label( $page ),
 			);
 		}
 
