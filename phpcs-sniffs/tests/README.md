@@ -1,10 +1,14 @@
-Run the standalone sniff fixtures from the Lite checkout:
+Run the standalone sniff fixtures from the Lite checkout. PHPCS must know where the shared `Formidable` standard lives first, so register `phpcs-sniffs` once per Composer install (the same step `.github/workflows/phpcs.yml` runs):
 
 ```sh
+CURRENT_PATHS=$(./vendor/bin/phpcs --config-show | grep 'installed_paths' | cut -d' ' -f2)
+./vendor/bin/phpcs --config-set installed_paths "$CURRENT_PATHS,../../../phpcs-sniffs"
 php phpcs-sniffs/tests/run.php
 ```
 
-The runner uses the checkout's Composer dependencies and creates temporary copies. It checks exact violation lines, expected fixed output, PHP syntax, a second fixer pass, and a clean PHPCS pass. It also compares runtime output for adjacent PHP blocks and runtime values for boolean ternaries and conditional HTML attributes.
+CI runs the same command after registering the sniffs.
+
+The runner uses the checkout's Composer dependencies and creates temporary copies. It checks exact violation lines, expected fixed output, PHP syntax, a second fixer pass, and a clean PHPCS pass. It also runs Lite's full `phpcs.xml` before and after each fix and fails if the fixed output adds a violation, so no fixer leaves work for a second tool. It also compares runtime output for adjacent PHP blocks and runtime values for boolean ternaries and conditional HTML attributes.
 
 Each `.inc` file has a matching `.fixed` snapshot. `expected.json` lists the lines that should be reported. Negative examples deliberately include patterns that would change behavior if rewritten.
 

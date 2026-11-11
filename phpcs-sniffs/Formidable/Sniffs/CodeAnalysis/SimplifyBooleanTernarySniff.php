@@ -58,7 +58,11 @@ class SimplifyBooleanTernarySniff implements Sniff {
 		if ( preg_match( '/\/\*|\/\/|#/', $phpcsFile->getTokensAsString( $start, $else - $start + 1 ) ) ) {
 			return;
 		}
-		$replacement = T_TRUE === $tokens[ $then ]['code'] ? '( ' . $condition . ' )' : '( ' . ConditionHelper::getNegativeCondition( $phpcsFile, $start, $conditionEnd ) . ' )';
+		$replacement = T_TRUE === $tokens[ $then ]['code'] ? $condition : $this->addSpaceAfterNegation( ConditionHelper::getNegativeCondition( $phpcsFile, $start, $conditionEnd ) );
+
+		if ( ! $this->isStandaloneExpression( $phpcsFile, $start, $else ) ) {
+			$replacement = '( ' . $replacement . ' )';
+		}
 		$fix         = $phpcsFile->addFixableError( 'Replace the boolean ternary with its boolean condition.', $stackPtr, 'Found' );
 
 		if ( true === $fix ) {
@@ -70,5 +74,56 @@ class SimplifyBooleanTernarySniff implements Sniff {
 			}
 			$phpcsFile->fixer->endChangeset();
 		}
+	}
+
+	/**
+	 * Checks whether the ternary is a whole value, so the condition needs no wrapping parentheses.
+	 *
+	 * This covers the right side of an assignment, an array value, a return, and a function argument.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $start     The first token of the ternary.
+	 * @param int  $end       The last token of the ternary.
+	 *
+	 * @return bool
+	 */
+	private function isStandaloneExpression( File $phpcsFile, $start, $end ) {
+		$tokens = $phpcsFile->getTokens();
+		$before = TokenHelper::findPreviousEffective( $phpcsFile, $start - 1 );
+		$after  = TokenHelper::findNextEffective( $phpcsFile, $end + 1 );
+
+		if ( null === $before || null === $after ) {
+			return false;
+		}
+
+		$validBefore = array( T_EQUAL, T_PLUS_EQUAL, T_MINUS_EQUAL, T_CONCAT_EQUAL, T_COALESCE_EQUAL, T_DOUBLE_ARROW, T_RETURN, T_COMMA, T_OPEN_PARENTHESIS );
+		$validAfter  = array( T_SEMICOLON, T_COMMA, T_CLOSE_PARENTHESIS );
+
+		return in_array( $tokens[ $before ]['code'], $validBefore, true ) && in_array( $tokens[ $after ]['code'], $validAfter, true );
+	}
+
+	/**
+	 * Adds the space the WordPress standard requires after each logical not operator.
+	 *
+	 * @param string $code The negated condition.
+	 *
+	 * @return string
+	 */
+	private function addSpaceAfterNegation( $code ) {
+		$parts  = token_get_all( '<?php ' . $code );
+		$result = '';
+
+		array_shift( $parts );
+
+		foreach ( $parts as $index => $part ) {
+			$text    = is_array( $part ) ? $part[1] : $part;
+			$result .= $text;
+			$next    = $parts[ $index + 1 ] ?? null;
+
+			if ( '!' === $part && null !== $next && ! ( is_array( $next ) && T_WHITESPACE === $next[0] ) ) {
+				$result .= ' ';
+			}
+		}
+		return $result;
 	}
 }

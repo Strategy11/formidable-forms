@@ -9,7 +9,10 @@
   ],
   "SimplifyBooleanTernary": [
     2,
-    3
+    3,
+    10,
+    11,
+    12
   ],
   "PreferDbPrepareArrayValues": [
     2,
