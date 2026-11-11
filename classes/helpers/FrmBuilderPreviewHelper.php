@@ -130,7 +130,60 @@ class FrmBuilderPreviewHelper {
 		$index              = count( $manifest->fields );
 		$manifest->fields[] = self::get_preview_data( $atts, $manifest );
 
-		echo '<li data-frm-preview="' . esc_attr( $index ) . '"></li>';
+		$attributes = array(
+			'data-frm-preview' => $index,
+			'class'            => 'frm-preview-placeholder ' . ( $atts['field']['classes'] ?? '' ),
+			'style'            => '--frm-preview-height:' . self::get_placeholder_height( $atts['field'] ) . 'px',
+		);
+		echo '<li ';
+		FrmAppHelper::array_to_html_params( $attributes, true );
+		echo '></li>';
+	}
+
+	/**
+	 * Reserve the builder card's label, input and spacing before its preview is drawn.
+	 *
+	 * @since x.x
+	 *
+	 * @param array|object $field The saved field and its display options.
+	 *
+	 * @return int Estimated card height in pixels.
+	 */
+	public static function get_placeholder_height( $field ) {
+		$type = FrmField::get_field_type( $field );
+		// Card borders and padding, a label line, the input gap and bottom spacing total 49px.
+		$height = 49;
+
+		if ( in_array( $type, array( 'html', 'summary', 'virtual' ), true ) ) {
+			// Matches .frm-embed-field-placeholder.
+			$height += 145;
+		} elseif ( 'textarea' === $type ) {
+			$rows    = absint( FrmField::get_option( $field, 'max' ) );
+			$height += max( 40, $rows * 21 + 16 );
+		} elseif ( in_array( $type, array( 'radio', 'checkbox' ), true ) ) {
+			$options    = is_object( $field ) ? $field->options : $field['options'];
+			$count      = is_array( $options ) ? count( $options ) : 1;
+			$align      = FrmField::get_option( $field, 'align' );
+			$columns    = array(
+				'frm_two_col'   => 2,
+				'frm_three_col' => 3,
+				'frm_four_col'  => 4,
+			);
+			$rows       = 'inline' === $align ? 1 : max( 1, (int) ceil( $count / ( $columns[ $align ] ?? 1 ) ) );
+			$row_height = 'buttons' === FrmField::get_option( $field, 'image_options' ) ? 45 : 26;
+
+			if ( FrmField::get_option( $field, 'use_images_in_buttons' ) ) {
+				$row_height = 33;
+			}
+
+			$height += $rows * $row_height;
+		} elseif ( 'break' === $type ) {
+			$height += 64;
+		} else {
+			$height += 40;
+		}//end if
+
+		return max( 89, $height );
 	}
 
 	/**

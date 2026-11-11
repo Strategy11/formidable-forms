@@ -899,10 +899,13 @@ class FrmField {
 	 */
 	public static function delete_form_transient( $form_id ) {
 		$form_id = absint( $form_id );
-		delete_transient( 'frm_form_fields_' . $form_id . 'excludeinclude' );
-		delete_transient( 'frm_form_fields_' . $form_id . 'includeinclude' );
-		delete_transient( 'frm_form_fields_' . $form_id . 'includeexclude' );
-		delete_transient( 'frm_form_fields_' . $form_id . 'excludeexclude' );
+
+		if ( wp_using_ext_object_cache() || wp_installing() ) {
+			delete_transient( 'frm_form_fields_' . $form_id . 'excludeinclude' );
+			delete_transient( 'frm_form_fields_' . $form_id . 'includeinclude' );
+			delete_transient( 'frm_form_fields_' . $form_id . 'includeexclude' );
+			delete_transient( 'frm_form_fields_' . $form_id . 'excludeexclude' );
+		}
 
 		if ( ! wp_using_ext_object_cache() ) {
 			self::delete_chunked_form_transients( $form_id );
@@ -918,7 +921,7 @@ class FrmField {
 	}
 
 	/**
-	 * Delete the extra chunks saved by set_field_transient() for large forms.
+	 * Find database-backed field transients together, including extra chunks for large forms.
 	 *
 	 * The LIKE prefixes are escaped so the underscores are matched literally.
 	 * Unescaped, the leading underscore is a wildcard and MySQL scans the whole options table.
@@ -934,9 +937,9 @@ class FrmField {
 
 		$base_name = 'frm_form_fields_' . $form_id;
 
-		$wpdb->query(
+		$option_names = $wpdb->get_col(
 			$wpdb->prepare(
-				'DELETE FROM %i WHERE option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s',
+				'SELECT option_name FROM %i WHERE option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s',
 				$wpdb->options,
 				$wpdb->esc_like( '_transient_timeout_' . $base_name . 'ex' ) . '%',
 				$wpdb->esc_like( '_transient_' . $base_name . 'ex' ) . '%',
@@ -944,6 +947,27 @@ class FrmField {
 				$wpdb->esc_like( '_transient_' . $base_name . 'in' ) . '%'
 			)
 		);
+
+		$existing_options = array_fill_keys( $option_names, true );
+
+		foreach ( $option_names as $option_name ) {
+			if ( wp_installing() ) {
+				delete_option( $option_name );
+				wp_cache_delete( $option_name, 'options' );
+				continue;
+			}
+
+			if ( str_starts_with( $option_name, '_transient_timeout_' ) ) {
+				$value_option = '_transient_' . substr( $option_name, strlen( '_transient_timeout_' ) );
+
+				if ( ! isset( $existing_options[ $value_option ] ) ) {
+					delete_option( $option_name );
+				}
+				continue;
+			}
+
+			delete_transient( substr( $option_name, strlen( '_transient_' ) ) );
+		}
 	}
 
 	/**
