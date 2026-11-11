@@ -343,6 +343,7 @@ class test_FrmAbilitiesFormsController extends FrmUnitTest {
 
 		$this->assertNotWPError( $implicit );
 		$this->assertSame( array_keys( $explicit ), array_keys( $implicit ), 'Omitting order, order_by and page_size should behave like sending the schema defaults.' );
+		$this->assertSame( 50, $defaults['page_size'], 'The page_size default should match the 50 the helper uses.' );
 	}
 
 	/**

@@ -93,7 +93,7 @@ class FrmAbilitiesEntriesController {
 			),
 			'end_date'   => array(
 				'type'        => 'string',
-				'description' => __( 'Return entries created on or before this day, including the whole day (YYYY-MM-DD format, UTC).', 'formidable' ),
+				'description' => __( 'Return entries created on or before this day, including the whole day (YYYY-MM-DD, UTC). Add a time (HH:MM:SS) to end there.', 'formidable' ),
 			),
 			'is_draft'   => array(
 				'type'        => 'integer',
@@ -355,8 +355,9 @@ class FrmAbilitiesEntriesController {
 		}
 
 		if ( ! empty( $input['end_date'] ) ) {
-			// Compare against the last second of the day so the whole end day is included.
-			$where['it.created_at <'] = gmdate( 'Y-m-d 23:59:59', strtotime( $input['end_date'] ) );
+			// A date with no time includes the whole end day. A date with a time is used as is.
+			$end_format               = preg_match( '/^\d{4}-\d{2}-\d{2}$/', trim( $input['end_date'] ) ) ? 'Y-m-d 23:59:59' : 'Y-m-d H:i:s';
+			$where['it.created_at <'] = gmdate( $end_format, strtotime( $input['end_date'] ) );
 		}
 
 		if ( isset( $where['it.id'] ) && ! $where['it.id'] ) {

@@ -411,6 +411,20 @@ class test_FrmAbilitiesEntriesController extends FrmUnitTest {
 		$expected = array( $ids['end'], $ids['start_end'] );
 		sort( $expected );
 		$this->assertSame( $expected, $single_day_ids, 'The same start and end date should return that whole day.' );
+
+		$with_time = $this->execute(
+			'list-entries',
+			array(
+				'form_id'    => $this->form->id,
+				'start_date' => '2026-03-10',
+				'end_date'   => '2026-03-12 10:00:00',
+			)
+		);
+		$this->assertNotWPError( $with_time );
+		$with_time_ids = array_map( 'intval', wp_list_pluck( $with_time, 'id' ) );
+
+		$this->assertContains( $ids['start_end'], $with_time_ids, 'An entry created before the end_date time should be included.' );
+		$this->assertNotContains( $ids['end'], $with_time_ids, 'An end_date with a time should not be extended to the end of the day.' );
 	}
 
 	/**
