@@ -38,6 +38,52 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 		self::_check_updated_values( $form_id );
 	}
 
+	/**
+	 * A save that fails in the database must not report success, so the builder keeps the
+	 * unsaved field order.
+	 *
+	 * @see FrmFormsController::update
+	 */
+	public function test_failed_form_update_with_ajax_reports_an_error() {
+		global $wpdb;
+		$form_id = $this->factory->form->get_id_by_key( $this->contact_form_key );
+		$fields  = FrmField::get_all_for_form( $form_id );
+		$field   = reset( $fields );
+
+		self::_setup_post_values( $form_id );
+		$_POST['frm_field_order'] = wp_json_encode( array( $field->id => 99 ) );
+
+		$fail_order_update = static function ( $query ) use ( $wpdb ) {
+			if ( str_starts_with( $query, 'UPDATE `' . $wpdb->prefix . 'frm_fields` SET field_order = CASE' ) ) {
+				return $query . ' INVALID';
+			}
+			return $query;
+		};
+		$suppress_errors   = $wpdb->suppress_errors();
+		add_filter( 'query', $fail_order_update );
+		$message = '';
+
+		try {
+			$this->_handleAjax( 'frm_save_form' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			unset( $e );
+		} catch ( WPAjaxDieStopException $e ) {
+			$message = $e->getMessage();
+		} finally {
+			remove_filter( 'query', $fail_order_update );
+			$wpdb->suppress_errors( $suppress_errors );
+		}
+
+		$this->assertSame( $suppress_errors, $wpdb->suppress_errors, 'Database error reporting should be restored.' );
+
+		// Without DOING_AJAX the edit page is rendered with the error, otherwise wp_die() gets the message.
+		$message .= $this->_last_response;
+
+		$this->assertStringContainsString( 'could not be saved', $message, 'A failed save should return an error.' );
+		$this->assertStringNotContainsString( 'successfully updated', $message, 'A failed save should not report success.' );
+		$this->assertNotSame( 99, (int) FrmField::getOne( $field->id )->field_order, 'The order should not be saved.' );
+	}
+
 	private function _setup_post_values( $form_id ) {
 		$fields = FrmField::get_all_for_form( $form_id );
 		$form   = FrmForm::getOne( $form_id );
