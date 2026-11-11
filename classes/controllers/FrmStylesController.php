@@ -141,7 +141,7 @@ class FrmStylesController {
 		$version = FrmAppHelper::plugin_version();
 
 		if ( FrmAppHelper::is_style_editor_page( 'edit' ) ) {
-			wp_enqueue_style( 'wp-components' );
+			wp_enqueue_style( 'formidable-color-picker' );
 		}
 
 		wp_enqueue_style( 'frm-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_css&frm_scope_custom_css=1' ), array(), $version );

@@ -36,6 +36,7 @@ describe( 'Style builder labels focus their visible/interactive control', () => 
 				cy.wrap( control ).select( 'RGB' ).should( 'have.value', 'rgb' );
 				return;
 			}
+			// WordPress 7.2+ renders the format menu as a combobox with a portaled listbox.
 			cy.wrap( control ).click();
 			cy.get( '#frm_success_bg_color_picker' ).should( 'not.have.attr', 'hidden' );
 			cy.get( '[role="listbox"]' ).should( 'be.visible' ).contains( '[role="option"]', 'RGB' ).click();

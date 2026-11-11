@@ -831,7 +831,10 @@ class FrmAppController {
 	}
 
 	/**
-	 * Register the shared block editor color picker.
+	 * Register the shared block editor color picker script and style.
+	 *
+	 * The picker CSS ships in frm_admin.css, so the style handle has no file of its own.
+	 * Enqueue the formidable-color-picker style with the script on any page that uses the picker.
 	 *
 	 * @since x.x
 	 *
@@ -841,6 +844,7 @@ class FrmAppController {
 	 * @return void
 	 */
 	private static function register_color_picker_script( $plugin_url, $version ) {
+		wp_register_style( 'formidable-color-picker', false, array( 'formidable-admin', 'wp-components' ), $version );
 		wp_register_script(
 			'formidable-color-picker',
 			$plugin_url . '/js/formidable-color-picker.js',
@@ -1783,7 +1787,7 @@ class FrmAppController {
 			FrmProFormsController::enqueue_pro_web_components_script();
 		}
 
-		wp_enqueue_style( 'wp-components' );
+		wp_enqueue_style( 'formidable-color-picker' );
 		wp_enqueue_script( 'formidable-web-components' );
 	}
 }

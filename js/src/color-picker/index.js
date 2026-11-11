@@ -91,7 +91,8 @@ function init( input, options = {} ) {
 		if ( wrapper.contains( target ) || panel.contains( target ) ) {
 			return true;
 		}
-		// Newer WordPress versions render the format menu outside the picker panel.
+		// WordPress 7.2+ renders the format menu as a popup portaled outside the picker panel.
+		// WordPress 7.1 and older use a native select inside the panel, so this lookup does not apply there.
 		const listbox = target.closest?.( '[role="listbox"]' ) ||
 			target.closest?.( '[role="presentation"]' )?.querySelector( '[role="listbox"]' );
 		if ( ! listbox?.id ) {
