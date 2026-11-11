@@ -1990,7 +1990,7 @@ class FrmXMLHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param object $field Field being exported or imported.
+	 * @param object|SimpleXMLElement $field Field being exported, or the raw XML field being imported.
 	 *
 	 * @return bool
 	 */
@@ -1998,10 +1998,30 @@ class FrmXMLHelper {
 		/**
 		 * @since x.x
 		 *
-		 * @param bool   $literal Whether XML must preserve this field's text exactly.
-		 * @param object $field Field configuration, including its type.
+		 * @param bool     $literal Whether XML must preserve this field's text exactly.
+		 * @param object|SimpleXMLElement $field   Field with string id, field_key and type properties. Export and import pass the same shape.
 		 */
-		return (bool) apply_filters( 'frm_xml_field_value_is_literal', false, $field );
+		return (bool) apply_filters( 'frm_xml_field_value_is_literal', false, self::normalize_field_for_literal_check( $field ) );
+	}
+
+	/**
+	 * Give the literal value filter the same field shape on export and import.
+	 *
+	 * Import passes a SimpleXMLElement whose properties are objects, so a strict
+	 * comparison such as 'code' === $field->type would never match there.
+	 *
+	 * @since x.x
+	 *
+	 * @param object|SimpleXMLElement $field Field being exported, or the raw XML field being imported.
+	 *
+	 * @return stdClass
+	 */
+	private static function normalize_field_for_literal_check( $field ) {
+		return (object) array(
+			'id'        => isset( $field->id ) ? (string) $field->id : '',
+			'field_key' => isset( $field->field_key ) ? (string) $field->field_key : '',
+			'type'      => isset( $field->type ) ? (string) $field->type : '',
+		);
 	}
 
 	/**
@@ -2048,8 +2068,12 @@ class FrmXMLHelper {
 	 */
 	public static function field_value_from_xml( $value, $field ) {
 		if ( $value instanceof SimpleXMLElement && 'base64' === (string) $value['encoding'] ) {
-			$decoded = base64_decode( (string) $value, true );
-			return false === $decoded ? '' : $decoded;
+			// Pretty-printed or wrapped files can add whitespace, which strict decoding rejects.
+			$encoded = (string) preg_replace( '/\s+/', '', (string) $value );
+			$decoded = base64_decode( $encoded, true );
+
+			// Keep the raw text rather than silently wiping the value when it is not valid base64.
+			return false === $decoded ? (string) $value : $decoded;
 		}
 
 		$value = (string) $value;
