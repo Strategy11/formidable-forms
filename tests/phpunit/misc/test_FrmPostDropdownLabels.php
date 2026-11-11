@@ -35,7 +35,19 @@ class test_FrmPostDropdownLabels extends FrmUnitTest {
 			)
 		);
 
-		foreach ( array( 'Saved Listings', 'Saved Listings (ID: ' . $id . ')', 'Saved', (string) $id ) as $term ) {
+		$terms = array(
+			'Saved Listings',
+			'Saved Listings (ID: ' . $id . ')',
+			'Saved Listings (ID: 6',
+			'Saved Listings (ID: ',
+			'Saved Listings (ID',
+			'Saved Listings (I',
+			'Saved Listings (',
+			'Saved',
+			(string) $id,
+		);
+
+		foreach ( $terms as $term ) {
 			$values = wp_list_pluck( FrmSettingsController::get_page_search_results( $term, 'page' ), 'value' );
 			$this->assertContains( (string) $id, array_map( 'strval', $values ), 'Term: ' . $term );
 		}

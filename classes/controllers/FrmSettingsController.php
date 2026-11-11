@@ -618,7 +618,7 @@ class FrmSettingsController {
 	public static function get_page_search_results( $term, $post_type ) {
 		global $wpdb;
 
-		$term  = trim( (string) preg_replace( '/\s*\(ID: \d+\)\s*$/', '', $term ) );
+		$term  = trim( (string) preg_replace( '/\s+\((?:I(?:D(?::\s*\d*)?)?)?\)?\s*$/', '', $term ) );
 		$where = array(
 			'post_status' => 'publish',
 			'post_type'   => $post_type,
