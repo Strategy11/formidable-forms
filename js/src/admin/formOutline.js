@@ -103,7 +103,7 @@ export function initFormOutline() {
 			const headingField = page.fields.find( field => getFieldDetails( field ).heading );
 			const labelField = headingField || page.fields.find( field => field.dataset.type !== HTML_FIELD_TYPE && field.dataset.type !== 'end_divider' && getFieldDetails( field ).text );
 			const heading = labelField ? getFieldDetails( labelField ).text : '';
-			const title = heading || sprintf( __( 'Page %d', 'formidable' ), index + 1 );
+			const title = ( labelField?.dataset.type !== SECTION_TYPE && heading ) || sprintf( __( 'Page %d', 'formidable' ), index + 1 );
 			return { fields: page.fields, breakField: page.breakField, index, title };
 		} );
 		return pagesCache;
@@ -119,6 +119,7 @@ export function initFormOutline() {
 		const { tag, span } = frmDom;
 		const children = [];
 		let fieldResultCount = 0;
+		let resultCount = 0;
 
 		const makeButton = ( className, text, field, pageIndex, fieldCount ) => {
 			const button = tag( 'button', {
@@ -140,6 +141,7 @@ export function initFormOutline() {
 		};
 
 		pages.forEach( page => {
+			const previousResultCount = resultCount;
 			const pageNumber = sprintf( __( 'Page %d', 'formidable' ), page.index + 1 );
 			const pageMatches = `${ pageNumber }: ${ page.title }`.toLocaleLowerCase().includes( query );
 			const firstField = page.fields[ 0 ] || page.breakField || pages[ 1 ]?.breakField;
@@ -153,8 +155,11 @@ export function initFormOutline() {
 				if ( field.dataset.type === SECTION_TYPE ) {
 					sections.set( field, [] );
 				}
-				const section = field.parentElement.closest( 'li[data-type="divider"]' );
-				sections.get( section )?.push( field );
+				let section = field.parentElement.closest( 'li[data-type="divider"]' );
+				while ( section ) {
+					sections.get( section )?.push( field );
+					section = section.parentElement.closest( 'li[data-type="divider"]' );
+				}
 			} );
 			const sectionRows = new Map();
 			const rows = [];
@@ -171,30 +176,34 @@ export function initFormOutline() {
 					return;
 				}
 				const isSection = type === SECTION_TYPE;
+				const matches = searchText.includes( query ) || field.dataset.fid.includes( query );
 				if ( query !== '' ) {
-					const matches = searchText.includes( query ) || field.dataset.fid.includes( query );
 					if ( ! matches && ! isSection ) {
 						return;
 					}
 				}
+				const section = field.parentElement.closest( 'li[data-type="divider"]' );
+				const parent = sectionRows.get( section );
+				const siblings = parent ? parent.children : rows;
+				if ( matches ) {
+					resultCount++;
+				}
 				if ( isSection ) {
 					const fieldCount = sections.get( field ).filter( child => ! STRUCTURE_TYPES.includes( child.dataset.type ) ).length;
 					const row = makeButton( 'frm-builder-outline-section', text, field, page.index, fieldCount );
-					sectionRows.set( field, { row, children: [], matches: searchText.includes( query ) || field.dataset.fid.includes( query ) } );
-					rows.push( row );
+					sectionRows.set( field, { row, children: [], matches, siblings } );
+					siblings.push( row );
 				} else {
 					const row = makeButton( 'frm-builder-outline-field', text, field, page.index );
-					const section = field.parentElement.closest( 'li[data-type="divider"]' );
-					const parent = sectionRows.get( section );
-					( parent ? parent.children : rows ).push( row );
+					siblings.push( row );
 				}
 				if ( ! isSection && query !== '' ) {
 					fieldResultCount++;
 				}
 			} );
-			sectionRows.forEach( section => {
+			Array.from( sectionRows.values() ).toReversed().forEach( section => {
 				if ( query !== '' && ! section.matches && ! pageMatches && section.children.length === 0 ) {
-					rows.splice( rows.indexOf( section.row ), 1 );
+					section.siblings.splice( section.siblings.indexOf( section.row ), 1 );
 					return;
 				}
 				if ( section.children.length ) {
@@ -208,6 +217,9 @@ export function initFormOutline() {
 
 			// A one-page form has no pages to show, only its sections and fields.
 			if ( pages.length > 1 ) {
+				if ( pageMatches && resultCount === previousResultCount ) {
+					resultCount++;
+				}
 				const pageLabel = page.title === pageNumber ? pageNumber : `${ pageNumber }: ${ page.title }`;
 				const fieldCount = page.fields.filter( field => ! STRUCTURE_TYPES.includes( field.dataset.type ) ).length;
 				const pageButton = tag( 'button', {
@@ -234,7 +246,6 @@ export function initFormOutline() {
 			}
 		} );
 
-		const resultCount = children.reduce( ( count, child ) => count + child.querySelectorAll( 'button' ).length, 0 );
 		const hasFields = pages.length > 1 || pages.some( page => page.fields.length > 0 );
 		const noResults = query !== '' && resultCount === 0;
 		const showEmpty = noResults || ! hasFields;

@@ -161,6 +161,9 @@ describe( 'Form outline', { retries: 0 }, () => {
 		cy.get( '.frm-builder-outline-field' ).should( 'have.length', 60 );
 		cy.get( '.frm-builder-outline-status' ).should( 'have.text', 'Showing up to 60 matching fields.' );
 
+		search( 'item 1' );
+		cy.get( '.frm-builder-outline-status' ).should( 'have.text', '11 matching results found.' );
+
 		search( 'item 42' );
 		cy.get( '#frm-builder-outline-search-input' ).type( '{enter}' );
 		cy.get( '#frm-show-fields li[data-fid="9042"]' ).should( 'have.class', 'frm-builder-outline-target' );
@@ -173,6 +176,35 @@ describe( 'Form outline', { retries: 0 }, () => {
 		cy.get( '#frm_insert_fields_tab' ).then( tab => tab[ 0 ].click() );
 		cy.get( '#frm_insert_fields_tab' ).closest( 'li' ).should( 'have.class', 'frm-active' );
 		cy.get( '#frm-builder-outline-toggle' ).closest( 'li' ).should( 'not.have.class', 'frm-active' );
+	} );
+
+	it( 'nests sections, counts direct matches and avoids repeated page names', () => {
+		addPageBreak();
+		cy.get( '#frm-show-fields' ).then( list => {
+			const doc = list[ 0 ].ownerDocument;
+			const panel = createField( doc, '98000', 'divider', 'Panel A' );
+			const inner = createField( doc, '98001', 'divider', 'Inner section' );
+			const panelFields = doc.createElement( 'ul' );
+			const innerFields = doc.createElement( 'ul' );
+			innerFields.append( createField( doc, '98002', 'text', 'Fax' ) );
+			inner.append( innerFields );
+			panelFields.append( createField( doc, '98003', 'text', 'Panel field' ), inner );
+			panel.append( panelFields );
+			list[ 0 ].append( panel );
+		} );
+		openOutline();
+		cy.get( '.frm-builder-outline-page' ).eq( 1 ).find( '.frm-builder-outline-label' ).should( 'have.text', 'Page 2' );
+		cy.get( '.frm-builder-outline-section[data-field-id="98000"] .frm-builder-outline-meta' ).should( 'have.text', '2 fields' );
+		cy.get( '.frm-builder-outline-section[data-field-id="98000"]' ).parent().children( 'ul' ).children( 'li' ).children( '.frm-builder-outline-section' ).should( 'have.attr', 'data-field-id', '98001' );
+		search( 'fax' );
+		cy.get( '.frm-builder-outline-section' ).should( 'have.length', 2 );
+		cy.get( '.frm-builder-outline-field' ).should( 'have.length', 1 ).and( 'have.text', 'Fax' );
+		cy.get( '.frm-builder-outline-status' ).should( 'have.text', '1 matching result found.' );
+		search( 'inner' );
+		cy.get( '.frm-builder-outline-section' ).should( 'have.length', 2 );
+		cy.get( '.frm-builder-outline-status' ).should( 'have.text', '1 matching result found.' );
+		search( 'missing' );
+		cy.get( '.frm-builder-outline-section' ).should( 'not.exist' );
 	} );
 
 	it( 'tracks edits only while open and preserves results when scrolling', () => {
