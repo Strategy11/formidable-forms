@@ -17,33 +17,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 FrmAddonsHelper::show_upgrade_renew_cta();
 FrmAddonsHelper::get_reconnect_link();
 
-$boosts        = array_filter( $addons, 'FrmAddonsHelper::is_boost' );
-$plugin_addons = array_diff_key( $addons, $boosts );
 ?>
 
 <div id="frm-addons-list" class="frm-flex-col frm-gap-md frm-mb-xs">
-	<?php if ( $boosts ) : ?>
-		<section class="frm-addons-section frm-boosts-section" aria-labelledby="frm-boosts-heading">
-			<h2 id="frm-boosts-heading"><?php esc_html_e( 'Boosts', 'formidable' ); ?></h2>
-			<p class="frm-addons-section-description"><?php esc_html_e( 'Small upgrades for your forms. Boosts unlock extra features and are purchased separately from your add-on plan.', 'formidable' ); ?></p>
-			<ul class="frm-list-grid-layout frm-boosts-list">
-				<?php
-				foreach ( $boosts as $slug => $addon ) {
-					require $view_path . 'addon.php';
-				}
-				?>
-			</ul>
-		</section>
-	<?php endif; ?>
-
-	<section class="frm-addons-section" aria-labelledby="frm-addons-heading">
-		<h2 id="frm-addons-heading"><?php esc_html_e( 'Add-ons', 'formidable' ); ?></h2>
-		<ul class="frm-list-grid-layout">
-			<?php
-			foreach ( $plugin_addons as $slug => $addon ) {
-				require $view_path . 'addon.php';
-			}
-			?>
-		</ul>
-	</section>
+	<ul class="frm-list-grid-layout">
+		<?php
+		foreach ( $addons as $slug => $addon ) {
+			require $view_path . 'addon.php';
+		}
+		?>
+	</ul>
 </div>

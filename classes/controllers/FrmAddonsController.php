@@ -287,7 +287,7 @@ class FrmAddonsController {
 	 *
 	 * The built-in gateways cover base payment processing, so the add-ons that
 	 * extend them are presented as their Pro/Legacy tiers until the API reflects
-	 * it. Names only — the add-ons keep their original excerpts.
+	 * it. Boost excerpts use temporary defaults when the API has none.
 	 *
 	 * @since 7.0
 	 *
@@ -308,6 +308,22 @@ class FrmAddonsController {
 
 		if ( isset( $overrides[ $slug ] ) ) {
 			$addon = array_merge( $addon, $overrides[ $slug ] );
+		}
+
+		if ( ! FrmAddonsHelper::is_boost( $addon ) || ! empty( $addon['excerpt'] ) ) {
+			return;
+		}
+
+		$excerpts = array(
+			'advanced-modals' => __( 'Open forms and content in smart popups with various trigger options.', 'formidable' ),
+			'color-picker'    => __( 'Select custom or pre-set colors, including optional transparency', 'formidable' ),
+			'bulk-edit'       => __( 'Update multiple entries at once, no CSV export/import needed.', 'formidable' ),
+			'celebrations'    => __( 'Reward submissions with emoji fountains and celebratory sounds.', 'formidable' ),
+			'field-tooltips'  => __( 'Add customized hover-and-tap help to any field.', 'formidable' ),
+		);
+
+		if ( isset( $excerpts[ $slug ] ) ) {
+			$addon['excerpt'] = $excerpts[ $slug ];
 		}
 	}
 

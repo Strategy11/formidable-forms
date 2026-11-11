@@ -39,6 +39,15 @@ class FrmAddonsHelper {
 	private static $boost_locked = false;
 
 	/**
+	 * Whether the add-on being rendered is a Boost.
+	 *
+	 * @since x.x
+	 *
+	 * @var bool
+	 */
+	private static $boost = false;
+
+	/**
 	 * Show the CTA to upgrade or renew.
 	 *
 	 * @since 6.15
@@ -276,7 +285,11 @@ class FrmAddonsHelper {
 			return false;
 		}
 
-		return self::$boost_locked || self::$plan_required || ! FrmAppHelper::pro_is_installed();
+		if ( self::$boost ) {
+			return self::$boost_locked;
+		}
+
+		return self::$plan_required || ! FrmAppHelper::pro_is_installed();
 	}
 
 	/**
@@ -325,7 +338,8 @@ class FrmAddonsHelper {
 	private static function set_plan_required( $addon ) {
 		self::$plan_required = FrmFormsHelper::get_plan_required( $addon );
 		self::$built_in      = ! empty( $addon['built_in'] );
-		self::$boost_locked  = self::is_boost( $addon ) && empty( $addon['url'] );
+		self::$boost         = self::is_boost( $addon );
+		self::$boost_locked  = self::$boost && empty( $addon['installed'] ) && empty( $addon['url'] );
 	}
 
 	/**

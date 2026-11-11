@@ -17,57 +17,6 @@
 	grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
 }
 
-/* Keep each group with its matching cards when searching or filtering. */
-.frm-addons-section:not(:has(.frm-card-item:not(.frm_hidden))) {
-	display: none;
-}
-
-.frm-addons-section h2 {
-	margin: 0 0 var(--gap-sm);
-	font-size: var(--text-lg);
-}
-
-.frm-addons-section-description {
-	margin: 0 0 var(--gap-md);
-	color: var(--grey-600);
-}
-
-.frm-boosts-section {
-	padding: var(--gap-md);
-	border: 1px solid var(--primary-200);
-	border-radius: var(--medium-radius);
-	background: var(--primary-25);
-}
-
-.frm-boosts-section h2 {
-	margin-bottom: var(--gap-xs);
-}
-
-.frm-boosts-list {
-	grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
-}
-
-.frm-boosts-list .frm-card-item {
-	padding: var(--gap-sm);
-	gap: var(--gap-sm);
-	box-shadow: none;
-}
-
-.frm-boosts-list .frm-border-icon {
-	width: 32px;
-	height: 32px;
-	min-width: 32px;
-}
-
-.frm-boosts-list .frm-card-item > p,
-.frm-boosts-list .frm-page-skeleton-divider {
-	display: none;
-}
-
-#frm-addons-list .frm-list-grid-layout:not(.frm-boosts-list) {
-	grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr));
-}
-
 #post-body-content[data-category="active-addons"] .frm-addons-request-addon,
 #post-body-content[data-category="available-addons"] .frm-addons-request-addon {
 	display: none;
@@ -138,6 +87,53 @@
 
 .plugin-card-formidable-pro.frm-addon-active .frm_toggle_block {
 	pointer-events: none;
+}
+
+/* Boosts: sold separately, so the card carries an orange tag instead of a plan lock. */
+.frm-addon-boost {
+	--frm-boost-600: #d9481a;
+	--frm-boost-50: #fef3ee;
+}
+
+.frm-card-item--outlined.frm-addon-boost:hover {
+	background-color: #fff;
+}
+
+/* Match the icon size and color used by the other add-ons. */
+.frm-addon-boost .frm-border-icon svg {
+	width: 24px;
+	height: 24px;
+	color: var(--grey-600);
+}
+
+.frm-card-item--outlined h3 .frm-boost-pill {
+	margin-left: 0;
+	background-color: var(--frm-boost-50);
+	color: var(--frm-boost-600);
+	font-size: 11px;
+	line-height: 16px;
+	padding: 2px 6px;
+	align-self: center;
+}
+
+.frm-addon-boost h3 {
+	display: flex;
+	align-items: center;
+	gap: var(--gap-xs, 8px);
+	min-width: 0;
+}
+
+.frm-page-skeleton-cat[data-category="boosts"] .frm-page-skeleton-cat-text {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--gap-xs, 8px);
+}
+
+.frm-page-skeleton-cat[data-category="boosts"] .frm-new-pill {
+	margin: 0;
+
+	/* Center the pill on the category letters. */
+	transform: translateY(1px);
 }
 
 #frm-addons-page .frm-addon-button {
