@@ -1,82 +1,13 @@
-// Same spot and look as the "View sample form" button on the Styles page.
-.frm-builder-outline {
-	position: fixed;
-	right: 40px;
-	bottom: 20px;
-	z-index: 20;
+// The Outline tab in the builder's side panel.
+// The id matches #frm-insert-fields, so it wins over the tab track's padding reset.
+#frm-builder-outline {
+	// Same side padding as the Add Fields tab, so the search boxes line up.
+	padding: 0 var(--gap-xs) var(--gap-md);
 
-	&[hidden] {
-		display: none;
-	}
-
-	#frm-builder-outline-toggle {
-		display: flex;
-		align-items: center;
-		max-width: 320px;
-		box-shadow: var(--box-shadow-xl);
-		font-weight: 400;
-
-		&.frm-active {
-			border-color: var(--primary-500);
-			color: var(--primary-700);
-		}
-	}
-
-	.frm-builder-outline-icon {
-		flex-shrink: 0;
-		width: 20px;
-		height: 20px;
-		fill: none;
-	}
-
-	.frm-builder-outline-current {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-	}
-}
-
-// Below 960px the builder tabs move to a fixed bar at the bottom, so sit above it.
-@media only screen and (max-width: 960px) {
-
-	.frm-builder-outline {
-		right: var(--gap-sm);
-		bottom: 84px;
-	}
-}
-
-// Fixed, so the canvas can scroll under it. The script places it above the pill.
-.frm-builder-outline-popover {
-	position: fixed;
-	z-index: 100;
-	width: 320px;
-	max-height: min(70vh, 560px);
-	overflow-y: auto;
-	padding: var(--gap-sm);
-	box-sizing: border-box;
-	border: 1px solid var(--grey-200);
-	border-radius: var(--small-radius);
-	box-shadow: var(--box-shadow-xl);
-	background: #fff;
-
-	&[hidden] {
-		display: none;
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		animation: frm-builder-outline-in 150ms cubic-bezier(0.2, 0, 0, 1);
-	}
-
-	// Stays put while the list scrolls under it.
 	.frm-search {
-		position: sticky;
-		top: calc(var(--gap-sm) * -1);
-		z-index: 1;
 		float: none;
 		width: 100%;
-		margin: calc(var(--gap-sm) * -1) 0 var(--gap-xs);
-		padding: var(--gap-sm) 0 var(--gap-xs);
-		background: #fff;
+		margin: 0 0 var(--gap-xs);
 
 		&.frm_hidden {
 			display: none;
@@ -199,14 +130,6 @@
 			font-size: var(--text-md);
 			overflow-wrap: anywhere;
 		}
-	}
-}
-
-@keyframes frm-builder-outline-in {
-
-	from {
-		opacity: 0;
-		transform: translateY(4px);
 	}
 }
 
