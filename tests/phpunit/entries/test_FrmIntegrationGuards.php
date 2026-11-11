@@ -10,6 +10,42 @@ class test_FrmIntegrationGuards extends FrmUnitTest {
 	/**
 	 * @return void
 	 */
+	public function test_denied_settings_and_import_deletes_report_failure() {
+		$form_id  = $this->factory->form->create();
+		$field_id = $this->factory->field->create(
+			array(
+				'form_id' => $form_id,
+				'type'    => 'captcha',
+			)
+		);
+		add_filter( 'frm_can_destroy_field', '__return_false' );
+
+		try {
+			$this->assertFalse( $this->run_private_method( array( 'FrmFormsController', 'toggle_field_in_form' ), array( $form_id, 'captcha', false, 'Captcha' ) ) );
+			$this->assertFalse( $this->run_private_method( array( 'FrmXMLHelper', 'delete_removed_fields' ), array( array( FrmField::getOne( $field_id ) ) ) ) );
+			$this->assertNotFalse( FrmField::getOne( $field_id ) );
+		} finally {
+			remove_filter( 'frm_can_destroy_field', '__return_false' );
+		}
+
+		$message = '';
+		$errors  = array();
+		FrmXMLHelper::parse_message(
+			array(
+				'warnings' => array( 'Delete denied' ),
+				'imported' => array( 'forms' => 0 ),
+				'updated'  => array(
+					'fields' => 1,
+					'forms'  => 0,
+				),
+				'forms'    => array(),
+			),
+			$message,
+			$errors
+		);
+		$this->assertContains( 'Delete denied', $errors );
+	}
+
 	public function test_entry_filter_blocks_standard_and_xml_writes() {
 		$form_id  = $this->factory->form->create();
 		$values   = array(

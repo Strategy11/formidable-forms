@@ -505,7 +505,7 @@ class FrmFieldsController {
 
 		$field_id = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
 
-		if ( ! FrmField::can_destroy( $field_id ) ) {
+		if ( false === FrmField::destroy( $field_id ) ) {
 			wp_send_json_error(
 				array(
 					'message' => __( 'This field cannot be deleted.', 'formidable' ),
@@ -514,7 +514,6 @@ class FrmFieldsController {
 			);
 		}
 
-		FrmField::destroy( $field_id );
 		wp_die();
 	}
 

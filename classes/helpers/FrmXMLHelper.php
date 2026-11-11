@@ -278,7 +278,9 @@ class FrmXMLHelper {
 
 			self::import_xml_fields( $item->field, $form_id, $this_form, $form_fields, $imported );
 
-			self::delete_removed_fields( $form_fields );
+			if ( ! self::delete_removed_fields( $form_fields ) ) {
+				$imported['warnings'][] = __( 'Some fields could not be deleted during import.', 'formidable' );
+			}
 
 			// Update field ids/keys to new ones.
 			do_action( 'frm_after_duplicate_form', $form_id, $form, array( 'old_id' => $old_id ) );
@@ -417,19 +419,19 @@ class FrmXMLHelper {
 	 *
 	 * @param array $form_fields
 	 *
-	 * @return void
+	 * @return bool
 	 */
 	private static function delete_removed_fields( $form_fields ) {
-		if ( ! $form_fields ) {
-			return;
-		}
+		$deleted = true;
 
 		foreach ( $form_fields as $field ) {
-			if ( is_object( $field ) ) {
-				FrmField::destroy( $field->id );
+			if ( is_object( $field ) && false === FrmField::destroy( $field->id ) ) {
+				$deleted = false;
 			}
 			unset( $field );
 		}
+
+		return $deleted;
 	}
 
 	/**
@@ -1635,6 +1637,10 @@ class FrmXMLHelper {
 		if ( ! is_array( $result ) ) {
 			$message = is_string( $result ) ? $result : htmlentities( print_r( $result, 1 ) );
 			return;
+		}
+
+		if ( ! empty( $result['warnings'] ) ) {
+			$errors = array_merge( $errors, array_unique( $result['warnings'] ) );
 		}
 
 		$t_strings = array(

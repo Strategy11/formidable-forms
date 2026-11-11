@@ -71,6 +71,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 			'field_id' => $field_id,
 		);
 
+		$before = did_filter( 'frm_can_destroy_field' );
 		add_filter( 'frm_can_destroy_field', '__return_false' );
 
 		try {
@@ -82,6 +83,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		}
 
 		$response = json_decode( $this->_last_response, true );
+		$this->assertSame( $before + 1, did_filter( 'frm_can_destroy_field' ), 'One delete must evaluate the policy once.' );
 		$this->assertFalse( $response['success'], 'A denied delete should return an error.' );
 		$this->assertNotEmpty( $response['data']['message'], 'The error should explain why.' );
 		$this->assertNotFalse( FrmField::getOne( $field_id ), 'The field should still exist.' );

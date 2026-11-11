@@ -56,9 +56,9 @@ class FrmEntry {
 		 *
 		 * @since x.x
 		 *
-		 * @param bool  $allow    Whether the entry may be saved.
-		 * @param array $values   Entry values, including the form ID.
-		 * @param int|string   $entry_id The entry being updated, or 0 when a new entry is created.
+		 * @param bool       $allow    Whether the entry may be saved.
+		 * @param array      $values   Entry values, including the form ID.
+		 * @param int|string $entry_id The entry being updated, or 0 when a new entry is created.
 		 */
 		return apply_filters( 'frm_allow_entry_save', true, $values, (int) $entry_id );
 	}
