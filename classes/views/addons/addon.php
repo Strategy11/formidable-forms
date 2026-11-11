@@ -23,9 +23,8 @@ $is_boost = FrmAddonsHelper::is_boost( $addon );
 	<div class="frm-flex frm-gap-xs frm-items-center frm-mb-2xs">
 		<span class="frm-border-icon">
 			<?php
-			if ( $is_boost ) {
-				$icon = ! empty( $addon['icon'] ) && is_string( $addon['icon'] ) && str_starts_with( $addon['icon'], 'frm_' ) ? $addon['icon'] : 'frm_lightning';
-				FrmAppHelper::icon_by_class( 'frmfont ' . $icon, array( 'aria-hidden' => 'true' ) );
+			if ( $is_boost && ! empty( $addon['icon'] ) && is_string( $addon['icon'] ) && str_starts_with( $addon['icon'], 'frm_' ) ) {
+				FrmAppHelper::icon_by_class( 'frmfont ' . $addon['icon'], array( 'aria-hidden' => 'true' ) );
 			} else {
 				FrmAddonsHelper::get_addon_icon( $addon['slug'] );
 			}

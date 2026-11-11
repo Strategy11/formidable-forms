@@ -92,12 +92,12 @@ class FrmAddonsController {
 			return;
 		}
 
-		$label = __( 'Add-ons / Boosts', 'formidable' );
+		$label = __( 'Add-Ons/Boosts', 'formidable' );
 		$label = '<span style="color:#3FCA89">' . esc_html( $label ) . '</span>';
 
 		add_submenu_page(
 			'formidable',
-			'Formidable | ' . __( 'Add-ons / Boosts', 'formidable' ),
+			'Formidable | ' . __( 'Add-Ons/Boosts', 'formidable' ),
 			$label,
 			'frm_view_forms',
 			'formidable-addons',
@@ -1868,9 +1868,11 @@ class FrmAddonsController {
 		if ( ! str_contains( $class, 'frm-button' ) ) {
 			$class .= ' frm-button-secondary frm-button-sm';
 		}
+
+		$button_class = $addon && FrmAddonsHelper::is_boost( $addon ) ? 'frm-boost-buy ' : 'install-now button ';
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
-		<a class="install-now button <?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank" rel="noopener" aria-label="<?php echo esc_attr( $text ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
+		<a class="<?php echo esc_attr( $button_class . $class ); ?>" href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank" rel="noopener" aria-label="<?php echo esc_attr( $text ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 			<?php echo esc_html( $text ); ?>
 		</a>
 		<?php
