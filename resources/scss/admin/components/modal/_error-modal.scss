@@ -2,14 +2,34 @@
  * Components - Error Modal
  */
 
-#frm_error_modal .frm_lock_simple {
-	padding: 20px;
-	border-radius: 50%;
-	background-color: var(--primary-25);
-	display: inline-block;
+#frm_error_modal {
+	width: min(550px, calc(100vw - 32px));
+	max-height: calc(100vh - 32px);
+	overflow-y: auto;
+	box-shadow: var(--box-shadow-xl);
 }
 
-#frm_error_modal #frm_lock_simple {
+#frm_error_modal::backdrop {
+	background: var(--grey-500);
+	opacity: 0.5;
+}
+
+#frm_error_modal .postbox {
+	max-height: none;
+}
+
+#frm_error_modal .frm_lock_simple {
+	width: 60px;
+	height: 60px;
+	margin-bottom: var(--gap-xs);
+	border-radius: 50%;
+	background-color: var(--primary-25);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#frm_error_modal .frm_lock_simple .frmsvg {
 	color: var(--primary-500);
 }
 
@@ -21,6 +41,11 @@
 	font-weight: 600;
 	font-size: var(--text-xl);
 	margin: 0;
+}
+
+/* Focus announces the static heading without treating it as an interactive control. */
+#frm_error_modal_title:focus {
+	outline: none;
 }
 
 #frm_error_modal .frm_modal_content {

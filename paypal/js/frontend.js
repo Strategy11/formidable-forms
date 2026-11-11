@@ -1241,7 +1241,7 @@
 			currencyCode: applePayConfig.currencyCode || 'USD',
 			requiredBillingContactFields: [ 'postalAddress' ],
 			total: {
-				label: document.title || 'Payment',
+				label: frmPayPalVars.walletDisplayName,
 				type: 'final',
 				amount: cachedAmount,
 			},
@@ -1252,7 +1252,7 @@
 		session.onvalidatemerchant = event => {
 			applePayInstance.validateMerchant( {
 				validationUrl: event.validationURL,
-				displayName: document.title || 'Payment'
+				displayName: frmPayPalVars.walletDisplayName
 			} )
 				.then( validateResult => {
 					session.completeMerchantValidation( validateResult.merchantSession );

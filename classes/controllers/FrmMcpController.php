@@ -388,7 +388,10 @@ class FrmMcpController {
 
 		return new WP_Error(
 			'frm_mcp_disabled',
-			__( 'The Formidable MCP server is turned off. Turn on MCP Server in Formidable > Global Settings > MCP to use it.', 'formidable' ),
+			__(
+				'Formidable AI access is off. Enable AI access in Formidable > Global Settings > MCP to use operational abilities. Setup discovery remains available.',
+				'formidable'
+			),
 			array( 'status' => 403 )
 		);
 	}

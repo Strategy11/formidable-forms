@@ -1049,12 +1049,16 @@ function frmFrontFormJS() {
 		const recaptcha = form.querySelector( '.frm-g-recaptcha[data-size="invisible"], .g-recaptcha[data-size="invisible"]' );
 		if ( recaptcha ) {
 			const recaptchaID = recaptcha.dataset.rid;
-			if ( recaptcha.dataset.saveAsSpam === '1' &&
-				( typeof grecaptcha === 'undefined' || recaptchaID === undefined ) ) {
+			if ( typeof grecaptcha === 'undefined' || recaptchaID === undefined ) {
 				return false;
 			}
 
-			const alreadyChecked = grecaptcha.getResponse( recaptchaID );
+			let alreadyChecked;
+			try {
+				alreadyChecked = grecaptcha.getResponse( recaptchaID );
+			} catch ( e ) {
+				return false;
+			}
 			if ( alreadyChecked.length === 0 ) {
 				return recaptcha;
 			}
