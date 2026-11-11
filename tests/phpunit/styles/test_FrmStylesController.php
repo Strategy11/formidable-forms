@@ -197,4 +197,45 @@ class test_FrmStylesController extends FrmUnitTest {
 
 		$this->assertSame( ' with_frm_style frm_style_' . $default_style->post_name, $class );
 	}
+
+	/**
+	 * The "Disable submit button styling" toggle must show the saved value. It used to read the
+	 * field name (always a non-empty string), so it always rendered unchecked and the next save
+	 * reset the setting.
+	 *
+	 * @dataProvider submit_style_toggle_provider
+	 *
+	 * @param int  $saved_value Saved submit_style value.
+	 * @param bool $expected    Whether the toggle should render checked.
+	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'submit_style_toggle_provider' )]
+	public function test_buttons_section_submit_style_toggle_reflects_saved_value( $saved_value, $expected ) {
+		$frm_style = new FrmStyle( 'default' );
+		$style     = $frm_style->get_one();
+
+		$style->post_content['submit_style'] = $saved_value;
+
+		ob_start();
+		FrmStylesController::include_style_section(
+			array(
+				'style'     => $style,
+				'frm_style' => $frm_style,
+			),
+			array( 'args' => 'buttons' )
+		);
+		$html = ob_get_clean();
+
+		$this->assertSame( 1, preg_match( '/<input[^>]*id="frm_submit_style"[^>]*>/s', $html, $matches ), 'The toggle input is missing.' );
+		$this->assertSame( $expected, str_contains( $matches[0], 'checked' ) );
+	}
+
+	/**
+	 * @return array
+	 */
+	public static function submit_style_toggle_provider() {
+		return array(
+			'saved as on'  => array( 1, true ),
+			'saved as off' => array( 0, false ),
+		);
+	}
 }

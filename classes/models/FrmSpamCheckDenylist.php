@@ -429,8 +429,8 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * @return string
 	 */
 	protected function convert_values_to_string( $values ) {
-		// Unslash the forward slashes so strings like /joomla/ are not stuck as \/joomla\/.
-		return str_replace( '\\/', '/', FrmAppHelper::maybe_json_encode( $values ) );
+		// Keep unicode and slashes as typed. Escaped (\u00e1), the hex digits false-match entries like "1ster".
+		return (string) wp_json_encode( $values, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
 	}
 
 	/**
@@ -687,7 +687,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		list( $net, $mask ) = explode( '/', $cidr_ip );
 
 		$ip_net  = ip2long( $net );
-		$ip_mask = ~( ( 1 << ( 32 - intval( $mask ) ) ) - 1 ); // phpcs:ignore SlevomatCodingStandard.PHP.UselessParentheses.UselessParentheses
+		$ip_mask = ~( ( 1 << ( 32 - intval( $mask ) ) ) - 1 ); // phpcs:ignore Formidable.CodeAnalysis.RemoveUselessParentheses.UselessParentheses
 
 		$ip_ip = ip2long( $ip );
 

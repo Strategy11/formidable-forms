@@ -6,6 +6,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFieldGridHelper {
 
 	/**
+	 * Get the builder grid provider, with the original helper as a fallback.
+	 *
+	 * @since x.x
+	 *
+	 * @return FrmFieldGridHelper
+	 */
+	public static function get_instance() {
+		/**
+		 * Filters the helper used to arrange fields in the builder.
+		 *
+		 * @since x.x
+		 *
+		 * @param FrmFieldGridHelper|null $helper The optional helper supplied by a field provider.
+		 */
+		$helper = apply_filters( 'frm_builder_grid_helper', null );
+		return $helper instanceof self ? $helper : new self();
+	}
+
+	/**
 	 * @var bool
 	 */
 	private $parent_li;

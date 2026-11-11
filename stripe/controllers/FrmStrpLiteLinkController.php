@@ -629,6 +629,12 @@ class FrmStrpLiteLinkController {
 			return $form;
 		}
 
+		if ( FrmAppHelper::is_admin() ) {
+			// Admin pages like the entries list load form objects without submitting them with Stripe link.
+			// Skip the payment action query there. AJAX requests still pass through.
+			return $form;
+		}
+
 		if ( false !== FrmStrpLiteActionsController::get_stripe_link_action( $form->id ) ) {
 			$form->options['ajax_submit'] = '1';
 		}
