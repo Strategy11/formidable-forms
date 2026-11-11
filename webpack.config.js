@@ -16,6 +16,14 @@ const webComponentScssFiles = glob.sync('./js/src/web-components/*/**.scss')
     return scssList;
 }, {});
 
+// Bundle each translation separately. English is included in the widget.
+const altchaTranslations = glob.sync( './node_modules/altcha/dist/i18n/*.js' )
+  .filter( file => /\/[a-z]{2}(?:-[a-z\d]+)?\.js$/.test( file ) && ! file.endsWith( '/en.js' ) )
+  .reduce( ( translations, file ) => {
+    translations['altcha/i18n/' + path.basename( file, '.js' )] = './' + file;
+    return translations;
+  }, {} );
+
 /**
  * Environment configuration
  */
@@ -37,6 +45,8 @@ const paths = {
 const entries = {
   // JavaScript entries
   js: {
+    altcha: './js/src/altcha-field.js',
+    ...altchaTranslations,
     formidable_blocks: './js/src/blocks.js',
     formidable_overlay: './js/src/overlay.js',
     'form-templates': './js/src/form-templates/index.js',
@@ -52,6 +62,7 @@ const entries = {
   },
   // SCSS entries
   scss: {
+    altcha: './resources/scss/altcha.scss',
     frm_admin: './resources/scss/admin/frm_admin.scss',
     'admin/frm-settings-components': './resources/scss/admin/frm-settings-components.scss',
     'admin/frm-legacy-paypal': './resources/scss/admin/frm-legacy-paypal.scss',

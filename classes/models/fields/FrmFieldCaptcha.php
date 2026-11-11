@@ -191,6 +191,10 @@ class FrmFieldCaptcha extends FrmFieldType {
 		$frm_settings = FrmAppHelper::get_settings();
 		$active_mode  = $frm_settings->active_captcha;
 
+		if ( 'altcha' === $active_mode ) {
+			return FrmAltchaController::api_url();
+		}
+
 		if ( 'recaptcha' === $active_mode ) {
 			return $this->recaptcha_api_url( $frm_settings );
 		}
@@ -633,7 +637,16 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 */
 	protected function send_api_check() {
 		$captcha_settings = FrmCaptchaFactory::get_settings_object();
-		$arg_array        = array(
+
+		if ( $captcha_settings instanceof FrmAltchaSettings ) {
+			return array(
+				'body' => wp_json_encode(
+					FrmAltchaController::verify_response( $captcha_settings, $this->field )
+				),
+			);
+		}
+
+		$arg_array = array(
 			'body' => array(
 				'secret'   => $captcha_settings->secret,
 				'response' => FrmAppHelper::get_param( $captcha_settings->token_field, '', 'post', 'sanitize_text_field' ),

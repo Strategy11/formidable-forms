@@ -42,8 +42,9 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	}
 
 	protected function get_all_fields() {
+		// CAPTCHA requires a solved challenge and has its own validation tests.
 		$fields  = array_keys( FrmField::field_selection() );
-		$exclude = array( 'html' );
+		$exclude = array( 'html', 'captcha' );
 		return array_diff( $fields, $exclude );
 	}
 
