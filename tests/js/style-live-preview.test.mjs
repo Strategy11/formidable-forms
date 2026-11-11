@@ -9,7 +9,7 @@ const source = readFileSync( new URL( '../../js/admin/style.js', import.meta.url
 const ast = parseSync( source, { configFile: false, babelrc: false } );
 const styler = ast.program.body[ 0 ].expression.callee.body.body;
 const editor = styler.find( node => node.type === 'FunctionDeclaration' && node.id.name === 'initEditPage' );
-const names = [ 'canUpdateLive', 'usesBaseFontSize', 'isSafeLiveValue' ];
+const names = [ 'canUpdateLive', 'usesBaseFontSize', 'isSafeLiveValue', 'updatePreview' ];
 const functions = names.map( name => {
 	const declaration = editor.body.body.find(
 		node => node.type === 'FunctionDeclaration' && node.id.name === name
@@ -33,6 +33,72 @@ function loadDecisions() {
 		}
 	} );
 }
+
+/**
+ * Load preview updates with observable rendering and request scheduling.
+ *
+ * @return {Object} The preview state and update function.
+ */
+function loadPreview() {
+	const preview = {
+		values: { title_color: '#000' },
+		renders: 0,
+		requests: 0,
+		rechecks: [],
+		vars: new Map()
+	};
+	preview.update = runInNewContext( `${ functions }\nupdatePreview`, {
+		livePreview: {
+			settings: new Set( [ 'title_color' ] ),
+			baseFontSizeSettings: new Set(),
+			values: { ...preview.values },
+			vars: preview.vars,
+			updateCount: 0
+		},
+		getStyleSettingValues: () => preview.values,
+		getCssVarName: key => key,
+		prepareLiveValue: ( key, value ) => value,
+		renderLiveVars: () => preview.renders++,
+		debouncedChangeStyling: () => preview.requests++,
+		queueMicrotask: callback => preview.rechecks.push( callback )
+	} );
+	return preview;
+}
+
+test( 'each intermediate local value renders immediately without scheduling a request', () => {
+	const preview = loadPreview();
+	for ( const color of [ '#123', '#456', '#789' ] ) {
+		preview.values = { title_color: color };
+		preview.update();
+		assert.equal( preview.vars.get( 'title_color' ).value, color );
+	}
+	assert.equal( preview.renders, 3 );
+	assert.equal( preview.requests, 0 );
+	assert.equal( preview.rechecks.length, 0 );
+} );
+
+test( 'mixed changes render local values while scheduling server CSS for the rest', () => {
+	const preview = loadPreview();
+	preview.values = { title_color: '#abc', custom_setting: '12px' };
+	preview.update();
+	assert.equal( preview.vars.get( 'title_color' ).value, '#abc' );
+	assert.equal( preview.vars.has( 'custom_setting' ), false );
+	assert.equal( preview.renders, 1 );
+	assert.equal( preview.requests, 1 );
+} );
+
+test( 'late component values render in a microtask without a debounce or repeated rechecks', () => {
+	const preview = loadPreview();
+	preview.update();
+	assert.equal( preview.rechecks.length, 1 );
+	preview.values = { title_color: '#abc' };
+	preview.rechecks.shift()();
+	assert.equal( preview.vars.get( 'title_color' ).value, '#abc' );
+	assert.equal( preview.rechecks.length, 0 );
+	preview.update();
+	preview.rechecks.shift()();
+	assert.equal( preview.rechecks.length, 0 );
+} );
 
 test( 'safe CSS values can update live', () => {
 	const { isSafeLiveValue } = loadDecisions();

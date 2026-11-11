@@ -1435,8 +1435,7 @@
 	function initEditPage() {
 		const { debounce } = frmDom.util;
 		const debouncedChangeStyling = debounce( () => changeStyling(), 100 );
-		const debouncedRecheckPreview = debounce( () => updatePreview( true ), 100 );
-		const debouncedColorChange	 = debounce( ( event, value ) => {
+		const colorChange = ( event, value ) => {
 			/**
 			 * Fires on style colorpicker change.
 			 *
@@ -1444,7 +1443,7 @@
 			 * @param {string} data.value New color value.
 			 */
 			wp.hooks.doAction( 'frm_style_options_color_change', { event, value } );
-		}, 200 );
+		};
 
 		const debouncedTextSquishCheck = debounce( textSquishCheck, 300 );
 		initPosClass(); // It's important that this gets called before we add event listeners because it triggers change events.
@@ -1506,7 +1505,7 @@
 				if ( container ) {
 					container.querySelector( '.wp-color-result-text' ).textContent = this.value;
 				}
-				debouncedColorChange( { target: this }, this.value );
+				colorChange( { target: this }, this.value );
 			}
 		} ).wpColorPicker( {
 			change( event, ui ) {
@@ -1525,9 +1524,8 @@
 					color = ui.color.toCSS( format );
 				}
 
-				debouncedColorChange( event, color );
-
 				input.value = color;
+				colorChange( event, color );
 
 				if ( null !== input.getAttribute( 'data-alpha-color-type' ) ) {
 					updatePreview();
@@ -1560,7 +1558,7 @@
 			}
 			return oldText === 'Select Color' ? 'Select' : oldText;
 		} );
-		jQuery( '#frm_styling_form .styling_settings, #frm_styling_form .frm-field-shape, #frm_styling_form input[name="frm_style_setting[post_content][base_font_size]"]' ).on( 'change', () => updatePreview() );
+		jQuery( '#frm_styling_form .styling_settings, #frm_styling_form .frm-field-shape, #frm_styling_form input[name="frm_style_setting[post_content][base_font_size]"]' ).on( 'input change', () => updatePreview() );
 
 		// This is really only necessary for Pro. But if Pro is not up to date to initialize the datepicker in the sample form, it should still work because it's initialized here.
 		initDatepickerSample();
@@ -1588,22 +1586,26 @@
 			);
 
 			if ( ! changedKeys.length ) {
-				// Some components update their setting input after the change event, so check again shortly.
+				// Some components update their setting input after the change event, so check after it finishes.
 				if ( true !== isRecheck ) {
-					debouncedRecheckPreview();
+					queueMicrotask( () => updatePreview( true ) );
 				}
 				return;
 			}
 
 			livePreview.values = values;
 
-			if ( ! changedKeys.every( key => canUpdateLive( key, values ) ) ) {
+			const liveKeys = changedKeys.filter( key => canUpdateLive( key, values ) );
+			if ( liveKeys.length !== changedKeys.length ) {
 				debouncedChangeStyling();
+			}
+
+			if ( ! liveKeys.length ) {
 				return;
 			}
 
 			livePreview.updateCount++;
-			changedKeys.forEach( key => {
+			liveKeys.forEach( key => {
 				livePreview.vars.set( getCssVarName( key ), {
 					value: prepareLiveValue( key, values[ key ] ),
 					updateCount: livePreview.updateCount
@@ -1611,7 +1613,7 @@
 			} );
 			renderLiveVars();
 
-			if ( changedKeys.includes( 'text_color_disabled' ) ) {
+			if ( liveKeys.includes( 'text_color_disabled' ) ) {
 				setSelectPlaceholderColor();
 			}
 		}
