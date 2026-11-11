@@ -55,6 +55,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 				element.style.overflow = previousOverflow[ index ];
 			} );
 		} );
+
+		// Admin pages hide direct children of #wpbody-content, so open the dialog from <body>.
+		document.body.appendChild( modalElement );
 		modalElement.showModal();
 	}
 </script>
