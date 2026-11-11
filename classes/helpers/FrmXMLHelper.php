@@ -422,6 +422,10 @@ class FrmXMLHelper {
 	 * @return bool
 	 */
 	private static function delete_removed_fields( $form_fields ) {
+		if ( ! $form_fields ) {
+			return true;
+		}
+
 		$deleted = true;
 
 		foreach ( $form_fields as $field ) {

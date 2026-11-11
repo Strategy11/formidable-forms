@@ -11,6 +11,7 @@ class test_FrmIntegrationGuards extends FrmUnitTest {
 	 * @return void
 	 */
 	public function test_denied_settings_and_import_deletes_report_failure() {
+		$this->assertTrue( $this->run_private_method( array( 'FrmXMLHelper', 'delete_removed_fields' ), array( false ) ), 'New imports have no previous fields to delete.' );
 		$form_id  = $this->factory->form->create();
 		$field_id = $this->factory->field->create(
 			array(
