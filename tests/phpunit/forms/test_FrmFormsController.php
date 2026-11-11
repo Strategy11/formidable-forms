@@ -39,6 +39,112 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->assertNotEmpty( strpos( $form, '<form ' ), 'The form is missing' );
 	}
 
+	public function test_post_exceeds_max_size() {
+		$limit = wp_convert_hr_to_bytes( (string) ini_get( 'post_max_size' ) );
+
+		if ( $limit <= 0 ) {
+			$this->markTestSkipped( 'post_max_size is unlimited' );
+		}
+
+		$server = $_SERVER;
+		$post   = $_POST;
+
+		$_SERVER['REQUEST_METHOD'] = 'POST';
+		$_POST                     = array();
+
+		$_SERVER['CONTENT_LENGTH'] = $limit + 1;
+		$this->assertTrue( FrmFormsController::post_exceeds_max_size(), 'An empty POST larger than the limit should be flagged' );
+
+		$_SERVER['CONTENT_LENGTH'] = $limit;
+		$this->assertFalse( FrmFormsController::post_exceeds_max_size(), 'A POST within the limit should not be flagged' );
+
+		$_SERVER['CONTENT_LENGTH'] = $limit + 1;
+		$_POST                     = array( 'id' => 1 );
+		$this->assertFalse( FrmFormsController::post_exceeds_max_size(), 'A POST that PHP parsed should not be flagged' );
+
+		$_POST                     = array();
+		$_SERVER['REQUEST_METHOD'] = 'GET';
+		$this->assertFalse( FrmFormsController::post_exceeds_max_size(), 'A GET request should not be flagged' );
+
+		$_SERVER = $server;
+		$_POST   = $post;
+	}
+
+	/**
+	 * A builder save larger than post_max_size redraws the builder with a message instead of silently dropping the changes.
+	 *
+	 * @see https://github.com/Strategy11/formidable-pro/issues/6921
+	 *
+	 * @covers FrmFormsController::route
+	 *
+	 * @return void
+	 */
+	public function test_route_shows_post_max_size_error() {
+		$html = $this->route_oversized_post( 'edit' );
+
+		$this->assertStringContainsString( 'Your changes were not saved', $html );
+		$this->assertStringContainsString( 'post_max_size', $html );
+	}
+
+	/**
+	 * The form Settings tab posts frm_action=settings in the URL and update_settings in the body, so it needs the same message.
+	 *
+	 * @see https://github.com/Strategy11/formidable-pro/issues/6921
+	 *
+	 * @covers FrmFormsController::route
+	 *
+	 * @return void
+	 */
+	public function test_route_shows_post_max_size_error_on_settings() {
+		$html = $this->route_oversized_post( 'settings' );
+
+		$this->assertStringContainsString( 'Your changes were not saved', $html );
+		$this->assertStringContainsString( 'post_max_size', $html );
+		$this->assertStringContainsString( 'frm_form_settings', $html, 'The settings page should be redrawn' );
+	}
+
+	/**
+	 * Runs route() for an empty POST that is larger than post_max_size.
+	 *
+	 * @param string $action The frm_action in the URL.
+	 *
+	 * @return string The page output.
+	 */
+	private function route_oversized_post( $action ) {
+		$limit = wp_convert_hr_to_bytes( (string) ini_get( 'post_max_size' ) );
+
+		if ( $limit <= 0 ) {
+			$this->markTestSkipped( 'post_max_size is unlimited' );
+		}
+
+		$this->set_current_user_to_1();
+		$form_id = $this->factory->form->create();
+		$server  = $_SERVER;
+		$get     = $_GET;
+		$post    = $_POST;
+		$request = $_REQUEST;
+
+		$_SERVER['REQUEST_METHOD'] = 'POST';
+		$_SERVER['CONTENT_LENGTH'] = $limit + 1;
+		$_POST                     = array();
+		$_GET                      = array(
+			'page'       => 'formidable',
+			'frm_action' => $action,
+			'id'         => $form_id,
+		);
+		$_REQUEST                  = $_GET;
+
+		ob_start();
+		FrmFormsController::route();
+		$html     = ob_get_clean();
+		$_SERVER  = $server;
+		$_GET     = $get;
+		$_POST    = $post;
+		$_REQUEST = $request;
+
+		return $html;
+	}
+
 	/**
 	 * @see FrmFormsController::update
 	 * without ajax

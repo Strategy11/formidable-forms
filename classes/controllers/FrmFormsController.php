@@ -2323,6 +2323,64 @@ class FrmFormsController {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @return int The post_max_size limit in bytes. 0 means no limit.
+	 */
+	public static function get_post_max_size() {
+		return max( 0, wp_convert_hr_to_bytes( (string) ini_get( 'post_max_size' ) ) );
+	}
+
+	/**
+	 * PHP drops the whole body of a POST larger than post_max_size, so $_POST arrives empty.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function post_exceeds_max_size() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( 'POST' !== FrmAppHelper::get_server_value( 'REQUEST_METHOD' ) || ! empty( $_POST ) ) {
+			return false;
+		}
+
+		$limit = self::get_post_max_size();
+
+		return $limit > 0 && (int) FrmAppHelper::get_server_value( 'CONTENT_LENGTH' ) > $limit;
+	}
+
+	/**
+	 * Redraws the builder or the form settings with a message, since update() and update_settings() never run for an empty $_POST.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $action The route action.
+	 *
+	 * @return void
+	 */
+	private static function show_post_max_size_error( $action ) {
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+
+		$message = sprintf(
+			/* translators: %1$s: The post_max_size limit, %2$s: Start link HTML, %3$s: end link HTML */
+			__( 'Your changes were not saved because the form is larger than the %1$s your server accepts (post_max_size). Ask your host to raise this limit, or %2$sread how to fix server limits%3$s.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			size_format( self::get_post_max_size() ),
+			'<a href="' . esc_url( self::get_form_too_long_docs_url() ) . '" target="_blank" rel="noopener">',
+			'</a>'
+		);
+		$errors  = array( 'post_max_size' => $message );
+		$form_id = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
+
+		if ( in_array( $action, array( 'settings', 'update_settings' ), true ) ) {
+			FrmOnSubmitHelper::maybe_migrate_submit_settings_to_action( $form_id );
+			self::get_settings_vars( $form_id, $errors );
+			return;
+		}
+
+		self::get_edit_vars( $form_id, $errors );
+	}
+
+	/**
 	 * Includes html that shows a message when the device is too small to use Formidable Forms admin pages.
 	 *
 	 * @since 6.20
@@ -2381,6 +2439,11 @@ class FrmFormsController {
 
 		add_action( 'frm_load_form_hooks', 'FrmHooksController::trigger_load_form_hooks' );
 		FrmAppHelper::trigger_hook_load( 'form' );
+
+		if ( in_array( $action, array( 'edit', 'update', 'settings', 'update_settings' ), true ) && self::post_exceeds_max_size() ) {
+			self::show_post_max_size_error( $action );
+			return null;
+		}
 
 		switch ( $action ) {
 			case 'create':
