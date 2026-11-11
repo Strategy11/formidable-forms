@@ -287,7 +287,8 @@ class FrmAddonsController {
 	 *
 	 * The built-in gateways cover base payment processing, so the add-ons that
 	 * extend them are presented as their Pro/Legacy tiers until the API reflects
-	 * it. Boost excerpts use temporary defaults when the API has none.
+	 * it. Boost excerpts use temporary defaults when the API has none. Unmapped Boosts
+	 * remain listed without a description paragraph when no excerpt is available.
 	 *
 	 * @since 7.0
 	 *
@@ -1856,8 +1857,9 @@ class FrmAddonsController {
 
 		if ( $addon && FrmAddonsHelper::is_boost( $addon ) ) {
 			$text         = ! empty( $atts['text'] ) ? $atts['text'] : __( 'Get Boost', 'formidable' );
-			$upgrade_link = ! empty( $addon['buy_url'] ) ? $addon['buy_url'] : $addon['link'];
+			$upgrade_link = ! empty( $addon['buy_url'] ) ? $addon['buy_url'] : ( $addon['link'] ?? $upgrade_link );
 			self::prepare_addon_link( $upgrade_link );
+			$upgrade_link = add_query_arg( 'utm_content', $addon['slug'], $upgrade_link );
 		} elseif ( $addon && isset( $addon['categories'] ) && in_array( 'Solution', $addon['categories'], true ) ) {
 			// Solutions will go to a separate page.
 			$upgrade_link = FrmAppHelper::admin_upgrade_link( 'addons', $addon['link'] );

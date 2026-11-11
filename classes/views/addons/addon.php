@@ -92,21 +92,26 @@ $is_boost = FrmAddonsHelper::is_boost( $addon );
 		?>
 	</div>
 
-	<p class="frm-line-clamp-2">
-		<?php FrmAppHelper::kses_echo( $addon['excerpt'], array( 'a' ) ); ?>
-	</p>
+	<?php if ( ! empty( $addon['excerpt'] ) ) { ?>
+		<p class="frm-line-clamp-2">
+			<?php FrmAppHelper::kses_echo( $addon['excerpt'], array( 'a' ) ); ?>
+		</p>
+	<?php } ?>
 
 	<span class="frm-page-skeleton-divider frm-mt-auto"></span>
 
 	<div class="frm-flex frm-items-center frm-justify-between">
 		<?php
 		if ( $is_boost ) {
-			?>
+			if ( ! empty( $addon['link'] ) ) {
+				?>
 			<a class="frm-link-with-external-icon" href="<?php echo esc_url( $addon['link'] ); ?>" target="_blank" rel="noopener">
 				<?php esc_html_e( 'Learn More', 'formidable' ); ?>
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowup8_icon', array( 'aria-hidden' => 'true' ) ); ?>
 			</a>
 			<?php
+			}
+
 			if ( empty( $addon['installed'] ) && empty( $addon['url'] ) ) {
 				FrmAddonsController::addon_upgrade_link( $addon, $pricing );
 			}
