@@ -2323,6 +2323,15 @@ class FrmFormsController {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @return int The post_max_size limit in bytes. 0 means no limit.
+	 */
+	public static function get_post_max_size() {
+		return max( 0, wp_convert_hr_to_bytes( (string) ini_get( 'post_max_size' ) ) );
+	}
+
+	/**
 	 * PHP drops the whole body of a POST larger than post_max_size, so $_POST arrives empty.
 	 *
 	 * @since x.x
@@ -2335,7 +2344,7 @@ class FrmFormsController {
 			return false;
 		}
 
-		$limit = wp_convert_hr_to_bytes( (string) ini_get( 'post_max_size' ) );
+		$limit = self::get_post_max_size();
 
 		return $limit > 0 && (int) FrmAppHelper::get_server_value( 'CONTENT_LENGTH' ) > $limit;
 	}
@@ -2355,7 +2364,7 @@ class FrmFormsController {
 		$message = sprintf(
 			/* translators: %1$s: The post_max_size limit, %2$s: Start link HTML, %3$s: end link HTML */
 			__( 'Your changes were not saved because the form is larger than the %1$s your server accepts (post_max_size). Ask your host to raise this limit, or %2$sread how to fix server limits%3$s.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-			size_format( wp_convert_hr_to_bytes( (string) ini_get( 'post_max_size' ) ) ),
+			size_format( self::get_post_max_size() ),
 			'<a href="' . esc_url( self::get_form_too_long_docs_url() ) . '" target="_blank" rel="noopener">',
 			'</a>'
 		);

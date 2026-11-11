@@ -8706,10 +8706,11 @@ window.frmAdminBuildJS = function() {
 		const v = JSON.stringify( $form.serializeArray() );
 
 		jQuery( document.getElementById( 'frm_compact_fields' ) ).val( v );
+		const data = { action: 'frm_save_form', frm_compact_fields: v, nonce: frmGlobal.nonce };
 		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
-			data: { action: 'frm_save_form', frm_compact_fields: v, nonce: frmGlobal.nonce },
+			data,
 			success( msg ) {
 				afterFormSave( $thisEle );
 				showFormSavedMessage( msg );
@@ -8717,7 +8718,10 @@ window.frmAdminBuildJS = function() {
 			},
 			error( xhr ) {
 				// PHP drops a request larger than post_max_size, so resubmitting would lose the edits too.
-				if ( 413 === xhr.status || ( 400 === xhr.status && '0' === xhr.responseText ) ) {
+				// A 400 with body 0 also happens when the session expired, so check the size.
+				const postMaxSize = Number( frmAdminJs.post_max_size );
+				const tooLarge = 413 === xhr.status || ( 400 === xhr.status && '0' === xhr.responseText && postMaxSize > 0 && jQuery.param( data ).length > postMaxSize );
+				if ( tooLarge ) {
 					$thisEle.classList.remove( 'frm_loading_form', 'frm_loading_button' );
 					$thisEle.setAttribute( 'aria-busy', 'false' );
 					infoModal( frmAdminJs.save_too_large );
