@@ -1,7 +1,10 @@
 <?php
 /**
  * The Outline tab in the builder's side panel: search and jump to pages, sections and fields.
+ *
+ * @package Formidable
  */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

@@ -3,7 +3,7 @@ describe( 'Form outline', { retries: 0 }, () => {
 
 	const openOutline = () => {
 		cy.get( '#frm-builder-outline-toggle' ).then( toggle => {
-			if ( toggle.attr( 'aria-expanded' ) !== 'true' ) {
+			if ( ! toggle.closest( 'li' ).hasClass( 'frm-active' ) ) {
 				toggle[ 0 ].click();
 			}
 		} );
@@ -79,12 +79,12 @@ describe( 'Form outline', { retries: 0 }, () => {
 		} );
 	};
 
-	it( 'shows only once the form has pages and finds fields by name only', () => {
-		cy.get( '.frm-builder-outline' ).should( 'not.be.visible' );
+	it( 'renders only in its tab and finds preview labels', () => {
+		cy.get( '.frm-builder-outline-list' ).should( 'be.empty' );
 
 		addField( 'text' );
 		addField( 'html' );
-		cy.get( '.frm-builder-outline' ).should( 'not.be.visible' );
+		cy.get( '.frm-builder-outline-list' ).should( 'be.empty' );
 		addPageBreak();
 		openOutline();
 
@@ -122,7 +122,9 @@ describe( 'Form outline', { retries: 0 }, () => {
 				}
 				fields.push( createField( doc, `${ 9000 + i }`, 'text', `Item ${ i }` ) );
 			}
-			list[ 0 ].append( ...fields );
+			const fragment = doc.createDocumentFragment();
+			fragment.append( ...fields );
+			list[ 0 ].append( fragment );
 		} );
 		openOutline();
 
@@ -143,14 +145,47 @@ describe( 'Form outline', { retries: 0 }, () => {
 		cy.get( '.frm-builder-outline-status' ).should( 'have.text', 'Showing up to 60 matching fields.' );
 
 		search( 'item 42' );
+		cy.get( '#frm-builder-outline-search-input' ).type( '{enter}' );
+		cy.get( '#frm-show-fields li[data-fid="9042"]' ).should( 'have.class', 'frm-builder-outline-target' );
 		cy.get( '.frm-builder-outline-field' ).should( 'have.length', 1 ).click();
 		cy.get( '#frm-show-fields li[data-fid="9042"]' ).should( 'have.class', 'frm-builder-outline-target' );
 		// Jumping to a field keeps the outline open.
 		cy.get( '#frm-builder-outline' ).should( 'be.visible' );
 
-		// Escape closes it and gives focus back to the button.
-		cy.get( '#frm-builder-outline-search-input' ).type( '{esc}' );
-		cy.get( '#frm-builder-outline' ).should( 'not.be.visible' );
-		cy.focused().should( 'have.id', 'frm-builder-outline-toggle' );
+		// The outline is a sidebar tab, so returning to Add Fields closes it.
+		cy.get( '#frm_insert_fields_tab' ).then( tab => tab[ 0 ].click() );
+		cy.get( '#frm-builder-outline' ).should( 'have.attr', 'inert' );
+	} );
+
+	it( 'tracks edits only while open and preserves results when scrolling', () => {
+		cy.get( '#frm-show-fields' ).then( list => {
+			const doc = list[ 0 ].ownerDocument;
+			const fragment = doc.createDocumentFragment();
+			const fields = [];
+			for ( let index = 0; index < 1000; index++ ) {
+				fields.push( createField( doc, `${ 90000 + index }`, 'text', `Large field ${ index }` ) );
+			}
+			fragment.append( ...fields );
+			list[ 0 ].append( fragment );
+		} );
+		cy.get( '.frm-builder-outline-list' ).should( 'be.empty' );
+		openOutline();
+		cy.get( '.frm-builder-outline-field' ).should( 'have.length', 1000 );
+		cy.get( '.frm-builder-outline-field' ).first().then( button => {
+			cy.get( '#post-body-content' ).scrollTo( 'bottom' );
+			cy.get( '.frm-builder-outline-field' ).first().should( current => {
+				expect( current[ 0 ] ).to.equal( button[ 0 ] );
+			} );
+		} );
+		cy.get( '#frm-show-fields li[data-fid="90000"] .frm_builder_field_name' ).then( label => {
+			label[ 0 ].textContent = 'Changed while open';
+		} );
+		cy.get( '.frm-builder-outline-field' ).first().should( 'have.text', 'Changed while open' );
+		cy.get( '#frm_insert_fields_tab' ).then( tab => tab[ 0 ].click() );
+		cy.get( '#frm-show-fields li[data-fid="90000"] .frm_builder_field_name' ).then( label => {
+			label[ 0 ].textContent = 'Changed while closed';
+		} );
+		openOutline();
+		cy.get( '.frm-builder-outline-field' ).first().should( 'have.text', 'Changed while closed' );
 	} );
 } );

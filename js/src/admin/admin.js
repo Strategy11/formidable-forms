@@ -10246,7 +10246,8 @@ window.frmAdminBuildJS = function() {
 				},
 				elementId,
 				success( msg ) {
-					if ( rich ) {
+					const codeTabActive = jQuery( `#wp-${ elementId }-wrap` ).hasClass( 'html-active' );
+					if ( rich && ! codeTabActive ) {
 						const paragraph = document.createElement( 'p' );
 						paragraph.innerText = msg;
 						send_to_editor( paragraph.innerHTML );
