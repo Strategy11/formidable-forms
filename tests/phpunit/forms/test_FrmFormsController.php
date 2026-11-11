@@ -445,5 +445,20 @@ class test_FrmFormsController extends FrmUnitTest {
 		unset( $_GET['action'] );
 
 		$this->assertStringContainsString( 'Draft check ' . $draft_id, $preview, 'The preview page should still render a draft form.' );
+
+		add_filter( 'wp_doing_ajax', '__return_true' );
+		$_POST['action'] = 'frm_entries_create';
+
+		$_SERVER['HTTP_REFERER'] = 'http://example.org/';
+		$ajax_from_page          = FrmFormsController::show_form( $draft_id );
+
+		$_SERVER['HTTP_REFERER'] = admin_url( 'admin-ajax.php?action=frm_forms_preview&form=' . $draft_key );
+		$ajax_from_preview       = FrmFormsController::show_form( $draft_id );
+
+		remove_filter( 'wp_doing_ajax', '__return_true' );
+		unset( $_POST['action'], $_SERVER['HTTP_REFERER'] );
+
+		$this->assertSame( $invalid, $ajax_from_page, 'An AJAX submit from a page should not render a draft form.' );
+		$this->assertStringContainsString( 'Draft check ' . $draft_id, $ajax_from_preview, 'An AJAX submit from the preview page should render the draft form again.' );
 	}
 }

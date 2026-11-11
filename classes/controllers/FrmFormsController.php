@@ -2700,7 +2700,7 @@ class FrmFormsController {
 		$form         = apply_filters( 'frm_pre_display_form', $form );
 		$frm_settings = FrmAppHelper::get_settings( array( 'current_form' => $form->id ) );
 
-		if ( self::is_viewable_draft_form( $form ) ) {
+		if ( self::is_hidden_draft_form( $form ) ) {
 			// Don't show a draft form on a page
 			$form = __( 'Please select a valid form', 'formidable' );
 		} elseif ( ! FrmForm::is_visible_to_user( $form ) ) {
@@ -2742,14 +2742,31 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Check if a draft form should be hidden. A draft form only renders on the preview page, for everyone.
+	 * Check if a draft form should be hidden. A draft form is hidden on every page, for everyone.
+	 * It only renders on the preview page, and when a form submitted from the preview page with AJAX is shown again.
 	 *
 	 * @param object $form
 	 *
 	 * @return bool
 	 */
-	private static function is_viewable_draft_form( $form ) {
-		return $form->status === 'draft' && ! FrmAppHelper::is_preview_page();
+	private static function is_hidden_draft_form( $form ) {
+		return $form->status === 'draft' && ! FrmAppHelper::is_preview_page() && ! self::is_ajax_submit_from_preview_page();
+	}
+
+	/**
+	 * Check if the current request is an AJAX form submission sent from the preview page.
+	 * The AJAX submit response renders the form again, so it needs the same draft exemption as the preview page.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function is_ajax_submit_from_preview_page() {
+		if ( ! wp_doing_ajax() || FrmAppHelper::get_post_param( 'action', '', 'sanitize_title' ) !== 'frm_entries_create' ) {
+			return false;
+		}
+
+		return str_contains( FrmAppHelper::get_server_value( 'HTTP_REFERER' ), 'action=frm_forms_preview' );
 	}
 
 	/**
