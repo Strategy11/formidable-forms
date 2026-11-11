@@ -388,11 +388,13 @@ class FrmEntryMeta {
 	/**
 	 * Keep literal source backslashes when a field opts out of legacy unslashing.
 	 *
-	 * Applied by get_entry_meta_by_field(), get_entry_metas_for_field() and getAll()
+	 * Applied by FrmEntry, get_entry_meta_by_field(), get_entry_metas_for_field() and getAll()
 	 * so every read path returns the same value for a field. The field type is only
 	 * looked up when something is hooked to the filter.
 	 *
 	 * @since x.x
+	 *
+	 * @internal
 	 *
 	 * @param mixed       $value    Stored or cached field value.
 	 * @param int|string  $field_id Field ID or key.
@@ -400,7 +402,7 @@ class FrmEntryMeta {
 	 *
 	 * @return mixed
 	 */
-	private static function maybe_unslash_field_value( $value, $field_id, $type = null ) {
+	public static function maybe_unslash_field_value( $value, $field_id, $type = null ) {
 		if ( ! has_filter( 'frm_should_unslash_entry_meta_value' ) ) {
 			return wp_unslash( $value );
 		}

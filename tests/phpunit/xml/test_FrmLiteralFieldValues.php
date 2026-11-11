@@ -71,6 +71,8 @@ class test_FrmLiteralFieldValues extends FrmUnitTest {
 				'form_id'       => $form_id,
 				'field_key'     => $field_key,
 				'default_value' => $source,
+				'name'          => $source,
+				'description'   => $source,
 			)
 		);
 		$filter    = function ( $literal, $field ) use ( $field_key ) {
@@ -83,14 +85,23 @@ class test_FrmLiteralFieldValues extends FrmUnitTest {
 			$contents = file_get_contents( $path );
 			$this->assertStringContainsString( '<default_value encoding="base64"><![CDATA[' . base64_encode( $source ) . ']]></default_value>', $contents );
 
-			FrmField::update( $field_id, array( 'default_value' => 'changed' ) );
+			FrmField::update(
+				$field_id,
+				array(
+					'default_value' => 'changed',
+					'name'          => 'changed',
+					'description'   => 'changed',
+				)
+			);
 			FrmXMLHelper::import_xml_now( simplexml_load_string( $contents ) );
 		} finally {
 			remove_filter( 'frm_xml_field_value_is_literal', $filter, 10 );
 		}
 
 		// FrmField::getOne() unslashes every column, so compare the stored value.
-		$this->assertSame( $source, FrmDb::get_var( 'frm_fields', array( 'field_key' => $field_key ), 'default_value' ) );
+		foreach ( array( 'default_value', 'name', 'description' ) as $column ) {
+			$this->assertSame( $source, FrmDb::get_var( 'frm_fields', array( 'field_key' => $field_key ), $column ) );
+		}
 	}
 
 	public function test_unslash_filter_applies_to_every_read_path() {
@@ -125,6 +136,19 @@ class test_FrmLiteralFieldValues extends FrmUnitTest {
 
 		try {
 			$this->assertSame( $stored, FrmEntryMeta::get_entry_meta_by_field( $entry_id, $field_id ) );
+			$this->assertSame( $stored, FrmEntry::getOne( $entry_id, true )->metas[ $field_id ] );
+			$this->assertSame( $stored, FrmEntry::getOne( $entry_id, true )->metas[ $field_id ], 'Cached entries preserve literal values too.' );
+			$entries = FrmEntry::getAll( array( 'it.id' => $entry_id ), '', '', true );
+			$this->assertSame( $stored, reset( $entries )->metas[ $field_id ] );
+			add_filter( 'frm_include_meta_keys', '__return_true' );
+
+			try {
+				wp_cache_flush();
+				$field_key = FrmField::get_key_by_id( $field_id );
+				$this->assertSame( $stored, FrmEntry::getOne( $entry_id, true )->metas[ $field_key ] );
+			} finally {
+				remove_filter( 'frm_include_meta_keys', '__return_true' );
+			}
 			$this->assertSame( array( $stored ), FrmEntryMeta::get_entry_metas_for_field( $field_id ) );
 			$all = FrmEntryMeta::getAll(
 				array(
@@ -142,6 +166,7 @@ class test_FrmLiteralFieldValues extends FrmUnitTest {
 
 		FrmEntryMeta::clear_cache();
 		wp_cache_flush();
+		$this->assertSame( 'C:tempnew {"a":1}', FrmEntry::getOne( $entry_id, true )->metas[ $field_id ] );
 		$this->assertSame( 'C:tempnew {"a":1}', FrmEntryMeta::get_entry_meta_by_field( $entry_id, $field_id ), 'Without the filter the legacy unslashing is unchanged.' );
 	}
 }

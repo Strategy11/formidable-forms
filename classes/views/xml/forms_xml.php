@@ -43,8 +43,8 @@ while ( $next_set = array_splice( $item_ids, 0, 20 ) ) {
 		<field>
 			<id><?php echo absint( $field->id ); ?></id>
 			<field_key><?php echo FrmXMLHelper::cdata( $field->field_key ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></field_key>
-			<name><?php echo FrmXMLHelper::cdata( $field->name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></name>
-			<description><?php echo FrmXMLHelper::cdata( $field->description ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></description>
+			<name<?php FrmAppHelper::array_to_html_params( $default_value_attributes, true ); ?>><?php echo FrmXMLHelper::field_value_to_xml( $field->name, $field ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></name>
+			<description<?php FrmAppHelper::array_to_html_params( $default_value_attributes, true ); ?>><?php echo FrmXMLHelper::field_value_to_xml( $field->description, $field ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></description>
 			<type><?php echo FrmXMLHelper::cdata( $field->type ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></type>
 			<default_value<?php FrmAppHelper::array_to_html_params( $default_value_attributes, true ); ?>><?php echo FrmXMLHelper::field_value_to_xml( $field->default_value, $field ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></default_value>
 			<field_order><?php echo absint( $field->field_order ); ?></field_order>

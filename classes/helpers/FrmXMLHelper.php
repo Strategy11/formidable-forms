@@ -612,8 +612,8 @@ class FrmXMLHelper {
 		return array(
 			'id'            => (int) $field->id,
 			'field_key'     => (string) $field->field_key,
-			'name'          => (string) $field->name,
-			'description'   => (string) $field->description,
+			'name'          => self::field_text_from_xml( $field->name, $field ),
+			'description'   => self::field_text_from_xml( $field->description, $field ),
 			'type'          => (string) $field->type,
 			'default_value' => self::field_value_from_xml( $field->default_value, $field ),
 			'field_order'   => (int) $field->field_order,
@@ -622,6 +622,24 @@ class FrmXMLHelper {
 			'options'       => FrmAppHelper::maybe_json_decode( (string) $field->options ),
 			'field_options' => self::fill_field_options( $field ),
 		);
+	}
+
+	/**
+	 * Decode marked text columns without interpreting unmarked JSON as an array.
+	 *
+	 * @since x.x
+	 *
+	 * @param SimpleXMLElement $value XML text column.
+	 * @param object           $field Exported field definition.
+	 *
+	 * @return string
+	 */
+	private static function field_text_from_xml( $value, $field ) {
+		if ( 'base64' === (string) $value['encoding'] ) {
+			return (string) self::field_value_from_xml( $value, $field );
+		}
+
+		return (string) $value;
 	}
 
 	/**
