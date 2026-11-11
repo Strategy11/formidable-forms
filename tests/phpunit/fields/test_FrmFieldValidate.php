@@ -218,7 +218,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$this->assertNotEmpty( $field );
 		$this->assertEmpty( FrmField::get_option( $field, 'allow_intl_domains' ), 'allow_intl_domains should be off by default.' );
 
-		foreach ( array( 'https://ernährung.ch', 'https://пример.рф', 'ernährung.ch' ) as $url ) {
+		foreach ( array( 'https://ernährung.ch', 'https://пример.рф', 'ernährung.ch', 'https://müller.de', 'https://www.müller.de', 'https://a.b.müller.de' ) as $url ) {
 			$errors = $this->check_single_value( array( $field->id => $url ) );
 			$this->assertArrayHasKey( 'field' . $field->id, $errors, 'An internationalized domain passed validation without allow_intl_domains: ' . $url );
 		}
@@ -274,6 +274,62 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		foreach ( $should_fail as $url ) {
 			$errors = $this->check_single_value( array( $field->id => $url ) );
 			$this->assertArrayHasKey( 'field' . $field->id, $errors, 'An invalid url passed validation: ' . $url );
+		}
+	}
+
+	/**
+	 * The host must run up to a path, query, fragment, port or the end of the value.
+	 *
+	 * Without an end anchor only the leading dotted chunk of the host was checked, so anything
+	 * after it passed, with or without allow_intl_domains.
+	 *
+	 * @see FrmFieldUrl::validate
+	 */
+	public function test_url_host_is_anchored() {
+		$default_field = $this->factory->field->get_object_by_id( $this->get_field_key( 'url' ) );
+		$intl_field    = $this->create_intl_url_field();
+
+		$should_pass = array(
+			'https://example.com',
+			'https://example.com/',
+			'https://example.com/path/to?x=1#top',
+			'https://example.com?x=1',
+			'https://example.com#top',
+			'https://example.com:8080',
+			'https://example.com:8080/path',
+			'https://a.b.example.com',
+			'http://localhost',
+			'http://localhost:8080',
+			'http://localhost/path',
+			'https://xn--mller-kva.de',
+			'https://a.b/ü',
+		);
+
+		$should_fail = array(
+			'https://example.c$m',
+			'https://example.com bad',
+		);
+
+		// Non-ASCII after the first dotted chunk is only invalid while international domains are off.
+		$should_fail_ascii_only = array(
+			'https://a.b.müller.de',
+		);
+
+		foreach ( array( $default_field, $intl_field ) as $field ) {
+			foreach ( $should_pass as $url ) {
+				$errors = $this->check_single_value( array( $field->id => $url ) );
+				$this->assertArrayNotHasKey( 'field' . $field->id, $errors, 'A valid url failed validation: ' . $url );
+			}
+
+			foreach ( $should_fail as $url ) {
+				$errors = $this->check_single_value( array( $field->id => $url ) );
+				$this->assertArrayHasKey( 'field' . $field->id, $errors, 'An invalid url passed validation: ' . $url );
+			}
+		}
+
+		foreach ( $should_fail_ascii_only as $url ) {
+			$errors = $this->check_single_value( array( $default_field->id => $url ) );
+			$this->assertArrayHasKey( 'field' . $default_field->id, $errors, 'An invalid url passed validation: ' . $url );
 		}
 	}
 
@@ -340,6 +396,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 			$this->assertStringContainsString( '[\da-z\u0080-\u{10FFFF}\.-]', $contents, 'The international host class is missing from ' . $name );
 			$this->assertStringNotContainsString( '\x80-\xff', $contents, 'The PHP byte range was copied into ' . $name . '. That rejects Cyrillic and CJK hosts.' );
 			$this->assertStringContainsString( 'data-intl-domains', $contents, 'The data-intl-domains check is missing from ' . $name );
+			$this->assertSame( 2, substr_count( $contents, '(?=[\/?#:]|$)' ), 'The host end anchor is missing from a pattern in ' . $name );
 		}
 	}
 
