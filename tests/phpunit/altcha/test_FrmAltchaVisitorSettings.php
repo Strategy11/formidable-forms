@@ -29,8 +29,8 @@ class test_FrmAltchaVisitorSettings extends FrmUnitTest {
 
 				$this->assertSame( $display, $config['display'], 'The selected layout should reach the widget.' );
 				$this->assertSame( $type, $config['type'], 'The selected interaction style should reach the widget.' );
-				$this->assertTrue( $config['hideLogo'], 'The logo should follow its own visibility setting.' );
-				$this->assertFalse( $config['hideFooter'], 'Hiding the logo should preserve the footer unless separately selected.' );
+				$this->assertFalse( $config['hideLogo'], 'The presentation should preserve the ALTCHA logo.' );
+				$this->assertFalse( $config['hideFooter'], 'The presentation should preserve the ALTCHA footer.' );
 				$this->assertSame( 'frm-altcha-response', $attrs['data-name'], 'Visitor controls should preserve the validation token name.' );
 			}
 		}
@@ -40,7 +40,7 @@ class test_FrmAltchaVisitorSettings extends FrmUnitTest {
 	 * Unsupported or malformed options fall back to the existing visible checkbox.
 	 */
 	public function test_invalid_visitor_options_use_safe_defaults() {
-		foreach ( array( 'unsupported', array( 'floating' ) ) as $invalid ) {
+		foreach ( array( 'overlay', 'bar', 'switch', 'native', 'unsupported', array( 'floating' ) ) as $invalid ) {
 			$settings = FrmAltchaHelper::sanitize_settings(
 				array(
 					'display'     => $invalid,

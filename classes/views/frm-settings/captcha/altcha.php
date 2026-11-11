@@ -20,28 +20,6 @@ $panel_attrs = array(
 	'role'            => 'tabpanel',
 	'aria-labelledby' => 'frm-altcha-tab',
 );
-
-$hide_footer_attrs = array(
-	'type'  => 'checkbox',
-	'name'  => 'frm_altcha[hide_footer]',
-	'id'    => 'frm_altcha_hide_footer',
-	'value' => '1',
-);
-
-if ( 1 === $settings['hide_footer'] ) {
-	$hide_footer_attrs['checked'] = 'checked';
-}
-
-$hide_logo_attrs = array(
-	'type'  => 'checkbox',
-	'name'  => 'frm_altcha[hide_logo]',
-	'id'    => 'frm_altcha_hide_logo',
-	'value' => '1',
-);
-
-if ( 1 === $settings['hide_logo'] ) {
-	$hide_logo_attrs['checked'] = 'checked';
-}
 ?>
 <div<?php FrmAppHelper::array_to_html_params( $panel_attrs, true ); ?>>
 	<details class="frm-spam-disclosure frm-mb-sm" open>
@@ -53,19 +31,11 @@ if ( 1 === $settings['hide_logo'] ) {
 			<?php esc_html_e( 'ALTCHA stops spam bots with a small proof-of-work puzzle that the visitor\'s browser solves in the background. It runs entirely on this site, with no keys, no third-party service, no cookies and no tracking.', 'formidable' ); ?>
 		</p>
 		<div class="frm_grid_container">
-			<p class="frm6 frm_form_field">
+			<p class="frm_form_field">
 				<label for="frm_altcha_display"><?php esc_html_e( 'Display mode', 'formidable' ); ?></label>
 				<select name="frm_altcha[display]" id="frm_altcha_display">
 					<?php foreach ( FrmAltchaHelper::display_modes() as $value => $label ) { ?>
 						<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $settings['display'], $value ); ?>><?php echo esc_html( $label ); ?></option>
-					<?php } ?>
-				</select>
-			</p>
-			<p class="frm6 frm_form_field">
-				<label for="frm_altcha_widget_type"><?php esc_html_e( 'Verification control', 'formidable' ); ?></label>
-				<select name="frm_altcha[widget_type]" id="frm_altcha_widget_type">
-					<?php foreach ( FrmAltchaHelper::widget_types() as $value => $label ) { ?>
-						<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $settings['widget_type'], $value ); ?>><?php echo esc_html( $label ); ?></option>
 					<?php } ?>
 				</select>
 			</p>
@@ -100,19 +70,6 @@ if ( 1 === $settings['hide_logo'] ) {
 						<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $settings['auto'], $value ); ?>><?php echo esc_html( $label ); ?></option>
 					<?php } ?>
 				</select>
-			</p>
-
-			<p class="frm_form_field">
-				<label for="frm_altcha_hide_logo">
-					<input<?php FrmAppHelper::array_to_html_params( $hide_logo_attrs, true ); ?> />
-					<?php esc_html_e( 'Hide the ALTCHA logo', 'formidable' ); ?>
-				</label>
-			</p>
-			<p class="frm_form_field">
-				<label for="frm_altcha_hide_footer">
-					<input<?php FrmAppHelper::array_to_html_params( $hide_footer_attrs, true ); ?> />
-					<?php esc_html_e( 'Hide the "Protected by ALTCHA" link', 'formidable' ); ?>
-				</label>
 			</p>
 		</div>
 	</details>

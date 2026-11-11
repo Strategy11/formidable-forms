@@ -80,10 +80,8 @@ class FrmAltchaHelper {
 	 */
 	public static function display_modes() {
 		return array(
-			'standard' => __( 'Inline (default)', 'formidable' ),
+			'standard' => __( 'Inline green checkmark (default)', 'formidable' ),
 			'floating' => __( 'Floating near the Submit button', 'formidable' ),
-			'overlay'  => __( 'Overlay', 'formidable' ),
-			'bar'      => __( 'Bar at the bottom of the screen', 'formidable' ),
 		);
 	}
 
@@ -97,8 +95,6 @@ class FrmAltchaHelper {
 	public static function widget_types() {
 		return array(
 			'checkbox' => __( 'Checkbox (default)', 'formidable' ),
-			'switch'   => __( 'Toggle switch', 'formidable' ),
-			'native'   => __( 'Browser checkbox', 'formidable' ),
 		);
 	}
 
@@ -150,10 +146,10 @@ class FrmAltchaHelper {
 			'difficulty'  => self::sanitize_choice( $raw['difficulty'] ?? '', self::difficulty_levels(), $defaults['difficulty'] ),
 			'expires'     => max( 1, min( 1440, $expires ) ),
 			'auto'        => self::sanitize_choice( $raw['auto'] ?? '', self::auto_modes(), $defaults['auto'] ),
-			'hide_footer' => 1 === (int) ( $raw['hide_footer'] ?? 0 ) ? 1 : 0,
+			'hide_footer' => $defaults['hide_footer'],
 			'display'     => self::sanitize_choice( $raw['display'] ?? '', self::display_modes(), $defaults['display'] ),
 			'widget_type' => self::sanitize_choice( $raw['widget_type'] ?? '', self::widget_types(), $defaults['widget_type'] ),
-			'hide_logo'   => in_array( $raw['hide_logo'] ?? 0, array( 1, '1', true ), true ) ? 1 : 0,
+			'hide_logo'   => $defaults['hide_logo'],
 		);
 	}
 

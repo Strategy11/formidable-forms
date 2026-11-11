@@ -268,7 +268,7 @@ class test_FrmAltchaSubmit extends FrmUnitTest {
 				'difficulty'  => 'medium',
 				'expires'     => 1440,
 				'auto'        => 'onfocus',
-				'hide_footer' => 1,
+				'hide_footer' => 0,
 				'display'     => 'standard',
 				'widget_type' => 'checkbox',
 				'hide_logo'   => 0,
