@@ -412,7 +412,7 @@ class FrmStylesHelper {
 	 *
 	 * @param string $color
 	 *
-	 * @return int
+	 * @return float|int Color brightness, or 0 for invalid input.
 	 */
 	public static function get_color_brightness( $color ) {
 		if ( str_starts_with( $color, 'rgb' ) ) {
@@ -428,6 +428,16 @@ class FrmStylesHelper {
 			}
 
 			$color = $hsl_to_hex;
+		}
+
+		if ( preg_match( '/^#?[a-fA-F0-9]{8}$/D', $color ) ) {
+			$color = substr( ltrim( $color, '#' ), 0, 6 );
+		}
+
+		$color = sanitize_hex_color_no_hash( $color );
+
+		if ( ! $color ) {
+			return 0;
 		}
 
 		self::fill_hex( $color );
