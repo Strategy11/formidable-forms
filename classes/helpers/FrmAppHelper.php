@@ -1976,20 +1976,6 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Format a WordPress page dropdown label.
-	 *
-	 * @since x.x
-	 *
-	 * @param string $title Filtered page title.
-	 * @param object $page  Page containing ID and post_title.
-	 *
-	 * @return string
-	 */
-	public static function page_dropdown_label( $title, $page ) {
-		return self::get_post_dropdown_label( $page );
-	}
-
-	/**
 	 * Renders an autocomplete page selection or a regular dropdown depending on
 	 * the total page count
 	 *
@@ -2013,8 +1999,17 @@ class FrmAppHelper {
 		$title    = '';
 
 		if ( $selected ) {
-			$post  = get_post( $selected );
-			$title = $post ? self::get_post_dropdown_label( $post ) : '';
+			$post = get_post( $selected );
+
+			if ( $post ) {
+				// Use the displayed title so the Private and Protected prefixes are kept.
+				$title = self::get_post_dropdown_label(
+					(object) array(
+						'ID'         => $post->ID,
+						'post_title' => get_the_title( $post ),
+					)
+				);
+			}
 		}
 
 		?>

@@ -26,28 +26,50 @@ class test_FrmPostDropdownLabels extends FrmUnitTest {
 	}
 
 	/** @return void */
-	public function test_page_dropdown_preserves_selection_and_escapes_titles() {
+	public function test_page_search_matches_prefilled_label_and_id() {
 		$id = self::factory()->post->create(
 			array(
 				'post_type'   => 'page',
 				'post_status' => 'publish',
-				'post_title'  => 'A & B',
+				'post_title'  => 'Saved Listings',
 			)
 		);
-		add_filter( 'list_pages', array( 'FrmAppHelper', 'page_dropdown_label' ), 10, 2 );
-		$html = wp_dropdown_pages(
+
+		foreach ( array( 'Saved Listings', 'Saved Listings (ID: ' . $id . ')', 'Saved', (string) $id ) as $term ) {
+			$values = wp_list_pluck( FrmSettingsController::get_page_search_results( $term, 'page' ), 'value' );
+			$this->assertContains( (string) $id, array_map( 'strval', $values ), 'Term: ' . $term );
+		}
+
+		$results = FrmSettingsController::get_page_search_results( 'Saved Listings', 'page' );
+		$this->assertSame( 'Saved Listings (ID: ' . $id . ')', $results[0]['label'] );
+		$this->assertSame( array(), FrmSettingsController::get_page_search_results( 'No such page', 'page' ) );
+	}
+
+	/** @return void */
+	public function test_autocomplete_selected_value_keeps_private_prefix() {
+		$id = self::factory()->post->create(
 			array(
-				'echo'     => 0,
-				'selected' => $id,
-				'name'     => 'destination',
-				'id'       => 'destination-id',
+				'post_type'   => 'page',
+				'post_status' => 'private',
+				'post_title'  => 'Secret',
 			)
 		);
-		$this->assertStringContainsString( 'value="' . $id . '" selected="selected"', $html );
-		$this->assertStringContainsString( 'A &amp; B (ID: ' . $id . ')', $html );
-		$this->assertStringContainsString( "id='destination-id'", $html );
-		remove_filter( 'list_pages', array( 'FrmAppHelper', 'page_dropdown_label' ), 10 );
-		$this->assertFalse( has_filter( 'list_pages', array( 'FrmAppHelper', 'page_dropdown_label' ) ) );
+		self::factory()->post->create_many(
+			51,
+			array(
+				'post_type'   => 'page',
+				'post_status' => 'publish',
+			)
+		);
+		ob_start();
+		FrmAppHelper::maybe_autocomplete_pages_options(
+			array(
+				'field_name' => 'destination',
+				'page_id'    => $id,
+			)
+		);
+		$html = ob_get_clean();
+		$this->assertStringContainsString( 'value="Private: Secret (ID: ' . $id . ')"', $html );
 	}
 
 	/** @return void */
