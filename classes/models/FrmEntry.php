@@ -26,13 +26,19 @@ class FrmEntry {
 	/**
 	 * Allow integrations to prevent entry storage and its associated actions.
 	 *
+	 * This runs before the frm_pre_create_entry filter, so a callback on that filter that
+	 * changes the form ID is not checked again.
+	 *
 	 * @since x.x
 	 *
-	 * @param array $values Entry values, including the form ID.
+	 * @param array      $values   Entry values. On create this is the full set of posted values. On
+	 *                             update it is the values being saved, with the entry's form ID added
+	 *                             when they do not include one.
+	 * @param int|string $entry_id The entry being updated, or 0 when a new entry is created.
 	 *
 	 * @return bool
 	 */
-	public static function allows_save( $values ) {
+	public static function allows_save( $values, $entry_id = 0 ) {
 		foreach ( array( 'form_id', 'parent_form_id' ) as $key ) {
 			if ( empty( $values[ $key ] ) ) {
 				continue;
@@ -45,7 +51,46 @@ class FrmEntry {
 			}
 		}
 
-		return (bool) apply_filters( 'frm_allow_entry_save', true, $values );
+		/**
+		 * Filter whether an entry may be saved.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool  $allow    Whether the entry may be saved.
+		 * @param array $values   Entry values, including the form ID.
+		 * @param int|string   $entry_id The entry being updated, or 0 when a new entry is created.
+		 */
+		return apply_filters( 'frm_allow_entry_save', true, $values, (int) $entry_id );
+	}
+
+	/**
+	 * Check whether an existing entry may be updated. The entry's own form is always
+	 * checked, and so is the form in the new values when it moves the entry.
+	 *
+	 * @since x.x
+	 *
+	 * @param int   $id     Entry ID.
+	 * @param array $values Values being saved.
+	 *
+	 * @return bool
+	 */
+	private static function allows_update( $id, $values ) {
+		$entry        = self::getOne( $id );
+		$check_values = $values;
+
+		if ( $entry && empty( $check_values['form_id'] ) ) {
+			$check_values['form_id'] = $entry->form_id;
+		}
+
+		if ( ! self::allows_save( $check_values, $id ) ) {
+			return false;
+		}
+
+		if ( ! $entry || (int) $entry->form_id === (int) $check_values['form_id'] ) {
+			return true;
+		}
+
+		return self::allows_save( array( 'form_id' => $entry->form_id ), $id );
 	}
 
 	/**
@@ -375,9 +420,7 @@ class FrmEntry {
 	private static function update_entry( $id, $values, $update_type ) {
 		global $wpdb;
 
-		$entry = self::getOne( $id );
-
-		if ( ! self::allows_save( $values ) || ( $entry && ! self::allows_save( array( 'form_id' => $entry->form_id ) ) ) ) {
+		if ( ! self::allows_update( $id, $values ) ) {
 			return false;
 		}
 

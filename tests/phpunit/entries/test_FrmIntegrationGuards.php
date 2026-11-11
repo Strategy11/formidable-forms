@@ -54,6 +54,87 @@ class test_FrmIntegrationGuards extends FrmUnitTest {
 	}
 
 	/**
+	 * Values from the last frm_allow_entry_save call.
+	 *
+	 * @var array
+	 */
+	private $entry_save_calls = array();
+
+	/**
+	 * @return void
+	 */
+	public function test_allowing_filter_receives_entry_id_and_saves() {
+		$form_id                = $this->factory->form->create();
+		$this->entry_save_calls = array();
+		add_filter( 'frm_allow_entry_save', array( $this, 'record_entry_save' ), 10, 3 );
+
+		try {
+			$entry_id = FrmEntry::create(
+				array(
+					'form_id' => $form_id,
+					'name'    => 'Original',
+				)
+			);
+			$this->assertNotFalse( $entry_id, 'An allowing filter with three arguments should not block creation.' );
+			$this->assertSame( 0, $this->entry_save_calls[0]['entry_id'], 'New entries should pass 0 as the entry ID.' );
+
+			// The entry was just created, so clear it from the list that blocks a second save in one request.
+			global $frm_vars;
+			$frm_vars['saved_entries'] = array();
+			$this->entry_save_calls    = array();
+			$this->assertNotFalse( FrmEntry::update( $entry_id, array( 'name' => 'Changed' ) ), 'An allowing filter should not block updates.' );
+			$this->assertSame( 'Changed', FrmEntry::getOne( $entry_id )->name, 'The update should be saved.' );
+			$this->assertCount( 1, $this->entry_save_calls, 'An update that keeps the form should be checked once.' );
+			$this->assertSame( (int) $entry_id, $this->entry_save_calls[0]['entry_id'], 'Updates should pass the entry ID.' );
+			$this->assertSame( (int) $form_id, (int) $this->entry_save_calls[0]['values']['form_id'], 'Updates without a form ID should include the entry form ID.' );
+		} finally {
+			remove_filter( 'frm_allow_entry_save', array( $this, 'record_entry_save' ), 10 );
+		}
+	}
+
+	/**
+	 * Record the arguments passed to frm_allow_entry_save and allow the save.
+	 *
+	 * @param bool  $allow    Whether the entry may be saved.
+	 * @param array $values   Entry values.
+	 * @param int   $entry_id The entry being updated, or 0 for a new entry.
+	 *
+	 * @return bool
+	 */
+	public function record_entry_save( $allow, $values, $entry_id ) {
+		$this->entry_save_calls[] = array(
+			'values'   => $values,
+			'entry_id' => $entry_id,
+		);
+		return $allow;
+	}
+
+	/**
+	 * Pro creates repeater child entries with the parent form in parent_form_id
+	 * (see FrmProEntry::create_sub_entries). A protected parent should block them.
+	 *
+	 * @return void
+	 */
+	public function test_storage_option_blocks_repeater_child_entry_values() {
+		$parent_id = $this->factory->form->create(
+			array( 'options' => array( 'prevent_entry_storage' => 1 ) )
+		);
+		$child_id  = $this->factory->form->create( array( 'parent_form_id' => $parent_id ) );
+		$field_id  = $this->factory->field->create( array( 'form_id' => $child_id ) );
+
+		$entry_values = array(
+			'form_id'        => $child_id,
+			'item_meta'      => array( $field_id => 'Child value' ),
+			'parent_item_id' => 0,
+			'parent_form_id' => $parent_id,
+			'parent_nonce'   => wp_create_nonce( 'parent' ),
+		);
+
+		$this->assertFalse( FrmEntry::create( $entry_values ), 'A repeater child entry of a protected form should not be stored.' );
+		$this->assertSame( 0, (int) FrmDb::get_count( 'frm_items', array( 'form_id' => $child_id ) ), 'No child entry should be saved.' );
+	}
+
+	/**
 	 * @return void
 	 */
 	public function test_existing_form_policy_blocks_updates_without_a_form_id() {

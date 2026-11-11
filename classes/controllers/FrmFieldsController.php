@@ -504,6 +504,16 @@ class FrmFieldsController {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$field_id = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
+
+		if ( ! FrmField::can_destroy( $field_id ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'This field cannot be deleted.', 'formidable' ),
+				),
+				403
+			);
+		}
+
 		FrmField::destroy( $field_id );
 		wp_die();
 	}
