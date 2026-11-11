@@ -348,6 +348,8 @@ class test_FrmEntryValidate extends FrmUnitTest {
 
 		$this->assertSame( array(), $this->get_option_errors( $field, '101' ) );
 		$this->assertArrayHasKey( 'field' . $field->id, $this->get_option_errors( $field, '999' ), 'A key that is not an option should still fail.' );
+		$this->assertArrayHasKey( 'field' . $field->id, $this->get_option_errors( $field, '101.9' ), 'A decimal should not match an integer key.' );
+		$this->assertSame( array(), $this->get_option_errors( $field, '0101' ), 'A zero padded key still matches.' );
 
 		remove_filter( 'frm_setup_new_fields_vars', $set_use_key, 20 );
 		remove_filter( 'frm_field_value_saved', array( $this, 'use_option_key_as_value' ) );

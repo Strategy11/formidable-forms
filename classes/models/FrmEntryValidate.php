@@ -341,7 +341,29 @@ class FrmEntryValidate {
 			return true;
 		}
 
-		return is_numeric( $current_value ) && (int) $current_value === (int) $option_value;
+		return self::is_same_integer( $current_value, $option_value );
+	}
+
+	/**
+	 * Compare two values as integers only when both are whole numbers, so "01" matches "1"
+	 * but a decimal like "101.9" does not match "101".
+	 *
+	 * @since x.x
+	 *
+	 * @param string $current_value The posted value.
+	 * @param string $option_value  The option value to compare against.
+	 *
+	 * @return bool
+	 */
+	private static function is_same_integer( $current_value, $option_value ) {
+		$current_value = trim( $current_value );
+		$option_value  = trim( $option_value );
+
+		if ( ! preg_match( '/^\d+$/', $current_value ) || ! preg_match( '/^\d+$/', $option_value ) ) {
+			return false;
+		}
+
+		return (int) $current_value === (int) $option_value;
 	}
 
 	/**
