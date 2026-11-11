@@ -21,7 +21,13 @@ if ( ! is_array( $addon ) || $addon['slug'] === 'views' ) {
 <li <?php FrmAddonsHelper::add_addon_attributes( $addon ); ?>>
 	<div class="frm-flex frm-gap-xs frm-items-center frm-mb-2xs">
 		<span class="frm-border-icon">
-			<?php FrmAddonsHelper::get_addon_icon( $addon['slug'] ); ?>
+			<?php
+			if ( FrmAddonsHelper::is_boost() ) {
+				FrmAppHelper::icon_by_class( 'frmfont ' . $addon['icon'], array( 'aria-hidden' => 'true' ) );
+			} else {
+				FrmAddonsHelper::get_addon_icon( $addon['slug'] );
+			}
+			?>
 		</span>
 
 		<h3>
@@ -29,6 +35,12 @@ if ( ! is_array( $addon ) || $addon['slug'] === 'views' ) {
 			<?php
 			if ( ! empty( $addon['is_new'] ) ) {
 				FrmAppHelper::show_pill_text();
+			}
+
+			if ( FrmAddonsHelper::is_boost() ) {
+				?>
+				<span class="frm-meta-tag frm-boost-pill" title="<?php esc_attr_e( 'Boosts are sold separately and are not included in any plan.', 'formidable' ); ?>"><?php esc_html_e( 'Boost', 'formidable' ); ?></span>
+				<?php
 			}
 			?>
 		</h3>
@@ -40,7 +52,8 @@ if ( ! is_array( $addon ) || $addon['slug'] === 'views' ) {
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon', array( 'aria-label' => __( 'Lock icon', 'formidable' ) ) ); ?>
 			</span>
 			<?php
-		} else {
+		} elseif ( ! FrmAddonsHelper::is_boost() || ! empty( $addon['installed'] ) ) {
+			// A Boost that isn't installed has no toggle. Its footer links to the Boost page instead.
 			$toggle_classes = 'with_frm_style frm_toggle frm-ml-auto';
 
 			if ( FrmAddonsHelper::is_built_in() ) {
@@ -87,7 +100,21 @@ if ( ! is_array( $addon ) || $addon['slug'] === 'views' ) {
 
 	<div class="frm-flex frm-items-center frm-justify-between">
 		<?php
-		if ( FrmAddonsHelper::is_built_in() ) {
+		if ( FrmAddonsHelper::is_boost() ) {
+			?>
+			<a class="frm-link-with-external-icon" href="<?php echo esc_url( $addon['link'] ); ?>" target="_blank">
+				<?php esc_html_e( 'Learn More', 'formidable' ); ?>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowup8_icon' ); ?>
+			</a>
+			<?php
+			if ( empty( $addon['installed'] ) ) {
+				?>
+				<a class="frm-button-secondary frm-button-sm frm-boost-buy" href="<?php echo esc_url( $addon['buy_link'] ); ?>" target="_blank" rel="noopener">
+					<?php esc_html_e( 'Get Boost', 'formidable' ); ?>
+				</a>
+				<?php
+			}
+		} elseif ( FrmAddonsHelper::is_built_in() ) {
 			if ( ! empty( $addon['docs'] ) ) {
 				$docs_label = ! empty( $addon['docs_label'] ) ? $addon['docs_label'] : __( 'View Docs', 'formidable' );
 				?>

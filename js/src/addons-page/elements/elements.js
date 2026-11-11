@@ -73,7 +73,7 @@ addElements( {
 	addonsList: document.getElementById( `${ PREFIX }-list` ),
 	addons: bodyContent?.querySelectorAll( '.frm-card-item' ),
 	availableAddons: bodyContent?.querySelectorAll(
-		'.frm-card-item:not(.frm-locked-item)'
+		'.frm-card-item:not(.frm-locked-item):not(.frm-boost-item)'
 	),
 	addonsToggle: bodyContent?.querySelectorAll( '.frm_toggle_block' ),
 

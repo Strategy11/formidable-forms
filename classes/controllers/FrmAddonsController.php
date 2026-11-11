@@ -92,10 +92,10 @@ class FrmAddonsController {
 			return;
 		}
 
-		$label = __( 'Add-Ons', 'formidable' );
+		$label = __( 'Add-Ons/Boosts', 'formidable' );
 		$label = '<span style="color:#3FCA89">' . esc_html( $label ) . '</span>';
 
-		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Add-Ons', 'formidable' ), $label, 'frm_view_forms', 'formidable-addons', 'FrmAddonsController::list_addons' );
+		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Add-Ons/Boosts', 'formidable' ), $label, 'frm_view_forms', 'formidable-addons', 'FrmAddonsController::list_addons' );
 
 		// Remove default created subpage, make the page with highest priority as default.
 		remove_submenu_page( 'formidable', 'formidable' );
@@ -154,7 +154,7 @@ class FrmAddonsController {
 				'excerpt'    => 'Create calculators, surveys, smart forms, and data-driven applications. Build directories, real estate listings, job boards, and much more.',
 			),
 		);
-		$addons = $pro + self::get_built_in_addons() + $addons;
+		$addons = $pro + self::get_built_in_addons() + $addons + self::get_boost_addons();
 		$addons = self::move_addon_after( $addons, 'stripe', 'stripe-payments' );
 		self::prepare_addons( $addons );
 
@@ -203,6 +203,61 @@ class FrmAddonsController {
 				'excerpt'    => 'Collect instant payments and recurring payments with PayPal Commerce on any Formidable form.',
 			),
 		);
+	}
+
+	/**
+	 * Get the Boosts, the small single-purpose plugins listed in their own sidebar category.
+	 *
+	 * Boosts are not in the add-ons API, so they are listed here. They aren't included
+	 * in any plan: "Get Boost" goes to the account page and "Learn More" to the Boost page.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string,array<string,mixed>>
+	 */
+	protected static function get_boost_addons() {
+		$boosts = array(
+			'field-tooltips' => array(
+				'title'   => 'Tooltips',
+				'icon'    => 'frm_boost_tooltips_icon',
+				'excerpt' => 'Add help icons to field labels that show tips on hover or tap.',
+			),
+			'simply-popups'  => array(
+				'title'   => 'Simply Popups',
+				'icon'    => 'frm_boost_popups_icon',
+				'plugin'  => 'formidable-simply-popups/frm-simply-popups.php',
+				'excerpt' => 'Open forms and content in smart popups with various trigger options.',
+			),
+			'bulk-edit'      => array(
+				'title'   => 'Bulk Edit',
+				'icon'    => 'frm_boost_bulk_edit_icon',
+				'excerpt' => 'Update fields and statuses across hundreds of entries at once.',
+			),
+			'celebrations'   => array(
+				'title'   => 'Celebrations',
+				'icon'    => 'frm_boost_celebrations_icon',
+				'excerpt' => 'Reward submissions with emoji fountains and celebratory sounds.',
+			),
+			'color-picker'   => array(
+				'title'   => 'Color-Picker Field',
+				'icon'    => 'frm_boost_color_picker_icon',
+				'excerpt' => 'Select custom or pre-set colors, including optional transparency.',
+			),
+		);
+
+		foreach ( $boosts as $slug => $boost ) {
+			$boosts[ $slug ] += array(
+				'slug'       => $slug,
+				'boost'      => true,
+				'categories' => array( 'Boosts' ),
+				'link'       => 'boosts/' . $slug . '/',
+				'docs'       => 'boosts/' . $slug . '/',
+				'buy_link'   => 'account/downloads/?utm_content=' . $slug,
+			);
+			self::prepare_addon_link( $boosts[ $slug ]['buy_link'] );
+		}
+
+		return $boosts;
 	}
 
 	/**
@@ -331,6 +386,12 @@ class FrmAddonsController {
 
 			$bottom_categories[ $plan ] = self::$categories[ $plan ];
 			unset( self::$categories[ $plan ] );
+		}
+
+		// Boosts go below the plans.
+		if ( isset( self::$categories['boosts'] ) ) {
+			$bottom_categories['boosts'] = self::$categories['boosts'];
+			unset( self::$categories['boosts'] );
 		}
 
 		$special_categories = array();
@@ -1099,7 +1160,7 @@ class FrmAddonsController {
 			} else {
 				$slug      = $id;
 				$base_file = $addon['file'] ?? 'formidable-' . $slug;
-				$file_name = $base_file . '/' . $base_file . '.php';
+				$file_name = $addon['plugin'] ?? $base_file . '/' . $base_file . '.php';
 
 				if ( ! isset( $addon['plugin'] ) ) {
 					$addon['plugin'] = $file_name;

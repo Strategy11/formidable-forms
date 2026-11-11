@@ -30,6 +30,15 @@ class FrmAddonsHelper {
 	private static $built_in = false;
 
 	/**
+	 * Whether the add-on being rendered is a Boost.
+	 *
+	 * @since x.x
+	 *
+	 * @var bool
+	 */
+	private static $boost = false;
+
+	/**
 	 * Show the CTA to upgrade or renew.
 	 *
 	 * @since 6.15
@@ -250,6 +259,10 @@ class FrmAddonsHelper {
 			$class_names[] = 'frm-locked-item';
 		}
 
+		if ( self::is_boost() ) {
+			$class_names[] = 'frm-boost-item';
+		}
+
 		return implode( ' ', $class_names );
 	}
 
@@ -259,7 +272,7 @@ class FrmAddonsHelper {
 	 * @return bool
 	 */
 	public static function is_locked() {
-		if ( self::$built_in ) {
+		if ( self::$built_in || self::$boost ) {
 			return false;
 		}
 
@@ -278,6 +291,17 @@ class FrmAddonsHelper {
 	}
 
 	/**
+	 * Check if the add-on being rendered is a Boost.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function is_boost() {
+		return self::$boost;
+	}
+
+	/**
 	 * Set the required plan for the given addon.
 	 *
 	 * @note
@@ -293,6 +317,7 @@ class FrmAddonsHelper {
 	private static function set_plan_required( $addon ) {
 		self::$plan_required = FrmFormsHelper::get_plan_required( $addon );
 		self::$built_in      = ! empty( $addon['built_in'] );
+		self::$boost         = ! empty( $addon['boost'] );
 	}
 
 	/**

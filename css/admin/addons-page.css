@@ -89,6 +89,53 @@
 	pointer-events: none;
 }
 
+/* Boosts: sold separately, so the card carries an orange tag instead of a plan lock. */
+.frm-boost-item {
+	--frm-boost-600: #d9481a;
+	--frm-boost-50: #fef3ee;
+}
+
+.frm-card-item--outlined.frm-boost-item:hover {
+	background-color: #fff;
+}
+
+/* Same icon box as other add-ons; two-tone grey icon (details at 40%). */
+.frm-boost-item .frm-border-icon svg {
+	width: 24px;
+	height: 24px;
+	color: var(--grey-600);
+}
+
+.frm-card-item--outlined h3 .frm-boost-pill {
+	margin-left: 0;
+	background-color: var(--frm-boost-50);
+	color: var(--frm-boost-600);
+	font-size: 11px;
+	line-height: 16px;
+	padding: 2px 6px;
+	align-self: center;
+}
+
+.frm-boost-item h3 {
+	display: flex;
+	align-items: center;
+	gap: var(--gap-xs, 8px);
+	min-width: 0;
+}
+
+.frm-page-skeleton-cat[data-category="boosts"] .frm-page-skeleton-cat-text {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--gap-xs, 8px);
+}
+
+.frm-page-skeleton-cat[data-category="boosts"] .frm-new-pill {
+	margin: 0;
+
+	/* Optical nudge: centers the pill on the letters, not the line box. */
+	transform: translateY(1px);
+}
+
 #frm-addons-page .frm-addon-button {
 	display: none;
 }
