@@ -31,22 +31,27 @@ function init( input, options = {} ) {
 	} );
 	const mount = div();
 	const panel = div( { className: 'frm-block-color-panel', child: mount } );
-	const valueInput = tag( 'input', { className: 'frm-block-color-input' } );
 	const wrapper = existing || div( { className: 'frm-block-color-picker' } );
 	const clear = tag( 'button', {
 		className: 'frm-block-color-clear',
 		text: __( 'Clear', 'formidable' ),
 	} );
+	const done = tag( 'button', {
+		className: 'frm-block-color-done frm-button-primary frm-button-sm',
+		text: __( 'Done', 'formidable' ),
+	} );
+	const actions = div( { className: 'frm-block-color-actions', children: [ clear, done ] } );
 	if ( ! existing ) {
 		input.before( wrapper );
 	}
 	button.type = 'button';
 	clear.type = 'button';
+	done.type = 'button';
 	panel.hidden = true;
 	swatch.replaceChildren();
 	swatch.setAttribute( 'aria-hidden', 'true' );
 	wrapper.append( button, input );
-	panel.append( valueInput, clear );
+	panel.append( actions );
 	input.hidden = true;
 	button.setAttribute( 'aria-expanded', 'false' );
 	panel.setAttribute( 'role', 'group' );
@@ -61,17 +66,16 @@ function init( input, options = {} ) {
 			}
 		} );
 	}
-	valueInput.setAttribute( 'aria-label', __( 'Color value', 'formidable' ) );
 	let root;
 	const update = () => {
 		text.textContent = input.value || __( 'Select Color', 'formidable' );
 		swatch.style.backgroundColor = input.value || 'transparent';
 		button.disabled = input.disabled;
-		valueInput.value = input.value;
 		if ( ! root || panel.hidden ) {
 			return;
 		}
 		root.render( createElement( ColorPicker, {
+			className: 'frm-block-color-control',
 			color: input.value || options.defaultColor || '#ffffff',
 			enableAlpha: input.dataset.alphaEnabled === 'true',
 			onChange: change,
@@ -175,14 +179,11 @@ function init( input, options = {} ) {
 		element.addEventListener( 'keydown', handleKeyDown );
 		element.addEventListener( 'focusout', handleFocusOut );
 	} );
-	valueInput.addEventListener( 'input', () => {
-		input.value = valueInput.value;
-		input.dispatchEvent( new Event( 'input', { bubbles: true } ) );
-	} );
-	valueInput.addEventListener( 'change', () => {
-		input.dispatchEvent( new Event( 'change', { bubbles: true } ) );
-	} );
 	clear.addEventListener( 'click', () => change( '' ) );
+	done.addEventListener( 'click', () => {
+		close();
+		button.focus();
+	} );
 	input.addEventListener( 'input', update );
 	input.addEventListener( 'change', notify );
 	input.addEventListener( 'frm:color-sync', update );

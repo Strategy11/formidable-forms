@@ -1456,6 +1456,7 @@ class FrmAppController {
 	 */
 	public static function show_error_modal( $error_args ) {
 		add_filter( 'frm_show_footer_links', '__return_false' );
+		FrmAppHelper::include_svg();
 
 		$defaults = array(
 			'title'            => '',
