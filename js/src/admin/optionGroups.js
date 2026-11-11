@@ -318,7 +318,9 @@ function setEnabled( list, enabled ) {
 	if ( enabled ) {
 		if ( ! rows.some( row => '' !== getGroup( row ) ) ) {
 			const name = nextGroupName( list );
-			rows.forEach( row => setGroup( row, name ) );
+			// Leave a blank first option, like an empty "choose" entry, above the groups.
+			const firstLabeled = rows.findIndex( row => '' !== ( row.querySelector( 'input[name$="[label]"]' )?.value.trim() ?? '' ) );
+			rows.slice( Math.max( firstLabeled, 0 ) ).forEach( row => setGroup( row, name ) );
 		}
 	} else {
 		rows.forEach( row => setGroup( row, '' ) );
@@ -537,10 +539,10 @@ export function initOptionGroupLists( container ) {
 /**
  * Adds a "## Group name" line to the Bulk Edit Options text each time the group changes.
  *
- * @param {string}      prefix        Text to add before the option line.
+ * @param {string}      prefix        Text to add before the option line. It is kept as is, so it should already end with `\r\n` when it holds a whole line.
  * @param {Object}      args          Details about the option line.
  * @param {HTMLElement} args.optionEl The option's list item.
- * @return {string} The prefix, with a group line when needed.
+ * @return {string} The prefix, with a group line ending in `\r\n` when needed.
  */
 export function addGroupLineToBulkEdit( prefix, { optionEl } ) {
 	if ( ! optionEl || ! getGroupInput( optionEl ) ) {
