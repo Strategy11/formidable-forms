@@ -20,10 +20,11 @@
 	display: none;
 }
 
-// Elements toggled with the hidden attribute stay hidden even when a rule sets their display.
+// Elements toggled with the hidden attribute stay hidden when a single class rule sets their display.
+// Not !important, so an inline display, like one from jQuery .show(), still wins.
 .frm_wrap [hidden],
 .with_frm_style [hidden] {
-	display: none !important;
+	display: none;
 }
 
 .frm-flex-box {

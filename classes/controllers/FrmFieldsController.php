@@ -213,16 +213,37 @@ class FrmFieldsController {
 		 *
 		 * @since x.x
 		 *
-		 * @param array|null $allowed_keys Setting names without the field ID suffix, like 'size'. Null allows every posted setting.
+		 * @param array|null $allowed_keys Setting names without the field ID suffix, like 'size'. Defaults to the field's saved
+		 *                                 settings and the default settings for its type. Return null to allow every posted setting.
 		 * @param object     $field        The saved field.
 		 */
-		$allowed_keys = apply_filters( 'frm_refresh_field_preview_settings', null, $field );
+		$allowed_keys = apply_filters( 'frm_refresh_field_preview_settings', self::get_default_preview_setting_keys( $field ), $field );
 
 		if ( is_array( $allowed_keys ) ) {
 			$settings = array_intersect_key( $settings, array_flip( array_filter( $allowed_keys, 'is_string' ) ) );
 		}
 
 		return self::sanitize_preview_settings( $settings );
+	}
+
+	/**
+	 * Get the settings a field preview may use when no filter changes them.
+	 *
+	 * These are the field columns, the field's saved settings and the default settings for its type, including
+	 * those added with the frm_default_field_opts filters. Anything else posted with the request is left out.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $field The saved field.
+	 *
+	 * @return array Setting names without the field ID suffix.
+	 */
+	private static function get_default_preview_setting_keys( $field ) {
+		$columns  = array( 'name', 'description', 'required', 'options', 'default_value' );
+		$defaults = FrmFieldsHelper::get_default_field_options_from_field( clone $field );
+		$keys     = array_merge( $columns, array_keys( $field->field_options ), array_keys( (array) $defaults ) );
+
+		return array_values( array_unique( array_map( 'strval', $keys ) ) );
 	}
 
 	/**

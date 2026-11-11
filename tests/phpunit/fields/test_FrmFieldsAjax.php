@@ -374,9 +374,37 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		$response = json_decode( $this->trigger_action( 'frm_refresh_field_preview' ), true );
 		remove_filter( 'frm_refresh_field_preview_settings', $filter, 10 );
 
-		$this->assertSame( array( array( null, $field_id ) ), $seen, 'The filter starts from null, which allows every setting.' );
+		$this->assertCount( 1, $seen );
+		$this->assertSame( $field_id, $seen[0][1] );
+		$this->assertIsArray( $seen[0][0], 'The filter starts from the field\'s known settings.' );
+		$this->assertContains( 'size', $seen[0][0] );
+		$this->assertContains( 'placeholder', $seen[0][0] );
+		$this->assertContains( 'name', $seen[0][0] );
 		$this->assertStringContainsString( 'placeholder="Allowed"', $response['data']['html'] );
 		$this->assertStringNotContainsString( 'width:300px', $response['data']['html'] );
+	}
+
+	/**
+	 * Without a filter, posted settings the field does not know are left out.
+	 *
+	 * @covers FrmFieldsController::get_preview_settings
+	 */
+	public function test_refresh_field_preview_ignores_unknown_settings_by_default() {
+		$field_id = $this->create_text_field( 'textarea' );
+		$_POST    = $this->get_refresh_field_preview_request(
+			$field_id,
+			array(
+				'size_' . $field_id               => '300',
+				'not_a_real_setting_' . $field_id => 'Unknown',
+			)
+		);
+
+		$method = new ReflectionMethod( 'FrmFieldsController', 'get_preview_settings' );
+		$method->setAccessible( true );
+		$settings = $method->invoke( null, FrmField::getOne( $field_id ) );
+
+		$this->assertSame( '300', $settings['size'] );
+		$this->assertArrayNotHasKey( 'not_a_real_setting', $settings );
 	}
 
 	/**
