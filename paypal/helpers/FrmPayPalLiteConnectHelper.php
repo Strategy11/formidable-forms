@@ -1045,7 +1045,7 @@ class FrmPayPalLiteConnectHelper {
 	 *
 	 * @return string
 	 */
-	private static function get_brand_name() {
+	public static function get_brand_name() {
 		$brand_name = get_bloginfo( 'name' );
 
 		/**

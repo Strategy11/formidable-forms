@@ -104,7 +104,8 @@
 	</rule>
 
 	<!-- Add some rules from the Slevomat Coding Standard -->
-	<rule ref="SlevomatCodingStandard.PHP.UselessParentheses" />
+	<!-- Formidable wrapper around SlevomatCodingStandard.PHP.UselessParentheses, without its ternary condition fixer bug. -->
+	<rule ref="Formidable.CodeAnalysis.RemoveUselessParentheses" />
 	<rule ref="SlevomatCodingStandard.Variables.UselessVariable" />
 
 	<rule ref="SlevomatCodingStandard.Files.LineLength">
