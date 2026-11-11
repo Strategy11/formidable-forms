@@ -356,7 +356,8 @@ class FrmAbilitiesEntriesController {
 
 		if ( ! empty( $input['end_date'] ) ) {
 			// A date with no time includes the whole end day. A date with a time is used as is.
-			$end_format               = preg_match( '/^\d{4}-\d{2}-\d{2}$/', trim( $input['end_date'] ) ) ? 'Y-m-d 23:59:59' : 'Y-m-d H:i:s';
+			$end_parts                = date_parse( $input['end_date'] );
+			$end_format               = false === $end_parts['hour'] ? 'Y-m-d 23:59:59' : 'Y-m-d H:i:s';
 			$where['it.created_at <'] = gmdate( $end_format, strtotime( $input['end_date'] ) );
 		}
 

@@ -412,6 +412,21 @@ class test_FrmAbilitiesEntriesController extends FrmUnitTest {
 		sort( $expected );
 		$this->assertSame( $expected, $single_day_ids, 'The same start and end date should return that whole day.' );
 
+		foreach ( array( '2026/03/12', 'March 12, 2026', '03/12/2026' ) as $end_date ) {
+			$alternate = $this->execute(
+				'list-entries',
+				array(
+					'form_id'    => $this->form->id,
+					'start_date' => '2026-03-12',
+					'end_date'   => $end_date,
+				)
+			);
+			$this->assertNotWPError( $alternate );
+			$alternate_ids = array_map( 'intval', wp_list_pluck( $alternate, 'id' ) );
+			sort( $alternate_ids );
+			$this->assertSame( $expected, $alternate_ids, 'Date-only formats should include the whole end day.' );
+		}
+
 		$with_time = $this->execute(
 			'list-entries',
 			array(
