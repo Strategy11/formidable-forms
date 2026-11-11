@@ -396,8 +396,7 @@ class FrmEntryValidate {
 	}
 
 	/**
-	 * Do not validate options if they have been modified with a hook.
-	 * This is to help avoid issues where the options could be based on a URL param for example.
+	 * Validate against the options produced by setup hooks, including options based on URL parameters.
 	 *
 	 * @since 6.21
 	 * @since x.x Added the $entry_id parameter.
@@ -418,24 +417,7 @@ class FrmEntryValidate {
 			FrmFieldsHelper::prepare_new_front_field( $values, $field_object );
 		}
 
-		if ( self::value_matches_prepared_options( $value, $values ) ) {
-			return true;
-		}
-
-		$separate_value = FrmField::get_option( $field_object, 'separate_value' );
-		$map_callback   = function ( $option ) use ( $separate_value ) {
-			if ( is_array( $option ) ) {
-				$option_value = $separate_value ? $option['value'] : $option['label'];
-			} else {
-				$option_value = $option;
-			}
-			return do_shortcode( $option_value );
-		};
-
-		$values_options       = array_map( $map_callback, $values['options'] );
-		$field_object_options = array_map( $map_callback, $field_object->options );
-
-		return $values_options !== $field_object_options;
+		return self::value_matches_prepared_options( $value, $values );
 	}
 
 	/**
@@ -474,6 +456,10 @@ class FrmEntryValidate {
 	 */
 	private static function value_matches_prepared_option( $current_value, $values ) {
 		foreach ( $values['options'] as $opt_key => $opt ) {
+			if ( str_starts_with( (string) $opt_key, 'other_' ) ) {
+				return true;
+			}
+
 			$option_value = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $values );
 
 			if ( is_scalar( $option_value ) && self::value_matches_option( $current_value, (string) $option_value ) ) {
