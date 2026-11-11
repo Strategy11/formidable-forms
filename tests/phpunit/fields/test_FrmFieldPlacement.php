@@ -23,6 +23,33 @@ class test_FrmFieldPlacement extends FrmUnitTest {
 		}
 	}
 
+	/** @return void */
+	public function test_legacy_fields_survive_duplication_and_xml_import() {
+		$form_id               = $this->factory->form->create();
+		$section               = FrmField::create( FrmFieldsHelper::setup_new_vars( 'divider', $form_id ) );
+		$field_id              = FrmField::create( FrmFieldsHelper::setup_new_vars( 'break', $form_id ) );
+		$field                 = FrmField::getOne( $field_id );
+		$options               = $field->field_options;
+		$options['in_section'] = $section;
+		global $wpdb;
+		$wpdb->update( $wpdb->prefix . 'frm_fields', array( 'field_options' => serialize( $options ) ), array( 'id' => $field_id ) );
+		wp_cache_delete( $field_id, 'frm_field' );
+
+		$copy_id = $this->factory->form->create();
+		FrmField::duplicate( $form_id, $copy_id );
+		$copied = FrmField::get_all_for_form( $copy_id );
+		$this->assertContains( 'break', wp_list_pluck( $copied, 'type' ) );
+
+		$path                = self::generate_xml( array( 'forms' ), array( 'ids' => array( $form_id ) ) );
+		$xml                 = simplexml_load_file( $path );
+		$xml->form->form_key = 'placement_legacy_import';
+		$result              = FrmXMLHelper::import_xml_now( $xml );
+		$imported_id         = $result['forms'][ $form_id ];
+		$this->assertNotSame( (int) $form_id, (int) $imported_id );
+		$imported = FrmField::get_all_for_form( $imported_id );
+		$this->assertContains( 'break', wp_list_pluck( $imported, 'type' ) );
+	}
+
 	public function test_section_rejects_incompatible_fields() {
 		$form_id = $this->factory->form->create();
 		$section = FrmField::create( FrmFieldsHelper::setup_new_vars( 'divider', $form_id ) );

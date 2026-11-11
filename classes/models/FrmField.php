@@ -503,7 +503,12 @@ class FrmField {
 			$new_values                                = apply_filters( 'frm_duplicated_field', $new_values );
 		}
 
-		if ( ! FrmFieldPlacementHelper::is_allowed( $new_values['type'] ?? '', (int) $new_values['form_id'], (int) ( $new_values['field_options']['in_section'] ?? 0 ) ) ) {
+		// Imports and duplicates carry a source ID. Preserve their existing layouts.
+		if ( empty( $values['id'] ) && ! FrmFieldPlacementHelper::is_allowed(
+			$new_values['type'] ?? '',
+			(int) $new_values['form_id'],
+			(int) ( $new_values['field_options']['in_section'] ?? 0 )
+		) ) {
 			return false;
 		}
 
@@ -739,7 +744,8 @@ class FrmField {
 
 			$values['description'] = FrmFieldsHelper::switch_field_ids( $values['description'] );
 
-			$values                                 = apply_filters( 'frm_duplicated_field', $values );
+			// Let create() apply the duplicate hook once and preserve the source placement.
+			$values['id']                           = $field->id;
 			$new_id                                 = self::create( $values );
 			$frm_duplicate_ids[ $field->id ]        = $new_id;
 			$frm_duplicate_ids[ $field->field_key ] = $new_id;
