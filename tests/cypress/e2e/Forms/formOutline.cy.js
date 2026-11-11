@@ -7,7 +7,8 @@ describe( 'Form outline', { retries: 0 }, () => {
 				toggle[ 0 ].click();
 			}
 		} );
-		cy.get( '#frm-builder-outline' ).should( 'be.visible' );
+		cy.get( '#frm-builder-outline-toggle' ).closest( 'li' ).should( 'have.class', 'frm-active' );
+		cy.get( '#frm-builder-outline' ).should( 'exist' );
 	};
 
 	const search = query => {
@@ -113,12 +114,21 @@ describe( 'Form outline', { retries: 0 }, () => {
 		cy.get( '#frm-show-fields' ).then( list => {
 			const doc = list[ 0 ].ownerDocument;
 			const fields = [];
+			const section = createField( doc, '99999', 'divider', 'Contact details' );
+			const sectionFields = doc.createElement( 'ul' );
+			sectionFields.className = 'start_divider';
+			sectionFields.append(
+				createField( doc, '9035', 'text', 'Item 35' ),
+				createField( doc, '99998', 'end_divider', '' )
+			);
+			section.append( sectionFields );
 			for ( let i = 1; i <= 70; i++ ) {
 				if ( i === 31 || i === 51 ) {
 					fields.push( createField( doc, `${ 9000 + i }0`, 'break', 'Next' ) );
 				}
 				if ( i === 35 ) {
-					fields.push( createField( doc, '99999', 'divider', 'Contact details' ) );
+					fields.push( section );
+					continue;
 				}
 				fields.push( createField( doc, `${ 9000 + i }`, 'text', `Item ${ i }` ) );
 			}
@@ -133,11 +143,18 @@ describe( 'Form outline', { retries: 0 }, () => {
 		// Counts leave out page breaks and sections.
 		cy.get( '.frm-builder-outline-page' ).first().find( '.frm-builder-outline-meta' ).should( 'have.text', '30 fields' );
 		cy.get( '.frm-builder-outline-page' ).eq( 1 ).find( '.frm-builder-outline-meta' ).should( 'have.text', '20 fields' );
-		cy.get( '.frm-builder-outline-section' ).should( 'have.length', 1 ).and( 'have.text', 'Contact details' );
+		cy.get( '.frm-builder-outline-section' ).should( 'have.length', 1 );
+		cy.get( '.frm-builder-outline-section .frm-builder-outline-label' ).should( 'have.text', 'Contact details' );
+		cy.get( '.frm-builder-outline-section .frm-builder-outline-meta' ).should( 'have.text', '1 field' );
+		cy.get( '.frm-builder-outline-section' ).parent().find( '.frm-builder-outline-field' ).should( 'have.length', 1 ).and( 'have.text', 'Item 35' );
+
+		search( '99998' );
+		cy.get( '.frm-builder-outline-field' ).should( 'not.exist' );
+		cy.get( '.frm-builder-outline-empty-title' ).should( 'have.text', 'No results for “99998”' );
 
 		search( 'contact' );
 		cy.get( '.frm-builder-outline-page' ).should( 'have.length', 1 );
-		cy.get( '.frm-builder-outline-section' ).should( 'have.text', 'Contact details' );
+		cy.get( '.frm-builder-outline-section .frm-builder-outline-label' ).should( 'have.text', 'Contact details' );
 		cy.get( '.frm-builder-outline-field' ).should( 'not.exist' );
 
 		search( 'item' );
@@ -150,11 +167,12 @@ describe( 'Form outline', { retries: 0 }, () => {
 		cy.get( '.frm-builder-outline-field' ).should( 'have.length', 1 ).click();
 		cy.get( '#frm-show-fields li[data-fid="9042"]' ).should( 'have.class', 'frm-builder-outline-target' );
 		// Jumping to a field keeps the outline open.
-		cy.get( '#frm-builder-outline' ).should( 'be.visible' );
+		cy.get( '#frm-builder-outline-toggle' ).closest( 'li' ).should( 'have.class', 'frm-active' );
 
 		// The outline is a sidebar tab, so returning to Add Fields closes it.
 		cy.get( '#frm_insert_fields_tab' ).then( tab => tab[ 0 ].click() );
-		cy.get( '#frm-builder-outline' ).should( 'have.attr', 'inert' );
+		cy.get( '#frm_insert_fields_tab' ).closest( 'li' ).should( 'have.class', 'frm-active' );
+		cy.get( '#frm-builder-outline-toggle' ).closest( 'li' ).should( 'not.have.class', 'frm-active' );
 	} );
 
 	it( 'tracks edits only while open and preserves results when scrolling', () => {
