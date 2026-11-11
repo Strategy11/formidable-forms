@@ -64,3 +64,46 @@ test( 'unconfirmed orders are sent again on the next save', () => {
 
 	confirmFieldOrderSaved( form, firstSave );
 } );
+
+test( 'confirming a save preserves orders changed while the request was running', () => {
+	orderInputs = [ 1, 2, 3 ].map( id => ( { name: `field_options[field_order_${ id }]`, value: String( id ) } ) );
+	setFields( [ 2, 1, 3 ] );
+	const form = makeForm();
+	syncFieldOrder( form );
+	const input = form.querySelector( '[name="frm_field_order"]' );
+	const firstSave = input.value;
+
+	setFields( [ 3, 2, 1 ] );
+	syncFieldOrder( form );
+	confirmFieldOrderSaved( form, firstSave );
+
+	assert.deepEqual( JSON.parse( input.value ), { 1: 3, 2: 2, 3: 1 } );
+	confirmFieldOrderSaved( form, input.value );
+	assert.deepEqual( JSON.parse( input.value ), {} );
+} );
+
+test( 'deleted fields are removed from pending orders', () => {
+	orderInputs = [ 1, 2, 3 ].map( id => ( { name: `field_options[field_order_${ id }]`, value: String( id ) } ) );
+	setFields( [ 3, 2, 1 ] );
+	const form = makeForm();
+	syncFieldOrder( form );
+
+	setFields( [ 2, 1 ] );
+	orderInputs = orderInputs.slice( 0, 2 );
+	syncFieldOrder( form );
+
+	const input = form.querySelector( '[name="frm_field_order"]' );
+	assert.deepEqual( JSON.parse( input.value ), { 1: 2, 2: 1 } );
+	confirmFieldOrderSaved( form, input.value );
+} );
+
+test( 'all controls for a field stay synchronized without posting settings', () => {
+	orderInputs = [ 1, 2, 1, 2 ].map( id => ( { name: `field_options[field_order_${ id }]`, value: String( id ) } ) );
+	setFields( [ 2, 1 ] );
+	const form = makeForm();
+	syncFieldOrder( form );
+
+	assert.deepEqual( orderInputs.map( input => input.value ), [ 2, 1, 2, 1 ] );
+	assert.equal( form.children.length, 1 );
+	confirmFieldOrderSaved( form, form.children[ 0 ].value );
+} );

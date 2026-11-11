@@ -294,7 +294,10 @@ class FrmForm {
 		unset( $new_values );
 
 		$values = self::update_fields( $id, $values );
-		self::update_field_order( $id, $values );
+
+		if ( ! self::update_field_order( $id, $values ) ) {
+			$query_results = false;
+		}
 
 		do_action( 'frm_update_form', $id, $values );
 		do_action( 'frm_update_form_' . $id, $values );
@@ -310,17 +313,17 @@ class FrmForm {
 	 * @param int|string $form_id Form being saved.
 	 * @param array      $values Form values including the JSON field ID to order map.
 	 *
-	 * @return void
+	 * @return bool Whether the order update succeeded or no update was needed.
 	 */
 	private static function update_field_order( $form_id, $values ) {
 		if ( (int) $form_id < 1 || empty( $values['frm_field_order'] ) || ! is_string( $values['frm_field_order'] ) ) {
-			return;
+			return true;
 		}
 
 		$orders = json_decode( $values['frm_field_order'], true );
 
 		if ( ! is_array( $orders ) || ! $orders ) {
-			return;
+			return true;
 		}
 
 		$ids  = array();
@@ -337,7 +340,7 @@ class FrmForm {
 		}
 
 		if ( ! $ids ) {
-			return;
+			return true;
 		}
 
 		global $wpdb;
@@ -355,12 +358,14 @@ class FrmForm {
 		);
 
 		if ( false === $result ) {
-			return;
+			return false;
 		}
 
 		foreach ( $form_ids as $affected_form_id ) {
 			FrmField::delete_form_transient( $affected_form_id );
 		}
+
+		return true;
 	}
 
 	/**

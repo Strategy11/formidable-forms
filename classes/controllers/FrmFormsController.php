@@ -413,7 +413,7 @@ class FrmFormsController {
 
 		self::maybe_remove_draft_option_from_fields( $id );
 
-		FrmForm::update( $id, $values );
+		$updated = FrmForm::update( $id, $values );
 		$message = __( 'Form was successfully updated.', 'formidable' );
 
 		if ( self::is_too_long( $values ) ) {
@@ -426,6 +426,10 @@ class FrmFormsController {
 		}
 
 		if ( defined( 'DOING_AJAX' ) ) {
+			if ( false !== $updated ) {
+				header( 'X-Frm-Form-Saved: 1' );
+			}
+
 			wp_die( FrmAppHelper::kses( $message, array( 'a' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 

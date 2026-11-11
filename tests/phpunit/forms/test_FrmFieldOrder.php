@@ -122,6 +122,40 @@ class test_FrmFieldOrder extends FrmUnitTest {
 		}
 	}
 
+	public function test_failed_order_update_is_reported_and_can_be_retried() {
+		global $wpdb;
+		$form_id           = $this->factory->form->create();
+		$field_id          = $this->factory->field->create(
+			array(
+				'form_id'     => $form_id,
+				'type'        => 'text',
+				'field_order' => 5,
+			)
+		);
+		$values            = array( 'frm_field_order' => wp_json_encode( array( $field_id => 1 ) ) );
+		$fail_order_update = static function ( $query ) use ( $wpdb ) {
+			if ( str_starts_with( $query, 'UPDATE `' . $wpdb->prefix . 'frm_fields` SET field_order = CASE' ) ) {
+				return $query . ' INVALID';
+			}
+			return $query;
+		};
+		$suppress_errors   = $wpdb->suppress_errors();
+		add_filter( 'query', $fail_order_update );
+
+		try {
+			$result = FrmForm::update( $form_id, $values );
+		} finally {
+			remove_filter( 'query', $fail_order_update );
+			$wpdb->suppress_errors( $suppress_errors );
+		}
+
+		$this->assertSame( $suppress_errors, $wpdb->suppress_errors, 'Database error reporting should be restored.' );
+		$this->assertFalse( $result, 'An order query failure must not be confirmed as saved.' );
+		$this->assertSame( 5, (int) FrmField::getOne( $field_id )->field_order );
+		$this->assertNotFalse( FrmForm::update( $form_id, $values ) );
+		$this->assertSame( 1, (int) FrmField::getOne( $field_id )->field_order );
+	}
+
 	public function test_invalid_form_id_cannot_reorder_top_level_forms() {
 		$form_id  = $this->factory->form->create();
 		$field_id = $this->factory->field->create(

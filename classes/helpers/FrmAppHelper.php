@@ -4045,7 +4045,6 @@ class FrmAppHelper {
 				'select_a_field'                     => __( 'Select a Field', 'formidable' ),
 				'no_items_found'                     => __( 'No items found.', 'formidable' ),
 				'field_already_used'                 => __( 'Oops. You have already used that field.', 'formidable' ),
-				'form_updated'                       => self::kses( __( 'Form was successfully updated.', 'formidable' ), array( 'a' ) ),
 
 				// Deprecated in 6.0.
 				'saving'                             => '',
