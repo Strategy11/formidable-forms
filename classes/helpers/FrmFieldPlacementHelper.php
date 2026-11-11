@@ -35,6 +35,12 @@ class FrmFieldPlacementHelper {
 		$form_id    = (int) ( $values['form_id'] ?? $field->form_id );
 		$options    = $values['field_options'] ?? $field->field_options;
 		$section_id = (int) ( $options['in_section'] ?? 0 );
+
+		if ( $type === $field->type && $form_id === (int) $field->form_id && $section_id === (int) FrmField::get_option( $field, 'in_section' ) ) {
+			// Existing placements stay editable even when the current policy forbids creating them.
+			return true;
+		}
+
 		return self::is_allowed( $type, $form_id, $section_id );
 	}
 
@@ -52,7 +58,8 @@ class FrmFieldPlacementHelper {
 	public static function is_allowed( $type, $form_id, $section_id = 0 ) {
 		$type           = explode( '|', $type )[0];
 		$section        = $section_id ? FrmField::getOne( $section_id ) : false;
-		$parent_form_id = $form_id ? FrmDb::get_var( 'frm_forms', array( 'id' => $form_id ), 'parent_form_id' ) : 0;
+		$form           = $form_id ? FrmForm::getOne( $form_id ) : false;
+		$parent_form_id = $form ? $form->parent_form_id : 0;
 
 		if ( $section ) {
 			if ( in_array( $type, array( 'break', 'submit', 'form', 'tabs', 'accordion' ), true ) ) {
@@ -60,7 +67,11 @@ class FrmFieldPlacementHelper {
 			}
 
 			if ( 'divider' === $section->type && 'divider' === $type ) {
-				return false;
+				$panel_parent = FrmField::getOne( (int) FrmField::get_option( $section, 'in_section' ) );
+
+				if ( ! $panel_parent || ! in_array( $panel_parent->type, array( 'tabs', 'accordion' ), true ) ) {
+					return false;
+				}
 			}
 		}
 

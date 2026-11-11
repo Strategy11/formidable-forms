@@ -35,6 +35,48 @@ class test_FrmFieldPlacement extends FrmUnitTest {
 		}
 	}
 
+	/** @return void */
+	public function test_legacy_placements_remain_editable() {
+		$form_id = $this->factory->form->create();
+		$section = FrmField::create( FrmFieldsHelper::setup_new_vars( 'divider', $form_id ) );
+
+		foreach ( array( 'break', 'captcha', 'gdpr' ) as $type ) {
+			$field_id              = FrmField::create( FrmFieldsHelper::setup_new_vars( $type, $form_id ) );
+			$field                 = FrmField::getOne( $field_id );
+			$options               = $field->field_options;
+			$options['in_section'] = $section;
+			global $wpdb;
+			$wpdb->update( $wpdb->prefix . 'frm_fields', array( 'field_options' => serialize( $options ) ), array( 'id' => $field_id ) );
+			wp_cache_delete( $field_id, 'frm_field' );
+			$this->assertNotFalse(
+				FrmField::update(
+					$field_id,
+					array(
+						'name'          => 'Renamed',
+						'field_options' => $options,
+					)
+				)
+			);
+			$this->assertSame( 'Renamed', FrmField::getOne( $field_id )->name );
+		}
+	}
+
+	/** @return void */
+	public function test_sections_are_allowed_in_tabs_and_accordion_panels() {
+		$form_id = $this->factory->form->create();
+
+		foreach ( array( 'tabs', 'accordion' ) as $type ) {
+			$container                                   = FrmField::create( FrmFieldsHelper::setup_new_vars( $type, $form_id ) );
+			$panel_values                                = FrmFieldsHelper::setup_new_vars( 'divider', $form_id );
+			$panel_values['field_options']['in_section'] = $container;
+			$panel                                       = FrmField::create( $panel_values );
+			$values                                      = FrmFieldsHelper::setup_new_vars( 'divider', $form_id );
+			$values['field_options']['in_section']       = $panel;
+			$this->assertNotFalse( FrmField::create( $values ) );
+			$this->assertTrue( FrmFieldPlacementHelper::is_allowed( 'divider', $form_id, $panel ) );
+		}
+	}
+
 	public function test_repeater_destination_is_checked_when_parent_form_is_passed() {
 		$form_id                           = $this->factory->form->create();
 		$values                            = FrmFieldsHelper::setup_new_vars( 'divider', $form_id );
