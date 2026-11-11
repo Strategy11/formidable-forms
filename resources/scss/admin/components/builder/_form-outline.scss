@@ -74,10 +74,13 @@
 		margin-top: var(--gap-xs);
 	}
 
-	.frm-builder-outline-page {
+	.frm-builder-outline-page,
+	.frm-builder-outline-section {
 		color: var(--grey-900);
 		font-weight: 600;
+	}
 
+	.frm-builder-outline-page {
 		// The bar marks the current page without relying on color.
 		&[aria-current] {
 			position: relative;
@@ -95,17 +98,11 @@
 		}
 	}
 
-	// Sections and matching fields hang off a guide line under their page.
-	.frm-builder-outline-section,
-	.frm-builder-outline-field {
-		// The guide line sits right under where the page name starts.
-		width: calc(100% - var(--gap-xs));
+	// Each group owns its guide line, including sections within pages.
+	ul.frm-builder-outline-children {
 		margin-inline-start: var(--gap-xs);
-		padding-inline-start: 12px;
+		padding-inline-start: var(--gap-xs);
 		border-inline-start: 1px solid var(--grey-200);
-		border-start-start-radius: 0;
-		border-end-start-radius: 0;
-		font-weight: 400;
 	}
 
 	.frm-builder-outline-field {

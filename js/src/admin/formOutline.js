@@ -120,11 +120,18 @@ export function initFormOutline() {
 		const children = [];
 		let fieldResultCount = 0;
 
-		const makeButton = ( className, text, field, pageIndex ) => {
+		const makeButton = ( className, text, field, pageIndex, fieldCount ) => {
 			const button = tag( 'button', {
 				className,
 				child: span( { className: 'frm-builder-outline-label', text } )
 			} );
+			if ( fieldCount !== undefined ) {
+				button.append( span( {
+					className: 'frm-builder-outline-meta',
+					/* translators: %d: Number of fields in the section */
+					text: sprintf( _n( '%d field', '%d fields', fieldCount, 'formidable' ), fieldCount )
+				} ) );
+			}
 			button.type = 'button';
 			button.title = text;
 			button.dataset.fieldId = field.dataset.fid;
@@ -140,7 +147,16 @@ export function initFormOutline() {
 				return;
 			}
 
-			// Sections and fields in form order. With a search, only the ones that match.
+			// Group by the builder containers, including fields inside layout rows.
+			const sections = new Map();
+			page.fields.forEach( field => {
+				if ( field.dataset.type === SECTION_TYPE ) {
+					sections.set( field, [] );
+				}
+				const section = field.parentElement.closest( 'li[data-type="divider"]' );
+				sections.get( section )?.push( field );
+			} );
+			const sectionRows = new Map();
 			const rows = [];
 			page.fields.forEach( field => {
 				const { type } = field.dataset;
@@ -157,17 +173,32 @@ export function initFormOutline() {
 				const isSection = type === SECTION_TYPE;
 				if ( query !== '' ) {
 					const matches = searchText.includes( query ) || field.dataset.fid.includes( query );
-					if ( ! matches && ! ( isSection && pageMatches ) ) {
+					if ( ! matches && ! isSection ) {
 						return;
 					}
 				}
-				// A page named after its first section would list that name twice in a row.
-				if ( query === '' && isSection && field === firstField && text === page.title && pages.length > 1 ) {
-					return;
+				if ( isSection ) {
+					const fieldCount = sections.get( field ).filter( child => ! STRUCTURE_TYPES.includes( child.dataset.type ) ).length;
+					const row = makeButton( 'frm-builder-outline-section', text, field, page.index, fieldCount );
+					sectionRows.set( field, { row, children: [], matches: searchText.includes( query ) || field.dataset.fid.includes( query ) } );
+					rows.push( row );
+				} else {
+					const row = makeButton( 'frm-builder-outline-field', text, field, page.index );
+					const section = field.parentElement.closest( 'li[data-type="divider"]' );
+					const parent = sectionRows.get( section );
+					( parent ? parent.children : rows ).push( row );
 				}
-				rows.push( makeButton( isSection ? 'frm-builder-outline-section' : 'frm-builder-outline-field', text, field, page.index ) );
 				if ( ! isSection && query !== '' ) {
 					fieldResultCount++;
+				}
+			} );
+			sectionRows.forEach( section => {
+				if ( query !== '' && ! section.matches && ! pageMatches && section.children.length === 0 ) {
+					rows.splice( rows.indexOf( section.row ), 1 );
+					return;
+				}
+				if ( section.children.length ) {
+					section.row.replaceChildren( section.row.firstElementChild, tag( 'ul', { className: 'frm-builder-outline-children', children: section.children } ) );
 				}
 			} );
 
@@ -194,12 +225,16 @@ export function initFormOutline() {
 				}
 				pageButton.dataset.fieldId = firstField.dataset.fid;
 				pageButton.dataset.pageIndex = page.index;
-				children.push( tag( 'li', { child: pageButton } ) );
+				children.push( tag( 'li', { children: [
+					pageButton,
+					... rows.length ? [ tag( 'ul', { className: 'frm-builder-outline-children', children: rows } ) ] : []
+				] } ) );
+			} else {
+				children.push( ...rows );
 			}
-			children.push( ...rows );
 		} );
 
-		const resultCount = children.length;
+		const resultCount = children.reduce( ( count, child ) => count + child.querySelectorAll( 'button' ).length, 0 );
 		const hasFields = pages.length > 1 || pages.some( page => page.fields.length > 0 );
 		const noResults = query !== '' && resultCount === 0;
 		const showEmpty = noResults || ! hasFields;
