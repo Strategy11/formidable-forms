@@ -151,6 +151,10 @@ class FrmEntriesHelper {
 	 * @return bool True if a value is posted.
 	 */
 	public static function value_is_posted( $field, $args ) {
+		if ( ! empty( $args['item_meta_path'] ) ) {
+			return isset( FrmEntryMetaPathHelper::get_posted_row( $args['item_meta_path'] )[ $field->id ] );
+		}
+
 		$value_is_posted = false;
 
 		if ( ! $_POST ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -392,7 +396,7 @@ class FrmEntriesHelper {
 			$value = $args['temp_value'];
 		}
 
-		if ( empty( $args['parent_field_id'] ) ) {
+		if ( empty( $args['parent_field_id'] ) && empty( $args['item_meta_path'] ) ) {
 			$_POST['item_meta'][ $field->id ] = $value;
 		} else {
 			self::set_parent_field_posted_value( $field, $value, $args );
@@ -411,17 +415,7 @@ class FrmEntriesHelper {
 	 * @return void
 	 */
 	private static function set_parent_field_posted_value( $field, $value, $args ) {
-		if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ] ) && is_array( $_POST['item_meta'][ $args['parent_field_id'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
-			if ( ! isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] ) || ! is_array( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
-				$_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] = array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			}
-		} else {
-			// All of the section was probably removed.
-			$_POST['item_meta'][ $args['parent_field_id'] ]                         = array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			$_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] = array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		}
-
-		$_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field->id ] = $value; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		FrmEntryMetaPathHelper::set_posted_value( $_POST, $field->id, $value, $args ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 	}
 
 	/**
@@ -467,12 +461,17 @@ class FrmEntriesHelper {
 	 * @return mixed
 	 */
 	public static function get_posted_meta( $field_id, $args ) {
+		if ( ! empty( $args['item_meta_path'] ) ) {
+			return FrmEntryMetaPathHelper::get_posted_row( $args['item_meta_path'] )[ $field_id ] ?? '';
+		}
+
 		if ( empty( $args['parent_field_id'] ) ) {
 			// Sanitizing is done next.
 			$value = isset( $_POST['item_meta'][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $field_id ] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		} else {
 			$value = isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
+
 		return $value;
 	}
 
@@ -537,18 +536,18 @@ class FrmEntriesHelper {
 			return;
 		}
 
-		// Check if there are any other posted "other" values for this field.
-		if ( ! FrmField::is_option_true( $field, 'other' ) || ! isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
+		$path = ! empty( $args['item_meta_path'] ) ? $args['item_meta_path'] : array( $args['parent_field_id'], $args['key_pointer'] );
+		$row  = FrmEntryMetaPathHelper::get_posted_row( $path );
+
+		if ( ! FrmField::is_option_true( $field, 'other' ) || ! isset( $row['other'][ $field->id ] ) ) {
 			return;
 		}
 
-		// Save original value
 		$args['temp_value'] = $value;
 		$args['other']      = true;
-		$other_vals         = wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
+		$other_vals         = $row['other'][ $field->id ];
 		FrmAppHelper::sanitize_value( 'sanitize_text_field', $other_vals );
 
-		// Set the validation value now.
 		self::set_other_validation_val( $value, $other_vals, $field, $args );
 	}
 
