@@ -287,7 +287,6 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	 */
 	public function test_url_host_is_anchored() {
 		$default_field = $this->factory->field->get_object_by_id( $this->get_field_key( 'url' ) );
-		$intl_field    = $this->create_intl_url_field();
 
 		$should_pass = array(
 			'https://example.com',
@@ -315,7 +314,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 			'https://a.b.müller.de',
 		);
 
-		foreach ( array( $default_field, $intl_field ) as $field ) {
+		foreach ( array( $default_field, $this->create_intl_url_field() ) as $field ) {
 			foreach ( $should_pass as $url ) {
 				$errors = $this->check_single_value( array( $field->id => $url ) );
 				$this->assertArrayNotHasKey( 'field' . $field->id, $errors, 'A valid url failed validation: ' . $url );
