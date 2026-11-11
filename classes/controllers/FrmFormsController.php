@@ -414,6 +414,12 @@ class FrmFormsController {
 		self::maybe_remove_draft_option_from_fields( $id );
 
 		$updated = FrmForm::update( $id, $values );
+
+		if ( false === $updated ) {
+			self::show_update_failed( $id );
+			return;
+		}
+
 		$message = __( 'Form was successfully updated.', 'formidable' );
 
 		if ( self::is_too_long( $values ) ) {
@@ -426,14 +432,33 @@ class FrmFormsController {
 		}
 
 		if ( defined( 'DOING_AJAX' ) ) {
-			if ( false !== $updated ) {
-				header( 'X-Frm-Form-Saved: 1' );
-			}
-
+			header( 'X-Frm-Form-Saved: 1' );
 			wp_die( FrmAppHelper::kses( $message, array( 'a' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		self::get_edit_vars( $id, array(), $message );
+	}
+
+	/**
+	 * Report a form save that did not complete, so the builder does not show a success message.
+	 * An AJAX save gets a 500 response with the X-Frm-Form-Saved: 0 header, and the builder keeps
+	 * the unsaved field order to send again.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $id Form ID.
+	 *
+	 * @return void
+	 */
+	private static function show_update_failed( $id ) {
+		$error = __( 'Some form changes could not be saved. Please try again.', 'formidable' );
+
+		if ( defined( 'DOING_AJAX' ) ) {
+			header( 'X-Frm-Form-Saved: 0' );
+			wp_die( esc_html( $error ), '', array( 'response' => 500 ) );
+		}
+
+		self::get_edit_vars( $id, array( 'form' => $error ) );
 	}
 
 	/**

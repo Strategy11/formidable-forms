@@ -8658,10 +8658,29 @@ window.frmAdminBuildJS = function() {
 				showFormSavedMessage( msg );
 				reloadIfAddonActivatedAjaxSubmitOnly();
 			},
-			error() {
+			error( xhr ) {
+				if ( xhr.getResponseHeader( 'X-Frm-Form-Saved' ) === '0' ) {
+					// The server could not save everything. Keep the unsaved changes and orders for the next save.
+					showFormSaveFailed( $thisEle, xhr.responseText );
+					return;
+				}
 				triggerSubmit( document.getElementById( 'frm_js_build_form' ) );
 			}
 		} );
+	}
+
+	/**
+	 * Stop the loading state and show the error returned by a save that did not complete.
+	 * The changed fields count is kept so the unsaved changes warning still applies.
+	 *
+	 * @param {HTMLElement} button The save button.
+	 * @param {string}      msg    The error message returned by the save request.
+	 * @return {void}
+	 */
+	function showFormSaveFailed( button, msg ) {
+		button.classList.remove( 'frm_loading_form', 'frm_loading_button' );
+		button.setAttribute( 'aria-busy', 'false' );
+		infoModal( msg );
 	}
 
 	/**
