@@ -31,8 +31,8 @@ const getFieldText = field => {
 };
 
 /**
- * Add a form outline to the builder: a button floating at the bottom right of the canvas that opens a popover
- * to search and jump to pages, sections and fields.
+ * Add a form outline to the builder: the Outline tab in the side panel lists the form's pages,
+ * sections and fields in order, and jumps to any of them.
  *
  * @since x.x
  * @return {void}
@@ -40,8 +40,9 @@ const getFieldText = field => {
 export function initFormOutline() {
 	const popover = document.getElementById( 'frm-builder-outline' );
 	const toggle = document.getElementById( 'frm-builder-outline-toggle' );
+	const tab = toggle?.closest( 'li' );
 	const builder = document.getElementById( 'frm-show-fields' );
-	if ( ! popover || ! toggle || ! builder ) {
+	if ( ! popover || ! tab || ! builder ) {
 		return;
 	}
 
@@ -51,7 +52,7 @@ export function initFormOutline() {
 	const emptyTitle = emptyMessage.querySelector( '.frm-builder-outline-empty-title' );
 	const emptyText = emptyMessage.querySelector( '.frm-builder-outline-empty-text' );
 	const status = popover.querySelector( '.frm-builder-outline-status' );
-	const isOpen = () => ! popover.hidden;
+	const isOpen = () => Boolean( tab?.classList.contains( 'frm-active' ) );
 	const scroller = document.getElementById( 'post-body-content' );
 	let currentPageIndex = 0;
 	let observer;
@@ -94,105 +95,88 @@ export function initFormOutline() {
 		const children = [];
 		let fieldResultCount = 0;
 
+		const makeButton = ( className, text, field, pageIndex ) => {
+			const button = tag( 'button', {
+				className,
+				child: span( { className: 'frm-builder-outline-label', text } )
+			} );
+			button.type = 'button';
+			button.title = text;
+			button.dataset.fieldId = field.dataset.fid;
+			button.dataset.pageIndex = pageIndex;
+			return tag( 'li', { child: button } );
+		};
+
 		pages.forEach( page => {
 			const pageMatches = page.title.toLocaleLowerCase().includes( query );
-			const matchingFields = query === ''
-				? []
-				: page.fields.filter( field => {
-					// Sections already get their own row.
-					if ( field.dataset.type === SECTION_TYPE ) {
-						return false;
-					}
-					const fieldText = getFieldText( field ).toLocaleLowerCase();
-					return fieldText.includes( query ) || field.dataset.fid.includes( query );
-				} );
-
-			const matchingSections = page.fields.filter( field => {
-				if ( field.dataset.type !== SECTION_TYPE ) {
-					return false;
-				}
-				if ( query === '' || pageMatches ) {
-					return true;
-				}
-
-				const sectionText = getFieldText( field ).toLocaleLowerCase();
-				return sectionText.includes( query ) || field.dataset.fid.includes( query );
-			} );
-
-			if ( query !== '' && ! pageMatches && matchingFields.length === 0 && matchingSections.length === 0 ) {
-				return;
-			}
-
 			const [ firstField ] = page.fields;
 			if ( ! firstField ) {
 				return;
 			}
 
-			const pageLabel = `${ sprintf( __( 'Page %1$d', 'formidable' ), page.index + 1 ) }: ${ page.title }`;
-			const fieldCount = page.fields.filter( field => ! STRUCTURE_TYPES.includes( field.dataset.type ) ).length;
-			const pageButton = tag( 'button', {
-				className: 'frm-builder-outline-page',
-				children: [
-					span( { className: 'frm-builder-outline-label', text: pageLabel } ),
-					/* translators: %d: Number of fields on the page */
-					span( { className: 'frm-builder-outline-meta', text: sprintf( _n( '%d field', '%d fields', fieldCount, 'formidable' ), fieldCount ) } )
-				]
-			} );
-			pageButton.type = 'button';
-			pageButton.title = pageLabel;
-			if ( page.index === currentPageIndex && query === '' ) {
-				pageButton.setAttribute( 'aria-current', 'location' );
-			}
-			pageButton.dataset.fieldId = firstField.dataset.fid;
-			pageButton.dataset.pageIndex = page.index;
-			children.push( tag( 'li', { child: pageButton } ) );
-
-			matchingSections.forEach( field => {
-				const sectionText = getFieldText( field );
-				// A page named after its first section would list that name twice in a row.
-				if ( ! sectionText || ( query === '' && field === firstField && sectionText === page.title ) ) {
+			// Sections and fields in form order. With a search, only the ones that match.
+			const rows = [];
+			page.fields.forEach( field => {
+				const { type } = field.dataset;
+				if ( type === 'end_divider' ) {
 					return;
 				}
-
-				const sectionButton = tag( 'button', {
-					className: 'frm-builder-outline-section',
-					child: span( { className: 'frm-builder-outline-label', text: sectionText } )
-				} );
-				sectionButton.type = 'button';
-				sectionButton.title = sectionText;
-				sectionButton.dataset.fieldId = field.dataset.fid;
-				sectionButton.dataset.pageIndex = page.index;
-				children.push( tag( 'li', { child: sectionButton } ) );
+				const text = getFieldText( field );
+				if ( ! text ) {
+					return;
+				}
+				const isSection = type === SECTION_TYPE;
+				if ( query !== '' ) {
+					const matches = text.toLocaleLowerCase().includes( query ) || field.dataset.fid.includes( query );
+					if ( ! matches && ! ( isSection && pageMatches ) ) {
+						return;
+					}
+					if ( ! isSection && fieldResultCount >= MAX_FIELD_RESULTS ) {
+						return;
+					}
+				}
+				// A page named after its first section would list that name twice in a row.
+				if ( isSection && field === firstField && text === page.title && pages.length > 1 ) {
+					return;
+				}
+				rows.push( makeButton( isSection ? 'frm-builder-outline-section' : 'frm-builder-outline-field', text, field, page.index ) );
+				if ( ! isSection && query !== '' ) {
+					fieldResultCount++;
+				}
 			} );
 
-			if ( query === '' || fieldResultCount >= MAX_FIELD_RESULTS ) {
+			if ( query !== '' && ! pageMatches && rows.length === 0 ) {
 				return;
 			}
 
-			matchingFields.forEach( field => {
-				if ( fieldResultCount >= MAX_FIELD_RESULTS ) {
-					return;
-				}
-				const fieldText = getFieldText( field );
-				const fieldButton = tag( 'button', {
-					className: 'frm-builder-outline-field',
-					child: span( { className: 'frm-builder-outline-label', text: fieldText } )
+			// A one-page form has no pages to show, only its sections and fields.
+			if ( pages.length > 1 ) {
+				const pageLabel = `${ sprintf( __( 'Page %1$d', 'formidable' ), page.index + 1 ) }: ${ page.title }`;
+				const fieldCount = page.fields.filter( field => ! STRUCTURE_TYPES.includes( field.dataset.type ) ).length;
+				const pageButton = tag( 'button', {
+					className: 'frm-builder-outline-page',
+					children: [
+						span( { className: 'frm-builder-outline-label', text: pageLabel } ),
+						/* translators: %d: Number of fields on the page */
+						span( { className: 'frm-builder-outline-meta', text: sprintf( _n( '%d field', '%d fields', fieldCount, 'formidable' ), fieldCount ) } )
+					]
 				} );
-				fieldButton.type = 'button';
-				fieldButton.title = fieldText;
-				fieldButton.dataset.fieldId = field.dataset.fid;
-				fieldButton.dataset.pageIndex = page.index;
-				children.push( tag( 'li', { child: fieldButton } ) );
-				fieldResultCount++;
-			} );
+				pageButton.type = 'button';
+				pageButton.title = pageLabel;
+				if ( page.index === currentPageIndex && query === '' ) {
+					pageButton.setAttribute( 'aria-current', 'location' );
+				}
+				pageButton.dataset.fieldId = firstField.dataset.fid;
+				pageButton.dataset.pageIndex = page.index;
+				children.push( tag( 'li', { child: pageButton } ) );
+			}
+			children.push( ...rows );
 		} );
 
 		const resultCount = children.length;
 		const hasFields = pages.some( page => page.fields.length > 0 );
-		// A lone page with no sections gives nothing to jump to, so explain how to add some instead.
-		const hasOutline = pages.length > 1 || resultCount > 1;
 		const noResults = query !== '' && resultCount === 0;
-		const showEmpty = noResults || ( query === '' && ! hasOutline );
+		const showEmpty = noResults || ! hasFields;
 		const fragment = document.createDocumentFragment();
 		if ( ! showEmpty ) {
 			fragment.append( ...children );
@@ -205,10 +189,8 @@ export function initFormOutline() {
 			emptyTitle.textContent = sprintf( __( 'No results for “%s”', 'formidable' ), search.value.trim() );
 			emptyText.textContent = __( 'Try a page, section or field name.', 'formidable' );
 		} else if ( showEmpty ) {
-			emptyTitle.textContent = hasFields ? __( 'No pages or sections yet', 'formidable' ) : __( 'No fields yet', 'formidable' );
-			emptyText.textContent = hasFields
-				? __( 'Add a Page Break or Section field to split this form into parts. You can still search above to jump to any field.', 'formidable' )
-				: __( 'Fields you add to this form will show up here.', 'formidable' );
+			emptyTitle.textContent = __( 'No fields yet', 'formidable' );
+			emptyText.textContent = __( 'Fields you add to this form will show up here, so you can jump to any of them.', 'formidable' );
 		}
 		if ( query === '' ) {
 			status.textContent = sprintf( _n( '%d page', '%d pages', pages.length, 'formidable' ), pages.length );
@@ -259,80 +241,33 @@ export function initFormOutline() {
 	const getPagePills = () => Array.from( document.querySelectorAll( '#frm-fake-page .frm-collapse-page, #frm-show-fields li[data-type="break"] .frm-collapse-page' ) );
 	const getPillPage = pill => Number( pill.querySelector( '.frm-page-num' )?.textContent ) - 1;
 
-	const placePopover = () => {
-		const rect = toggle.getBoundingClientRect();
-		// Line up with the button's right edge, like a menu opened from it.
-		popover.style.right = `${ window.innerWidth - rect.right }px`;
-		// Open upward, so the list grows away from the button.
-		popover.style.bottom = `${ window.innerHeight - rect.top + 8 }px`;
-	};
-
 	// Track the page at the top of the canvas, so the outline can mark it.
-	const updateDock = () => {
-		const pills = getPagePills();
+	const updateCurrentPage = () => {
+		if ( ! isOpen() ) {
+			return;
+		}
 		const { top } = scroller.getBoundingClientRect();
 		let index = -1;
-		pills.forEach( pill => {
+		getPagePills().forEach( pill => {
 			if ( pill.offsetParent && pill.getBoundingClientRect().top < top + 8 ) {
 				index = Math.max( index, getPillPage( pill ) );
 			}
 		} );
-		const pages = getPages();
-		const pageChanged = currentPageIndex !== Math.max( index, 0 );
-		currentPageIndex = Math.max( index, 0 );
-		const page = pages[ currentPageIndex ];
-		const hasPages = pages.length > 1 && Boolean( page );
-		// The outline only earns its place once the form is split into pages.
-		toggle.parentElement.hidden = ! hasPages;
-		if ( ! hasPages ) {
-			if ( isOpen() ) {
-				setOpen( false );
-			}
-			return;
-		}
-		if ( isOpen() ) {
-			placePopover();
-			if ( pageChanged ) {
-				render();
-			}
+		if ( currentPageIndex !== Math.max( index, 0 ) ) {
+			currentPageIndex = Math.max( index, 0 );
+			render();
 		}
 	};
 
-	let dockFrame;
-	const queueDockUpdate = () => {
-		window.cancelAnimationFrame( dockFrame );
-		dockFrame = window.requestAnimationFrame( updateDock );
+	let scrollFrame;
+	const queueCurrentPageUpdate = () => {
+		window.cancelAnimationFrame( scrollFrame );
+		scrollFrame = window.requestAnimationFrame( updateCurrentPage );
 	};
 
-	const setOpen = open => {
-		popover.hidden = ! open;
-		toggle.setAttribute( 'aria-expanded', String( open ) );
-		toggle.classList.toggle( 'frm-active', open );
-		updateDock();
-		updateOutline();
-		if ( open ) {
-			search.focus();
-		}
-	};
-
-	toggle.addEventListener( 'click', () => setOpen( popover.hidden ) );
-	document.addEventListener( 'keydown', event => {
-		if ( event.key === 'Escape' && ! popover.hidden ) {
-			setOpen( false );
-			toggle.focus();
-		}
-	} );
-	// Not a modal: the builder stays usable, and clicking anywhere else closes the outline.
-	document.addEventListener( 'pointerdown', event => {
-		if ( ! popover.hidden && ! popover.contains( event.target ) && ! toggle.contains( event.target ) ) {
-			setOpen( false );
-		}
-	} );
-	scroller.addEventListener( 'scroll', queueDockUpdate, { passive: true } );
-	window.addEventListener( 'resize', queueDockUpdate );
-	// Page breaks load and move with the builder, so recheck the dock when they do.
-	new MutationObserver( queueDockUpdate ).observe( builder, { childList: true, subtree: true } );
-	updateDock();
+	// The tab navigator switches tabs by class, from clicks, keys and code, so watch the class.
+	new MutationObserver( updateOutline ).observe( tab, { attributes: true, attributeFilter: [ 'class' ] } );
+	scroller.addEventListener( 'scroll', queueCurrentPageUpdate, { passive: true } );
 	search.addEventListener( 'input', render );
 	// Arrow keys move between the search box and the results, like a menu. Safari's Tab skips buttons by default.
 	popover.addEventListener( 'keydown', event => {
