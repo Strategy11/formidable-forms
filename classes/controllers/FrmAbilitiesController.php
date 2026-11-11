@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Each domain (forms, fields, entries, styles, form actions) lives in its own
  * FrmAbilities*Controller. This class registers the shared category, delegates
  * to the domain controllers, and owns the gate every plugin in the family
- * checks before registering anything of its own.
+ * checks before registering operational abilities of its own.
  *
  * Pro and Views register the domains that belong to their features, and the API
  * add-on registers whatever is left over on a site where those plugins are too
@@ -46,7 +46,7 @@ class FrmAbilitiesController {
 	}
 
 	/**
-	 * Check whether the Formidable family may register abilities at all.
+	 * Check whether the Formidable family may register operational abilities.
 	 *
 	 * Pro, Views, and the API add-on all consult this before registering their
 	 * own domains, so the MCP setting is one switch for the whole AI surface
@@ -132,10 +132,7 @@ class FrmAbilitiesController {
 	 * @return void
 	 */
 	public static function register_categories() {
-		if ( ! self::is_active() ) {
-			return;
-		}
-
+		// Setup discovery remains available while operational abilities are off.
 		// Pro, Views, and the API add-on all register into this category, so
 		// whichever of them runs first would otherwise register it twice. The
 		// registry is asked directly because wp_get_ability_category() is a
@@ -180,6 +177,8 @@ class FrmAbilitiesController {
 	 * @return void
 	 */
 	public static function register_abilities() {
+		FrmAbilitiesSetupController::register_abilities();
+
 		if ( ! self::is_active() ) {
 			return;
 		}
