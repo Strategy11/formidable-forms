@@ -22,9 +22,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v6
 
       - name: Psalm
-        uses: docker://vimeo/psalm-github-actions
+        uses: docker://ghcr.io/psalm/psalm-github-actions:6.16.1
         with:
           composer_require_dev: true

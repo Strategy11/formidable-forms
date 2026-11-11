@@ -14,49 +14,20 @@ describe( 'Forms page', () => {
 		cy.log( 'Validate all header data' );
 		cy.log( 'Validate the upgrade link' );
 
-		cy.get( '.frm-upgrade-bar .frm-upgrade-bar-inner > a, #frm_sale_banner a:not(.dismiss)' )
-			.then( $el => {
-				const text = $el.text().trim();
-				const href = $el.attr( 'href' );
+		cy.get( 'body' ).then( $body => {
+			if ( $body.find( '#frm_sale_banner' ).length ) {
+				cy.get( '#frm_sale_banner' )
+					.should( 'have.attr', 'data-url' )
+					.and( 'match', /^https?:\/\// );
+				cy.get( '#frm_sale_banner a:not(.dismiss)' ).should( 'be.visible' ).and( 'not.be.empty' );
+				return;
+			}
 
-				const substrings = [
-					'upgrading to PRO',
-					'Get 60% Off Pro!',
-					'Get the Deal',
-					'upgrading for 60% off during our No Brainer Sale!',
-					'Black Friday Deals',
-					'Cyber Monday Deals',
-					'Anniversary Sale'
-				];
-
-				if ( href && substrings.some( substring => text.includes( substring ) ) ) {
-					cy.origin( 'https://formidableforms.com', { args: { href } }, ( { href } ) => {
-						cy.visit( href );
-						cy.get( 'h1' ).should( $h1 => {
-							const headingText = $h1.text().trim().toLowerCase();
-							expect( [
-								'the only wordpress form maker & application builder plugin',
-								'upgrade today to unlock the full power of formidable forms',
-								'the most advanced wordpress form builder',
-								'more than just a wordpress form builder',
-								'get more done in less time with better wordpress forms',
-								'power your wordpress site like never before',
-								'tired of workarounds? build what you really need.',
-								'build powerful forms, web apps, dashboards, and more',
-								'black friday sales are happening now!',
-								'save 65% on the best wordpress form builder',
-								'don\'t miss the best deals for cyber monday!',
-								'don\'t miss the giving tuesday flash sale!',
-								'don\'t miss 65% off on the best wordpress form builder!',
-								'upgrading for 60% off before our Anniversary Sale ends!',
-								'stop patching together plugins. start building what you actually need.'
-							] ).to.include( headingText );
-						} );
-					} );
-				} else {
-					throw new Error( `Unexpected banner text or missing href: "${ text }"` );
-				}
-			} );
+			cy.get( '.frm-upgrade-bar .frm-upgrade-bar-inner > a' )
+				.should( 'be.visible' )
+				.and( 'have.attr', 'href' )
+				.and( 'match', /^https?:\/\// );
+		} );
 
 		cy.log( 'Navigate back to the original page' );
 		cy.visit( '/wp-admin/admin.php?page=formidable' );

@@ -1019,7 +1019,20 @@ class FrmAppController {
 	}
 
 	/**
-	 * Unregister Popper if the registered version is outdated.
+	 * Check the popper handle again after other plugins have enqueued their scripts.
+	 * Most plugins register scripts on admin_enqueue_scripts, after admin_js() has run.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function maybe_replace_foreign_popper() {
+		self::maybe_deregister_popper1();
+	}
+
+	/**
+	 * Unregister Popper if another plugin replaced our copy.
+	 * The source is compared rather than the version, since a version can be empty or mislabeled.
 	 *
 	 * @since 6.26
 	 *
@@ -1028,13 +1041,13 @@ class FrmAppController {
 	private static function maybe_deregister_popper1() {
 		global $wp_scripts;
 
-		if ( ! array_key_exists( 'popper', $wp_scripts->registered ) ) {
+		if ( ! self::should_register_popper() || ! array_key_exists( 'popper', $wp_scripts->registered ) ) {
 			return;
 		}
 
 		$popper = $wp_scripts->registered['popper'];
 
-		if ( ! version_compare( $popper->ver, '2.0', '<' ) ) {
+		if ( $popper->src === FrmAppHelper::plugin_url() . '/js/popper.min.js' ) {
 			return;
 		}
 
@@ -1302,6 +1315,9 @@ class FrmAppController {
 		$tables[] = $wpdb->prefix . 'frm_forms';
 		$tables[] = $wpdb->prefix . 'frm_items';
 		$tables[] = $wpdb->prefix . 'frm_item_metas';
+		$tables[] = $wpdb->prefix . 'frm_payments';
+		$tables[] = $wpdb->prefix . 'frm_subscriptions';
+		$tables[] = $wpdb->prefix . 'frm_gated_tokens';
 
 		return $tables;
 	}

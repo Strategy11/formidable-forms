@@ -76,16 +76,17 @@ class FrmAbilitiesFieldsController {
 								'description' => __( 'Field type (text, textarea, radio, checkbox, dropdown, email, number, date, file, etc.)', 'formidable' ),
 							),
 							'default_value' => array(
-								'type'        => 'string',
-								'description' => __( 'Default value for the field', 'formidable' ),
+								'type'        => array( 'string', 'array', 'object', 'null' ),
+								'description' => __( 'Default value for the field. An array or object when the field holds several values, such as Address.', 'formidable' ),
 							),
 							'options'       => array(
-								'type'        => 'array',
-								'description' => __(
-									'Field choices: strings, or {"label", "value"} objects when using separate values. Star rating and scale choices are numbers.',
+								'type'                 => array( 'array', 'object' ),
+								'description'          => __(
+									'Field choices: strings, numbers (star rating, scale), or {"label", "value"} objects when using separate values, or an object keyed by option key.',
 									'formidable'
 								),
-								'items'       => array( 'type' => array( 'string', 'number', 'object' ) ),
+								'items'                => array( 'type' => array( 'string', 'number', 'object' ) ),
+								'additionalProperties' => array( 'type' => array( 'string', 'number', 'object' ) ),
 							),
 							'field_order'   => array(
 								'type'        => 'integer',
