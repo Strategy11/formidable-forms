@@ -198,6 +198,11 @@ class FrmFieldsController {
 		$field_type    = FrmAppHelper::get_post_param( 'field_type', '', 'sanitize_text_field' );
 		$form_id       = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 		$field_options = FrmAppHelper::get_post_param( 'field_options', array(), 'wp_kses_post' );
+		$section_id    = ! empty( $field_options['in_section'] ) ? (int) $field_options['in_section'] : FrmAppHelper::get_post_param( 'section_id', 0, 'absint' );
+
+		if ( ! FrmFieldPlacementHelper::is_allowed( $field_type, $form_id, $section_id ) ) {
+			wp_die( esc_html__( 'This field type cannot be placed in this section or repeater.', 'formidable' ), '', array( 'response' => 400 ) );
+		}
 
 		do_action( 'frm_before_create_field', $field_type, $form_id );
 
@@ -219,6 +224,10 @@ class FrmFieldsController {
 	 * @return array|false
 	 */
 	public static function include_new_field( $field_type, $form_id, $field_options = array() ) {
+		if ( ! FrmFieldPlacementHelper::is_allowed( $field_type, $form_id, (int) ( $field_options['in_section'] ?? 0 ) ) ) {
+			return false;
+		}
+
 		$field_values = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
 
 		if ( $field_options ) {

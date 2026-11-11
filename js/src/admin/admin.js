@@ -4,6 +4,7 @@
  * Internal dependencies
  */
 const { validateField } = require( './settings/validateField' );
+const { allowContainerDrop } = require( './fieldPlacement' );
 const { getRangeSettingsDefaults, validateNumberRangeSetting, validateStepSetting, validateRangeSettings } = require( './settings/validateRangeSettings' );
 const { initFieldListHoverPill } = require( './fieldListHoverPill' );
 const { initShowBoxIconSwap } = require( './showBoxIconSwap' );
@@ -2524,6 +2525,10 @@ window.frmAdminBuildJS = function() {
 			return false;
 		}
 
+		if ( ! allowContainerDrop( draggable, droppable ) ) {
+			return false;
+		}
+
 		const customDrop = wp.hooks.applyFilters( 'frm_builder_allow_drop', null, draggable, droppable );
 		if ( null !== customDrop ) {
 			return customDrop;
@@ -2571,25 +2576,6 @@ window.frmAdminBuildJS = function() {
 		}
 
 		const droppableIsARepeater = droppable.classList.contains( 'start_divider' ) && null !== droppable.closest( '.repeat_section' );
-		const droppableIsInsideOfARepeater = null !== droppable.closest( '.repeat_section' );
-
-		if ( droppableIsARepeater || droppableIsInsideOfARepeater ) {
-			const isGdpr = draggable.classList.contains( 'edit_field_type_gdpr' ) || draggable.id === 'gdpr';
-			if ( isGdpr ) {
-				return false;
-			}
-
-			/**
-			 * @since 6.27
-			 *
-			 * @param {boolean}     denyDropInRepeater
-			 * @param {HTMLElement} draggable
-			 */
-			const shouldDenyDropInRepeater = wp.hooks.applyFilters( 'frm_deny_drop_in_repeater', false, draggable );
-			if ( shouldDenyDropInRepeater ) {
-				return false;
-			}
-		}
 
 		if ( ! droppableIsARepeater ) {
 			const $fieldsInRow = getFieldsInRow( jQuery( droppable ) );
@@ -2662,7 +2648,7 @@ window.frmAdminBuildJS = function() {
 		const newFieldWillBeAddedToASection = droppable.classList.contains( 'start_divider' ) || null !== droppable.closest( '.start_divider' );
 		if ( newFieldWillBeAddedToASection ) {
 			// Don't allow a section or an embedded form in a section.
-			return ! newEmbedField && ! newSectionField;
+			return ! newPageBreakField && ! newEmbedField && ! newSectionField;
 		}
 
 		return true;
@@ -2701,7 +2687,7 @@ window.frmAdminBuildJS = function() {
 	function allowMoveFieldGroup( fieldGroup, droppable ) {
 		if ( droppable.classList.contains( 'start_divider' ) && null === fieldGroup.querySelector( '.start_divider' ) ) {
 			// Allow a field group with no section inside of a section.
-			return true;
+			return allowMoveFieldToSection( fieldGroup );
 		}
 		return false;
 	}

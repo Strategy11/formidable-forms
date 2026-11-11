@@ -503,6 +503,10 @@ class FrmField {
 			$new_values                                = apply_filters( 'frm_duplicated_field', $new_values );
 		}
 
+		if ( ! FrmFieldPlacementHelper::is_allowed( $new_values['type'] ?? '', (int) $new_values['form_id'], (int) ( $new_values['field_options']['in_section'] ?? 0 ) ) ) {
+			return false;
+		}
+
 		self::preserve_format_option_backslashes( $new_values );
 
 		foreach ( $new_values as $k => $v ) {
@@ -784,6 +788,10 @@ class FrmField {
 				// Don't keep the old placeholder setting for hidden fields
 				$values['field_options']['clear_on_focus'] = 0;
 			}
+		}
+
+		if ( ! FrmFieldPlacementHelper::is_allowed_update( $id, $values ) ) {
+			return false;
 		}
 
 		// Serialize array values

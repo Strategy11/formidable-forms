@@ -30,6 +30,26 @@ abstract class FrmFieldType {
 	protected $type;
 
 	/**
+	 * Whether this field can be placed in a repeater.
+	 *
+	 * @since x.x
+	 *
+	 * @var bool
+	 */
+	protected $allow_in_repeater = true;
+
+	/**
+	 * Get the repeater placement policy, including declarations from add-ons.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public function allows_in_repeater() {
+		return $this->allow_in_repeater && ! in_array( $this->type, array( 'captcha', 'submit', 'gdpr', 'summary', 'break', 'divider', 'form', 'tabs', 'accordion' ), true );
+	}
+
+	/**
 	 * Does the html for this field label need to include "for"?
 	 *
 	 * @var bool
@@ -558,6 +578,11 @@ DEFAULT_HTML;
 	 */
 	public function form_builder_classes( $display_type ) {
 		$classes = 'form-field edit_form_item frm_field_box frm_top_container frm_not_divider edit_field_type_' . $display_type;
+
+		if ( ! $this->allows_in_repeater() ) {
+			$classes .= ' frm-no-repeater';
+		}
+
 		return $this->alter_builder_classes( $classes );
 	}
 
