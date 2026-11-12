@@ -742,7 +742,7 @@ class FrmXMLController {
 		 */
 		$query = apply_filters( 'frm_csv_where', $query, compact( 'form_id', 'search', 'fid', 'item_id' ) );
 
-		$entry_ids = FrmDb::get_col( $wpdb->prefix . 'frm_items it', $query );
+		$entry_ids = FrmDb::get_col( $wpdb->prefix . 'frm_items it', $query, 'id', array( 'order_by' => 'it.id ASC' ) );
 		unset( $query );
 
 		if ( $entry_ids ) {

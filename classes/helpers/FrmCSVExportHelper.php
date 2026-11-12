@@ -506,14 +506,14 @@ class FrmCSVExportHelper {
 				'parent_item_id' => $next_set,
 			);
 			// Order by parent_item_id so children will be first.
-			$order_by = ' ORDER BY parent_item_id DESC';
+			$order_by = ' ORDER BY parent_item_id DESC, id ASC';
 		} else {
 			// When Pro is not installed, only query for direct ID matches only as we do not expect parent item id
 			// Matches and the more simplified query is faster.
 			$where    = array(
 				'id' => $next_set,
 			);
-			$order_by = '';
+			$order_by = ' ORDER BY id ASC';
 		}
 
 		$entries = FrmEntry::getAll( $where, $order_by, '', true, false );
