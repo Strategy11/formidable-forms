@@ -734,6 +734,26 @@ legend.frm_hidden{
 	gap: 2%;
 }
 
+.with_frm_style.frm_inline_top .frm_submit.frm_flex,
+.with_frm_style .frm_submit.frm_flex.frm_inline_submit {
+	align-items: flex-start;
+	align-content: flex-start;
+	row-gap: 0;
+}
+
+.with_frm_style.frm_inline_top .frm_submit.frm_flex::before,
+.with_frm_style .frm_submit.frm_flex.frm_inline_submit::before {
+	flex-basis: 100%;
+	order: -2;
+}
+
+/* Inside labels add padding above the input instead of rendering a label, so the spacer matches that padding. */
+.with_frm_style.frm_inline_inside .frm_submit.frm_flex::before {
+	box-sizing: border-box;
+	height: calc(0.5 * var(--field-height));
+	overflow: hidden;
+}
+
 <?php if ( $pro_is_installed ) { ?>
 .with_frm_style .frm_submit.frm_flex button.frm_button_submit ~ .frm_prev_page {
 	order: -1;
