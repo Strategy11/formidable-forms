@@ -89,8 +89,8 @@ try {
 		foreach ( $report['files'][ $fixturePath ]['messages'] as $message ) {
 			$actual[] = $message['line'];
 
-			if ( ! $message['fixable'] ) {
-				throw new RuntimeException( $name . ': non-fixable violation.' );
+			if ( 'ERROR' !== $message['type'] || ! $message['fixable'] ) {
+				throw new RuntimeException( $name . ': every violation must be a fixable error.' );
 			}
 		}
 
@@ -160,37 +160,61 @@ try {
 		}
 		fwrite( STDOUT, $name . ': passed' . PHP_EOL );
 	}
-	// The shared standard discovers new files automatically, so verify the staged opt-in.
-	$rolloutPath = $scratch . '/rollout.php';
-	copy( $fixtures . '/PreferDbGetCol.inc', $rolloutPath );
 
-	foreach ( array(
-		'phpcs-sniffs/Formidable/ruleset.xml' => 0,
-		'phpcs.xml'                           => 2,
-	) as $standard => $count ) {
-		$result = run_sniff_command( array( PHP_BINARY, $root . '/vendor/bin/phpcs', '--standard=' . $root . '/' . $standard, '-q', '--report=json', $rolloutPath ) );
-		$report = json_decode( $result[1], true );
-		$actual = 0;
+	// Both standards must enforce every fixture as fixable errors without opt-in overrides.
+	foreach ( array( 'phpcs-sniffs/Formidable/ruleset.xml', 'phpcs.xml' ) as $standard ) {
+		foreach ( $expected as $name => $lines ) {
+			$fixturePath = $scratch . '/' . $name . '.php';
+			copy( $fixtures . '/' . $name . '.inc', $fixturePath );
+			$result = run_sniff_command( array( PHP_BINARY, $root . '/vendor/bin/phpcs', '--standard=' . $root . '/' . $standard, '-q', '--report=json', $fixturePath ) );
+			$report = json_decode( $result[1], true );
+			$actual = array();
 
-		if ( ! is_array( $report ) || ! isset( $report['files'] ) ) {
-			throw new RuntimeException( 'Cannot verify staged rollout. ' . $result[1] . $result[2] );
-		}
+			if ( ! is_array( $report ) || ! isset( $report['files'][ $fixturePath ] ) ) {
+				throw new RuntimeException( 'Cannot verify shared errors. ' . $result[1] . $result[2] );
+			}
 
-		foreach ( $report['files'] as $file ) {
-			foreach ( $file['messages'] as $message ) {
+			foreach ( $report['files'][ $fixturePath ]['messages'] as $message ) {
 				$sourceParts = explode( '.', $message['source'] );
 
-				if ( array_slice( $sourceParts, 0, 3 ) === array( 'Formidable', 'CodeAnalysis', 'PreferDbGetCol' ) ) {
-					++$actual;
+				if ( array_slice( $sourceParts, 0, 3 ) !== array( 'Formidable', 'CodeAnalysis', (string) $name ) ) {
+					continue;
 				}
+
+				if ( 'ERROR' !== $message['type'] || ! $message['fixable'] ) {
+					throw new RuntimeException( $name . ': every violation must be a fixable error in ' . $standard );
+				}
+				$actual[] = $message['line'];
+			}
+
+			if ( $lines !== $actual ) {
+				throw new RuntimeException( $name . ': unexpected shared error lines in ' . $standard );
 			}
 		}
+	}
+	fwrite( STDOUT, 'Shared standard fixable errors: passed' . PHP_EOL );
 
-		if ( $count !== $actual ) {
-			throw new RuntimeException( 'Unexpected staged rollout count for ' . $standard );
+	// Enforce the reporting contract across the entire custom sniff library.
+	$sniffPaths = glob( $root . '/phpcs-sniffs/Formidable/Sniffs/*/*Sniff.php' );
+
+	if ( false === $sniffPaths || ! $sniffPaths ) {
+		throw new RuntimeException( 'Cannot find the custom sniff library.' );
+	}
+
+	foreach ( $sniffPaths as $sniffPath ) {
+		$content = file_get_contents( $sniffPath );
+
+		if ( false === $content ) {
+			throw new RuntimeException( 'Cannot read ' . $sniffPath );
+		}
+
+		foreach ( token_get_all( $content ) as $token ) {
+			if ( is_array( $token ) && T_STRING === $token[0] && in_array( strtolower( $token[1] ), array( 'adderror', 'addwarning', 'addfixablewarning' ), true ) ) {
+				throw new RuntimeException( $sniffPath . ': use addFixableError() for every violation.' );
+			}
 		}
 	}
-	fwrite( STDOUT, 'Shared standard opt-in: passed' . PHP_EOL );
+	fwrite( STDOUT, 'Custom sniff reporting contract: passed' . PHP_EOL );
 
 } finally {
 	foreach ( glob( $scratch . '/*' ) as $fixturePath ) {

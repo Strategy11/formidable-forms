@@ -12,7 +12,7 @@ The runner uses the checkout's Composer dependencies and creates temporary copie
 
 Each `.inc` file has a matching `.fixed` snapshot. `expected.json` lists the lines that should be reported. Negative examples deliberately include patterns that would change behavior if rewritten.
 
-PHPCS discovers sniff files automatically, even without explicit references in the shared ruleset. The new rules therefore have severity zero in the shared ruleset during rollout. Lite's `phpcs.xml` explicitly enables them at severity five. Add-ons can do the same after reviewing existing violations. Once all consumers are clean, raise the shared severity and remove the per-plugin overrides.
+All custom sniffs must report fixable errors using `addFixableError()`. The runner checks this contract across the entire library. It also verifies every fixture's exact violation lines, error type, and fixability under both the shared standard and Lite's `phpcs.xml`. The six rewrite rules are enabled in the shared standard, so add-ons inherit them without per-plugin overrides.
 
 Detection is deliberately conservative:
 
