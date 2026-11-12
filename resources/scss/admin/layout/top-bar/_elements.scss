@@ -57,3 +57,8 @@
 	gap: 0 var(--gap-sm);
 	flex-wrap: wrap;
 }
+
+// Grey-500, like the "Saved 2 min ago" link next to it, so the switcher's chevron reads clearly.
+#frm_bs_dropdown h1 .frmsvg {
+	color: var(--grey-500);
+}
