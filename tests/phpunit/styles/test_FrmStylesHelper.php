@@ -93,6 +93,56 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		}
 	}
 
+	public function test_color_formats_in_generated_colors() {
+		$colors = array(
+			'#f80'                       => '255,136,0',
+			'#ff880080'                  => '255,136,0',
+			'RGB(255, 136, 0)'           => '255,136,0',
+			'rgb(100% 50% 0% / 50%)'     => '255,128,0',
+			'hsl(30, 100%, 50%)'         => '255,128,0',
+			'hsla(30, 100%, 50%, 0.25)'  => '255,128,0',
+			'hsl(390deg 100% 50% / .25)' => '255,128,0',
+			'hsl(-330, 100%, 50%)'       => '255,128,0',
+			'hsl(.5turn 100% 50%)'       => '0,255,255',
+			'hsl(33.5, 100%, 50%)'       => '255,142,0',
+		);
+
+		foreach ( $colors as $color => $expected ) {
+			$this->assertSame( $expected, FrmStylesHelper::hex2rgb( $color ), $color );
+			$this->assertSame( 'rgba(' . $expected . ',0.4)', FrmStylesHelper::hex2rgba( $color, 0.4 ), $color );
+			$this->assertTrue( FrmStylesHelper::is_valid_color( $color ), $color );
+		}
+
+		$this->assertSame( '#ff8a0a', FrmStylesHelper::adjust_brightness( 'rgb(255, 128, 0)', 10 ) );
+		$this->assertSame( '#ff8a0a', FrmStylesHelper::adjust_brightness( 'hsl(30, 100%, 50%)', 10 ) );
+		$this->assertSame( 'rgba(255,138,10,0.25)', FrmStylesHelper::adjust_brightness( 'hsla(30, 100%, 50%, .25)', 10 ) );
+		$this->assertSame( 'rgba(255,10,10,0.533)', FrmStylesHelper::adjust_brightness( '#f008', 10 ) );
+		$this->assertSame( 'rgba(255,10,10,0)', FrmStylesHelper::adjust_brightness( '#ff000000', 10 ) );
+		$this->assertSame( 151.381, FrmStylesHelper::get_color_brightness( 'hsl(30, 100%, 50%)' ) );
+	}
+
+	public function test_invalid_functional_colors() {
+		$colors = array(
+			'rgb(1/2/3)',
+			'rgb(1, 2 3)',
+			'rgb(1 2 3 .5)',
+			'rgb()',
+			'rgb(nope)',
+			'rgb(1,2)',
+			'hsl(30,50,50)',
+			'hsl()',
+			'hsl(20, 30%, 40%);color:red',
+			'rgb(1,2,3) url(test)',
+		);
+
+		foreach ( $colors as $color ) {
+			$this->assertFalse( FrmStylesHelper::is_valid_color( $color ), $color );
+			$this->assertSame( '0,0,0', FrmStylesHelper::hex2rgb( $color ), $color );
+			$this->assertSame( 0, FrmStylesHelper::get_color_brightness( $color ), $color );
+			$this->assertSame( $color, FrmStylesHelper::adjust_brightness( $color, 10 ), $color );
+		}
+	}
+
 	public function test_get_form_count_for_style() {
 		$new_style_id = $this->factory->post->create(
 			array( 'post_type' => FrmStylesController::$post_type )

@@ -1545,17 +1545,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	private static function is_a_valid_color( $value ) {
-		$match = 0;
-
-		if ( str_starts_with( $value, 'rgba(' ) ) {
-			$match = preg_match( '/^rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d*(?:\.\d+)?)\)$/', $value );
-		} elseif ( str_starts_with( $value, 'rgb(' ) ) {
-			$match = preg_match( '/^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/', $value );
-		} elseif ( str_starts_with( $value, '#' ) ) {
-			$match = preg_match( '/^#([a-f0-9]{6}|[a-f0-9]{3})\b$/', $value );
-		}
-
-		return (bool) $match;
+		return FrmStylesHelper::is_valid_color( $value );
 	}
 
 	/**
