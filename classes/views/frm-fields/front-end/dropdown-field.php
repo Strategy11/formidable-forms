@@ -85,6 +85,8 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 			$option_params['disabled'] = 'disabled';
 		}
 
+		FrmOptionGroupsController::before_dropdown_option( $field, $opt_key );
+
 		echo '<option ';
 		FrmAppHelper::array_to_html_params( $option_params, true );
 		selected( (bool) $selected );
@@ -96,6 +98,8 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 
 		unset( $option_params );
 	}//end foreach
+
+	FrmOptionGroupsController::after_dropdown_options();
 	?>
 	</select>
 	<?php
