@@ -311,7 +311,7 @@ class FrmEntryValidate {
 			}//end foreach
 
 			if ( ! $match ) {
-				return self::options_are_dynamic_based_on_hook( $field, $value, $entry_id );
+				return self::value_matches_hook_options( $field, $value, $entry_id );
 			}
 		}//end foreach
 
@@ -399,7 +399,7 @@ class FrmEntryValidate {
 	 * Validate against the options produced by setup hooks, including options based on URL parameters.
 	 *
 	 * @since 6.21
-	 * @since x.x Added the $entry_id parameter.
+	 * @since x.x Added the $entry_id parameter and renamed from options_are_dynamic_based_on_hook.
 	 *
 	 * @param object       $field_object The field object.
 	 * @param array|string $value        The value to validate.
@@ -407,7 +407,7 @@ class FrmEntryValidate {
 	 *
 	 * @return bool
 	 */
-	private static function options_are_dynamic_based_on_hook( $field_object, $value, $entry_id = 0 ) {
+	private static function value_matches_hook_options( $field_object, $value, $entry_id = 0 ) {
 		$values          = (array) $field_object;
 		$values['value'] = $value;
 
