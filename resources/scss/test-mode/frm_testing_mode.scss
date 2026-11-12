@@ -8,13 +8,10 @@
 @import "../admin/components/tooltip";
 @import "../admin/components/select/dropdown";
 @import "../admin/components/select/multiselect";
-@import "../admin/components/select/multiselect-popup";
-@import "../admin/components/list/code-list";
-@import "../admin/components/accordion/accordion";
+@import "../admin/components/select/dropdown-items";
 @import "../admin/components/search/search-inputs";
 
-// For upsells
-@import "../admin/components/notifications/call-to-action";
+// For the upsell gradient.
 @import "../admin/components/upgrade/upgrade-bar";
 
 // For the warning message when the add-on is not active.

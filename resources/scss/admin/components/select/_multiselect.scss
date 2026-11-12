@@ -2,6 +2,12 @@
  * Components - Multiselect
  */
 
+.frm-btn-group .multiselect.dropdown-toggle {
+	box-sizing: border-box;
+	min-height: unset;
+	cursor: pointer;
+}
+
 .multiselect-container {
 	position: absolute;
 	list-style-type: none;
