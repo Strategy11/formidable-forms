@@ -3,6 +3,7 @@
 	"private": true,
 	"main": "webpack.config.js",
 	"scripts": {
+		"test:unit": "node --test tests/js/*.test.mjs",
 		"build": "cross-env NODE_ENV=production webpack --progress",
 		"dev": "cross-env NODE_ENV=default webpack --watch",
 		"watch": "npm run dev",

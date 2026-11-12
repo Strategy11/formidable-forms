@@ -1427,8 +1427,8 @@
 	 */
 	function initEditPage() {
 		const { debounce } = frmDom.util;
-		const debouncedPreviewUpdate = debounce( () => changeStyling(), 100 );
-		const debouncedColorChange	 = debounce( ( event, value ) => {
+		const debouncedChangeStyling = debounce( () => changeStyling(), 100 );
+		const colorChange = ( event, value ) => {
 			/**
 			 * Fires on style colorpicker change.
 			 *
@@ -1436,12 +1436,21 @@
 			 * @param {string} data.value New color value.
 			 */
 			wp.hooks.doAction( 'frm_style_options_color_change', { event, value } );
-		}, 200 );
+		};
 
 		const debouncedTextSquishCheck = debounce( textSquishCheck, 300 );
 		// Counts preview requests so a slow, outdated response cannot overwrite a newer preview.
 		let stylingRequest = 0;
 		initPosClass(); // It's important that this gets called before we add event listeners because it triggers change events.
+
+		const livePreview = {
+			settings: new Set( window.frmStyleLivePreview?.settings ),
+			colorSettings: new Set( window.frmStyleLivePreview?.colorSettings ),
+			baseFontSizeSettings: new Set( window.frmStyleLivePreview?.baseFontSizeSettings ),
+			values: getStyleSettingValues(), // The setting values the preview currently reflects.
+			vars: new Map(), // CSS variable name => { value, updateCount }.
+			updateCount: 0
+		};
 
 		[ 'frm_field_height', 'frm_field_font_size', 'frm_field_pad' ].forEach( selector => {
 			document.getElementById( selector ).addEventListener( 'change', debouncedTextSquishCheck );
@@ -1451,12 +1460,12 @@
 			frmDom.colorPicker.init( input, {
 				change( event ) {
 					trackUnsavedChange();
-					debouncedColorChange( event, input.value );
-					debouncedPreviewUpdate();
+					colorChange( event, input.value );
+					updatePreview();
 				}
 			} );
 		} );
-		jQuery( '#frm_styling_form .styling_settings, #frm_styling_form .frm-field-shape, #frm_styling_form input[name="frm_style_setting[post_content][base_font_size]"]' ).on( 'change', debouncedPreviewUpdate );
+		jQuery( '#frm_styling_form .styling_settings, #frm_styling_form .frm-field-shape, #frm_styling_form input[name="frm_style_setting[post_content][base_font_size]"]' ).on( 'input change', event => updatePreview( false, 'input' === event.type ) );
 
 		// This is really only necessary for Pro. But if Pro is not up to date to initialize the datepicker in the sample form, it should still work because it's initialized here.
 		initDatepickerSample();
@@ -1468,17 +1477,230 @@
 		);
 
 		/**
+		 * Update the preview after a style setting changes.
+		 * When every changed setting only feeds a CSS variable, the variables are updated right away with JavaScript.
+		 * Anything else requests new CSS from the server.
+		 *
+		 * @since x.x
+		 *
+		 * @param {boolean} isRecheck True when called again after a change event that did not change any values yet.
+		 * @param {boolean} isTyping  True when called from an input event, while a value may still be incomplete.
+		 * @return {void}
+		 */
+		function updatePreview( isRecheck = false, isTyping = false ) {
+			const values = getStyleSettingValues();
+			let changedKeys = Object.keys( { ...livePreview.values, ...values } ).filter(
+				key => livePreview.values[ key ] !== values[ key ]
+			);
+
+			if ( isTyping ) {
+				// Keep showing the previous color until a hex color typed by hand is complete.
+				const incompleteKeys = changedKeys.filter( key => isIncompleteHexColor( key, values[ key ] ) );
+				if ( incompleteKeys.length ) {
+					incompleteKeys.forEach( key => {
+						values[ key ] = livePreview.values[ key ];
+					} );
+					changedKeys = changedKeys.filter( key => ! incompleteKeys.includes( key ) );
+					if ( ! changedKeys.length ) {
+						return;
+					}
+				}
+			}
+
+			if ( ! changedKeys.length ) {
+				// Some components update their setting input after the change event, so check after it finishes.
+				if ( true !== isRecheck ) {
+					queueMicrotask( () => updatePreview( true ) );
+				}
+				return;
+			}
+
+			livePreview.values = values;
+
+			const liveKeys = changedKeys.filter( key => canUpdateLive( key, values ) );
+			if ( liveKeys.length !== changedKeys.length ) {
+				debouncedChangeStyling();
+			}
+
+			if ( ! liveKeys.length ) {
+				return;
+			}
+
+			livePreview.updateCount++;
+			liveKeys.forEach( key => {
+				livePreview.vars.set( getCssVarName( key ), {
+					value: prepareLiveValue( key, values[ key ] ),
+					updateCount: livePreview.updateCount
+				} );
+			} );
+			renderLiveVars();
+
+			if ( liveKeys.includes( 'text_color_disabled' ) ) {
+				setSelectPlaceholderColor();
+			}
+		}
+
+		/**
+		 * Check for a color setting that holds part of a hex color, like #1 or #1234.
+		 *
+		 * @since x.x
+		 *
+		 * @param {string}           key   The setting key.
+		 * @param {string|undefined} value The setting value.
+		 * @return {boolean} True if the value looks like a hex color that is still being typed.
+		 */
+		function isIncompleteHexColor( key, value ) {
+			if ( ! livePreview.colorSettings.has( key ) || 'string' !== typeof value ) {
+				return false;
+			}
+
+			const trimmed = value.trim();
+			const digits = trimmed.replace( /^#/, '' );
+			return '' !== trimmed && /^[0-9a-f]*$/i.test( digits ) && ! [ 3, 6, 8 ].includes( digits.length );
+		}
+
+		/**
+		 * @since x.x
+		 *
+		 * @return {HTMLElement[]} The inputs that are sent to the server when requesting new CSS.
+		 */
+		function getStyleInputs() {
+			return Array.from( document.getElementById( 'frm_style_sidebar' ).querySelectorAll( 'input, select, textarea' ) ).filter(
+				input => 'style_name' === input.name || 0 === input.name.indexOf( 'frm_style_setting[post_content]' )
+			);
+		}
+
+		/**
+		 * @since x.x
+		 *
+		 * @return {Object} Style setting values keyed by setting name, plus the style_name value.
+		 */
+		function getStyleSettingValues() {
+			const values = {};
+			jQuery( getStyleInputs() ).serializeArray().forEach( ( { name, value } ) => {
+				const key = name.replace( /^frm_style_setting\[post_content\]\[(.*)\]$/, '$1' );
+				values[ key ] = value;
+			} );
+			return values;
+		}
+
+		/**
+		 * Check if a setting can be updated without new CSS from the server.
+		 *
+		 * @since x.x
+		 *
+		 * @param {string} key    The setting key.
+		 * @param {Object} values All current setting values.
+		 * @return {boolean} True if the CSS variable can be set with JavaScript.
+		 */
+		function canUpdateLive( key, values ) {
+			if ( ! livePreview.settings.has( key ) || ! isSafeLiveValue( values[ key ] ) ) {
+				return false;
+			}
+
+			// The server scales these font sizes from the base font size when it is in use.
+			return ! livePreview.baseFontSizeSettings.has( key ) || ! usesBaseFontSize( values );
+		}
+
+		/**
+		 * This matches the check in FrmStylesHelper::update_base_font_size.
+		 *
+		 * @since x.x
+		 *
+		 * @param {Object} values All current setting values.
+		 * @return {boolean} True if font sizes are scaled from the base font size.
+		 */
+		function usesBaseFontSize( values ) {
+			const isEmpty = value => ! value || '0' === value;
+			return ! isEmpty( values.base_font_size ) && ! isEmpty( values.use_base_font_size ) && 'false' !== values.use_base_font_size;
+		}
+
+		/**
+		 * Values that the server would sanitize or skip are left to the server, so both ways of updating the preview always match.
+		 *
+		 * @since x.x
+		 *
+		 * @param {string|undefined} value The setting value. It is undefined when the input is not submitted, like an unchecked checkbox.
+		 * @return {boolean} True if the value can be used as is.
+		 */
+		function isSafeLiveValue( value ) {
+			if ( 'string' !== typeof value ) {
+				return false;
+			}
+
+			const trimmed = value.trim();
+			if ( '' === trimmed || /[{}[\];<>&"'\\]|%[a-f0-9]{2}|function\(/i.test( trimmed ) ) {
+				return false;
+			}
+
+			return trimmed.split( '(' ).length === trimmed.split( ')' ).length;
+		}
+
+		/**
+		 * This matches the formatting in FrmStylesHelper::get_color_output.
+		 *
+		 * @since x.x
+		 *
+		 * @param {string} key   The setting key.
+		 * @param {string} value The setting value.
+		 * @return {string} The value to use for the CSS variable.
+		 */
+		function prepareLiveValue( key, value ) {
+			const trimmed = value.trim();
+			if ( livePreview.colorSettings.has( key ) && ! trimmed.includes( '#' ) && ! /(rgba?|hsla?|hwb)\(/.test( trimmed ) ) {
+				return `#${ trimmed }`;
+			}
+			return trimmed;
+		}
+
+		/**
+		 * This matches the variable names from FrmStylesHelper::output_vars.
+		 *
+		 * @since x.x
+		 *
+		 * @param {string} key The setting key.
+		 * @return {string} The CSS variable name.
+		 */
+		function getCssVarName( key ) {
+			return `--${ key.replace( /_/g, '-' ).replace( /[^a-zA-Z0-9_-]/g, '' ) }`;
+		}
+
+		/**
+		 * Write the CSS variables set with JavaScript to a style tag after #this_css, so they take priority over the last server response.
+		 *
+		 * @since x.x
+		 *
+		 * @return {void}
+		 */
+		function renderLiveVars() {
+			let styleTag = document.getElementById( 'frm_style_live_vars' );
+			if ( ! styleTag ) {
+				styleTag = tag( 'style', { id: 'frm_style_live_vars' } );
+				document.getElementById( 'this_css' ).after( styleTag );
+			}
+
+			const styleName = livePreview.values.style_name;
+			if ( ! livePreview.vars.size || ! styleName ) {
+				styleTag.textContent = '';
+				return;
+			}
+
+			styleTag.textContent = `.${ CSS.escape( styleName ) }.with_frm_style{}`;
+			const [ rule ] = styleTag.sheet.cssRules;
+			livePreview.vars.forEach( ( { value }, name ) => rule.style.setProperty( name, value ) );
+		}
+
+		/**
 		 * Sends an AJAX POST request for new CSS to use for the preview.
-		 * This is called whenever a style setting is changed, generally using debouncedPreviewUpdate to avoid simultaneous requests.
+		 * This is called through updatePreview when a changed style setting needs the server, using debouncedChangeStyling to avoid simultaneous requests.
 		 *
 		 * @return {void}
 		 */
 		function changeStyling() {
-			const styleInputs = Array.from( document.getElementById( 'frm_style_sidebar' ).querySelectorAll( 'input, select, textarea' ) ).filter(
-				input => 'style_name' === input.name || 0 === input.name.indexOf( 'frm_style_setting[post_content]' )
-			);
-			const locStr = JSON.stringify( jQuery( styleInputs ).serializeArray() );
+			const locStr = JSON.stringify( jQuery( getStyleInputs() ).serializeArray() );
 			const request = ++stylingRequest;
+			// The response includes every value sent, so it replaces the CSS variables set with JavaScript up to this point.
+			const requestUpdateCount = livePreview.updateCount;
 
 			jQuery.ajax( {
 				type: 'POST',
@@ -1492,8 +1714,12 @@
 					if ( request !== stylingRequest ) {
 						return;
 					}
-					handleChangeStylingSuccess( css );
+					handleChangeStylingSuccess( css, requestUpdateCount );
 					setSelectPlaceholderColor();
+				},
+				error: () => {
+					// These values were not applied, so the next change must send them to the server.
+					livePreview.values = {};
 				}
 			} );
 		}
@@ -1501,10 +1727,11 @@
 		/**
 		 * Update the CSS used for the preview on the edit page when a styling input has been updated.
 		 *
-		 * @param {string} css The response from the frm_change_styling request.
+		 * @param {string} css                The response from the frm_change_styling request.
+		 * @param {number} requestUpdateCount The live preview update count when the request was sent.
 		 * @return {void}
 		 */
-		function handleChangeStylingSuccess( css ) {
+		function handleChangeStylingSuccess( css, requestUpdateCount ) {
 			// Validate the string response. A valid output will include rules with .with_frm_style
 			if ( ! css.includes( '.with_frm_style' ) ) {
 				// Handle error (possibly a permission error, or an outdated nonce).
@@ -1512,6 +1739,13 @@
 				return;
 			}
 			document.getElementById( 'this_css' ).innerHTML = css;
+
+			livePreview.vars.forEach( ( { updateCount }, name ) => {
+				if ( updateCount <= requestUpdateCount ) {
+					livePreview.vars.delete( name );
+				}
+			} );
+			renderLiveVars();
 		}
 
 		/**

@@ -315,6 +315,38 @@ class test_FrmAbilitiesFormsController extends FrmUnitTest {
 	}
 
 	/**
+	 * Calling list-forms with no ordering input matches the schema defaults.
+	 *
+	 * @see https://github.com/Strategy11/formidable-pro/issues/6857
+	 *
+	 * @return void
+	 */
+	public function test_list_forms_defaults_match_the_schema() {
+		global $wpdb;
+
+		foreach ( array( '2020-01-02 00:00:00', '2020-01-01 00:00:00', '2020-01-03 00:00:00' ) as $date ) {
+			$form_id = $this->factory->form->create();
+			$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'created_at' => $date ), array( 'id' => $form_id ) );
+		}
+
+		FrmForm::clear_form_cache();
+
+		$properties = wp_get_ability( 'formidable-forms/list-forms' )->get_input_schema()['properties'];
+		$defaults   = array(
+			'order'     => $properties['order']['default'],
+			'order_by'  => $properties['order_by']['default'],
+			'page_size' => $properties['page_size']['default'],
+		);
+
+		$implicit = $this->execute( 'list-forms' );
+		$explicit = $this->execute( 'list-forms', $defaults );
+
+		$this->assertNotWPError( $implicit );
+		$this->assertSame( array_keys( $explicit ), array_keys( $implicit ), 'Omitting order, order_by and page_size should behave like sending the schema defaults.' );
+		$this->assertSame( 50, $defaults['page_size'], 'The page_size default should match the 50 the helper uses.' );
+	}
+
+	/**
 	 * @return void
 	 */
 	public function test_permission_follows_the_frm_view_and_edit_and_delete_forms_capabilities() {
