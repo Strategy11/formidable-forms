@@ -77,17 +77,21 @@ if ( ! empty( $should_show_warning ) ) {
 			FrmAppHelper::tooltip_icon( __( 'Selected form actions will be triggered when this test entry is submitted', 'formidable' ) );
 			?>
 			<div id="frm_testmode_enabled_form_actions_container" class="frm-fields">
-				<select id="frm_testmode_enabled_form_actions" multiple class="frm_multiselect" name="frm_testmode[enabled_form_actions][]" <?php disabled( ! $enabled ); ?>>
-				<?php
-				foreach ( $form_actions as $form_action ) {
-					?>
-					<option value="<?php echo esc_attr( $form_action->ID ); ?>" <?php selected( in_array( $form_action->ID, $enabled_form_actions, true ), true ); ?>>
-						<?php echo esc_html( $form_action->post_title ) . ' (' . absint( $form_action->ID ) . ')'; ?>
-					</option>
+				<?php if ( $form_actions ) { ?>
+					<select id="frm_testmode_enabled_form_actions" multiple class="frm_multiselect" name="frm_testmode[enabled_form_actions][]" <?php disabled( ! $enabled ); ?>>
 					<?php
-				}
-				?>
-				</select>
+					foreach ( $form_actions as $form_action ) {
+						?>
+						<option value="<?php echo esc_attr( $form_action->ID ); ?>" <?php selected( in_array( $form_action->ID, $enabled_form_actions, true ), true ); ?>>
+							<?php echo esc_html( $form_action->post_title ) . ' (' . absint( $form_action->ID ) . ')'; ?>
+						</option>
+						<?php
+					}
+					?>
+					</select>
+				<?php } else { ?>
+					<span class="frm-testmode-no-actions"><?php echo esc_html_x( 'None', 'no form actions to enable', 'formidable' ); ?></span>
+				<?php }//end if ?>
 
 				<?php
 				/**
