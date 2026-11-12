@@ -2013,13 +2013,15 @@ class FrmXMLHelper {
 	 * @return bool
 	 */
 	private static function field_value_is_literal( $field ) {
+		$field = self::normalize_field_for_literal_check( $field );
+
 		/**
 		 * @since x.x
 		 *
 		 * @param bool     $literal Whether XML must preserve this field's text exactly.
-		 * @param object|SimpleXMLElement $field   Field with string id, field_key and type properties. Export and import pass the same shape.
+		 * @param stdClass $field   Field with string id, field_key and type properties. Export and import pass the same shape.
 		 */
-		return (bool) apply_filters( 'frm_xml_field_value_is_literal', false, self::normalize_field_for_literal_check( $field ) );
+		return (bool) apply_filters( 'frm_xml_field_value_is_literal', false, $field );
 	}
 
 	/**
