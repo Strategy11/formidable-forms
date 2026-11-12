@@ -320,6 +320,160 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	}
 
 	/**
+	 * The preview uses the posted settings, but nothing is saved.
+	 *
+	 * @see FrmFieldsController::refresh_field_preview
+	 */
+	public function test_refresh_field_preview_uses_unsaved_settings_in_memory() {
+		global $wpdb;
+		$field_id = $this->create_text_field( 'textarea' );
+		$before   = FrmField::getOne( $field_id );
+		$query    = $wpdb->prepare( 'SELECT field_options FROM %i WHERE id = %d', $wpdb->prefix . 'frm_fields', $field_id );
+		$saved    = $wpdb->get_var( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+		$_POST = $this->get_refresh_field_preview_request(
+			$field_id,
+			array(
+				'size_' . $field_id         => '300',
+				'placeholder_' . $field_id  => 'Unsaved <script>alert(1)</script>placeholder',
+				'size_' . ( $field_id + 1 ) => '999',
+			)
+		);
+
+		$response = json_decode( $this->trigger_action( 'frm_refresh_field_preview' ), true );
+		$this->assertTrue( $response['success'] );
+		$html = $response['data']['html'];
+		$this->assertStringContainsString( 'width:300px;', $html );
+		$this->assertStringContainsString( 'placeholder="Unsaved alert(1)placeholder"', $html, 'Posted settings are sanitized like a save.' );
+		$this->assertStringNotContainsString( '999', $html, 'Settings of another field are ignored.' );
+
+		$this->assertSame( $saved, $wpdb->get_var( $query ), 'The preview must not save the field.' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$this->assertEquals( $before->field_options, FrmField::getOne( $field_id )->field_options, 'The cached field keeps its saved settings.' );
+	}
+
+	/**
+	 * @see FrmFieldsController::refresh_field_preview
+	 */
+	public function test_refresh_field_preview_allowed_settings_filter() {
+		$field_id = $this->create_text_field( 'textarea' );
+		$seen     = array();
+		$filter   = function ( $allowed, $field ) use ( &$seen ) {
+			$seen[] = array( $allowed, (int) $field->id );
+			return array( 'placeholder' );
+		};
+		add_filter( 'frm_refresh_field_preview_settings', $filter, 10, 2 );
+
+		$_POST = $this->get_refresh_field_preview_request(
+			$field_id,
+			array(
+				'size_' . $field_id        => '300',
+				'placeholder_' . $field_id => 'Allowed',
+			)
+		);
+
+		$response = json_decode( $this->trigger_action( 'frm_refresh_field_preview' ), true );
+		remove_filter( 'frm_refresh_field_preview_settings', $filter, 10 );
+
+		$this->assertCount( 1, $seen );
+		$this->assertSame( $field_id, $seen[0][1] );
+		$this->assertIsArray( $seen[0][0], 'The filter starts from the field\'s known settings.' );
+		$this->assertContains( 'size', $seen[0][0] );
+		$this->assertContains( 'placeholder', $seen[0][0] );
+		$this->assertContains( 'name', $seen[0][0] );
+		$this->assertStringContainsString( 'placeholder="Allowed"', $response['data']['html'] );
+		$this->assertStringNotContainsString( 'width:300px', $response['data']['html'] );
+	}
+
+	/**
+	 * Without a filter, posted settings the field does not know are left out.
+	 *
+	 * @covers FrmFieldsController::get_preview_settings
+	 */
+	public function test_refresh_field_preview_ignores_unknown_settings_by_default() {
+		$field_id = $this->create_text_field( 'textarea' );
+		$_POST    = $this->get_refresh_field_preview_request(
+			$field_id,
+			array(
+				'size_' . $field_id               => '300',
+				'not_a_real_setting_' . $field_id => 'Unknown',
+			)
+		);
+
+		$method = new ReflectionMethod( 'FrmFieldsController', 'get_preview_settings' );
+		$method->setAccessible( true );
+		$settings = $method->invoke( null, FrmField::getOne( $field_id ) );
+
+		$this->assertSame( '300', $settings['size'] );
+		$this->assertArrayNotHasKey( 'not_a_real_setting', $settings );
+	}
+
+	/**
+	 * @see FrmFieldsController::refresh_field_preview
+	 */
+	public function test_refresh_field_preview_requires_permission() {
+		$field_id = $this->create_text_field();
+		wp_set_current_user( $this->factory->user->create( array( 'role' => 'subscriber' ) ) );
+
+		$_POST    = $this->get_refresh_field_preview_request( $field_id, array() );
+		$response = $this->trigger_action( 'frm_refresh_field_preview' );
+		$this->assertSame( FrmAppHelper::get_settings()->admin_permission, $response );
+	}
+
+	/**
+	 * @see FrmFieldsController::refresh_field_preview
+	 */
+	public function test_refresh_field_preview_requires_nonce() {
+		$_POST          = $this->get_refresh_field_preview_request( $this->create_text_field(), array() );
+		$_POST['nonce'] = 'invalid';
+		$_REQUEST       = $_POST;
+
+		$this->assertSame( '-1', $this->trigger_action( 'frm_refresh_field_preview' ) );
+	}
+
+	/**
+	 * @see FrmFieldsController::refresh_field_preview
+	 */
+	public function test_refresh_field_preview_rejects_missing_field() {
+		$_POST    = $this->get_refresh_field_preview_request( 999999, array() );
+		$response = json_decode( $this->trigger_action( 'frm_refresh_field_preview' ), true );
+		$this->assertFalse( $response['success'] );
+	}
+
+	/**
+	 * Field types that set $allow_in_repeater to false are marked for the builder drop check.
+	 *
+	 * @see FrmFieldsController::load_single_field
+	 */
+	public function test_builder_field_marks_types_not_allowed_in_repeater() {
+		ob_start();
+		FrmFieldsController::load_single_field( $this->create_text_field( 'gdpr' ), array( 'id' => $this->form_id ) );
+		$gdpr = ob_get_clean();
+
+		ob_start();
+		FrmFieldsController::load_single_field( $this->create_text_field(), array( 'id' => $this->form_id ) );
+		$text = ob_get_clean();
+
+		$this->assertStringContainsString( 'data-norepeater="1"', $gdpr );
+		$this->assertStringNotContainsString( 'data-norepeater', $text );
+	}
+
+	/**
+	 * @param int   $field_id The field to preview.
+	 * @param array $settings The posted field_options.
+	 *
+	 * @return array
+	 */
+	private function get_refresh_field_preview_request( $field_id, $settings ) {
+		return array(
+			'action'        => 'frm_refresh_field_preview',
+			'nonce'         => wp_create_nonce( 'frm_ajax' ),
+			'form_id'       => $this->form_id,
+			'field_id'      => $field_id,
+			'field_options' => $settings,
+		);
+	}
+
+	/**
 	 * @param int[] $field_ids The fields to request settings for.
 	 *
 	 * @return array

@@ -137,6 +137,176 @@ class FrmFieldsController {
 	}
 
 	/**
+	 * Render a field's builder preview with the unsaved settings from its panel.
+	 *
+	 * The posted settings are applied to a copy of the saved field. Nothing is saved.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function refresh_field_preview() {
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$field_id = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
+		$field    = $field_id ? FrmField::getOne( $field_id ) : null;
+
+		if ( ! is_object( $field ) ) {
+			wp_send_json_error();
+			return;
+		}
+
+		// Work on a copy, so the cached field keeps its saved settings.
+		$field                 = clone $field;
+		$field->field_options  = is_array( $field->field_options ) ? $field->field_options : array();
+		$form_id               = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
+		$field->parent_form_id = $form_id ? $form_id : $field->form_id;
+
+		self::apply_preview_settings( $field, self::get_preview_settings( $field ) );
+
+		global $frm_vars;
+		$frm_vars['is_admin'] = true;
+		$_GET['page']         = 'formidable';
+
+		ob_start();
+		FrmFieldFactory::get_field_object( $field )->show_on_form_builder();
+		$html = ob_get_clean() . '<div class="clear"></div>';
+
+		wp_send_json_success( array( 'html' => $html ) );
+	}
+
+	/**
+	 * Get the posted settings for a field preview, keyed by setting name.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $field The saved field.
+	 *
+	 * @return array
+	 */
+	private static function get_preview_settings( $field ) {
+		$suffix        = '_' . $field->id;
+		$suffix_length = strlen( $suffix );
+		$posted        = FrmAppHelper::get_post_param( 'field_options', array(), '' );
+		$settings      = array();
+
+		if ( is_array( $posted ) ) {
+			foreach ( $posted as $name => $value ) {
+				$name = (string) $name;
+
+				if ( strlen( $name ) > $suffix_length && str_ends_with( $name, $suffix ) ) {
+					$settings[ substr( $name, 0, -$suffix_length ) ] = $value;
+				}
+			}
+		}
+
+		// The default value input is not named like the other settings.
+		$default_value = FrmAppHelper::get_post_param( 'default_value' . $suffix, null, '' );
+
+		if ( null !== $default_value ) {
+			$settings['default_value'] = $default_value;
+		}
+
+		/**
+		 * Filters which posted settings a field preview refresh may use.
+		 *
+		 * @since x.x
+		 *
+		 * @param array|null $allowed_keys Setting names without the field ID suffix, like 'size'. Defaults to the field's saved
+		 *                                 settings and the default settings for its type. Return null to allow every posted setting.
+		 * @param object     $field        The saved field.
+		 */
+		$allowed_keys = apply_filters( 'frm_refresh_field_preview_settings', self::get_default_preview_setting_keys( $field ), $field );
+
+		if ( is_array( $allowed_keys ) ) {
+			$settings = array_intersect_key( $settings, array_flip( array_filter( $allowed_keys, 'is_string' ) ) );
+		}
+
+		return self::sanitize_preview_settings( $settings );
+	}
+
+	/**
+	 * Get the settings a field preview may use when no filter changes them.
+	 *
+	 * These are the field columns, the field's saved settings and the default settings for its type, including
+	 * those added with the frm_default_field_opts filters. Anything else posted with the request is left out.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $field The saved field.
+	 *
+	 * @return array Setting names without the field ID suffix.
+	 */
+	private static function get_default_preview_setting_keys( $field ) {
+		$columns  = array( 'name', 'description', 'required', 'options', 'default_value' );
+		$defaults = FrmFieldsHelper::get_default_field_options_from_field( clone $field );
+		$keys     = array_merge( $columns, array_keys( $field->field_options ), array_keys( (array) $defaults ) );
+
+		return array_values( array_unique( array_map( 'strval', $keys ) ) );
+	}
+
+	/**
+	 * Sanitize preview settings the way field settings are sanitized on save.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $settings The posted settings.
+	 *
+	 * @return array
+	 */
+	private static function sanitize_preview_settings( $settings ) {
+		foreach ( $settings as $key => $value ) {
+			if ( is_array( $value ) ) {
+				$settings[ $key ] = self::sanitize_preview_settings( $value );
+			} elseif ( is_scalar( $value ) ) {
+				$settings[ $key ] = trim( FrmAppHelper::kses( (string) $value, 'all' ) );
+			} else {
+				unset( $settings[ $key ] );
+			}
+		}
+
+		return $settings;
+	}
+
+	/**
+	 * Apply preview settings to a copy of a field.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $field    A copy of the saved field.
+	 * @param array  $settings The sanitized settings, keyed by setting name.
+	 *
+	 * @return void
+	 */
+	private static function apply_preview_settings( $field, $settings ) {
+		// These are field columns rather than field options.
+		$columns = array( 'name', 'description', 'required', 'options', 'default_value' );
+		// These would change which field is rendered, or how, so they are never previewed.
+		$ignored = array( 'id', 'type', 'field_key', 'field_order', 'form_id' );
+
+		foreach ( $settings as $key => $value ) {
+			$key = (string) $key;
+
+			if ( in_array( $key, $ignored, true ) ) {
+				continue;
+			}
+
+			if ( ! in_array( $key, $columns, true ) ) {
+				$field->field_options[ $key ] = $value;
+				continue;
+			}
+
+			if ( 'options' === $key && is_array( $value ) ) {
+				// The template for new choices is not a choice.
+				unset( $value['000'] );
+			}
+
+			$field->{$key} = $value;
+		}
+	}
+
+	/**
 	 * Omit definitions the browser has already received, including from the initial page.
 	 *
 	 * @since 7.0
@@ -357,6 +527,7 @@ class FrmFieldsController {
 		 * @param array $display
 		 */
 		$extra_field_attributes = apply_filters( 'frm_field_container_extra_attributes', array(), $field, $display );
+		$extra_field_attributes = self::add_repeater_attribute( $extra_field_attributes, $field_obj );
 
 		$li_classes  = self::get_classes_for_builder_field( $field, $display, $field_obj );
 		$li_classes .= ' ui-state-default widgets-holder-wrap';
@@ -391,6 +562,7 @@ class FrmFieldsController {
 
 		/** This filter is documented in classes/controllers/FrmFieldsController.php */
 		$extra_field_attributes = apply_filters( 'frm_field_container_extra_attributes', array(), $field, $display );
+		$extra_field_attributes = self::add_repeater_attribute( $extra_field_attributes, $field_obj );
 
 		$li_classes  = self::get_classes_for_builder_field( $field, $display, $field_obj );
 		$li_classes .= ' ui-state-default widgets-holder-wrap';
@@ -399,6 +571,26 @@ class FrmFieldsController {
 			compact( 'field', 'saved_field', 'field_obj', 'display', 'li_classes', 'extra_field_attributes' ),
 			$values['preview_manifest']
 		);
+	}
+
+	/**
+	 * Mark a builder field that can't be dropped into a repeater.
+	 *
+	 * @since x.x
+	 *
+	 * @param array|mixed  $attributes The field list item attributes.
+	 * @param FrmFieldType $field_obj  The field type object.
+	 *
+	 * @return array
+	 */
+	private static function add_repeater_attribute( $attributes, $field_obj ) {
+		$attributes = is_array( $attributes ) ? $attributes : array();
+
+		if ( ! $field_obj->allow_in_repeater() ) {
+			$attributes['data-norepeater'] = '1';
+		}
+
+		return $attributes;
 	}
 
 	/**

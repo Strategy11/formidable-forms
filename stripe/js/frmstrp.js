@@ -601,9 +601,32 @@
 			return;
 		}
 
-		if ( document.getElementsByClassName( 'frm-card-element' ).length ) {
+		if ( document.getElementsByClassName( 'frm-card-element' ).length && ! stripeElementsAreMounted() ) {
 			maybeLoadStripeLink();
 		}
+	}
+
+	/**
+	 * Check if the Stripe Elements are already mounted in the current form.
+	 * Elements can be loaded from more than one event after an AJAX submit, so this prevents a double mount.
+	 *
+	 * @since x.x
+	 *
+	 * @return {boolean} True if a mount target is already in the page.
+	 */
+	function stripeElementsAreMounted() {
+		return null !== document.querySelector( '.frm-payment-element, .frm-link-authentication-element' );
+	}
+
+	/**
+	 * Mount the Stripe Elements again when new form HTML is added to the page.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function onFieldsInserted() {
+		loadElements();
 	}
 
 	/**
@@ -1355,6 +1378,8 @@
 			}
 			loadElements();
 			jQuery( document ).on( 'frmPageChanged', onPageChange );
+			jQuery( document ).on( 'frmFormComplete', onFieldsInserted );
+			document.addEventListener( 'frmFieldsInserted', onFieldsInserted );
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
 			jQuery( document ).on( 'submit.frmstrp', '.frm-show-form', validateForm );
 			jQuery( document ).on( 'frmFieldChanged', priceChanged );
