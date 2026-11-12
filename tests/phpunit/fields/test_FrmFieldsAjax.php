@@ -89,6 +89,34 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		$this->assertNotFalse( FrmField::getOne( $field_id ), 'The field should still exist.' );
 	}
 
+	public function test_allowed_delete_checks_policy_once_and_missing_delete_succeeds() {
+		$field_id = $this->factory->field->create( array( 'form_id' => $this->form_id ) );
+		$_POST    = array(
+			'action'   => 'frm_delete_field',
+			'nonce'    => wp_create_nonce( 'frm_ajax' ),
+			'field_id' => $field_id,
+		);
+		$before   = did_filter( 'frm_can_destroy_field' );
+
+		try {
+			$this->_handleAjax( 'frm_delete_field' );
+		} catch ( WPAjaxDieStopException $e ) {
+			unset( $e );
+		}
+
+		$this->assertSame( $before + 1, did_filter( 'frm_can_destroy_field' ), 'An allowed delete should evaluate the policy once.' );
+		$this->assertNull( FrmField::getOne( $field_id ), 'The allowed field should be deleted.' );
+		$this->_last_response = '';
+
+		try {
+			$this->_handleAjax( 'frm_delete_field' );
+		} catch ( WPAjaxDieStopException $e ) {
+			unset( $e );
+		}
+
+		$this->assertSame( '', $this->_last_response, 'Deleting an already missing field should succeed quietly.' );
+	}
+
 	/**
 	 * Test duplicating a text field
 	 *

@@ -47,6 +47,9 @@ class test_FrmIntegrationGuards extends FrmUnitTest {
 		$this->assertContains( 'Delete denied', $errors );
 	}
 
+	/**
+	 * @return void
+	 */
 	public function test_entry_filter_blocks_standard_and_xml_writes() {
 		$form_id  = $this->factory->form->create();
 		$values   = array(
