@@ -78,15 +78,17 @@ export default class frmSliderComponent {
 
 			this.initSteps( rangeInput, index );
 
-			// Update display while dragging.
+			// Update the display and preview while dragging.
 			rangeInput.addEventListener( 'input', () => {
 				const value = this.getRangeValue( rangeInput, index );
 				valueInput.value = value;
 				frmSliderComponent.refreshRange( rangeInput, element, value );
 				this.syncGroupSliders( element, value );
+				this.options[ index ].fullValue = this.updateValue( element, value + frmSliderComponent.getUnit( element ) );
+				this.triggerValueChange( index );
 			} );
 
-			// Commit value to hidden input on release.
+			// Also handle committed changes from other input methods.
 			rangeInput.addEventListener( 'change', () => {
 				const value = this.getRangeValue( rangeInput, index );
 				this.options[ index ].fullValue = this.updateValue( element, value + frmSliderComponent.getUnit( element ) );
@@ -94,7 +96,7 @@ export default class frmSliderComponent {
 			} );
 
 			// Sync text input changes back to the range.
-			valueInput.addEventListener( 'change', event => {
+			const onValueChange = event => {
 				const unit = frmSliderComponent.getUnit( element );
 				const newValue = parseFloat( event.target.value );
 				const { steps } = this.options[ index ];
@@ -109,7 +111,9 @@ export default class frmSliderComponent {
 				// always false - reject it and resync the text box to the last committed value instead
 				// of leaving it showing the rejected input while the range stays unchanged.
 				if ( isNaN( newValue ) || ! isValid ) {
-					valueInput.value = this.getRangeValue( rangeInput, index );
+					if ( 'change' === event.type ) {
+						valueInput.value = this.getRangeValue( rangeInput, index );
+					}
 					return;
 				}
 
@@ -117,7 +121,9 @@ export default class frmSliderComponent {
 				frmSliderComponent.refreshRange( rangeInput, element, newValue );
 				this.options[ index ].fullValue = this.updateValue( element, newValue + unit );
 				this.triggerValueChange( index );
-			} );
+			};
+			valueInput.addEventListener( 'input', onValueChange );
+			valueInput.addEventListener( 'change', onValueChange );
 
 			frmSliderComponent.expandSliderGroup( element );
 			this.updateOnUnitChange( element, rangeInput, valueInput, index );

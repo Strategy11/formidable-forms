@@ -24,7 +24,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Psalm
-        uses: docker://ghcr.io/psalm/psalm-github-actions:6.16.1
+      # Keep Psalm separate from the project dev autoloader and its PHPUnit dependencies.
+      - name: Set up PHP and Psalm
+        uses: shivammathur/setup-php@v2
         with:
-          composer_require_dev: true
+          php-version: '8.3'
+          tools: composer:v2, psalm:6.16.1
+          coverage: none
+
+      - name: Install analysis dependencies
+        run: |
+          jq '{require, autoload, config, "require-dev": (."require-dev" | with_entries(select(.key == "php-stubs/wordpress-stubs")))} | with_entries(select(.value != null))' composer.json > composer.psalm.json
+          COMPOSER=composer.psalm.json composer install --no-interaction --no-scripts --prefer-dist
+
+      - name: Psalm
+        run: psalm --no-cache --no-progress --output-format=github
