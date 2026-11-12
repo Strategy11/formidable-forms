@@ -213,6 +213,7 @@ class FrmStyle {
 		}
 
 		// Preserve valid percentage, fractional and space-separated RGB syntax.
+		// The parser accepts out-of-range channels, so legacy comma syntax still needs the repair below.
 		$modern_syntax = str_contains( $color_val, '%' ) || str_contains( $color_val, '/' ) || ! str_contains( $color_val, ',' ) || preg_match( '/\.\d+\s*,/', $color_val );
 
 		if ( $modern_syntax && FrmStylesHelper::is_valid_color( $color_val ) ) {
