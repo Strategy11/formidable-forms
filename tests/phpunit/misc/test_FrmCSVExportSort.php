@@ -75,6 +75,73 @@ class test_FrmCSVExportSort extends FrmUnitTest {
 	}
 
 	/**
+	 * @covers FrmXMLController::csv
+	 *
+	 * @runInSeparateProcess
+	 *
+	 * @preserveGlobalState disabled
+	 */
+	public function test_controller_reads_the_requested_sort() {
+		$this->set_current_user_to_1();
+		$form     = $this->factory->form->create_and_get();
+		$field_id = $this->factory->field->create(
+			array(
+				'form_id' => $form->id,
+				'type'    => 'number',
+			)
+		);
+		$ids      = array();
+
+		foreach ( array( '10', '2', '30' ) as $value ) {
+			$ids[] = $this->factory->entry->create(
+				array(
+					'form_id'   => $form->id,
+					'item_meta' => array( $field_id => $value ),
+				)
+			);
+		}
+
+		$get      = $_GET;
+		$request  = $_REQUEST;
+		$_GET     = array(
+			'form'    => $form->id,
+			'orderby' => 'meta_' . $field_id,
+			'order'   => 'DESC',
+		);
+		$_REQUEST = $_GET;
+		$handler  = static function () {
+			return static function () {
+				throw new RuntimeException( 'CSV complete.' );
+			};
+		};
+		add_filter( 'wp_die_handler', $handler );
+		ob_start();
+
+		try {
+			FrmXMLController::csv();
+		} catch ( RuntimeException $exception ) {
+			$this->assertSame( 'CSV complete.', $exception->getMessage(), 'The CSV controller should finish through wp_die.' );
+		} finally {
+			$csv = ob_get_clean();
+			remove_filter( 'wp_die_handler', $handler );
+			$_GET     = $get;
+			$_REQUEST = $request;
+		}
+
+		$lines     = preg_split( '/\r\n|\n|\r/', trim( $csv ) );
+		$headings  = str_getcsv( array_shift( $lines ), ',', '"', '' );
+		$id_column = array_search( 'ID', $headings, true );
+		$exported  = array();
+
+		foreach ( $lines as $line ) {
+			$row        = str_getcsv( $line, ',', '"', '' );
+			$exported[] = (int) $row[ $id_column ];
+		}
+
+		$this->assertSame( array( $ids[2], $ids[0], $ids[1] ), $exported, 'The controller should read both sort parameters from the URL.' );
+	}
+
+	/**
 	 * @param object $form Form being exported.
 	 * @param array  $ids  Ordered entry IDs.
 	 *
