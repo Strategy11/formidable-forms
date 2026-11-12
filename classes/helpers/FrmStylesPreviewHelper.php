@@ -425,10 +425,12 @@ class FrmStylesPreviewHelper {
 				#frm_style_preview .with_frm_style .frm_slimselect.ss-main {
 					width: var(--field-width);
 				}
-				#frm_style_preview .with_frm_style .frm_radio {
+				#frm_style_preview .with_frm_style .frm-default-option-align .frm_radio,
+				#frm_sample_form .with_frm_style .frm_radio {
 					display:' . $radio_display_type . ';
 				}
-				#frm_style_preview .with_frm_style .frm_checkbox {
+				#frm_style_preview .with_frm_style .frm-default-option-align .frm_checkbox,
+				#frm_sample_form .with_frm_style .frm_checkbox {
 					display:' . $check_display_type . ';
 				}';
 

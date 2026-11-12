@@ -144,13 +144,117 @@ class FrmStylesController {
 			wp_enqueue_style( 'formidable-color-picker' );
 		}
 
-		wp_enqueue_style( 'frm-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_css&frm_scope_custom_css=1' ), array(), $version );
+		wp_enqueue_style( 'frm-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_css&frm_scope_custom_css=1' ), array(), self::get_scoped_css_version() );
+		self::enqueue_preview_theme_css();
 
 		$style = apply_filters( 'frm_style_head', false );
 
 		if ( $style ) {
 			wp_enqueue_style( 'frm-single-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_load_css&flat=1' ) . '&' . http_build_query( $style->post_content ), array(), $version ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
+	}
+
+	/**
+	 * Version the styler's copy of the saved stylesheet by the last style save and the global
+	 * custom CSS, so the browser can keep it until either one changes.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	private static function get_scoped_css_version() {
+		$last_update = get_option( 'frm_last_style_update' );
+		$custom_css  = self::get_custom_css();
+
+		return FrmAppHelper::plugin_version() . '-' . ( $last_update ? $last_update : '0' ) . '-' . substr( md5( is_string( $custom_css ) ? $custom_css : '' ), 0, 8 );
+	}
+
+	/**
+	 * Style the styler preview with the active theme's front end CSS, scoped to the preview.
+	 *
+	 * Without this the preview inherits wp-admin typography, so a form that looks right on the
+	 * front end can look different in the styler.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function enqueue_preview_theme_css() {
+		// Undo the wp-admin element styles inside the preview. The theme CSS depends on this so it loads after it and wins.
+		wp_enqueue_style( 'frm-styler-preview', FrmAppHelper::plugin_url() . '/css/admin/styler-preview.css', array( 'frm-custom-theme' ), FrmAppHelper::plugin_version() );
+
+		/**
+		 * Allow the active theme's CSS to be kept out of the Visual Styler preview.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool $load_theme_css True to style the preview with the theme's front end CSS.
+		 */
+		if ( ! apply_filters( 'frm_styler_load_theme_css', true ) ) {
+			return;
+		}
+
+		$url = add_query_arg(
+			array(
+				'action' => 'frm_styler_theme_css',
+				'nonce'  => wp_create_nonce( 'frm_ajax' ),
+			),
+			admin_url( 'admin-ajax.php' )
+		);
+		wp_enqueue_style( 'frm-styler-theme-preview', $url, array( 'frm-styler-preview' ), FrmStylesThemeCssHelper::get_version() );
+	}
+
+	/**
+	 * Output the active theme's front end CSS, scoped to the styler preview.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function load_preview_theme_css() {
+		FrmAppHelper::permission_check( 'frm_change_settings' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$version   = FrmStylesThemeCssHelper::get_version();
+		$cache_key = 'frm_styler_theme_css_' . md5( $version );
+		$css       = get_transient( $cache_key );
+
+		if ( ! is_string( $css ) ) {
+			$css = FrmStylesThemeCssHelper::get_scoped_theme_css( '#frm_active_style_form, #frm_sample_form' );
+			set_transient( $cache_key, $css, DAY_IN_SECONDS );
+		}
+
+		header( 'Content-type: text/css' );
+		self::maybe_send_browser_cache_headers( $version );
+
+		echo $css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Generated CSS, escaping would corrupt it.
+
+		// Not wp_die(). Its AJAX handler sends no-cache headers again, which would undo the cache headers above.
+		// css/custom_theme.css.php ends the saved stylesheet request the same way.
+		die();
+	}
+
+	/**
+	 * Let the browser keep a versioned stylesheet served from admin-ajax.php.
+	 *
+	 * WordPress sends no-cache headers from admin-ajax.php before any action runs. A stylesheet requested with
+	 * the current version in its URL can be cached anyway, since any change to its content also
+	 * changes the version, and with it the URL the page asks for.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $version The current version of the stylesheet.
+	 *
+	 * @return void
+	 */
+	private static function maybe_send_browser_cache_headers( $version ) {
+		if ( headers_sent() || FrmAppHelper::simple_get( 'ver' ) !== $version ) {
+			return;
+		}
+
+		header_remove( 'Expires' );
+		header_remove( 'Pragma' );
+		header( 'Cache-Control: private, max-age=' . YEAR_IN_SECONDS . ', immutable' );
 	}
 
 	/**
@@ -1183,6 +1287,11 @@ class FrmStylesController {
 	 */
 	public static function load_saved_css() {
 		$css = get_transient( 'frmpro_css' );
+
+		if ( FrmAppHelper::simple_get( 'frm_scope_custom_css' ) ) {
+			// The styler loads the full stylesheet on every visit, so let the browser keep it.
+			self::maybe_send_browser_cache_headers( self::get_scoped_css_version() );
+		}
 
 		ob_start();
 		include FrmAppHelper::plugin_path() . '/css/custom_theme.css.php';
