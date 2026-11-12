@@ -25,11 +25,14 @@
 	<rule ref="Formidable.CodeAnalysis.FlipNegativeTernary" />
 	<rule ref="Formidable.CodeAnalysis.InlineFrmSettingsReturn" />
 	<rule ref="Formidable.CodeAnalysis.InlineSingleUseVariable" />
+	<rule ref="Formidable.CodeAnalysis.MergeAdjacentPhpBlocks" />
 	<rule ref="Formidable.CodeAnalysis.MergeNestedIf" />
 	<rule ref="Formidable.CodeAnalysis.MoveSimpleCheckBeforeExpensiveCall" />
 	<rule ref="Formidable.CodeAnalysis.MoveVariableBelowEarlyReturn" />
 	<rule ref="Formidable.CodeAnalysis.PreferArrayKeyExists" />
 	<rule ref="Formidable.CodeAnalysis.PreferArrayKeyFirstLast" />
+	<rule ref="Formidable.CodeAnalysis.PreferDbGetCol" />
+	<rule ref="Formidable.CodeAnalysis.PreferDbPrepareArrayValues" />
 	<rule ref="Formidable.CodeAnalysis.PreferEmptyArrayComparison" />
 	<rule ref="Formidable.CodeAnalysis.PreferEscHtmlE" />
 	<rule ref="Formidable.CodeAnalysis.PreferFrmAppHelper" />
@@ -37,6 +40,7 @@
 	<rule ref="Formidable.CodeAnalysis.PreferFrmFieldGetFieldType" />
 	<rule ref="Formidable.CodeAnalysis.PreferFrmFieldGetType" />
 	<rule ref="Formidable.CodeAnalysis.PreferFrmHtmlHelper" />
+	<rule ref="Formidable.CodeAnalysis.PreferHtmlParamsEchoMode" />
 	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
 	<rule ref="Formidable.CodeAnalysis.PreferNegationOverEmptyForFunctionCall" />
 	<rule ref="Formidable.CodeAnalysis.PreferNotEmptyTernary" />
@@ -47,6 +51,7 @@
 	<rule ref="Formidable.CodeAnalysis.PreferStrictInArrayNeedle" />
 	<rule ref="Formidable.CodeAnalysis.PreferStrcasecmp" />
 	<rule ref="Formidable.CodeAnalysis.PreferTruthyOverNotEmptyForFunctionCall" />
+	<rule ref="Formidable.CodeAnalysis.PreferWpAttributeHelpers" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyAfterTypeCheck" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnAssignedVariable" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnGlobal" />
@@ -66,6 +71,7 @@
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantTrimAfterSanitize" />
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantReturnVariable" />
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantWpdbPrefix" />
+	<rule ref="Formidable.CodeAnalysis.SimplifyBooleanTernary" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyDualConditionToTernary" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyEmptyTernary" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyIfReturn" />

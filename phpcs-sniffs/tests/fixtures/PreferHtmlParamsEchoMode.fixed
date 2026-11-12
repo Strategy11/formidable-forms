@@ -1,0 +1,11 @@
+<?php
+FrmAppHelper::array_to_html_params( $attrs, true );
+FrmAppHelper::array_to_html_params( $attrs, true );
+echo FrmAppHelper::array_to_html_params( $attrs, true );
+echo 'prefix' . FrmAppHelper::array_to_html_params( $attrs );
+echo FrmAppHelper::array_to_html_params( $attrs ), 'suffix';
+echo OtherHelper::array_to_html_params( $attrs );
+echo FrmAppHelper::array_to_html_params( attrs: $attrs );
+echo FrmAppHelper::array_to_html_params( ...$attrs );
+echo FrmAppHelper::array_to_html_params( /* keep */ $attrs );
+echo FrmAppHelper::array_to_html_params( $attrs, echo: true );
