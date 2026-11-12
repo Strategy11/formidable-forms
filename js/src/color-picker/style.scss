@@ -1,0 +1,148 @@
+.frm-block-color-picker {
+	display: block;
+	position: relative;
+	width: 100%;
+
+	.frm-block-color-toggle {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		width: 100%;
+		min-height: 36px;
+		padding: 6px 10px;
+		border: 1px solid var(--grey-300, #d0d5dd);
+		border-radius: 8px;
+		background: #fff;
+		color: #101828;
+		font: inherit;
+		font-size: var(--text-md);
+		font-weight: 400;
+		line-height: var(--leading);
+		text-align: start;
+		cursor: pointer;
+	}
+
+	.frm-block-color-toggle:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	.frm-block-color-toggle:focus-visible {
+		outline: 2px solid var(--primary-500, #026ee8);
+		outline-offset: 2px;
+	}
+
+	.frm-block-color-swatch {
+		flex: 0 0 20px;
+		height: 20px;
+		border: 1px solid #d0d5dd;
+		border-radius: 50%;
+	}
+
+	.frm-block-color-swatch svg {
+		display: block;
+		width: 100%;
+		height: 100%;
+		border-radius: inherit;
+	}
+
+	.frm-block-color-value {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+}
+
+.frm-block-color-panel {
+	position: fixed;
+	z-index: 10000;
+	width: 248px;
+	max-width: calc(100vw - 16px);
+	max-height: calc(100vh - 16px);
+	overflow: auto;
+	padding: 16px;
+	box-sizing: border-box;
+	border: 1px solid #d0d5dd;
+	border-radius: 8px;
+	background: #fff;
+	box-shadow: 0 6px 16px #0002;
+	font-size: var(--text-md);
+	line-height: var(--leading);
+
+	&[hidden] {
+		display: none;
+	}
+
+	// Keep WordPress's format selector and copy behavior, placing Copy inside the Hex field.
+	.frm-block-color-control:has(input[maxlength]) {
+
+		> div:last-child {
+			position: relative;
+
+			> div:first-child {
+				padding-inline: 0;
+			}
+
+			> div:last-child {
+				padding: var(--gap-xs) 0 var(--gap-sm);
+			}
+		}
+
+		.components-button.has-icon {
+			position: absolute;
+			inset-inline-end: 4px;
+			bottom: var(--gap-sm);
+			z-index: 1;
+			width: 36px;
+			height: 36px;
+			color: var(--grey-700);
+		}
+
+		.components-input-control,
+		.components-input-control__container {
+			width: 100%;
+			border-radius: var(--small-radius);
+		}
+
+		.components-input-control .components-input-control__backdrop {
+			border-color: var(--grey-300);
+		}
+
+		.components-input-control__container:focus-within .components-input-control__backdrop {
+			border-color: var(--primary-500);
+		}
+
+		input[type="text"] {
+			height: 36px;
+			min-height: 36px;
+			padding-inline-end: 40px;
+			font-size: var(--text-md);
+			color: var(--grey-800);
+		}
+
+		.components-input-control__prefix > span {
+			color: var(--grey-700);
+		}
+	}
+
+	.frm-block-color-actions {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--gap-xs);
+	}
+
+	.frm-block-color-done:focus-visible {
+		outline: 2px solid var(--primary-500, #026ee8);
+		outline-offset: 2px;
+	}
+
+	.frm-block-color-clear {
+		border: 0;
+		padding: 4px 0;
+		font-size: var(--text-xs);
+		background: none;
+		color: var(--primary-500, #026ee8);
+		cursor: pointer;
+	}
+}

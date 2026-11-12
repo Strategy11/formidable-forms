@@ -34,6 +34,7 @@ export default [
 			'js/onboarding-wizard.js',
 			'js/addons-page.js',
 			'js/formidable_styles.js',
+			'js/formidable-color-picker.js',
 			'js/formidable_admin.js',
 			'js/bootstrap-multiselect.js',
 			'js/formidable-settings-components.js',

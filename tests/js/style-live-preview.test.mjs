@@ -46,6 +46,7 @@ function loadPreview() {
 		requests: 0,
 		rechecks: [],
 		ajax: [],
+		responses: [],
 		vars: new Map()
 	};
 	preview.livePreview = {
@@ -58,12 +59,14 @@ function loadPreview() {
 	};
 	const jQuery = () => ( { serializeArray: () => [] } );
 	jQuery.ajax = options => preview.ajax.push( options );
-	[ preview.update, preview.changeStyling ] = runInNewContext( `${ functions }\n[ updatePreview, changeStyling ]`, {
+	[ preview.update, preview.changeStyling ] = runInNewContext( `let stylingRequest = 0;\n${ functions }\n[ updatePreview, changeStyling ]`, {
 		livePreview: preview.livePreview,
 		jQuery,
 		ajaxurl: '',
 		frmGlobal: {},
 		getStyleInputs: () => [],
+		handleChangeStylingSuccess: ( css, updateCount ) => preview.responses.push( { css, updateCount } ),
+		setSelectPlaceholderColor: () => {},
 		getStyleSettingValues: () => preview.values,
 		getCssVarName: key => key,
 		prepareLiveValue: ( key, value ) => value,
@@ -219,4 +222,16 @@ test( 'a failed styling request makes the next change send every setting again',
 	preview.update();
 	assert.equal( preview.requests, 2 );
 	assert.equal( preview.vars.get( 'title_color' ).value, '#abc' );
+} );
+
+test( 'outdated styling responses cannot overwrite a newer preview', () => {
+	const preview = loadPreview();
+	preview.changeStyling();
+	preview.livePreview.updateCount = 1;
+	preview.changeStyling();
+	preview.ajax[ 1 ].success( 'new CSS' );
+	preview.ajax[ 0 ].success( 'old CSS' );
+	assert.equal( preview.responses.length, 1 );
+	assert.equal( preview.responses[ 0 ].css, 'new CSS' );
+	assert.equal( preview.responses[ 0 ].updateCount, 1 );
 } );
