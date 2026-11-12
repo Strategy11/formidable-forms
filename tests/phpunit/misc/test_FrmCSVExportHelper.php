@@ -213,9 +213,9 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 		$form_id = $this->factory->form->create();
 		wp_set_current_user( $this->factory->user->create( array( 'role' => 'administrator' ) ) );
 		$_GET['form'] = $form_id;
-
-		$sql     = '';
-		$capture = function ( $query ) use ( &$sql ) {
+		$sql          = '';
+		$stopped      = false;
+		$capture      = function ( $query ) use ( &$sql ) {
 			if ( preg_match( '/^SELECT id FROM \S*frm_items it\b/', $query ) ) {
 				$sql = $query;
 				throw new Exception( 'stop' );
@@ -224,14 +224,17 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 		};
 
 		add_filter( 'query', $capture );
+
 		try {
 			FrmXMLController::csv();
 		} catch ( Exception $e ) {
-			// Stopped at the entry id query.
+			$stopped = true;
 		}
+
 		remove_filter( 'query', $capture );
 		unset( $_GET['form'] );
 
+		$this->assertTrue( $stopped );
 		$this->assertNotSame( '', $sql );
 		$this->assertMatchesRegularExpression( '/ORDER BY it\.id ASC\s*$/i', $sql );
 	}
