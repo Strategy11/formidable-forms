@@ -2,8 +2,8 @@
  * Components - Fields Part 3
  */
 
-label input[type="checkbox"],
-label input[type="radio"] {
+label input[type="checkbox"]#{$outside-styler-preview},
+label input[type="radio"]#{$outside-styler-preview} {
 	vertical-align: inherit;
 }
 

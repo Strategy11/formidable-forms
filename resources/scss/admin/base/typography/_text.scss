@@ -3,9 +3,9 @@
  */
 
 .frm-white-body,
-.frm-white-body p,
+.frm-white-body p#{$outside-styler-preview},
 .frm_wrap,
-.frm_wrap p,
+.frm_wrap p#{$outside-styler-preview},
 .frm-modal,
 .frm-white-body .postbox .inside {
 	font-size: var(--text-sm);
@@ -13,8 +13,8 @@
 	line-height: var(--leading);
 }
 
-.frm-white-body p,
-.frm_wrap p {
+.frm-white-body p#{$outside-styler-preview},
+.frm_wrap p#{$outside-styler-preview} {
 	margin: var(--gap-sm) 0;
 }
 

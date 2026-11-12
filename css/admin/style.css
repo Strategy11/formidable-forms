@@ -228,52 +228,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	display: none;
 }
 
-#frm_style_preview .with_frm_style :not(.ui-datepicker-title) > select:not(.flatpickr-monthDropdown-months) {
-
-	/* Prevent back end styles from shrinking dropdowns. But leave datepicker dropdowns alone. */
-	width: var(--auto-width);
-	max-width: 100%;
-}
-
-#frm_style_preview select {
-	appearance: none; /* Hide the default icon */
-}
-
-#frm_style_preview select:not(.ui-datepicker-month):not(.ui-datepicker-year):not(.frm-ranking-position) {
-
-	/*
-	The styler preview doesn't use .wp-core-ui which results in a funny looking dropdown arrow.
-	Restore the WordPress background image defined in /wp-admin/css/forms.css for preview selects so they appear nicer and more consistent with other dropdowns.
-	The SVG is arrow-down-alt2 from Dashicons.
-	This needs to be important because of a background-image: none !important rule that gets applied in front end CSS.
-	*/
-	background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E") !important;
-	background-repeat: no-repeat !important;
-	background-position: right 5px top 55% !important;
-
-	padding-right: 24px; /* Add enough padding for the icon. */
-}
-
-/* Unset frm_admin checkbox styling in the preview. */
-#frm_style_preview input[type="checkbox"]:checked {
-	background-color: unset;
-}
-
-#frm_style_preview input[type="checkbox"]:checked::before {
-	content: "";
-	position: relative;
-	left: 1px;
-}
-
-/*
-Avoid a conflict with the .frm_form_field > label:first-child rule in frm_admin.css
-The label in the preview should use the label color setting.
-*/
-#frm_style_preview .frm_form_field > label:first-child {
-	color: var(--label-color);
-	font-size: var(--font-size);
-}
-
 .frm-color-blocks {
 	display: grid;
 	justify-content: center;
@@ -549,12 +503,4 @@ body.rtl .frm-style-card-separator {
 	border: none;
 	background: none;
 	float: right;
-}
-
-@media only screen and (max-width: 782px) {
-
-	#frm_style_preview .with_frm_style .frm_radio input[type="radio"],
-	#frm_style_preview .with_frm_style .frm_checkbox input[type="checkbox"] {
-		width: 18px !important;
-	}
 }

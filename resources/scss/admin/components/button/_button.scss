@@ -271,7 +271,7 @@
 #frm-form-button .frm_button_submit,
 .frm-form-button .frm_button_submit,
 .frm-white-body .frm-preview-buttons button,
-.frm-white-body .button:not(.frm-button-primary),
+.frm-white-body .button:not(.frm-button-primary)#{$outside-styler-preview},
 .wp-core-ui.frm-white-body .button-secondary,
 .wp-core-ui .button-secondary.frm-button-secondary,
 .wp-core-ui .button.frm-button-secondary,

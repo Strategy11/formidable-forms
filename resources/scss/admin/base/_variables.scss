@@ -2,6 +2,14 @@
  * Base - Variables
  */
 
+/*
+ * Append to the subject of a selector that styles admin UI with generic form markup, so it
+ * leaves the Visual Styler preview alone. The preview shows a form the way the front end does,
+ * and an admin rule that reaches into it makes the preview differ from the live form.
+ * :where() keeps the specificity of the rule unchanged everywhere else.
+ */
+$outside-styler-preview: ":where(:not(#frm_style_preview *))";
+
 :root,
 .frm-white-body,
 .frm_wrap {

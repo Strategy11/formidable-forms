@@ -2,13 +2,13 @@
  * Components - Fields
  */
 
-.frm_scale {
+.frm_scale#{$outside-styler-preview} {
 	text-align: center;
 	float: left;
 	margin-right: 10px;
 }
 
-.frm_scale input {
+.frm_scale input#{$outside-styler-preview} {
 	display: block;
 	margin: 5px;
 }
@@ -98,43 +98,43 @@
 #new_fields input[type="text"],
 #new_fields input[type="number"],
 .frm_field_box .frm_form_fields > textarea,
-.frm_form_fields .frm_form_field > textarea,
-.frm_form_fields .frm_form_field > input[type="email"],
-.frm_form_fields .frm_form_field > input[type="url"],
-.frm_form_fields .frm_form_field > input[type="number"],
-.frm_form_fields .frm_form_field > input[type="tel"],
-.frm_form_fields .frm_form_field > input[type="text"],
-.frm_form_fields .frm_form_field > input[type="range"] {
+.frm_form_fields .frm_form_field > textarea#{$outside-styler-preview},
+.frm_form_fields .frm_form_field > input[type="email"]#{$outside-styler-preview},
+.frm_form_fields .frm_form_field > input[type="url"]#{$outside-styler-preview},
+.frm_form_fields .frm_form_field > input[type="number"]#{$outside-styler-preview},
+.frm_form_fields .frm_form_field > input[type="tel"]#{$outside-styler-preview},
+.frm_form_fields .frm_form_field > input[type="text"]#{$outside-styler-preview},
+.frm_form_fields .frm_form_field > input[type="range"]#{$outside-styler-preview} {
 	width: 100%;
 }
 
-.frm_form_fields textarea.wp-editor-area {
+.frm_form_fields textarea.wp-editor-area#{$outside-styler-preview} {
 	width: 100%;
 	border: none;
 }
 
-.frm_form_fields input[type="file"],
-.frm_form_fields input[type="file"]:disabled {
+.frm_form_fields input[type="file"]#{$outside-styler-preview},
+.frm_form_fields input[type="file"]:disabled#{$outside-styler-preview} {
 	background: transparent;
 	border: none;
 	box-shadow: none;
 	width: auto;
 }
 
-.frm_form_fields select {
+.frm_form_fields select#{$outside-styler-preview} {
 	width: auto;
 	max-width: 100%;
 }
 
-input[type="radio"],
-input[type="checkbox"] {
+input[type="radio"]#{$outside-styler-preview},
+input[type="checkbox"]#{$outside-styler-preview} {
 	width: 16px;
 	padding: 0;
 }
 
-.frm_grid_container > p,
-.frm_grid_container > p.frm_form_field,
-.frm_grid_container > div.frm_form_field,
+.frm_grid_container > p#{$outside-styler-preview},
+.frm_grid_container > p.frm_form_field#{$outside-styler-preview},
+.frm_grid_container > div.frm_form_field#{$outside-styler-preview},
 #new_fields .frm_grid_container > p {
 	margin-top: 8px;
 	margin-bottom: 8px;
@@ -167,20 +167,20 @@ input[type="checkbox"] {
 }
 
 .frm_wrap .frm-fields .auto_width,
-.frm_form_fields input.auto_width,
-.frm_form_fields select.auto_width,
-.frm_form_fields textarea.auto_width {
+.frm_form_fields input.auto_width#{$outside-styler-preview},
+.frm_form_fields select.auto_width#{$outside-styler-preview},
+.frm_form_fields textarea.auto_width#{$outside-styler-preview} {
 	width: auto !important;
 }
 
-.frm_form_fields select.auto_width {
+.frm_form_fields select.auto_width#{$outside-styler-preview} {
 	min-width: 60px;
 }
 
-.frm_form_fields input:focus,
-.frm_form_fields select:focus,
-.frm_form_fields textarea:focus,
-.frm_focus_field input {
+.frm_form_fields input:focus#{$outside-styler-preview},
+.frm_form_fields select:focus#{$outside-styler-preview},
+.frm_form_fields textarea:focus#{$outside-styler-preview},
+.frm_focus_field input#{$outside-styler-preview} {
 	background-color: #fff;
 	border-color: #ddd;
 }

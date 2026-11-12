@@ -1,0 +1,202 @@
+/*
+This file is added to the visual styler admin page, before the theme CSS for the preview.
+
+The preview shows a form the way the front end does, but it sits inside wp-admin, so the element
+styles in wp-admin/css/common.css and wp-admin/css/forms.css reach into it. A front end page has
+none of those, so a field could look different in the preview than on the live form.
+
+Each rule below mirrors a wp-admin selector and reverts what it sets. Inside @scope, a rule wins
+over an unscoped rule with the same specificity, so these beat the wp-admin rules without beating
+Formidable's own style rules, which are more specific. The theme CSS for the preview is scoped the
+same way and loads after this file, so the theme still wins over these resets at equal specificity.
+
+A theme rule that is less specific than the wp-admin selector, like * { box-sizing: border-box; },
+loses to the reset. So a wp-admin value that matches what nearly every theme sets is left in place
+rather than reverted. That is why box-sizing and the fieldset label alignment are not reset here.
+*/
+
+@scope (#frm_active_style_form, #frm_sample_form) {
+
+	/* wp-admin/css/common.css */
+	p {
+		margin: revert;
+		font-size: revert;
+		line-height: revert;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		margin: revert;
+		color: revert;
+		font-size: revert;
+		font-weight: revert;
+	}
+
+	a {
+		color: revert;
+		transition: revert;
+	}
+
+	a:hover,
+	a:active,
+	a:focus {
+		color: revert;
+		box-shadow: revert;
+		outline: revert;
+	}
+
+	strong {
+		font-weight: revert;
+	}
+
+	ul {
+		list-style: revert;
+	}
+
+	li {
+		margin-bottom: revert;
+	}
+
+	fieldset {
+		margin: revert;
+		padding: revert;
+		border: revert;
+	}
+
+	img {
+		border: revert;
+	}
+
+	label {
+		vertical-align: revert;
+	}
+
+	/* wp-admin/css/forms.css */
+	input,
+	select,
+	textarea,
+	button {
+		margin: revert;
+		font-family: revert;
+		font-size: revert;
+		font-weight: revert;
+	}
+
+	textarea {
+		overflow: revert;
+		padding: revert;
+		line-height: revert;
+		resize: revert;
+	}
+
+	input[type="text"],
+	input[type="password"],
+	input[type="color"],
+	input[type="date"],
+	input[type="datetime"],
+	input[type="datetime-local"],
+	input[type="email"],
+	input[type="month"],
+	input[type="number"],
+	input[type="search"],
+	input[type="tel"],
+	input[type="time"],
+	input[type="url"],
+	input[type="week"],
+	select,
+	textarea {
+		min-height: revert;
+		padding: revert;
+		color: revert;
+		background-color: revert;
+		border: revert;
+		border-radius: revert;
+		box-shadow: revert;
+	}
+
+	select {
+		line-height: revert;
+	}
+
+	input[type="text"]:focus,
+	input[type="password"]:focus,
+	input[type="color"]:focus,
+	input[type="date"]:focus,
+	input[type="datetime"]:focus,
+	input[type="datetime-local"]:focus,
+	input[type="email"]:focus,
+	input[type="month"]:focus,
+	input[type="number"]:focus,
+	input[type="search"]:focus,
+	input[type="tel"]:focus,
+	input[type="time"]:focus,
+	input[type="url"]:focus,
+	input[type="week"]:focus,
+	select:focus,
+	textarea:focus,
+	input[type="checkbox"]:focus,
+	input[type="radio"]:focus {
+		border-color: revert;
+		box-shadow: revert;
+		outline: revert;
+	}
+
+	input[readonly] {
+		background-color: revert;
+	}
+
+	/* :where() keeps the specificity equal to the wp-admin rule, so a hidden option stays hidden. */
+	input[type="checkbox"]:where(:not(.frm_hidden)),
+	input[type="radio"]:where(:not(.frm_hidden)) {
+		display: revert;
+		align-items: revert;
+		justify-content: revert;
+	}
+
+	input[type="checkbox"],
+	input[type="radio"] {
+		clear: revert;
+		width: revert;
+		min-width: revert;
+		height: revert;
+		margin: revert;
+		padding: revert !important; /* Matches the !important padding in wp-admin/css/forms.css. */
+		line-height: revert;
+		color: revert;
+		text-align: revert;
+		vertical-align: revert;
+		background: revert;
+		border: revert;
+		border-radius: revert;
+		outline: revert;
+		box-shadow: revert;
+		cursor: revert;
+		transition: revert;
+		appearance: revert;
+	}
+
+	input[type="checkbox"]:checked,
+	input[type="radio"]:checked {
+		background: revert;
+		border-color: revert;
+	}
+
+	input[type="checkbox"]:checked::before,
+	input[type="radio"]:checked::before {
+		content: revert;
+		display: revert;
+		float: revert;
+		width: revert;
+		height: revert;
+		margin: revert;
+		vertical-align: revert;
+		background-color: revert;
+		border-radius: revert;
+		outline: revert;
+		-webkit-font-smoothing: revert;
+	}
+}

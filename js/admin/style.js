@@ -1441,6 +1441,8 @@
 		const debouncedTextSquishCheck = debounce( textSquishCheck, 300 );
 		// Counts preview requests so a slow, outdated response cannot overwrite a newer preview.
 		let stylingRequest = 0;
+		// The request that is still waiting for new CSS, so it can be cancelled when a newer one replaces it.
+		let pendingStylingRequest = null;
 		initPosClass(); // It's important that this gets called before we add event listeners because it triggers change events.
 
 		const livePreview = {
@@ -1702,7 +1704,10 @@
 			// The response includes every value sent, so it replaces the CSS variables set with JavaScript up to this point.
 			const requestUpdateCount = livePreview.updateCount;
 
-			jQuery.ajax( {
+			// Its response would be ignored anyway, so cancel it to free the browser's connection for this one.
+			pendingStylingRequest?.abort();
+
+			pendingStylingRequest = jQuery.ajax( {
 				type: 'POST',
 				url: ajaxurl,
 				data: {
@@ -1717,7 +1722,11 @@
 					handleChangeStylingSuccess( css, requestUpdateCount );
 					setSelectPlaceholderColor();
 				},
-				error: () => {
+				error: ( xhr, textStatus ) => {
+					if ( 'abort' === textStatus ) {
+						// A newer request replaced this one, and it already includes these values.
+						return;
+					}
 					// These values were not applied, so the next change must send them to the server.
 					livePreview.values = {};
 				}

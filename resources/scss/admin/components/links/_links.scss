@@ -8,19 +8,19 @@ a h1 .frmsvg {
 	min-width: var(--text-sm);
 }
 
-a .frmsvg {
+a .frmsvg#{$outside-styler-preview} {
 	color: currentColor;
 }
 
 .frm_wrap .view-switch a.current::before,
-.frm-white-body a,
-.frm_wrap a,
-.frm_wrap a i {
+.frm-white-body a#{$outside-styler-preview},
+.frm_wrap a#{$outside-styler-preview},
+.frm_wrap a i#{$outside-styler-preview} {
 	color: var(--primary-color);
 }
 
-.frm_wrap a:active,
-.frm_wrap a:hover {
+.frm_wrap a:active#{$outside-styler-preview},
+.frm_wrap a:hover#{$outside-styler-preview} {
 	color: var(--primary-700);
 	box-shadow: none;
 }
