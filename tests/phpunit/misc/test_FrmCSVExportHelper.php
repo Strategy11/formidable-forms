@@ -201,6 +201,7 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 		}
 
 		$this->assertNotEmpty( $sql );
+
 		foreach ( $sql as $query ) {
 			$this->assertMatchesRegularExpression( '/ORDER BY .*\bid ASC\s*$/i', $query );
 		}
