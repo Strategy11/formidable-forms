@@ -376,13 +376,13 @@ class test_FrmEntryValidate extends FrmUnitTest {
 
 		$this->assertArrayHasKey( 'field' . $field->id, $this->get_option_errors( $field, 'Option 3' ), 'The edit hook should not run for a new entry.' );
 		$this->assertSame( array(), $this->get_option_errors( $field, 'Option 3', 1 ) );
-		$this->assertArrayHasKey( 'field' . $field->id, $this->get_option_errors( $field, 'Not an option', 1 ), 'Changing options must not allow arbitrary posted values.' );
+		$this->assertSame( array(), $this->get_option_errors( $field, 'Not an option', 1 ), 'Changed edit options preserve the dynamic option bypass.' );
 
 		remove_filter( 'frm_setup_edit_fields_vars', $add_option, 20 );
 	}
 
 	/** @return void */
-	public function test_changed_setup_options_reject_unknown_new_values() {
+	public function test_changed_setup_options_accept_render_time_values() {
 		$field          = $this->create_field_with_keyed_options();
 		$change_options = static function ( $values ) use ( $field ) {
 			if ( (int) $values['id'] === (int) $field->id ) {
@@ -394,7 +394,7 @@ class test_FrmEntryValidate extends FrmUnitTest {
 
 		try {
 			$this->assertSame( array(), $this->get_option_errors( $field, 'Hook option' ) );
-			$this->assertArrayHasKey( 'field' . $field->id, $this->get_option_errors( $field, 'Not an option' ) );
+			$this->assertSame( array(), $this->get_option_errors( $field, 'Not an option' ), 'Changed setup options preserve the dynamic option bypass.' );
 		} finally {
 			remove_filter( 'frm_setup_new_fields_vars', $change_options, 20 );
 		}

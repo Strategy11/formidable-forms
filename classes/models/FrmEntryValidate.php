@@ -303,7 +303,9 @@ class FrmEntryValidate {
 					$option_value = $option;
 				}
 
-				$match = self::value_matches_option( $current_value, $option_value );
+				// Preserve the numeric comparison used for saved options before setup hook validation.
+				$match = self::value_matches_option( $current_value, $option_value )
+				|| ( is_numeric( $current_value ) && (int) $current_value === (int) $option_value );
 
 				if ( $match ) {
 					break;
@@ -311,7 +313,10 @@ class FrmEntryValidate {
 			}//end foreach
 
 			if ( ! $match ) {
-				return self::value_matches_hook_options( $field, $value, $entry_id );
+				$hook_match = self::value_matches_hook_options( $field, $value, $entry_id );
+
+				// Older snippets may only register the new-entry hook, which also ran on edits before.
+				return $hook_match || ( $entry_id && self::value_matches_hook_options( $field, $value ) );
 			}
 		}//end foreach
 
@@ -396,7 +401,7 @@ class FrmEntryValidate {
 	}
 
 	/**
-	 * Validate against the options produced by setup hooks, including options based on URL parameters.
+	 * Accept options produced by setup hooks and preserve the bypass for changed option lists.
 	 *
 	 * @since 6.21
 	 * @since x.x Added the $entry_id parameter and renamed from options_are_dynamic_based_on_hook.
@@ -417,7 +422,20 @@ class FrmEntryValidate {
 			FrmFieldsHelper::prepare_new_front_field( $values, $field_object );
 		}
 
-		return self::value_matches_prepared_options( $value, $values );
+		$separate_value = FrmField::get_option( $field_object, 'separate_value' );
+		$map_callback   = static function ( $option ) use ( $separate_value ) {
+			if ( is_array( $option ) ) {
+				$option = $separate_value ? $option['value'] : $option['label'];
+			}
+			return do_shortcode( $option );
+		};
+
+		$values_options = array_map( $map_callback, $values['options'] );
+		$saved_options  = array_map( $map_callback, $field_object->options );
+
+		// Setup options can depend on render-time URL parameters, time, or other custom context.
+		// A changed list cannot reliably validate what was offered when the form rendered.
+		return $values_options !== $saved_options || self::value_matches_prepared_options( $value, $values );
 	}
 
 	/**
