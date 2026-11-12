@@ -9,7 +9,7 @@ const source = readFileSync( new URL( '../../js/admin/style.js', import.meta.url
 const ast = parseSync( source, { configFile: false, babelrc: false } );
 const styler = ast.program.body[ 0 ].expression.callee.body.body;
 const editor = styler.find( node => node.type === 'FunctionDeclaration' && node.id.name === 'initEditPage' );
-const names = [ 'canUpdateLive', 'usesBaseFontSize', 'isSafeLiveValue', 'updatePreview' ];
+const names = [ 'canUpdateLive', 'usesBaseFontSize', 'isSafeLiveValue', 'isIncompleteHexColor', 'updatePreview', 'changeStyling' ];
 const functions = names.map( name => {
 	const declaration = editor.body.body.find(
 		node => node.type === 'FunctionDeclaration' && node.id.name === name
@@ -45,16 +45,25 @@ function loadPreview() {
 		renders: 0,
 		requests: 0,
 		rechecks: [],
+		ajax: [],
 		vars: new Map()
 	};
-	preview.update = runInNewContext( `${ functions }\nupdatePreview`, {
-		livePreview: {
-			settings: new Set( [ 'title_color' ] ),
-			baseFontSizeSettings: new Set(),
-			values: { ...preview.values },
-			vars: preview.vars,
-			updateCount: 0
-		},
+	preview.livePreview = {
+		settings: new Set( [ 'title_color' ] ),
+		colorSettings: new Set( [ 'title_color' ] ),
+		baseFontSizeSettings: new Set(),
+		values: { ...preview.values },
+		vars: preview.vars,
+		updateCount: 0
+	};
+	const jQuery = () => ( { serializeArray: () => [] } );
+	jQuery.ajax = options => preview.ajax.push( options );
+	[ preview.update, preview.changeStyling ] = runInNewContext( `${ functions }\n[ updatePreview, changeStyling ]`, {
+		livePreview: preview.livePreview,
+		jQuery,
+		ajaxurl: '',
+		frmGlobal: {},
+		getStyleInputs: () => [],
 		getStyleSettingValues: () => preview.values,
 		getCssVarName: key => key,
 		prepareLiveValue: ( key, value ) => value,
@@ -166,4 +175,48 @@ test( 'font sizes update live when base font size is absent or disabled', () => 
 			field_font_size: '20px', base_font_size: '16px', use_base_font_size: useBaseFontSize
 		} ), true );
 	}
+} );
+
+test( 'partial hex colors typed by hand wait until the color is complete', () => {
+	const preview = loadPreview();
+	for ( const color of [ '#', '#1', '#12', '#1234', '#12345', '1' ] ) {
+		preview.values = { title_color: color };
+		preview.update( false, true );
+	}
+	assert.equal( preview.renders, 0 );
+	assert.equal( preview.requests, 0 );
+	assert.equal( preview.livePreview.values.title_color, '#000' );
+
+	for ( const color of [ '#123', '#123456', '12345678' ] ) {
+		preview.values = { title_color: color };
+		preview.update( false, true );
+		assert.equal( preview.vars.get( 'title_color' ).value, color );
+	}
+	assert.equal( preview.renders, 3 );
+} );
+
+test( 'clearing a color or leaving a partial hex color still updates the preview', () => {
+	const preview = loadPreview();
+	preview.values = { title_color: '' };
+	preview.update( false, true );
+	assert.equal( preview.requests, 1 );
+
+	preview.values = { title_color: '#12' };
+	preview.update();
+	assert.equal( preview.vars.get( 'title_color' ).value, '#12' );
+} );
+
+test( 'a failed styling request makes the next change send every setting again', () => {
+	const preview = loadPreview();
+	preview.values = { title_color: '#000', custom_setting: '70px' };
+	preview.update();
+	assert.equal( preview.requests, 1 );
+
+	preview.changeStyling();
+	preview.ajax[ 0 ].error();
+
+	preview.values = { title_color: '#abc', custom_setting: '70px' };
+	preview.update();
+	assert.equal( preview.requests, 2 );
+	assert.equal( preview.vars.get( 'title_color' ).value, '#abc' );
 } );

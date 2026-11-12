@@ -1558,7 +1558,7 @@
 			}
 			return oldText === 'Select Color' ? 'Select' : oldText;
 		} );
-		jQuery( '#frm_styling_form .styling_settings, #frm_styling_form .frm-field-shape, #frm_styling_form input[name="frm_style_setting[post_content][base_font_size]"]' ).on( 'input change', () => updatePreview() );
+		jQuery( '#frm_styling_form .styling_settings, #frm_styling_form .frm-field-shape, #frm_styling_form input[name="frm_style_setting[post_content][base_font_size]"]' ).on( 'input change', event => updatePreview( false, 'input' === event.type ) );
 
 		// This is really only necessary for Pro. But if Pro is not up to date to initialize the datepicker in the sample form, it should still work because it's initialized here.
 		initDatepickerSample();
@@ -1577,13 +1577,28 @@
 		 * @since x.x
 		 *
 		 * @param {boolean} isRecheck True when called again after a change event that did not change any values yet.
+		 * @param {boolean} isTyping  True when called from an input event, while a value may still be incomplete.
 		 * @return {void}
 		 */
-		function updatePreview( isRecheck = false ) {
+		function updatePreview( isRecheck = false, isTyping = false ) {
 			const values = getStyleSettingValues();
-			const changedKeys = Object.keys( { ...livePreview.values, ...values } ).filter(
+			let changedKeys = Object.keys( { ...livePreview.values, ...values } ).filter(
 				key => livePreview.values[ key ] !== values[ key ]
 			);
+
+			if ( isTyping ) {
+				// Keep showing the previous color until a hex color typed by hand is complete.
+				const incompleteKeys = changedKeys.filter( key => isIncompleteHexColor( key, values[ key ] ) );
+				if ( incompleteKeys.length ) {
+					incompleteKeys.forEach( key => {
+						values[ key ] = livePreview.values[ key ];
+					} );
+					changedKeys = changedKeys.filter( key => ! incompleteKeys.includes( key ) );
+					if ( ! changedKeys.length ) {
+						return;
+					}
+				}
+			}
 
 			if ( ! changedKeys.length ) {
 				// Some components update their setting input after the change event, so check after it finishes.
@@ -1616,6 +1631,25 @@
 			if ( liveKeys.includes( 'text_color_disabled' ) ) {
 				setSelectPlaceholderColor();
 			}
+		}
+
+		/**
+		 * Check for a color setting that holds part of a hex color, like #1 or #1234.
+		 *
+		 * @since x.x
+		 *
+		 * @param {string}           key   The setting key.
+		 * @param {string|undefined} value The setting value.
+		 * @return {boolean} True if the value looks like a hex color that is still being typed.
+		 */
+		function isIncompleteHexColor( key, value ) {
+			if ( ! livePreview.colorSettings.has( key ) || 'string' !== typeof value ) {
+				return false;
+			}
+
+			const trimmed = value.trim();
+			const digits = trimmed.replace( /^#/, '' );
+			return '' !== trimmed && /^[0-9a-f]*$/i.test( digits ) && ! [ 3, 6, 8 ].includes( digits.length );
 		}
 
 		/**
@@ -1771,6 +1805,10 @@
 				success: css => {
 					handleChangeStylingSuccess( css, requestUpdateCount );
 					setSelectPlaceholderColor();
+				},
+				error: () => {
+					// These values were not applied, so the next change must send them to the server.
+					livePreview.values = {};
 				}
 			} );
 		}
