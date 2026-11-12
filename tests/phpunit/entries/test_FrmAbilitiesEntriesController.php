@@ -346,6 +346,160 @@ class test_FrmAbilitiesEntriesController extends FrmUnitTest {
 	}
 
 	/**
+	 * The search term is only applied with Pro, so Lite must not advertise it.
+	 *
+	 * @see https://github.com/Strategy11/formidable-pro/issues/6854
+	 *
+	 * @return void
+	 */
+	public function test_list_entries_schema_has_no_search_without_pro() {
+		if ( class_exists( 'FrmProEntriesHelper' ) ) {
+			$this->markTestSkipped( 'Pro is active, so search is supported.' );
+		}
+
+		$schema = wp_get_ability( 'formidable-forms/list-entries' )->get_input_schema();
+
+		$this->assertArrayNotHasKey( 'search', $schema['properties'] );
+		$this->assertArrayHasKey( 'form_id', $schema['properties'], 'The other inputs should still be listed.' );
+	}
+
+	/**
+	 * The start_date and end_date inputs both include their whole day.
+	 *
+	 * @see https://github.com/Strategy11/formidable-pro/issues/6857
+	 *
+	 * @return void
+	 */
+	public function test_list_entries_date_filters_include_the_boundary_days() {
+		$created = array(
+			'before'    => '2026-03-09 23:59:59',
+			'start'     => '2026-03-10 00:00:00',
+			'end'       => '2026-03-12 23:59:59',
+			'after'     => '2026-03-13 00:00:00',
+			'start_end' => '2026-03-12 00:00:00',
+		);
+		$ids     = $this->create_entries_created_at( $created );
+
+		$listed = $this->execute(
+			'list-entries',
+			array(
+				'form_id'    => $this->form->id,
+				'start_date' => '2026-03-10',
+				'end_date'   => '2026-03-12',
+			)
+		);
+		$this->assertNotWPError( $listed );
+		$listed_ids = array_map( 'intval', wp_list_pluck( $listed, 'id' ) );
+
+		$this->assertContains( $ids['start'], $listed_ids, 'An entry created at midnight on start_date should be included.' );
+		$this->assertContains( $ids['end'], $listed_ids, 'An entry created at 23:59:59 on end_date should be included.' );
+		$this->assertContains( $ids['start_end'], $listed_ids, 'An entry created at midnight on end_date should be included.' );
+		$this->assertNotContains( $ids['before'], $listed_ids, 'An entry from the day before start_date should be left out.' );
+		$this->assertNotContains( $ids['after'], $listed_ids, 'An entry from the day after end_date should be left out.' );
+
+		$single_day = $this->execute(
+			'list-entries',
+			array(
+				'form_id'    => $this->form->id,
+				'start_date' => '2026-03-12',
+				'end_date'   => '2026-03-12',
+			)
+		);
+		$this->assertNotWPError( $single_day );
+		$single_day_ids = array_map( 'intval', wp_list_pluck( $single_day, 'id' ) );
+		sort( $single_day_ids );
+		$expected = array( $ids['end'], $ids['start_end'] );
+		sort( $expected );
+		$this->assertSame( $expected, $single_day_ids, 'The same start and end date should return that whole day.' );
+
+		foreach ( array( '2026/03/12', 'March 12, 2026', '03/12/2026' ) as $end_date ) {
+			$alternate = $this->execute(
+				'list-entries',
+				array(
+					'form_id'    => $this->form->id,
+					'start_date' => '2026-03-12',
+					'end_date'   => $end_date,
+				)
+			);
+			$this->assertNotWPError( $alternate );
+			$alternate_ids = array_map( 'intval', wp_list_pluck( $alternate, 'id' ) );
+			sort( $alternate_ids );
+			$this->assertSame( $expected, $alternate_ids, 'Date-only formats should include the whole end day.' );
+		}
+
+		$with_time = $this->execute(
+			'list-entries',
+			array(
+				'form_id'    => $this->form->id,
+				'start_date' => '2026-03-10',
+				'end_date'   => '2026-03-12 10:00:00',
+			)
+		);
+		$this->assertNotWPError( $with_time );
+		$with_time_ids = array_map( 'intval', wp_list_pluck( $with_time, 'id' ) );
+
+		$this->assertContains( $ids['start_end'], $with_time_ids, 'An entry created before the end_date time should be included.' );
+		$this->assertNotContains( $ids['end'], $with_time_ids, 'An end_date with a time should not be extended to the end of the day.' );
+	}
+
+	/**
+	 * Calling list-entries with no ordering input matches the schema defaults.
+	 *
+	 * @see https://github.com/Strategy11/formidable-pro/issues/6857
+	 *
+	 * @return void
+	 */
+	public function test_list_entries_defaults_match_the_schema() {
+		$this->create_entries_created_at(
+			array(
+				'middle' => '2026-03-11 12:00:00',
+				'oldest' => '2026-03-10 12:00:00',
+				'newest' => '2026-03-12 12:00:00',
+			)
+		);
+
+		$properties = wp_get_ability( 'formidable-forms/list-entries' )->get_input_schema()['properties'];
+		$defaults   = array(
+			'order'     => $properties['order']['default'],
+			'order_by'  => $properties['order_by']['default'],
+			'page_size' => $properties['page_size']['default'],
+		);
+
+		$implicit = $this->execute( 'list-entries', array( 'form_id' => $this->form->id ) );
+		$explicit = $this->execute( 'list-entries', array_merge( array( 'form_id' => $this->form->id ), $defaults ) );
+
+		$this->assertNotWPError( $implicit );
+		$this->assertSame(
+			wp_list_pluck( $explicit, 'id' ),
+			wp_list_pluck( $implicit, 'id' ),
+			'Omitting order, order_by and page_size should behave like sending the schema defaults.'
+		);
+		$this->assertSame( 50, $defaults['page_size'], 'The page_size default should match the 50 the helper uses.' );
+	}
+
+	/**
+	 * Create one entry per label with a fixed created_at.
+	 *
+	 * @param array $created Created at value (UTC) keyed by label.
+	 *
+	 * @return array<string, int> Entry id keyed by label.
+	 */
+	private function create_entries_created_at( $created ) {
+		global $wpdb;
+
+		$ids = array();
+
+		foreach ( $created as $label => $date ) {
+			$ids[ $label ] = (int) $this->factory->entry->create( array( 'form_id' => $this->form->id ) );
+			$wpdb->update( $wpdb->prefix . 'frm_items', array( 'created_at' => $date ), array( 'id' => $ids[ $label ] ) );
+		}
+
+		FrmEntry::clear_cache();
+
+		return $ids;
+	}
+
+	/**
 	 * @return void
 	 */
 	public function test_permission_follows_the_frm_view_and_delete_entries_capabilities() {
