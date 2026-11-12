@@ -313,10 +313,10 @@ class FrmEntryValidate {
 			}//end foreach
 
 			if ( ! $match ) {
-				$hook_match = self::value_matches_hook_options( $field, $value, $entry_id );
+				$hook_match = self::hook_options_allow_value( $field, $value, $entry_id );
 
 				// Older snippets may only register the new-entry hook, which also ran on edits before.
-				return $hook_match || ( $entry_id && self::value_matches_hook_options( $field, $value ) );
+				return $hook_match || ( $entry_id && self::hook_options_allow_value( $field, $value ) );
 			}
 		}//end foreach
 
@@ -412,7 +412,7 @@ class FrmEntryValidate {
 	 *
 	 * @return bool
 	 */
-	private static function value_matches_hook_options( $field_object, $value, $entry_id = 0 ) {
+	private static function hook_options_allow_value( $field_object, $value, $entry_id = 0 ) {
 		$values          = (array) $field_object;
 		$values['value'] = $value;
 
