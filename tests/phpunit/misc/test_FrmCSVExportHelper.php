@@ -170,4 +170,69 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 		$this->assertStringContainsString( ',"Test Value",', $csv_content );
 		$this->assertStringContainsString( ',"' . $entry->id . '",', $csv_content );
 	}
+
+	/**
+	 * @covers FrmCSVExportHelper::generate_csv
+	 */
+	public function test_generate_csv_orders_entries_by_id() {
+		$form_id = $this->factory->form->create();
+		$form    = FrmForm::getOne( $form_id );
+		$sql     = array();
+		$capture = function ( $query ) use ( &$sql ) {
+			if ( preg_match( '/^SELECT .* FROM \S*frm_items\b/s', $query ) ) {
+				$sql[] = $query;
+			}
+			return $query;
+		};
+
+		add_filter( 'query', $capture );
+		$csv_path = FrmCSVExportHelper::generate_csv(
+			array(
+				'mode'      => 'file',
+				'form'      => $form,
+				'entry_ids' => array( 3, 1, 2 ),
+				'form_cols' => FrmField::get_all_for_form( $form->id, '', 'include' ),
+			)
+		);
+		remove_filter( 'query', $capture );
+
+		if ( is_string( $csv_path ) && file_exists( $csv_path ) ) {
+			unlink( $csv_path );
+		}
+
+		$this->assertNotEmpty( $sql );
+		foreach ( $sql as $query ) {
+			$this->assertMatchesRegularExpression( '/ORDER BY .*\bid ASC\s*$/i', $query );
+		}
+	}
+
+	/**
+	 * @covers FrmXMLController::csv
+	 */
+	public function test_csv_selects_entry_ids_in_order() {
+		$form_id = $this->factory->form->create();
+		wp_set_current_user( $this->factory->user->create( array( 'role' => 'administrator' ) ) );
+		$_GET['form'] = $form_id;
+
+		$sql     = '';
+		$capture = function ( $query ) use ( &$sql ) {
+			if ( preg_match( '/^SELECT id FROM \S*frm_items it\b/', $query ) ) {
+				$sql = $query;
+				throw new Exception( 'stop' );
+			}
+			return $query;
+		};
+
+		add_filter( 'query', $capture );
+		try {
+			FrmXMLController::csv();
+		} catch ( Exception $e ) {
+			// Stopped at the entry id query.
+		}
+		remove_filter( 'query', $capture );
+		unset( $_GET['form'] );
+
+		$this->assertNotSame( '', $sql );
+		$this->assertMatchesRegularExpression( '/ORDER BY it\.id ASC\s*$/i', $sql );
+	}
 }
