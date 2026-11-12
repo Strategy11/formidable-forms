@@ -35,19 +35,77 @@ class test_FrmFieldPlacement extends FrmUnitTest {
 		$wpdb->update( $wpdb->prefix . 'frm_fields', array( 'field_options' => serialize( $options ) ), array( 'id' => $field_id ) );
 		wp_cache_delete( $field_id, 'frm_field' );
 
-		$copy_id = $this->factory->form->create();
-		FrmField::duplicate( $form_id, $copy_id );
-		$copied = FrmField::get_all_for_form( $copy_id );
-		$this->assertContains( 'break', wp_list_pluck( $copied, 'type' ) );
+		// Pro remaps in_section on this hook. Stand in for it when Pro is not loaded.
+		$remap     = static function ( $values ) {
+			global $frm_duplicate_ids;
+			$old = (int) ( $values['field_options']['in_section'] ?? 0 );
 
-		$path                = self::generate_xml( array( 'forms' ), array( 'ids' => array( $form_id ) ) );
-		$xml                 = simplexml_load_file( $path );
-		$xml->form->form_key = 'placement_legacy_import';
-		$result              = FrmXMLHelper::import_xml_now( $xml );
-		$imported_id         = $result['forms'][ $form_id ];
-		$this->assertNotSame( (int) $form_id, (int) $imported_id );
-		$imported = FrmField::get_all_for_form( $imported_id );
-		$this->assertContains( 'break', wp_list_pluck( $imported, 'type' ) );
+			if ( $old && isset( $frm_duplicate_ids[ $old ] ) ) {
+				$values['field_options']['in_section'] = $frm_duplicate_ids[ $old ];
+			}
+
+			return $values;
+		};
+		$add_remap = ! has_filter( 'frm_duplicated_field' );
+
+		if ( $add_remap ) {
+			add_filter( 'frm_duplicated_field', $remap );
+		}
+
+		try {
+			$copy_id = $this->factory->form->create();
+			FrmField::duplicate( $form_id, $copy_id );
+			$this->assert_break_is_in_copied_section( $copy_id, 'A duplicated form' );
+
+			$path                = self::generate_xml( array( 'forms' ), array( 'ids' => array( $form_id ) ) );
+			$xml                 = simplexml_load_file( $path );
+			$xml->form->form_key = 'placement_legacy_import';
+			$result              = FrmXMLHelper::import_xml_now( $xml );
+			$imported_id         = $result['forms'][ $form_id ];
+			$this->assertNotSame( (int) $form_id, (int) $imported_id );
+			$this->assert_break_is_in_copied_section( $imported_id, 'An imported form' );
+		} finally {
+			if ( $add_remap ) {
+				remove_filter( 'frm_duplicated_field', $remap );
+			}
+		}
+	}
+
+	/**
+	 * @param int    $form_id Form that received the copied fields.
+	 * @param string $context Prefix for failure messages.
+	 *
+	 * @return void
+	 */
+	private function assert_break_is_in_copied_section( $form_id, $context ) {
+		$fields  = FrmField::get_all_for_form( $form_id );
+		$by_type = array();
+
+		foreach ( $fields as $field ) {
+			$by_type[ $field->type ] = $field;
+		}
+
+		$this->assertArrayHasKey( 'divider', $by_type, $context . ' must keep its section.' );
+		$this->assertArrayHasKey( 'break', $by_type, $context . ' must keep the legacy page break.' );
+		$this->assertSame(
+			(int) $by_type['divider']->id,
+			(int) FrmField::get_option( $by_type['break'], 'in_section' ),
+			$context . ' must place the page break in the copied section, not the source section.'
+		);
+	}
+
+	/** @return void */
+	public function test_create_copy_does_not_leak_to_the_next_create() {
+		$form_id                               = $this->factory->form->create();
+		$section                               = FrmField::create( FrmFieldsHelper::setup_new_vars( 'divider', $form_id ) );
+		$values                                = FrmFieldsHelper::setup_new_vars( 'break', $form_id );
+		$values['field_options']['in_section'] = $section;
+
+		$this->assertNotFalse( FrmField::create_copy( $values ), 'A copy keeps its source placement.' );
+		$this->assertFalse( FrmField::create( $values ), 'A plain create after a copy must still enforce placement.' );
+
+		$values['id'] = 123;
+		$this->assertFalse( FrmField::create( $values ), 'An id key alone must not bypass placement rules.' );
 	}
 
 	public function test_section_rejects_incompatible_fields() {
