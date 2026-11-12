@@ -251,6 +251,39 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertSame( $values['content'], wp_kses_post( $values['content'] ) );
 	}
 
+	/**
+	 * @covers FrmAppHelper::sanitize_request
+	 */
+	public function test_sanitize_request_ignores_array_value() {
+		$values = array( 'frm_action' => array( 'x' ) );
+
+		FrmAppHelper::sanitize_request( array( 'frm_action' => 'sanitize_title' ), $values );
+
+		$this->assertSame( '', $values['frm_action'] );
+	}
+
+	/**
+	 * @covers FrmAppHelper::is_true
+	 */
+	public function test_is_true_array_value_is_false_without_warning() {
+		$warnings = array();
+
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_set_error_handler
+		set_error_handler(
+			function ( $errno, $errstr ) use ( &$warnings ) {
+				$warnings[] = $errstr;
+				return true;
+			}
+		);
+
+		$result = FrmAppHelper::is_true( array( 'x' ) );
+
+		restore_error_handler();
+
+		$this->assertFalse( $result );
+		$this->assertSame( array(), $warnings );
+	}
+
 	public function test_kses() {
 		$start_value    = '<script></script><script></script>';
 		$safe_value     = 'Hello, <a href="/test">click here</a>';

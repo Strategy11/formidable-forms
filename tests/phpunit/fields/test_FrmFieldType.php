@@ -38,6 +38,22 @@ class test_FrmFieldType extends FrmUnitTest {
 		$this->assertStringContainsString( ' step="any"', $form );
 	}
 
+	/**
+	 * @covers FrmFieldType::prepare_esc_value
+	 */
+	public function test_prepare_esc_value_flattens_nested_array() {
+		$field_type = new FrmFieldText(
+			array(
+				'id'    => 1,
+				'value' => array( 'a', array( 'b', array( 'c' ) ) ),
+			)
+		);
+
+		$value = $this->run_private_method( array( $field_type, 'prepare_esc_value' ) );
+
+		$this->assertSame( 'a, b, c', $value );
+	}
+
 	public function test_sanitize_value() {
 		$this->set_current_user_to_1();
 		$frm_field_type = new FrmFieldDefault();
