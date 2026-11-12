@@ -23,6 +23,12 @@
 }
 
 /* Card */
+
+/* A card with no excerpt sizes to its content instead of stretching to the row, so no gap opens above the divider. */
+#frm-addons-list .frm-card-item:not(:has(> p)) {
+	align-self: start;
+}
+
 .frm-border-icon > svg {
 	width: 24px;
 }
