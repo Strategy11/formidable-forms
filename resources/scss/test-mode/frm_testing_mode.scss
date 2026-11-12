@@ -8,13 +8,10 @@
 @import "../admin/components/tooltip";
 @import "../admin/components/select/dropdown";
 @import "../admin/components/select/multiselect";
-@import "../admin/components/select/multiselect-popup";
-@import "../admin/components/list/code-list";
-@import "../admin/components/accordion/accordion";
+@import "../admin/components/select/dropdown-items";
 @import "../admin/components/search/search-inputs";
 
-// For upsells
-@import "../admin/components/notifications/call-to-action";
+// For the upsell gradient.
 @import "../admin/components/upgrade/upgrade-bar";
 
 // For the warning message when the add-on is not active.
@@ -51,35 +48,75 @@ body.frm_preview_page .ui-widget-overlay {
 	z-index: 2;
 }
 
+/*
+ * The container renders inside whatever theme is active when the preview is
+ * opened with &theme=1. Everything below is scoped to the container ID so it
+ * outranks the theme's element and class selectors (h2, hr, label, button,
+ * .caret, .dropdown-toggle, ...) without needing !important.
+ */
 #frm_testing_mode {
+	box-sizing: border-box;
+	margin: 0 0 40px;
+	padding: 16px 20px;
+	position: relative;
+	color: var(--grey-800);
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-size: var(--text-sm);
+	font-weight: 400;
+	line-height: var(--leading);
+	letter-spacing: normal;
+	text-align: left;
+	text-transform: none;
+	border: 1px solid #0000001a;
 	border-radius: 1rem;
 	background-color: #fff;
-	border-color: #0000001a;
-	border-width: 1px;
-	border-style: solid;
-	padding: 16px 20px;
-	margin-bottom: 40px;
-	position: relative;
 
 	h2 {
+		// Leave room for the absolutely positioned Reset button.
+		margin: 0;
+		padding: 0 100px 0 0;
+		border: 0;
+		color: #000;
+		font-family: inherit;
 		font-size: 18px;
+		font-style: normal;
 		font-weight: 600;
-		color: rgba(0, 0, 0, 1);
-		margin-bottom: 0;
+
+		// Matches the Reset button height so the two line up.
+		line-height: 32px;
+		letter-spacing: normal;
+		text-align: left;
+		text-shadow: none;
+		text-transform: none;
+		background: none;
+
+		&::before,
+		&::after {
+			content: none;
+		}
 	}
 
 	label {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--gap-2xs);
+		float: none;
+		width: auto;
+		margin: 0;
+		padding: 0;
+		color: var(--grey-800);
+		font-family: inherit;
 		font-size: 12px;
 		font-weight: 600;
+		line-height: var(--leading);
+		letter-spacing: normal;
+		text-transform: none;
+		white-space: nowrap;
 
 		span.frm_toggle_opt {
 			color: var(--grey-800);
 			font-weight: 600;
 		}
-	}
-
-	label:not(:first-child) {
-		margin-left: var(--gap-xs);
 	}
 
 	a.frm_button {
@@ -88,20 +125,64 @@ body.frm_preview_page .ui-widget-overlay {
 		font-size: 14px;
 	}
 
-	hr {
-		color: unset;
-		background: var(--grey-200);
-		height: 1px;
-		border: none;
+	a {
+		box-shadow: none;
+		font-family: inherit;
+		letter-spacing: normal;
+		text-shadow: none;
+		text-transform: none;
 	}
 
-	> div:nth-of-type(2) {
+	hr {
+		display: block;
+		width: auto;
+		max-width: none;
+		height: 1px;
+		margin: var(--gap-xs) 0;
+		padding: 0;
+		border: 0;
+		color: unset;
+		opacity: 1;
+		background: var(--grey-200);
+
+		&::before,
+		&::after {
+			content: none;
+		}
+	}
+
+	> h2 + div {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var(--gap-xs) var(--gap-sm);
+		margin-top: var(--gap-xs);
+	}
+
+	// Not nth-of-type: add-ons can print a div (the Stripe note) before the hr.
+	> hr + div {
 		display: flex;
 		align-items: center;
+		gap: var(--gap-xs);
 	}
 
-	.multiselect.dropdown-toggle::after {
-		border: none;
+	// A theme clearfix (div::after) would become an extra flex item and push the AI button off the edge.
+	> h2 + div,
+	> hr + div {
+
+		&::before,
+		&::after {
+			content: none;
+		}
+	}
+
+	// Themes force checkboxes visible with !important and a two-class selector.
+	.frm_toggle_block input {
+		display: none !important;
+	}
+
+	.frm_toggle {
+		margin: 0;
 	}
 
 	// Used for the upsell "speaker" icon.
@@ -117,11 +198,153 @@ body.frm_preview_page .ui-widget-overlay {
 		gap: var(--gap-xs);
 	}
 
-	label:not(.frm_toggle_block) {
-		margin-right: 2px;
+	#frm_testmode_enabled_form_actions_container {
+		margin-left: var(--gap-2xs);
+	}
+
+	// Shown in place of the dropdown when the form has no actions.
+	.frm-testmode-no-actions {
+		color: var(--grey-500);
+		font-weight: 400;
+	}
+
+	.btn-group {
+		display: inline-block;
+		position: relative;
+		margin: 0;
+		vertical-align: middle;
+	}
+
+	// Themes style .dropdown-toggle for their nav menus (absolute, hidden, fixed size) and every button.
+	.btn-group button.multiselect.dropdown-toggle {
+		display: inline-block;
+		box-sizing: border-box;
+		float: none;
+		width: auto;
+		min-width: 0;
+		max-width: none;
+		min-height: 0;
+		margin: 0;
+		padding: 0 12px;
+		position: relative;
+		inset: auto;
+		color: var(--grey-800);
+		font-family: inherit;
+		font-weight: 600;
+		line-height: 18px;
+		letter-spacing: normal;
+		text-align: left;
+		text-decoration: none;
+		text-shadow: none;
+		text-transform: none;
+		white-space: nowrap;
+		border: 1px solid var(--grey-300);
+		background: #fff;
+		box-shadow: var(--box-shadow-xs);
+
+		&:hover,
+		&:focus,
+		&:active {
+			color: var(--grey-800);
+			background: #fff;
+		}
+
+		&::before,
+		&::after {
+			content: none;
+			border: none;
+		}
+	}
+
+	// Themes hide .dropdown-menu until a nav item is hovered (opacity, visibility).
+	.multiselect-container.show {
+		display: block;
+		opacity: 1;
+		visibility: visible;
+	}
+
+	.multiselect-container button.multiselect-option {
+		display: flex;
+		align-items: center;
+		width: 100%;
+		height: auto;
+		min-height: 0;
+		margin: 0 0 4px;
+		padding: 5px 10px;
+		color: var(--grey-800);
+		font-family: inherit;
+		letter-spacing: normal;
+		text-shadow: none;
+		text-transform: none;
+		border: 0;
+		border-radius: var(--small-radius);
+		background: transparent;
+		box-shadow: none;
+
+		&.active,
+		&:hover,
+		&:focus {
+			color: var(--primary-500);
+			background: var(--primary-25);
+		}
+	}
+
+	// Bootstrap based themes offset .form-check with padding and a negative input margin.
+	.multiselect-container .form-check {
+		display: flex;
+		align-items: center;
+
+		// The shared label max-width is a percentage of this element.
+		width: 100%;
+		min-height: 0;
+		margin: 0;
+		padding: 0;
+	}
+
+	// Keep the native checkbox. Themes replace it with pseudo element drawings.
+	.multiselect-container .form-check-input {
+		float: none;
+		position: static;
+		width: 13px;
+		height: 13px;
+		margin: 0;
+		opacity: 1;
+		appearance: auto;
+		accent-color: var(--primary-500);
+		box-shadow: none;
+
+		&::before,
+		&::after {
+			content: none;
+		}
+	}
+
+	.multiselect-container .form-check-label {
+		margin-left: 5px;
+	}
+
+	// Themes draw their own .caret triangle with borders.
+	.caret {
+		width: 19px;
+		height: 9px;
+		margin-left: 0;
+		border: 0;
+
+		&::before,
+		&::after {
+			content: none;
+		}
 	}
 
 	select {
+		display: inline-block;
+		box-sizing: border-box;
+		vertical-align: middle;
+		min-width: 0;
+		max-width: none;
+		font-family: inherit;
+		letter-spacing: normal;
+		text-transform: none;
 		width: auto !important;
 		min-height: auto !important;
 		outline: 0;
@@ -159,15 +382,29 @@ body.frm_preview_page .ui-widget-overlay {
 	.multiselect-selected-text {
 		position: relative;
 		top: 2px;
+
+		// The shared calc(90% - gap) is circular on a shrink-to-fit button and cut off short labels.
+		// 200px container - 12px padding - 19px caret - 8px caret gap - 2px border, rounded down.
+		max-width: 155px;
 	}
 
 	#frm_testmode_fill_in_empty_form_fields {
-		background-color: var(--primary-500);
-		color: #fff;
+		height: auto;
 		padding: 8px 18px;
+		color: #fff;
+		font-weight: 600;
+		line-height: var(--leading);
+		white-space: nowrap;
+		background-color: var(--primary-500);
+
+		&:hover,
+		&:focus {
+			color: #fff;
+		}
 	}
 
 	.frm_help {
+		display: inline-flex;
 		vertical-align: top;
 	}
 }
@@ -194,18 +431,42 @@ body.frm_preview_page .ui-widget-overlay {
 }
 
 #frm_test_mode_pagination {
-	display: inline-block;
-	margin-left: var(--gap-xs);
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: var(--gap-2xs);
 
+	// Themes restyle every input[type="button"]: gradients, uppercase, min sizes, shadows.
 	input[type="button"] {
-		border: 1px solid var(--grey-300);
+		box-sizing: border-box;
+		width: auto;
+		min-width: 0;
+		height: auto;
+		min-height: 0;
+		margin: 0;
 		padding: 8px 12px;
-		border-radius: 8px;
+		color: var(--grey-800);
+		font-family: inherit;
 		font-size: 12px;
-		background-color: #fff;
+		font-weight: 400;
+		line-height: 18px;
+		letter-spacing: normal;
+		text-shadow: none;
+		text-transform: none;
+		vertical-align: middle;
+		border: 1px solid var(--grey-300);
+		border-radius: 8px;
+		background: #fff;
+		box-shadow: none;
+		opacity: 1;
+		appearance: none;
+
+		// Themes fade input[aria-disabled="true"], which the current page always has.
+		&.frm_noallow {
+			opacity: 0.5;
+		}
 
 		&.frm_test_mode_active_page {
-			background-color: var(--primary-500);
+			background: var(--primary-500);
 			border-color: var(--primary-500);
 			color: #fff;
 		}
@@ -217,20 +478,38 @@ body.frm_preview_page .ui-widget-overlay {
 }
 
 #frm_testmode_start_over {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--gap-2xs);
+	box-sizing: border-box;
+	width: auto;
+
+	// 32px tall, level with the h2 line height.
+	height: 32px;
+	min-height: 0;
+	margin: 0;
+	padding: 0 12px;
 	position: absolute;
 	right: 20px;
-	top: 20px;
-	background-color: #fff;
+	top: 16px;
 	color: var(--grey-800);
-	border-radius: 20px;
-	padding: 4px 12px;
-	border-color: var(--grey-300);
+	font-size: 14px;
 	font-weight: 600;
+	line-height: 1;
+	white-space: nowrap;
+	border: 1px solid var(--grey-300);
+	border-radius: 20px;
+	background-color: #fff;
 
 	img {
-		vertical-align: middle;
-		position: relative;
-		bottom: 2px;
+		display: block;
+		flex: none;
+		width: 16px;
+		height: 16px;
+		max-width: none;
+		margin: 0;
+		border: 0;
+		box-shadow: none;
 	}
 }
 
@@ -287,26 +566,25 @@ body.frm_preview_page .ui-widget-overlay {
 
 @media (max-width: 1024px) {
 
-	#frm_testing_mode > div > label:not(#frm_quick_jump_label) {
-		width: 100%;
-		display: block !important;
-		margin-left: 0 !important;
+	#frm_testing_mode > h2 + div {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: var(--gap-sm);
+		margin-top: var(--gap-sm);
 	}
 
-	#frm_testing_mode > div > label:not(#frm_quick_jump_label) {
-		margin-top: var(--gap-sm);
+	// Let the dropdown drop below its label when the card is too narrow for both.
+	#frm_testing_mode > h2 + div > label {
+		flex-wrap: wrap;
+		white-space: normal;
 	}
 
 	#frm_testmode_fill_in_empty_form_fields {
 		display: block;
 	}
 
-	#frm_testing_mode > div:nth-of-type(2) {
+	#frm_testing_mode > hr + div {
 		flex-direction: column;
-		align-items: normal;
-	}
-
-	#frm_test_mode_pagination {
-		margin-left: 0;
+		align-items: flex-start;
 	}
 }

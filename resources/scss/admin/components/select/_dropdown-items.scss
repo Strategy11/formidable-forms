@@ -1,0 +1,49 @@
+/**
+ * Component: Dropdown Items
+ *
+ * Rows shared by the dropdown menus, the Bootstrap multiselect and the code list.
+ * Imported from _code-list.scss so the admin cascade order is unchanged.
+ */
+
+.frm-select-list-item,
+.frm_wrap .ui-autocomplete li > div,
+.multiselect-container button.multiselect-option,
+.frm-dropdown-menu > .dropdown-item > a,
+.frm-dropdown-menu > .dropdown-item > a:visited,
+.frm-dropdown-menu > .dropdown-item > a:link, /* Override jQuery UI */
+.frm-dropdown-menu .frm_dropdown_li,
+.frm_code_list.frm-full-hover a {
+	display: flex;
+	color: var(--grey-700);
+	padding: 5px 10px;
+	font-size: var(--text-md);
+	gap: var(--gap-xs);
+	align-items: center;
+}
+
+.multiselect-container button.multiselect-option.disabled {
+	opacity: 0.5;
+}
+
+.frm-select-list-item.active,
+.frm-select-list-item:hover,
+.frm_wrap .ui-autocomplete li div.ui-state-active,
+.frm_wrap .ui-autocomplete li.ui-state-focus,
+.multiselect-container button.multiselect-option.active,
+.multiselect-container button.multiselect-option:hover,
+.frm-dropdown-menu > .dropdown-item > a:hover,
+.frm_code_list.frm-full-hover a:hover span,
+.frm_code_list.frm-full-hover a:hover {
+	background: var(--primary-25);
+	color: var(--primary-500);
+}
+
+.frm-select-list-item .frmsvg,
+.frm-dropdown-menu > .dropdown-item > a .frmsvg {
+	opacity: 0.8;
+}
+
+.frm-select-list-item:hover .frmsvg,
+.frm-dropdown-menu > .dropdown-item > a:hover .frmsvg {
+	opacity: 1;
+}
