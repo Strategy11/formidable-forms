@@ -2750,23 +2750,61 @@ class FrmFormsController {
 	 * @return bool
 	 */
 	private static function is_hidden_draft_form( $form ) {
-		return $form->status === 'draft' && ! FrmAppHelper::is_preview_page() && ! self::is_ajax_submit_from_preview_page();
+		return $form->status === 'draft' && ! FrmAppHelper::is_preview_page() && ! self::is_ajax_submit_from_preview_page( $form );
 	}
 
 	/**
 	 * Check if the current request is an AJAX form submission sent from the preview page.
 	 * The AJAX submit response renders the form again, so it needs the same draft exemption as the preview page.
+	 * The preview page adds a nonce to the draft form, so this does not depend on the Referer header,
+	 * which a Referrer-Policy can strip. Only a visitor who could already open the preview has the nonce.
 	 *
 	 * @since x.x
 	 *
+	 * @param object $form The form being shown.
+	 *
 	 * @return bool
 	 */
-	private static function is_ajax_submit_from_preview_page() {
+	private static function is_ajax_submit_from_preview_page( $form ) {
 		if ( ! wp_doing_ajax() || FrmAppHelper::get_post_param( 'action', '', 'sanitize_title' ) !== 'frm_entries_create' ) {
 			return false;
 		}
 
-		return str_contains( FrmAppHelper::get_server_value( 'HTTP_REFERER' ), 'action=frm_forms_preview' );
+		$nonce = FrmAppHelper::get_post_param( self::get_draft_preview_nonce_name( $form ), '', 'sanitize_text_field' );
+
+		return $nonce && wp_verify_nonce( $nonce, self::get_draft_preview_nonce_name( $form ) );
+	}
+
+	/**
+	 * Add a nonce to a draft form so an AJAX submit from the preview page can show the draft form again.
+	 * A draft form only renders on the preview page or in that AJAX response, so the nonce never reaches other pages.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $form The form being rendered.
+	 *
+	 * @return void
+	 */
+	public static function maybe_add_draft_preview_nonce( $form ) {
+		if ( $form->status !== 'draft' ) {
+			return;
+		}
+
+		$name = self::get_draft_preview_nonce_name( $form );
+		wp_nonce_field( $name, $name, false );
+	}
+
+	/**
+	 * Get the nonce action and field name used to show a draft form again after an AJAX submit from the preview page.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $form The draft form.
+	 *
+	 * @return string
+	 */
+	private static function get_draft_preview_nonce_name( $form ) {
+		return 'frm_preview_draft_' . $form->id;
 	}
 
 	/**

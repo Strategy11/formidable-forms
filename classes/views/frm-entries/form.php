@@ -57,6 +57,7 @@ echo FrmAppHelper::maybe_kses( FrmFormsHelper::replace_shortcodes( $values['befo
 <input type="hidden" name="form_key" value="<?php echo esc_attr( $form->form_key ); ?>" />
 <input type="hidden" name="item_meta[0]" value="" />
 <?php wp_nonce_field( 'frm_submit_entry_nonce', 'frm_submit_entry_' . $form->id ); ?>
+<?php FrmFormsController::maybe_add_draft_preview_nonce( $form ); ?>
 <?php if ( isset( $id ) ) { ?>
 <input type="hidden" name="id" value="<?php echo esc_attr( $id ); ?>" />
 <?php } ?>
