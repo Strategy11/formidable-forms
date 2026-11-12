@@ -194,7 +194,13 @@ class FrmStylesController {
 			return;
 		}
 
-		$url = admin_url( 'admin-ajax.php?action=frm_styler_theme_css' );
+		$url = add_query_arg(
+			array(
+				'action' => 'frm_styler_theme_css',
+				'nonce'  => wp_create_nonce( 'frm_ajax' ),
+			),
+			admin_url( 'admin-ajax.php' )
+		);
 		wp_enqueue_style( 'frm-styler-theme-preview', $url, array( 'frm-styler-preview' ), FrmStylesThemeCssHelper::get_version() );
 	}
 
@@ -206,9 +212,8 @@ class FrmStylesController {
 	 * @return void
 	 */
 	public static function load_preview_theme_css() {
-		if ( ! current_user_can( 'frm_change_settings' ) ) {
-			wp_die( '', '', array( 'response' => 403 ) );
-		}
+		FrmAppHelper::permission_check( 'frm_change_settings' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$version   = FrmStylesThemeCssHelper::get_version();
 		$cache_key = 'frm_styler_theme_css_' . md5( $version );
