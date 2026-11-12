@@ -527,11 +527,16 @@ class FrmEntry {
 
 		FrmAppHelper::unserialize_or_decode( $entry->description );
 		// TODO: Remove slashes on input only, not output.
-		$metas = $entry->metas ?? null;
+		$has_metas = property_exists( $entry, 'metas' );
+		$metas     = $entry->metas ?? null;
 		unset( $entry->metas );
 		$entry = wp_unslash( $entry );
 
 		if ( ! is_array( $metas ) ) {
+			if ( $has_metas ) {
+				$entry->metas = wp_unslash( $metas );
+			}
+
 			return;
 		}
 

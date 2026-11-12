@@ -169,4 +169,13 @@ class test_FrmLiteralFieldValues extends FrmUnitTest {
 		$this->assertSame( 'C:tempnew {"a":1}', FrmEntry::getOne( $entry_id, true )->metas[ $field_id ] );
 		$this->assertSame( 'C:tempnew {"a":1}', FrmEntryMeta::get_entry_meta_by_field( $entry_id, $field_id ), 'Without the filter the legacy unslashing is unchanged.' );
 	}
+	public function test_prepare_entry_preserves_non_array_meta_values() {
+		$entry = (object) array(
+			'description' => '',
+			'metas'       => 'C:\\temp',
+		);
+		$args  = array( &$entry );
+		$this->run_private_method( array( 'FrmEntry', 'prepare_entry' ), $args );
+		$this->assertSame( 'C:temp', $entry->metas, 'Legacy non-array metas should still be unslashed and preserved.' );
+	}
 }
