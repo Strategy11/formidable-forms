@@ -528,6 +528,10 @@ class FrmAbilitiesFieldsController {
 		$prepared            = self::apply_field_input( FrmFieldsHelper::setup_new_vars( $field['type'], $form_id ), $field );
 		$prepared['form_id'] = $form_id;
 
+		if ( ! FrmFieldPlacementHelper::is_allowed( $prepared['type'], $form_id, (int) ( $prepared['field_options']['in_section'] ?? 0 ) ) ) {
+			return new WP_Error( 'frm_invalid_field_placement', __( 'This field type cannot be placed in this section or repeater.', 'formidable' ), array( 'status' => 400 ) );
+		}
+
 		// The builder merges the raw input before this filter fires. Pro's
 		// FrmProField::create() relies on that to see repeat and create the
 		// repeater's child form. Input is applied again after the filter so

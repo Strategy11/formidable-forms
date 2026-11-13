@@ -2524,6 +2524,12 @@ class FrmFieldsHelper {
 	public static function show_add_field_link( $field_type ) {
 		$field_label = FrmFormsHelper::get_field_link_name( $field_type );
 		$classes     = 'frmbutton frm6 frm_t' . $field_type['key'];
+		$type        = explode( '|', $field_type['key'] )[0];
+		$field       = FrmFieldFactory::get_field_type( $type );
+
+		if ( ! $field->allows_in_repeater() ) {
+			$classes .= ' frm-no-repeater';
+		}
 
 		if ( ! empty( $field_type['hide'] ) ) {
 			$classes .= ' frm_hidden';
