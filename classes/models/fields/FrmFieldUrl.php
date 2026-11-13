@@ -104,12 +104,12 @@ class FrmFieldUrl extends FrmFieldType {
 	 */
 	private function get_url_pattern() {
 		if ( ! $this->allows_intl_domains() ) {
-			return '/^http(s)?:\/\/(?:localhost|(?:[\da-z\.-]+\.[\da-z\.-]+))/i';
+			return '/^http(s)?:\/\/(?:localhost|[\da-z\.-][\da-z-]*\.[\da-z\.-]+)(?=[\/?#:]|$)/i';
 		}
 
 		// The host class allows \x80-\xff so internationalized domain names pass.
 		// Byte range by design, and no /u modifier: with /u, preg_match() returns false on invalid UTF-8.
-		return '/^http(s)?:\/\/(?:localhost|(?:[\da-z\x80-\xff\.-]+\.[\da-z\x80-\xff\.-]+))/i';
+		return '/^http(s)?:\/\/(?:localhost|[\da-z\x80-\xff\.-][\da-z\x80-\xff-]*\.[\da-z\x80-\xff\.-]+)(?=[\/?#:]|$)/i';
 	}
 
 	/**

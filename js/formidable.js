@@ -839,8 +839,8 @@ function frmFrontFormJS() {
 		// JS matches UTF-16 code units, so it uses the u flag and a code point range where the PHP side
 		// matches raw UTF-8 bytes. PHP must NOT gain /u: preg_match() returns false on malformed UTF-8.
 		const pattern = field.hasAttribute( 'data-intl-domains' )
-			? /^http(s)?:\/\/(?:localhost|(?:[\da-z\u0080-\u{10FFFF}\.-]+\.[\da-z\u0080-\u{10FFFF}\.-]+))/iu
-			: /^http(s)?:\/\/(?:localhost|(?:[\da-z\.-]+\.[\da-z\.-]+))/i;
+			? /^http(s)?:\/\/(?:localhost|[\da-z\u0080-\u{10FFFF}\.-][\da-z\u0080-\u{10FFFF}-]*\.[\da-z\u0080-\u{10FFFF}\.-]+)(?=[\/?#:]|$)/iu
+			: /^http(s)?:\/\/(?:localhost|[\da-z\.-][\da-z-]*\.[\da-z\.-]+)(?=[\/?#:]|$)/i;
 
 		if ( url !== '' && ! pattern.test( url ) ) {
 			fieldID = getFieldId( field, true );
