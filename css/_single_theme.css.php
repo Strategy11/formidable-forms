@@ -412,6 +412,24 @@ endif;
 	border-style:var(--field-border-style)<?php echo esc_html( $important ); ?>;
 }
 
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field input::placeholder,
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field textarea::placeholder,
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field input.frm_default,
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field textarea.frm_default,
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .placeholder,
+.<?php echo esc_html( $style_class ); ?> .frm_form_field input:invalid::placeholder,
+.<?php echo esc_html( $style_class ); ?> .frm_form_field textarea:invalid::placeholder {
+	color:var(--text-color-error)<?php echo esc_html( $important ); ?>;
+}
+
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) input::placeholder,
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) textarea::placeholder,
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) input.frm_default,
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) textarea.frm_default,
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm_combo_inputs_container > .frm_form_field:not(.frm_blank_field) .placeholder {
+	color:var(--text-color-disabled)<?php echo esc_html( $important ); ?>;
+}
+
 <?php
 // Only include this style when the signatures add-on is active
 if ( class_exists( 'FrmSigField' ) ) :
