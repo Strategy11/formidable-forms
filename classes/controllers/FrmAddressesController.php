@@ -201,6 +201,18 @@ class FrmAddressesController extends FrmComboFieldsController {
 	}
 
 	/**
+	 * Gets the country name to country code mapping.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	public static function get_country_codes() {
+		self::maybe_define_country_codes();
+		return self::$country_codes ?? array();
+	}
+
+	/**
 	 * Define country codes mapping.
 	 *
 	 * @since 6.34
