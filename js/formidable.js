@@ -1796,7 +1796,7 @@ function frmFrontFormJS() {
 			return;
 		}
 
-		document.querySelectorAll( '.frm_loading_form' ).forEach( function( form ) {
+		document.querySelectorAll( '.frm_loading_form, .frm_loading_prev' ).forEach( function( form ) {
 			form.classList.remove( 'frm_loading_form', 'frm_loading_prev' );
 			jQuery( form ).trigger( 'frmEndFormLoading' );
 
@@ -2278,7 +2278,7 @@ function frmFrontFormJS() {
 	function enableSubmitButtonOnBackButtonPress() {
 		window.addEventListener( 'pageshow', function( event ) {
 			if ( event.persisted ) {
-				document.querySelectorAll( '.frm_loading_form' ).forEach(
+				document.querySelectorAll( '.frm_loading_form, .frm_loading_prev' ).forEach(
 					function( form ) {
 						enableSubmitButton( form );
 					}
