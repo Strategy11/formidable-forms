@@ -506,7 +506,7 @@ class FrmCSVExportHelper {
 				'parent_item_id' => $next_set,
 			);
 			// Order by parent_item_id so children will be first.
-			$order_by = ' ORDER BY parent_item_id DESC';
+			$order_by = ' ORDER BY parent_item_id DESC, id ASC';
 		} else {
 			// When Pro is not installed, only query for direct ID matches only as we do not expect parent item id
 			// Matches and the more simplified query is faster.
@@ -518,15 +518,23 @@ class FrmCSVExportHelper {
 
 		$entries = FrmEntry::getAll( $where, $order_by, '', true, false );
 
+		// Collect repeater values before writing parent rows in the requested order.
 		foreach ( $entries as $entry ) {
-			self::$entry = $entry;
-			unset( $entry );
-
-			if ( self::$entry->form_id === self::$form_id ) {
-				self::prepare_csv_row();
-			} else {
-				self::add_repeat_field_values_to_csv( $entries );
+			if ( $entry->form_id === self::$form_id ) {
+				continue;
 			}
+
+			self::$entry = $entry;
+			self::add_repeat_field_values_to_csv( $entries );
+		}
+
+		foreach ( $next_set as $entry_id ) {
+			if ( ! isset( $entries[ $entry_id ] ) || $entries[ $entry_id ]->form_id !== self::$form_id ) {
+				continue;
+			}
+
+			self::$entry = $entries[ $entry_id ];
+			self::prepare_csv_row();
 		}
 	}
 

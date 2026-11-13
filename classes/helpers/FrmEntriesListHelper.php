@@ -103,21 +103,36 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @return string
 	 */
 	protected function get_order_by() {
-		$orderby = self::get_param(
-			array(
-				'param'   => 'orderby',
-				'default' => 'id',
-			)
-		);
-		$order   = self::get_param(
-			array(
-				'param'   => 'order',
-				'default' => 'DESC',
-			)
-		);
+		$sort = self::get_sort_parameters();
+		return self::get_sort_query( $sort['orderby'], $sort['order'] );
+	}
 
+	/**
+	 * Get the effective entries list sort before leaving the current admin screen.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	public static function get_sort_parameters() {
+		$orderby = FrmAppHelper::get_param( 'orderby', 'id', 'request', 'sanitize_title' );
+		$order   = FrmAppHelper::get_param( 'order', 'DESC', 'request', 'sanitize_title' );
 		FrmAppController::apply_saved_sort_preference( $orderby, $order );
 
+		return compact( 'orderby', 'order' );
+	}
+
+	/**
+	 * Build the same sort clause for the entries list and its CSV export.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $orderby Entry column or field meta alias.
+	 * @param string $order   Sort direction.
+	 *
+	 * @return string
+	 */
+	public static function get_sort_query( $orderby, $order ) {
 		if ( str_contains( $orderby, 'meta' ) ) {
 			$order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
 
