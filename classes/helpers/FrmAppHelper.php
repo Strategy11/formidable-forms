@@ -1532,30 +1532,9 @@ class FrmAppHelper {
 	public static function allow_style( $allow_css, $css_string ) {
 		if ( ! $allow_css && str_starts_with( $css_string, '--primary-700:' ) ) {
 			$split     = explode( ':', $css_string, 2 );
-			$allow_css = 2 === count( $split ) && self::is_a_valid_color( $split[1] );
+			$allow_css = 2 === count( $split ) && FrmStylesHelper::is_valid_color( $split[1] );
 		}
 		return $allow_css;
-	}
-
-	/**
-	 * @since 5.0.13
-	 *
-	 * @param string $value
-	 *
-	 * @return bool
-	 */
-	private static function is_a_valid_color( $value ) {
-		$match = 0;
-
-		if ( str_starts_with( $value, 'rgba(' ) ) {
-			$match = preg_match( '/^rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d*(?:\.\d+)?)\)$/', $value );
-		} elseif ( str_starts_with( $value, 'rgb(' ) ) {
-			$match = preg_match( '/^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/', $value );
-		} elseif ( str_starts_with( $value, '#' ) ) {
-			$match = preg_match( '/^#([a-f0-9]{6}|[a-f0-9]{3})\b$/', $value );
-		}
-
-		return (bool) $match;
 	}
 
 	/**
