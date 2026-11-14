@@ -326,4 +326,133 @@ class test_FrmEntryValidate extends FrmUnitTest {
 
 		$this->assertArrayHasKey( $fields['radio_5']->id, $values['item_meta'] );
 	}
+
+	/**
+	 * A hook can fill a dropdown with the same options that are saved for the field, and
+	 * set use_key so the option key is submitted. The key should pass option validation.
+	 *
+	 * @covers FrmEntryValidate::validate_field
+	 */
+	public function test_option_validation_with_use_key_set_by_hook() {
+		$field = $this->create_field_with_keyed_options();
+
+		$set_use_key = function ( $values ) use ( $field ) {
+			if ( (int) $values['id'] === (int) $field->id ) {
+				$values['use_key'] = true;
+			}
+			return $values;
+		};
+
+		add_filter( 'frm_setup_new_fields_vars', $set_use_key, 20 );
+		add_filter( 'frm_field_value_saved', array( $this, 'use_option_key_as_value' ), 10, 3 );
+
+		$this->assertSame( array(), $this->get_option_errors( $field, '101' ) );
+		$this->assertArrayHasKey( 'field' . $field->id, $this->get_option_errors( $field, '999' ), 'A key that is not an option should still fail.' );
+		$this->assertArrayHasKey( 'field' . $field->id, $this->get_option_errors( $field, '101.9' ), 'A decimal should not match an integer key.' );
+		$this->assertSame( array(), $this->get_option_errors( $field, '0101' ), 'A zero padded key still matches.' );
+
+		remove_filter( 'frm_setup_new_fields_vars', $set_use_key, 20 );
+		remove_filter( 'frm_field_value_saved', array( $this, 'use_option_key_as_value' ) );
+
+		$this->assertArrayHasKey( 'field' . $field->id, $this->get_option_errors( $field, '101' ), 'Without the hook, the key is not an option value.' );
+	}
+
+	/**
+	 * When an entry is edited, the frm_setup_edit_fields_vars hook decides the options.
+	 *
+	 * @covers FrmEntryValidate::validate_field
+	 */
+	public function test_option_validation_uses_edit_hook_when_editing() {
+		$field = $this->create_field_with_keyed_options();
+
+		$add_option = function ( $values ) use ( $field ) {
+			if ( (int) $values['id'] === (int) $field->id ) {
+				$values['options']['103'] = 'Option 3';
+			}
+			return $values;
+		};
+
+		add_filter( 'frm_setup_edit_fields_vars', $add_option, 20 );
+
+		$this->assertArrayHasKey( 'field' . $field->id, $this->get_option_errors( $field, 'Option 3' ), 'The edit hook should not run for a new entry.' );
+		$this->assertSame( array(), $this->get_option_errors( $field, 'Option 3', 1 ) );
+		$this->assertSame( array(), $this->get_option_errors( $field, 'Not an option', 1 ), 'Changed edit options preserve the dynamic option bypass.' );
+
+		remove_filter( 'frm_setup_edit_fields_vars', $add_option, 20 );
+	}
+
+	/** @return void */
+	public function test_changed_setup_options_accept_render_time_values() {
+		$field          = $this->create_field_with_keyed_options();
+		$change_options = static function ( $values ) use ( $field ) {
+			if ( (int) $values['id'] === (int) $field->id ) {
+				$values['options'] = array( 'Hook option' );
+			}
+			return $values;
+		};
+		add_filter( 'frm_setup_new_fields_vars', $change_options, 20 );
+
+		try {
+			$this->assertSame( array(), $this->get_option_errors( $field, 'Hook option' ) );
+			$this->assertSame( array(), $this->get_option_errors( $field, 'Not an option' ), 'Changed setup options preserve the dynamic option bypass.' );
+		} finally {
+			remove_filter( 'frm_setup_new_fields_vars', $change_options, 20 );
+		}
+	}
+
+	/**
+	 * Mirrors the Pro frm_field_value_saved callback that renders the option key when use_key is on.
+	 *
+	 * @param array|string $opt     The option.
+	 * @param int|string   $opt_key The option key.
+	 * @param array        $field   The field array.
+	 *
+	 * @return array|int|string
+	 */
+	public function use_option_key_as_value( $opt, $opt_key, $field ) {
+		return FrmField::is_option_true( $field, 'use_key' ) ? $opt_key : $opt;
+	}
+
+	/**
+	 * @return stdClass
+	 */
+	private function create_field_with_keyed_options() {
+		$form = $this->factory->form->create_and_get();
+
+		return $this->factory->field->create_and_get(
+			array(
+				'form_id' => $form->id,
+				'type'    => 'select',
+				'options' => array(
+					'101' => array(
+						'label' => 'Option 1',
+						'value' => '101',
+					),
+					'102' => array(
+						'label' => 'Option 2',
+						'value' => '102',
+					),
+				),
+			)
+		);
+	}
+
+	/**
+	 * @param stdClass $field    The field to validate.
+	 * @param string   $value    The posted value.
+	 * @param int      $entry_id The entry being edited, or 0 for a new entry.
+	 *
+	 * @return array
+	 */
+	private function get_option_errors( $field, $value, $entry_id = 0 ) {
+		$errors = array();
+		$values = array(
+			'form_id'   => $field->form_id,
+			'item_meta' => array( $field->id => $value ),
+		);
+
+		FrmEntryValidate::validate_field( $field, $errors, $values, array( 'entry_id' => $entry_id ) );
+
+		return $errors;
+	}
 }
