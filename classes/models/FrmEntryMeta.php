@@ -363,7 +363,7 @@ class FrmEntryMeta {
 
 		if ( $cached && isset( $cached->metas ) && isset( $cached->metas[ $field_id ] ) ) {
 			$result = $cached->metas[ $field_id ];
-			return wp_unslash( $result );
+			return self::maybe_unslash_field_value( $result, $field_id );
 		}
 
 		$get_table = $wpdb->prefix . 'frm_item_metas';
@@ -382,7 +382,43 @@ class FrmEntryMeta {
 		$field_type = FrmField::get_type( $field_id );
 		FrmFieldsHelper::prepare_field_value( $result, $field_type );
 
-		return wp_unslash( $result );
+		return self::maybe_unslash_field_value( $result, $field_id, $field_type );
+	}
+
+	/**
+	 * Keep literal source backslashes when a field opts out of legacy unslashing.
+	 *
+	 * Applied by FrmEntry, get_entry_meta_by_field(), get_entry_metas_for_field() and getAll()
+	 * so every read path returns the same value for a field. The field type is only
+	 * looked up when something is hooked to the filter.
+	 *
+	 * @since x.x
+	 *
+	 * @internal
+	 *
+	 * @param mixed       $value    Stored or cached field value.
+	 * @param int|string  $field_id Field ID or key.
+	 * @param string|null $type     Field type, when the caller already knows it.
+	 *
+	 * @return mixed
+	 */
+	public static function maybe_unslash_field_value( $value, $field_id, $type = null ) {
+		if ( ! has_filter( 'frm_should_unslash_entry_meta_value' ) ) {
+			return wp_unslash( $value );
+		}
+
+		if ( null === $type ) {
+			$type = FrmField::get_type( $field_id );
+		}
+
+		/**
+		 * @since x.x
+		 *
+		 * @param bool       $unslash  Whether the field value should be unslashed.
+		 * @param string     $type     Field type.
+		 * @param int|string $field_id Field ID or key.
+		 */
+		return apply_filters( 'frm_should_unslash_entry_meta_value', true, $type, $field_id ) ? wp_unslash( $value ) : $value;
 	}
 
 	/**
@@ -417,7 +453,7 @@ class FrmEntryMeta {
 			unset( $k, $v );
 		}
 
-		return wp_unslash( $values );
+		return self::maybe_unslash_field_value( $values, $field_id );
 	}
 
 	/**
@@ -491,7 +527,7 @@ class FrmEntryMeta {
 
 		foreach ( $results as $k => $result ) {
 			FrmAppHelper::unserialize_or_decode( $result->meta_value );
-			$results[ $k ]->meta_value = wp_unslash( $result->meta_value );
+			$results[ $k ]->meta_value = self::maybe_unslash_field_value( $result->meta_value, $result->field_id, $result->field_type );
 			unset( $k, $result );
 		}
 

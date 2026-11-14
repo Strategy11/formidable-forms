@@ -612,16 +612,34 @@ class FrmXMLHelper {
 		return array(
 			'id'            => (int) $field->id,
 			'field_key'     => (string) $field->field_key,
-			'name'          => (string) $field->name,
-			'description'   => (string) $field->description,
+			'name'          => self::field_text_from_xml( $field->name, $field ),
+			'description'   => self::field_text_from_xml( $field->description, $field ),
 			'type'          => (string) $field->type,
-			'default_value' => FrmAppHelper::maybe_json_decode( (string) $field->default_value ),
+			'default_value' => self::field_value_from_xml( $field->default_value, $field ),
 			'field_order'   => (int) $field->field_order,
 			'form_id'       => (int) $form_id,
 			'required'      => (int) $field->required,
 			'options'       => FrmAppHelper::maybe_json_decode( (string) $field->options ),
 			'field_options' => self::fill_field_options( $field ),
 		);
+	}
+
+	/**
+	 * Decode marked text columns without interpreting unmarked JSON as an array.
+	 *
+	 * @since x.x
+	 *
+	 * @param SimpleXMLElement $value XML text column.
+	 * @param object           $field Exported field definition.
+	 *
+	 * @return string
+	 */
+	private static function field_text_from_xml( $value, $field ) {
+		if ( 'base64' === (string) $value['encoding'] ) {
+			return (string) self::field_value_from_xml( $value, $field );
+		}
+
+		return (string) $value;
 	}
 
 	/**
@@ -1983,6 +2001,103 @@ class FrmXMLHelper {
 
 		// $str = ent2ncr(esc_html( $str));
 		return '<![CDATA[' . str_replace( ']]>', ']]]]><![CDATA[>', $str ) . ']]>';
+	}
+
+	/**
+	 * Whether a field stores literal source rather than encoded compound values.
+	 *
+	 * @since x.x
+	 *
+	 * @param object|SimpleXMLElement $field Field being exported, or the raw XML field being imported.
+	 *
+	 * @return bool
+	 */
+	private static function field_value_is_literal( $field ) {
+		$field = self::normalize_field_for_literal_check( $field );
+
+		/**
+		 * @since x.x
+		 *
+		 * @param bool     $literal Whether XML must preserve this field's text exactly.
+		 * @param stdClass $field   Field with string id, field_key and type properties. Export and import pass the same shape.
+		 */
+		return (bool) apply_filters( 'frm_xml_field_value_is_literal', false, $field );
+	}
+
+	/**
+	 * Give the literal value filter the same field shape on export and import.
+	 *
+	 * Import passes a SimpleXMLElement whose properties are objects, so a strict
+	 * comparison such as 'code' === $field->type would never match there.
+	 *
+	 * @since x.x
+	 *
+	 * @param object|SimpleXMLElement $field Field being exported, or the raw XML field being imported.
+	 *
+	 * @return stdClass
+	 */
+	private static function normalize_field_for_literal_check( $field ) {
+		return (object) array(
+			'id'        => isset( $field->id ) ? (string) $field->id : '',
+			'field_key' => isset( $field->field_key ) ? (string) $field->field_key : '',
+			'type'      => isset( $field->type ) ? (string) $field->type : '',
+		);
+	}
+
+	/**
+	 * Encode a field value without interpreting literal source as JSON or PHP serialization.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $value Stored field value.
+	 * @param object $field Field being exported.
+	 *
+	 * @return string XML character data.
+	 */
+	public static function field_value_to_xml( $value, $field ) {
+		if ( ! self::field_value_is_literal( $field ) ) {
+			return self::cdata( $value );
+		}
+
+		// XML normalizes carriage returns and rejects some otherwise valid source characters.
+		return '<![CDATA[' . base64_encode( $value ) . ']]>';
+	}
+
+	/**
+	 * Mark literal values so imports can recover their exact bytes.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $field Field being exported.
+	 *
+	 * @return array
+	 */
+	public static function field_value_xml_attributes( $field ) {
+		return self::field_value_is_literal( $field ) ? array( 'encoding' => 'base64' ) : array();
+	}
+
+	/**
+	 * Decode compound field data while preserving literal source text.
+	 *
+	 * @since x.x
+	 *
+	 * @param SimpleXMLElement|string $value XML field value.
+	 * @param object                  $field Destination field or exported field definition.
+	 *
+	 * @return array|string
+	 */
+	public static function field_value_from_xml( $value, $field ) {
+		if ( $value instanceof SimpleXMLElement && 'base64' === (string) $value['encoding'] ) {
+			// Pretty-printed or wrapped files can add whitespace, which strict decoding rejects.
+			$encoded = (string) preg_replace( '/\s+/', '', (string) $value );
+			$decoded = base64_decode( $encoded, true );
+
+			// Keep the raw text rather than silently wiping the value when it is not valid base64.
+			return false === $decoded ? (string) $value : $decoded;
+		}
+
+		$value = (string) $value;
+		return self::field_value_is_literal( $field ) ? $value : FrmAppHelper::maybe_json_decode( $value );
 	}
 
 	/**
