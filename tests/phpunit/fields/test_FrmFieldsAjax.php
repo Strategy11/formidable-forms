@@ -59,6 +59,65 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	}
 
 	/**
+	 * A delete denied by frm_can_destroy_field returns an error so the builder keeps the field.
+	 *
+	 * @see FrmFieldsController::destroy
+	 */
+	public function test_denied_delete_returns_error() {
+		$field_id = $this->factory->field->create( array( 'form_id' => $this->form_id ) );
+		$_POST    = array(
+			'action'   => 'frm_delete_field',
+			'nonce'    => wp_create_nonce( 'frm_ajax' ),
+			'field_id' => $field_id,
+		);
+
+		$before = did_filter( 'frm_can_destroy_field' );
+		add_filter( 'frm_can_destroy_field', '__return_false' );
+
+		try {
+			$this->_handleAjax( 'frm_delete_field' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			unset( $e );
+		} finally {
+			remove_filter( 'frm_can_destroy_field', '__return_false' );
+		}
+
+		$response = json_decode( $this->_last_response, true );
+		$this->assertSame( $before + 1, did_filter( 'frm_can_destroy_field' ), 'One delete must evaluate the policy once.' );
+		$this->assertFalse( $response['success'], 'A denied delete should return an error.' );
+		$this->assertNotEmpty( $response['data']['message'], 'The error should explain why.' );
+		$this->assertNotFalse( FrmField::getOne( $field_id ), 'The field should still exist.' );
+	}
+
+	public function test_allowed_delete_checks_policy_once_and_missing_delete_succeeds() {
+		$field_id = $this->factory->field->create( array( 'form_id' => $this->form_id ) );
+		$_POST    = array(
+			'action'   => 'frm_delete_field',
+			'nonce'    => wp_create_nonce( 'frm_ajax' ),
+			'field_id' => $field_id,
+		);
+		$before   = did_filter( 'frm_can_destroy_field' );
+
+		try {
+			$this->_handleAjax( 'frm_delete_field' );
+		} catch ( WPAjaxDieStopException $e ) {
+			unset( $e );
+		}
+
+		$this->assertSame( $before + 1, did_filter( 'frm_can_destroy_field' ), 'An allowed delete should evaluate the policy once.' );
+		$this->assertNull( FrmField::getOne( $field_id ), 'The allowed field should be deleted.' );
+		$this->_last_response = '';
+
+		try {
+			$this->_handleAjax( 'frm_delete_field' );
+		} catch ( WPAjaxDieStopException $e ) {
+			unset( $e );
+		}
+
+		$this->assertSame( '', $this->_last_response, 'Deleting an already missing field should succeed quietly.' );
+	}
+
+	/**
 	 * Test duplicating a text field
 	 *
 	 * @see FrmFieldsController::duplicate

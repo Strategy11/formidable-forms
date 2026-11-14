@@ -287,9 +287,12 @@ class FrmFormsController {
 
 		// Handle captcha field inclusion
 		$include_captcha = isset( $_POST['frm_include_captcha'] ) && '1' === $_POST['frm_include_captcha']; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		self::handle_captcha_field( $id, $include_captcha );
+		$captcha_updated = self::handle_captcha_field( $id, $include_captcha );
+		$gdpr_updated    = self::maybe_handle_gdpr_field( $id );
 
-		self::maybe_handle_gdpr_field( $id );
+		if ( ! $captcha_updated || ! $gdpr_updated ) {
+			$warnings[] = __( 'Some fields could not be added or deleted.', 'formidable' );
+		}
 
 		$message = __( 'Settings Successfully Updated', 'formidable' );
 
@@ -314,10 +317,10 @@ class FrmFormsController {
 	 * @param int  $form_id         Form ID.
 	 * @param bool $include_captcha Whether to include captcha field.
 	 *
-	 * @return void
+	 * @return bool
 	 */
 	private static function handle_captcha_field( $form_id, $include_captcha ) {
-		self::toggle_field_in_form( $form_id, 'captcha', $include_captcha, __( 'Captcha', 'formidable' ) );
+		return self::toggle_field_in_form( $form_id, 'captcha', $include_captcha, __( 'Captcha', 'formidable' ) );
 	}
 
 	/**
@@ -328,16 +331,16 @@ class FrmFormsController {
 	 *
 	 * @param int $form_id Form ID.
 	 *
-	 * @return void
+	 * @return bool
 	 */
 	private static function maybe_handle_gdpr_field( $form_id ) {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( ! isset( $_POST['frm_include_gdpr'] ) || FrmFieldGdprHelper::hide_gdpr_field() ) {
-			return;
+			return true;
 		}
 
 		$include_gdpr = '1' === $_POST['frm_include_gdpr']; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		self::toggle_field_in_form( $form_id, FrmFieldGdprHelper::FIELD_TYPE, $include_gdpr, __( 'GDPR', 'formidable' ) );
+		return self::toggle_field_in_form( $form_id, FrmFieldGdprHelper::FIELD_TYPE, $include_gdpr, __( 'GDPR', 'formidable' ) );
 	}
 
 	/**
@@ -350,7 +353,7 @@ class FrmFormsController {
 	 * @param bool   $include    Whether the form should include the field.
 	 * @param string $field_name The name to give a newly created field.
 	 *
-	 * @return void
+	 * @return bool
 	 */
 	private static function toggle_field_in_form( $form_id, $field_type, $include, $field_name ) {
 		$form_fields        = FrmField::get_all_for_form( $form_id, '', 'exclude' );
@@ -376,10 +379,14 @@ class FrmFormsController {
 			$field_values                = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
 			$field_values['name']        = $field_name;
 			$field_values['field_order'] = $submit_field_order > 0 ? $submit_field_order - 1 : $last_field_order + 1;
-			FrmField::create( $field_values );
-		} elseif ( ! $include && $existing_field_id ) {
-			FrmField::destroy( $existing_field_id );
+			return false !== FrmField::create( $field_values );
 		}
+
+		if ( ! $include && $existing_field_id ) {
+			return false !== FrmField::destroy( $existing_field_id );
+		}
+
+		return true;
 	}
 
 	/**
@@ -2707,16 +2714,21 @@ class FrmFormsController {
 			$form = do_shortcode( $frm_settings->login_msg );
 		} else {
 			do_action( 'frm_pre_get_form', $form );
-			$form = self::get_form( $form, $title, $description, $atts );
+			$form_object = $form;
+			$form        = self::get_form( $form, $title, $description, $atts );
 
 			/**
 			 * Use this shortcode to check for external shortcodes that may span
 			 * across multiple fields in the customizable HTML
 			 *
 			 * @since 2.0.8
+			 * @since x.x The form object is passed as the second argument.
+			 *
+			 * @param string $form        Rendered form HTML.
+			 * @param object $form_object Form being rendered.
 			 */
-			$form = apply_filters( 'frm_filter_final_form', $form );
-		}
+			$form = apply_filters( 'frm_filter_final_form', $form, $form_object );
+		}//end if
 
 		return $form;
 	}
