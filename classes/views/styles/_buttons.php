@@ -12,6 +12,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<li class="frm-active"><?php esc_html_e( 'Default', 'formidable' ); ?></li>
 			<li><?php esc_html_e( 'On Hover', 'formidable' ); ?></li>
 			<li><?php esc_html_e( 'On Click', 'formidable' ); ?></li>
+			<?php
+			/**
+			 * Adds submit button settings tabs after the built-in states.
+			 *
+			 * @since x.x
+			 *
+			 * @param object   $style     Style being edited.
+			 * @param FrmStyle $frm_style Style model used to render controls.
+			 */
+			do_action( 'frm_style_button_tabs', $style, $frm_style );
+			?>
 		</ul>
 	</div>
 	<div class="frm-tabs-container">
@@ -366,6 +377,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 				</div>
 			</div>
+			<?php
+			/**
+			 * Adds matching submit button settings panels in tab order.
+			 *
+			 * @since x.x
+			 *
+			 * @param object   $style     Style being edited.
+			 * @param FrmStyle $frm_style Style model used to render controls.
+			 */
+			do_action( 'frm_style_button_tab_content', $style, $frm_style );
+			?>
 		</div>
 	</div>
 </div>
