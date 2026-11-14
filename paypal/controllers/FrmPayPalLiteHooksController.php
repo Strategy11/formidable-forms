@@ -67,6 +67,7 @@ class FrmPayPalLiteHooksController {
 		);
 
 		add_action( 'frm_field_options_before_label', 'FrmPayPalLiteFieldsController::add_paypal_order_field_note', 10, 3 );
+		add_action( 'frm_before_action_settings', 'FrmPayPalLiteLegacyMigrationController::show_migration_notice' );
 
 		if ( defined( 'DOING_AJAX' ) ) {
 			self::load_ajax_hooks();
@@ -100,6 +101,7 @@ class FrmPayPalLiteHooksController {
 		add_action( 'wp_ajax_nopriv_frm_paypal_report_error', 'FrmPayPalLiteAppController::report_error' );
 
 		add_action( 'wp_ajax_frm_paypal_render_seller_status', 'FrmPayPalLiteConnectHelper::handle_render_seller_status' );
+		add_action( 'wp_ajax_frm_paypal_migrate_legacy_action', 'FrmPayPalLiteLegacyMigrationController::migrate_action' );
 
 		add_action( 'wp_ajax_frm_add_form_action', 'FrmPayPalLiteActionsController::maybe_modify_new_action_post_data', 1 );
 	}
