@@ -1954,6 +1954,28 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Format a page or View choice with a title and its ID.
+	 *
+	 * @since x.x
+	 *
+	 * @param object   $post     Post containing ID and post_title.
+	 * @param bool|int $truncate Maximum title length, or false for the full title.
+	 *
+	 * @return string
+	 */
+	public static function get_post_dropdown_label( $post, $truncate = false ) {
+		$title = trim( $post->post_title );
+		$title = '' === $title ? FrmFormsHelper::get_no_title_text() : $title;
+
+		if ( $truncate ) {
+			$title = self::truncate( $title, $truncate );
+		}
+
+		/* translators: 1: Post title, 2: Post ID. */
+		return sprintf( __( '%1$s (ID: %2$d)', 'formidable' ), $title, $post->ID );
+	}
+
+	/**
 	 * Renders an autocomplete page selection or a regular dropdown depending on
 	 * the total page count
 	 *
@@ -1977,7 +1999,17 @@ class FrmAppHelper {
 		$title    = '';
 
 		if ( $selected ) {
-			$title = get_the_title( $selected );
+			$post = get_post( $selected );
+
+			if ( $post ) {
+				// Use the displayed title so the Private and Protected prefixes are kept.
+				$title = self::get_post_dropdown_label(
+					(object) array(
+						'ID'         => $post->ID,
+						'post_title' => get_the_title( $post ),
+					)
+				);
+			}
 		}
 
 		?>
@@ -2108,7 +2140,7 @@ class FrmAppHelper {
 			<option value=""><?php echo esc_html( $args['placeholder'] ); ?></option>
 			<?php foreach ( $pages as $page ) { ?>
 				<option value="<?php echo esc_attr( $page->ID ); ?>" <?php selected( $selected, $page->ID ); ?>>
-					<?php echo esc_html( $args['truncate'] ? self::truncate( $page->post_title, $args['truncate'] ) : $page->post_title ); ?>
+					<?php echo esc_html( self::get_post_dropdown_label( $page, $args['truncate'] ) ); ?>
 				</option>
 			<?php } ?>
 		</select>
