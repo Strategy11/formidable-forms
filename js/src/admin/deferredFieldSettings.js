@@ -21,9 +21,13 @@ export function addFieldSettingsMetadata( field, fieldId, metadata ) {
 	const container = frmDom.div( { className: 'frm-deferred-settings-meta' } );
 	container.hidden = true;
 	const inputs = Object.entries( metadataInputs ).flatMap( ( [ key, [ name, prefix ] ] ) => {
-		const value = metadata[ key ];
+		let value = metadata[ key ];
 		if ( value === null || value === undefined ) {
 			return [];
+		}
+		if ( key === 'type' && value === 'select' ) {
+			// Match the field type setting, which posts "dropdown" because some security tools flag "select" as SQL injection.
+			value = 'dropdown';
 		}
 		const input = frmDom.tag( 'input' );
 		input.type = 'hidden';

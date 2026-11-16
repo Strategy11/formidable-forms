@@ -2265,7 +2265,12 @@ window.frmAdminBuildJS = function() {
 
 	// Update the in_section field value
 	function updateInSectionValue( fieldId, sectionId ) {
-		document.getElementById( `frm_in_section_${ fieldId }` ).value = sectionId;
+		// The input may still be in a cached settings panel, which would otherwise keep the old section.
+		ensureFieldSettings( fieldId );
+		const inSectionInput = document.getElementById( `frm_in_section_${ fieldId }` );
+		if ( inSectionInput ) {
+			inSectionInput.value = sectionId;
+		}
 	}
 
 	/**
@@ -8128,7 +8133,8 @@ window.frmAdminBuildJS = function() {
 	function checkUniqueOpt( targetInput ) {
 		const settingsContainer = targetInput.closest( '.frm-single-settings' );
 		const fieldId = settingsContainer.getAttribute( 'data-fid' );
-		const areValuesSeparate = settingsContainer.querySelector( `[name="field_options[separate_value_${ fieldId }]"]` ).checked;
+		// The separate values setting is only there when Pro is active.
+		const areValuesSeparate = Boolean( settingsContainer.querySelector( `[name="field_options[separate_value_${ fieldId }]"]` )?.checked );
 
 		if ( areValuesSeparate && ! targetInput.name.endsWith( '[value]' ) ) {
 			return;
