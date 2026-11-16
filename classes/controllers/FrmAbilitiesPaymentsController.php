@@ -340,6 +340,16 @@ class FrmAbilitiesPaymentsController {
 	private static function build_list_query( $table, $input ) {
 		global $wpdb;
 
+		$form = null;
+
+		if ( ! empty( $input['form_id'] ) ) {
+			$form = FrmAbilitiesHelper::get_form( $input['form_id'] );
+
+			if ( is_wp_error( $form ) ) {
+				return $form;
+			}
+		}
+
 		if ( ! FrmTransLiteAppHelper::payments_table_exists() ) {
 			// No gateway has been set up yet, so the table was never created.
 			return array();
@@ -350,13 +360,7 @@ class FrmAbilitiesPaymentsController {
 		$table_name = $wpdb->prefix . $table;
 		$status     = ! empty( $input['status'] ) && is_string( $input['status'] ) ? sanitize_text_field( $input['status'] ) : '';
 
-		if ( ! empty( $input['form_id'] ) ) {
-			$form = FrmAbilitiesHelper::get_form( $input['form_id'] );
-
-			if ( is_wp_error( $form ) ) {
-				return $form;
-			}
-
+		if ( $form ) {
 			$sql    = 'SELECT p.* FROM %i p JOIN %i i ON p.item_id = i.id WHERE i.form_id = %d';
 			$params = array( $table_name, $wpdb->prefix . 'frm_items', $form->id );
 

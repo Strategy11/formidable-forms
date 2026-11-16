@@ -149,6 +149,22 @@ class test_FrmAbilitiesPaymentsController extends FrmUnitTest {
 	}
 
 	/**
+	 * A form that does not exist gets the same not-found error whether or not
+	 * the frm_payments table has been created yet.
+	 *
+	 * @return void
+	 */
+	public function test_list_payments_rejects_a_missing_form_when_the_table_is_missing() {
+		delete_option( ( new FrmTransLiteDb() )->db_opt_name );
+		$this->assertFalse( FrmTransLiteAppHelper::payments_table_exists() );
+
+		$listed = $this->execute( 'list-payments', array( 'form_id' => 999999 ) );
+
+		$this->assertWPError( $listed );
+		$this->assertSame( 'frm_form_not_found', $listed->get_error_code() );
+	}
+
+	/**
 	 * @return void
 	 */
 	public function test_list_payments_filters_by_form() {
