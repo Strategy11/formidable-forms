@@ -474,10 +474,6 @@ class FrmSettings {
 	 * @return void
 	 */
 	private function fill_captcha_settings() {
-		if ( ! isset( $this->active_captcha ) ) {
-			$this->active_captcha = 'recaptcha';
-		}
-
 		$privkey = '';
 		$re_lang = '';
 
@@ -517,8 +513,53 @@ class FrmSettings {
 			$this->re_threshold = .5;
 		}
 
+		$this->set_supported_captcha();
+
 		if ( ! $this->captcha_type_selected ) {
 			$this->maybe_default_to_altcha();
+		}
+	}
+
+	/**
+	 * Get the CAPTCHA providers that use site and secret keys, with their setting prefixes.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string, string>
+	 */
+	private function get_captcha_key_prefixes() {
+		return array(
+			'recaptcha' => '',
+			'hcaptcha'  => 'hcaptcha_',
+			'turnstile' => 'turnstile_',
+		);
+	}
+
+	/**
+	 * Use a configured provider when the saved CAPTCHA type is unsupported.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private function set_supported_captcha() {
+		if ( 'altcha' === $this->active_captcha ) {
+			return;
+		}
+
+		$prefixes = $this->get_captcha_key_prefixes();
+
+		if ( array_key_exists( $this->active_captcha, $prefixes ) ) {
+			return;
+		}
+
+		$this->active_captcha = 'recaptcha';
+
+		foreach ( $prefixes as $type => $prefix ) {
+			if ( ! empty( $this->{ $prefix . 'pubkey' } ) && ! empty( $this->{ $prefix . 'privkey' } ) ) {
+				$this->active_captcha = $type;
+				return;
+			}
 		}
 	}
 
@@ -530,17 +571,13 @@ class FrmSettings {
 	 * @return void
 	 */
 	private function maybe_default_to_altcha() {
-		if ( 'altcha' === $this->active_captcha ) {
+		$prefixes = $this->get_captcha_key_prefixes();
+
+		if ( ! isset( $prefixes[ $this->active_captcha ] ) ) {
 			return;
 		}
 
-		$prefixes = array(
-			'recaptcha' => '',
-			'hcaptcha'  => 'hcaptcha_',
-			'turnstile' => 'turnstile_',
-		);
-
-		$prefix  = $prefixes[ $this->active_captcha ] ?? '';
+		$prefix  = $prefixes[ $this->active_captcha ];
 		$pubkey  = $prefix . 'pubkey';
 		$privkey = $prefix . 'privkey';
 

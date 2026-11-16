@@ -12,29 +12,58 @@ class test_FrmStyle extends FrmUnitTest {
 	public function test_maybe_sanitize_rgba_value() {
 		$frm_style            = new FrmStyle();
 		$invalid_color_values = array(
-			'rgba(45, 45, 45,' => 'rgba(45,45,45,1)',
-			'rgba(, , ,1)'     => 'rgba(0,0,0,1)',
-			'rgba(45,45'       => 'rgba(45,45,0,1)',
-			'rgba(355,,,0.5)'  => 'rgba(255,0,0,0.5)',
-			'rgba(255,0,0,11)' => 'rgba(255,0,0,1)',
-			'rgba(99,99,99,1)' => 'rgba(99,99,99,1)',
-			'rgb(45, ,45)'     => 'rgb(45,0,45)',
-			'rgb( , , )'       => 'rgb(0,0,0)',
-			'rgb(300,0,-1)'    => 'rgb(255,0,0)',
-			'rgb('             => 'rgb(0,0,0)',
-			'rgb(255,255,255)' => 'rgb(255,255,255)',
-			'(rgba(0,0,0,1)'   => 'rgba(0,0,0,1)',
-			'((rgba(0,0,0,1)'  => 'rgba(0,0,0,1)',
-			'(rgb(0,0,0)'      => 'rgb(0,0,0)',
-			'rgba(0,0,0,1))'   => 'rgba(0,0,0,1)',
-			' rgba(0,0,0,1)'   => 'rgba(0,0,0,1)',
-			' (rgb(0,0,0)'     => 'rgb(0,0,0)',
-			'rgba((0,0,0,1)'   => 'rgba(0,0,0,1)',
+			'rgba(45, 45, 45,'       => 'rgba(45,45,45,1)',
+			'rgba(, , ,1)'           => 'rgba(0,0,0,1)',
+			'rgba(45,45'             => 'rgba(45,45,0,1)',
+			'rgba(355,,,0.5)'        => 'rgba(255,0,0,0.5)',
+			'rgba(255,0,0,11)'       => 'rgba(255,0,0,1)',
+			'rgba(99,99,99,1)'       => 'rgba(99,99,99,1)',
+			'rgb(45, ,45)'           => 'rgb(45,0,45)',
+			'rgb( , , )'             => 'rgb(0,0,0)',
+			'rgb(300,0,-1)'          => 'rgb(255,0,0)',
+			'rgb('                   => 'rgb(0,0,0)',
+			'rgb(255,255,255)'       => 'rgb(255,255,255)',
+			'(rgba(0,0,0,1)'         => 'rgba(0,0,0,1)',
+			'((rgba(0,0,0,1)'        => 'rgba(0,0,0,1)',
+			'(rgb(0,0,0)'            => 'rgb(0,0,0)',
+			'rgba(0,0,0,1))'         => 'rgba(0,0,0,1)',
+			' rgba(0,0,0,1)'         => 'rgba(0,0,0,1)',
+			' (rgb(0,0,0)'           => 'rgb(0,0,0)',
+			'rgba((0,0,0,1)'         => 'rgba(0,0,0,1)',
+			'rgb(100% 50% 0% / 50%)' => 'rgb(100% 50% 0% / 50%)',
+			'rgb(1.5, 2.5, 3.5)'     => 'rgb(1.5, 2.5, 3.5)',
 		);
 
 		foreach ( $invalid_color_values as $color_val => $expected_color_val ) {
 			$this->run_private_method( array( $frm_style, 'maybe_sanitize_rgba_value' ), array( &$color_val ) );
 			$this->assertSame( $expected_color_val, $color_val );
+		}
+	}
+
+	public function test_save_color_formats() {
+		$frm_style                  = new FrmStyle();
+		$values                     = array(
+			'fieldset_bg_color'   => 'hsla(30, 100%, 50%, 0.25)',
+			'border_color_active' => 'hsl(210.5, 75.25%, 40.5%)',
+			'submit_bg_color'     => 'rgb(65, 153, 253)',
+			'label_color'         => 'rgba(65,153,253,0.502)',
+			'text_color'          => 'rgb(100% 50% 0% / 50%)',
+		);
+		$style_id                   = $frm_style->save( (array) $frm_style->get_new() );
+		$_POST['frm_style_setting'] = array(
+			'post_title'   => 'Color formats regression',
+			'post_content' => $values,
+		);
+		$ids                        = $frm_style->update( $style_id );
+		unset( $_POST['frm_style_setting'] );
+		$this->assertCount( 1, $ids );
+		$this->assertIsInt( $ids[0] );
+		$saved  = ( new FrmStyle( $ids[0] ) )->get_one();
+		$output = FrmStylesHelper::get_settings_for_output( $saved );
+
+		foreach ( $values as $key => $color ) {
+			$this->assertSame( $color, $saved->post_content[ $key ], $key );
+			$this->assertSame( $color, $output[ $key ], $key );
 		}
 	}
 

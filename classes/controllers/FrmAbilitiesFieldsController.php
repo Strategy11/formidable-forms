@@ -430,6 +430,8 @@ class FrmAbilitiesFieldsController {
 			return new WP_Error( 'frm_no_update_data', __( 'No data provided to update.', 'formidable' ), array( 'status' => 400 ) );
 		}
 
+		$field_data = self::add_stored_values_for_cleaning( $field, $field_data );
+
 		$new_type      = ! empty( $field_data['type'] ) ? $field_data['type'] : $field->type;
 		$field_options = isset( $field_data['field_options'] ) && is_array( $field_data['field_options'] ) ? $field_data['field_options'] : (array) $field->field_options;
 		$checked       = self::check_form_select( $new_type, $field_options );
@@ -528,6 +530,10 @@ class FrmAbilitiesFieldsController {
 		$prepared            = self::apply_field_input( FrmFieldsHelper::setup_new_vars( $field['type'], $form_id ), $field );
 		$prepared['form_id'] = $form_id;
 
+		if ( ! FrmFieldPlacementHelper::is_allowed( $prepared['type'], $form_id, (int) ( $prepared['field_options']['in_section'] ?? 0 ) ) ) {
+			return new WP_Error( 'frm_invalid_field_placement', __( 'This field type cannot be placed in this section or repeater.', 'formidable' ), array( 'status' => 400 ) );
+		}
+
 		// The builder merges the raw input before this filter fires. Pro's
 		// FrmProField::create() relies on that to see repeat and create the
 		// repeater's child form. Input is applied again after the filter so
@@ -548,9 +554,32 @@ class FrmAbilitiesFieldsController {
 			$prepared['field_key'] = sanitize_title( $field['name'] );
 		}
 
-		$checked = self::check_form_select( $prepared['type'], (array) $prepared['field_options'] );
+		$prepared = self::clean_new_field_options( $prepared );
+		$checked  = self::check_form_select( $prepared['type'], (array) $prepared['field_options'] );
 
 		return is_wp_error( $checked ) ? $checked : $prepared;
+	}
+
+	/**
+	 * Run the field type's save cleaning on a new field.
+	 *
+	 * The builder saves a field through FrmField::update(), which applies
+	 * frm_clean_{type}_field_options_before_update. FrmField::create() has no
+	 * such hook, so without this a new field keeps its options exactly as sent.
+	 * The field ID is 0 because the field does not exist yet.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $prepared Prepared field data.
+	 *
+	 * @return array
+	 */
+	private static function clean_new_field_options( $prepared ) {
+		/**
+		 * @param array $prepared Field data.
+		 * @param int   $id       Field ID, 0 for a field that has not been created yet.
+		 */
+		return (array) apply_filters( 'frm_clean_' . $prepared['type'] . '_field_options_before_update', $prepared, 0 );
 	}
 
 	/**
@@ -786,6 +815,39 @@ class FrmAbilitiesFieldsController {
 	private static function merge_field_options_with_existing( $field, $field_data ) {
 		if ( isset( $field_data['field_options'] ) && is_array( $field_data['field_options'] ) ) {
 			$field_data['field_options'] = array_merge( (array) $field->field_options, $field_data['field_options'] );
+		}
+
+		return $field_data;
+	}
+
+	/**
+	 * Give an update the type, name and options the builder always sends, so FrmField::update() cleans it.
+	 *
+	 * FrmField::update() only applies frm_clean_{type}_field_options_before_update
+	 * when the values include a type, which a partial ability update does not.
+	 * Cleaners also read name and field_options, like the repeater one that renames
+	 * the child form, so those are filled from the stored field when missing.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $field      The stored field object.
+	 * @param array    $field_data Non-empty field data to update.
+	 *
+	 * @return array
+	 */
+	private static function add_stored_values_for_cleaning( $field, $field_data ) {
+		if ( ! empty( $field_data['type'] ) ) {
+			return $field_data;
+		}
+
+		$field_data['type'] = $field->type;
+
+		if ( ! isset( $field_data['name'] ) ) {
+			$field_data['name'] = $field->name;
+		}
+
+		if ( ! isset( $field_data['field_options'] ) ) {
+			$field_data['field_options'] = (array) $field->field_options;
 		}
 
 		return $field_data;
