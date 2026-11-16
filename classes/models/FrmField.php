@@ -23,6 +23,15 @@ class FrmField {
 	public static $transient_size = 200;
 
 	/**
+	 * Set by create_copy() so the next create() keeps the source placement.
+	 *
+	 * @since x.x
+	 *
+	 * @var bool
+	 */
+	private static $preserve_placement = false;
+
+	/**
 	 * @return array
 	 */
 	public static function field_selection() {
@@ -473,6 +482,10 @@ class FrmField {
 	public static function create( $values, $return = true ) {
 		global $wpdb, $frm_duplicate_ids;
 
+		// Read the copy flag first so a field created from a hook below is checked normally.
+		$preserve_placement       = self::$preserve_placement;
+		self::$preserve_placement = false;
+
 		$new_values              = array();
 		$key                     = $values['field_key'] ?? $values['name'];
 		$new_values['field_key'] = FrmAppHelper::get_unique_key( $key, $wpdb->prefix . 'frm_fields', 'field_key' );
@@ -501,6 +514,14 @@ class FrmField {
 		if ( isset( $values['id'] ) ) {
 			$frm_duplicate_ids[ $values['field_key'] ] = $new_values['field_key'];
 			$new_values                                = apply_filters( 'frm_duplicated_field', $new_values );
+		}
+
+		if ( ! $preserve_placement && ! FrmFieldPlacementHelper::is_allowed(
+			$new_values['type'] ?? '',
+			(int) $new_values['form_id'],
+			(int) ( $new_values['field_options']['in_section'] ?? 0 )
+		) ) {
+			return false;
 		}
 
 		self::preserve_format_option_backslashes( $new_values );
@@ -540,6 +561,25 @@ class FrmField {
 		}
 
 		return $new_id;
+	}
+
+	/**
+	 * Create a field copied from an existing one, as in a form or section duplicate or an XML import.
+	 *
+	 * The copy keeps the placement of its source even when the current rules would refuse a new
+	 * field there, so forms saved before a rule existed keep their layout. Callers that build a new
+	 * field from user input must use create() so the placement rules apply.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $values Field values, as passed to create().
+	 * @param bool  $return Whether to return the new field ID.
+	 *
+	 * @return false|int
+	 */
+	public static function create_copy( $values, $return = true ) {
+		self::$preserve_placement = true;
+		return self::create( $values, $return );
 	}
 
 	/**
@@ -736,7 +776,7 @@ class FrmField {
 			$values['description'] = FrmFieldsHelper::switch_field_ids( $values['description'] );
 
 			$values                                 = apply_filters( 'frm_duplicated_field', $values );
-			$new_id                                 = self::create( $values );
+			$new_id                                 = self::create_copy( $values );
 			$frm_duplicate_ids[ $field->id ]        = $new_id;
 			$frm_duplicate_ids[ $field->field_key ] = $new_id;
 			unset( $field );
@@ -784,6 +824,10 @@ class FrmField {
 				// Don't keep the old placeholder setting for hidden fields
 				$values['field_options']['clear_on_focus'] = 0;
 			}
+		}
+
+		if ( ! FrmFieldPlacementHelper::is_allowed_update( $id, $values ) ) {
+			return false;
 		}
 
 		// Serialize array values
@@ -899,13 +943,17 @@ class FrmField {
 	 */
 	public static function delete_form_transient( $form_id ) {
 		$form_id = absint( $form_id );
-		delete_transient( 'frm_form_fields_' . $form_id . 'excludeinclude' );
-		delete_transient( 'frm_form_fields_' . $form_id . 'includeinclude' );
-		delete_transient( 'frm_form_fields_' . $form_id . 'includeexclude' );
-		delete_transient( 'frm_form_fields_' . $form_id . 'excludeexclude' );
 
-		global $wpdb;
-		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->options . ' WHERE option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_' . $form_id . 'ex%', '_transient_frm_form_fields_' . $form_id . 'ex%', '_transient_timeout_frm_form_fields_' . $form_id . 'in%', '_transient_frm_form_fields_' . $form_id . 'in%' ) ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		if ( wp_using_ext_object_cache() || wp_installing() ) {
+			delete_transient( 'frm_form_fields_' . $form_id . 'excludeinclude' );
+			delete_transient( 'frm_form_fields_' . $form_id . 'includeinclude' );
+			delete_transient( 'frm_form_fields_' . $form_id . 'includeexclude' );
+			delete_transient( 'frm_form_fields_' . $form_id . 'excludeexclude' );
+		}
+
+		if ( ! wp_using_ext_object_cache() ) {
+			self::delete_chunked_form_transients( $form_id );
+		}
 
 		FrmDb::cache_delete_group( 'frm_field' );
 
@@ -913,6 +961,56 @@ class FrmField {
 
 		if ( $form && $form->parent_form_id && (int) $form->parent_form_id !== $form_id ) {
 			self::delete_form_transient( $form->parent_form_id );
+		}
+	}
+
+	/**
+	 * Find database-backed field transients together, including extra chunks for large forms.
+	 *
+	 * The LIKE prefixes are escaped so the underscores are matched literally.
+	 * Unescaped, the leading underscore is a wildcard and MySQL scans the whole options table.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $form_id Form ID.
+	 *
+	 * @return void
+	 */
+	private static function delete_chunked_form_transients( $form_id ) {
+		global $wpdb;
+
+		$base_name = 'frm_form_fields_' . $form_id;
+
+		$option_names = $wpdb->get_col(
+			$wpdb->prepare(
+				'SELECT option_name FROM %i WHERE option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s',
+				$wpdb->options,
+				$wpdb->esc_like( '_transient_timeout_' . $base_name . 'ex' ) . '%',
+				$wpdb->esc_like( '_transient_' . $base_name . 'ex' ) . '%',
+				$wpdb->esc_like( '_transient_timeout_' . $base_name . 'in' ) . '%',
+				$wpdb->esc_like( '_transient_' . $base_name . 'in' ) . '%'
+			)
+		);
+
+		$existing_options = array_fill_keys( $option_names, true );
+
+		foreach ( $option_names as $option_name ) {
+			if ( wp_installing() ) {
+				delete_option( $option_name );
+				wp_cache_delete( $option_name, 'options' );
+				continue;
+			}
+
+			if ( str_starts_with( $option_name, '_transient_timeout_' ) ) {
+				$value_option = '_transient_' . substr( $option_name, strlen( '_transient_timeout_' ) );
+
+				if ( ! isset( $existing_options[ $value_option ] ) ) {
+					delete_option( $option_name );
+				}
+				continue;
+			}
+
+			delete_transient( substr( $option_name, strlen( '_transient_' ) ) );
 		}
 	}
 

@@ -111,6 +111,59 @@ class test_FrmAbilitiesFieldsController extends FrmUnitTest {
 	}
 
 	/**
+	 * Choice options keyed by option text, array defaults and a NULL default are what Formidable
+	 * can store, so list-fields must not reject them, or one such field fails the whole form.
+	 *
+	 * @return void
+	 */
+	public function test_list_fields_accepts_string_keyed_options_and_array_default_values() {
+		$select_id  = FrmField::create(
+			array(
+				'form_id'       => $this->form->id,
+				'type'          => 'select',
+				'name'          => 'Location',
+				'default_value' => '',
+				'options'       => array(
+					'1'         => array(
+						'label' => '',
+						'value' => '',
+					),
+					'Asheville' => array(
+						'label' => 'Asheville',
+						'value' => 'asheville',
+					),
+					'other_1'   => 'Other',
+				),
+			)
+		);
+		$address_id = FrmField::create(
+			array(
+				'form_id'       => $this->form->id,
+				'type'          => 'address',
+				'name'          => 'Address',
+				'default_value' => array(
+					'line1' => '1 Main St',
+					'city'  => 'Asheville',
+				),
+			)
+		);
+		$text_id    = FrmField::create(
+			array(
+				'form_id' => $this->form->id,
+				'type'    => 'text',
+				'name'    => 'No default',
+			)
+		);
+
+		$listed = $this->execute( 'list-fields', array( 'form_id' => $this->form->id ) );
+
+		$this->assertNotWPError( $listed, 'list-fields should validate for string-keyed options, array default values and a NULL default.' );
+		$this->assertArrayHasKey( FrmField::getOne( $select_id )->field_key, $listed );
+		$this->assertArrayHasKey( FrmField::getOne( $address_id )->field_key, $listed );
+		$this->assertArrayHasKey( FrmField::getOne( $text_id )->field_key, $listed );
+	}
+
+	/**
 	 * @return void
 	 */
 	public function test_list_fields_requires_a_form_id() {

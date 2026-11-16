@@ -220,6 +220,7 @@ class FrmTransLiteActionsController {
 		$atts     = array(
 			'trigger'  => $atts['status'],
 			'entry_id' => $entry_id,
+			'payment'  => $atts['payment'] ?? null,
 		);
 
 		if ( ! isset( $atts['payment'] ) ) {
