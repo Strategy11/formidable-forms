@@ -730,6 +730,8 @@ class FrmAppController {
 		wp_register_script( 'formidable_settings', $plugin_url . '/js/admin/settings.js', array( 'wp-i18n' ), $version, true );
 		wp_set_script_translations( 'formidable_settings', 'formidable' );
 		wp_localize_script( 'formidable_settings', 'frmSettings', $settings_js_vars );
+		self::register_color_picker_script( $plugin_url, $version );
+		$frm_components_dependencies[] = 'formidable-color-picker';
 		wp_register_script( 'formidable-web-components', $plugin_url . '/js/formidable-web-components.js', $frm_components_dependencies, $version, true );
 
 		if ( self::should_show_floating_links() ) {
@@ -829,6 +831,31 @@ class FrmAppController {
 	}
 
 	/**
+	 * Register the shared block editor color picker script and style.
+	 *
+	 * The picker CSS ships in frm_admin.css, so the style handle has no file of its own.
+	 * Enqueue the formidable-color-picker style with the script on any page that uses the picker.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $plugin_url Plugin asset URL.
+	 * @param string $version    Plugin asset version.
+	 *
+	 * @return void
+	 */
+	private static function register_color_picker_script( $plugin_url, $version ) {
+		wp_register_style( 'formidable-color-picker', false, array( 'formidable-admin', 'wp-components' ), $version );
+		wp_register_script(
+			'formidable-color-picker',
+			$plugin_url . '/js/formidable-color-picker.js',
+			array( 'formidable_dom', 'wp-components', 'wp-element', 'wp-i18n' ),
+			$version,
+			true
+		);
+		wp_set_script_translations( 'formidable-color-picker', 'formidable' );
+	}
+
+	/**
 	 * @since 6.27
 	 *
 	 * @return array
@@ -851,7 +878,7 @@ class FrmAppController {
 
 		if ( FrmAppHelper::is_style_editor_page( 'edit' ) ) {
 			// We only need to load the color picker when editing styles.
-			$dependencies[] = 'wp-color-picker';
+			$dependencies[] = 'formidable-color-picker';
 		}
 
 		return $dependencies;
@@ -891,6 +918,7 @@ class FrmAppController {
 			return;
 		}
 
+		// Lite's disabled email color placeholders still use core's picker markup.
 		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_script( 'formidable_settings' );
 	}
@@ -1760,6 +1788,7 @@ class FrmAppController {
 			FrmProFormsController::enqueue_pro_web_components_script();
 		}
 
+		wp_enqueue_style( 'formidable-color-picker' );
 		wp_enqueue_script( 'formidable-web-components' );
 	}
 }

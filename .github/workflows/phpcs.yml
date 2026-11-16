@@ -41,5 +41,8 @@ jobs:
           CURRENT_PATHS=$(./vendor/bin/phpcs --config-show | grep 'installed_paths' | cut -d' ' -f2)
           ./vendor/bin/phpcs --config-set installed_paths "$CURRENT_PATHS,../../../phpcs-sniffs"
 
+      - name: Custom sniff fixtures
+        run: php phpcs-sniffs/tests/run.php
+
       - name: PHPCS check
         run: ./vendor/bin/phpcs --parallel=10 ./
