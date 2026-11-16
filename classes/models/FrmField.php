@@ -23,6 +23,15 @@ class FrmField {
 	public static $transient_size = 200;
 
 	/**
+	 * Set by create_copy() so the next create() keeps the source placement.
+	 *
+	 * @since x.x
+	 *
+	 * @var bool
+	 */
+	private static $preserve_placement = false;
+
+	/**
 	 * @return array
 	 */
 	public static function field_selection() {
@@ -473,6 +482,10 @@ class FrmField {
 	public static function create( $values, $return = true ) {
 		global $wpdb, $frm_duplicate_ids;
 
+		// Read the copy flag first so a field created from a hook below is checked normally.
+		$preserve_placement       = self::$preserve_placement;
+		self::$preserve_placement = false;
+
 		$new_values              = array();
 		$key                     = $values['field_key'] ?? $values['name'];
 		$new_values['field_key'] = FrmAppHelper::get_unique_key( $key, $wpdb->prefix . 'frm_fields', 'field_key' );
@@ -501,6 +514,14 @@ class FrmField {
 		if ( isset( $values['id'] ) ) {
 			$frm_duplicate_ids[ $values['field_key'] ] = $new_values['field_key'];
 			$new_values                                = apply_filters( 'frm_duplicated_field', $new_values );
+		}
+
+		if ( ! $preserve_placement && ! FrmFieldPlacementHelper::is_allowed(
+			$new_values['type'] ?? '',
+			(int) $new_values['form_id'],
+			(int) ( $new_values['field_options']['in_section'] ?? 0 )
+		) ) {
+			return false;
 		}
 
 		self::preserve_format_option_backslashes( $new_values );
@@ -540,6 +561,25 @@ class FrmField {
 		}
 
 		return $new_id;
+	}
+
+	/**
+	 * Create a field copied from an existing one, as in a form or section duplicate or an XML import.
+	 *
+	 * The copy keeps the placement of its source even when the current rules would refuse a new
+	 * field there, so forms saved before a rule existed keep their layout. Callers that build a new
+	 * field from user input must use create() so the placement rules apply.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $values Field values, as passed to create().
+	 * @param bool  $return Whether to return the new field ID.
+	 *
+	 * @return false|int
+	 */
+	public static function create_copy( $values, $return = true ) {
+		self::$preserve_placement = true;
+		return self::create( $values, $return );
 	}
 
 	/**
@@ -736,7 +776,7 @@ class FrmField {
 			$values['description'] = FrmFieldsHelper::switch_field_ids( $values['description'] );
 
 			$values                                 = apply_filters( 'frm_duplicated_field', $values );
-			$new_id                                 = self::create( $values );
+			$new_id                                 = self::create_copy( $values );
 			$frm_duplicate_ids[ $field->id ]        = $new_id;
 			$frm_duplicate_ids[ $field->field_key ] = $new_id;
 			unset( $field );
@@ -784,6 +824,10 @@ class FrmField {
 				// Don't keep the old placeholder setting for hidden fields
 				$values['field_options']['clear_on_focus'] = 0;
 			}
+		}
+
+		if ( ! FrmFieldPlacementHelper::is_allowed_update( $id, $values ) ) {
+			return false;
 		}
 
 		// Serialize array values
