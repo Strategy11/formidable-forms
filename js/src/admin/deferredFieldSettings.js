@@ -48,6 +48,35 @@ export function addFieldSettingsMetadata( field, fieldId, metadata ) {
 }
 
 /**
+ * Keep a setting change for a panel that has not loaded yet, so it is applied when the panel is inserted.
+ *
+ * @since x.x
+ * @param {string} fieldId Numeric field ID.
+ * @param {string} name    Setting name, without the field ID suffix.
+ * @param {string} id      ID of the matching input in the settings panel.
+ * @param {string} value   The new setting value.
+ * @return {boolean} True when the value was kept, false when the field has no deferred settings.
+ */
+export function setPendingFieldSetting( fieldId, name, id, value ) {
+	const metadata = document.getElementById( `frm_field_id_${ fieldId }` )?.querySelector( ':scope > .frm-deferred-settings-meta' );
+	if ( ! metadata ) {
+		return false;
+	}
+
+	const inputName = `field_options[${ name }_${ fieldId }]`;
+	let input = Array.from( metadata.querySelectorAll( 'input' ) ).find( candidate => candidate.name === inputName );
+	if ( ! input ) {
+		input = frmDom.tag( 'input' );
+		input.type = 'hidden';
+		input.name = inputName;
+		input.id = id;
+		metadata.append( input );
+	}
+	input.value = value;
+	return true;
+}
+
+/**
  * Cache server-rendered settings without parsing their HTML or creating controls.
  *
  * @since 7.0
