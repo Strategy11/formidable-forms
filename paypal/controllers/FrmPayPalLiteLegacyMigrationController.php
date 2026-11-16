@@ -24,7 +24,7 @@ class FrmPayPalLiteLegacyMigrationController {
 			return;
 		}
 
-		$blocker = FrmPayPalLiteLegacyMigrationHelper::get_migration_blocker( (int) $form_action->menu_order );
+		$blocker = FrmPayPalLiteLegacyMigrationHelper::get_migration_blocker( (int) $form_action->menu_order, $form_action->post_content );
 
 		include FrmPayPalLiteAppHelper::plugin_path() . 'views/settings/legacy-migration-notice.php';
 	}

@@ -9,8 +9,8 @@
 	actions.addEventListener( 'click', onMigrateLegacyClick );
 
 	/**
-	 * Convert a legacy PayPal action into a PayPal Commerce payment action, then reload the builder.
-	 * The reload matters: saving the form with the old settings still on the page would delete the new action.
+	 * Convert a legacy PayPal action into a PayPal Commerce payment action, then reload the page.
+	 * The reload matters. Saving the form with the old settings still on the page would delete the new action.
 	 *
 	 * @param {Event} event
 	 * @return {void}
@@ -22,36 +22,51 @@
 		}
 
 		const { __ } = wp.i18n;
-		const result = button.closest( '.frm-paypal-legacy-migration' ).querySelector( '.frm-paypal-migration-result' );
+		const notice = button.closest( '.frm-paypal-legacy-migration' );
+		const result = notice.querySelector( '.frm-paypal-migration-result' );
 		const body = new FormData();
+		const showError = message => {
+			button.disabled = false;
+			result.replaceChildren(
+				frmDom.tag( 'div', {
+					className: 'frm_error_style frm-mt-sm frm-mb-0',
+					text: message || __( 'The action could not be converted.', 'formidable' )
+				} )
+			);
+		};
 
 		body.append( 'action', 'frm_paypal_migrate_legacy_action' );
 		body.append( 'action_id', button.dataset.actionId );
 		body.append( 'nonce', frmGlobal.nonce );
 
 		button.disabled = true;
-		result.replaceChildren( frmDom.tag( 'p', { text: __( 'Converting…', 'formidable' ) } ) );
+		result.replaceChildren( frmDom.tag( 'p', { className: 'frm-mt-sm frm-mb-0', text: __( 'Converting…', 'formidable' ) } ) );
 
 		fetch( ajaxurl, { method: 'POST', body } )
 			.then( response => response.json() )
 			.then( response => {
 				if ( ! response.success ) {
-					button.disabled = false;
-					result.replaceChildren(
-						frmDom.tag( 'p', {
-							className: 'frm_error_style',
-							text: response.data?.message ?? __( 'The action could not be converted.', 'formidable' )
-						} )
-					);
+					showError( response.data?.message );
 					return;
 				}
 
-				const children = [ frmDom.tag( 'p', { text: __( 'Your PayPal Commerce action is ready and this legacy action is now off.', 'formidable' ) } ) ];
+				// Divs, not paragraphs, so the success message color is not replaced by the admin paragraph color.
+				const children = [
+					frmDom.tag( 'div', {
+						className: 'frm-mb-xs frm-font-semibold',
+						text: __( 'Converted to PayPal Commerce', 'formidable' )
+					} ),
+					frmDom.tag( 'div', {
+						className: 'frm-mb-sm',
+						text: __( 'Your PayPal Commerce action is ready and this legacy action is now off. Reload the page to see the new action.', 'formidable' )
+					} )
+				];
 
 				if ( response.data.notes.length ) {
-					children.push( frmDom.tag( 'p', { text: __( 'Review these settings on the new action:', 'formidable' ) } ) );
 					children.push(
+						frmDom.tag( 'div', { className: 'frm-mb-xs', text: __( 'Review these settings on the new action:', 'formidable' ) } ),
 						frmDom.tag( 'ul', {
+							className: 'frm-mt-0 frm-mb-sm frm-paypal-migration-notes',
 							children: response.data.notes.map( note => frmDom.tag( 'li', { text: note } ) )
 						} )
 					);
@@ -59,21 +74,18 @@
 
 				const reload = frmDom.tag( 'button', {
 					className: 'button frm-button-primary',
-					text: __( 'Reload the form builder', 'formidable' )
+					text: __( 'Reload the page', 'formidable' )
 				} );
 				reload.type = 'button';
 				reload.addEventListener( 'click', () => window.location.reload() );
 				children.push( reload );
 
+				notice.querySelector( '.frm-paypal-migration-intro' ).classList.add( 'frm_hidden' );
+				notice.classList.replace( 'frm_note_style', 'frm_updated_message' );
 				result.replaceChildren( ...children );
-				button.remove();
+				reload.focus();
 			} )
-			.catch( () => {
-				button.disabled = false;
-				result.replaceChildren(
-					frmDom.tag( 'p', { className: 'frm_error_style', text: __( 'The action could not be converted.', 'formidable' ) } )
-				);
-			} );
+			.catch( () => showError() );
 	}
 
 	function onLayoutChange() {

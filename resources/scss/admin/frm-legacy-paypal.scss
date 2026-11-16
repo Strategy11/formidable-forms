@@ -41,4 +41,14 @@
 	#postcustomstuff.frmpp_after_pay_rows:not(:has(.frmpp_after_pay_row)) {
 		display: none !important;
 	}
+
+	// Settings to review after converting to PayPal Commerce.
+	.frm-paypal-migration-notes {
+		list-style: disc;
+		padding-left: var(--gap-md);
+
+		li {
+			margin-bottom: var(--gap-2xs);
+		}
+	}
 }

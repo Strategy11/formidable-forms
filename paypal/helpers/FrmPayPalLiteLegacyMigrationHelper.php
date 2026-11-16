@@ -48,11 +48,12 @@ class FrmPayPalLiteLegacyMigrationHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param int $form_id The ID of the form the legacy action belongs to.
+	 * @param int          $form_id         The ID of the form the legacy action belongs to.
+	 * @param array|string $legacy_settings The legacy action settings, as an array or the saved JSON.
 	 *
 	 * @return string An empty string when the action can be migrated.
 	 */
-	public static function get_migration_blocker( $form_id ) {
+	public static function get_migration_blocker( $form_id, $legacy_settings = array() ) {
 		$connection_error = FrmTransLiteAppHelper::get_gateway_connection_error( 'paypal' );
 
 		if ( $connection_error ) {
@@ -63,7 +64,27 @@ class FrmPayPalLiteLegacyMigrationHelper {
 			return __( 'This form already has a payment action, and only one is allowed per form. Delete the existing payment action to convert this one.', 'formidable' );
 		}
 
-		return '';
+		return self::get_after_payment_blocker( self::get_settings_array( $legacy_settings ) );
+	}
+
+	/**
+	 * The payment action only runs After Payment rows with a Pro version that supports them,
+	 * so converting without one would silently stop the field updates.
+	 *
+	 * @param array $legacy_settings The legacy action settings.
+	 *
+	 * @return string An empty string when the After Payment rows can run after converting.
+	 */
+	private static function get_after_payment_blocker( $legacy_settings ) {
+		if ( ! self::convert_change_fields( $legacy_settings['change_field'] ?? array() ) || self::after_payment_is_supported() ) {
+			return '';
+		}
+
+		if ( FrmAppHelper::pro_is_installed() ) {
+			return __( 'This action changes fields after payment, which needs the latest version of Formidable Pro. Update Formidable Pro to convert this action.', 'formidable' );
+		}
+
+		return __( 'This action changes fields after payment, which needs Formidable Pro. Activate Formidable Pro to convert this action.', 'formidable' );
 	}
 
 	/**
@@ -82,8 +103,9 @@ class FrmPayPalLiteLegacyMigrationHelper {
 			return new WP_Error( 'frm_paypal_invalid_action', __( 'That legacy PayPal action could not be found.', 'formidable' ) );
 		}
 
-		$form_id = (int) $legacy_action->menu_order;
-		$blocker = self::get_migration_blocker( $form_id );
+		$form_id         = (int) $legacy_action->menu_order;
+		$legacy_settings = self::get_settings_array( $legacy_action->post_content );
+		$blocker         = self::get_migration_blocker( $form_id, $legacy_settings );
 
 		if ( $blocker ) {
 			return new WP_Error( 'frm_paypal_migration_blocked', $blocker );
@@ -95,10 +117,8 @@ class FrmPayPalLiteLegacyMigrationHelper {
 			return new WP_Error( 'frm_paypal_no_payment_action', __( 'The payment action is not available.', 'formidable' ) );
 		}
 
-		$legacy_settings = FrmAppHelper::maybe_json_decode( $legacy_action->post_content );
-		$legacy_settings = is_array( $legacy_settings ) ? $legacy_settings : array();
-		$notes           = array();
-		$new_action      = $payment_control->prepare_new( $form_id );
+		$notes      = array();
+		$new_action = $payment_control->prepare_new( $form_id );
 
 		$new_action->post_title   = $legacy_action->post_title;
 		$new_action->post_content = array_merge( $new_action->post_content, self::convert_settings( $legacy_settings, $form_id, $notes ) );
@@ -181,9 +201,11 @@ class FrmPayPalLiteLegacyMigrationHelper {
 			$settings = array_merge( $settings, self::convert_recurring_settings( $legacy, $item_name, $form_id, $notes ) );
 		}
 
-		if ( ! empty( $legacy['change_field'] ) && is_array( $legacy['change_field'] ) ) {
-			$settings['change_field'] = array_values( $legacy['change_field'] );
-			$notes[]                  = __( 'PayPal Commerce does not support the "After Payment" field updates, so they no longer run.', 'formidable' );
+		$change_fields = self::convert_change_fields( $legacy['change_field'] ?? array() );
+
+		if ( $change_fields ) {
+			// get_migration_blocker() stops the conversion when nothing can run these rows.
+			$settings['change_field'] = $change_fields;
 		}
 
 		if ( ! empty( $legacy['business_email'] ) ) {
@@ -215,6 +237,59 @@ class FrmPayPalLiteLegacyMigrationHelper {
 		}
 
 		return (string) ( $legacy['paypal_amount'] ?? '' );
+	}
+
+	/**
+	 * Saved actions hold their settings as JSON. Actions loaded for the form settings page hold an array.
+	 *
+	 * @param array|string $settings The legacy action settings.
+	 *
+	 * @return array
+	 */
+	private static function get_settings_array( $settings ) {
+		$settings = FrmAppHelper::maybe_json_decode( $settings );
+		return is_array( $settings ) ? $settings : array();
+	}
+
+	/**
+	 * Legacy "After Payment" rows use the same id, status and value keys as the payment action.
+	 * The legacy statuses, Completed and Failed, both exist in the payment action, so only
+	 * incomplete rows are dropped.
+	 *
+	 * @param array $change_fields The legacy After Payment rows, keyed by row number.
+	 *
+	 * @return array<int, array{id: int, status: string, value: string}>
+	 */
+	private static function convert_change_fields( $change_fields ) {
+		if ( ! is_array( $change_fields ) ) {
+			return array();
+		}
+
+		$rows = array();
+
+		foreach ( $change_fields as $row ) {
+			if ( ! is_array( $row ) || empty( $row['id'] ) || ! in_array( $row['status'] ?? '', array( 'complete', 'failed' ), true ) ) {
+				continue;
+			}
+
+			$rows[] = array(
+				'id'     => absint( $row['id'] ),
+				'status' => $row['status'],
+				'value'  => (string) ( $row['value'] ?? '' ),
+			);
+		}
+
+		return $rows;
+	}
+
+	/**
+	 * Pro runs the After Payment rows of the payment action. While the Stripe add-on is active,
+	 * its own payment action runs them instead.
+	 *
+	 * @return bool
+	 */
+	private static function after_payment_is_supported() {
+		return is_callable( 'FrmProTransLiteController::change_fields_after_payment' ) || class_exists( 'FrmTransActionsController' );
 	}
 
 	/**

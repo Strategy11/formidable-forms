@@ -65,6 +65,99 @@ class test_FrmPayPalLiteLegacyMigration extends FrmUnitTest {
 		$this->assertCount( 1, $notes, 'The donation conversion is disclosed.' );
 	}
 
+	public function test_after_payment_rows_are_copied() {
+		$notes = array();
+		$value = FrmPayPalLiteLegacyMigrationHelper::convert_settings(
+			array(
+				'paypal_type'   => '_xclick',
+				'paypal_amount' => '5',
+				'change_field'  => array(
+					3 => array(
+						'id'     => '12',
+						'status' => 'complete',
+						'value'  => 'Paid [25]',
+					),
+					5 => array(
+						'id'     => '13',
+						'status' => 'failed',
+						'value'  => 'Failed',
+					),
+					7 => array(
+						'id'     => '',
+						'status' => 'complete',
+						'value'  => 'No field',
+					),
+					8 => array(
+						'id'     => '14',
+						'status' => '',
+						'value'  => 'No status',
+					),
+				),
+			),
+			1,
+			$notes
+		);
+		$this->assertSame(
+			array(
+				array(
+					'id'     => 12,
+					'status' => 'complete',
+					'value'  => 'Paid [25]',
+				),
+				array(
+					'id'     => 13,
+					'status' => 'failed',
+					'value'  => 'Failed',
+				),
+			),
+			$value['change_field'],
+			'Complete rows are copied with their statuses and shortcodes, and incomplete rows are dropped.'
+		);
+	}
+
+	public function test_missing_after_payment_rows_are_not_added() {
+		$notes = array();
+		$value = FrmPayPalLiteLegacyMigrationHelper::convert_settings(
+			array(
+				'paypal_type'  => '_xclick',
+				'change_field' => array(
+					array(
+						'id'     => '',
+						'status' => '',
+						'value'  => '',
+					),
+				),
+			),
+			1,
+			$notes
+		);
+		$this->assertArrayNotHasKey( 'change_field', $value, 'Empty rows add no After Payment setting.' );
+		$this->assertSame( array(), $notes, 'Empty rows add no notes.' );
+	}
+
+	public function test_after_payment_rows_need_a_supporting_pro_version() {
+		$this->assertFalse( is_callable( 'FrmProTransLiteController::change_fields_after_payment' ), 'This test needs Pro without After Payment support.' );
+
+		$method = array( 'FrmPayPalLiteLegacyMigrationHelper', 'get_after_payment_blocker' );
+		$rows   = array(
+			'change_field' => array(
+				array(
+					'id'     => 12,
+					'status' => 'complete',
+					'value'  => 'Paid',
+				),
+			),
+		);
+
+		$this->assertSame( '', $this->run_private_method( $method, array( array() ) ), 'Actions without After Payment rows can always convert.' );
+		$this->assertStringContainsString( 'Activate Formidable Pro', $this->run_private_method( $method, array( $rows ) ), 'Without Pro, the conversion is blocked.' );
+
+		add_filter( 'frm_pro_installed', '__return_true' );
+		$blocker = $this->run_private_method( $method, array( $rows ) );
+		remove_filter( 'frm_pro_installed', '__return_true' );
+		$this->assertStringContainsString( 'Update Formidable Pro', $blocker, 'With an outdated Pro, the conversion asks for an update.' );
+	}
+
 	public function test_invalid_actions_are_rejected() {
 		$result = FrmPayPalLiteLegacyMigrationHelper::migrate( 0 );
 		$this->assertWPError( $result, 'Missing actions are rejected before conversion.' );
