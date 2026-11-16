@@ -327,7 +327,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @param string $value
 	 */
 	private function is_a_valid_color( $value ) {
-		return $this->run_private_method( array( 'FrmAppHelper', 'is_a_valid_color' ), array( $value ) );
+		return FrmAppHelper::allow_style( false, '--primary-700:' . $value );
 	}
 
 	public function test_remove_get_action() {

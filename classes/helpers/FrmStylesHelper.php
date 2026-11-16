@@ -231,49 +231,155 @@ class FrmStylesHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param string $color Color setting value. This could be hex or rgb.
+	 * @param string $color Hex, RGB or HSL color setting value.
 	 *
 	 * @return string RGB value without the rgb() wrapper.
 	 */
 	public static function hex2rgb( $color ) {
-		$rgb = str_starts_with( $color, 'rgb' ) ? self::get_rgb_array_from_rgb( $color ) : self::get_rgb_array_from_hex( $color );
-		return implode( ',', $rgb );
+		$channels = self::get_color_channels( $color );
+		return $channels ? implode( ',', array_slice( $channels, 0, 3 ) ) : '0,0,0';
 	}
 
 	/**
-	 * Remove the rgb()/rgba() wrapper from a RGB color and return its R, G and B values as an array.
+	 * Parse the color formats supported by the styler.
 	 *
-	 * @since 6.8.3
+	 * @since x.x
 	 *
-	 * @param string $rgb    RGB value including the rgb() or rgba() wrapper.
+	 * @param string $color Hex, RGB or HSL color value.
 	 *
-	 * @return array<string> including three numeric values for R, G, and B.
+	 * @return array Numeric red, green, blue and alpha channels, or an empty array for invalid input.
 	 */
-	private static function get_rgb_array_from_rgb( $rgb ) {
-		$rgb = str_replace( array( 'rgb(', 'rgba(', ')' ), '', $rgb );
-		$rgb = explode( ',', $rgb );
+	private static function get_color_channels( $color ) {
+		$color = strtolower( trim( $color ) );
 
-		if ( 4 === count( $rgb ) ) {
-			// Drop the alpha. The function is expected to only return r,g,b with no alpha.
-			array_pop( $rgb );
+		if ( 'transparent' === $color ) {
+			return array( 0, 0, 0, 0 );
 		}
 
-		return $rgb;
+		if ( preg_match( '/^#?(?:[a-f0-9]{3,4}|[a-f0-9]{6}|[a-f0-9]{8})$/D', $color ) ) {
+			return self::get_hex_color_channels( $color );
+		}
+
+		if ( ! preg_match( '/^(rgba?|hsla?)\(\s*([^()]+)\s*\)$/D', $color, $matches ) ) {
+			return array();
+		}
+
+		$separator       = str_contains( $matches[2], ',' ) ? '\s*,\s*' : '\s+';
+		$alpha_separator = str_contains( $matches[2], ',' ) ? '\s*,\s*' : '\s*\/\s*';
+		$component       = '[^,\/\s]+';
+
+		if ( ! preg_match( '/^' . $component . $separator . $component . $separator . $component . '(?:' . $alpha_separator . $component . ')?$/D', trim( $matches[2] ) ) ) {
+			return array();
+		}
+
+		$is_hsl = str_starts_with( $matches[1], 'hsl' );
+		$parts  = preg_split( '/\s*[,\/]\s*|\s+/', trim( $matches[2] ) );
+
+		if ( ! is_array( $parts ) || count( $parts ) < 3 || count( $parts ) > 4 ) {
+			return array();
+		}
+
+		foreach ( $parts as $index => $part ) {
+			$unit = $is_hsl && 0 === $index ? '(?:deg|grad|rad|turn)?' : '%?';
+
+			if ( ! preg_match( '/^[+-]?(?:[0-9]+(?:\.[0-9]+)?|\.[0-9]+)' . $unit . '$/D', $part ) ) {
+				return array();
+			}
+
+			if ( $is_hsl && ( 1 === $index || 2 === $index ) && ! str_ends_with( $part, '%' ) ) {
+				return array();
+			}
+		}
+
+		$alpha = isset( $parts[3] ) ? (float) $parts[3] : 1;
+
+		if ( isset( $parts[3] ) && str_ends_with( $parts[3], '%' ) ) {
+			$alpha /= 100;
+		}
+
+		$alpha = max( 0, min( 1, $alpha ) );
+
+		if ( $is_hsl ) {
+			$hex = self::hsl_to_hex( $color );
+			return array( hexdec( substr( $hex, 0, 2 ) ), hexdec( substr( $hex, 2, 2 ) ), hexdec( substr( $hex, 4, 2 ) ), $alpha );
+		}
+
+		$channels = array();
+
+		for ( $index = 0; $index < 3; $index++ ) {
+			$value = (float) $parts[ $index ];
+
+			if ( str_ends_with( $parts[ $index ], '%' ) ) {
+				$value = $value * 255 / 100;
+			}
+
+			$channels[] = (int) round( max( 0, min( 255, $value ) ) );
+		}
+
+		$channels[] = $alpha;
+		return $channels;
 	}
 
 	/**
-	 * Get the R, G, and B array values from a Hex color code.
+	 * Expand a validated hex color into numeric channels.
 	 *
-	 * @since 6.8.3
+	 * @since x.x
 	 *
-	 * @param string $hex    A hex color string.
+	 * @param string $color Hex color with an optional hash.
 	 *
-	 * @return array<string> Including three numeric values for R, G, and B.
+	 * @return array Red, green, blue and alpha channels.
 	 */
-	private static function get_rgb_array_from_hex( $hex ) {
-		$hex               = str_replace( '#', '', $hex );
-		list( $r, $g, $b ) = sscanf( $hex, '%02x%02x%02x' );
-		return array( $r, $g, $b );
+	private static function get_hex_color_channels( $color ) {
+		$hex = ltrim( $color, '#' );
+
+		if ( strlen( $hex ) < 5 ) {
+			$hex = preg_replace( '/./', '$0$0', $hex );
+		}
+
+		$channels    = array_map( 'hexdec', str_split( $hex, 2 ) );
+		$channels[3] = isset( $channels[3] ) ? $channels[3] / 255 : 1;
+		return $channels;
+	}
+
+	/**
+	 * Check whether a value is a supported color without accepting CSS declarations.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $color Hex, RGB or HSL color value.
+	 *
+	 * @return bool
+	 */
+	public static function is_valid_color( $color ) {
+		return (bool) self::get_color_channels( $color );
+	}
+
+	/**
+	 * Read opacity consistently across the supported color formats.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $color Hex, RGB or HSL color value.
+	 *
+	 * @return float|int Opacity, defaulting to opaque for unsupported colors.
+	 */
+	public static function get_color_alpha( $color ) {
+		$channels = self::get_color_channels( $color );
+		return $channels ? $channels[3] : 1;
+	}
+
+	/**
+	 * Restore the hash only for a bare hexadecimal color setting.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $color Saved color value.
+	 *
+	 * @return string CSS color value.
+	 */
+	public static function add_color_hash_if_needed( $color ) {
+		$color = trim( $color );
+		return self::is_hex( $color ) ? '#' . $color : $color;
 	}
 
 	/**
@@ -290,48 +396,37 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * @since 6.0
-	 *
-	 * @param string $rgba Color setting value. This could be hex or rgb.
-	 *
-	 * @return string Hex color value.
-	 */
-	private static function rgb_to_hex( $rgba ) {
-		if ( str_starts_with( $rgba, '#' ) ) {
-			// Color is already hex.
-			return $rgba;
-		}
-		preg_match( '/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i', $rgba, $by_color );
-		return sprintf( '%02x%02x%02x', $by_color[1], $by_color[2], $by_color[3] );
-	}
-
-	/**
 	 * @since 6.8
 	 *
 	 * @param string $hsl
 	 *
-	 * @return string|null Null if it fails to parse the HSL string.
+	 * @return string Hex value of a validated HSL color.
 	 */
 	private static function hsl_to_hex( $hsl ) {
-		// Convert hsla to hsl.
-		$hsl = preg_replace( '/hsla\((\d+),\s*([\d.]+)%,\s*([\d.]+)%,\s*([\d.]+)\)/', 'hsl($1, $2%, $3%)', $hsl );
+		$opening_brace = strpos( $hsl, '(' );
 
-		// Extract HSL components from the color string.
-		preg_match( '/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/', $hsl, $matches );
-
-		if ( count( $matches ) !== 4 ) {
-			// Invalid HSL string format.
-			return null;
+		if ( false === $opening_brace ) {
+			return '';
 		}
 
-		// Extract HSL values.
-		$h = (int) $matches[1];
-		$s = (int) $matches[2] / 100;
-		$l = (int) $matches[3] / 100;
+		$parts = preg_split( '/\s*[,\/]\s*|\s+/', trim( substr( $hsl, $opening_brace + 1 ), " \t\n\r\0\x0B)" ) );
+		$h     = (float) $parts[0];
+
+		if ( str_ends_with( $parts[0], 'grad' ) ) {
+			$h *= 0.9;
+		} elseif ( str_ends_with( $parts[0], 'rad' ) ) {
+			$h = rad2deg( $h );
+		} elseif ( str_ends_with( $parts[0], 'turn' ) ) {
+			$h *= 360;
+		}
+
+		$h = fmod( fmod( $h, 360 ) + 360, 360 );
+		$s = max( 0, min( 100, (float) $parts[1] ) ) / 100;
+		$l = max( 0, min( 100, (float) $parts[2] ) ) / 100;
 
 		// Calculate RGB values.
 		$c = ( 1 - abs( 2 * $l - 1 ) ) * $s;
-		$x = $c * ( 1 - abs( ( (int) ( $h / 60 ) % 2 ) - 1 ) );
+		$x = $c * ( 1 - abs( fmod( $h / 60, 2 ) - 1 ) );
 		$m = $l - $c / 2;
 		$r = 0;
 		$g = 0;
@@ -375,36 +470,25 @@ class FrmStylesHelper {
 	 * @return string
 	 */
 	public static function adjust_brightness( $hex, $steps ) {
-		$steps = max( - 255, min( 255, $steps ) );
+		$steps    = max( - 255, min( 255, $steps ) );
+		$channels = self::get_color_channels( $hex );
 
-		if ( str_starts_with( $hex, 'rgba(' ) ) {
-			$rgba                   = str_replace( ')', '', str_replace( 'rgba(', '', $hex ) );
-			list ( $r, $g, $b, $a ) = array_map( 'trim', explode( ',', $rgba ) );
-			$r                      = max( 0, min( 255, $r + $steps ) );
-			$g                      = max( 0, min( 255, $g + $steps ) );
-			$b                      = max( 0, min( 255, $b + $steps ) );
-			return 'rgba(' . $r . ',' . $g . ',' . $b . ',' . $a . ')';
+		if ( ! $channels ) {
+			return $hex;
 		}
 
-		// Normalize into a six character long hex string
-		$hex = str_replace( '#', '', $hex );
-		self::fill_hex( $hex );
+		$alpha = array_pop( $channels );
 
-		// Split into three parts: R, G and B
-		$color_parts = str_split( $hex, 2 );
-		$return      = '#';
+		foreach ( $channels as &$channel ) {
+			$channel = max( 0, min( 255, $channel + $steps ) );
+		}
+		unset( $channel );
 
-		foreach ( $color_parts as $color ) {
-			// Convert to decimal.
-			$color = hexdec( $color );
-			// Adjust color.
-			$color = max( 0, min( 255, $color + $steps ) );
-
-			// Make two char hex code.
-			$return .= str_pad( dechex( $color ), 2, '0', STR_PAD_LEFT );
+		if ( $alpha < 1 || preg_match( '/^rgba\(/i', trim( $hex ) ) ) {
+			return 'rgba(' . implode( ',', $channels ) . ',' . round( $alpha, 3 ) . ')';
 		}
 
-		return $return;
+		return '#' . sprintf( '%02x%02x%02x', $channels[0], $channels[1], $channels[2] );
 	}
 
 	/**
@@ -415,53 +499,15 @@ class FrmStylesHelper {
 	 * @return float|int Color brightness, or 0 for invalid input.
 	 */
 	public static function get_color_brightness( $color ) {
-		if ( str_starts_with( $color, 'rgb' ) ) {
-			$color = self::rgb_to_hex( $color );
-		}
+		$channels = self::get_color_channels( $color );
 
-		if ( str_starts_with( $color, 'hsl' ) ) {
-			$hsl_to_hex = self::hsl_to_hex( $color );
-
-			if ( is_null( $hsl_to_hex ) ) {
-				// Fallback if we cannot convert the HSL value.
-				return 0;
-			}
-
-			$color = $hsl_to_hex;
-		}
-
-		if ( preg_match( '/^#?[a-fA-F0-9]{8}$/D', $color ) ) {
-			$color = substr( ltrim( $color, '#' ), 0, 6 );
-		}
-
-		$color = sanitize_hex_color_no_hash( $color );
-
-		if ( ! $color ) {
+		if ( ! $channels ) {
 			return 0;
 		}
 
-		self::fill_hex( $color );
-
-		$c_r = hexdec( substr( $color, 0, 2 ) );
-		$c_g = hexdec( substr( $color, 2, 2 ) );
-		$c_b = hexdec( substr( $color, 4, 2 ) );
+		list( $c_r, $c_g, $c_b ) = $channels;
 
 		return ( ( $c_r * 299 ) + ( $c_g * 587 ) + ( $c_b * 114 ) ) / 1000;
-	}
-
-	/**
-	 * Change a 3 character hex color to a 6 character one.
-	 *
-	 * @since 6.0
-	 *
-	 * @param string $color Color value, passed by reference.
-	 *
-	 * @return void
-	 */
-	private static function fill_hex( &$color ) {
-		if ( 3 === strlen( $color ) ) {
-			$color = $color[0] . $color[0] . $color[1] . $color[1] . $color[2] . $color[2];
-		}
 	}
 
 	/**
@@ -967,17 +1013,12 @@ class FrmStylesHelper {
 	 */
 	private static function get_color_output( $default, &$color ) {
 		$color = trim( $color );
-
-		if ( ! $color ) {
-			$color = $default;
-		} elseif ( ! str_contains( $color, '#' ) && self::is_hex( $color ) ) {
-			$color = '#' . $color;
-		}
+		$color = $color ? self::add_color_hash_if_needed( $color ) : $default;
 	}
 
 	/**
 	 * If a color looks like a hex code without the #, prepend the #.
-	 * A color looks like a hex code if it does not contain the substrings "rgb", "rgba", "hsl", "hsla", or "hwb".
+	 * Only hexadecimal digits with a supported color length are considered hex.
 	 *
 	 * @since 6.8
 	 *
@@ -986,21 +1027,7 @@ class FrmStylesHelper {
 	 * @return bool
 	 */
 	private static function is_hex( $color ) {
-		$non_hex_substrings = array(
-			'rgb(',
-			'rgba(',
-			'hsl(',
-			'hsla(',
-			'hwb(',
-		);
-
-		foreach ( $non_hex_substrings as $substring ) {
-			if ( str_contains( $color, $substring ) ) {
-				return false;
-			}
-		}
-
-		return true;
+		return (bool) preg_match( '/^(?:[a-f0-9]{3,4}|[a-f0-9]{6}|[a-f0-9]{8})$/iD', $color );
 	}
 
 	/**
