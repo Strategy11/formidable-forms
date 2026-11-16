@@ -315,7 +315,8 @@ class FrmAbilitiesPaymentsController {
 			return new WP_Error( 'frm_payments_missing_id', __( 'A payment ID is required.', 'formidable' ), array( 'status' => 400 ) );
 		}
 
-		$payment = ( new FrmTransLitePayment() )->get_one( absint( $input['id'] ) );
+		// Without a gateway the table does not exist yet, so there is nothing to find.
+		$payment = FrmTransLiteAppHelper::payments_table_exists() ? ( new FrmTransLitePayment() )->get_one( absint( $input['id'] ) ) : null;
 
 		if ( ! $payment ) {
 			return new WP_Error( 'frm_payment_not_found', __( 'No payment was found with that ID.', 'formidable' ), array( 'status' => 404 ) );

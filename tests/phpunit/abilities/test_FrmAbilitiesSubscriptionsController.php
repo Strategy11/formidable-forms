@@ -165,6 +165,35 @@ class test_FrmAbilitiesSubscriptionsController extends FrmUnitTest {
 	}
 
 	/**
+	 * Get, delete and refund/cancel all look the subscription up first. Without the
+	 * frm_subscriptions table that lookup must report not found without querying it.
+	 *
+	 * @return void
+	 */
+	public function test_get_subscription_is_not_found_when_the_table_is_missing() {
+		global $wpdb;
+
+		delete_option( ( new FrmTransLiteDb() )->db_opt_name );
+
+		$missing_table = function ( $query ) use ( $wpdb ) {
+			return str_replace( $wpdb->prefix . 'frm_subscriptions', $wpdb->prefix . 'frm_missing_subscriptions', $query );
+		};
+		add_filter( 'query', $missing_table );
+
+		$suppress         = $wpdb->suppress_errors( true );
+		$wpdb->last_error = '';
+		$fetched          = $this->execute( 'get-subscription', array( 'id' => 1 ) );
+		$last_error       = $wpdb->last_error;
+		$wpdb->suppress_errors( $suppress );
+
+		remove_filter( 'query', $missing_table );
+
+		$this->assertWPError( $fetched );
+		$this->assertSame( 'frm_subscription_not_found', $fetched->get_error_code() );
+		$this->assertSame( '', $last_error, 'Getting a subscription should not query a table that does not exist.' );
+	}
+
+	/**
 	 * @return void
 	 */
 	public function test_list_subscriptions_filters_by_form() {

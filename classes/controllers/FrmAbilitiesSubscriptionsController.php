@@ -315,7 +315,8 @@ class FrmAbilitiesSubscriptionsController {
 			return new WP_Error( 'frm_subscriptions_missing_id', __( 'A subscription ID is required.', 'formidable' ), array( 'status' => 400 ) );
 		}
 
-		$subscription = ( new FrmTransLiteSubscription() )->get_one( absint( $input['id'] ) );
+		// Without a gateway the table does not exist yet, so there is nothing to find.
+		$subscription = FrmTransLiteAppHelper::payments_table_exists() ? ( new FrmTransLiteSubscription() )->get_one( absint( $input['id'] ) ) : null;
 
 		if ( ! $subscription ) {
 			return new WP_Error( 'frm_subscription_not_found', __( 'No subscription was found with that ID.', 'formidable' ), array( 'status' => 404 ) );

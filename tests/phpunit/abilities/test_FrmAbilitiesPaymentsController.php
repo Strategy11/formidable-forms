@@ -165,6 +165,35 @@ class test_FrmAbilitiesPaymentsController extends FrmUnitTest {
 	}
 
 	/**
+	 * Get, delete and refund/cancel all look the payment up first. Without the
+	 * frm_payments table that lookup must report not found without querying it.
+	 *
+	 * @return void
+	 */
+	public function test_get_payment_is_not_found_when_the_table_is_missing() {
+		global $wpdb;
+
+		delete_option( ( new FrmTransLiteDb() )->db_opt_name );
+
+		$missing_table = function ( $query ) use ( $wpdb ) {
+			return str_replace( $wpdb->prefix . 'frm_payments', $wpdb->prefix . 'frm_missing_payments', $query );
+		};
+		add_filter( 'query', $missing_table );
+
+		$suppress         = $wpdb->suppress_errors( true );
+		$wpdb->last_error = '';
+		$fetched          = $this->execute( 'get-payment', array( 'id' => 1 ) );
+		$last_error       = $wpdb->last_error;
+		$wpdb->suppress_errors( $suppress );
+
+		remove_filter( 'query', $missing_table );
+
+		$this->assertWPError( $fetched );
+		$this->assertSame( 'frm_payment_not_found', $fetched->get_error_code() );
+		$this->assertSame( '', $last_error, 'Getting a payment should not query a table that does not exist.' );
+	}
+
+	/**
 	 * @return void
 	 */
 	public function test_list_payments_filters_by_form() {
