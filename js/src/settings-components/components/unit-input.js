@@ -9,6 +9,7 @@ import { documentOn } from 'core/utils';
  * @return {void}
  */
 export function setupUnitInputHandlers() {
+	documentOn( 'input', '.frm-unit-input .frm-unit-input-control', onUnitInputChange );
 	documentOn( 'change', '.frm-unit-input .frm-unit-input-control', onUnitInputChange );
 	documentOn( 'change', '.frm-unit-input select', onUnitInputChange );
 }
@@ -32,6 +33,8 @@ function onUnitInputChange( event ) {
 
 	// Update the actual field value
 	const inputValue = control.value.trim();
-	unitInput.querySelector( 'input[type="hidden"]' ).value = '' !== inputValue ? inputValue + unit : '';
+	const input = unitInput.querySelector( 'input[type="hidden"]' );
+	input.value = '' !== inputValue ? inputValue + unit : '';
+	input.dispatchEvent( new Event( 'input', { bubbles: true } ) );
 }
 
