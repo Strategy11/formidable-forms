@@ -875,7 +875,7 @@ class FrmXMLHelper {
 			$f = self::maybe_import_images_for_options( $f );
 		}
 
-		$new_id = FrmField::create( $f );
+		$new_id = FrmField::create_copy( $f );
 
 		if ( ! $new_id ) {
 			return;
