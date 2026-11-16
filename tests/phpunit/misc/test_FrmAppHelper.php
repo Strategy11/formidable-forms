@@ -522,6 +522,22 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertNotSame( $super_long_form_key, $unique_key );
 	}
 
+	public function test_get_unique_key_increments_for_truncated_long_key() {
+		$table_name = 'frm_forms';
+		$column     = 'form_key';
+		$long_key   = str_repeat( 'a', 75 );
+		$truncated  = substr( $long_key, 0, 60 );
+
+		$this->factory->form->create( array( 'form_key' => $long_key ) );
+
+		$first = FrmAppHelper::get_unique_key( $long_key, $table_name, $column );
+		$this->assertSame( $truncated . '2', $first );
+		$this->factory->form->create( array( 'form_key' => $first ) );
+
+		$second = FrmAppHelper::get_unique_key( $long_key, $table_name, $column );
+		$this->assertSame( $truncated . '3', $second, 'The suffix should skip keys already created from the truncated key.' );
+	}
+
 	private function add_field_to_form( $form_id, $field_key ) {
 		$type = 'text';
 		$this->factory->field->create( compact( 'type', 'form_id', 'field_key' ) );
