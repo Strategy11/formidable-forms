@@ -302,6 +302,11 @@ class test_FrmFieldValidate extends FrmUnitTest {
 			'http://localhost/path',
 			'https://xn--mller-kva.de',
 			'https://a.b/ü',
+			'https://a.my_host.com',
+			'https://my_host.example.com',
+			'https://_dmarc.example.com',
+			'https://example.com_/path',
+			'http://dev_site.local:8080/path',
 		);
 
 		$should_fail = array(
@@ -391,8 +396,8 @@ class test_FrmFieldValidate extends FrmUnitTest {
 			$contents = file_get_contents( $file );
 			$name     = basename( $file );
 
-			$this->assertStringContainsString( '[\da-z\.-]', $contents, 'The default ASCII-only host class is missing from ' . $name );
-			$this->assertStringContainsString( '[\da-z\u0080-\u{10FFFF}\.-]', $contents, 'The international host class is missing from ' . $name );
+			$this->assertStringContainsString( '[\da-z_\.-]', $contents, 'The default ASCII-only host class is missing from ' . $name );
+			$this->assertStringContainsString( '[\da-z_\u0080-\u{10FFFF}\.-]', $contents, 'The international host class is missing from ' . $name );
 			$this->assertStringNotContainsString( '\x80-\xff', $contents, 'The PHP byte range was copied into ' . $name . '. That rejects Cyrillic and CJK hosts.' );
 			$this->assertStringContainsString( 'data-intl-domains', $contents, 'The data-intl-domains check is missing from ' . $name );
 			$this->assertSame( 2, substr_count( $contents, '(?=[\/?#:]|$)' ), 'The host end anchor is missing from a pattern in ' . $name );
