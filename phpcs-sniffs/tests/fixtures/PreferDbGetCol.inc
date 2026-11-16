@@ -1,0 +1,10 @@
+<?php
+$a = FrmDb::get_var( 'frm_fields', $where, 'id', $args, '', 'col' );
+$b = wp_list_pluck( FrmDb::get_results( 'frm_fields', $where, 'id' ), 'id' );
+$c = wp_list_pluck( FrmDb::get_results( 'frm_fields', $where, '*' ), 'id' );
+$d = wp_list_pluck( FrmDb::get_results( 'frm_fields', $where, 'id' ), 'id', 'id' );
+$e = FrmDb::get_var( 'frm_fields', $where, 'id', $args, '', 'var' );
+$f = $obj->wp_list_pluck( FrmDb::get_results( 'frm_fields', $where, 'id' ), 'id' );
+$g = wp_list_pluck( FrmDb::get_results( 'frm_fields', $where, 'id, name' ), 'id' );
+$h = wp_list_pluck( FrmDb::get_results( 'frm_fields', $where, 'id' ) ?: array(), 'id' );
+$i = Other\FrmDb::get_var( 'frm_fields', $where, 'id', $args, '', 'col' );
