@@ -101,14 +101,80 @@ class test_FrmCSVExportSort extends FrmUnitTest {
 			);
 		}
 
+		$exported = $this->exported_ids_from_controller(
+			array(
+				'form'    => $form->id,
+				'orderby' => 'meta_' . $field_id,
+				'order'   => 'DESC',
+			)
+		);
+
+		$this->assertSame( array( $ids[2], $ids[0], $ids[1] ), $exported, 'The controller should read both sort parameters from the URL.' );
+	}
+
+	/**
+	 * @covers FrmXMLController::csv
+	 *
+	 * @runInSeparateProcess
+	 *
+	 * @preserveGlobalState disabled
+	 */
+	public function test_controller_applies_items_table_conditions_with_the_sort() {
+		$this->set_current_user_to_1();
+		$form     = $this->factory->form->create_and_get();
+		$field_id = $this->factory->field->create(
+			array(
+				'form_id' => $form->id,
+				'type'    => 'number',
+			)
+		);
+		$ids      = array();
+
+		foreach ( array( '10', '2', '30', '5' ) as $index => $value ) {
+			$ids[] = $this->factory->entry->create(
+				array(
+					'form_id'   => $form->id,
+					'item_meta' => array( $field_id => $value ),
+					'is_draft'  => 2 === $index ? 1 : 0,
+				)
+			);
+		}
+
+		$excluded = $ids[3];
+		$filter   = static function ( $query ) use ( $excluded ) {
+			$query['it.is_draft'] = 0;
+			$query['it.id !']     = $excluded;
+			return $query;
+		};
+		add_filter( 'frm_csv_where', $filter );
+
+		try {
+			$exported = $this->exported_ids_from_controller(
+				array(
+					'form'    => $form->id,
+					'orderby' => 'meta_' . $field_id,
+					'order'   => 'DESC',
+				)
+			);
+		} finally {
+			remove_filter( 'frm_csv_where', $filter );
+		}
+
+		$this->assertSame( array( $ids[0], $ids[1] ), $exported, 'Conditions on the aliased items table should filter the sorted export.' );
+	}
+
+	/**
+	 * Run the CSV controller with the given URL parameters and return the exported entry IDs in order.
+	 *
+	 * @param array $params Query string parameters.
+	 *
+	 * @return array
+	 */
+	private function exported_ids_from_controller( $params ) {
 		$get      = $_GET;
 		$request  = $_REQUEST;
-		$_GET     = array(
-			'form'    => $form->id,
-			'orderby' => 'meta_' . $field_id,
-			'order'   => 'DESC',
-		);
-		$_REQUEST = $_GET;
+		$_GET     = $params;
+		$_REQUEST = $params;
 		$handler  = static function () {
 			return static function () {
 				throw new RuntimeException( 'CSV complete.' );
@@ -138,7 +204,7 @@ class test_FrmCSVExportSort extends FrmUnitTest {
 			$exported[] = (int) $row[ $id_column ];
 		}
 
-		$this->assertSame( array( $ids[2], $ids[0], $ids[1] ), $exported, 'The controller should read both sort parameters from the URL.' );
+		return $exported;
 	}
 
 	/**
