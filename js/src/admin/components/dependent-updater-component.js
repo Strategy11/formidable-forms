@@ -51,6 +51,7 @@ export default class frmStyleDependentUpdaterComponent {
 		this.data.propagateInputs.forEach( input => {
 			input.value = value;
 			input.dataset.colorFormat = format;
+			input.dispatchEvent( new Event( 'frm:color-sync' ) );
 		} );
 		this.data.propagateInputs[ 0 ].dispatchEvent( this.data.changeEvent );
 	}

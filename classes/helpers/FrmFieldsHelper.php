@@ -2524,20 +2524,18 @@ class FrmFieldsHelper {
 	public static function show_add_field_link( $field_type ) {
 		$field_label = FrmFormsHelper::get_field_link_name( $field_type );
 		$classes     = 'frmbutton frm6 frm_t' . $field_type['key'];
+		$type        = explode( '|', $field_type['key'] )[0];
+		$field       = FrmFieldFactory::get_field_type( $type );
+
+		if ( ! $field->allows_in_repeater() ) {
+			$classes .= ' frm-no-repeater';
+		}
 
 		if ( ! empty( $field_type['hide'] ) ) {
 			$classes .= ' frm_hidden';
 		}
-
-		$li_params = self::add_repeater_attribute(
-			array(
-				'class' => $classes,
-				'id'    => $field_type['key'],
-			),
-			$field_type['key']
-		);
 		?>
-<li <?php FrmAppHelper::array_to_html_params( $li_params, true ); ?>>
+<li class="<?php echo esc_attr( $classes ); ?>" id="<?php echo esc_attr( $field_type['key'] ); ?>">
 	<a href="#" class="frm_add_field" title="<?php echo esc_attr( $field_label ); ?>" role="button" aria-label="<?php echo esc_attr( $field_label ); ?>">
 		<?php FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ) ); ?>
 		<span><?php echo esc_html( $field_label ); ?></span>
@@ -2549,26 +2547,6 @@ class FrmFieldsHelper {
 	</a>
 </li>
 		<?php
-	}
-
-	/**
-	 * Mark an add field button whose field type can't be dropped into a repeater.
-	 *
-	 * @since x.x
-	 *
-	 * @param array  $li_params The button list item attributes.
-	 * @param string $field_key The field type, like gdpr or data|select.
-	 *
-	 * @return array
-	 */
-	private static function add_repeater_attribute( $li_params, $field_key ) {
-		$type = explode( '|', $field_key )[0];
-
-		if ( ! FrmFieldFactory::get_field_type( $type )->allow_in_repeater() ) {
-			$li_params['data-norepeater'] = '1';
-		}
-
-		return $li_params;
 	}
 
 	/**
@@ -2635,10 +2613,6 @@ class FrmFieldsHelper {
 
 		if ( ! $show_upgrade && ! empty( $field_type['limit'] ) ) {
 			$li_params = self::update_params_with_limit_data( $li_params, $args['id'], $field_key, $field_type['limit'] );
-		}
-
-		if ( ! $show_upgrade ) {
-			$li_params = self::add_repeater_attribute( $li_params, $field_key );
 		}
 
 		if ( ! empty( $field_type['upsell_image'] ) ) {

@@ -34,6 +34,7 @@ export default [
 			'js/onboarding-wizard.js',
 			'js/addons-page.js',
 			'js/formidable_styles.js',
+			'js/formidable-color-picker.js',
 			'js/formidable_admin.js',
 			'js/bootstrap-multiselect.js',
 			'js/formidable-settings-components.js',
@@ -441,6 +442,13 @@ export default [
 					'fadeIn', 'fadeOut', 'fadeTo', 'fadeToggle',
 				],
 			} ],
+		},
+	},
+	{
+		files: [ 'tests/js/style-live-preview.test.mjs' ],
+		rules: {
+			// The harness executes only function declarations from the checked-in styler.
+			'sonarjs/code-eval': 'off',
 		},
 	},
 ];

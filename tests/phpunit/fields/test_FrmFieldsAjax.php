@@ -440,24 +440,6 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	}
 
 	/**
-	 * Field types that set $allow_in_repeater to false are marked for the builder drop check.
-	 *
-	 * @see FrmFieldsController::load_single_field
-	 */
-	public function test_builder_field_marks_types_not_allowed_in_repeater() {
-		ob_start();
-		FrmFieldsController::load_single_field( $this->create_text_field( 'gdpr' ), array( 'id' => $this->form_id ) );
-		$gdpr = ob_get_clean();
-
-		ob_start();
-		FrmFieldsController::load_single_field( $this->create_text_field(), array( 'id' => $this->form_id ) );
-		$text = ob_get_clean();
-
-		$this->assertStringContainsString( 'data-norepeater="1"', $gdpr );
-		$this->assertStringNotContainsString( 'data-norepeater', $text );
-	}
-
-	/**
 	 * @param int   $field_id The field to preview.
 	 * @param array $settings The posted field_options.
 	 *

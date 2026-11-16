@@ -368,6 +368,11 @@ class FrmFieldsController {
 		$field_type    = FrmAppHelper::get_post_param( 'field_type', '', 'sanitize_text_field' );
 		$form_id       = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 		$field_options = FrmAppHelper::get_post_param( 'field_options', array(), 'wp_kses_post' );
+		$section_id    = ! empty( $field_options['in_section'] ) ? (int) $field_options['in_section'] : FrmAppHelper::get_post_param( 'section_id', 0, 'absint' );
+
+		if ( ! FrmFieldPlacementHelper::is_allowed( $field_type, $form_id, $section_id ) ) {
+			wp_die( esc_html__( 'This field type cannot be placed in this section or repeater.', 'formidable' ), '', array( 'response' => 400 ) );
+		}
 
 		do_action( 'frm_before_create_field', $field_type, $form_id );
 
@@ -389,6 +394,10 @@ class FrmFieldsController {
 	 * @return array|false
 	 */
 	public static function include_new_field( $field_type, $form_id, $field_options = array() ) {
+		if ( ! FrmFieldPlacementHelper::is_allowed( $field_type, $form_id, (int) ( $field_options['in_section'] ?? 0 ) ) ) {
+			return false;
+		}
+
 		$field_values = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
 
 		if ( $field_options ) {
@@ -527,7 +536,6 @@ class FrmFieldsController {
 		 * @param array $display
 		 */
 		$extra_field_attributes = apply_filters( 'frm_field_container_extra_attributes', array(), $field, $display );
-		$extra_field_attributes = self::add_repeater_attribute( $extra_field_attributes, $field_obj );
 
 		$li_classes  = self::get_classes_for_builder_field( $field, $display, $field_obj );
 		$li_classes .= ' ui-state-default widgets-holder-wrap';
@@ -562,7 +570,6 @@ class FrmFieldsController {
 
 		/** This filter is documented in classes/controllers/FrmFieldsController.php */
 		$extra_field_attributes = apply_filters( 'frm_field_container_extra_attributes', array(), $field, $display );
-		$extra_field_attributes = self::add_repeater_attribute( $extra_field_attributes, $field_obj );
 
 		$li_classes  = self::get_classes_for_builder_field( $field, $display, $field_obj );
 		$li_classes .= ' ui-state-default widgets-holder-wrap';
@@ -571,26 +578,6 @@ class FrmFieldsController {
 			compact( 'field', 'saved_field', 'field_obj', 'display', 'li_classes', 'extra_field_attributes' ),
 			$values['preview_manifest']
 		);
-	}
-
-	/**
-	 * Mark a builder field that can't be dropped into a repeater.
-	 *
-	 * @since x.x
-	 *
-	 * @param array|mixed  $attributes The field list item attributes.
-	 * @param FrmFieldType $field_obj  The field type object.
-	 *
-	 * @return array
-	 */
-	private static function add_repeater_attribute( $attributes, $field_obj ) {
-		$attributes = is_array( $attributes ) ? $attributes : array();
-
-		if ( ! $field_obj->allow_in_repeater() ) {
-			$attributes['data-norepeater'] = '1';
-		}
-
-		return $attributes;
 	}
 
 	/**
