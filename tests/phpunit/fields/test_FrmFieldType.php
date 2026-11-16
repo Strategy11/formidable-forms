@@ -62,6 +62,16 @@ class test_FrmFieldType extends FrmUnitTest {
 		$this->assertSame( '', $options['autocomplete'], 'Saved phone fields without an autocomplete setting should not gain tel autocomplete.' );
 	}
 
+	public function test_phone_autocomplete_default_is_empty_in_repeater() {
+		$parent_form_id = $this->factory->form->create();
+		$child_form_id  = $this->factory->form->create( array( 'parent_form_id' => $parent_form_id ) );
+		$child_values   = FrmFieldsHelper::setup_new_vars( 'phone', $child_form_id );
+		$parent_values  = FrmFieldsHelper::setup_new_vars( 'phone', $parent_form_id );
+
+		$this->assertSame( '', $child_values['field_options']['autocomplete'], 'New phone fields in a repeater should not default to tel autocomplete.' );
+		$this->assertSame( 'tel', $parent_values['field_options']['autocomplete'], 'New phone fields outside a repeater should still default to tel autocomplete.' );
+	}
+
 	public function test_phone_autocomplete_default_can_be_filtered() {
 		$filter = function ( $options ) {
 			$options['autocomplete'] = '';

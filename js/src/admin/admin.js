@@ -7216,8 +7216,10 @@ window.frmAdminBuildJS = function() {
 		if ( formatElement.classList.contains( 'frm_phone_type_dropdown' ) ) {
 			const autocompleteElement = document.getElementById( `field_options_autocomplete_${ fieldId }` );
 			const hasFormat = 'custom' === type || 'international' === type;
+			// Browser autofill would put the same value in every repeater row.
+			const isInRepeater = Boolean( document.getElementById( `frm_field_id_${ fieldId }` )?.closest( '.repeat_section' ) );
 
-			if ( autocompleteElement && 'none' === type && ! autocompleteElement.value ) {
+			if ( autocompleteElement && 'none' === type && ! autocompleteElement.value && ! isInRepeater ) {
 				autocompleteElement.value = 'tel';
 			} else if ( autocompleteElement && hasFormat && 'tel' === autocompleteElement.value ) {
 				autocompleteElement.value = '';

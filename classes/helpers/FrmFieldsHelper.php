@@ -51,6 +51,11 @@ class FrmFieldsHelper {
 
 		$values['field_options']['custom_html'] = self::get_default_html( $type );
 
+		if ( ! empty( $values['field_options']['autocomplete'] ) && self::is_repeater_form( $form_id ) ) {
+			// Browser autofill would put the same value in every repeater row.
+			$values['field_options']['autocomplete'] = '';
+		}
+
 		if ( ! empty( $setting ) ) {
 			if ( in_array( $type, array( 'data', 'lookup' ), true ) ) {
 				$values['field_options']['data_type'] = $setting;
@@ -63,6 +68,19 @@ class FrmFieldsHelper {
 		FrmSubmitHelper::update_last_row_fields_order_when_adding_field( $field_count );
 
 		return $values;
+	}
+
+	/**
+	 * Check if a form is the child form of a repeater.
+	 *
+	 * @since x.x
+	 *
+	 * @param int|string $form_id The ID of the form the field is added to.
+	 *
+	 * @return bool
+	 */
+	private static function is_repeater_form( $form_id ) {
+		return $form_id && FrmDb::get_var( 'frm_forms', array( 'id' => $form_id ), 'parent_form_id' );
 	}
 
 	/**
