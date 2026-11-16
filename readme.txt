@@ -17,7 +17,7 @@ https://youtu.be/7X2BqhRsXcg
 [Watch the video overview for the Formidable form builder, calculator, and quiz maker](https://youtu.be/7X2BqhRsXcg)
 
 > <strong>Formidable Pro</strong><br />
-> This plugin is the free version of Formidable Pro, which adds email signup and subscription forms, multi-page forms, conversational forms, file upload forms, star rating and scale fields, quiz grading, and conditional logic. Add repeater fields, premium Stripe and PayPal payment integrations, cascading dropdowns, calculated fields, front-end editing, the AI form builder, and the web application builder. [Get Formidable Pro and unlock every premium form feature.](https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion)
+> This plugin is the free version of Formidable Pro, which adds email signup and subscription forms, multi-page forms, conversational forms, file upload forms, star rating and scale fields, quiz grading, and conditional logic. Add repeater fields, premium Stripe and PayPal payment integrations, cascading dropdowns, calculated fields, front-end editing, the AI form builder, and the web application builder. [Get Formidable Pro and unlock premium form features.](https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion)
 >
 > Start with the [Lite vs Pro comparison](https://formidableforms.com/knowledgebase/what-is-the-difference-between-the-lite-free-and-pro-version/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion).
 
