@@ -136,10 +136,9 @@ class test_FrmPayPalLiteLegacyMigration extends FrmUnitTest {
 	}
 
 	public function test_after_payment_rows_need_a_supporting_pro_version() {
-		$this->assertFalse( is_callable( 'FrmProTransLiteController::change_fields_after_payment' ), 'This test needs Pro without After Payment support.' );
-
-		$method = array( 'FrmPayPalLiteLegacyMigrationHelper', 'get_after_payment_blocker' );
-		$rows   = array(
+		$supported = is_callable( 'FrmProTransLiteController::change_fields_after_payment' ) || class_exists( 'FrmTransActionsController' );
+		$method    = array( 'FrmPayPalLiteLegacyMigrationHelper', 'get_after_payment_blocker' );
+		$rows      = array(
 			'change_field' => array(
 				array(
 					'id'     => 12,
@@ -150,7 +149,13 @@ class test_FrmPayPalLiteLegacyMigration extends FrmUnitTest {
 		);
 
 		$this->assertSame( '', $this->run_private_method( $method, array( array() ) ), 'Actions without After Payment rows can always convert.' );
-		$this->assertStringContainsString( 'Activate Formidable Pro', $this->run_private_method( $method, array( $rows ) ), 'Without Pro, the conversion is blocked.' );
+		$blocker = $this->run_private_method( $method, array( $rows ) );
+
+		if ( $supported ) {
+			$this->assertSame( '', $blocker, 'A loaded After Payment integration should allow conversion.' );
+			return;
+		}
+		$this->assertStringContainsString( 'Activate Formidable Pro', $blocker, 'Without Pro, the conversion is blocked.' );
 
 		add_filter( 'frm_pro_installed', '__return_true' );
 		$blocker = $this->run_private_method( $method, array( $rows ) );
@@ -162,5 +167,59 @@ class test_FrmPayPalLiteLegacyMigration extends FrmUnitTest {
 		$result = FrmPayPalLiteLegacyMigrationHelper::migrate( 0 );
 		$this->assertWPError( $result, 'Missing actions are rejected before conversion.' );
 		$this->assertSame( 'frm_paypal_invalid_action', $result->get_error_code(), 'The rejection identifies the invalid action.' );
+	}
+
+	/**
+	 * Converts the saved action, moves only create emails and prevents a duplicate conversion.
+	 */
+	public function test_migrate_preserves_subscription_and_email_settings() {
+		update_option( 'frm_paypal_connect_merchant_id_test', 'migration_fixture', false );
+		update_option( 'frm_paypal_connect_merchant_id_live', 'migration_fixture', false );
+		$form_id                      = $this->factory->form->create();
+		$legacy_id                    = wp_insert_post(
+			array(
+				'post_type'    => FrmFormActionsController::$action_post_type,
+				'post_excerpt' => 'paypal',
+				'post_status'  => 'publish',
+				'post_title'   => 'Gold membership',
+				'menu_order'   => $form_id,
+				'post_content' => wp_json_encode(
+					array(
+						'paypal_type'       => '_xclick-subscriptions',
+						'paypal_amount'     => '9.99',
+						'paypal_item_name'  => 'Gold',
+						'currency'          => 'USD',
+						'repeat_time'       => 'M',
+						'paypal_stop_email' => 1,
+					)
+				),
+			)
+		);
+		$email_control                = FrmFormActionsController::get_form_actions( 'email' );
+		$email                        = $email_control->prepare_new( $form_id );
+		$email->post_content['event'] = array( 'create', 'update', 'payment-success' );
+		$email_id                     = $email_control->save_settings( $email );
+		$other                        = $email_control->prepare_new( $form_id );
+		$other->post_content['event'] = array( 'update' );
+		$other_id                     = $email_control->save_settings( $other );
+		FrmFormAction::clear_cache();
+
+		$result = FrmPayPalLiteLegacyMigrationHelper::migrate( $legacy_id );
+		$this->assertIsArray( $result, 'A valid legacy action should convert.' );
+		$payment  = get_post( $result['action_id'] );
+		$settings = json_decode( $payment->post_content, true );
+		$this->assertSame( 'payment', $payment->post_excerpt, 'The new action should use Commerce.' );
+		$this->assertSame( array( 'paypal' ), $settings['gateway'], 'The converted action should use PayPal.' );
+		$this->assertSame( 'recurring', $settings['type'], 'Subscriptions should remain recurring.' );
+		$this->assertSame( '9.99', $settings['amount'], 'The saved amount should survive conversion.' );
+		$this->assertSame( 'month', $settings['interval'], 'The billing period should survive conversion.' );
+		$this->assertSame( 'draft', get_post_status( $legacy_id ), 'The legacy action should be disabled.' );
+		$moved = json_decode( get_post( $email_id )->post_content, true );
+		$this->assertSame( array( 'update', 'payment-success' ), $moved['event'], 'Only create should move, without duplicating payment-success.' );
+		$unchanged = json_decode( get_post( $other_id )->post_content, true );
+		$this->assertSame( array( 'update' ), $unchanged['event'], 'Emails without a create event should remain unchanged.' );
+		$again = FrmPayPalLiteLegacyMigrationHelper::migrate( $legacy_id );
+		$this->assertWPError( $again, 'A second conversion should be blocked.' );
+		$this->assertSame( 'frm_paypal_migration_blocked', $again->get_error_code(), 'The existing Commerce action should prevent duplicates.' );
 	}
 }
