@@ -265,11 +265,6 @@ class FrmFormApi {
 	 * @return string
 	 */
 	protected function api_url() {
-		if ( ! $this->license ) {
-			// Direct traffic to Cloudflare worker when there is no license.
-			return 'https://plapi.formidableforms.com/list/';
-		}
-
 		return 'https://formidableforms.com/wp-json/s11edd/v1/updates/';
 	}
 
