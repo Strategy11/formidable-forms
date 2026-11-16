@@ -490,13 +490,9 @@ DEFAULT_HTML;
 	 * @return string The style attribute value, or an empty string when no size applies.
 	 */
 	protected function get_builder_size_style() {
-		if ( in_array( $this->type, array( 'select', 'data', 'time' ), true ) ) {
-			return '';
-		}
-
 		$display = $this->display_field_settings();
 
-		if ( empty( $display['size'] ) ) {
+		if ( ! $this->should_show_size_setting( $display ) ) {
 			return '';
 		}
 
@@ -511,6 +507,19 @@ DEFAULT_HTML;
 		}
 
 		return 'width:' . $size . ';';
+	}
+
+	/**
+	 * Whether the field settings panel offers a width control.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $display Display options for the field settings panel.
+	 *
+	 * @return bool
+	 */
+	public function should_show_size_setting( array $display ) {
+		return ! empty( $display['size'] ) && ! in_array( $this->type, array( 'select', 'data', 'time' ), true );
 	}
 
 	/**
