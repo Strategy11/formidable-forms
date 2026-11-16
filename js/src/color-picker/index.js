@@ -1,7 +1,7 @@
 /**
  * Shared adapter for WordPress's block editor color picker.
  */
-import { formatColor } from './format-color';
+import { colorToHex, formatColor } from './format-color';
 
 const pickers = new WeakMap();
 const { createElement, createRoot } = wp.element;
@@ -67,6 +67,13 @@ function init( input, options = {} ) {
 		} );
 	}
 	let root;
+	let selectedFormat = input.value.trim().match( /^(rgb|hsl)a?\(/i )?.[ 1 ].toLowerCase() || 'hex';
+	const getSelectedFormat = () => {
+		const select = mount.querySelector( 'select' );
+		const trigger = mount.querySelector( '[aria-haspopup="listbox"]' );
+		const value = ( select?.value || trigger?.textContent || '' ).trim().toLowerCase();
+		return [ 'hex', 'rgb', 'hsl' ].includes( value ) ? value : selectedFormat;
+	};
 	const update = () => {
 		text.textContent = input.value || __( 'Select Color', 'formidable' );
 		swatch.style.backgroundColor = input.value || 'transparent';
@@ -78,6 +85,7 @@ function init( input, options = {} ) {
 			className: 'frm-block-color-control',
 			color: input.value || options.defaultColor || '#ffffff',
 			enableAlpha: input.dataset.alphaEnabled === 'true',
+			copyFormat: selectedFormat,
 			onChange: change,
 		} ) );
 	};
@@ -86,11 +94,27 @@ function init( input, options = {} ) {
 		options.change?.( event, null );
 	};
 	const change = hex => {
-		// The format menu changes the display. Preserve the stored format when editing.
-		input.value = hex ? formatColor( hex, input.value ) : '';
+		selectedFormat = getSelectedFormat();
+		input.value = hex ? formatColor( hex, input.value, selectedFormat ) : '';
 		input.dispatchEvent( new Event( 'input', { bubbles: true } ) );
 		input.dispatchEvent( new Event( 'change', { bubbles: true } ) );
 	};
+	// WordPress exposes color changes as hex, but has no callback for its format menu.
+	const formatObserver = new MutationObserver( () => {
+		const format = getSelectedFormat();
+		if ( format === selectedFormat ) {
+			return;
+		}
+		selectedFormat = format;
+		if ( ! input.value ) {
+			update();
+			return;
+		}
+		const hex = colorToHex( input.value );
+		if ( hex ) {
+			change( hex );
+		}
+	} );
 	const contains = target => {
 		if ( wrapper.contains( target ) || panel.contains( target ) ) {
 			return true;
@@ -134,6 +158,7 @@ function init( input, options = {} ) {
 		root?.render( null );
 		panel.remove();
 		observer.disconnect();
+		formatObserver.disconnect();
 		window.removeEventListener( 'scroll', position, true );
 		window.removeEventListener( 'resize', position );
 		button.setAttribute( 'aria-expanded', 'false' );
@@ -150,7 +175,9 @@ function init( input, options = {} ) {
 		document.body.append( panel );
 		panel.hidden = false;
 		button.setAttribute( 'aria-expanded', 'true' );
+		selectedFormat = input.value.trim().match( /^(rgb|hsl)a?\(/i )?.[ 1 ].toLowerCase() || 'hex';
 		root ??= createRoot( mount );
+		formatObserver.observe( mount, { childList: true, subtree: true, characterData: true } );
 		activePicker = { contains, close };
 		update();
 		position();
