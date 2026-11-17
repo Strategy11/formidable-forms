@@ -45,8 +45,7 @@ class FrmFieldTextarea extends FrmFieldType {
 	 * @return void
 	 */
 	public function show_on_form_builder( $name = '' ) {
-		$size = FrmField::get_option( $this->field, 'size' );
-		$max  = FrmField::get_option( $this->field, 'max' );
+		$max = FrmField::get_option( $this->field, 'max' );
 
 		$html_atts = array(
 			'name'        => $this->html_name( $name ),
@@ -55,18 +54,15 @@ class FrmFieldTextarea extends FrmFieldType {
 			'class'       => 'dyn_default_value',
 			'placeholder' => FrmField::get_option( $this->field, 'placeholder' ),
 		);
-		echo '<textarea';
-		FrmAppHelper::array_to_html_params( $html_atts, true );
 
-		if ( $size ) {
-			if ( is_numeric( $size ) ) {
-				$size .= 'px';
-			}
+		$size_style = $this->get_builder_size_style();
 
-			$style = 'width:' . $size . ';';
-			echo ' style="' . esc_attr( $style ) . '"';
+		if ( $size_style ) {
+			$html_atts['style'] = $size_style;
 		}
 
+		echo '<textarea';
+		FrmAppHelper::array_to_html_params( $html_atts, true );
 		echo '>';
 		echo FrmAppHelper::esc_textarea( force_balance_tags( $this->get_field_column( 'default_value' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '</textarea>';

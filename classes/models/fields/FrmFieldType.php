@@ -470,7 +470,56 @@ DEFAULT_HTML;
 			$input_atts['disabled'] = 'disabled';
 		}
 
+		$size_style = $this->get_builder_size_style();
+
+		if ( $size_style ) {
+			$input_atts['style'] = $size_style;
+		}
+
 		return '<input ' . FrmAppHelper::array_to_html_params( $input_atts ) . ' />';
+	}
+
+	/**
+	 * Get the inline width style that shows the Field Size setting in the form builder preview.
+	 *
+	 * The width is printed with the field so the preview renders at its final size, with no
+	 * resize after the builder scripts load. The builder updates it live as the setting changes.
+	 *
+	 * @since x.x
+	 *
+	 * @return string The style attribute value, or an empty string when no size applies.
+	 */
+	protected function get_builder_size_style() {
+		$display = $this->display_field_settings();
+
+		if ( ! $this->should_show_size_setting( $display ) ) {
+			return '';
+		}
+
+		$size = FrmField::get_option( $this->field, 'size' );
+
+		if ( ! $size || ! is_scalar( $size ) ) {
+			return '';
+		}
+
+		if ( is_numeric( $size ) ) {
+			$size .= 'px';
+		}
+
+		return 'width:' . $size . ';';
+	}
+
+	/**
+	 * Whether the field settings panel offers a width control.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $display Display options for the field settings panel.
+	 *
+	 * @return bool
+	 */
+	public function should_show_size_setting( array $display ) {
+		return ! empty( $display['size'] ) && ! in_array( $this->type, array( 'select', 'data', 'time' ), true );
 	}
 
 	/**

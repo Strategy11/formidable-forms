@@ -445,9 +445,9 @@ export default [
 		},
 	},
 	{
-		files: [ 'tests/js/style-live-preview.test.mjs' ],
+		files: [ 'tests/js/style-live-preview.test.mjs', 'tests/js/paypalBootstrap.test.mjs' ],
 		rules: {
-			// The harness executes only function declarations from the checked-in styler.
+			// The harnesses execute only checked-in scripts.
 			'sonarjs/code-eval': 'off',
 		},
 	},
