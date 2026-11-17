@@ -157,6 +157,94 @@ class test_FrmBoostsMarketplace extends FrmUnitTest {
 	}
 
 	/**
+	 * Only the add-ons feed asks for Boosts. Other feeds share the request code but not the Boosts.
+	 *
+	 * @covers FrmFormApi::include_boosts
+	 *
+	 * @return void
+	 */
+	public function test_only_the_addon_api_requests_boosts() {
+		$api = new FrmStyleApi( '' );
+		$api->reset_cached();
+		$urls    = array();
+		$request = static function ( $preempt, $args, $url ) use ( &$urls ) {
+			$urls[] = $url;
+			return array(
+				'response' => array( 'code' => 200 ),
+				'body'     => wp_json_encode( array() ),
+				'headers'  => array(),
+			);
+		};
+		add_filter( 'pre_http_request', $request, 10, 3 );
+
+		try {
+			$api->get_api_info();
+			$this->assertCount( 1, $urls );
+			$this->assertStringNotContainsString( 'include_boosts', $urls[0] );
+		} finally {
+			remove_filter( 'pre_http_request', $request, 10 );
+			$api->reset_cached();
+		}
+
+		foreach ( array( 'FrmStyleApi', 'FrmFormTemplateApi', 'FrmApplicationApi', 'FrmYoutubeFeedApi', 'FrmSalesApi', 'FrmInbox' ) as $class ) {
+			$this->assertFalse( $this->run_private_method( array( ( new ReflectionClass( $class ) )->newInstanceWithoutConstructor(), 'include_boosts' ) ), $class );
+		}
+		$this->assertTrue( $this->run_private_method( array( new FrmFormApi( '' ), 'include_boosts' ) ) );
+
+		// A subclass that keeps the add-ons cache, like FrmAILicense, reads the same feed and must keep its Boosts.
+		$addons_subclass = new class( '' ) extends FrmFormApi {};
+		$this->assertTrue( $this->run_private_method( array( $addons_subclass, 'include_boosts' ) ) );
+		$this->assertTrue( $this->run_private_method( array( new FrmFormApi( 'license-key' ), 'include_boosts' ) ) );
+	}
+
+	/**
+	 * Boosts are bought separately, so they are not counted or suggested as add-ons.
+	 *
+	 * @covers FrmAddonsController::get_addons_count
+	 * @covers FrmPluginSearch::matching_addon
+	 *
+	 * @return void
+	 */
+	public function test_boosts_are_not_counted_or_searched_as_addons() {
+		// The Boost comes first so a search that does not skip Boosts would match it.
+		$feed = array(
+			'2' => $this->addon( 'field-tooltips' ) + array(
+				'name'         => 'Tooltips',
+				'excerpt'      => 'Add tooltips.',
+				'search_terms' => 'tooltips',
+			),
+			'1' => array(
+				'title'        => 'Signature',
+				'name'         => 'Signature',
+				'excerpt'      => 'Add a signature.',
+				'search_terms' => 'tooltips signature',
+			),
+		);
+		$api  = new FrmFormApi( '' );
+		$api->reset_cached();
+		$request = static function () use ( $feed ) {
+			return array(
+				'response' => array( 'code' => 200 ),
+				'body'     => wp_json_encode( $feed ),
+				'headers'  => array(),
+			);
+		};
+		add_filter( 'pre_http_request', $request );
+
+		try {
+			$this->assertSame( 1, FrmAddonsController::get_addons_count() );
+		} finally {
+			remove_filter( 'pre_http_request', $request );
+			$api->reset_cached();
+		}
+
+		$search = ( new ReflectionClass( 'FrmPluginSearch' ) )->newInstanceWithoutConstructor();
+		$this->assertSame( 1, $this->run_private_method( array( $search, 'matching_addon' ), array( $feed, array( 'tooltips' ) ) ) );
+		unset( $feed['1'] );
+		$this->assertNull( $this->run_private_method( array( $search, 'matching_addon' ), array( $feed, array( 'tooltips' ) ) ) );
+	}
+
+	/**
 	 * @param string $slug Boost slug.
 	 *
 	 * @return array
