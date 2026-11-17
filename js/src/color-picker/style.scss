@@ -51,6 +51,15 @@
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
+
+	// Pro 7.0.1 and older initialize the WordPress Iris picker on this input. Show Iris instead of the Lite toggle.
+	&:has(.wp-picker-container) > .frm-block-color-toggle {
+		display: none;
+	}
+
+	.wp-picker-container input.hex[hidden] {
+		display: inline-block;
+	}
 }
 
 .frm-block-color-panel {

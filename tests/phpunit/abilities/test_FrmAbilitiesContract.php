@@ -264,12 +264,16 @@ class test_FrmAbilitiesContract extends FrmUnitTest {
 	}
 
 	/**
-	 * Discovery remains usable by users who cannot change settings.
+	 * Discovery remains usable by form viewers who cannot change settings.
+	 *
+	 * @covers FrmAbilitiesSetupController::can_get_ai_status
 	 *
 	 * @return void
 	 */
-	public function test_subscriber_can_discover_but_cannot_enable_ai_access() {
+	public function test_form_viewer_can_discover_but_cannot_enable_ai_access() {
 		$user_id = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+		$user    = new WP_User( $user_id );
+		$user->add_cap( 'frm_view_forms' );
 		wp_set_current_user( $user_id );
 
 		$status = wp_get_ability( 'formidable-forms/get-ai-status' )->execute();
@@ -278,6 +282,36 @@ class test_FrmAbilitiesContract extends FrmUnitTest {
 		$this->assertFalse( $status['can_enable'] );
 		$this->assertSame( array( 'enabled', 'ready', 'blocked_reason', 'can_enable', 'settings_url' ), array_keys( $status ) );
 		$this->set_current_user_to_1();
+	}
+
+	/**
+	 * A user without Formidable access cannot read the AI status.
+	 *
+	 * @covers FrmAbilitiesSetupController::can_get_ai_status
+	 *
+	 * @return void
+	 */
+	public function test_subscriber_cannot_discover_ai_access() {
+		$user_id = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+		wp_set_current_user( $user_id );
+
+		$this->assertFalse( FrmAbilitiesSetupController::can_get_ai_status() );
+		$this->assertWPError( wp_get_ability( 'formidable-forms/get-ai-status' )->execute() );
+		$this->set_current_user_to_1();
+	}
+
+	/**
+	 * The status ability takes no input, so its schema must not serialize properties as a JSON list.
+	 *
+	 * @covers FrmAbilitiesSetupController::register_abilities
+	 *
+	 * @return void
+	 */
+	public function test_ai_status_input_schema_has_no_list_properties() {
+		$schema = wp_get_ability( 'formidable-forms/get-ai-status' )->get_input_schema();
+
+		$this->assertSame( 'object', $schema['type'] );
+		$this->assertStringNotContainsString( '"properties":[]', wp_json_encode( $schema ) );
 	}
 
 	/**

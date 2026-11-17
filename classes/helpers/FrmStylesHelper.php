@@ -926,7 +926,8 @@ class FrmStylesHelper {
 		 */
 		$settings = apply_filters( 'frm_style_live_preview_settings', $settings );
 
-		return array_values( array_unique( array_filter( (array) $settings, 'is_string' ) ) );
+		// A callback may not return an array.
+		return is_array( $settings ) ? array_values( array_unique( array_filter( $settings, 'is_string' ) ) ) : array();
 	}
 
 	/**

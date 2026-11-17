@@ -2,26 +2,24 @@ describe( 'Slider style component', () => {
 	beforeEach( () => {
 		cy.login();
 		cy.viewport( 1280, 1600 );
-		// Every change the tests below make gets committed to the hidden input by a "change"
-		// handler that runs immediately - but the style editor also fires an admin-ajax
-		// `frm_change_styling` live-preview request on the same change, and re-normalizes the
-		// hidden input's value (e.g. adding back the unit) once that request resolves. Firing
-		// several slider changes back to back without waiting for that request backs its queue
-		// up, so the value/disabled-state assertions that follow can outlast Cypress's default
-		// retry window - not because the value is wrong, but because it hasn't settled yet.
-		// The action lives in the POST body, not the URL, so match on the body rather than a URL
-		// pattern.
-		cy.intercept( 'POST', '**/admin-ajax.php', req => {
-			if ( req.body?.includes( 'action=frm_change_styling' ) ) {
-				req.alias = 'changeStyling';
-			}
-		} );
 	} );
 
 	const SLIDER_TIMEOUT = 10000;
-	// Wait for the live-preview sync request to actually round-trip, rather than a fixed delay.
-	// Call this after every blur()/select() on a slider.
-	const settleSliderChange = () => cy.wait( '@changeStyling', { timeout: SLIDER_TIMEOUT } );
+
+	/**
+	 * Asserts the value a live-preview setting wrote to its CSS variable. Live-preview settings
+	 * update the preview with JavaScript and never send a frm_change_styling request,
+	 * so read the variable the preview form actually computes.
+	 *
+	 * @param {string} name     - The CSS variable name, e.g. '--fieldset'.
+	 * @param {string} expected - The expected variable value.
+	 * @return {void}
+	 */
+	const assertLivePreviewVar = ( name, expected ) => {
+		cy.get( '#frm_style_preview .frm_forms.with_frm_style', { timeout: SLIDER_TIMEOUT } ).first().should( $form => {
+			expect( $form[ 0 ].ownerDocument.defaultView.getComputedStyle( $form[ 0 ] ).getPropertyValue( name ).trim() ).to.eq( expected );
+		} );
+	};
 
 	/**
 	 * Locates a single (non multi-value) slider's range input, visible text input, unit select
@@ -80,20 +78,21 @@ describe( 'Slider style component', () => {
 		const slider = getSingleSlider( '#frm_fieldset' );
 
 		// Max value for Border Width is 25 - start from a known, valid value.
+		// Border Width is a live-preview setting, so the preview's CSS variable updates without a server request.
 		slider.text().clear().type( '10' ).blur();
-		settleSliderChange();
 		slider.hidden().should( 'have.value', '10px' );
+		assertLivePreviewVar( '--fieldset', '10px' );
 
 		cy.log( 'A value above the max is rejected and the text box resyncs to the current range value' );
 		slider.text().clear().type( '999' ).blur();
-		settleSliderChange();
 		slider.text().should( 'have.value', '10' );
 		slider.hidden().should( 'have.value', '10px' );
+		assertLivePreviewVar( '--fieldset', '10px' );
 
 		cy.log( 'A negative value is rejected the same way' );
 		slider.text().clear().type( '-5' ).blur();
-		settleSliderChange();
 		slider.text().should( 'have.value', '10' );
+		assertLivePreviewVar( '--fieldset', '10px' );
 		// A direct cy.get() (rather than through the slider.hidden() helper) so the assertion is
 		// visible to static analysis - functionally identical to the checks above.
 		cy.get( '#frm_fieldset', { timeout: SLIDER_TIMEOUT } ).should( 'have.value', '10px' );

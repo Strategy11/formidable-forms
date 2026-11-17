@@ -109,7 +109,6 @@ zip -r $zipname $destination \
 	-x "*/stubs-*" \
 	-x "*/readme.md" \
 	-x "*/README.md" \
-	-x "*.md" \
 	-x "*/docs/*" \
 	-x "*/baseline-*/*" \
 	-x "*/.lint-tools/*" \
@@ -146,6 +145,23 @@ zip -r $zipname $destination \
 	-x "*/webpack.config.cjs" \
 	-x "*/cypress.preview.config.js" \
 	"${@:4}"
+
+# Drop the remaining Markdown docs, like AGENTS.md or PLAN.md. A zip exclusion has no exceptions,
+# so delete them from the archive instead, keeping the license and attribution files bundled libraries require.
+status "Removing Markdown docs..."
+if ! command -v unzip > /dev/null 2>&1; then
+	echo "unzip is required to remove Markdown docs from $zipname. Install it and build again." >&2
+	exit 1
+fi
+if ! archive_files="$(unzip -Z1 "$zipname")"; then
+	echo "Could not list the files in $zipname, so its Markdown docs were not removed." >&2
+	exit 1
+fi
+# grep exits with 1 when nothing matches, which only means there are no docs to remove.
+md_files="$(printf '%s\n' "$archive_files" | grep -iE '\.md$' | grep -viE '(^|/)[^/]*(licen[cs]e|copying|authors|notice)[^/]*\.md$')" || [ $? -eq 1 ]
+if [ -n "$md_files" ]; then
+	printf '%s\n' "$md_files" | tr '\n' '\0' | xargs -0 zip -q -nw -d "$zipname"
+fi
 
 if [ ! -z "$3" ]; then
 	rm -rf $destination
