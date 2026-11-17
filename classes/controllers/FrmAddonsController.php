@@ -469,7 +469,15 @@ class FrmAddonsController {
 	 * @return int Count of addons.
 	 */
 	public static function get_addons_count() {
-		return count( self::get_api_addons() );
+		$addons = array_filter(
+			self::get_api_addons(),
+			function ( $addon ) {
+				// Boosts are purchased separately, so they are not counted with the add-ons a license unlocks.
+				return ! is_array( $addon ) || ! FrmAddonsHelper::is_boost( $addon );
+			}
+		);
+
+		return count( $addons );
 	}
 
 	/**

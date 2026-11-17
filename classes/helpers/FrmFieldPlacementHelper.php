@@ -31,10 +31,12 @@ class FrmFieldPlacementHelper {
 			return true;
 		}
 
-		$type       = $values['type'] ?? $field->type;
-		$form_id    = (int) ( $values['form_id'] ?? $field->form_id );
-		$options    = $values['field_options'] ?? $field->field_options;
-		$section_id = (int) ( $options['in_section'] ?? 0 );
+		$type    = $values['type'] ?? $field->type;
+		$form_id = (int) ( $values['form_id'] ?? $field->form_id );
+		$options = $values['field_options'] ?? $field->field_options;
+		// Some callers, like Pro, pass the options already serialized.
+		FrmAppHelper::unserialize_or_decode( $options );
+		$section_id = is_array( $options ) ? (int) ( $options['in_section'] ?? 0 ) : 0;
 
 		if ( $type === $field->type && $form_id === (int) $field->form_id && $section_id === (int) FrmField::get_option( $field, 'in_section' ) ) {
 			// Existing placements stay editable even when the current policy forbids creating them.
