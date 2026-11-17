@@ -712,11 +712,25 @@
 			return color;
 		}
 
-		const rgba = color.replace( /^rgba?\(|\s+|\)$/g, '' ).split( ',' );
-		const alpha = isNaN( parseFloat( rgba[ 3 ] ) ) ? 1 : parseFloat( rgba[ 3 ] );
+		const rgba = color.replace( /^rgba?\(|\)$/g, '' ).trim().split( /[\s,/]+/ );
+		const alpha = getColorAlpha( rgba[ 3 ] );
 		const hex = [ 0, 1, 2 ].map( i => Math.round( ( alpha * parseInt( rgba[ i ], 10 ) ) + ( ( 1 - alpha ) * backdrop[ i ] ) ).toString( 16 ).padStart( 2, '0' ) );
 
 		return `#${ hex.join( '' ) }`;
+	}
+
+	/**
+	 * Normalize numeric and percentage alpha values to the range Stripe colors need.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} rawAlpha CSS alpha component.
+	 * @return {number} Alpha between zero and one, defaulting to one.
+	 */
+	function getColorAlpha( rawAlpha = '' ) {
+		const parsed = parseFloat( rawAlpha );
+		const alpha = rawAlpha.endsWith( '%' ) ? parsed / 100 : parsed;
+		return isNaN( alpha ) ? 1 : Math.max( 0, Math.min( 1, alpha ) );
 	}
 
 	/**
@@ -730,10 +744,21 @@
 	 */
 	function getBackdropColor( element ) {
 		for ( let parent = element.parentElement; parent; parent = parent.parentElement ) {
-			const channels = window.getComputedStyle( parent ).backgroundColor.match( /[\d.]+/g );
-			if ( channels && ( 3 === channels.length || 1 === parseFloat( channels[ 3 ] ) ) ) {
-				return channels.slice( 0, 3 ).map( Number );
+			const color = window.getComputedStyle( parent ).backgroundColor;
+			const match = color.match( /^(rgba?\(|color\(srgb )([^)]+)\)$/ );
+			if ( ! match ) {
+				continue;
 			}
+			const channels = match[ 2 ].trim().split( /[\s,/]+/ );
+			if ( 1 !== getColorAlpha( channels[ 3 ] ) ) {
+				continue;
+			}
+			const isSRGB = match[ 1 ].startsWith( 'color(' );
+			return channels.slice( 0, 3 ).map( channel => {
+				const value = parseFloat( channel );
+				const scaled = channel.endsWith( '%' ) ? value / 100 * 255 : value * ( isSRGB ? 255 : 1 );
+				return Math.max( 0, Math.min( 255, scaled ) );
+			} );
 		}
 		return [ 255, 255, 255 ];
 	}

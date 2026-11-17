@@ -1,5 +1,7 @@
 <?php
 
+use PHPUnit\Framework\Assert;
+
 /**
  * @group stripe
  */
@@ -187,10 +189,17 @@ class test_FrmStrpLiteMergedUpdates extends FrmUnitTest {
 	public function test_empty_style_context_has_all_appearance_keys() {
 		$settings = $this->run_private_method( array( 'FrmStrpLiteActionsController', 'get_style_settings_for_form' ), array( 0 ) );
 		$rules    = $this->run_private_method( array( 'FrmStrpLiteActionsController', 'get_appearance_rules' ), array( $settings ) );
-		$this->assertArrayHasKey( '.Input', $rules );
-		$this->assertArrayNotHasKey( 'fontFamily', $rules['.Input'] );
-		$this->assertArrayNotHasKey( 'fontFamily', $rules['.Label'] );
-		$this->assertArrayHasKey( 'borderColor', $rules['.Input:focus'] );
+		Assert::assertArrayHasKey( '.Input', $rules );
+		Assert::assertArrayNotHasKey( 'fontFamily', $rules['.Input'] );
+		Assert::assertArrayNotHasKey( 'fontFamily', $rules['.Label'] );
+		$this->assertSame( '', $rules['.Input:focus']['borderColor'] );
+	}
+
+	public function test_focus_border_color_matches_the_style() {
+		$settings                        = $this->run_private_method( array( 'FrmStrpLiteActionsController', 'get_style_settings_for_form' ), array( 0 ) );
+		$settings['border_color_active'] = '#ff8000';
+		$rules                           = $this->run_private_method( array( 'FrmStrpLiteActionsController', 'get_appearance_rules' ), array( $settings ) );
+		$this->assertSame( '#ff8000', $rules['.Input:focus']['borderColor'] );
 	}
 
 	public function test_successful_webhook_updates_the_description_without_a_return_visit() {
