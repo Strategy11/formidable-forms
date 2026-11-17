@@ -8,6 +8,9 @@ class FrmField {
 	/**
 	 * Version of the persistent field write hooks available to derived indexes.
 	 *
+	 * Version 1 covers frm_field_created and frm_field_updated, plus frm_field_order_updated for
+	 * builder saves that write the field order of many fields in one query without frm_field_updated.
+	 *
 	 * @since x.x
 	 */
 	const WRITE_HOOKS_VERSION = 1;
@@ -696,8 +699,10 @@ class FrmField {
 			'id' => $copy_field->id,
 		);
 		FrmFieldsHelper::fill_field( $values, $copy_field, $copy_field->form_id );
-		$values   = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
-		$field_id = self::create( $values );
+		$values = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
+
+		// A copy keeps the placement of its source, even one saved before a placement rule existed.
+		$field_id = self::create_copy( $values );
 
 		/**
 		 * Fires after duplicating a field.

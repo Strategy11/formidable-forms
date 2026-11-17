@@ -106,6 +106,47 @@ class test_FrmFieldOrder extends FrmUnitTest {
 		$this->assertSame( 1, (int) FrmField::getOne( end( $ids ) )->field_order, 'The last field should move to the start.' );
 	}
 
+	public function test_order_save_fires_order_updated_action() {
+		global $wpdb;
+		$form_id  = $this->factory->form->create();
+		$field_id = $this->factory->field->create(
+			array(
+				'form_id'     => $form_id,
+				'type'        => 'text',
+				'field_order' => 5,
+			)
+		);
+		$calls    = array();
+		$record   = static function ( $ids, $saved_form_id ) use ( &$calls ) {
+			$calls[] = array( $ids, $saved_form_id );
+		};
+		add_action( 'frm_field_order_updated', $record, 10, 2 );
+
+		FrmForm::update( $form_id, array( 'frm_field_order' => wp_json_encode( array( $field_id => 1 ) ) ) );
+		$this->assertSame( array( array( array( $field_id ), $form_id ) ), $calls, 'A saved order should report the field IDs and form ID.' );
+
+		$calls             = array();
+		$fail_order_update = static function ( $query ) use ( $wpdb ) {
+			if ( str_starts_with( $query, 'UPDATE `' . $wpdb->prefix . 'frm_fields` SET field_order = CASE' ) ) {
+				return $query . ' INVALID';
+			}
+			return $query;
+		};
+		$suppress_errors   = $wpdb->suppress_errors();
+		add_filter( 'query', $fail_order_update );
+
+		try {
+			FrmForm::update( $form_id, array( 'frm_field_order' => wp_json_encode( array( $field_id => 2 ) ) ) );
+		} finally {
+			remove_filter( 'query', $fail_order_update );
+			remove_action( 'frm_field_order_updated', $record, 10 );
+			$wpdb->suppress_errors( $suppress_errors );
+		}
+
+		$this->assertSame( $suppress_errors, $wpdb->suppress_errors, 'Database error reporting should be restored.' );
+		$this->assertSame( array(), $calls, 'A failed order query should not report an update.' );
+	}
+
 	public function test_invalid_order_values_are_ignored() {
 		$form_id  = $this->factory->form->create();
 		$field_id = $this->factory->field->create(
