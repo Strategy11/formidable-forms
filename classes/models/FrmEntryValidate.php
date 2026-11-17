@@ -313,14 +313,31 @@ class FrmEntryValidate {
 			}//end foreach
 
 			if ( ! $match ) {
-				$hook_match = self::hook_options_allow_value( $field, $value, $entry_id );
-
-				// Older snippets may only register the new-entry hook, which also ran on edits before.
-				return $hook_match || ( $entry_id && self::hook_options_allow_value( $field, $value ) );
+				return self::setup_hooks_allow_value( $field, $value, $entry_id );
 			}
 		}//end foreach
 
 		return true;
+	}
+
+	/**
+	 * Check a value that is missing from the saved options against the setup hooks.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass     $field    The field being validated.
+	 * @param array|string $value    The value to validate.
+	 * @param int          $entry_id The entry being edited, or 0 for a new entry.
+	 *
+	 * @return bool
+	 */
+	private static function setup_hooks_allow_value( $field, $value, $entry_id ) {
+		if ( self::hook_options_allow_value( $field, $value, $entry_id ) ) {
+			return true;
+		}
+
+		// Older snippets may only register the new-entry hook, which also ran on edits before.
+		return $entry_id && self::has_new_entry_only_setup_callbacks() && self::hook_options_allow_value( $field, $value );
 	}
 
 	/**
@@ -422,8 +439,13 @@ class FrmEntryValidate {
 			FrmFieldsHelper::prepare_new_front_field( $values, $field_object );
 		}
 
+		if ( self::value_matches_prepared_options( $value, $values ) ) {
+			return true;
+		}
+
 		$separate_value = FrmField::get_option( $field_object, 'separate_value' );
-		$map_callback   = static function ( $option ) use ( $separate_value ) {
+
+		$map_callback = static function ( $option ) use ( $separate_value ) {
 			if ( is_array( $option ) ) {
 				$option = $separate_value ? $option['value'] : $option['label'];
 			}
@@ -433,9 +455,59 @@ class FrmEntryValidate {
 		$values_options = array_map( $map_callback, $values['options'] );
 		$saved_options  = array_map( $map_callback, $field_object->options );
 
-		// Setup options can depend on render-time URL parameters, time, or other custom context.
-		// A changed list cannot reliably validate what was offered when the form rendered.
-		return $values_options !== $saved_options || self::value_matches_prepared_options( $value, $values );
+		if ( $values_options === $saved_options ) {
+			return false;
+		}
+
+		/**
+		 * Setup options can depend on render-time URL parameters, time, or other custom context,
+		 * so a changed list cannot reliably validate what was offered when the form rendered.
+		 * By default any value is accepted for that field. Return false to require the posted
+		 * value to match one of the options the setup hooks return at submission time.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool     $skip_validation Whether to accept any value for this field.
+		 * @param stdClass $field           The field being validated.
+		 * @param array    $values          The field array after the setup hooks run.
+		 * @param int      $entry_id        The entry being edited, or 0 for a new entry.
+		 */
+		return (bool) apply_filters( 'frm_skip_changed_option_validation', true, $field_object, $values, $entry_id );
+	}
+
+	/**
+	 * Check if the new-entry setup hook has a callback that did not already run through
+	 * the edit setup hook. Only those callbacks can make a value valid on the fallback check.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function has_new_entry_only_setup_callbacks() {
+		global $wp_filter;
+
+		if ( empty( $wp_filter['frm_setup_new_fields_vars']->callbacks ) ) {
+			return false;
+		}
+
+		$edit_callbacks = array();
+
+		if ( ! empty( $wp_filter['frm_setup_edit_fields_vars']->callbacks ) ) {
+			foreach ( $wp_filter['frm_setup_edit_fields_vars']->callbacks as $callbacks ) {
+				$edit_callbacks = array_merge( $edit_callbacks, array_keys( $callbacks ) );
+			}
+		}
+
+		// Pro prepares new and edited fields with separate callbacks that apply the same options.
+		$edit_callbacks[] = 'FrmProFieldsHelper::setup_new_vars';
+
+		foreach ( $wp_filter['frm_setup_new_fields_vars']->callbacks as $callbacks ) {
+			if ( array_diff( array_keys( $callbacks ), $edit_callbacks ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

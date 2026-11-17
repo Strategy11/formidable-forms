@@ -17,6 +17,9 @@ class test_FrmOptionValidation extends FrmUnitTest {
 	/** @var array Setup values supplied by custom code. */
 	private $setup_values = array();
 
+	/** @var int How many times the new-entry setup hook ran. */
+	private $new_calls = 0;
+
 	/**
 	 * Exercise the public field validation path for static and dynamic choices.
 	 *
@@ -388,6 +391,170 @@ class test_FrmOptionValidation extends FrmUnitTest {
 		} finally {
 			remove_filter( 'frm_setup_new_fields_vars', array( $this, 'filter_setup_values' ), 20 );
 		}
+	}
+
+	/**
+	 * Sites can opt out of the changed-list bypass and validate against the submission-time options.
+	 *
+	 * @dataProvider strict_changed_option_cases
+	 *
+	 * @param bool   $editing Whether an entry is being edited.
+	 * @param string $value   The submitted value.
+	 * @param bool   $valid   Whether the value should pass.
+	 *
+	 * @return void
+	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'strict_changed_option_cases' )]
+	public function test_changed_option_bypass_can_be_disabled( $editing, $value, $valid ) {
+		$form_id               = $this->factory->form->create();
+		$field                 = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $form_id,
+				'type'    => 'select',
+				'options' => array( 'Alpha', 'Beta' ),
+			)
+		);
+		$entry_id              = $editing ? $this->factory->entry->create( array( 'form_id' => $form_id ) ) : 0;
+		$hook                  = $editing ? 'frm_setup_edit_fields_vars' : 'frm_setup_new_fields_vars';
+		$this->option_field_id = (int) $field->id;
+		$this->setup_values    = array( 'options' => array( 'Alpha', 'Beta', 'Gamma' ) );
+		$errors                = array();
+		$values                = array(
+			'form_id'   => $form_id,
+			'item_meta' => array( $field->id => $value ),
+		);
+
+		add_filter( $hook, array( $this, 'filter_setup_values' ), 20 );
+		add_filter( 'frm_skip_changed_option_validation', '__return_false' );
+
+		try {
+			FrmEntryValidate::validate_field( $field, $errors, $values, array( 'entry_id' => $entry_id ) );
+			$this->assertSame( $valid, ! isset( $errors[ 'field' . $field->id ] ), 'Disabling the bypass should validate against the hook options.' );
+		} finally {
+			remove_filter( $hook, array( $this, 'filter_setup_values' ), 20 );
+			remove_filter( 'frm_skip_changed_option_validation', '__return_false' );
+		}
+	}
+
+	/**
+	 * @return array
+	 */
+	public static function strict_changed_option_cases() {
+		return array(
+			'new hook option'   => array( false, 'Gamma', true ),
+			'new saved option'  => array( false, 'Alpha', true ),
+			'new unknown value' => array( false, 'zzz', false ),
+			'edit hook option'  => array( true, 'Gamma', true ),
+			'edit unknown'      => array( true, 'zzz', false ),
+		);
+	}
+
+	/**
+	 * The bypass filter only runs when a setup hook changed the option list.
+	 *
+	 * @return void
+	 */
+	public function test_changed_option_filter_receives_field_context() {
+		$form_id               = $this->factory->form->create();
+		$field                 = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $form_id,
+				'type'    => 'select',
+				'options' => array( 'Alpha' ),
+			)
+		);
+		$this->option_field_id = (int) $field->id;
+		$this->setup_values    = array( 'options' => array( 'Current option' ) );
+		$calls                 = array();
+		$capture               = static function ( $skip, $field_object, $values, $entry_id ) use ( &$calls ) {
+			$calls[] = array( (int) $field_object->id, $values['options'], $entry_id );
+			return $skip;
+		};
+		$errors                = array();
+		$values                = array(
+			'form_id'   => $form_id,
+			'item_meta' => array( $field->id => 'Unknown' ),
+		);
+
+		add_filter( 'frm_skip_changed_option_validation', $capture, 10, 4 );
+
+		try {
+			FrmEntryValidate::validate_field( $field, $errors, $values );
+			$this->assertSame( array(), $calls, 'An unchanged option list should not reach the bypass filter.' );
+
+			add_filter( 'frm_setup_new_fields_vars', array( $this, 'filter_setup_values' ), 20 );
+			FrmEntryValidate::validate_field( $field, $errors, $values );
+			$this->assertSame( array( array( (int) $field->id, array( 'Current option' ), 0 ) ), $calls, 'A changed list should pass the field, prepared options and entry ID.' );
+		} finally {
+			remove_filter( 'frm_skip_changed_option_validation', $capture, 10 );
+			remove_filter( 'frm_setup_new_fields_vars', array( $this, 'filter_setup_values' ), 20 );
+		}
+	}
+
+	/**
+	 * On an edit-hook miss, the new-entry hooks only run again when one of their
+	 * callbacks did not already run through the edit hook.
+	 *
+	 * @return void
+	 */
+	public function test_edit_miss_only_runs_new_hooks_for_new_only_callbacks() {
+		$form_id         = $this->factory->form->create();
+		$field           = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $form_id,
+				'type'    => 'select',
+				'options' => array( 'Alpha' ),
+			)
+		);
+		$entry_id        = $this->factory->entry->create( array( 'form_id' => $form_id ) );
+		$this->new_calls = 0;
+		$values          = array(
+			'form_id'   => $form_id,
+			'item_meta' => array( $field->id => 'Unknown' ),
+		);
+
+		add_filter( 'frm_setup_new_fields_vars', array( $this, 'count_new_hook' ) );
+		add_filter( 'frm_setup_edit_fields_vars', array( $this, 'count_new_hook' ) );
+
+		try {
+			$errors = array();
+			FrmEntryValidate::validate_field( $field, $errors, $values, array( 'entry_id' => $entry_id ) );
+			$this->assertArrayHasKey( 'field' . $field->id, $errors, 'An unknown value should be rejected.' );
+			$this->assertSame( 0, $this->new_calls, 'Callbacks shared with the edit hook should not run the new-entry hooks again.' );
+
+			add_filter( 'frm_setup_new_fields_vars', array( $this, 'legacy_new_hook' ) );
+			$errors = array();
+			FrmEntryValidate::validate_field( $field, $errors, $values, array( 'entry_id' => $entry_id ) );
+			$this->assertArrayHasKey( 'field' . $field->id, $errors, 'An unknown value should still be rejected.' );
+			$this->assertSame( 1, $this->new_calls, 'A new-entry-only callback should get the legacy fallback check.' );
+		} finally {
+			remove_filter( 'frm_setup_new_fields_vars', array( $this, 'count_new_hook' ) );
+			remove_filter( 'frm_setup_edit_fields_vars', array( $this, 'count_new_hook' ) );
+			remove_filter( 'frm_setup_new_fields_vars', array( $this, 'legacy_new_hook' ) );
+		}
+	}
+
+	/**
+	 * @param array $values The prepared field values.
+	 *
+	 * @return array
+	 */
+	public function count_new_hook( $values ) {
+		if ( 'frm_setup_new_fields_vars' === current_filter() ) {
+			++$this->new_calls;
+		}
+		return $values;
+	}
+
+	/**
+	 * Stand-in for an older snippet that only registers the new-entry hook.
+	 *
+	 * @param array $values The prepared field values.
+	 *
+	 * @return array
+	 */
+	public function legacy_new_hook( $values ) {
+		return $values;
 	}
 
 	/**
