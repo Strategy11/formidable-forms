@@ -44,6 +44,7 @@ const entries = {
     'onboarding-wizard': './js/src/onboarding-wizard/index.js',
     'addons-page': './js/src/addons-page/index.js',
     formidable_styles: './js/src/admin/styles.js',
+    'formidable-color-picker': './js/src/color-picker/index.js',
     formidable_admin: './js/src/admin/admin.js',
     frm_testing_mode: './js/src/frm_testing_mode.js',
     'formidable-settings-components': './js/src/settings-components/index.js',

@@ -46,7 +46,7 @@ jobs:
 
     name: PHP ${{ matrix.php }} / PHPUnit ${{ matrix.phpunit }} tests in WP ${{ matrix.wordpress }}
     steps:
-      - uses: actions/checkout@v3.5.0
+      - uses: actions/checkout@v6
 
       # get the PHP version
       - uses: shivammathur/setup-php@v2

@@ -356,7 +356,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 		do_action( 'frm_field_options_after_description', compact( 'field', 'display', 'values' ) );
 
 		// Field Size
-		if ( $display['size'] && ! in_array( $field['type'], array( 'select', 'data', 'time' ), true ) ) {
+		if ( $field_obj->should_show_size_setting( $display ) ) {
 			$display_max = $display['max'];
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/pixels-wide.php';
 		}

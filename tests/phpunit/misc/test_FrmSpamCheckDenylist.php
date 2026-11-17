@@ -656,9 +656,8 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 	}
 
 	/**
-	 * The values are compared as a JSON string, which escapes forward slashes, and
-	 * they are unescaped again before the compare. Without that, no denylist entry
-	 * holding a slash could ever match.
+	 * The values are compared as a JSON string with the forward slashes left
+	 * unescaped. Escaped, no denylist entry holding a slash could ever match.
 	 */
 	public function test_check_values_with_slashes_in_denylist_words() {
 		$values                                      = $this->default_values;
@@ -670,6 +669,26 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 
 		// A slash in the word still has to be part of the value to match.
 		$this->assertFalse( $this->check_values_with( array( array( 'words' => array( 'spam/other' ) ) ), $spam_check ) );
+	}
+
+	/**
+	 * Accented characters are compared as typed. Escaped as \u00e1, they leave
+	 * hex digits in the compared string that false-match entries like `1ster`.
+	 */
+	public function test_check_values_with_accented_text() {
+		$values                                      = $this->default_values;
+		$values['item_meta'][ $this->text_field_id ] = 'Máster en Educación';
+		$spam_check                                  = new FrmSpamCheckDenylist( $values );
+
+		$this->assertFalse( $this->check_values_with( array( array( 'words' => array( '1ster' ) ) ), $spam_check ) );
+		$regex_denylist = array(
+			'words'    => array( '1ster' ),
+			'is_regex' => true,
+		);
+		$this->assertFalse( $this->check_values_with( array( $regex_denylist ), $spam_check ) );
+
+		// An accented denylist word matches the accented text it was written for.
+		$this->assertTrue( $this->check_values_with( array( array( 'words' => array( 'máster' ) ) ), $spam_check ) );
 	}
 
 	/**

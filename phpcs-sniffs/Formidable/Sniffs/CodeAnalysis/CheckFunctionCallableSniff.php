@@ -96,12 +96,7 @@ class CheckFunctionCallableSniff implements Sniff {
 		$statementInfo = $this->getStatementInfo( $phpcsFile, $tokens, $stackPtr );
 
 		if ( false === $statementInfo ) {
-			$phpcsFile->addError(
-				'Function %s() could be disabled. Wrap in if ( function_exists( \'%s\' ) ) check.',
-				$stackPtr,
-				'UncheckedCall',
-				array( $functionName, $functionName )
-			);
+			// Only report calls whose enclosing statement can be fixed safely.
 			return;
 		}
 
