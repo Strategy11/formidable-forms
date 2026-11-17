@@ -50,8 +50,7 @@ class test_FrmBoostsMarketplace extends FrmUnitTest {
 
 	/** @return void */
 	public function test_missing_excerpts_render_without_empty_paragraphs() {
-		// The API sends the folder-style slugs. Older cached feeds still send the short ones.
-		foreach ( array( 'bulk-edit', 'formidable-bulk-edit', 'formidable-tooltips', 'brand-new-boost' ) as $slug ) {
+		foreach ( array( 'formidable-bulk-edit', 'formidable-tooltips', 'brand-new-boost' ) as $slug ) {
 			$addon = $this->addon( $slug );
 			$this->run_private_method( array( 'FrmAddonsController', 'override_addon_display' ), array( &$addon, $slug ) );
 
@@ -209,7 +208,7 @@ class test_FrmBoostsMarketplace extends FrmUnitTest {
 	public function test_boosts_are_not_counted_or_searched_as_addons() {
 		// The Boost comes first so a search that does not skip Boosts would match it.
 		$feed = array(
-			'2' => $this->addon( 'field-tooltips' ) + array(
+			'2' => $this->addon( 'formidable-tooltips' ) + array(
 				'name'         => 'Tooltips',
 				'excerpt'      => 'Add tooltips.',
 				'search_terms' => 'tooltips',
@@ -253,18 +252,19 @@ class test_FrmBoostsMarketplace extends FrmUnitTest {
 	 * @return void
 	 */
 	public function test_installed_boost_is_found_when_the_api_path_differs() {
-		$addon          = $this->addon( 'field-tooltips' );
+		// The API sends this path, but Advanced Modals ships its main file as frm-advanced-modals.php.
+		$addon          = $this->addon( 'formidable-advanced-modals' );
 		$addon['id']    = 123;
-		$addon['title'] = 'Tooltips';
-		$api_file       = 'field-tooltips/field-tooltips.php';
+		$addon['title'] = 'Advanced Modals';
+		$api_file       = 'formidable-advanced-modals/formidable-advanced-modals.php';
 		$cached         = wp_cache_get( 'plugins', 'plugins' );
 
 		wp_cache_set(
 			'plugins',
 			array(
 				'' => array(
-					'formidable-tooltips/formidable-tooltips.php' => array( 'Name' => 'Formidable Tooltips' ),
-					'formidable-other/formidable-other.php'       => array( 'Name' => 'Formidable Other' ),
+					'formidable-advanced-modals/frm-advanced-modals.php' => array( 'Name' => 'Formidable Advanced Modals' ),
+					'formidable-other/formidable-other.php'              => array( 'Name' => 'Formidable Other' ),
 				),
 			),
 			'plugins'
@@ -272,9 +272,9 @@ class test_FrmBoostsMarketplace extends FrmUnitTest {
 
 		$updater                = ( new ReflectionClass( 'FrmAddon' ) )->newInstanceWithoutConstructor();
 		$updater->download_id   = 123;
-		$updater->plugin_folder = 'renamed-tooltips/renamed-tooltips.php';
+		$updater->plugin_folder = 'renamed-modals/frm-advanced-modals.php';
 		$register               = static function ( $plugins ) use ( $updater ) {
-			$plugins['tooltips'] = $updater;
+			$plugins['advanced-modals'] = $updater;
 			return $plugins;
 		};
 
@@ -284,11 +284,11 @@ class test_FrmBoostsMarketplace extends FrmUnitTest {
 
 		try {
 			// Inactive Boost: matched by its plugin name.
-			$this->assertSame( 'formidable-tooltips/formidable-tooltips.php', $resolve( $addon ) );
+			$this->assertSame( 'formidable-advanced-modals/frm-advanced-modals.php', $resolve( $addon ) );
 
 			// Active Boost: matched by its updater download id first.
 			add_filter( 'frm_installed_addons', $register );
-			$this->assertSame( 'renamed-tooltips/renamed-tooltips.php', $resolve( $addon ) );
+			$this->assertSame( 'renamed-modals/frm-advanced-modals.php', $resolve( $addon ) );
 			remove_filter( 'frm_installed_addons', $register );
 
 			// Not installed: the API path is kept.

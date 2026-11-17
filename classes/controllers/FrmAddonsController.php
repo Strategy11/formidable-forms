@@ -316,25 +316,15 @@ class FrmAddonsController {
 		}
 
 		$excerpts = array(
-			'advanced-modals' => __( 'Open forms and content in smart popups with various trigger options.', 'formidable' ),
-			'color-picker'    => __( 'Select custom or pre-set colors, including optional transparency', 'formidable' ),
-			'bulk-edit'       => __( 'Update multiple entries at once, no CSV export/import needed.', 'formidable' ),
-			'celebrations'    => __( 'Reward submissions with emoji fountains and celebratory sounds.', 'formidable' ),
-			'field-tooltips'  => __( 'Add customized hover-and-tap help to any field.', 'formidable' ),
+			'formidable-advanced-modals' => __( 'Open forms and content in smart popups with various trigger options.', 'formidable' ),
+			'formidable-color-picker'    => __( 'Select custom or pre-set colors, including optional transparency', 'formidable' ),
+			'formidable-bulk-edit'       => __( 'Update multiple entries at once, no CSV export/import needed.', 'formidable' ),
+			'formidable-celebrations'    => __( 'Reward submissions with emoji fountains and celebratory sounds.', 'formidable' ),
+			'formidable-tooltips'        => __( 'Add customized hover-and-tap help to any field.', 'formidable' ),
 		);
 
-		// The API now sends Boost slugs that match their plugin folders. Older cached feeds still use the short slugs.
-		$current_slugs = array(
-			'formidable-advanced-modals' => 'advanced-modals',
-			'formidable-color-picker'    => 'color-picker',
-			'formidable-bulk-edit'       => 'bulk-edit',
-			'formidable-celebrations'    => 'celebrations',
-			'formidable-tooltips'        => 'field-tooltips',
-		);
-		$excerpt_slug  = $current_slugs[ $slug ] ?? $slug;
-
-		if ( isset( $excerpts[ $excerpt_slug ] ) ) {
-			$addon['excerpt'] = $excerpts[ $excerpt_slug ];
+		if ( isset( $excerpts[ $slug ] ) ) {
+			$addon['excerpt'] = $excerpts[ $slug ];
 		}
 	}
 
