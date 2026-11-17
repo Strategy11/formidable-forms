@@ -401,8 +401,7 @@ class test_FrmFormsController extends FrmUnitTest {
 	}
 
 	/**
-	 * A draft form placed on a page is hidden from everyone, logged out
-	 * visitors included. Only the preview page renders it.
+	 * A draft form placed on a page is hidden from visitors without form editing access. Editors and shared previews can still render it.
 	 *
 	 * @see https://github.com/Strategy11/formidable-pro/issues/6861
 	 *
@@ -434,13 +433,18 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->assertStringContainsString( 'Draft check ' . $published, FrmFormsController::show_form( $published ), 'A published form should still render.' );
 
 		$this->set_current_user_to_1();
-		$this->assertSame( $invalid, FrmFormsController::show_form( $draft_id ), 'An editor should not see a draft form on a page either.' );
+		$this->assertStringContainsString( 'Draft check ' . $draft_id, FrmFormsController::show_form( $draft_id ), 'Form editors should see drafts on ordinary pages.' );
 
 		$previous_pagenow = $pagenow;
 		$pagenow          = 'admin-ajax.php'; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		$_GET['action']   = 'frm_forms_preview';
 		wp_set_current_user( 0 );
 		$preview = FrmFormsController::show_form( $draft_id );
+		$this->assertStringContainsString(
+			'name="frm_preview_draft_' . $published . '"',
+			FrmFormsController::show_form( $published ),
+			'Published previews need a nonce for embedded drafts.'
+		);
 		$pagenow = $previous_pagenow; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		unset( $_GET['action'] );
 
@@ -498,5 +502,27 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->assertSame( $invalid, $spoofed_nonce, 'An AJAX submit with an invalid preview nonce should not render a draft form.' );
 		$this->assertStringContainsString( 'Draft check ' . $draft_id, $no_referer, 'An AJAX submit from the preview page should render the draft form again without a Referer.' );
 		$this->assertSame( $invalid, $referer_only, 'A preview page Referer alone should not render a draft form.' );
+	}
+	/**
+	 * Draft restrictions apply equally to shortcodes and blocks without hiding forms from editors.
+	 */
+	public function test_draft_shortcode_and_block_visibility() {
+		$form_id = $this->factory->form->create( array( 'status' => 'draft' ) );
+		$this->factory->field->create(
+			array(
+				'form_id' => $form_id,
+				'type'    => 'text',
+				'name'    => 'Editor draft field',
+			)
+		);
+		$shortcode = '[formidable id="' . $form_id . '"]';
+
+		wp_set_current_user( 0 );
+		$this->assertStringNotContainsString( 'Editor draft field', do_shortcode( $shortcode ) );
+		$this->assertStringNotContainsString( 'Editor draft field', FrmSimpleBlocksController::simple_form_render( array( 'formId' => $form_id ) ) );
+
+		$this->set_current_user_to_1();
+		$this->assertStringContainsString( 'Editor draft field', do_shortcode( $shortcode ) );
+		$this->assertStringContainsString( 'Editor draft field', FrmSimpleBlocksController::simple_form_render( array( 'formId' => $form_id ) ) );
 	}
 }
