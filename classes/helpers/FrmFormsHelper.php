@@ -778,7 +778,7 @@ class FrmFormsHelper {
 		 * @param bool  $ajax_load True when the form has more than AJAX_BUILDER_FIELD_THRESHOLD fields.
 		 * @param array $args      Contains `field_count` and `form_id`.
 		 */
-		return (bool) apply_filters(
+		return apply_filters(
 			'frm_ajax_load_form_builder',
 			$field_count > self::AJAX_BUILDER_FIELD_THRESHOLD,
 			compact( 'field_count', 'form_id' )
