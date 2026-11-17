@@ -106,6 +106,25 @@ export function waitForFieldSettings( fieldIds ) {
 }
 
 /**
+ * Ask once more for settings whose last request failed.
+ *
+ * @since x.x
+ * @param {string[]} fieldIds Numeric field IDs.
+ * @return {Promise<string[]>} Resolves with the fields whose settings still failed to load.
+ */
+export function retryFailedFieldSettings( fieldIds ) {
+	const failed = fieldIds.map( String ).filter( fieldId => failedFieldIds.has( fieldId ) );
+	if ( ! failed.length ) {
+		return Promise.resolve( [] );
+	}
+
+	// Send now instead of in a microtask, so the requests exist before waiting on them.
+	failed.forEach( fieldId => urgentFieldIds.add( fieldId ) );
+	sendUrgentRequests();
+	return waitForFieldSettings( failed ).then( () => failed.filter( fieldId => failedFieldIds.has( fieldId ) ) );
+}
+
+/**
  * Forget a deleted field so its settings are not requested.
  *
  * @since x.x

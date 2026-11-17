@@ -376,6 +376,7 @@ legend.frm_hidden{
 
 .with_frm_style .frm_primary_label{
 	max-width:100%;
+	line-height: inherit;
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
 	font-family: var(--font);
 <?php } ?>

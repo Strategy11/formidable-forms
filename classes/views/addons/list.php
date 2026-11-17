@@ -16,12 +16,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 FrmAddonsHelper::show_upgrade_renew_cta();
 FrmAddonsHelper::get_reconnect_link();
+
 ?>
 
-<ul id="frm-addons-list" class="frm-list-grid-layout frm-mb-xs">
-	<?php
-	foreach ( $addons as $slug => $addon ) {
-		require $view_path . 'addon.php';
-	}
-	?>
-</ul>
+<div id="frm-addons-list" class="frm-flex-col frm-gap-md frm-mb-xs">
+	<ul class="frm-list-grid-layout">
+		<?php
+		foreach ( $addons as $slug => $addon ) {
+			require $view_path . 'addon.php';
+		}
+		?>
+	</ul>
+</div>

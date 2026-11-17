@@ -327,7 +327,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @param string $value
 	 */
 	private function is_a_valid_color( $value ) {
-		return $this->run_private_method( array( 'FrmAppHelper', 'is_a_valid_color' ), array( $value ) );
+		return FrmAppHelper::allow_style( false, '--primary-700:' . $value );
 	}
 
 	public function test_remove_get_action() {
@@ -520,6 +520,22 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$unique_key = FrmAppHelper::get_unique_key( $super_long_form_key, $table_name, $column );
 		$this->assertLessThanOrEqual( 70, strlen( $unique_key ) );
 		$this->assertNotSame( $super_long_form_key, $unique_key );
+	}
+
+	public function test_get_unique_key_increments_for_truncated_long_key() {
+		$table_name = 'frm_forms';
+		$column     = 'form_key';
+		$long_key   = str_repeat( 'a', 75 );
+		$truncated  = substr( $long_key, 0, 60 );
+
+		$this->factory->form->create( array( 'form_key' => $long_key ) );
+
+		$first = FrmAppHelper::get_unique_key( $long_key, $table_name, $column );
+		$this->assertSame( $truncated . '2', $first );
+		$this->factory->form->create( array( 'form_key' => $first ) );
+
+		$second = FrmAppHelper::get_unique_key( $long_key, $table_name, $column );
+		$this->assertSame( $truncated . '3', $second, 'The suffix should skip keys already created from the truncated key.' );
 	}
 
 	private function add_field_to_form( $form_id, $field_key ) {
