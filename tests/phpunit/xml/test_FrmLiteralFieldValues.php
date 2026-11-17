@@ -170,6 +170,75 @@ class test_FrmLiteralFieldValues extends FrmUnitTest {
 		$this->assertSame( 'C:tempnew {"a":1}', FrmEntryMeta::get_entry_meta_by_field( $entry_id, $field_id ), 'Without the filter the legacy unslashing is unchanged.' );
 	}
 
+	public function test_get_all_passes_each_field_type_to_unslash_filter() {
+		$form_id   = $this->factory->form->create();
+		$field_ids = array(
+			'text'     => $this->factory->field->create(
+				array(
+					'type'    => 'text',
+					'form_id' => $form_id,
+				)
+			),
+			'textarea' => $this->factory->field->create(
+				array(
+					'type'    => 'textarea',
+					'form_id' => $form_id,
+				)
+			),
+		);
+		$entry_ids = array();
+
+		for ( $i = 0; $i < 3; $i++ ) {
+			$entry_ids[] = $this->factory->entry->create(
+				array(
+					'form_id'   => $form_id,
+					'item_meta' => array(
+						$field_ids['text']     => 'placeholder',
+						$field_ids['textarea'] => 'placeholder',
+					),
+				)
+			);
+		}
+
+		global $wpdb;
+
+		foreach ( $field_ids as $type => $field_id ) {
+			$wpdb->update(
+				$wpdb->prefix . 'frm_item_metas',
+				array( 'meta_value' => 'C:\\' . $type ),
+				array( 'field_id' => $field_id )
+			);
+		}
+
+		FrmEntryMeta::clear_cache();
+		wp_cache_flush();
+
+		$seen   = array();
+		$filter = function ( $unslash, $type, $field_id ) use ( &$seen ) {
+			$seen[] = array( (int) $field_id, $type );
+			return 'textarea' !== $type;
+		};
+		add_filter( 'frm_should_unslash_entry_meta_value', $filter, 10, 3 );
+
+		try {
+			$entries = FrmEntry::getAll( array( 'it.id' => $entry_ids ), '', '', true );
+		} finally {
+			remove_filter( 'frm_should_unslash_entry_meta_value', $filter );
+		}
+
+		$this->assertCount( 3, $entries );
+		$this->assertCount( 6, $seen, 'The filter runs once per meta per entry.' );
+
+		foreach ( $seen as $call ) {
+			$this->assertSame( array_search( $call[0], $field_ids, true ), $call[1], 'Each meta gets its own field type, including from the shared lookup.' );
+		}
+
+		foreach ( $entries as $entry ) {
+			$this->assertSame( 'C:text', $entry->metas[ $field_ids['text'] ] );
+			$this->assertSame( 'C:\\textarea', $entry->metas[ $field_ids['textarea'] ] );
+		}
+	}
+
 	public function test_prepare_entry_preserves_non_array_meta_values() {
 		$entry = (object) array(
 			'description' => '',

@@ -517,10 +517,12 @@ class FrmEntry {
 	 * @since 4.02.03
 	 *
 	 * @param object $entry
+	 * @param array  $field_types Field types already looked up, keyed by field ID or key.
+	 *                            Shared across entries so each field type is only looked up once.
 	 *
 	 * @return void
 	 */
-	private static function prepare_entry( &$entry ) {
+	private static function prepare_entry( &$entry, &$field_types = array() ) {
 		if ( ! $entry ) {
 			return;
 		}
@@ -540,8 +542,20 @@ class FrmEntry {
 			return;
 		}
 
+		$check_types = has_filter( 'frm_should_unslash_entry_meta_value' );
+
 		foreach ( $metas as $field_id => $value ) {
-			$metas[ $field_id ] = FrmEntryMeta::maybe_unslash_field_value( $value, $field_id );
+			$type = null;
+
+			if ( $check_types ) {
+				if ( ! isset( $field_types[ $field_id ] ) ) {
+					$field_types[ $field_id ] = (string) FrmField::get_type( $field_id );
+				}
+
+				$type = $field_types[ $field_id ];
+			}
+
+			$metas[ $field_id ] = FrmEntryMeta::maybe_unslash_field_value( $value, $field_id, $type );
 		}
 		$entry->metas = $metas;
 	}
@@ -554,8 +568,10 @@ class FrmEntry {
 	 * @return void
 	 */
 	private static function prepare_entries( &$entries ) {
+		$field_types = array();
+
 		foreach ( $entries as $k => $entry ) {
-			self::prepare_entry( $entry );
+			self::prepare_entry( $entry, $field_types );
 			$entries[ $k ] = $entry;
 		}
 	}
