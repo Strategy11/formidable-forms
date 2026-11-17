@@ -136,7 +136,7 @@ class test_FrmPayPalLiteLegacyMigration extends FrmUnitTest {
 	}
 
 	public function test_after_payment_rows_need_a_supporting_pro_version() {
-		$supported = is_callable( 'FrmProTransLiteController::change_fields_after_payment' ) || class_exists( 'FrmTransActionsController' );
+		$supported = $this->run_private_method( array( 'FrmPayPalLiteLegacyMigrationHelper', 'after_payment_is_supported' ) );
 		$method    = array( 'FrmPayPalLiteLegacyMigrationHelper', 'get_after_payment_blocker' );
 		$rows      = array(
 			'change_field' => array(
