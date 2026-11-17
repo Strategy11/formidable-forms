@@ -7284,9 +7284,24 @@ window.frmAdminBuildJS = function() {
 	function maybeUpdateFormatInput( event ) {
 		const formatElement = event.target;
 		const type = formatElement.value;
+		const fieldId = formatElement.dataset.fieldId;
+
+		if ( formatElement.classList.contains( 'frm_phone_type_dropdown' ) ) {
+			const autocompleteElement = document.getElementById( `field_options_autocomplete_${ fieldId }` );
+			// An upgrade-only option snaps back to none below, so it must not clear the tel default.
+			const isUpgradeOption = Boolean( formatElement.selectedOptions[ 0 ]?.classList.contains( 'frm_show_upgrade' ) );
+			const hasFormat = ! isUpgradeOption && ( 'custom' === type || 'international' === type );
+			// Browser autofill would put the same value in every repeater row.
+			const isInRepeater = Boolean( document.getElementById( `frm_field_id_${ fieldId }` )?.closest( '.repeat_section' ) );
+
+			if ( autocompleteElement && 'none' === type && ! autocompleteElement.value && ! isInRepeater ) {
+				autocompleteElement.value = 'tel';
+			} else if ( autocompleteElement && hasFormat && 'tel' === autocompleteElement.value ) {
+				autocompleteElement.value = '';
+			}
+		}
 
 		if ( 'custom' === type ) {
-			const { fieldId } = formatElement.dataset;
 			const formatInput = document.getElementById( `frm-field-format-custom-${ fieldId }` ).querySelector( '.frm_format_opt' );
 
 			if ( 'international' === formatInput.value || 'currency' === formatInput.value || 'number' === formatInput.value ) {
