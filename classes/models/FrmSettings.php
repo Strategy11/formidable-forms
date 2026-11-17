@@ -465,10 +465,6 @@ class FrmSettings {
 	 * @return void
 	 */
 	private function fill_captcha_settings() {
-		if ( ! isset( $this->active_captcha ) ) {
-			$this->active_captcha = 'recaptcha';
-		}
-
 		$privkey = '';
 		$re_lang = '';
 
@@ -506,6 +502,36 @@ class FrmSettings {
 
 		if ( ! isset( $this->re_threshold ) ) {
 			$this->re_threshold = .5;
+		}
+
+		$this->set_supported_captcha();
+	}
+
+	/**
+	 * Use a configured provider when the saved CAPTCHA type is unsupported.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private function set_supported_captcha() {
+		$prefixes = array(
+			'recaptcha' => '',
+			'hcaptcha'  => 'hcaptcha_',
+			'turnstile' => 'turnstile_',
+		);
+
+		if ( array_key_exists( $this->active_captcha, $prefixes ) ) {
+			return;
+		}
+
+		$this->active_captcha = 'recaptcha';
+
+		foreach ( $prefixes as $type => $prefix ) {
+			if ( ! empty( $this->{ $prefix . 'pubkey' } ) && ! empty( $this->{ $prefix . 'privkey' } ) ) {
+				$this->active_captcha = $type;
+				return;
+			}
 		}
 	}
 
