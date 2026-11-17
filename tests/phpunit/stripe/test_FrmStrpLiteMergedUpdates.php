@@ -192,14 +192,14 @@ class test_FrmStrpLiteMergedUpdates extends FrmUnitTest {
 		Assert::assertArrayHasKey( '.Input', $rules );
 		Assert::assertArrayNotHasKey( 'fontFamily', $rules['.Input'] );
 		Assert::assertArrayNotHasKey( 'fontFamily', $rules['.Label'] );
-		$this->assertSame( '', $rules['.Input:focus']['borderColor'] );
+		Assert::assertSame( '', $rules['.Input:focus']['borderColor'] );
 	}
 
 	public function test_focus_border_color_matches_the_style() {
 		$settings                        = $this->run_private_method( array( 'FrmStrpLiteActionsController', 'get_style_settings_for_form' ), array( 0 ) );
 		$settings['border_color_active'] = '#ff8000';
 		$rules                           = $this->run_private_method( array( 'FrmStrpLiteActionsController', 'get_appearance_rules' ), array( $settings ) );
-		$this->assertSame( '#ff8000', $rules['.Input:focus']['borderColor'] );
+		Assert::assertSame( '#ff8000', $rules['.Input:focus']['borderColor'] );
 	}
 
 	public function test_successful_webhook_updates_the_description_without_a_return_visit() {

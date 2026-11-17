@@ -13,6 +13,7 @@ let initialization = 0;
  */
 async function getStripeColor( color, backgrounds = [] ) {
 	let appearance;
+	const events = [];
 	const captured = new Error( 'Stripe appearance captured' );
 	const card = {
 		parentElement: backgrounds.reduceRight( ( parentElement, backgroundColor ) => ( { parentElement, backgroundColor } ), null )
@@ -26,7 +27,7 @@ async function getStripeColor( color, backgrounds = [] ) {
 		ready: callback => callback(),
 		find: () => selection,
 		not: () => selection,
-		attr() {}
+		attr: () => selection
 	};
 	const Stripe = () => ( {
 		elements: options => {
@@ -43,7 +44,7 @@ async function getStripeColor( color, backgrounds = [] ) {
 		},
 		jQuery: () => selection,
 		Stripe,
-		frmFrontForm: { triggerCustomEvent() {} },
+		frmFrontForm: { triggerCustomEvent: ( ...args ) => events.push( args ) },
 		frm_stripe_vars: {
 			appearanceRules: {
 				'.Input': { color, backgroundColor: color },
@@ -64,6 +65,7 @@ async function getStripeColor( color, backgrounds = [] ) {
 			}
 		}
 	}
+	assert.equal( events[ 0 ][ 1 ], 'frmStripeLiteDisableSubmit' );
 	assert.equal( appearance.variables.colorText, appearance.variables.colorBackground );
 	if ( color ) {
 		assert.equal( appearance.variables.colorPrimary, appearance.variables.colorBackground );
