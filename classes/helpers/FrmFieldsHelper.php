@@ -51,8 +51,8 @@ class FrmFieldsHelper {
 
 		$values['field_options']['custom_html'] = self::get_default_html( $type );
 
-		if ( ! empty( $values['field_options']['autocomplete'] ) && self::is_repeater_form( $form_id ) ) {
-			// Browser autofill would put the same value in every repeater row.
+		if ( 'phone' === $type && 'tel' === ( $values['field_options']['autocomplete'] ?? '' ) && self::is_repeater_form( $form_id ) ) {
+			// Browser autofill would put the same phone number in every repeater row.
 			$values['field_options']['autocomplete'] = '';
 		}
 
