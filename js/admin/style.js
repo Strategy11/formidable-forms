@@ -1314,9 +1314,11 @@
 				continue;
 			}
 
-			targetInput.value = defaultValues[ key ];
+			const isColor = targetInput.classList.contains( 'hex' );
+			// Default hex colors have no leading '#'. Add it like syncQuickSettingsSwatch so the color picker can read the value.
+			targetInput.value = isColor ? addColorHash( defaultValues[ key ] ) : defaultValues[ key ];
 
-			if ( targetInput.classList.contains( 'hex' ) ) {
+			if ( isColor ) {
 				// Trigger a change event so the color pickers sync. Otherwise they stay the same color after reset.
 				targetInput.dispatchEvent( new Event( 'frm:color-sync' ) );
 			}
@@ -1350,10 +1352,21 @@
 		}
 
 		// Stored hex colors have no leading '#'. PHP adds it at render time (FrmStylesHelper::get_color_output()); match that here.
-		const color = /^[0-9a-f]{3,8}$/i.test( value ) ? `#${ value }` : value;
-
-		swatch.value = color;
+		swatch.value = addColorHash( value );
 		swatch.dispatchEvent( new Event( 'frm:color-sync' ) );
+	}
+
+	/**
+	 * Prepend '#' to a hex color saved without it. This matches FrmStylesHelper::add_color_hash_if_needed.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} value The color value.
+	 * @return {string} The color, with a '#' when it is a hex color without one.
+	 */
+	function addColorHash( value ) {
+		const trimmed = String( value ).trim();
+		return /^(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test( trimmed ) ? `#${ trimmed }` : trimmed;
 	}
 
 	/**
@@ -1646,11 +1659,7 @@
 		 * @return {string} The value to use for the CSS variable.
 		 */
 		function prepareLiveValue( key, value ) {
-			const trimmed = value.trim();
-			if ( livePreview.colorSettings.has( key ) && ! trimmed.includes( '#' ) && ! /(rgba?|hsla?|hwb)\(/.test( trimmed ) ) {
-				return `#${ trimmed }`;
-			}
-			return trimmed;
+			return livePreview.colorSettings.has( key ) ? addColorHash( value ) : value.trim();
 		}
 
 		/**

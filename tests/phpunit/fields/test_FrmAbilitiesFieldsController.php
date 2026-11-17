@@ -334,7 +334,7 @@ class test_FrmAbilitiesFieldsController extends FrmUnitTest {
 	}
 
 	/**
-	 * create-form builds inline fields through the same pipeline as create-field.
+	 * The create-form ability builds inline fields through the same pipeline as create-field.
 	 *
 	 * @return void
 	 */
@@ -401,7 +401,7 @@ class test_FrmAbilitiesFieldsController extends FrmUnitTest {
 
 	/**
 	 * A default_value-only or name-only update still reaches the cleaners, with
-	 * the stored type, name and options they expect.
+	 * the stored type and options they expect.
 	 *
 	 * @return void
 	 */
@@ -440,13 +440,118 @@ class test_FrmAbilitiesFieldsController extends FrmUnitTest {
 		remove_filter( 'frm_clean_text_field_options_before_update', $spy );
 
 		$this->assertCount( 2, $seen, 'The clean filter should run for each top level update.' );
-		$this->assertSame( 'Stored Name', $seen[0]['name'], 'A default_value update should carry the stored name.' );
+		$this->assertArrayNotHasKey( 'name', $seen[0], 'A default_value update should not save the stored name again.' );
 		$this->assertSame( 'New Name', $seen[1]['name'], 'A name update should keep the new name.' );
 		$this->assertIsArray( $seen[0]['field_options'], 'The cleaners expect field_options.' );
 
 		$stored = FrmField::getOne( $field->id );
 		$this->assertSame( 'New Name', $stored->name );
 		$this->assertSame( 'abc', $stored->default_value );
+	}
+
+	/**
+	 * A user without unfiltered_html can change a setting without stripping the markup an admin put in the label.
+	 *
+	 * @covers FrmAbilitiesFieldsController::execute_update_field
+	 *
+	 * @return void
+	 */
+	public function test_update_field_keeps_stored_label_markup_for_users_without_unfiltered_html() {
+		global $wpdb;
+
+		$label     = '<script>alert(1)</script>Label';
+		$text      = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $this->form->id,
+				'type'    => 'text',
+			)
+		);
+		$section   = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $this->form->id,
+				'type'    => 'divider',
+			)
+		);
+		$field_ids = array( $text->id, $section->id );
+
+		foreach ( $field_ids as $field_id ) {
+			$wpdb->update( $wpdb->prefix . 'frm_fields', array( 'name' => $label ), array( 'id' => $field_id ) );
+		}
+
+		FrmField::delete_form_transient( $this->form->id );
+
+		$seen = array();
+		$spy  = function ( $values ) use ( &$seen ) {
+			$seen[] = $values;
+			return $values;
+		};
+		$deny = function ( $caps, $cap ) {
+			return 'unfiltered_html' === $cap ? array( 'do_not_allow' ) : $caps;
+		};
+		add_filter( 'frm_clean_divider_field_options_before_update', $spy );
+		add_filter( 'map_meta_cap', $deny, 10, 2 );
+
+		try {
+			foreach ( $field_ids as $field_id ) {
+				$this->assertNotWPError(
+					$this->execute(
+						'update-field',
+						array(
+							'id'       => $field_id,
+							'required' => true,
+						)
+					)
+				);
+			}
+		} finally {
+			remove_filter( 'map_meta_cap', $deny, 10 );
+			remove_filter( 'frm_clean_divider_field_options_before_update', $spy );
+		}
+
+		foreach ( $field_ids as $field_id ) {
+			$stored = FrmField::getOne( $field_id );
+			$this->assertSame( $label, $stored->name, 'The label markup should be kept.' );
+			$this->assertSame( '1', (string) $stored->required );
+		}
+		$this->assertCount( 0, $seen, 'The section cleaner should be skipped instead of saving a filtered name.' );
+	}
+
+	/**
+	 * The section and repeater cleaner renames the repeater's child form, so it gets the stored name.
+	 *
+	 * @covers FrmAbilitiesFieldsController::execute_update_field
+	 *
+	 * @return void
+	 */
+	public function test_update_field_gives_the_section_cleaner_the_stored_name() {
+		$section = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $this->form->id,
+				'type'    => 'divider',
+				'name'    => 'Section Name',
+			)
+		);
+
+		$seen = array();
+		$spy  = function ( $values ) use ( &$seen ) {
+			$seen[] = $values;
+			return $values;
+		};
+		add_filter( 'frm_clean_divider_field_options_before_update', $spy );
+
+		$this->execute(
+			'update-field',
+			array(
+				'id'          => $section->id,
+				'description' => 'New description',
+			)
+		);
+
+		remove_filter( 'frm_clean_divider_field_options_before_update', $spy );
+
+		$this->assertCount( 1, $seen );
+		$this->assertSame( 'Section Name', $seen[0]['name'] );
+		$this->assertSame( 'Section Name', FrmField::getOne( $section->id )->name );
 	}
 
 	/**
