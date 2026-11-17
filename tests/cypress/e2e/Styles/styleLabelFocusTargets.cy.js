@@ -65,12 +65,6 @@ describe( 'Style builder labels focus their visible/interactive control', () => 
 	} );
 
 	it( 'A slider label outside Width/Height also drops its focus target once its unit is cleared to "Not set"', () => {
-		cy.intercept( 'POST', '**/admin-ajax.php', req => {
-			if ( req.body?.includes( 'action=frm_change_styling' ) ) {
-				req.alias = 'changeStyling';
-			}
-		} );
-
 		cy.visit( '/wp-admin/admin.php?page=formidable-styles&section=advanced-settings' );
 		cy.get( '#general-style', { timeout: STYLES_PAGE_TIMEOUT } ).should( 'have.class', 'open' );
 
@@ -79,13 +73,17 @@ describe( 'Style builder labels focus their visible/interactive control', () => 
 
 		cy.log( 'Clearing the unit to "Not set" disables the value input and drops the label\'s focus target' );
 		cy.get( '#frm_fieldset' ).closest( '.frm-slider-component' ).find( '.frm-slider-value select' ).select( '' );
-		cy.wait( '@changeStyling', { timeout: 10000 } );
 		cy.get( '#frm_fieldset-value' ).should( 'be.disabled' );
 		cy.get( '[data-slider-label-for="frm_fieldset-value"]' ).should( 'not.have.attr', 'for' );
 
 		cy.log( 'Choosing a measured unit again re-associates the label with the now-enabled input' );
 		cy.get( '#frm_fieldset' ).closest( '.frm-slider-component' ).find( '.frm-slider-value select' ).select( 'px' );
-		cy.wait( '@changeStyling', { timeout: 10000 } );
+		cy.log( 'Border Width is a live-preview setting, so the preview CSS variable follows the measured value without a server request' );
+		cy.get( '#frm_fieldset' ).invoke( 'val' ).should( 'match', /px$/ ).then( value => {
+			cy.get( '#frm_style_preview .frm_forms.with_frm_style', { timeout: 10000 } ).first().should( $form => {
+				expect( $form[ 0 ].ownerDocument.defaultView.getComputedStyle( $form[ 0 ] ).getPropertyValue( '--fieldset' ).trim() ).to.eq( value );
+			} );
+		} );
 		cy.get( '[data-slider-label-for="frm_fieldset-value"]' ).should( 'have.attr', 'for', 'frm_fieldset-value' );
 		cy.get( '[data-slider-label-for="frm_fieldset-value"]' ).click();
 		cy.focused().should( 'have.id', 'frm_fieldset-value' );

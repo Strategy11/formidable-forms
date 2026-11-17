@@ -312,7 +312,15 @@ class FrmAddonsHelper {
 			return true;
 		}
 
-		$categories = $addon['category-slugs'] ?? array_map( 'sanitize_title', $addon['categories'] ?? array() );
+		if ( isset( $addon['category-slugs'] ) ) {
+			$categories = $addon['category-slugs'];
+		} else {
+			$categories = array();
+
+			foreach ( $addon['categories'] ?? array() as $category ) {
+				$categories[] = sanitize_title( $category );
+			}
+		}
 
 		return in_array( 'boost', $categories, true ) || in_array( 'boosts', $categories, true );
 	}

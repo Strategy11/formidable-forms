@@ -365,6 +365,18 @@ class FrmForm {
 			FrmField::delete_form_transient( $affected_form_id );
 		}
 
+		/**
+		 * Fires after the builder saves the field order in one query.
+		 *
+		 * This write does not fire frm_field_updated for each field.
+		 *
+		 * @since x.x
+		 *
+		 * @param int[] $ids     IDs of the fields whose order was sent. Fields outside the form are skipped by the query.
+		 * @param int   $form_id The form being saved.
+		 */
+		do_action( 'frm_field_order_updated', $ids, (int) $form_id );
+
 		return true;
 	}
 

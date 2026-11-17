@@ -23,7 +23,7 @@ const { initLivePreview, getSettingKey, clampToInputRange } = require( './livePr
 const { createFieldReadiness, getFieldPreviewBody } = require( './fieldReadiness' );
 const { createRefreshFieldPreview } = require( './refreshFieldPreview' );
 const { queueFieldPreview, renderFieldPreviewNow, forgetFieldPreview, setInitialFieldPreviews } = require( './fieldPreviewQueue' );
-const { queueFieldSettings, startFieldSettingsQueue, isFieldSettingsPending, requestFieldSettingsNow, waitForFieldSettings, cancelFieldSettings } = require( './fieldSettingsLoader' );
+const { queueFieldSettings, startFieldSettingsQueue, isFieldSettingsPending, requestFieldSettingsNow, waitForFieldSettings, retryFailedFieldSettings, cancelFieldSettings } = require( './fieldSettingsLoader' );
 
 const fieldHtmlTemplate = document.createElement( 'template' );
 
@@ -325,7 +325,7 @@ window.frmAdminBuildJS = function() {
 	// Resolves once the Field Options tab is showing the selected field's settings. See showFieldOptionsTab.
 	let fieldOptionsTabShown = Promise.resolve();
 
-	const { __, sprintf } = wp.i18n;
+	const { __, _n, sprintf } = wp.i18n;
 	let debouncedSyncAfterDragAndDrop;
 	let postBodyContent;
 	let $postBodyContent;
@@ -2842,6 +2842,8 @@ window.frmAdminBuildJS = function() {
 
 	// Fields drawn from page data whose settings were needed before they arrived.
 	const fieldsAwaitingSettings = new Set();
+	// Fields whose settings failed to load during the last save attempt.
+	const fieldsFailedOnSave = new Set();
 	let placeholderSpinnerObserver;
 
 	/**
@@ -3260,13 +3262,66 @@ window.frmAdminBuildJS = function() {
 		}
 
 		button.classList.add( 'frm_loading_button' );
-		waitForFieldSettings( [ ...fieldsAwaitingSettings ] ).then( () => {
-			// Fields whose request failed have nothing to save, so they no longer hold the save.
+		const fieldIds = [ ...fieldsAwaitingSettings ];
+		waitForFieldSettings( fieldIds ).then( () => retryFailedFieldSettings( fieldIds ) ).then( failedFieldIds => {
+			// Loaded fields were already removed. Deleted fields have nothing to save.
 			fieldsAwaitingSettings.clear();
+			if ( ! failedFieldIds.length ) {
+				fieldsFailedOnSave.clear();
+			} else if ( ! confirmSaveWithoutFieldSettings( failedFieldIds, button ) ) {
+				return;
+			}
 			button.classList.remove( 'frm_loading_button' );
 			save.call( button );
+		} ).catch( error => {
+			console.error( error );
+			showFormSaveFailed( button, __( 'The form could not be saved. Please try again.', 'formidable' ) );
 		} );
 		return true;
+	}
+
+	/**
+	 * Decide whether to save while some field settings still fail to load.
+	 *
+	 * Edits made before these settings loaded are only kept beside the preview, so saving drops them.
+	 * The first failed attempt keeps them and asks to try again. When the same fields fail again,
+	 * the settings may never load, so ask before saving without them instead of blocking every save.
+	 *
+	 * @since x.x
+	 * @param {string[]}    failedFieldIds The fields whose settings failed to load.
+	 * @param {HTMLElement} button         The save button that was clicked.
+	 * @return {boolean} True to save without the failed fields.
+	 */
+	function confirmSaveWithoutFieldSettings( failedFieldIds, button ) {
+		const failedBefore = failedFieldIds.some( fieldId => fieldsFailedOnSave.has( fieldId ) );
+		fieldsFailedOnSave.clear();
+		failedFieldIds.forEach( fieldId => fieldsFailedOnSave.add( fieldId ) );
+
+		if ( ! failedBefore ) {
+			failedFieldIds.forEach( fieldId => fieldsAwaitingSettings.add( fieldId ) );
+			showFormSaveFailed( button, __( 'Some field settings could not be loaded, so the form was not saved. Your changes are still here. Please try saving again.', 'formidable' ) );
+			return false;
+		}
+
+		const message = sprintf(
+			/* translators: %d: The number of fields whose settings could not be loaded. */
+			_n(
+				'Save anyway? Unsaved changes to %d field whose settings could not be loaded will be lost.',
+				'Save anyway? Unsaved changes to %d fields whose settings could not be loaded will be lost.',
+				failedFieldIds.length,
+				'formidable'
+			),
+			failedFieldIds.length
+		);
+
+		if ( window.confirm( message ) ) {
+			return true;
+		}
+
+		failedFieldIds.forEach( fieldId => fieldsAwaitingSettings.add( fieldId ) );
+		button.classList.remove( 'frm_loading_form', 'frm_loading_button' );
+		button.setAttribute( 'aria-busy', 'false' );
+		return false;
 	}
 
 	/**
@@ -3588,7 +3643,13 @@ window.frmAdminBuildJS = function() {
 				nonce: frmGlobal.nonce
 			},
 			success( msg ) {
-				const duplicatedFieldId = checkMsgForFieldId( msg );
+				const duplicatedFieldId = 'string' === typeof msg ? checkMsgForFieldId( msg ) : 0;
+				if ( ! duplicatedFieldId ) {
+					// Nothing was created, for example when the field type is not allowed where the field is.
+					infoModal( __( 'This field could not be duplicated.', 'formidable' ) );
+					return;
+				}
+
 				let newRow;
 
 				let replaceWith;
@@ -3957,7 +4018,10 @@ window.frmAdminBuildJS = function() {
 	function afterAddField( msg, addFocus, skipOrderSync = false ) {
 		const regex = /id="(\S+)"/;
 		const match = regex.exec( msg );
-		const field = document.getElementById( match[ 1 ] );
+		const field = match ? document.getElementById( match[ 1 ] ) : null;
+		if ( ! field ) {
+			return;
+		}
 		const section = wp.hooks.applyFilters( 'frm_builder_new_container_selector', `#${ match[ 1 ] }.edit_field_type_divider ul.frm_sorting.start_divider`, field );
 		const $thisSection = jQuery( section );
 		const type = field.getAttribute( 'data-type' );

@@ -235,3 +235,21 @@ test( 'outdated styling responses cannot overwrite a newer preview', () => {
 	assert.equal( preview.responses[ 0 ].css, 'new CSS' );
 	assert.equal( preview.responses[ 0 ].updateCount, 1 );
 } );
+
+test( 'only bare hex colors get a hash in the live preview', () => {
+	const helper = styler.find( node => node.type === 'FunctionDeclaration' && node.id.name === 'addColorHash' );
+	const prepare = editor.body.body.find( node => node.type === 'FunctionDeclaration' && node.id.name === 'prepareLiveValue' );
+	const prepareLiveValue = runInNewContext(
+		`${ source.slice( helper.start, helper.end ) }\n${ source.slice( prepare.start, prepare.end ) }\nprepareLiveValue`,
+		{ livePreview: { colorSettings: new Set( [ 'title_color' ] ) } }
+	);
+	for ( const [ value, expected ] of [
+		[ '344054', '#344054' ], [ ' fff ', '#fff' ], [ 'ffff', '#ffff' ], [ 'ff000080', '#ff000080' ],
+		[ '#344054', '#344054' ], [ 'transparent', 'transparent' ], [ 'rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0.5)' ],
+		[ 'hwb(120 0% 0%)', 'hwb(120 0% 0%)' ], [ 'var(--x)', 'var(--x)' ], [ '12345', '12345' ], [ 'abcdeg', 'abcdeg' ]
+	] ) {
+		assert.equal( prepareLiveValue( 'title_color', value ), expected, value );
+	}
+	assert.equal( prepareLiveValue( 'field_font_size', ' 12px ' ), '12px' );
+	assert.equal( prepareLiveValue( 'field_font_size', 'fff' ), 'fff' );
+} );
