@@ -185,7 +185,7 @@ class FrmAddonsHelper {
 			'bulk-edit'                       => 'boost_bulk_edit',
 			'celebrations'                    => 'boost_celebrations',
 			'color-picker'                    => 'boost_color_picker',
-			'field-tooltips'                  => 'boost_tooltips',
+			'tooltips'                        => 'boost_tooltips',
 			'acf-forms'                       => 'acfforms',
 			'activecampaign-wordpress-plugin' => 'activecampaign',
 			'ai'                              => 'ai-form',
