@@ -320,7 +320,7 @@ class FrmAddonsController {
 			'color-picker'    => __( 'Select custom or pre-set colors, including optional transparency', 'formidable' ),
 			'bulk-edit'       => __( 'Update multiple entries at once, no CSV export/import needed.', 'formidable' ),
 			'celebrations'    => __( 'Reward submissions with emoji fountains and celebratory sounds.', 'formidable' ),
-			'tooltips'        => __( 'Add customized hover-and-tap help to any field.', 'formidable' ),
+			'field-tooltips'  => __( 'Add customized hover-and-tap help to any field.', 'formidable' ),
 		);
 
 		if ( isset( $excerpts[ $slug ] ) ) {
