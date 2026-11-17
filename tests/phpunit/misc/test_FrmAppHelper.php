@@ -911,4 +911,65 @@ class test_FrmAppHelper extends FrmUnitTest {
 			$target
 		);
 	}
+
+	/**
+	 * @covers FrmAppHelper::get_pro_builder_features
+	 * @covers FrmAppHelper::needs_pro_builder_compat
+	 */
+	public function test_needs_pro_builder_compat() {
+		$pro_features = array();
+		$set_features = function () use ( &$pro_features ) {
+			return $pro_features;
+		};
+
+		add_filter( 'frm_pro_builder_features', $set_features, PHP_INT_MAX );
+		add_filter( 'frm_pro_installed', '__return_false', PHP_INT_MAX );
+
+		// Lite only: no compat bundle, whatever is registered.
+		$this->assertFalse( FrmAppHelper::needs_pro_builder_compat() );
+
+		remove_filter( 'frm_pro_installed', '__return_false', PHP_INT_MAX );
+		add_filter( 'frm_pro_installed', '__return_true', PHP_INT_MAX );
+
+		// Older Pro registers nothing, so Lite loads its copy.
+		$this->assertSame( array(), FrmAppHelper::get_pro_builder_features() );
+		$this->assertTrue( FrmAppHelper::needs_pro_builder_compat() );
+
+		// A Pro that handles only some features still needs Lite's copy of the rest.
+		$pro_features = array( 'calc_box', 'lookup_settings' );
+		$this->assertTrue( FrmAppHelper::needs_pro_builder_compat() );
+
+		// A Pro that handles every feature does not.
+		$pro_features = FrmAppHelper::PRO_BUILDER_FEATURES;
+		$this->assertFalse( FrmAppHelper::needs_pro_builder_compat() );
+
+		// Non-string entries are dropped and keys are reindexed.
+		$pro_features = array(
+			3 => 'calc_box',
+			4 => array( 'lookup_settings' ),
+			5 => 7,
+		);
+		$this->assertSame( array( 'calc_box' ), FrmAppHelper::get_pro_builder_features() );
+
+		$pro_features = 'calc_box';
+		$this->assertSame( array(), FrmAppHelper::get_pro_builder_features() );
+
+		remove_filter( 'frm_pro_installed', '__return_true', PHP_INT_MAX );
+		remove_filter( 'frm_pro_builder_features', $set_features, PHP_INT_MAX );
+	}
+
+	/**
+	 * With a Pro version that registers its builder features, Lite skips the compat bundle.
+	 *
+	 * @covers FrmAppHelper::needs_pro_builder_compat
+	 */
+	public function test_needs_pro_builder_compat_with_pro_registry() {
+		if ( ! has_filter( 'frm_pro_builder_features', 'FrmProAppController::add_builder_features' ) ) {
+			$this->markTestSkipped( 'Pro is not active or does not register its builder features.' );
+		}
+
+		$features = FrmAppHelper::get_pro_builder_features();
+		$this->assertSame( array(), array_diff( FrmAppHelper::PRO_BUILDER_FEATURES, $features ) );
+		$this->assertFalse( FrmAppHelper::needs_pro_builder_compat() );
+	}
 }
