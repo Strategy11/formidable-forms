@@ -734,10 +734,23 @@ legend.frm_hidden{
 	gap: 2%;
 }
 
-/* Line up an inline submit button with the bottom of the inputs in its row, so the label height above them does not matter. */
-.with_frm_style.frm_inline_top .frm_fields_container > .frm_submit,
-.with_frm_style .frm_fields_container > .frm_submit.frm_inline_submit {
-	align-self: end;
+.with_frm_style.frm_inline_top .frm_submit.frm_flex,
+.with_frm_style .frm_submit.frm_flex.frm_inline_submit {
+	align-items: flex-start;
+	align-content: flex-start;
+	row-gap: 0;
+}
+
+.with_frm_style.frm_inline_top .frm_submit.frm_flex::before,
+.with_frm_style .frm_submit.frm_flex.frm_inline_submit::before {
+	flex-basis: 100%;
+	order: -2;
+}
+
+/* formidable.js sets the offset when a theme restyles the labels and the spacer no longer matches them. It must outrank the margin in each style's spacer rule. */
+.frm_forms.with_frm_style.frm_inline_top .frm_fields_container .frm_submit::before,
+.frm_forms.with_frm_style .frm_fields_container .frm_submit.frm_inline_submit::before {
+	margin-bottom: var(--frm-inline-submit-offset, 0);
 }
 
 <?php if ( $pro_is_installed ) { ?>

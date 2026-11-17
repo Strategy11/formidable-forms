@@ -445,7 +445,7 @@ export default [
 		},
 	},
 	{
-		files: [ 'tests/js/style-live-preview.test.mjs', 'tests/js/paypalBootstrap.test.mjs' ],
+		files: [ 'tests/js/style-live-preview.test.mjs', 'tests/js/paypalBootstrap.test.mjs', 'tests/js/inlineSubmitAlignment.test.mjs' ],
 		rules: {
 			// The harnesses execute only checked-in scripts.
 			'sonarjs/code-eval': 'off',

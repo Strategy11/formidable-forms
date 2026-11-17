@@ -317,8 +317,7 @@ class test_FrmStyle extends FrmUnitTest {
 	}
 
 	/**
-	 * An inline submit button lines up with the bottom of the inputs in its row instead of sitting under
-	 * a spacer that copies the label size, which a theme that restyles labels throws off.
+	 * Inline buttons reserve a label row without aligning to descriptions or errors below inputs.
 	 *
 	 * @see https://github.com/Strategy11/formidable-pro/issues/6894
 	 */
@@ -327,11 +326,11 @@ class test_FrmStyle extends FrmUnitTest {
 			array( new FrmStyle(), 'get_css_content' ),
 			array( FrmAppHelper::plugin_path() . '/css/custom_theme.css.php' )
 		);
-		$submit_selector = '.with_frm_style.frm_inline_top .frm_fields_container > .frm_submit,.with_frm_style .frm_fields_container > .frm_submit.frm_inline_submit';
+		$submit_selector = '.with_frm_style.frm_inline_top .frm_submit.frm_flex,.with_frm_style .frm_submit.frm_flex.frm_inline_submit';
 
-		$this->assertStringContainsString( $submit_selector . ' {align-self: end;}', $css );
-		$this->assertStringNotContainsString( 'frm_submit::before', $css );
-		$this->assertStringNotContainsString( 'frm_inline_submit::before', $css );
+		\PHPUnit\Framework\Assert::assertStringContainsString( $submit_selector . ' {align-items: flex-start;align-content: flex-start;row-gap: 0;}', $css );
+		\PHPUnit\Framework\Assert::assertStringContainsString( 'flex-basis: 100%;order: -2;', $css );
+		\PHPUnit\Framework\Assert::assertStringContainsString( 'margin-bottom: var(--frm-inline-submit-offset, 0);', $css );
 	}
 
 	/**
