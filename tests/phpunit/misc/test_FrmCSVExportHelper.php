@@ -114,6 +114,51 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 		}
 	}
 
+	/**
+	 * A repeater meta value that is not a serialized array used to make the heading loop run forever.
+	 *
+	 * @see https://github.com/Strategy11/formidable-pro/issues/6988
+	 */
+	public function test_csv_headings_skip_repeater_meta_that_is_not_a_serialized_array() {
+		$parent_form = $this->factory->form->create_and_get();
+		$child_form  = $this->factory->form->create_and_get( array( 'parent_form_id' => $parent_form->id ) );
+		$repeater    = $this->factory->field->create_and_get(
+			array(
+				'form_id'       => $parent_form->id,
+				'type'          => 'divider',
+				'name'          => 'Repeater',
+				'field_options' => array(
+					'repeat'      => 1,
+					'form_select' => $child_form->id,
+				),
+			)
+		);
+		$child_field = $this->factory->field->create_and_get(
+			array(
+				'form_id'       => $child_form->id,
+				'type'          => 'text',
+				'name'          => 'Repeated Text',
+				'field_options' => array(
+					'in_section' => $repeater->id,
+				),
+			)
+		);
+
+		$valid_entry_id   = $this->factory->entry->create( array( 'form_id' => $parent_form->id ) );
+		$invalid_entry_id = $this->factory->entry->create( array( 'form_id' => $parent_form->id ) );
+		FrmEntryMeta::add_entry_meta( $valid_entry_id, $repeater->id, '', array( 101, 102 ) );
+		FrmEntryMeta::add_entry_meta( $invalid_entry_id, $repeater->id, '', 'Some text' );
+
+		$this->set_private_property( 'FrmCSVExportHelper', 'form_id', $parent_form->id );
+		$this->set_private_property( 'FrmCSVExportHelper', 'fields', array( $repeater, $child_field ) );
+
+		$keys = array_keys( $this->csv_headings() );
+
+		$this->assertContains( $child_field->id . '[0]', $keys );
+		$this->assertContains( $child_field->id . '[1]', $keys );
+		$this->assertNotContains( $child_field->id . '[2]', $keys );
+	}
+
 	private function set_form( $form ) {
 		$this->form = $form;
 		$this->set_private_property( 'FrmCSVExportHelper', 'form_id', $form->id );
