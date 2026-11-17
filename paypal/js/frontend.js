@@ -2689,7 +2689,10 @@
 
 	// ---- Bootstrap ----
 
-	document.addEventListener( 'DOMContentLoaded', async function() {
+	/**
+	 * Start PayPal once its SDK is available.
+	 */
+	function bootstrap() {
 		if ( window.paypal ) {
 			paypalInit();
 			return;
@@ -2704,7 +2707,14 @@
 			},
 			50
 		);
-	} );
+	}
+
+	// This script can be loaded async, so DOMContentLoaded may have already fired.
+	if ( 'loading' === document.readyState ) {
+		document.addEventListener( 'DOMContentLoaded', bootstrap );
+	} else {
+		bootstrap();
+	}
 
 	jQuery( document ).on( 'frmPageChanged', function() {
 		paypalInit();
