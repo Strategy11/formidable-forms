@@ -335,6 +335,11 @@ class test_FrmStyle extends FrmUnitTest {
 		$inside_selector = '.with_frm_style.frm_inline_inside .frm_submit.frm_flex::before';
 
 		$this->assertStringContainsString( $inside_selector . ' {box-sizing: border-box;height: calc(0.5 * var(--field-height));overflow: hidden;}', $css );
+
+		// The JS in formidable.js sets the offset when a theme restyles the labels.
+		$offset_selector  = '.frm_forms.with_frm_style.frm_inline_top .frm_fields_container .frm_submit::before,';
+		$offset_selector .= '.frm_forms.with_frm_style .frm_fields_container .frm_submit.frm_inline_submit::before';
+		$this->assertStringContainsString( $offset_selector . ' {margin-bottom: var(--frm-inline-submit-offset, 0);}', $css );
 	}
 
 	/**

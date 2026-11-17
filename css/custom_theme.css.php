@@ -754,6 +754,12 @@ legend.frm_hidden{
 	overflow: hidden;
 }
 
+/* formidable.js sets the offset when a theme restyles the labels and the spacer no longer matches them. It must outrank the margin in each style's spacer rule. */
+.frm_forms.with_frm_style.frm_inline_top .frm_fields_container .frm_submit::before,
+.frm_forms.with_frm_style .frm_fields_container .frm_submit.frm_inline_submit::before {
+	margin-bottom: var(--frm-inline-submit-offset, 0);
+}
+
 <?php if ( $pro_is_installed ) { ?>
 .with_frm_style .frm_submit.frm_flex button.frm_button_submit ~ .frm_prev_page {
 	order: -1;

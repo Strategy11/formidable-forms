@@ -2243,6 +2243,107 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * Line up inline submit buttons with the inputs in the same row, then keep them lined up.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function initInlineSubmitAlignment() {
+		let frameRequested = false;
+		const scheduleAlignment = function() {
+			if ( frameRequested ) {
+				return;
+			}
+			frameRequested = true;
+			window.requestAnimationFrame( function() {
+				frameRequested = false;
+				alignInlineSubmitButtons();
+			} );
+		};
+
+		alignInlineSubmitButtons();
+		window.addEventListener( 'load', scheduleAlignment );
+		window.addEventListener( 'resize', scheduleAlignment );
+		jQuery( document ).on( 'frmPageChanged', scheduleAlignment );
+
+		if ( document.fonts?.ready ) {
+			document.fonts.ready.then( scheduleAlignment );
+		}
+	}
+
+	/**
+	 * The ::before spacer above an inline submit button copies the label size from the form style.
+	 * A theme that restyles labels (for example `label { line-height: 1 }`) makes the real label
+	 * taller or shorter than the spacer, so measure the difference and correct the spacer with it.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function alignInlineSubmitButtons() {
+		document.querySelectorAll( '.frm_inline_top .frm_submit, .frm_submit.frm_inline_submit' ).forEach( alignInlineSubmitButton );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} submitContainer The .frm_submit element.
+	 * @return {void}
+	 */
+	function alignInlineSubmitButton( submitContainer ) {
+		submitContainer.style.removeProperty( '--frm-inline-submit-offset' );
+
+		const input = getInlineSubmitRowInput( submitContainer );
+
+		if ( ! input ) {
+			return;
+		}
+
+		// Previous and Submit can wrap onto two rows in a narrow cell, so line up the top row.
+		const buttonTops = Array.from( submitContainer.children )
+			.filter( child => child.getClientRects().length )
+			.map( child => child.getBoundingClientRect().top );
+
+		if ( ! buttonTops.length ) {
+			return;
+		}
+
+		const offset = Math.round( ( input.getBoundingClientRect().top - Math.min( ...buttonTops ) ) * 100 ) / 100;
+
+		if ( Math.abs( offset ) >= 0.5 ) {
+			submitContainer.style.setProperty( '--frm-inline-submit-offset', `${ offset }px` );
+		}
+	}
+
+	/**
+	 * Get the input closest to the submit button when it sits in the same row as the button.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} submitContainer The .frm_submit element.
+	 * @return {HTMLElement|null} The input, or null when the closest field is on another row.
+	 */
+	function getInlineSubmitRowInput( submitContainer ) {
+		const submitTop = submitContainer.getBoundingClientRect().top;
+		let sibling = submitContainer.previousElementSibling;
+
+		while ( sibling ) {
+			if ( sibling.classList.contains( 'frm_form_field' ) && sibling.getClientRects().length ) {
+				const input = sibling.querySelector( 'input:not([type="hidden"]), select, textarea' );
+
+				if ( input && input.getClientRects().length ) {
+					// Fields wrap onto their own row on narrow screens, and then there is nothing to line up with.
+					return Math.abs( sibling.getBoundingClientRect().top - submitTop ) < 1 ? input : null;
+				}
+			}
+			sibling = sibling.previousElementSibling;
+		}
+
+		return null;
+	}
+
 	function maybeShowNewTabFallbackMessage() {
 		if ( ! window.frmShowNewTabFallback ) {
 			return;
@@ -2806,6 +2907,7 @@ function frmFrontFormJS() {
 			documentOn( 'click', '.frm_error_link', focusFieldFromErrorLink );
 
 			initFloatingLabels();
+			initInlineSubmitAlignment();
 			maybeShowNewTabFallbackMessage();
 
 			jQuery( document ).on( 'frmAfterAddRow', setCustomValidityMessage );
