@@ -27,10 +27,10 @@ class FrmAbilitiesSetupController {
 					'formidable'
 				),
 				'category'            => FrmAbilitiesController::CATEGORY,
+				// No properties key. An empty PHP array would serialize as a JSON list instead of an object.
 				'input_schema'        => array(
-					'type'       => 'object',
-					'default'    => array(),
-					'properties' => array(),
+					'type'    => 'object',
+					'default' => array(),
 				),
 				'output_schema'       => array(
 					'type'       => 'object',
@@ -68,7 +68,7 @@ class FrmAbilitiesSetupController {
 	}
 
 	/**
-	 * Allow authenticated users to discover setup without exposing form data.
+	 * Allow users who can view forms to discover setup, like the other read abilities.
 	 *
 	 * @since x.x
 	 *
@@ -76,7 +76,7 @@ class FrmAbilitiesSetupController {
 	 */
 	public static function can_get_ai_status() {
 		FrmAbilitiesHelper::set_current_user();
-		return current_user_can( 'read' );
+		return current_user_can( 'frm_view_forms' ) || current_user_can( 'administrator' );
 	}
 
 	/**
