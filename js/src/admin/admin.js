@@ -7288,7 +7288,9 @@ window.frmAdminBuildJS = function() {
 
 		if ( formatElement.classList.contains( 'frm_phone_type_dropdown' ) ) {
 			const autocompleteElement = document.getElementById( `field_options_autocomplete_${ fieldId }` );
-			const hasFormat = 'custom' === type || 'international' === type;
+			// An upgrade-only option snaps back to none below, so it must not clear the tel default.
+			const isUpgradeOption = Boolean( formatElement.selectedOptions[ 0 ]?.classList.contains( 'frm_show_upgrade' ) );
+			const hasFormat = ! isUpgradeOption && ( 'custom' === type || 'international' === type );
 			// Browser autofill would put the same value in every repeater row.
 			const isInRepeater = Boolean( document.getElementById( `frm_field_id_${ fieldId }` )?.closest( '.repeat_section' ) );
 
