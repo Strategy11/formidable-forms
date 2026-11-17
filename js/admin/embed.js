@@ -329,7 +329,17 @@
 			}
 		];
 
-		options.forEach(
+		/**
+		 * Add embed choices with access to the panel they render into.
+		 *
+		 * @since x.x
+		 */
+		wp.hooks.applyFilters( 'frm_embed_modal_options', options, {
+			type: state.type,
+			objectId: state.objectId,
+			objectKey: state.objectKey,
+			content
+		} ).forEach(
 			option => content.append( getModalOption( option ) )
 		);
 
@@ -367,6 +377,12 @@
 				callback();
 			}
 		);
+		output.addEventListener( 'keydown', event => {
+			if ( event.key === 'Enter' || event.key === ' ' ) {
+				event.preventDefault();
+				output.click();
+			}
+		} );
 		return output;
 	}
 
@@ -423,7 +439,7 @@
 		return urlObj.toString();
 	}
 
-	function getEmbedExample( { label, example, link, linkLabel } ) {
+	function getEmbedExample( { label, example, link, linkLabel, description } ) {
 		const unique = getAutoId();
 
 		const labelElement = getLabel( label );
@@ -445,6 +461,11 @@
 		exampleElement.value = example;
 		exampleElement.readOnly = true;
 		exampleElement.setAttribute( 'tabindex', -1 );
+		labelElement.htmlFor = exampleElement.id;
+
+		if ( description ) {
+			element.append( tag( 'p', { className: 'description', text: description } ) );
+		}
 
 		if ( link !== undefined && linkLabel !== undefined ) {
 			const linkElement = tag( 'a' );

@@ -1532,30 +1532,9 @@ class FrmAppHelper {
 	public static function allow_style( $allow_css, $css_string ) {
 		if ( ! $allow_css && str_starts_with( $css_string, '--primary-700:' ) ) {
 			$split     = explode( ':', $css_string, 2 );
-			$allow_css = 2 === count( $split ) && self::is_a_valid_color( $split[1] );
+			$allow_css = 2 === count( $split ) && FrmStylesHelper::is_valid_color( $split[1] );
 		}
 		return $allow_css;
-	}
-
-	/**
-	 * @since 5.0.13
-	 *
-	 * @param string $value
-	 *
-	 * @return bool
-	 */
-	private static function is_a_valid_color( $value ) {
-		$match = 0;
-
-		if ( str_starts_with( $value, 'rgba(' ) ) {
-			$match = preg_match( '/^rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d*(?:\.\d+)?)\)$/', $value );
-		} elseif ( str_starts_with( $value, 'rgb(' ) ) {
-			$match = preg_match( '/^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/', $value );
-		} elseif ( str_starts_with( $value, '#' ) ) {
-			$match = preg_match( '/^#([a-f0-9]{6}|[a-f0-9]{3})\b$/', $value );
-		}
-
-		return (bool) $match;
 	}
 
 	/**
@@ -2781,23 +2760,21 @@ class FrmAppHelper {
 			$key = self::generate_new_key( $num_chars );
 		}
 
-		$key = self::prevent_numeric_and_reserved_keys( $key );
-
-		$similar_keys = FrmDb::get_col(
-			$table_name,
-			array(
-				$column . ' like%' => $key,
-				'ID !'             => $id,
-			),
-			$column
-		);
+		$key          = self::prevent_numeric_and_reserved_keys( $key );
+		$similar_keys = self::get_similar_keys( $key, $table_name, $column, $id );
 
 		// Create a unique field id if it has already been used.
 		if ( ! in_array( $key, $similar_keys, true ) ) {
 			return $key;
 		}
 
-		$key = self::maybe_truncate_key_before_appending( $column, $key );
+		$truncated_key = self::maybe_truncate_key_before_appending( $column, $key );
+
+		if ( $truncated_key !== $key ) {
+			// Keys already created from the truncated key aren't in the list loaded for the full key.
+			$key          = $truncated_key;
+			$similar_keys = self::get_similar_keys( $key, $table_name, $column, $id );
+		}
 
 		/**
 		 * Allow for a custom separator between the attempted key and the generated suffix.
@@ -2816,6 +2793,25 @@ class FrmAppHelper {
 		} while ( in_array( $key_check, $similar_keys, true ) );
 
 		return $key_check;
+	}
+
+	/**
+	 * @param string $key
+	 * @param string $table_name
+	 * @param string $column
+	 * @param int    $id
+	 *
+	 * @return array<string>
+	 */
+	private static function get_similar_keys( $key, $table_name, $column, $id ) {
+		return FrmDb::get_col(
+			$table_name,
+			array(
+				$column . ' like%' => $key,
+				'ID !'             => $id,
+			),
+			$column
+		);
 	}
 
 	/**
@@ -4194,7 +4190,7 @@ class FrmAppHelper {
 		// Keyed off whether the summary will actually take focus, not merely whether it's
 		// active — otherwise filtering frm_focus_error_summary off leaves focus going
 		// nowhere instead of falling back to the first field.
-		$default = $form && self::should_focus_error_summary( $form ) ? false : true;
+		$default = ! $form || ! self::should_focus_error_summary( $form );
 
 		return (bool) apply_filters( 'frm_focus_first_error', $default, $form );
 	}
@@ -4262,7 +4258,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function should_include_alert_role_on_field_errors( $form = null ) {
-		$default = $form && FrmFormsHelper::is_error_summary_active_for_form( $form ) ? false : true;
+		$default = ! $form || ! FrmFormsHelper::is_error_summary_active_for_form( $form );
 		return (bool) apply_filters( 'frm_include_alert_role_on_field_errors', $default, $form );
 	}
 
@@ -5246,8 +5242,8 @@ class FrmAppHelper {
 	/**
 	 * Checks if this request can hand its tooltip strings to `frm_admin_js.tooltips`.
 	 *
-	 * `is_form_builder_page()` alone misses the `frm_load_field` ajax request because that
-	 * request never sends `frm_action`. Other builder ajax requests are left out on purpose
+	 * `is_form_builder_page()` alone misses the `frm_load_field` and `frm_load_field_settings`
+	 * ajax requests because they never send `frm_action`. Other builder ajax requests are left out on purpose
 	 * since nothing ships their collected strings to the page.
 	 *
 	 * @since 7.0
@@ -5256,7 +5252,7 @@ class FrmAppHelper {
 	 */
 	private static function should_defer_tooltips() {
 		if ( wp_doing_ajax() ) {
-			return 'frm_load_field' === self::get_post_param( 'action', '', 'sanitize_text_field' );
+			return in_array( self::get_post_param( 'action', '', 'sanitize_text_field' ), array( 'frm_load_field', 'frm_load_field_settings' ), true );
 		}
 
 		return self::is_form_builder_page( false );

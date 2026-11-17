@@ -88,6 +88,55 @@ class FrmFieldsController {
 	}
 
 	/**
+	 * Render the settings panels for field previews the browser drew from page data.
+	 *
+	 * The previews are already on the page, so only the settings are sent back, keyed by field id.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function load_field_settings() {
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$field_ids = FrmAppHelper::get_post_param( 'field_ids', array(), 'absint' );
+		$form_id   = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
+
+		if ( ! $form_id || ! is_array( $field_ids ) || ! $field_ids ) {
+			wp_send_json_error();
+		}
+
+		$_GET['page'] = 'formidable';
+		$fields       = self::get_builder_fields_by_id( $form_id );
+		$values       = array(
+			'id'            => $form_id,
+			'doing_ajax'    => true,
+			'settings_only' => true,
+		);
+		$settings     = array();
+
+		foreach ( $field_ids as $field_id ) {
+			if ( ! isset( $fields[ $field_id ] ) ) {
+				continue;
+			}
+
+			ob_start();
+			self::load_single_field( $fields[ $field_id ], $values );
+			$settings[ $field_id ] = ob_get_clean();
+		}
+
+		wp_send_json_success(
+			array(
+				'settings'      => $settings,
+				// admin_footer never fires here, so the deferred tooltip text rides along with the html.
+				'tooltips'      => self::get_missing_builder_definitions( FrmAppHelper::get_deferred_tooltips(), 'known_tooltips' ),
+				'selectOptions' => self::get_missing_builder_definitions( FrmBuilderSelectHelper::get_templates(), 'known_select_options' ),
+			)
+		);
+	}
+
+	/**
 	 * Omit definitions the browser has already received, including from the initial page.
 	 *
 	 * @since 7.0
@@ -149,6 +198,11 @@ class FrmFieldsController {
 		$field_type    = FrmAppHelper::get_post_param( 'field_type', '', 'sanitize_text_field' );
 		$form_id       = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 		$field_options = FrmAppHelper::get_post_param( 'field_options', array(), 'wp_kses_post' );
+		$section_id    = ! empty( $field_options['in_section'] ) ? (int) $field_options['in_section'] : FrmAppHelper::get_post_param( 'section_id', 0, 'absint' );
+
+		if ( ! FrmFieldPlacementHelper::is_allowed( $field_type, $form_id, $section_id ) ) {
+			wp_die( esc_html__( 'This field type cannot be placed in this section or repeater.', 'formidable' ), '', array( 'response' => 400 ) );
+		}
 
 		do_action( 'frm_before_create_field', $field_type, $form_id );
 
@@ -170,6 +224,10 @@ class FrmFieldsController {
 	 * @return array|false
 	 */
 	public static function include_new_field( $field_type, $form_id, $field_options = array() ) {
+		if ( ! FrmFieldPlacementHelper::is_allowed( $field_type, $form_id, (int) ( $field_options['in_section'] ?? 0 ) ) ) {
+			return false;
+		}
+
 		$field_values = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
 
 		if ( $field_options ) {
@@ -253,10 +311,25 @@ class FrmFieldsController {
 			$field_object = FrmField::getOne( $field['id'] );
 		}
 
-		$field_obj       = FrmFieldFactory::get_field_factory( $field_object );
-		$display         = self::display_field_options( array(), $field_obj );
+		$field_obj = FrmFieldFactory::get_field_factory( $field_object );
+		$display   = self::display_field_options( array(), $field_obj );
+
+		if ( isset( $values['preview_manifest'] ) && ! isset( $field ) && FrmBuilderPreviewHelper::supports( $field_object, $field_obj, $display ) ) {
+			self::add_browser_preview( $field_object, $field_obj, $display, $values );
+			return;
+		}
+
 		$ajax_loading    = ! empty( $values['ajax_load'] );
 		$ajax_this_field = isset( $values['count'] ) && $values['count'] > 10 && ! in_array( $field_object->type, array( 'divider', 'end_divider' ), true );
+		/**
+		 * Filters deferred loading for a builder field.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool $ajax_this_field Whether to defer rendering the field.
+		 * @param object $field_object The builder field.
+		 */
+		$ajax_this_field = apply_filters( 'frm_builder_field_ajax', $ajax_this_field, $field_object );
 
 		if ( $ajax_loading && $ajax_this_field ) {
 			$li_classes = self::get_classes_for_builder_field( array(), $display, $field_obj );
@@ -278,6 +351,11 @@ class FrmFieldsController {
 			$field                        = FrmFieldsHelper::setup_edit_vars( $field_object );
 		}
 
+		if ( ! empty( $values['settings_only'] ) && isset( $field ) ) {
+			self::load_single_field_settings( compact( 'field', 'field_obj', 'values', 'display' ) );
+			return;
+		}
+
 		/**
 		 * Filter for adding extra attributes to the field container.
 		 *
@@ -292,7 +370,44 @@ class FrmFieldsController {
 		$li_classes  = self::get_classes_for_builder_field( $field, $display, $field_obj );
 		$li_classes .= ' ui-state-default widgets-holder-wrap';
 
-		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field.php';
+		$previous_field_vars = FrmFieldsHelper::set_builder_field_vars( $field_object, $field );
+
+		try {
+			require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field.php';
+		} finally {
+			FrmFieldsHelper::set_builder_field_vars( $field_object, $previous_field_vars );
+		}
+	}
+
+	/**
+	 * Leave a field preview for the browser to draw, and its settings for a later request.
+	 *
+	 * The classes and attributes still come from the same filters as a preview rendered here.
+	 *
+	 * @since x.x
+	 *
+	 * @param object       $field_object The field being added to the form builder.
+	 * @param FrmFieldType $field_obj    The field type object.
+	 * @param array        $display      The field display settings.
+	 * @param array        $values       The form values, including the preview manifest.
+	 *
+	 * @return void
+	 */
+	private static function add_browser_preview( $field_object, $field_obj, $display, $values ) {
+		$field_object->parent_form_id = $values['id'] ?? $field_object->form_id;
+		$field                        = FrmFieldsHelper::setup_edit_vars( $field_object );
+		$saved_field                  = $field_object;
+
+		/** This filter is documented in classes/controllers/FrmFieldsController.php */
+		$extra_field_attributes = apply_filters( 'frm_field_container_extra_attributes', array(), $field, $display );
+
+		$li_classes  = self::get_classes_for_builder_field( $field, $display, $field_obj );
+		$li_classes .= ' ui-state-default widgets-holder-wrap';
+
+		FrmBuilderPreviewHelper::add_to_manifest(
+			compact( 'field', 'saved_field', 'field_obj', 'display', 'li_classes', 'extra_field_attributes' ),
+			$values['preview_manifest']
+		);
 	}
 
 	/**
@@ -317,8 +432,17 @@ class FrmFieldsController {
 		}
 
 		$placeholder        = count( $manifest->fields );
-		$manifest->fields[] = array( (int) $field->id, $index );
-		echo '<li data-frm-placeholder="' . esc_attr( $placeholder ) . '"></li>';
+		$height             = FrmBuilderPreviewHelper::get_placeholder_height( $field );
+		$layout_classes     = (string) FrmField::get_option( $field, 'classes' );
+		$manifest->fields[] = array( (int) $field->id, $index, $layout_classes );
+		$attributes         = array(
+			'data-frm-placeholder' => $placeholder,
+			'class'                => 'frm-preview-placeholder ' . $layout_classes,
+			'style'                => '--frm-preview-height:' . $height . 'px',
+		);
+		echo '<li ';
+		FrmAppHelper::array_to_html_params( $attributes, true );
+		echo '></li>';
 	}
 
 	/**

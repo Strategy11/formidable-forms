@@ -1509,6 +1509,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			'includeApplePay'          => $include_apple_pay,
 			'includeGooglePayApplePay' => $include_google_pay || $include_apple_pay,
 			'mode'                     => FrmPayPalLiteAppHelper::active_mode(),
+			'walletDisplayName'        => FrmPayPalLiteAppHelper::get_wallet_display_name(),
 		);
 
 		wp_localize_script( 'formidable-paypal', 'frmPayPalVars', $paypal_vars );

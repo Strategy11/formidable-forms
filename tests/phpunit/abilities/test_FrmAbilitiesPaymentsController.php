@@ -119,6 +119,81 @@ class test_FrmAbilitiesPaymentsController extends FrmUnitTest {
 	}
 
 	/**
+	 * Without a gateway the frm_payments table is never created. Listing must
+	 * return nothing without querying a missing table and logging an error.
+	 *
+	 * @see https://github.com/Strategy11/formidable-pro/issues/6860
+	 *
+	 * @return void
+	 */
+	public function test_list_payments_returns_nothing_when_the_table_is_missing() {
+		global $wpdb;
+
+		delete_option( ( new FrmTransLiteDb() )->db_opt_name );
+
+		$missing_table = function ( $query ) use ( $wpdb ) {
+			return str_replace( $wpdb->prefix . 'frm_payments', $wpdb->prefix . 'frm_missing_payments', $query );
+		};
+		add_filter( 'query', $missing_table );
+
+		$suppress         = $wpdb->suppress_errors( true );
+		$wpdb->last_error = '';
+		$listed           = $this->execute( 'list-payments', array() );
+		$last_error       = $wpdb->last_error;
+		$wpdb->suppress_errors( $suppress );
+
+		remove_filter( 'query', $missing_table );
+
+		$this->assertSame( array(), $listed );
+		$this->assertSame( '', $last_error, 'Listing should not query a table that does not exist.' );
+	}
+
+	/**
+	 * A form that does not exist gets the same not-found error whether or not
+	 * the frm_payments table has been created yet.
+	 *
+	 * @return void
+	 */
+	public function test_list_payments_rejects_a_missing_form_when_the_table_is_missing() {
+		delete_option( ( new FrmTransLiteDb() )->db_opt_name );
+		$this->assertFalse( FrmTransLiteAppHelper::payments_table_exists() );
+
+		$listed = $this->execute( 'list-payments', array( 'form_id' => 999999 ) );
+
+		$this->assertWPError( $listed );
+		$this->assertSame( 'frm_form_not_found', $listed->get_error_code() );
+	}
+
+	/**
+	 * Get, delete and refund/cancel all look the payment up first. Without the
+	 * frm_payments table that lookup must report not found without querying it.
+	 *
+	 * @return void
+	 */
+	public function test_get_payment_is_not_found_when_the_table_is_missing() {
+		global $wpdb;
+
+		delete_option( ( new FrmTransLiteDb() )->db_opt_name );
+
+		$missing_table = function ( $query ) use ( $wpdb ) {
+			return str_replace( $wpdb->prefix . 'frm_payments', $wpdb->prefix . 'frm_missing_payments', $query );
+		};
+		add_filter( 'query', $missing_table );
+
+		$suppress         = $wpdb->suppress_errors( true );
+		$wpdb->last_error = '';
+		$fetched          = $this->execute( 'get-payment', array( 'id' => 1 ) );
+		$last_error       = $wpdb->last_error;
+		$wpdb->suppress_errors( $suppress );
+
+		remove_filter( 'query', $missing_table );
+
+		$this->assertWPError( $fetched );
+		$this->assertSame( 'frm_payment_not_found', $fetched->get_error_code() );
+		$this->assertSame( '', $last_error, 'Getting a payment should not query a table that does not exist.' );
+	}
+
+	/**
 	 * @return void
 	 */
 	public function test_list_payments_filters_by_form() {

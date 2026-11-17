@@ -21,6 +21,47 @@ namespace {
 	define( 'WP_IMPORTING', false );
 	define( 'ICL_PLUGIN_INACTIVE', false );
 
+	class WP_HTML_Decoder {
+		/**
+		 * @param string $text Raw attribute text.
+		 *
+		 * @return string
+		 */
+		public static function decode_attribute( $text ) {
+			return '';
+		}
+	}
+
+	class WP_HTML_Tag_Processor {
+		/** @var string */
+		public $html;
+
+		/**
+		 * @param string $html HTML to process.
+		 */
+		public function __construct( $html ) {
+			$this->html = $html;
+		}
+
+		/**
+		 * @param array|string|null $query Tag query.
+		 *
+		 * @return bool
+		 */
+		public function next_tag( $query = null ) {
+			return false;
+		}
+
+		/**
+		 * @param string $name Attribute name.
+		 *
+		 * @return bool|string|null
+		 */
+		public function get_attribute( $name ) {
+			return null;
+		}
+	}
+
 	class FrmProFormState {
 		public static function get_from_request( $key, $default ) {}
 		/**

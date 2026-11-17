@@ -39,13 +39,13 @@ class FrmEntriesHelper {
 	public static function setup_new_vars( $fields, $form = '', $reset = false, $args = array() ) {
 		remove_action( 'media_buttons', 'FrmFormsController::insert_form_button' );
 
-		$values = array(
+		$posted_key = FrmAppHelper::get_post_param( 'item_key', '', 'sanitize_title' );
+		$values     = array(
 			'name'        => '',
 			'description' => '',
-			'item_key'    => '',
+			'item_key'    => ! $reset && is_string( $posted_key ) ? $posted_key : '',
+			'fields'      => array(),
 		);
-
-		$values['fields'] = array();
 
 		if ( ! $fields ) {
 			return apply_filters( 'frm_setup_new_entry', $values );

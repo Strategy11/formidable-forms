@@ -4,16 +4,34 @@
  * Internal dependencies
  */
 const { validateField } = require( './settings/validateField' );
+const { syncFieldOrder, confirmFieldOrderSaved } = require( './fieldOrder' );
+const { allowContainerDrop } = require( './fieldPlacement' );
 const { getRangeSettingsDefaults, validateNumberRangeSetting, validateStepSetting, validateRangeSettings } = require( './settings/validateRangeSettings' );
 const { initFieldListHoverPill } = require( './fieldListHoverPill' );
 const { initShowBoxIconSwap } = require( './showBoxIconSwap' );
 const { hydrateBuilderSelect, hydrateBuilderSelectsIn } = require( './sharedSelectOptions' );
 const { processFieldLoadBatch } = require( './fieldLoadBatch' );
+const { getFieldLoadBatch } = require( './fieldLoadWeights' );
 const { hydrateFieldPlaceholders } = require( './fieldPlaceholders' );
-const { addFieldSettingsMetadata, cacheFieldSettings, forgetFieldSettings, materializeFieldSettings, materializeAllFieldSettings } = require( './deferredFieldSettings' );
+const { renderDropdownPreview, updateComboSelectPreview, updateAddressPreview } = require( './fieldPreview' );
+const { captureFieldSettings, applyFieldSettings, restoreFieldSettingValues } = require( './duplicateFieldSettings' );
+const { addFieldSettingsMetadata, cacheFieldSettings, forgetFieldSettings, materializeFieldSettings, materializeAllFieldSettings, setPendingFieldSetting } = require( './deferredFieldSettings' );
+const { hydrateFieldPreviews, renderFieldPreviews, PENDING_PREVIEW_CLASS } = require( './fieldPreviews' );
+const { queueFieldPreview, renderFieldPreviewNow, forgetFieldPreview, setInitialFieldPreviews } = require( './fieldPreviewQueue' );
+const { queueFieldSettings, startFieldSettingsQueue, isFieldSettingsPending, requestFieldSettingsNow, waitForFieldSettings, cancelFieldSettings } = require( './fieldSettingsLoader' );
+
+const fieldHtmlTemplate = document.createElement( 'template' );
 
 // Footer scripts can restore placeholders before add-ons inspect the builder's fields.
 hydrateFieldPlaceholders();
+
+// Fields drawn from page data have their list items in place before anything scans the builder.
+const browserPreviewFieldIds = hydrateFieldPreviews();
+
+setInitialFieldPreviews( document.getElementById( 'frm-show-fields' )?.querySelectorAll( 'li.form-field' ) || [] );
+
+// Fields that are still waiting for their preview, either over ajax or from page data.
+const UNRENDERED_FIELD_SELECTOR = `.frm_field_loading, .${ PENDING_PREVIEW_CLASS }`;
 
 window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 	const el = {
@@ -306,6 +324,15 @@ window.frmAdminBuildJS = function() {
 	let debouncedSyncAfterDragAndDrop;
 	let postBodyContent;
 	let $postBodyContent;
+	let wpBodyContent;
+	let formEditorContainer;
+	let optionsPanel;
+	let optionsTab;
+	let settingsScrollContainer;
+	let defaultFieldSettings;
+	let activeSettingsPanel = null;
+	let activeHoverRow = null;
+	let fieldGroupControls;
 
 	const dragState = {
 		dragging: false,
@@ -314,12 +341,13 @@ window.frmAdminBuildJS = function() {
 		submitButtonRow: null
 	};
 
-	// How far past the visible field list a field gets its drag and drop widget. A full screen
-	// either way keeps the widgets ahead of the auto scroll while a field is being dragged.
+	// Prepare dragging and attach drop targets within a screen of the visible field list
+	// to keep ahead of the auto scroll while a field is being dragged.
 	const DRAG_DROP_ROOT_MARGIN = '100% 0px';
 	let dragDropObserver;
 	const dragDropAttachers = new WeakMap();
 	const dragDropDeferredDetach = new Set();
+	const pendingDraggables = new WeakSet();
 
 	if ( thisForm ) {
 		thisFormId = thisForm.value;
@@ -1134,7 +1162,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
-	 * Make a field or field group draggable once it scrolls near the visible part of the builder.
+	 * Prepare a field or field group for interaction once it scrolls near the builder.
 	 *
 	 * @since 7.0
 	 *
@@ -1150,8 +1178,8 @@ window.frmAdminBuildJS = function() {
 	 * Every jQuery UI draggable and droppable is a live widget, and jQuery UI walks all of the
 	 * droppables when a drag starts. On a form with a thousand fields, standing them all up at
 	 * page load is thousands of widgets before anyone drags anything. The widget is attached
-	 * as its element comes within a screen of the visible field list instead, and destroyed
-	 * again once it scrolls away, so the widget count follows what is on screen.
+	 * as its element comes within a screen of the visible field list instead. Draggables
+	 * wait for interaction as well. Widgets are destroyed again once they scroll away.
 	 *
 	 * @since 7.0
 	 *
@@ -1313,7 +1341,40 @@ window.frmAdminBuildJS = function() {
 		droppable.classList.remove( 'frm-over-droppable' );
 	}
 
+	/**
+	 * Initialize dragging on the first hover, press, or touch.
+	 *
+	 * @since x.x
+	 * @param {HTMLElement}      draggable The field or field group to drag.
+	 * @param {string|undefined} handle    The selector for the drag handle.
+	 * @return {void}
+	 */
 	function makeDraggable( draggable, handle ) {
+		if ( pendingDraggables.has( draggable ) || draggable.classList.contains( 'ui-draggable' ) ) {
+			return;
+		}
+
+		const events = [ 'mouseover', 'mousedown', 'touchstart', 'click' ];
+		const initialize = () => {
+			events.forEach( type => draggable.removeEventListener( type, initialize, true ) );
+			pendingDraggables.delete( draggable );
+			initializeDraggable( draggable, handle );
+		};
+
+		pendingDraggables.add( draggable );
+		// Capture initializes the widget before jQuery UI handles the same press or touch.
+		events.forEach( type => draggable.addEventListener( type, initialize, true ) );
+	}
+
+	/**
+	 * Attach the draggable widget after interaction.
+	 *
+	 * @since x.x
+	 * @param {HTMLElement}      draggable The field or field group to drag.
+	 * @param {string|undefined} handle    The selector for the drag handle.
+	 * @return {void}
+	 */
+	function initializeDraggable( draggable, handle ) {
 		const settings = {
 			helper: getDraggableHelper,
 			revert: 'invalid',
@@ -1545,8 +1606,9 @@ window.frmAdminBuildJS = function() {
 		maybeOpenCollapsedPage( placeholder );
 
 		const $previousFieldContainer = ui.helper.parent();
-		const previousSection = ui.helper.get( 0 ).closest( 'ul.start_divider' );
-		const newSection = placeholder.closest( 'ul.start_divider' );
+		const sectionSelector = wp.hooks.applyFilters( 'frm_builder_section_selector', 'ul.start_divider' );
+		const previousSection = ui.helper.get( 0 ).closest( sectionSelector );
+		const newSection = placeholder.closest( sectionSelector );
 
 		if ( draggable.classList.contains( 'frm-new-field' ) ) {
 			insertNewFieldByDragging( draggable.id );
@@ -1922,19 +1984,16 @@ window.frmAdminBuildJS = function() {
 
 	function updateFieldGroupControls( $row, count ) {
 		const row = $row.get( 0 );
-		if ( ! row || row.querySelector( ':scope > .frm_field_loading' ) ) {
-			return;
-		}
-
-		const rowOffset = $row.offset();
-
-		if ( rowOffset === undefined ) {
+		if ( ! row || row.querySelector( `:scope > :is(${ UNRENDERED_FIELD_SELECTOR })` ) ) {
 			return;
 		}
 
 		const shouldShowControls = count >= 2;
 
-		let controls = document.getElementById( 'frm_field_group_controls' );
+		let controls = fieldGroupControls;
+		if ( ! controls?.isConnected ) {
+			controls = document.getElementById( 'frm_field_group_controls' );
+		}
 		if ( ! controls ) {
 			if ( ! shouldShowControls ) {
 				// exit early. if we do not need controls and they do not exist, do nothing.
@@ -1949,7 +2008,10 @@ window.frmAdminBuildJS = function() {
 			builderPage.append( controls );
 		}
 
-		$row.append( controls );
+		fieldGroupControls = controls;
+		if ( controls.parentElement !== row ) {
+			row.append( controls );
+		}
 		controls.style.display = shouldShowControls ? 'block' : 'none';
 	}
 
@@ -2204,7 +2266,15 @@ window.frmAdminBuildJS = function() {
 
 	// Update the in_section field value
 	function updateInSectionValue( fieldId, sectionId ) {
-		document.getElementById( `frm_in_section_${ fieldId }` ).value = sectionId;
+		// The input may still be in a cached settings panel, which would otherwise keep the old section.
+		ensureFieldSettings( fieldId );
+		const inSectionInput = document.getElementById( `frm_in_section_${ fieldId }` );
+		if ( inSectionInput ) {
+			inSectionInput.value = sectionId;
+			return;
+		}
+		// The settings are still loading. Apply the section once the panel is inserted.
+		setPendingFieldSetting( fieldId, 'in_section', `frm_in_section_${ fieldId }`, sectionId );
 	}
 
 	/**
@@ -2322,8 +2392,9 @@ window.frmAdminBuildJS = function() {
 	 * @param {Object} $placeholder jQuery object.
 	 */
 	function handleInsertFieldByDraggingResponse( msg, $placeholder ) {
+		$placeholder = jQuery( $placeholder );
 		let replaceWith;
-		document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
+		formEditorContainer.classList.add( 'frm-has-fields' );
 		const $siblings = $placeholder.siblings( 'li.form-field' ).not( '.edit_field_type_end_divider' );
 
 		if ( ! $siblings.length ) {
@@ -2463,6 +2534,15 @@ window.frmAdminBuildJS = function() {
 			return false;
 		}
 
+		if ( ! allowContainerDrop( draggable, droppable ) ) {
+			return false;
+		}
+
+		const customDrop = wp.hooks.applyFilters( 'frm_builder_allow_drop', null, draggable, droppable );
+		if ( null !== customDrop ) {
+			return customDrop;
+		}
+
 		const isSubmitBtn = draggable.classList.contains( 'edit_field_type_submit' );
 		const containSubmitBtn = ! draggable.classList.contains( 'form_field' ) && Boolean( draggable.querySelector( '.edit_field_type_submit' ) );
 
@@ -2505,25 +2585,6 @@ window.frmAdminBuildJS = function() {
 		}
 
 		const droppableIsARepeater = droppable.classList.contains( 'start_divider' ) && null !== droppable.closest( '.repeat_section' );
-		const droppableIsInsideOfARepeater = null !== droppable.closest( '.repeat_section' );
-
-		if ( droppableIsARepeater || droppableIsInsideOfARepeater ) {
-			const isGdpr = draggable.classList.contains( 'edit_field_type_gdpr' ) || draggable.id === 'gdpr';
-			if ( isGdpr ) {
-				return false;
-			}
-
-			/**
-			 * @since 6.27
-			 *
-			 * @param {boolean}     denyDropInRepeater
-			 * @param {HTMLElement} draggable
-			 */
-			const shouldDenyDropInRepeater = wp.hooks.applyFilters( 'frm_deny_drop_in_repeater', false, draggable );
-			if ( shouldDenyDropInRepeater ) {
-				return false;
-			}
-		}
 
 		if ( ! droppableIsARepeater ) {
 			const $fieldsInRow = getFieldsInRow( jQuery( droppable ) );
@@ -2532,7 +2593,7 @@ window.frmAdminBuildJS = function() {
 				return false;
 			}
 
-			if ( draggable.id === 'divider' && droppable.closest( '.start_divider' ) ) {
+			if ( isSectionFieldType( draggable.id ) && droppable.closest( '.start_divider' ) ) {
 				return false;
 			}
 		}
@@ -2555,6 +2616,17 @@ window.frmAdminBuildJS = function() {
 		return element?.matches( '#frm-show-fields > li:last-child' );
 	}
 
+	/**
+	 * Check if a field type from the field list adds a section.
+	 * Repeater (divider|repeat) is a section too, and sections cannot be nested.
+	 *
+	 * @param {string} fieldType The field type, the id of its button in the field list.
+	 * @return {boolean} True for Section and its variants.
+	 */
+	function isSectionFieldType( fieldType ) {
+		return 'divider' === fieldType || fieldType.startsWith( 'divider|' );
+	}
+
 	// Don't allow a new page break or hidden field in a field group.
 	// Don't allow a new field into a field group that includes a page break or hidden field.
 	// Don't allow a new section inside of a section.
@@ -2563,7 +2635,7 @@ window.frmAdminBuildJS = function() {
 		const classes = draggable.classList;
 		const newPageBreakField = classes.contains( 'frm_tbreak' );
 		const newHiddenField = classes.contains( 'frm_thidden' );
-		const newSectionField = classes.contains( 'frm_tdivider' );
+		const newSectionField = isSectionFieldType( draggable.id );
 		const newEmbedField = classes.contains( 'frm_tform' );
 		const newUserIdField = classes.contains( 'frm_tuser_id' );
 
@@ -2585,7 +2657,7 @@ window.frmAdminBuildJS = function() {
 		const newFieldWillBeAddedToASection = droppable.classList.contains( 'start_divider' ) || null !== droppable.closest( '.start_divider' );
 		if ( newFieldWillBeAddedToASection ) {
 			// Don't allow a section or an embedded form in a section.
-			return ! newEmbedField && ! newSectionField;
+			return ! newPageBreakField && ! newEmbedField && ! newSectionField;
 		}
 
 		return true;
@@ -2624,7 +2696,7 @@ window.frmAdminBuildJS = function() {
 	function allowMoveFieldGroup( fieldGroup, droppable ) {
 		if ( droppable.classList.contains( 'start_divider' ) && null === fieldGroup.querySelector( '.start_divider' ) ) {
 			// Allow a field group with no section inside of a section.
-			return true;
+			return allowMoveFieldToSection( fieldGroup );
 		}
 		return false;
 	}
@@ -2695,6 +2767,9 @@ window.frmAdminBuildJS = function() {
 
 	let activeFieldLoadRequests = 0;
 	let fieldLoadStarted = false;
+
+	// Fields drawn from page data whose settings were needed before they arrived.
+	const fieldsAwaitingSettings = new Set();
 	let placeholderSpinnerObserver;
 
 	/**
@@ -2777,25 +2852,18 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function loadFields( thisField ) {
-		const fieldIds = [];
-		const claimField = element => {
-			element.classList.add( 'frm_load_now' );
-			if ( element.classList.contains( 'frm_field_loading' ) ) {
-				fieldIds.push( element.dataset.fid );
+		const candidates = [];
+		let candidate = thisField;
+		while ( candidate && candidates.length < FIELD_LOAD_BATCH_SIZE ) {
+			if ( candidate.classList.contains( 'frm_field_loading' ) && ! candidate.classList.contains( 'frm_load_now' ) ) {
+				candidates.push( candidate.dataset.fid );
 			}
-		};
-
-		claimField( thisField );
-
-		let nextField = getNextField( thisField );
-		while ( nextField && fieldIds.length < FIELD_LOAD_BATCH_SIZE ) {
-			claimField( nextField );
-			nextField = getNextField( nextField );
+			candidate = getNextField( candidate );
 		}
+		const fieldIds = getFieldLoadBatch( candidates, FIELD_LOAD_BATCH_SIZE );
+		fieldIds.forEach( fieldId => document.getElementById( `frm_field_id_${ fieldId }` ).classList.add( 'frm_load_now' ) );
 
 		if ( ! fieldIds.length ) {
-			// There is nothing to ask the server for. The fields are flagged either way, so the
-			// queue carries on past them instead of offering them up again.
 			return;
 		}
 
@@ -2894,9 +2962,43 @@ window.frmAdminBuildJS = function() {
 
 		return processFieldLoadBatch(
 			Object.entries( loadedFields ),
-			renderLoadedField,
+			queueLoadedFieldPreview,
+			insertLoadedFieldSlice,
 			initializeLoadedFieldSlice
 		);
+	}
+
+	/**
+	 * Cache compatible AJAX previews until their placeholders approach the viewport.
+	 *
+	 * Specialized fields keep their existing initialization contract.
+	 *
+	 * @since x.x
+	 * @param {Array} entry The field ID and its rendered HTML and settings metadata.
+	 * @return {Object|null} A field to insert immediately, or null when queued or deleted.
+	 */
+	function queueLoadedFieldPreview( entry ) {
+		const [ key, field ] = entry;
+		if ( ! field.settingsMeta ) {
+			return renderLoadedField( entry );
+		}
+		const placeholder = document.getElementById( `frm_field_id_${ key }` );
+		if ( ! placeholder ) {
+			return null;
+		}
+		cacheFieldSettings( key, field.settingsHtml );
+		addFieldSettingsMetadata( placeholder, key, field.settingsMeta );
+		placeholderSpinnerObserver?.unobserve( placeholder );
+		placeholder.querySelector( '.frm_visible_spinner' )?.remove();
+		placeholder.classList.remove( 'frm_field_loading' );
+		placeholder.classList.add( PENDING_PREVIEW_CLASS );
+		placeholder.dataset.type = field.type;
+		queueFieldPreview( placeholder, () => {
+			const rendered = renderLoadedField( entry );
+			insertLoadedFieldSlice( [ rendered ] );
+			return rendered;
+		}, initializeLoadedFieldSlice );
+		return null;
 	}
 
 	/**
@@ -2904,7 +3006,7 @@ window.frmAdminBuildJS = function() {
 	 *
 	 * @since 7.0
 	 * @param {Array} entry The field ID and its rendered HTML and type.
-	 * @return {Object|null} The inserted field, or null if its placeholder was deleted.
+	 * @return {Object|null} The detached field, or null if its placeholder was deleted.
 	 */
 	function renderLoadedField( entry ) {
 		const [ key, field ] = entry;
@@ -2916,21 +3018,75 @@ window.frmAdminBuildJS = function() {
 		dragDropObserver.unobserve( oldField );
 		dragDropAttachers.delete( oldField );
 		cacheFieldSettings( key, field.settingsHtml );
-		jQuery( oldField ).replaceWith( field.html );
-
-		const element = document.getElementById( `frm_field_id_${ key }` );
+		fieldHtmlTemplate.innerHTML = field.html;
+		const element = fieldHtmlTemplate.content.firstElementChild;
 		if ( ! element ) {
+			oldField.remove();
 			return null;
 		}
-		if ( field.settingsMeta ) {
+		const metadata = oldField.querySelector( ':scope > .frm-deferred-settings-meta' );
+		if ( metadata ) {
+			const classes = metadata.querySelector( '.frm_classes' )?.value;
+			if ( classes !== undefined && classes !== field.settingsMeta.classes ) {
+				const previous = ( field.settingsMeta.classes || '' ).split( /\s+/ ).filter( Boolean );
+				const current = classes.split( /\s+/ ).filter( Boolean );
+				element.classList.remove( ...previous );
+				element.classList.add( ...current );
+			}
+			element.append( metadata );
+		} else if ( field.settingsMeta ) {
 			addFieldSettingsMetadata( element, key, field.settingsMeta );
 		}
-		prepareLoadedFieldMarkup( element );
-		if ( element.classList.contains( 'edit_field_type_divider' ) ) {
-			element.querySelectorAll( 'ul.frm_sorting' ).forEach( setupSortableList );
+		if ( oldField.classList.contains( 'selected' ) ) {
+			element.classList.add( 'selected' );
 		}
-		lazyMakeDraggable( element );
-		return { id: key, type: field.type, element };
+		prepareLoadedFieldMarkup( element );
+		const fragment = document.createDocumentFragment();
+		fragment.append( fieldHtmlTemplate.content );
+		return { placeholder: oldField, fragment, id: key, type: field.type, element };
+	}
+
+	/**
+	 * Insert adjacent fields together when their placeholders share a parent.
+	 *
+	 * @since x.x
+	 * @param {Array} fields The detached fields and their placeholders.
+	 * @return {void}
+	 */
+	function insertLoadedFieldSlice( fields ) {
+		let group = [];
+		const insertGroup = () => {
+			if ( ! group.length ) {
+				return;
+			}
+
+			const fragment = document.createDocumentFragment();
+			// eslint-disable-next-line formidable/prefer-document-fragment -- move each detached field into the insertion fragment
+			group.forEach( field => fragment.append( field.fragment ) );
+			group[ 0 ].placeholder.replaceWith( fragment );
+			group.slice( 1 ).forEach( field => field.placeholder.remove() );
+			group.forEach( field => {
+				if ( field.element.classList.contains( 'edit_field_type_divider' ) ) {
+					field.element.querySelectorAll( 'ul.frm_sorting' ).forEach( setupSortableList );
+				}
+				lazyMakeDraggable( field.element );
+			} );
+			group = [];
+		};
+
+		fields.forEach( field => {
+			if ( ! field ) {
+				insertGroup();
+				return;
+			}
+
+			const previous = group[ group.length - 1 ];
+			if ( previous && ( previous.placeholder.parentElement !== field.placeholder.parentElement || previous.placeholder.nextElementSibling !== field.placeholder ) ) {
+				insertGroup();
+			}
+			group.push( field );
+		} );
+		insertGroup();
 	}
 
 	/**
@@ -2941,7 +3097,104 @@ window.frmAdminBuildJS = function() {
 	 * @return {HTMLElement|null} The field settings panel, if the field has loaded.
 	 */
 	function ensureFieldSettings( fieldId ) {
-		return materializeFieldSettings( fieldId, prepareLoadedFieldMarkup );
+		renderFieldPreviewNow( fieldId );
+		const settings = materializeFieldSettings( fieldId, prepareLoadedFieldMarkup );
+		if ( ! settings && isFieldSettingsPending( fieldId ) ) {
+			// Finish the job once the settings arrive. See handleLoadedFieldSettings.
+			fieldsAwaitingSettings.add( String( fieldId ) );
+			requestFieldSettingsNow( fieldId );
+		}
+		return settings;
+	}
+
+	/**
+	 * Prepare the previews drawn from page data, and start loading their settings.
+	 *
+	 * @since x.x
+	 * @return {void}
+	 */
+	function initBrowserPreviewFields() {
+		if ( ! browserPreviewFieldIds.length ) {
+			return;
+		}
+
+		renderFieldPreviews( replaceFieldPreviewPlaceholder, initializeLoadedFieldSlice );
+
+		queueFieldSettings( {
+			formId: thisFormId,
+			fieldIds: browserPreviewFieldIds,
+			onLoaded: handleLoadedFieldSettings
+		} );
+
+		// Previews still loading over ajax are on screen, so they go first. See afterAllFieldsLoad.
+		if ( ! fieldLoadStarted ) {
+			startFieldSettingsQueue();
+		}
+	}
+
+	/**
+	 * Prepare a preview drawn from page data as it takes its placeholder's place.
+	 *
+	 * @since x.x
+	 * @param {HTMLElement} placeholder The empty list item being replaced.
+	 * @param {HTMLElement} field       The drawn preview.
+	 * @return {Object} The field, in the shape initializeLoadedFieldSlice expects.
+	 */
+	function replaceFieldPreviewPlaceholder( placeholder, field ) {
+		dragDropObserver?.unobserve( placeholder );
+		dragDropAttachers.delete( placeholder );
+		prepareLoadedFieldMarkup( field );
+		lazyMakeDraggable( field, '.frm-move' );
+		return { id: field.dataset.fid, type: field.dataset.type, element: field };
+	}
+
+	/**
+	 * Apply settings that something asked for before they arrived.
+	 *
+	 * A selected field shows its settings. Any other field moves its settings into the save form,
+	 * so an edit made in the meantime, like a new field order or layout class, is saved.
+	 *
+	 * @since x.x
+	 * @param {string[]} fieldIds The fields whose settings were just cached.
+	 * @return {void}
+	 */
+	function handleLoadedFieldSettings( fieldIds ) {
+		fieldIds.forEach( fieldId => {
+			if ( ! fieldsAwaitingSettings.delete( fieldId ) ) {
+				return;
+			}
+
+			const field = document.getElementById( `frm_field_id_${ fieldId }` );
+			if ( field?.classList.contains( 'selected' ) ) {
+				showFieldOptions( field );
+				return;
+			}
+
+			moveFieldSettings( ensureFieldSettings( fieldId ) );
+		} );
+	}
+
+	/**
+	 * Hold a save until the settings that edits are waiting on have arrived.
+	 *
+	 * @since x.x
+	 * @param {Function}    save   The save handler to call again.
+	 * @param {HTMLElement} button The save button that was clicked.
+	 * @return {boolean} True if the save will run later.
+	 */
+	function deferSaveForFieldSettings( save, button ) {
+		if ( ! fieldsAwaitingSettings.size ) {
+			return false;
+		}
+
+		button.classList.add( 'frm_loading_button' );
+		waitForFieldSettings( [ ...fieldsAwaitingSettings ] ).then( () => {
+			// Fields whose request failed have nothing to save, so they no longer hold the save.
+			fieldsAwaitingSettings.clear();
+			button.classList.remove( 'frm_loading_button' );
+			save.call( button );
+		} );
+		return true;
 	}
 
 	/**
@@ -2966,7 +3219,7 @@ window.frmAdminBuildJS = function() {
 	 */
 	function prepareInteractedFieldSettings( event ) {
 		const field = event.target.closest( '#frm-show-fields li.form-field' );
-		if ( field && ! field.classList.contains( 'frm_field_loading' ) ) {
+		if ( field && ! field.matches( UNRENDERED_FIELD_SELECTOR ) ) {
 			ensureFieldSettings( field.dataset.fid );
 		}
 	}
@@ -2979,8 +3232,16 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function ignoreLoadingFieldMouseEvent( event ) {
+		const pendingPreview = event.target.closest( `.${ PENDING_PREVIEW_CLASS }` );
+		if ( pendingPreview && event.type === 'click' ) {
+			event.preventDefault();
+			event.stopImmediatePropagation();
+			const rendered = renderFieldPreviewNow( pendingPreview.dataset.fid );
+			rendered?.element.click();
+			return;
+		}
 		// A drag helper lets the pointer reach placeholders, so let jQuery UI track the drag.
-		if ( document.body.classList.contains( 'frm-dragging' ) || ! event.target.closest( '.frm_field_loading' ) ) {
+		if ( document.body.classList.contains( 'frm-dragging' ) || ! event.target.closest( UNRENDERED_FIELD_SELECTOR ) ) {
 			return;
 		}
 
@@ -3024,6 +3285,7 @@ window.frmAdminBuildJS = function() {
 	 */
 	function afterAllFieldsLoad() {
 		placeholderSpinnerObserver?.disconnect();
+		startFieldSettingsQueue();
 		renumberPageBreaks();
 		maybeHideQuantityProductFieldOption();
 		scheduleBulkOptionsOverlay();
@@ -3116,7 +3378,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function handleAddFieldClickResponse( msg ) {
-		document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
+		formEditorContainer.classList.add( 'frm-has-fields' );
 		const replaceWith = wrapFieldLi( msg );
 		const submitField = $newFields[ 0 ].querySelector( '.edit_field_type_submit' );
 
@@ -3231,6 +3493,12 @@ window.frmAdminBuildJS = function() {
 		closeOpenFieldDropdowns();
 		const fieldId = $field.data( 'fid' );
 		const children = fieldsInSection( fieldId );
+		const originalSettings = ensureFieldSettings( fieldId );
+		if ( originalSettings ) {
+			hydrateBuilderSelectsIn( originalSettings );
+		}
+		const settingsSnapshot = originalSettings
+			? captureFieldSettings( originalSettings, $field[ 0 ] ) : null;
 		let fieldOrder;
 
 		if ( null !== newRowId ) {
@@ -3248,6 +3516,7 @@ window.frmAdminBuildJS = function() {
 				nonce: frmGlobal.nonce
 			},
 			success( msg ) {
+				const duplicatedFieldId = checkMsgForFieldId( msg );
 				let newRow;
 
 				let replaceWith;
@@ -3261,6 +3530,9 @@ window.frmAdminBuildJS = function() {
 						if ( null !== fieldOrder ) {
 							newRow.lastElementChild.setAttribute( 'frm-field-order', fieldOrder );
 						}
+						afterAddField( msg, false );
+						maybeDuplicateUnsavedSettings( settingsSnapshot, duplicatedFieldId );
+						setLayoutClassesForDuplicatedFieldInGroup( $field[ 0 ], document.getElementById( `frm_field_id_${ duplicatedFieldId }` ) );
 						jQuery( newRow ).trigger(
 							'frm_added_duplicated_field_to_row',
 							{
@@ -3268,8 +3540,6 @@ window.frmAdminBuildJS = function() {
 								originalFieldId: fieldId
 							}
 						);
-						afterAddField( msg, false );
-						setLayoutClassesForDuplicatedFieldInGroup( $field.get( 0 ), replaceWith.get( 0 ) );
 						return;
 					}
 				}
@@ -3287,10 +3557,10 @@ window.frmAdminBuildJS = function() {
 				}
 
 				afterAddField( msg, false );
-				maybeDuplicateUnsavedSettings( fieldId, msg );
+				maybeDuplicateUnsavedSettings( settingsSnapshot, duplicatedFieldId );
 				toggleOneSectionHolder( replaceWith.find( '.start_divider' ) );
 				$field[ 0 ].querySelector( '.frm-dropdown-menu.dropdown-menu-right' )?.classList.remove( 'show' );
-				setLayoutClassesForDuplicatedFieldInGroup( $field.get( 0 ), replaceWith.get( 0 ) );
+				setLayoutClassesForDuplicatedFieldInGroup( $field[ 0 ], document.getElementById( `frm_field_id_${ duplicatedFieldId }` ) );
 			}
 		} );
 		return false;
@@ -3305,103 +3575,80 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function setLayoutClassesForDuplicatedFieldInGroup( field, newField ) {
-		const hoverTarget = field.closest( '.frm-field-group-hover-target' );
-		if ( ! hoverTarget || ! isFieldGroup( hoverTarget.parentElement ) ) {
+		if ( ! newField || ! field.closest( 'li.frm_field_box:not(.form-field)' ) ) {
 			return;
 		}
-		const fieldId = field.dataset.fid;
-		let fieldClasses = document.getElementById( `frm_classes_${ fieldId }` )?.value;
-		if ( ! fieldClasses ) {
+		const classesInput = document.getElementById( `frm_classes_${ newField.dataset.fid }` );
+		if ( ! classesInput ) {
 			return;
 		}
-		fieldClasses = fieldClasses.replace( 'frm_first', '' );
-		if ( ! newField.className.includes( fieldClasses ) ) {
-			newField.className += ` ${ fieldClasses }`;
-
-			const classesInput = document.getElementById( `frm_classes_${ newField.dataset.fid }` );
-			if ( classesInput ) {
-				classesInput.value = fieldClasses;
-			}
-		}
-	}
-
-	function maybeDuplicateUnsavedSettings( originalFieldId, newFieldHtml ) {
-		const originalSettings = ensureFieldSettings( originalFieldId );
-		if ( ! originalSettings ) {
-			return;
-		}
-
-		const newFieldId = jQuery( newFieldHtml ).attr( 'data-fid' );
-		if ( newFieldId === undefined ) {
-			return;
-		}
-
-		const copySettings = document.getElementById( `frm-single-settings-${ newFieldId }` );
-		if ( ! copySettings ) {
-			return;
-		}
-
-		const fieldOptionKeys = [
-			'name', 'required', 'unique', 'read_only', 'placeholder', 'description', 'size', 'max', 'format', 'prepend', 'append', 'separate_value'
-		];
-
-		originalSettings.querySelectorAll( 'input[name^="field_options["], textarea[name^="field_options["]' ).forEach(
-			function( originalSetting ) {
-				const key = getKeyFromSettingInput( originalSetting );
-
-				if ( 'options' === key ) {
-					copyOption( originalSetting, copySettings, originalFieldId, newFieldId );
-					return;
-				}
-
-				if ( ! fieldOptionKeys.includes( key ) ) {
-					return;
-				}
-
-				const tagType = originalSetting.matches( 'input' ) ? 'input' : 'textarea';
-				const copySetting = copySettings.querySelector( `${ tagType }[name="field_options[${ key }_${ newFieldId }]"]` );
-				if ( null === copySetting ) {
-					return;
-				}
-
-				if ( 'checkbox' === originalSetting.type ) {
-					if ( originalSetting.checked !== copySetting.checked ) {
-						jQuery( copySetting ).trigger( 'click' );
-					}
-				} else if ( 'text' === originalSetting.type || 'textarea' === tagType ) {
-					if ( originalSetting.value !== copySetting.value ) {
-						copySetting.value = originalSetting.value;
-						jQuery( copySetting ).trigger( 'change' );
-					}
-				}
-			}
+		const layoutClasses = getLayoutClasses();
+		const fieldClasses = classesInput.value.split( /\s+/ ).filter(
+			name => name && name !== 'frm_first' && ! layoutClasses.includes( name )
 		);
+		const layoutClass = getLayoutClassName( field.classList );
+		if ( layoutClass ) {
+			fieldClasses.push( layoutClass );
+		}
+		classesInput.value = fieldClasses.join( ' ' );
+		classesInput.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+	}
 
-		const originalDefault = originalSettings.querySelector( `input[name="default_value_${ originalFieldId }"]` );
-		if ( null !== originalDefault ) {
-			const copyDefault = copySettings.querySelector( `input[name="default_value_${ newFieldId }"]` );
-			if ( null !== copyDefault && originalDefault.value !== copyDefault.value ) {
-				copyDefault.value = originalDefault.value;
-				jQuery( copyDefault ).trigger( 'change' );
+	/**
+	 * Overlay unsaved controls and refresh their UI after PHP creates the saved-value copy.
+	 *
+	 * @since x.x
+	 * @param {Object|null} snapshot   Source settings captured before the duplication request.
+	 * @param {number}      newFieldId The field ID returned by PHP.
+	 * @return {void}
+	 */
+	function maybeDuplicateUnsavedSettings( snapshot, newFieldId ) {
+		if ( ! snapshot ) {
+			return;
+		}
+		const settings = ensureFieldSettings( newFieldId );
+		const field = document.getElementById( `frm_field_id_${ newFieldId }` );
+		if ( ! settings || ! field ) {
+			return;
+		}
+		hydrateBuilderSelectsIn( settings );
+		moveFieldSettings( settings );
+		const changed = applyFieldSettings( snapshot, settings, field );
+		changed.forEach( input => {
+			if ( input.closest( '.frm_sortable_field_opts' ) ||
+				input.name === `field_options[type_${ newFieldId }]` ||
+				input.dataset.changeatt === 'class' ) {
+				return;
 			}
+			if ( input.classList.contains( 'wp-editor-area' ) ) {
+				window.tinymce?.get( input.id )?.setContent( input.value );
+			}
+			input.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+		} );
+		// Handlers such as image toggles choose defaults. The source's values take precedence.
+		restoreFieldSettingValues( snapshot, settings );
+		const classesInput = settings.querySelector( '.frm_classes' );
+		if ( classesInput ) {
+			if ( field.closest( 'li.frm_field_box:not(.form-field)' ) ) {
+				classesInput.value = classesInput.value.replace( /\bfrm_first\b/g, '' ).trim();
+			}
+			classesInput.dispatchEvent( new Event( 'change', { bubbles: true } ) );
 		}
-	}
-
-	function copyOption( originalSetting, copySettings, originalFieldId, newFieldId ) {
-		const remainingKeyDetails = originalSetting.name.substr( 23 + `${ originalFieldId }`.length );
-		const copyKey = `field_options[options_${ newFieldId }]${ remainingKeyDetails }`;
-		const copySetting = copySettings.querySelector( `input[name="${ copyKey }"]` );
-		if ( null !== copySetting && copySetting.value !== originalSetting.value ) {
-			copySetting.value = originalSetting.value;
-			jQuery( copySetting ).trigger( 'change' );
+		// Plain preview bindings also cover defaults read directly from TinyMCE before blur.
+		settings.querySelectorAll( '[data-changeme]:not(.frm_classes)' ).forEach( input => liveChanges.call( input ) );
+		const required = settings.querySelector( '.frm_req_field' );
+		if ( required ) {
+			field.querySelector( '.frm_required' )?.classList.toggle( 'frm_hidden', ! required.checked );
+			toggleValidationBox( required.checked, `.frm_required_details${ newFieldId }` );
 		}
-	}
-
-	function getKeyFromSettingInput( input ) {
-		const nameWithoutPrefix = input.name.substr( 14 );
-		const nameSplit = nameWithoutPrefix.split( '_' );
-		nameSplit.pop();
-		return nameSplit.join( '_' );
+		const unique = settings.querySelector( '.frm_mark_unique' );
+		if ( unique ) {
+			toggleValidationBox( unique.checked, `.frm_unique_details${ newFieldId }` );
+		}
+		if ( settings.querySelector( '.frm_sortable_field_opts' ) ) {
+			resetDisplayedOpts( newFieldId );
+		}
+		fieldUpdated();
 	}
 
 	function closeOpenFieldDropdowns() {
@@ -3421,8 +3668,19 @@ window.frmAdminBuildJS = function() {
 
 	function checkForMultiselectKeysOnMouseMove( event ) {
 		const keyIsDown = Boolean( event.ctrlKey || event.metaKey || event.shiftKey );
-		jQuery( builderPage ).toggleClass( 'frm-multiselect-key-is-down', keyIsDown );
+		builderPage.classList.toggle( 'frm-multiselect-key-is-down', keyIsDown );
 		checkForActiveHoverTarget( event );
+	}
+
+	/**
+	 * @since x.x
+	 * @return {HTMLElement|null} The hovered row, while it remains in the builder.
+	 */
+	function getActiveHoverRow() {
+		if ( activeHoverRow && ( ! activeHoverRow.isConnected || ! activeHoverRow.classList.contains( 'frm-field-group-hover-target' ) ) ) {
+			activeHoverRow = null;
+		}
+		return activeHoverRow;
 	}
 
 	function checkForActiveHoverTarget( event ) {
@@ -3431,7 +3689,8 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
-		if ( null !== fieldsContainer.querySelector( '.frm-field-group-hover-target .frm-field-settings-open' ) ) {
+		const hoverRow = getActiveHoverRow();
+		if ( hoverRow?.querySelector( '.frm-field-settings-open' ) ) {
 			// do not set a hover target if a dropdown is open for the current hover target.
 			return;
 		}
@@ -3441,8 +3700,12 @@ window.frmAdminBuildJS = function() {
 			const list = elementFromPoint.closest( 'ul.frm_sorting' );
 
 			if ( null !== list && ! list.classList.contains( 'start_divider' ) && 'frm-show-fields' !== list.id ) {
-				if ( list.querySelector( ':scope > .frm_field_loading' ) ) {
+				if ( list.querySelector( `:scope > :is(${ UNRENDERED_FIELD_SELECTOR })` ) ) {
 					maybeRemoveGroupHoverTarget();
+					return;
+				}
+
+				if ( list === hoverRow ) {
 					return;
 				}
 
@@ -3452,24 +3715,26 @@ window.frmAdminBuildJS = function() {
 				}
 				updateFieldGroupControls( jQuery( list ), getFieldsInRow( jQuery( list ) ).length );
 				list.classList.add( 'frm-field-group-hover-target' );
-				jQuery( '#wpbody-content' ).on( 'mousemove', maybeRemoveHoverTargetOnMouseMove );
+				activeHoverRow = list;
+				wpBodyContent.addEventListener( 'mousemove', maybeRemoveHoverTargetOnMouseMove );
 			}
 		}
 	}
 
 	function maybeRemoveGroupHoverTarget() {
-		const controls = document.getElementById( 'frm_field_group_controls' );
+		const controls = fieldGroupControls;
 		if ( controls ) {
 			controls.style.display = 'none';
 		}
 
-		const previousHoverTarget = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
+		const previousHoverTarget = getActiveHoverRow();
+		wpBodyContent.removeEventListener( 'mousemove', maybeRemoveHoverTargetOnMouseMove );
 		if ( ! previousHoverTarget ) {
 			return false;
 		}
 
-		jQuery( '#wpbody-content' ).off( 'mousemove', maybeRemoveHoverTargetOnMouseMove );
 		previousHoverTarget.classList.remove( 'frm-field-group-hover-target' );
+		activeHoverRow = null;
 		return previousHoverTarget;
 	}
 
@@ -3625,7 +3890,7 @@ window.frmAdminBuildJS = function() {
 		const regex = /id="(\S+)"/;
 		const match = regex.exec( msg );
 		const field = document.getElementById( match[ 1 ] );
-		const section = `#${ match[ 1 ] }.edit_field_type_divider ul.frm_sorting.start_divider`;
+		const section = wp.hooks.applyFilters( 'frm_builder_new_container_selector', `#${ match[ 1 ] }.edit_field_type_divider ul.frm_sorting.start_divider`, field );
 		const $thisSection = jQuery( section );
 		const type = field.getAttribute( 'data-type' );
 
@@ -3777,14 +4042,14 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function clearSettingsBox( preventFieldGroups ) {
-		jQuery( '#new_fields .frm-single-settings' ).addClass( 'frm_hidden' );
-		jQuery( '#frm-options-panel > .frm-single-settings' ).removeClass( 'frm_hidden' );
+		hideActiveFieldSettings();
+		defaultFieldSettings.classList.remove( 'frm_hidden' );
 		deselectFields( preventFieldGroups );
 	}
 
 	function deselectFields( preventFieldGroups ) {
-		jQuery( 'li.ui-state-default.selected' ).removeClass( 'selected' );
-		jQuery( '.frm-show-field-settings.selected' ).removeClass( 'selected' );
+		fieldsContainer.querySelectorAll( 'li.ui-state-default.selected' ).forEach( field => field.classList.remove( 'selected' ) );
+		builderPage.querySelectorAll( '.frm-show-field-settings.selected' ).forEach( field => field.classList.remove( 'selected' ) );
 		if ( ! preventFieldGroups ) {
 			unselectFieldGroups();
 		}
@@ -4241,7 +4506,6 @@ window.frmAdminBuildJS = function() {
 
 	function liveChanges() {
 		/*jshint validthis:true */
-		let option;
 		const newValue = this.value;
 		const changes = document.getElementById( this.getAttribute( 'data-changeme' ) );
 		const att = this.getAttribute( 'data-changeatt' );
@@ -4251,18 +4515,19 @@ window.frmAdminBuildJS = function() {
 		}
 
 		if ( att !== null ) {
-			if ( changes.tagName === 'SELECT' && att === 'placeholder' ) {
-				option = changes.options[ 0 ];
-				if ( option.value === '' ) {
-					option.innerHTML = newValue;
-				} else {
-					// Create a placeholder option if there are no blank values.
-					addBlankSelectOption( changes, newValue );
-				}
+			if ( changes.tagName === 'SELECT' && changes.hasAttribute( 'data-frm-preview-choices' ) &&
+				( att === 'value' || att === 'placeholder' ) ) {
+				updateComboSelectPreview( changes, this.closest( '.frm-single-settings' ) );
+			} else if ( changes.tagName === 'SELECT' && att === 'placeholder' ) {
+				resetDisplayedOpts( this.closest( '.frm-single-settings' ).dataset.fid );
 			} else if ( att === 'class' ) {
 				changeFieldClass( changes, this );
 			} else if ( isSliderField( changes ) ) {
 				updateSliderFieldPreview( changes, att, newValue );
+			} else if ( att === 'value' || att === 'textContent' ) {
+				changes[ att ] = newValue;
+			} else if ( att === 'rows' && newValue === '' ) {
+				changes.removeAttribute( att );
 			} else {
 				changes.setAttribute( att, newValue );
 			}
@@ -4270,14 +4535,19 @@ window.frmAdminBuildJS = function() {
 			if ( newValue !== '' ) {
 				changes.innerHTML = '<input type="text" value="" disabled />';
 			}
+		} else if ( changes.tagName === 'TEXTAREA' && ! changes.classList.contains( 'wp-editor-area' ) ) {
+			changes.value = newValue;
 		} else {
-			changes.innerHTML = purifyHtml( newValue );
+			const content = changes.classList.contains( 'frm_primary_label' )
+				? changes.querySelector( '.frm_builder_field_name' ) || changes
+				: changes;
+			content.innerHTML = purifyHtml( newValue );
 			if ( 'TEXTAREA' === changes.nodeName && changes.classList.contains( 'wp-editor-area' ) ) {
 				// Trigger change events on wysiwyg textareas so we can also sync default values in the visual tab.
 				jQuery( changes ).trigger( 'change' );
 			}
 
-			if ( changes.classList.contains( 'frm_primary_label' ) && 'break' === changes.nextElementSibling.getAttribute( 'data-ftype' ) ) {
+			if ( changes.classList.contains( 'frm_primary_label' ) && 'break' === changes.nextElementSibling?.getAttribute( 'data-ftype' ) ) {
 				changes.nextElementSibling.querySelector( '.frm_button_submit' ).textContent = newValue;
 			}
 		}
@@ -4361,6 +4631,7 @@ window.frmAdminBuildJS = function() {
 			const $reqBox = jQuery( `input[name="field_options[required_indicator_${ fieldId }]"]` );
 			if ( $reqBox.val() === '' ) {
 				$reqBox.val( '*' );
+				liveChanges.call( $reqBox[ 0 ] );
 			}
 			label.removeClass( 'frm_hidden' );
 		} else {
@@ -4703,11 +4974,11 @@ window.frmAdminBuildJS = function() {
 		refreshOptionDisplayNow( jQuery( this ) );
 
 		const hasImageOptions = imagesAsOptions( fieldId );
-		toggle( jQuery( `.field_${ fieldId }_image_id` ), '', hasImageOptions );
-		toggle( jQuery( `.frm_toggle_image_options_${ fieldId }` ), '', hasImageOptions );
-		toggle( jQuery( `.frm_image_size_${ fieldId }` ), '', hasImageOptions );
-		toggle( jQuery( `.frm_alignment_${ fieldId }` ), '', hasImageOptions );
-		toggle( jQuery( `.frm-add-other#frm_add_field_${ fieldId }` ), '', hasImageOptions );
+		toggle( $field.find( `.field_${ fieldId }_image_id` ), '', hasImageOptions );
+		toggle( $field.find( `.frm_toggle_image_options_${ fieldId }` ), '', hasImageOptions );
+		toggle( $field.find( `.frm_image_size_${ fieldId }` ), '', hasImageOptions );
+		toggle( $field.find( `.frm_alignment_${ fieldId }` ), '', hasImageOptions );
+		toggle( $field.find( `.frm-add-other#frm_add_field_${ fieldId }` ), '', hasImageOptions );
 
 		removeImageSizeClasses( displayField );
 
@@ -5048,7 +5319,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function clickDeleteFieldGroup() {
-		const hoverTarget = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
+		const hoverTarget = getActiveHoverRow();
 		if ( ! hoverTarget ) {
 			return;
 		}
@@ -5062,7 +5333,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function duplicateFieldGroup() {
-		const hoverTarget = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
+		const hoverTarget = getActiveHoverRow();
 		if ( ! hoverTarget ) {
 			return;
 		}
@@ -5084,15 +5355,12 @@ window.frmAdminBuildJS = function() {
 		const injectedCloneOptions = [];
 
 		const expectedLength = $fields.length;
-		const originalFieldIdByDuplicatedFieldId = {};
 
 		let duplicatedCount = 0;
 
 		jQuery( newRow ).on(
 			'frm_added_duplicated_field_to_row',
-			function( _, args ) {
-				originalFieldIdByDuplicatedFieldId[ jQuery( args.duplicatedFieldHtml ).attr( 'data-fid' ) ] = args.originalFieldId;
-
+			function() {
 				if ( expectedLength > ++duplicatedCount ) {
 					return;
 				}
@@ -5113,12 +5381,6 @@ window.frmAdminBuildJS = function() {
 				syncLayoutClasses( $duplicatedFields.first(), syncDetails );
 				newRow.classList.remove( 'frm_hidden' );
 				updateFieldOrder();
-
-				getFieldsInRow( $newRowUl ).each(
-					function() {
-						maybeDuplicateUnsavedSettings( originalFieldIdByDuplicatedFieldId[ this.getAttribute( 'data-fid' ) ], jQuery( this ).prop( 'outerHTML' ) );
-					}
-				);
 			}
 		);
 
@@ -5137,7 +5399,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function clickFieldGroupLayout() {
-		const hoverTarget = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
+		const hoverTarget = getActiveHoverRow();
 
 		if ( ! hoverTarget ) {
 			return;
@@ -5442,7 +5704,7 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function handleFieldGroupLayoutOptionClick() {
-		const row = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
+		const row = getActiveHoverRow();
 		if ( ! row ) {
 			// The field group layout options also get clicked when merging multiple rows.
 			// The following code isn't required for multiple rows though so just exit early.
@@ -5462,7 +5724,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function mergeSelectedFieldGroups() {
-		const $selectedFieldGroups = jQuery( '.frm-selected-field-group' );
+		const $selectedFieldGroups = jQuery( fieldsContainer.querySelectorAll( '.frm-selected-field-group' ) );
 		const $firstGroupUl = $selectedFieldGroups.first();
 		$selectedFieldGroups.not( $firstGroupUl ).each(
 			function() {
@@ -5487,7 +5749,7 @@ window.frmAdminBuildJS = function() {
 		if ( null !== this.closest( '.frm-merge-fields-into-row' ) ) {
 			return;
 		}
-		const $fields = getFieldsInRow( jQuery( '.frm-field-group-hover-target' ) );
+		const $fields = getFieldsInRow( jQuery( getActiveHoverRow() ) );
 		setupCustomLayoutOptions( $fields );
 	}
 
@@ -5571,7 +5833,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function customFieldGroupLayoutInsideMergeClick() {
-		const $fields = jQuery( '.frm-selected-field-group li.form-field' );
+		const $fields = jQuery( fieldsContainer.querySelectorAll( '.frm-selected-field-group li.form-field' ) );
 		setupCustomLayoutOptions( $fields );
 	}
 
@@ -5635,7 +5897,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function breakFieldGroupClick() {
-		const row = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
+		const row = getActiveHoverRow();
 		breakRow( row );
 		destroyFieldGroupPopup();
 	}
@@ -5697,7 +5959,7 @@ window.frmAdminBuildJS = function() {
 		const $controls = jQuery( document.getElementById( 'frm_field_group_controls' ) );
 
 		if ( $controls.length && 'none' !== $controls.get( 0 ).style.display ) {
-			syncLayoutClasses( getFieldsInRow( jQuery( fieldsContainer.querySelector( '.frm-field-group-hover-target' ) ) ).first(), syncDetails );
+			syncLayoutClasses( getFieldsInRow( jQuery( getActiveHoverRow() ) ).first(), syncDetails );
 		} else {
 			const $ul = mergeSelectedFieldGroups();
 			syncLayoutClasses( getFieldsInRow( $ul ).first(), syncDetails );
@@ -5715,7 +5977,7 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
-		const hoverTarget = fieldsContainer.querySelector( '.frm-field-group-hover-target' );
+		const hoverTarget = getActiveHoverRow();
 		if ( ! hoverTarget ) {
 			return;
 		}
@@ -5879,7 +6141,7 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function maybeHideFieldGroupMessage() {
-		const selectedRowCount = document.querySelectorAll( '.frm-selected-field-group' ).length;
+		const selectedRowCount = fieldsContainer.querySelectorAll( '.frm-selected-field-group' ).length;
 		if ( selectedRowCount < 2 ) {
 			return;
 		}
@@ -5893,7 +6155,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function getSelectedFieldGroups() {
-		const $fieldGroups = jQuery( '.frm-selected-field-group' );
+		const $fieldGroups = jQuery( fieldsContainer.querySelectorAll( '.frm-selected-field-group' ) );
 		if ( $fieldGroups.length ) {
 			return $fieldGroups;
 		}
@@ -5922,7 +6184,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function selectedGroupHasMultipleFields() {
-		return getFieldsInRow( jQuery( document.querySelector( '.frm-selected-field-group' ) ) ).length > 1;
+		return getFieldsInRow( jQuery( fieldsContainer.querySelector( '.frm-selected-field-group' ) ) ).length > 1;
 	}
 
 	function unselectFieldGroups( event ) {
@@ -5943,7 +6205,7 @@ window.frmAdminBuildJS = function() {
 				return;
 			}
 		}
-		jQuery( '.frm-selected-field-group' ).removeClass( 'frm-selected-field-group' );
+		jQuery( fieldsContainer.querySelectorAll( '.frm-selected-field-group' ) ).removeClass( 'frm-selected-field-group' );
 		jQuery( document ).off( 'click', unselectFieldGroups );
 		maybeRemoveMultiselectPopup();
 	}
@@ -6002,7 +6264,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function selectedFieldsAreMergeable() {
-		const selectedFieldGroups = document.querySelectorAll( '.frm-selected-field-group' );
+		const selectedFieldGroups = fieldsContainer.querySelectorAll( '.frm-selected-field-group' );
 		const { length } = selectedFieldGroups;
 		if ( 1 === length ) {
 			return false;
@@ -6033,13 +6295,13 @@ window.frmAdminBuildJS = function() {
 		}
 
 		const size = getSelectedFieldCount();
-		const popup = getFieldGroupPopup( size, document.querySelector( '.frm-selected-field-group' ).firstChild );
+		const popup = getFieldGroupPopup( size, fieldsContainer.querySelector( '.frm-selected-field-group' ).firstChild );
 		this.append( popup );
 	}
 
 	function getSelectedFieldCount() {
 		let count = 0;
-		jQuery( document.querySelectorAll( '.frm-selected-field-group' ) ).each(
+		jQuery( fieldsContainer.querySelectorAll( '.frm-selected-field-group' ) ).each(
 			function() {
 				count += getFieldsInRow( jQuery( this ) ).length;
 			}
@@ -6078,7 +6340,7 @@ window.frmAdminBuildJS = function() {
 
 	function getSelectedFieldIds() {
 		const deleteFieldIds = [];
-		jQuery( '.frm-selected-field-group > li.form-field' )
+		jQuery( fieldsContainer.querySelectorAll( '.frm-selected-field-group > li.form-field' ) )
 			.each(
 				function() {
 					deleteFieldIds.push( this.dataset.fid );
@@ -6170,6 +6432,10 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function moveOpenModalsOutOfFieldOptions( settings ) {
+		if ( ! settings.length ) {
+			return;
+		}
+
 		const openModals = settings[ 0 ].querySelectorAll( '.frm-inline-modal[data-fills]' );
 		if ( ! openModals.length ) {
 			return;
@@ -6192,16 +6458,22 @@ window.frmAdminBuildJS = function() {
 			},
 			success() {
 				forgetFieldSettings( fieldId );
+				forgetFieldPreview( fieldId );
+				cancelFieldSettings( fieldId );
+				fieldsAwaitingSettings.delete( String( fieldId ) );
 				const $thisField = jQuery( document.getElementById( `frm_field_id_${ fieldId }` ) );
 				const settings = jQuery( `#frm-single-settings-${ fieldId }` );
 
 				// Remove settings from sidebar.
 				if ( settings.is( ':visible' ) ) {
 					document.querySelector( '.frm-settings-panel .frm-tabs-navs ul > li:first-child' )?.click();
-					document.querySelector( '#frm-options-panel .frm-single-settings' ).classList.remove( 'frm_hidden' );
+					defaultFieldSettings.classList.remove( 'frm_hidden' );
 				}
 
 				moveOpenModalsOutOfFieldOptions( settings );
+				if ( activeSettingsPanel === settings[ 0 ] ) {
+					activeSettingsPanel = null;
+				}
 				settings.remove();
 
 				$thisField.fadeOut( 'slow', function() {
@@ -6234,7 +6506,6 @@ window.frmAdminBuildJS = function() {
 					}
 
 					if ( jQuery( '#frm-show-fields li' ).length === 0 || hasOnlySubmitField() ) {
-						const formEditorContainer = document.getElementById( 'frm_form_editor_container' );
 						formEditorContainer.classList.remove( 'frm-has-fields' );
 						formEditorContainer.classList.add( 'frm-empty-fields' );
 					} else if ( $section.length ) {
@@ -6862,6 +7133,7 @@ window.frmAdminBuildJS = function() {
 
 		if ( setting !== undefined ) {
 			if ( fieldType.tagName === 'SELECT' ) {
+				hydrateBuilderSelect( fieldType );
 				fieldTypeName = fieldType.options[ fieldType.selectedIndex ].text.toLowerCase();
 			} else {
 				fieldTypeName = fieldTypeName.replace( '_', ' ' );
@@ -6927,7 +7199,7 @@ window.frmAdminBuildJS = function() {
 			const originalList = e.originalEvent.target.closest( 'ul.frm_sorting' );
 			if ( null !== originalList ) {
 				// prevent section click if clicking a field group within a section.
-				if ( originalList.classList.contains( 'edit_field_type_divider' ) || originalList.parentNode.parentNode.classList.contains( 'start_divider' ) ) {
+				if ( wp.hooks.applyFilters( 'frm_builder_skip_container_click', originalList.classList.contains( 'edit_field_type_divider' ) || originalList.parentNode.parentNode.classList.contains( 'start_divider' ), originalList ) ) {
 					return;
 				}
 			}
@@ -6947,9 +7219,22 @@ window.frmAdminBuildJS = function() {
 	function maybeUpdateFormatInput( event ) {
 		const formatElement = event.target;
 		const type = formatElement.value;
+		const fieldId = formatElement.dataset.fieldId;
+
+		if ( formatElement.classList.contains( 'frm_phone_type_dropdown' ) ) {
+			const autocompleteElement = document.getElementById( `field_options_autocomplete_${ fieldId }` );
+			const hasFormat = 'custom' === type || 'international' === type;
+			// Browser autofill would put the same value in every repeater row.
+			const isInRepeater = Boolean( document.getElementById( `frm_field_id_${ fieldId }` )?.closest( '.repeat_section' ) );
+
+			if ( autocompleteElement && 'none' === type && ! autocompleteElement.value && ! isInRepeater ) {
+				autocompleteElement.value = 'tel';
+			} else if ( autocompleteElement && hasFormat && 'tel' === autocompleteElement.value ) {
+				autocompleteElement.value = '';
+			}
+		}
 
 		if ( 'custom' === type ) {
-			const { fieldId } = formatElement.dataset;
 			const formatInput = document.getElementById( `frm-field-format-custom-${ fieldId }` ).querySelector( '.frm_format_opt' );
 
 			if ( 'international' === formatInput.value || 'currency' === formatInput.value || 'number' === formatInput.value ) {
@@ -7020,7 +7305,7 @@ window.frmAdminBuildJS = function() {
 		jQuery( document.getElementById( `frm_field_id_${ id }` ) ).find( 'li.frm_field_box:not(.no_repeat_section .edit_field_type_end_divider)' ).each( function() {
 			children.push( jQuery( this ).data( 'fid' ) );
 		} );
-		return children;
+		return wp.hooks.applyFilters( 'frm_builder_child_field_ids', children, id );
 	}
 
 	function toggleFormTax() {
@@ -7078,11 +7363,6 @@ window.frmAdminBuildJS = function() {
 		if ( single.length < 1 ) {
 			resetDisplayedOpts( fieldId );
 
-			// Set the default value.
-			const defaultVal = thisOpt.find( 'input[name^="default_value_"]' );
-			if ( defaultVal.is( ':checked' ) && label.length > 0 ) {
-				jQuery( `select[name^="item_meta[${ fieldId }]"]` ).val( label.val() );
-			}
 			return;
 		}
 
@@ -7605,8 +7885,12 @@ window.frmAdminBuildJS = function() {
 		const isProduct = isProductField( sourceID );
 		const showOther = atts.other;
 
-		removeDropdownOpts( field );
 		const opts = getMultipleOpts( sourceID, field.id.includes( 'frm_field_logic_opt' ) );
+		if ( field.closest( '#frm-show-fields .frm_form_fields' ) && ! field.closest( '.frm-single-settings' ) ) {
+			renderDropdownPreview( field, opts, placeholder );
+			return;
+		}
+		removeDropdownOpts( field );
 		let hasPlaceholder = placeholder !== undefined;
 
 		for ( let i = 0; i < opts.length; i++ ) {
@@ -7866,7 +8150,8 @@ window.frmAdminBuildJS = function() {
 	function checkUniqueOpt( targetInput ) {
 		const settingsContainer = targetInput.closest( '.frm-single-settings' );
 		const fieldId = settingsContainer.getAttribute( 'data-fid' );
-		const areValuesSeparate = settingsContainer.querySelector( `[name="field_options[separate_value_${ fieldId }]"]` ).checked;
+		// The separate values setting is only there when Pro is active.
+		const areValuesSeparate = Boolean( settingsContainer.querySelector( `[name="field_options[separate_value_${ fieldId }]"]` )?.checked );
 
 		if ( areValuesSeparate && ! targetInput.name.endsWith( '[value]' ) ) {
 			return;
@@ -7982,73 +8267,10 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function updateFieldOrder() {
-		const self = this;
-
-		this.initOnceInAllInstances = function() {
-			if ( updateFieldOrder.prototype.orderFieldsObject !== undefined ) {
-				return;
-			}
-
-			// It will store the order input fields ( input[name="field_options[field_order_{fieldId}]"] ).
-			// It will help to reduce the DOM searches based on fieldId.
-			// The same object data is used across all "updateFieldOrder" instances.
-			updateFieldOrder.prototype.orderFieldsObject = {};
-
-			// Get the Form group that will handle the fields settings.
-			// Perform a single DOM search and use it across all "updateFieldOrder" instances.
-			updateFieldOrder.prototype.fieldSettingsForm = document.getElementById( 'frm-end-form-marker' ).closest( 'form' );
-		};
-
-		this.getFieldOrderInputById = function( fieldId, parent ) {
-			let field;
-			const { orderFieldsObject } = updateFieldOrder.prototype;
-			const { fieldSettingsForm } = updateFieldOrder.prototype;
-
-			if ( orderFieldsObject[ fieldId ] === undefined ) {
-				field = fieldSettingsForm.querySelector( `input[name="field_options[field_order_${ fieldId }]"]` );
-				if ( ! field ) {
-					field = parent.querySelector( `input[name="field_options[field_order_${ fieldId }]"]` );
-				}
-				orderFieldsObject[ fieldId ] = field;
-				return field;
-			}
-
-			return orderFieldsObject[ fieldId ];
-		};
-
-		this.initOnceInAllInstances();
 		renumberPageBreaks();
-
-		return ( function() {
-			let fieldId;
-			let field;
-			let currentOrder;
-			let newOrder;
-			let i;
-			let singleField;
-			const moveFieldsClass = new moveFieldSettings();
-			const fields = jQuery( 'li.frm_field_box', jQuery( '#frm-show-fields' ) );
-
-			for ( i = 0; i < fields.length; i++ ) {
-				fieldId = fields[ i ].getAttribute( 'data-fid' );
-				field = self.getFieldOrderInputById( fieldId, fields[ i ] );
-
-				// get current field order, make sure we don't get the "field" reference as the "field" value will get updated later.
-				currentOrder = field ? Number( field.value ) : null;
-				newOrder = i + 1;
-
-				if ( currentOrder != newOrder && null !== currentOrder ) {
-					field.value = newOrder;
-					singleField = ensureFieldSettings( fieldId );
-
-					// add field that needs to be moved to "updateFieldOrder.prototype.fieldSettingsForm"
-					moveFieldsClass.append( singleField );
-					fieldUpdated();
-				}
-			}
-			// move all appended fields
-			moveFieldsClass.moveFields();
-		}() );
+		if ( syncFieldOrder( builderForm ) ) {
+			fieldUpdated();
+		}
 	}
 
 	function toggleSectionHolder() {
@@ -8142,11 +8364,13 @@ window.frmAdminBuildJS = function() {
 
 	/**
 	 * Get rid of empty container that inserts extra space.
+	 *
+	 * @param {HTMLElement|Document} container The settings panel or page to clean.
 	 */
-	function hideEmptyEle() {
-		jQuery( '.frm-hide-empty' ).each( function() {
-			if ( jQuery( this ).text().trim().length === 0 ) {
-				jQuery( this ).remove();
+	function hideEmptyEle( container = document ) {
+		container.querySelectorAll( '.frm-hide-empty' ).forEach( element => {
+			if ( element.textContent.trim().length === 0 ) {
+				element.remove();
 			}
 		} );
 	}
@@ -8418,7 +8642,7 @@ window.frmAdminBuildJS = function() {
 		/*jshint validthis:true */
 		const $thisEle = this;
 
-		if ( showNameYourFormModal() ) {
+		if ( showNameYourFormModal() || deferSaveForFieldSettings( submitBuild, this ) ) {
 			return;
 		}
 
@@ -8426,26 +8650,67 @@ window.frmAdminBuildJS = function() {
 
 		const $form = jQuery( builderForm );
 		const v = JSON.stringify( $form.serializeArray() );
+		const savedOrders = builderForm.querySelector( '[name="frm_field_order"]' )?.value;
 
 		jQuery( document.getElementById( 'frm_compact_fields' ) ).val( v );
 		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
 			data: { action: 'frm_save_form', frm_compact_fields: v, nonce: frmGlobal.nonce },
-			success( msg ) {
+			success( msg, textStatus, xhr ) {
+				// An invalid save also returns 200 with the edit page, so keep the orders for the next save.
+				if ( xhr.getResponseHeader( 'X-Frm-Form-Saved' ) === '1' ) {
+					confirmFieldOrderSaved( builderForm, savedOrders );
+				}
 				afterFormSave( $thisEle );
-
-				const $postStuff = document.getElementById( 'post-body-content' );
-				const $html = document.createElement( 'div' );
-				$html.setAttribute( 'class', 'frm_updated_message' );
-				$html.innerHTML = msg;
-				$postStuff.insertBefore( $html, $postStuff.firstChild );
+				showFormSavedMessage( msg );
 				reloadIfAddonActivatedAjaxSubmitOnly();
 			},
-			error() {
+			error( xhr ) {
+				if ( xhr.getResponseHeader( 'X-Frm-Form-Saved' ) === '0' ) {
+					// The server could not save everything. Keep the unsaved changes and orders for the next save.
+					showFormSaveFailed( $thisEle, xhr.responseText );
+					return;
+				}
 				triggerSubmit( document.getElementById( 'frm_js_build_form' ) );
 			}
 		} );
+	}
+
+	/**
+	 * Stop the loading state and show the error returned by a save that did not complete.
+	 * The changed fields count is kept so the unsaved changes warning still applies.
+	 *
+	 * @param {HTMLElement} button The save button.
+	 * @param {string}      msg    The error message returned by the save request.
+	 * @return {void}
+	 */
+	function showFormSaveFailed( button, msg ) {
+		button.classList.remove( 'frm_loading_form', 'frm_loading_button' );
+		button.setAttribute( 'aria-busy', 'false' );
+		infoModal( msg );
+	}
+
+	/**
+	 * Show the message returned after saving the form with AJAX.
+	 * A plain success message pops up as a toast. A message with a link, like the
+	 * form too long warning, stays at the top of the builder so there is time to read it.
+	 *
+	 * @param {string} msg The message HTML returned by the save request.
+	 * @return {void}
+	 */
+	function showFormSavedMessage( msg ) {
+		const content = span( {} );
+		content.innerHTML = msg;
+
+		if ( ! content.querySelector( 'a' ) ) {
+			frmDom.success( content );
+			return;
+		}
+
+		const postStuff = document.getElementById( 'post-body-content' );
+		const message = div( { className: 'frm_updated_message', child: content } );
+		postStuff.insertBefore( message, postStuff.firstChild );
 	}
 
 	function triggerSubmit( form ) {
@@ -8463,7 +8728,7 @@ window.frmAdminBuildJS = function() {
 
 	function submitNoAjax() {
 		/*jshint validthis:true */
-		if ( showNameYourFormModal() ) {
+		if ( showNameYourFormModal() || deferSaveForFieldSettings( submitNoAjax, this ) ) {
 			return;
 		}
 
@@ -9139,14 +9404,11 @@ window.frmAdminBuildJS = function() {
 	 * @param {HTMLElement} obj The selected field element.
 	 */
 	function showFieldOptions( obj ) {
-		let i;
 		const fieldId = obj.getAttribute( 'data-fid' );
+		renderFieldPreviewNow( fieldId );
+		obj = document.getElementById( `frm_field_id_${ fieldId }` );
 		const fieldType = obj.getAttribute( 'data-type' );
-		const allFieldSettings = document.querySelectorAll( '.frm-single-settings:not(.frm_hidden)' );
-
-		for ( i = 0; i < allFieldSettings.length; i++ ) {
-			allFieldSettings[ i ].classList.add( 'frm_hidden' );
-		}
+		hideActiveFieldSettings();
 
 		const singleField = ensureFieldSettings( fieldId );
 		if ( ! singleField ) {
@@ -9160,12 +9422,13 @@ window.frmAdminBuildJS = function() {
 		}
 
 		// Scroll settings panel to top
-		document.querySelector( '.frm-settings-panel.frm-scrollbar-wrapper' )?.scrollTo( {
+		settingsScrollContainer?.scrollTo( {
 			top: 0,
 			behavior: 'instant'
 		} );
 
 		singleField.classList.remove( 'frm_hidden' );
+		activeSettingsPanel = singleField;
 		initiateMultiselect( singleField );
 
 		// Cancel slide animation on expanded sections so screen readers
@@ -9190,6 +9453,18 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
+	 * Hide the previous selection without searching every field's settings.
+	 *
+	 * @since x.x
+	 * @return {void}
+	 */
+	function hideActiveFieldSettings() {
+		activeSettingsPanel?.classList.add( 'frm_hidden' );
+		activeSettingsPanel = null;
+		defaultFieldSettings.classList.add( 'frm_hidden' );
+	}
+
+	/**
 	 * Switch the sidebar to the Field Options tab, which slides the settings panel into view.
 	 *
 	 * The panel's setup work (deferred inits, TinyMCE, frmShowedFieldSettings listeners) all runs
@@ -9204,8 +9479,6 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function showFieldOptionsTab( obj, singleField, editorReady ) {
-		const optionsTab = document.getElementById( 'frm-options-panel-tab' );
-
 		if ( optionsTab.parentElement.classList.contains( 'frm-active' ) ) {
 			// The tab is already open, so there is no slide to protect.
 			optionsTab.click();
@@ -9279,8 +9552,8 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function isTinyMceActive() {
-		const activeSettings = document.querySelector( '.frm-single-settings:not(.frm_hidden)' );
-		if ( ! activeSettings ) {
+		const activeSettings = activeSettingsPanel;
+		if ( ! activeSettings?.isConnected || activeSettings.classList.contains( 'frm_hidden' ) ) {
 			return false;
 		}
 
@@ -9942,7 +10215,8 @@ window.frmAdminBuildJS = function() {
 				},
 				elementId,
 				success( msg ) {
-					if ( rich ) {
+					const codeTabActive = jQuery( `#wp-${ elementId }-wrap` ).hasClass( 'html-active' );
+					if ( rich && ! codeTabActive ) {
 						const paragraph = document.createElement( 'p' );
 						paragraph.innerText = msg;
 						send_to_editor( paragraph.innerHTML );
@@ -12137,6 +12411,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	return {
+		ensureFieldPreview: renderFieldPreviewNow,
 		init() {
 			initAddMyEmailAddress();
 			addAdminFooterLinks();
@@ -12359,6 +12634,13 @@ window.frmAdminBuildJS = function() {
 		},
 
 		buildInit() {
+			wpBodyContent = document.getElementById( 'wpbody-content' );
+			formEditorContainer = document.getElementById( 'frm_form_editor_container' );
+			optionsPanel = document.getElementById( 'frm-options-panel' );
+			optionsTab = document.getElementById( 'frm-options-panel-tab' );
+			settingsScrollContainer = builderPage.querySelector( '.frm-settings-panel.frm-scrollbar-wrapper' );
+			defaultFieldSettings = optionsPanel.querySelector( ':scope > .frm-single-settings' );
+			activeSettingsPanel = builderForm.querySelector( '.frm-single-settings:not(.frm_hidden)' );
 			hydrateFieldPlaceholders();
 			[ 'click', 'dblclick', 'mousedown', 'mousemove', 'mouseover', 'mouseout', 'contextmenu' ].forEach( eventType => {
 				fieldsContainer.addEventListener( eventType, ignoreLoadingFieldMouseEvent, true );
@@ -12381,6 +12663,7 @@ window.frmAdminBuildJS = function() {
 			fillFieldLoadQueue();
 
 			setupSortable( 'ul.frm_sorting' );
+			initBrowserPreviewFields();
 
 			document.querySelectorAll( '.field_type_list > li:not(.frm_show_upgrade):not(.frm_show_update)' ).forEach( makeDraggable );
 			initFieldListHoverPill();
@@ -12410,7 +12693,7 @@ window.frmAdminBuildJS = function() {
 			renumberPageBreaks();
 
 			const $builderForm = jQuery( builderForm );
-			const builderArea = document.getElementById( 'frm_form_editor_container' );
+			const builderArea = formEditorContainer;
 
 			// Formidable Pro can take over adding a condition row itself (see its builder.js) once
 			// it no longer needs this fallback for sites running an older, incompatible Pro version.
@@ -12431,6 +12714,20 @@ window.frmAdminBuildJS = function() {
 			$builderForm.on( 'blur', 'input[id^="frm_calc"]', checkCalculationCreatedByUser );
 			$builderForm.on( 'change', 'input.frm_format_opt, input.frm_max_length_opt', toggleInvalidMsg );
 			$builderForm.on( 'change click', '[data-changeme]', liveChanges );
+			const previewInputHandlers = new WeakMap();
+			builderForm.addEventListener( 'input', event => {
+				const input = event.target;
+				if ( input.matches( '[data-changeme]' ) ) {
+					if ( ! previewInputHandlers.has( input ) ) {
+						previewInputHandlers.set( input, debounce( liveChanges ) );
+					}
+					previewInputHandlers.get( input ).call( input );
+					fieldUpdated();
+				}
+			} );
+			frmDom.util.documentOn( 'change', '.frm-single-settings select[id^="address_type_"]', function() {
+				updateAddressPreview( this, liveChanges );
+			} );
 			$builderForm.on( 'click', 'input.frm_req_field', markRequired );
 			$builderForm.on( 'click', '.frm_mark_unique', markUnique );
 
@@ -12546,7 +12843,8 @@ window.frmAdminBuildJS = function() {
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
-			document.addEventListener( 'frm_added_field', hideEmptyEle );
+			document.addEventListener( 'frm_added_field', event => hideEmptyEle( event.frmField ) );
+			wp.hooks.addAction( 'frm_field_settings_loaded', 'formidableAdmin', hideEmptyEle );
 			maybeHideQuantityProductFieldOption();
 			handleNameFieldOnFormBuilder();
 			toggleSectionHolder();
@@ -12559,6 +12857,7 @@ window.frmAdminBuildJS = function() {
 				}
 			} );
 			wp.hooks.addAction( 'frmShowedFieldSettings', 'formidableAdmin', ( showBtn, fieldSettingsEl ) => {
+				hideEmptyEle( fieldSettingsEl );
 				fieldSettingsEl.querySelectorAll( '.frm-collapse-me' ).forEach( addSlideAnimationCssVars );
 				setupFieldOptionSorting( fieldSettingsEl );
 			}, 9999 );
@@ -13168,6 +13467,7 @@ window.frmAdminBuildJS = function() {
 		handleInsertFieldByDraggingResponse,
 		handleAddFieldClickResponse,
 		syncLayoutClasses,
+		syncAfterDragAndDrop,
 		moveFieldSettings,
 		maybeCollapseSettings,
 	};

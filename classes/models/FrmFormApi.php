@@ -126,6 +126,8 @@ class FrmFormApi {
 			$url .= '?l=' . urlencode( base64_encode( $this->license ) );
 		}
 
+		$url = add_query_arg( 'include_boosts', 1, $url );
+
 		if ( $this->force ) {
 			$addons      = false;
 			$this->force = false;
@@ -263,10 +265,6 @@ class FrmFormApi {
 	 * @return string
 	 */
 	protected function api_url() {
-		if ( ! $this->license ) {
-			// Direct traffic to Cloudflare worker when there is no license.
-			return 'https://plapi.formidableforms.com/list/';
-		}
 		return 'https://formidableforms.com/wp-json/s11edd/v1/updates/';
 	}
 

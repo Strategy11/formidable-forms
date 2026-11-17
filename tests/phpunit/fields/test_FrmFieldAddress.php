@@ -289,7 +289,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	}
 
 	/**
-	 * @return void array<(array<string> | string)>>
+	 * @return \Iterator<string, array<(array<string> | string)>>
 	 */
 	public static function address_type_provider() {
 		yield 'international' => array( 'international', array( 'line1', 'line2', 'city', 'state', 'zip', 'country' ) );
@@ -346,7 +346,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	}
 
 	/**
-	 * @return void array<(array<string> | string)>>
+	 * @return \Iterator<string, array<(array<string> | string)>>
 	 */
 	public static function us_zip_provider() {
 		yield 'five digits' => array( '62704', true );
@@ -581,7 +581,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	}
 
 	/**
-	 * @return void array<(array | string)>>
+	 * @return \Iterator<string, array<(array | string)>>
 	 */
 	public static function address_string_provider() {
 		yield 'six parts map in order' => array(
@@ -655,7 +655,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	}
 
 	/**
-	 * @return void array<(array | string)>>
+	 * @return \Iterator<string, array<(array | string)>>
 	 */
 	public static function import_value_provider() {
 		yield 'six parts include line2 and country' => array(
@@ -755,7 +755,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	}
 
 	/**
-	 * @return void array<(array<string> | string)>>
+	 * @return \Iterator<string, array<(array<string> | string)>>
 	 */
 	public static function processed_sub_fields_provider() {
 		yield 'international' => array( 'international', array( 'line1', 'line2', 'city', 'state', 'zip', 'country' ) );

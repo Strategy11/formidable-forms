@@ -118,17 +118,75 @@ class FrmPayPalLiteAppController {
 	 *
 	 * @return array Array of products with prices and quantities.
 	 */
-	// phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 	private static function get_pricing_data_from_posted_values( $form_id ) {
-		$products = array();
-		$fields   = FrmField::get_all_for_form( $form_id );
+		$fields = FrmField::get_all_for_form( $form_id );
 
 		if ( ! $fields ) {
-			return $products;
+			return array();
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$posted_data = $_POST['item_meta'] ?? array();
+
+		if ( ! is_array( $posted_data ) ) {
+			return array();
+		}
+
+		$value_sets = array_merge( array( $posted_data ), self::get_repeater_rows_from_posted_values( $fields, $posted_data ) );
+		$products   = array();
+
+		foreach ( $value_sets as $values ) {
+			$products = array_merge( $products, self::get_pricing_data_from_values( $fields, $values ) );
+		}
+
+		return $products;
+	}
+
+	/**
+	 * Get the posted values for each row of every repeater in the form.
+	 *
+	 * Fields inside a repeater are posted under the repeater's section ID,
+	 * one array of field values per row, so they are not found at the top level of item_meta.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $fields      The form fields, including fields inside repeaters.
+	 * @param array $posted_data The posted item_meta values.
+	 *
+	 * @return array Array of field values arrays, one per repeater row.
+	 */
+	private static function get_repeater_rows_from_posted_values( $fields, $posted_data ) {
+		$rows = array();
+
+		foreach ( $fields as $field ) {
+			if ( ! FrmField::is_repeating_field( $field ) || empty( $posted_data[ $field->id ] ) || ! is_array( $posted_data[ $field->id ] ) ) {
+				continue;
+			}
+
+			foreach ( $posted_data[ $field->id ] as $row_id => $row_values ) {
+				if ( in_array( $row_id, array( 'form', 'row_ids' ), true ) || ! is_array( $row_values ) ) {
+					continue;
+				}
+
+				$rows[] = $row_values;
+			}
+		}
+
+		return $rows;
+	}
+
+	/**
+	 * Extract pricing data from one set of field values, either the top level of the form or a single repeater row.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $fields The form fields.
+	 * @param array $values The posted values, keyed by field ID.
+	 *
+	 * @return array Array of products with prices and quantities.
+	 */
+	private static function get_pricing_data_from_values( $fields, $values ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
+		$products = array();
 
 		foreach ( $fields as $field ) {
 			if ( ! in_array( $field->type, array( 'product', 'quantity', 'total' ), true ) ) {
@@ -136,7 +194,7 @@ class FrmPayPalLiteAppController {
 			}
 
 			$field_id = $field->id;
-			$value    = $posted_data[ $field_id ] ?? '';
+			$value    = $values[ $field_id ] ?? '';
 
 			if ( ! $value ) {
 				continue;
@@ -209,6 +267,36 @@ class FrmPayPalLiteAppController {
 	}
 
 	/**
+	 * Drop the line items when they do not add up to the amount being charged.
+	 *
+	 * The line items are sent to PayPal with an item_total breakdown, and PayPal rejects any order
+	 * where the breakdown does not equal the order amount. That happens whenever the amount includes
+	 * more than the product fields, like a calculated tax, gratuity, fee, or discount.
+	 * Without line items, no breakdown is sent and the order is created with the amount alone.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $pricing_data The products with prices and quantities.
+	 * @param string $amount       The order amount, formatted with two decimals.
+	 *
+	 * @return array
+	 */
+	private static function maybe_remove_pricing_data_for_amount_mismatch( $pricing_data, $amount ) {
+		$item_total = 0;
+
+		foreach ( $pricing_data as $item ) {
+			// Match how the line items are rounded when the breakdown is built.
+			$item_total += floatval( number_format( floatval( $item['price'] ), 2, '.', '' ) ) * intval( $item['quantity'] );
+		}
+
+		if ( number_format( $item_total, 2, '.', '' ) !== $amount ) {
+			return array();
+		}
+
+		return $pricing_data;
+	}
+
+	/**
 	 * Create a PayPal order via AJAX.
 	 */
 	public static function create_order() {
@@ -261,8 +349,9 @@ class FrmPayPalLiteAppController {
 		}
 
 		// PayPal expects the amount in a format like 10.00, so format it.
-		$amount   = number_format( floatval( $amount ), 2, '.', '' );
-		$currency = strtoupper( $action->post_content['currency'] );
+		$amount       = number_format( floatval( $amount ), 2, '.', '' );
+		$currency     = strtoupper( $action->post_content['currency'] );
+		$pricing_data = self::maybe_remove_pricing_data_for_amount_mismatch( $pricing_data, $amount );
 
 		$order_response = FrmPayPalLiteConnectHelper::create_order( $amount, $currency, $payment_source, $payer, $shipping_preference, $pricing_data, $shipping, $description );
 

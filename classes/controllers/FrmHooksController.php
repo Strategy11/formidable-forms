@@ -158,6 +158,7 @@ class FrmHooksController {
 		add_action( 'admin_notices', 'FrmAppController::pro_get_started_headline' );
 		add_action( 'admin_init', 'FrmAppController::admin_init', 11 );
 		add_action( 'admin_enqueue_scripts', 'FrmAppController::admin_enqueue_scripts' );
+		add_action( 'admin_enqueue_scripts', 'FrmAppController::maybe_replace_foreign_popper', PHP_INT_MAX );
 		add_action( 'admin_footer', 'FrmAppHelper::print_deferred_tooltips' );
 		add_action( 'admin_footer', 'FrmBuilderSelectHelper::print_templates' );
 		add_filter( 'plugin_action_links_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'FrmAppController::settings_link' );
@@ -287,6 +288,7 @@ class FrmHooksController {
 
 		// Fields Controller.
 		add_action( 'wp_ajax_frm_load_field', 'FrmFieldsController::load_field' );
+		add_action( 'wp_ajax_frm_load_field_settings', 'FrmFieldsController::load_field_settings' );
 		add_action( 'wp_ajax_frm_insert_field', 'FrmFieldsController::create' );
 		add_action( 'wp_ajax_frm_duplicate_field', 'FrmFieldsController::duplicate' );
 		add_action( 'wp_ajax_frm_delete_field', 'FrmFieldsController::destroy' );

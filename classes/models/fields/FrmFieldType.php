@@ -30,6 +30,26 @@ abstract class FrmFieldType {
 	protected $type;
 
 	/**
+	 * Whether this field can be placed in a repeater.
+	 *
+	 * @since x.x
+	 *
+	 * @var bool
+	 */
+	protected $allow_in_repeater = true;
+
+	/**
+	 * Get the repeater placement policy, including declarations from add-ons.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public function allows_in_repeater() {
+		return $this->allow_in_repeater && ! in_array( $this->type, array( 'captcha', 'submit', 'gdpr', 'summary', 'break', 'divider', 'form', 'tabs', 'accordion' ), true );
+	}
+
+	/**
 	 * Does the html for this field label need to include "for"?
 	 *
 	 * @var bool
@@ -300,8 +320,9 @@ DEFAULT_HTML;
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<label class="frm_primary_label" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
-			<?php FrmAppHelper::kses_echo( force_balance_tags( $field['name'] ), 'all' ); ?>
-			<span class="frm_required <?php echo esc_attr( FrmField::is_required( $field ) ? '' : 'frm_hidden' ); ?>">
+			<span class="frm_builder_field_name"><?php FrmAppHelper::kses_echo( force_balance_tags( $field['name'] ), 'all' ); ?></span>
+			<span id="frm_required_indicator_<?php echo esc_attr( $field['id'] ); ?>"
+				class="frm_required <?php echo esc_attr( FrmField::is_required( $field ) ? '' : 'frm_hidden' ); ?>">
 				<?php echo esc_html( $field['required_indicator'] ); ?>
 			</span>
 			<span class="frm-sub-label frm-collapsed-label">
@@ -345,9 +366,69 @@ DEFAULT_HTML;
 		$field['html_name']     = $field_name;
 		$field['html_id']       = $html_id;
 		$field['default_value'] = $this->maybe_decode_value( $field['default_value'] );
+		$this->prepare_builder_dropdown_options( $field );
 
 		$display = $this->display_field_settings();
 		include $this->include_form_builder_file();
+	}
+
+	/**
+	 * Keep only displayed choices in a dropdown preview. Settings retain every choice.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $field The prepared builder field.
+	 *
+	 * @return void
+	 */
+	protected function prepare_builder_dropdown_options( array &$field ) {
+		$is_dropdown = 'select' === $field['type'] ||
+		( 'product' === $field['type'] && 'select' === ( $field['data_type'] ?? 'select' ) );
+
+		if ( ! $is_dropdown || ! is_array( $field['options'] ) ) {
+			return;
+		}
+
+		$placeholder = $field['placeholder'] ?? '';
+
+		if ( ! $placeholder ) {
+			$placeholder = FrmFieldsController::get_default_value_from_name( $field );
+		}
+
+		$selected = array();
+		$first    = array();
+
+		foreach ( $field['options'] as $key => $option ) {
+			if ( FrmFieldsHelper::should_hide_field_choice( $key, $field ) ) {
+				continue;
+			}
+
+			$label = FrmFieldsHelper::get_label_from_array( $option, $key, $field );
+
+			if ( '' !== $placeholder && '' === $label ) {
+				continue;
+			}
+
+			$value      = FrmFieldsHelper::get_value_from_array( $option, $key, $field );
+			$is_default = FrmAppHelper::check_selected( $field['value'], $value );
+
+			if ( $is_default ) {
+				$selected[ $key ] = $option;
+			}
+
+			if ( ! $first && ! FrmFieldsHelper::should_disable_choice( $key, $is_default, $field ) ) {
+				$first[ $key ] = $option;
+			}
+		}//end foreach
+
+		if ( $selected ) {
+			$field['options']     = ! empty( $field['multiple'] ) ? $selected : array_slice( $selected, -1, 1, true );
+			$field['placeholder'] = '';
+			$field['label']       = '';
+			return;
+		}
+
+		$field['options'] = '' !== $placeholder ? array() : $first;
 	}
 
 	/**
@@ -497,6 +578,11 @@ DEFAULT_HTML;
 	 */
 	public function form_builder_classes( $display_type ) {
 		$classes = 'form-field edit_form_item frm_field_box frm_top_container frm_not_divider edit_field_type_' . $display_type;
+
+		if ( ! $this->allows_in_repeater() ) {
+			$classes .= ' frm-no-repeater';
+		}
+
 		return $this->alter_builder_classes( $classes );
 	}
 
@@ -1434,7 +1520,8 @@ DEFAULT_HTML;
 		$step = FrmField::get_option( $this->field, 'step' );
 
 		if ( ! is_numeric( $step ) && $step !== 'any' ) {
-			$step = 1;
+			$defaults = $this->extra_field_opts();
+			$step     = $defaults['step'] ?? 1;
 		}
 
 		$input_html .= ' min="' . esc_attr( $min ) . '" max="' . esc_attr( $max ) . '" step="' . esc_attr( $step ) . '"';

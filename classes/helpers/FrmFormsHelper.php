@@ -6,6 +6,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFormsHelper {
 
 	/**
+	 * Forms with more fields than this load and save in the builder with AJAX.
+	 *
+	 * @since x.x
+	 *
+	 * @var int
+	 */
+	const AJAX_BUILDER_FIELD_THRESHOLD = 40;
+
+	/**
 	 * Store and re-use field type data for the insert_opt_html function (to avoid multiple calls to FrmField::all_field_selection).
 	 *
 	 * @since 6.10
@@ -72,7 +81,13 @@ class FrmFormsHelper {
 		}
 
 		$where    = apply_filters( 'frm_forms_dropdown', $query, $field_name );
-		$forms    = FrmForm::get_published_forms( $where, 999, $args['inc_children'] );
+		$forms    = FrmForm::get_published_form_names(
+			$where,
+			array(
+				'limit'        => 999,
+				'inc_children' => $args['inc_children'],
+			)
+		);
 		$add_html = array();
 		self::add_html_attr( $args['onchange'], 'onchange', $add_html );
 		self::add_html_attr( $args['class'], 'class', $add_html );
@@ -739,6 +754,56 @@ class FrmFormsHelper {
 			'show_description' => 0,
 			'ajax_submit'      => 0,
 		);
+	}
+
+	/**
+	 * Check if the form builder should load and save fields with AJAX.
+	 * Rendering every field on page load slows down exponentially as a form grows,
+	 * so long forms always use AJAX.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $field_count The number of fields in the form.
+	 * @param int $form_id     The id of the form being edited.
+	 *
+	 * @return bool
+	 */
+	public static function should_ajax_load_builder( $field_count, $form_id ) {
+		/**
+		 * Allows turning AJAX loading in the form builder on or off.
+		 * Use __return_false to always load every field with the page.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool  $ajax_load True when the form has more than AJAX_BUILDER_FIELD_THRESHOLD fields.
+		 * @param array $args      Contains `field_count` and `form_id`.
+		 */
+		return (bool) apply_filters(
+			'frm_ajax_load_form_builder',
+			$field_count > self::AJAX_BUILDER_FIELD_THRESHOLD,
+			compact( 'field_count', 'form_id' )
+		);
+	}
+
+	/**
+	 * Count the fields in a form the way a user sees them, without the Submit field.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $fields Field objects or arrays.
+	 *
+	 * @return int
+	 */
+	public static function count_fields_without_submit( $fields ) {
+		$count = 0;
+
+		foreach ( $fields as $field ) {
+			if ( FrmSubmitHelper::FIELD_TYPE !== FrmField::get_field_type( $field ) ) {
+				++$count;
+			}
+		}
+
+		return $count;
 	}
 
 	/**
