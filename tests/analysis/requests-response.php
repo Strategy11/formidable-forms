@@ -23,6 +23,13 @@ if ( ! class_exists( Response::class ) ) {
 		 * @var string
 		 */
 		public $body = '';
+
+		/**
+		 * HTTP status code assigned by response fixtures.
+		 *
+		 * @var int
+		 */
+		public $status_code = 200;
 	}
 }
 

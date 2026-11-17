@@ -107,6 +107,13 @@ test( 'Stripe preserves opaque colors and clamps alpha at its boundaries', async
 	}
 } );
 
+test( 'Stripe normalizes percentage and fractional RGB channels before blending', async () => {
+	assert.equal( await maybeAdjustColorForStripe( 'rgba(100%,0%,0%,50%)', [ 0, 0, 255 ] ), '#800080' );
+	assert.equal( await maybeAdjustColorForStripe( 'rgba(50%,50%,50%,1)' ), '#808080' );
+	assert.equal( await maybeAdjustColorForStripe( 'rgba(127.6,0,0,1)' ), '#800000' );
+	assert.equal( await maybeAdjustColorForStripe( 'rgba(300,-5,300,0.5)' ), '#ff80ff' );
+} );
+
 test( 'Stripe finds the first solid RGB backdrop and falls back to white', async () => {
 	assert.equal( await getStripeColor( 'rgba(0,0,0,0)', [ 'rgba(0,0,0,0)', 'rgba(255,0,0,0.5)', 'rgb(17,24,39)', 'rgb(255,255,255)' ] ), '#111827' );
 	assert.equal( await getStripeColor( 'rgba(0,0,0,0)' ), '#ffffff' );

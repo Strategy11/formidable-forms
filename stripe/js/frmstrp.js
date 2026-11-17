@@ -714,7 +714,8 @@
 
 		const rgba = color.replace( /^rgba?\(|\)$/g, '' ).trim().split( /[\s,/]+/ );
 		const alpha = getColorAlpha( rgba[ 3 ] );
-		const hex = [ 0, 1, 2 ].map( i => Math.round( ( alpha * parseInt( rgba[ i ], 10 ) ) + ( ( 1 - alpha ) * backdrop[ i ] ) ).toString( 16 ).padStart( 2, '0' ) );
+		const rgb = getColorChannelsForStripe( rgba );
+		const hex = rgb.map( ( channel, i ) => Math.round( ( alpha * channel ) + ( ( 1 - alpha ) * backdrop[ i ] ) ).toString( 16 ).padStart( 2, '0' ) );
 
 		return `#${ hex.join( '' ) }`;
 	}
@@ -731,6 +732,23 @@
 		const parsed = parseFloat( rawAlpha );
 		const alpha = rawAlpha.endsWith( '%' ) ? parsed / 100 : parsed;
 		return isNaN( alpha ) ? 1 : Math.max( 0, Math.min( 1, alpha ) );
+	}
+
+	/**
+	 * Normalize RGB percentages and sRGB values to byte channels.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Array<string>} channels CSS color components.
+	 * @param {boolean}       isSRGB   Whether numeric channels use the zero to one scale.
+	 * @return {Array<number>} RGB channels between zero and 255.
+	 */
+	function getColorChannelsForStripe( channels, isSRGB = false ) {
+		return channels.slice( 0, 3 ).map( channel => {
+			const value = parseFloat( channel );
+			const scaled = channel.endsWith( '%' ) ? value / 100 * 255 : value * ( isSRGB ? 255 : 1 );
+			return Math.round( Math.max( 0, Math.min( 255, scaled ) ) );
+		} );
 	}
 
 	/**
@@ -754,11 +772,7 @@
 				continue;
 			}
 			const isSRGB = match[ 1 ].startsWith( 'color(' );
-			return channels.slice( 0, 3 ).map( channel => {
-				const value = parseFloat( channel );
-				const scaled = channel.endsWith( '%' ) ? value / 100 * 255 : value * ( isSRGB ? 255 : 1 );
-				return Math.max( 0, Math.min( 255, scaled ) );
-			} );
+			return getColorChannelsForStripe( channels, isSRGB );
 		}
 		return [ 255, 255, 255 ];
 	}
