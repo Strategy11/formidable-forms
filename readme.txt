@@ -4,7 +4,7 @@ Tags: form builder, contact form, contact form plugin, ai form builder, forms
 Requires at least: 6.3
 Tested up to: 7.1
 Requires PHP: 7.0
-Stable tag: 7.0
+Stable tag: 7.1
 
 The drag and drop AI form builder for contact forms, multi-step forms, payment forms, quizzes, polls, surveys, calculators, and web apps.
 
@@ -366,6 +366,57 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 7.1 =
+* New: The form builder now loads long forms with AJAX automatically. The "Load and save form builder page with AJAX" setting has been removed.
+* New: Large forms now load previews and field settings in smaller batches. Previews below the screen wait until you scroll near them.
+* New: The builder now blocks fields that don't work in a Repeater or Section, such as CAPTCHA, Submit, GDPR, Summary, Page Break, and embedded forms.
+* New: The style editor now uses a new color picker. Colors save in the format you pick: RGB, HSL, or Hex.
+* New: Style changes in the visual styler now show in the preview right away, without waiting for the server.
+* New: Phone fields now have an Autocomplete setting.
+* New: Boosts now show in their own section on the Add-Ons page.
+* New: Stripe Link elements now share additional form styling to closer match other inputs.
+* New: Formidable AI has a new get-ai-status ability so AI tools can see how to turn on access, and a new mark-entry-spam ability.
+* New: Forms created with the create-form ability now start with anti-spam on and an email action, like forms made in the builder.
+* New: New frm_no_save_fields, frm_embed_modal_options, frm_field_created, frm_field_updated, frm_field_destroyed, and frm_field_order_updated hooks, plus a new hook that runs before a form is destroyed.
+* New: The frm_add_entry_meta filter now receives the original value as a second argument.
+* Performance: Moving a field in a large form now saves only the new field order. The builder uses fewer database queries when creating, updating, or reordering many fields.
+* Performance: Form dropdowns, the next-field-order lookup, and form field cache clearing now use faster queries.
+* Performance: The Stripe Link check no longer runs a query on admin pages.
+* Fix: PayPal Commerce now checks the capture status before marking an order as paid. Declined cards no longer create a payment, and pending captures create a pending payment.
+* Fix: PayPal Commerce card fields could stay empty on multi-page forms when the script loaded late.
+* Fix: PayPal Commerce validation failed for products inside repeaters.
+* Fix: PayPal Commerce Apple Pay failed when the page title had a non-ASCII character.
+* Fix: PayPal Commerce rejected cards when the Address field was on an earlier page, because the billing country code was missing.
+* Fix: Going to the previous page on a multi-page PayPal Commerce form no longer tries to submit the empty card.
+* Fix: Deleting a multisite site now also removes the payments, subscriptions, and gated tokens tables.
+* Fix: The Denylist check no longer marks accented text, like "Máster", as spam.
+* Fix: The submit button could ignore the first click after fixing a field error.
+* Fix: The "Disable submit button styling" toggle always loaded as off.
+* Fix: A form lost its styling when the style it used was deleted. It now falls back to the default style.
+* Fix: The inline Submit button sat below the inputs when using the default submit HTML.
+* Fix: Primary labels did not line up with inputs in themes that set a label line height, like Hello Elementor.
+* Fix: Long style names could push the dropdown out of the style card.
+* Fix: Test mode controls now look the same in any theme.
+* Fix: Admin dropdowns and tooltips broke when another plugin loaded Popper 1.
+* Fix: Field Size now shows in the builder preview.
+* Fix: Builder previews kept the field label markup and the required indicator when drawn in the browser.
+* Fix: Errors with deferred field settings panels in the builder. A dropdown posted the wrong type, and a failed load could silently drop settings on save.
+* Fix: Duplicating a field no longer fails on forms saved with the older field placement format.
+* Fix: Dragging a Repeater into a Section was allowed in the builder.
+* Fix: Form and field keys longer than 60 characters could collide when duplicated.
+* Fix: An empty Number Step rendered step="any" instead of step="1" and rejected decimals.
+* Fix: Dropdown, radio, and checkbox fields filled by setup hooks could reject valid values.
+* Fix: Hex colors like #ffffff caused a PHP deprecation notice when brightness was calculated.
+* Fix: Style Reset and the live preview now keep the # on hex colors, and an invalid typed hex no longer becomes #000000.
+* Fix: The Entry Key typed on an earlier page was lost on multi-page Entries > Add New forms.
+* Fix: Form Templates > Create Template opened a copy of the new template instead of the template itself.
+* Fix: Inserting Default HTML in the Message editor's Code tab added escaped markup.
+* Fix: JS-built search boxes, like Applications > Search Templates, showed no magnifier icon.
+* Fix: Payment status hooks ran on the wrong payment because trigger_payment_status_change ignored the payment passed in.
+* Fix: Duplicate-entry errors now show in the error summary when submitting with AJAX.
+* Fix: The Square script no longer shows a Missing Dependencies warning in the visual styler.
+* Fix: The list-entries, list-forms, list-fields, list-payments, and list-subscriptions abilities now return correct defaults and no longer error on star rating or scale fields, spam entries, or a missing payments table.
+
 = 7.0 =
 * Security: Additional permission checks have been added to prevent unauthorized plugin installations.
 * Security: Download URL validation has been hardened to prevent downloads from untrusted sources.
@@ -416,36 +467,8 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: A subscription cancel event for a subscription that isn't on this site no longer causes an error.
 * Fix: Posted Stripe client secrets are now checked against Stripe before they're trusted.
 
-= 6.35 =
-* Security: More strict sanitizing is now applied to entry key values before it gets used in the HTML of a form.
-* Security: The value that records who last saved an entry is now always set from the current user, not allowing for any custom values unless importing.
-* New: The shortcodes list now offers show options for more types, and long names are truncated so the list stays readable.
-* New: The Processor column on the Payments list page can now be sorted.
-* New: A message is now shown on the Payments list page after bulk deleting.
-* New: The required email input used for Stripe Link payments will now display a required asterisk like other required inputs.
-* New: A new frm_builder_after_field_label hook has been added for adding content after a label in the builder.
-* New: A new frm_payment_user_id filter has been added for setting which user a payment belongs to.
-* Performance: The builder now loads much faster when there are a lot of fields. Fields loaded with AJAX are now loaded in asynchronous batches.
-* Performance: The way the denylist is checked has been optimized, so spam checks are much faster when a large amount of text is submitted.
-* Performance: Pricing updates for Stripe payments are now debounced, and are skipped on pages with no payment intents.
-* Fix: A subscription would not get cancelled after it reached its Recurring Payment Limit.
-* Fix: Payment status actions could run twice for the same Stripe Link payment.
-* Fix: Multiple customer objects would get created for Stripe Link recurring payments.
-* Fix: Subscription plan details would not update after changing the trial period.
-* Fix: A Stripe Link redirect would use the URL from Form settings instead of the URL in the confirmation action that ran.
-* Fix: Square payments would not correctly follow conditional logic when two Square actions were used.
-* Fix: The wrong amount would get used when verifying a buyer with Square.
-* Fix: Connecting and disconnecting Square would go by whichever mode was active instead of the mode that was selected.
-* Fix: In Pro, the dropdown on a style card would not populate, leaving no way to delete a style or set one as the default.
-* Fix: In Pro, a section added after a partially sized field would move into the previous row after a reload.
-* Fix: Adding the frm_first layout class would not start a new row for a group.
-* Fix: A field id used in a description would not get switched when a form was duplicated or imported.
-* Fix: Creating a field with a missing or invalid options value would raise a PHP warning and store null.
-* Fix: The Embeds column would only update when a post was inserted, so it went stale when a page was updated or deleted.
-* The old hard coded widths for the frm_grid_2 through frm_grid_10 classes have been removed from the generated stylesheets, helping to reduce the file size of styles used on the front end.
-
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
 == Upgrade Notice ==
-= 7.0 =
+= 7.1 =
 This version fixes security-related bugs. Upgrade immediately.

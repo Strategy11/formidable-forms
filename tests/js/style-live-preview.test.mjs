@@ -21,7 +21,7 @@ const functions = names.map( name => {
 /**
  * Load the preview decisions with independent settings for each test.
  *
- * @since x.x
+ * @since 7.1
  *
  * @return {Object} The production decision functions.
  */

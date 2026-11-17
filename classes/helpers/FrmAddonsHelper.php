@@ -32,7 +32,7 @@ class FrmAddonsHelper {
 	/**
 	 * Whether the current Boost needs to be purchased.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @var bool
 	 */
@@ -41,7 +41,7 @@ class FrmAddonsHelper {
 	/**
 	 * Whether the add-on being rendered is a Boost.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @var bool
 	 */
@@ -301,7 +301,7 @@ class FrmAddonsHelper {
 	/**
 	 * Check whether an add-on belongs to the Boosts category.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array $addon The add-on data from the API or prepared for display.
 	 *

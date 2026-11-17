@@ -567,7 +567,7 @@ class FrmAbilitiesFieldsController {
 	 * such hook, so without this a new field keeps its options exactly as sent.
 	 * The field ID is 0 because the field does not exist yet.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array $prepared Prepared field data.
 	 *
@@ -833,7 +833,7 @@ class FrmAbilitiesFieldsController {
 	 * unfiltered_html, so re-saving it everywhere would strip markup an admin authored
 	 * from a label the request did not change.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param stdClass $field      The stored field object.
 	 * @param array    $field_data Non-empty field data to update.

@@ -252,7 +252,7 @@ class FrmEntryValidate {
 	 * Validate that value matches one of the options for the field.
 	 *
 	 * @since 6.21
-	 * @since x.x Added the $entry_id parameter.
+	 * @since 7.1 Added the $entry_id parameter.
 	 *
 	 * @param stdClass     $field
 	 * @param array|string $value
@@ -323,7 +323,7 @@ class FrmEntryValidate {
 	/**
 	 * Check a value that is missing from the saved options against the setup hooks.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param stdClass     $field    The field being validated.
 	 * @param array|string $value    The value to validate.
@@ -343,7 +343,7 @@ class FrmEntryValidate {
 	/**
 	 * Check if a posted value matches a single option value.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param string $current_value The posted value.
 	 * @param string $option_value  The option value to compare against.
@@ -370,7 +370,7 @@ class FrmEntryValidate {
 	 * Compare two values as integers only when both are whole numbers, so "01" matches "1"
 	 * but a decimal like "101.9" does not match "101".
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param string $current_value The posted value.
 	 * @param string $option_value  The option value to compare against.
@@ -421,7 +421,7 @@ class FrmEntryValidate {
 	 * Accept options produced by setup hooks and preserve the bypass for changed option lists.
 	 *
 	 * @since 6.21
-	 * @since x.x Added the $entry_id parameter and renamed from options_are_dynamic_based_on_hook.
+	 * @since 7.1 Added the $entry_id parameter and renamed from options_are_dynamic_based_on_hook.
 	 *
 	 * @param object       $field_object The field object.
 	 * @param array|string $value        The value to validate.
@@ -465,7 +465,7 @@ class FrmEntryValidate {
 		 * By default any value is accepted for that field. Return false to require the posted
 		 * value to match one of the options the setup hooks return at submission time.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param bool     $skip_validation Whether to accept any value for this field.
 		 * @param stdClass $field           The field being validated.
@@ -479,7 +479,7 @@ class FrmEntryValidate {
 	 * Check if the new-entry setup hook has a callback that did not already run through
 	 * the edit setup hook. Only those callbacks can make a value valid on the fallback check.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return bool
 	 */
@@ -515,7 +515,7 @@ class FrmEntryValidate {
 	 * same option values the field renders with. This includes the option key when a
 	 * hook sets use_key, which does not change the option list itself.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array|string $value  The value to validate.
 	 * @param array        $values The field array after the setup hooks run.
@@ -537,7 +537,7 @@ class FrmEntryValidate {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param string $current_value The posted value.
 	 * @param array  $values        The field array after the setup hooks run.

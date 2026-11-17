@@ -772,7 +772,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Get the status of the first capture in the order response.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param object $response The captured PayPal order.
 	 *

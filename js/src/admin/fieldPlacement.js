@@ -1,7 +1,7 @@
 /**
  * Check every field carried by a drag before a container accepts the drop.
  *
- * @since x.x
+ * @since 7.1
  * @param {HTMLElement} draggable Field, palette button, or row being dragged.
  * @param {HTMLElement} droppable Destination row or container.
  * @return {boolean} Whether all fields are compatible with the container.
