@@ -317,29 +317,21 @@ class test_FrmStyle extends FrmUnitTest {
 	}
 
 	/**
-	 * With the default "frm_submit frm_flex" submit HTML, the inline submit label spacer must take a full row
-	 * and the button must not be vertically centered against it.
+	 * An inline submit button lines up with the bottom of the inputs in its row instead of sitting under
+	 * a spacer that copies the label size, which a theme that restyles labels throws off.
 	 *
 	 * @see https://github.com/Strategy11/formidable-pro/issues/6894
 	 */
-	public function test_generated_css_aligns_inline_flex_submit_with_inputs() {
+	public function test_generated_css_aligns_inline_submit_with_inputs() {
 		$css             = $this->run_private_method(
 			array( new FrmStyle(), 'get_css_content' ),
 			array( FrmAppHelper::plugin_path() . '/css/custom_theme.css.php' )
 		);
-		$submit_selector = '.with_frm_style.frm_inline_top .frm_submit.frm_flex,.with_frm_style .frm_submit.frm_flex.frm_inline_submit';
-		$spacer_selector = '.with_frm_style.frm_inline_top .frm_submit.frm_flex::before,.with_frm_style .frm_submit.frm_flex.frm_inline_submit::before';
+		$submit_selector = '.with_frm_style.frm_inline_top .frm_fields_container > .frm_submit,.with_frm_style .frm_fields_container > .frm_submit.frm_inline_submit';
 
-		$this->assertStringContainsString( $submit_selector . ' {align-items: flex-start;', $css );
-		$this->assertStringContainsString( $spacer_selector . ' {flex-basis: 100%;order: -2;}', $css );
-		$inside_selector = '.with_frm_style.frm_inline_inside .frm_submit.frm_flex::before';
-
-		$this->assertStringContainsString( $inside_selector . ' {box-sizing: border-box;height: calc(0.5 * var(--field-height));overflow: hidden;}', $css );
-
-		// The JS in formidable.js sets the offset when a theme restyles the labels.
-		$offset_selector  = '.frm_forms.with_frm_style.frm_inline_top .frm_fields_container .frm_submit::before,';
-		$offset_selector .= '.frm_forms.with_frm_style .frm_fields_container .frm_submit.frm_inline_submit::before';
-		$this->assertStringContainsString( $offset_selector . ' {margin-bottom: var(--frm-inline-submit-offset, 0);}', $css );
+		$this->assertStringContainsString( $submit_selector . ' {align-self: end;}', $css );
+		$this->assertStringNotContainsString( 'frm_submit::before', $css );
+		$this->assertStringNotContainsString( 'frm_inline_submit::before', $css );
 	}
 
 	/**

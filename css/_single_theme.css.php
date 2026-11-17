@@ -36,7 +36,9 @@ $pro_is_installed = $pro_is_installed ?? FrmAppHelper::pro_is_installed();
 <?php } ?>
 
 <?php if ( ! empty( $field_margin ) ) { ?>
-.<?php echo esc_html( $style_class ); ?> .form-field{
+.<?php echo esc_html( $style_class ); ?> .form-field,
+.<?php echo esc_html( $style_class ); ?>.frm_inline_top .frm_fields_container > .frm_submit,
+.<?php echo esc_html( $style_class ); ?> .frm_fields_container > .frm_submit.frm_inline_submit{
 	margin-bottom:var(--field-margin)<?php echo esc_html( $important ); ?>;
 }
 <?php } ?>
@@ -321,22 +323,6 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	}//end if
 }//end if
 ?>
-
-.<?php echo esc_html( $style_class ); ?>.frm_inline_top .frm_submit::before,
-.<?php echo esc_html( $style_class ); ?> .frm_submit.frm_inline_submit::before {
-	content:"before";
-	<?php if ( ! empty( $font ) ) { ?>
-		font-family:<?php FrmAppHelper::kses_echo( $font ); ?>;
-	<?php } ?>
-	font-size:var(--font-size)<?php echo esc_html( $important ); ?>;
-	color:var(--label-color)<?php echo esc_html( $important ); ?>;
-	font-weight:var(--weight)<?php echo esc_html( $important ); ?>;
-	margin:0;
-	padding:var(--label-padding)<?php echo esc_html( $important ); ?>;
-	width:auto;
-	display:block;
-	visibility:hidden;
-}
 
 .<?php echo esc_html( $style_class ); ?>.frm_inline_form .frm_submit input,
 .<?php echo esc_html( $style_class ); ?>.frm_inline_form .frm_submit button,
