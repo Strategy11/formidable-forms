@@ -376,6 +376,7 @@ legend.frm_hidden{
 
 .with_frm_style .frm_primary_label{
 	max-width:100%;
+	line-height: inherit;
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
 	font-family: var(--font);
 <?php } ?>
@@ -526,6 +527,7 @@ legend.frm_hidden{
 .with_frm_style select[multiple="multiple"]{
 	height:auto;
 	line-height:normal;
+	background-image: none; /* Some themes add a dropdown arrow to every select. */
 }
 
 <?php if ( $pro_is_installed ) { ?>
@@ -823,6 +825,11 @@ a.frm_save_draft{
 	white-space:normal;
 }
 
+.with_frm_style .frm_checkbox label:not(.frm_screen_reader),
+.with_frm_style .frm_radio label:not(.frm_screen_reader) {
+	margin-bottom: 0; /* Override Bootstrap themes. */
+}
+
 .with_frm_style .frm_checkbox label input[type=checkbox],
 .with_frm_style .frm_radio label input[type=radio] {
 	margin-right: 4px;
@@ -979,6 +986,11 @@ a.frm_save_draft{
 .frm_success_style{
 	border-radius:4px;
 	padding:15px;
+}
+
+.with_frm_style .frm_error_style:focus:not(:focus-visible) {
+	/* The error summary receives focus after submit. Don't show a theme focus ring for it. */
+	outline: none;
 }
 
 .with_frm_style .frm_message p {

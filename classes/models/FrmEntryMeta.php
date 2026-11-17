@@ -58,7 +58,15 @@ class FrmEntryMeta {
 		);
 
 		self::set_value_before_save( $new_values, $field );
-		$new_values = apply_filters( 'frm_add_entry_meta', $new_values );
+		/**
+		 * Filter entry metadata before insertion.
+		 *
+		 * @since x.x Added the original value parameter for fields that preserve whitespace.
+		 *
+		 * @param array $new_values Prepared metadata columns.
+		 * @param mixed $meta_value Original value before trimming or serialization.
+		 */
+		$new_values = apply_filters( 'frm_add_entry_meta', $new_values, $meta_value );
 		$entry_id   = $new_values['item_id'];
 		$field_id   = $new_values['field_id'];
 		self::before_meta_change( $entry_id, $field_id );

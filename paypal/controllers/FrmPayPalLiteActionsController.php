@@ -435,12 +435,19 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return self::get_paypal_error_message( $response, __( 'Failed to capture order.', 'formidable' ) );
 		}
 
-		$capture_id = self::get_capture_id_from_response( $response );
+		$capture_id     = self::get_capture_id_from_response( $response );
+		$capture_status = self::get_capture_status_from_response( $response );
+
+		if ( $capture_status && ! in_array( $capture_status, array( 'COMPLETED', 'PENDING' ), true ) ) {
+			return self::convert_issue_to_message( 'INSTRUMENT_DECLINED' );
+		}
 
 		self::sync_entry_data_with_capture_response( $response, $atts );
 
+		self::$pending_capture = 'PENDING' === $capture_status;
+
 		// Create a payment record.
-		$atts['status']         = 'complete';
+		$atts['status']         = self::$pending_capture ? 'pending' : 'complete';
 		$atts['charge']         = new stdClass();
 		$atts['charge']->id     = $capture_id ? $capture_id : $paypal_order_id;
 		$atts['charge']->amount = $atts['amount'];
@@ -756,6 +763,31 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 			foreach ( $captures as $capture ) {
 				return $capture->id;
+			}
+		}
+
+		return '';
+	}
+
+	/**
+	 * Get the status of the first capture in the order response.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $response The captured PayPal order.
+	 *
+	 * @return string
+	 */
+	private static function get_capture_status_from_response( $response ) {
+		foreach ( $response->purchase_units ?? array() as $purchase_unit ) {
+			$captures = $purchase_unit->payments->captures ?? array();
+
+			if ( ! is_array( $captures ) ) {
+				continue;
+			}
+
+			foreach ( $captures as $capture ) {
+				return $capture->status ?? '';
 			}
 		}
 
@@ -1511,6 +1543,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			'includeApplePay'          => $include_apple_pay,
 			'includeGooglePayApplePay' => $include_google_pay || $include_apple_pay,
 			'mode'                     => FrmPayPalLiteAppHelper::active_mode(),
+			'walletDisplayName'        => FrmPayPalLiteAppHelper::get_wallet_display_name(),
 		);
 
 		wp_localize_script( 'formidable-paypal', 'frmPayPalVars', $paypal_vars );

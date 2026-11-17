@@ -128,7 +128,7 @@
 	 */
 	async function paypalInit() {
 		const cardElement = document.querySelector( '.frm-card-element' );
-		if ( ! cardElement ) {
+		if ( ! cardElement || ! window.paypal ) {
 			return;
 		}
 
@@ -182,12 +182,20 @@
 			isRecurring
 		} );
 
+		if ( runId !== initRunId ) {
+			return;
+		}
+
 		// 1b. Discover Google Pay / Apple Pay. Their SDKs (pay.js / PayPal applepay
 		// component) load asynchronously and are frequently not ready during the first
 		// run, which previously left these buttons missing on first load. We wait
 		// (bounded) for them here so every eligible method appears together in one
 		// render instead of popping in afterward.
-		await discoverDeferredPaymentMethods( { buttonsAreEnabled, isRecurring } );
+		await discoverDeferredPaymentMethods( { buttonsAreEnabled, isRecurring, runId } );
+
+		if ( runId !== initRunId ) {
+			return;
+		}
 
 		if ( paymentMethods.size === 0 ) {
 			displayPaymentFailure( 'No payment methods available.' );
@@ -226,6 +234,9 @@
 				} catch ( err ) {
 					console.error( `Failed to pre-render payment method: ${ key }`, err );
 				}
+				if ( runId !== initRunId ) {
+					return;
+				}
 			}
 		}
 
@@ -233,13 +244,17 @@
 		const firstKey = paymentMethods.keys().next().value;
 		await selectPaymentMethod( firstKey );
 
+		if ( runId !== initRunId ) {
+			return;
+		}
+
 		// 6. Attach form submit handler (for card method).
 		thisForm.addEventListener( 'submit', handleFormSubmission );
 
 		// 7. Pay Later messages.
 		if ( paymentMethods.has( 'paylater' ) ) {
 			renderMessages();
-			jQuery( document ).on( 'frmFieldChanged', priceChanged );
+			jQuery( document ).off( 'frmFieldChanged', priceChanged ).on( 'frmFieldChanged', priceChanged );
 			checkPriceFieldsOnLoad();
 		}
 
@@ -253,7 +268,7 @@
 
 			// priceChanged already refreshes the amount when Pay Later messages are on.
 			if ( ! paymentMethods.has( 'paylater' ) ) {
-				jQuery( document ).on( 'frmFieldChanged', refreshCachedAmountOnFieldChange );
+				jQuery( document ).off( 'frmFieldChanged', refreshCachedAmountOnFieldChange ).on( 'frmFieldChanged', refreshCachedAmountOnFieldChange );
 			}
 		}
 	}
@@ -343,7 +358,7 @@
 	 * @return {Promise<void>}
 	 */
 	async function discoverDeferredPaymentMethods( opts ) {
-		const { buttonsAreEnabled, isRecurring } = opts;
+		const { buttonsAreEnabled, isRecurring, runId } = opts;
 
 		if ( ! buttonsAreEnabled || isRecurring ) {
 			return;
@@ -365,6 +380,10 @@
 			frmPayPalVars.includeGooglePay ? resolveGooglePayEligibility() : false,
 			frmPayPalVars.includeApplePay ? resolveApplePayEligibility() : false
 		] );
+
+		if ( runId !== initRunId ) {
+			return;
+		}
 
 		if ( googlePayEligible ) {
 			registerMethod( 'google_pay', {
@@ -1241,7 +1260,7 @@
 			currencyCode: applePayConfig.currencyCode || 'USD',
 			requiredBillingContactFields: [ 'postalAddress' ],
 			total: {
-				label: document.title || 'Payment',
+				label: frmPayPalVars.walletDisplayName,
 				type: 'final',
 				amount: cachedAmount,
 			},
@@ -1252,7 +1271,7 @@
 		session.onvalidatemerchant = event => {
 			applePayInstance.validateMerchant( {
 				validationUrl: event.validationURL,
-				displayName: document.title || 'Payment'
+				displayName: frmPayPalVars.walletDisplayName
 			} )
 				.then( validateResult => {
 					session.completeMerchantValidation( validateResult.merchantSession );
@@ -2700,7 +2719,10 @@
 
 	// ---- Bootstrap ----
 
-	document.addEventListener( 'DOMContentLoaded', async function() {
+	/**
+	 * Start PayPal once its SDK is available.
+	 */
+	function bootstrap() {
 		if ( window.paypal ) {
 			paypalInit();
 			return;
@@ -2715,7 +2737,14 @@
 			},
 			50
 		);
-	} );
+	}
+
+	// This script can be loaded async, so DOMContentLoaded may have already fired.
+	if ( 'loading' === document.readyState ) {
+		document.addEventListener( 'DOMContentLoaded', bootstrap );
+	} else {
+		bootstrap();
+	}
 
 	jQuery( document ).on( 'frmPageChanged', function() {
 		paypalInit();

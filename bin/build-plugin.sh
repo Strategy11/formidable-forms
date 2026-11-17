@@ -75,7 +75,16 @@ version="$2"
 npm run set-version -- $version
 
 status "Preparing POT file..."
-npm run makepot
+(
+	# Apply the memory limit while preserving each plugin's translation command.
+	FORMIDABLE_WP_CLI="$(command -v wp)"
+	export FORMIDABLE_WP_CLI
+	wp () {
+		php -d memory_limit=512M "$FORMIDABLE_WP_CLI" "$@"
+	}
+	export -f wp
+	npm --script-shell=bash run makepot
+)
 
 # Generate the plugin zip file.
 status "Creating archive..."

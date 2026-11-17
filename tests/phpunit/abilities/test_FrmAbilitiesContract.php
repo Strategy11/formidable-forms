@@ -26,6 +26,7 @@ class test_FrmAbilitiesContract extends FrmUnitTest {
 	 * @var array<string>
 	 */
 	private static $no_required_input_abilities = array(
+		'formidable-forms/get-ai-status',
 		'formidable-forms/list-forms',
 		'formidable-forms/list-entries',
 		'formidable-forms/list-styles',
@@ -127,6 +128,7 @@ class test_FrmAbilitiesContract extends FrmUnitTest {
 		$abilities = $this->get_formidable_abilities();
 
 		$expected = array(
+			'get-ai-status',
 			'list-forms',
 			'get-form',
 			'create-form',
@@ -210,8 +212,7 @@ class test_FrmAbilitiesContract extends FrmUnitTest {
 	}
 
 	/**
-	 * The MCP setting is one switch for the whole AI surface, so nothing
-	 * registers while it is off.
+	 * Only setup discovery registers while the MCP setting is off.
 	 *
 	 * @covers FrmAbilitiesController::register_abilities
 	 *
@@ -227,14 +228,122 @@ class test_FrmAbilitiesContract extends FrmUnitTest {
 		$frm_settings->store();
 		FrmMcpController::reset();
 
-		FrmAbilitiesController::register_abilities();
+		wp_unregister_ability_category( FrmAbilitiesController::CATEGORY );
+		do_action( 'wp_abilities_api_categories_init' );
+		do_action( 'wp_abilities_api_init' );
 
-		$this->assertSame( array(), $this->get_formidable_abilities(), 'No ability should register while MCP is off.' );
+		$this->assertSame( array( 'formidable-forms/get-ai-status' ), array_keys( $this->get_formidable_abilities() ) );
+
+		$adapter_loaded = class_exists( 'WP\\MCP\\Core\\McpAdapter', false );
+		$status         = wp_get_ability( 'formidable-forms/get-ai-status' )->execute();
+
+		$this->assertNotWPError( $status );
+		$this->assertFalse( $status['enabled'] );
+		$this->assertFalse( $status['ready'] );
+		$this->assertNotEmpty( $status['blocked_reason'] );
+		$this->assertTrue( $status['can_enable'] );
+		$this->assertSame( admin_url( 'admin.php?page=formidable-settings&t=mcp_settings' ), $status['settings_url'] );
+		$this->assertFalse( FrmMcpController::is_enabled(), 'Discovery must not enable AI access.' );
+		$this->assertSame( FrmAbilitiesController::CATEGORY, wp_get_ability_category( FrmAbilitiesController::CATEGORY )->get_slug() );
+		$this->assertSame( $adapter_loaded, class_exists( 'WP\\MCP\\Core\\McpAdapter', false ), 'Discovery must not load the adapter.' );
+
+		$request = new WP_REST_Request( 'GET', '/wp-abilities/v1/abilities' );
+		$request->set_param( 'category', FrmAbilitiesController::CATEGORY );
+		$response = rest_do_request( $request );
+		$this->assertSame( 200, $response->get_status() );
+		$this->assertSame( array( 'formidable-forms/get-ai-status' ), array_column( $response->get_data(), 'name' ) );
+
+		$response = rest_do_request( new WP_REST_Request( 'GET', '/wp-abilities/v1/abilities/formidable-forms/get-ai-status/run' ) );
+		$this->assertSame( 200, $response->get_status() );
+		$this->assertSame( $status, $response->get_data() );
 
 		$frm_settings->mcp = 1;
 		$frm_settings->store();
 		FrmMcpController::reset();
 		$this->enable_abilities();
+	}
+
+	/**
+	 * Discovery remains usable by form viewers who cannot change settings.
+	 *
+	 * @covers FrmAbilitiesSetupController::can_get_ai_status
+	 *
+	 * @return void
+	 */
+	public function test_form_viewer_can_discover_but_cannot_enable_ai_access() {
+		$user_id = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+		$user    = new WP_User( $user_id );
+		$user->add_cap( 'frm_view_forms' );
+		wp_set_current_user( $user_id );
+
+		$status = wp_get_ability( 'formidable-forms/get-ai-status' )->execute();
+
+		$this->assertNotWPError( $status );
+		$this->assertFalse( $status['can_enable'] );
+		$this->assertSame( array( 'enabled', 'ready', 'blocked_reason', 'can_enable', 'settings_url' ), array_keys( $status ) );
+		$this->set_current_user_to_1();
+	}
+
+	/**
+	 * A user without Formidable access cannot read the AI status.
+	 *
+	 * @covers FrmAbilitiesSetupController::can_get_ai_status
+	 *
+	 * @return void
+	 */
+	public function test_subscriber_cannot_discover_ai_access() {
+		$user_id = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+		wp_set_current_user( $user_id );
+
+		$this->assertFalse( FrmAbilitiesSetupController::can_get_ai_status() );
+		$this->assertWPError( wp_get_ability( 'formidable-forms/get-ai-status' )->execute() );
+		$this->set_current_user_to_1();
+	}
+
+	/**
+	 * The status ability takes no input, so its schema must not serialize properties as a JSON list.
+	 *
+	 * @covers FrmAbilitiesSetupController::register_abilities
+	 *
+	 * @return void
+	 */
+	public function test_ai_status_input_schema_has_no_list_properties() {
+		$schema = wp_get_ability( 'formidable-forms/get-ai-status' )->get_input_schema();
+
+		$this->assertSame( 'object', $schema['type'] );
+		$this->assertStringNotContainsString( '"properties":[]', wp_json_encode( $schema ) );
+	}
+
+	/**
+	 * Enabled access still reports adapter compatibility separately.
+	 *
+	 * @return void
+	 */
+	public function test_ai_status_reports_adapter_readiness() {
+		FrmMcpCompat::load_adapter();
+		$status = wp_get_ability( 'formidable-forms/get-ai-status' )->execute( array() );
+
+		$this->assertNotWPError( $status );
+		$this->assertTrue( $status['enabled'] );
+		$this->assertSame( FrmMcpCompat::is_usable(), $status['ready'] );
+		$this->assertSame( FrmMcpCompat::unsupported_reason(), $status['blocked_reason'] );
+	}
+
+	/**
+	 * An enabled setting alone does not establish that operations are available.
+	 *
+	 * @return void
+	 */
+	public function test_ai_status_reports_missing_operational_abilities() {
+		wp_unregister_ability( 'formidable-forms/list-forms' );
+
+		$status = wp_get_ability( 'formidable-forms/get-ai-status' )->execute();
+
+		$this->assertNotWPError( $status );
+		$this->assertTrue( $status['enabled'] );
+		$this->assertFalse( $status['ready'] );
+		$this->assertNotEmpty( $status['blocked_reason'] );
+		do_action( 'wp_abilities_api_init' );
 	}
 
 	/**
