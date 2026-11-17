@@ -323,8 +323,18 @@ class FrmAddonsController {
 			'field-tooltips'  => __( 'Add customized hover-and-tap help to any field.', 'formidable' ),
 		);
 
-		if ( isset( $excerpts[ $slug ] ) ) {
-			$addon['excerpt'] = $excerpts[ $slug ];
+		// The API now sends Boost slugs that match their plugin folders. Older cached feeds still use the short slugs.
+		$current_slugs = array(
+			'formidable-advanced-modals' => 'advanced-modals',
+			'formidable-color-picker'    => 'color-picker',
+			'formidable-bulk-edit'       => 'bulk-edit',
+			'formidable-celebrations'    => 'celebrations',
+			'formidable-tooltips'        => 'field-tooltips',
+		);
+		$excerpt_slug  = $current_slugs[ $slug ] ?? $slug;
+
+		if ( isset( $excerpts[ $excerpt_slug ] ) ) {
+			$addon['excerpt'] = $excerpts[ $excerpt_slug ];
 		}
 	}
 
@@ -1145,6 +1155,11 @@ class FrmAddonsController {
 
 			self::override_addon_display( $addon, $slug );
 
+			if ( FrmAddonsHelper::is_boost( $addon ) ) {
+				$file_name       = self::get_boost_plugin_file( $addon, $file_name );
+				$addon['plugin'] = $file_name;
+			}
+
 			$addon['installed'] = self::is_installed( $file_name );
 
 			if ( 'highrise' === $slug && ! $addon['installed'] ) {
@@ -1187,6 +1202,48 @@ class FrmAddonsController {
 
 			$addons[ $id ] = $addon;
 		}//end foreach
+	}
+
+	/**
+	 * Find the plugin file of an installed Boost.
+	 *
+	 * The plugin path the API sends for a Boost does not always match the folder
+	 * it is installed in. When it does not, match the installed copy by its
+	 * updater download id (active Boosts), then by its plugin name (inactive Boosts).
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $addon     The Boost data from the API.
+	 * @param string $file_name The plugin file the API sends for the Boost.
+	 *
+	 * @return string The installed plugin file, or the API plugin file when the Boost is not installed.
+	 */
+	private static function get_boost_plugin_file( $addon, $file_name ) {
+		if ( self::is_installed( $file_name ) ) {
+			return $file_name;
+		}
+
+		if ( ! empty( $addon['id'] ) ) {
+			foreach ( apply_filters( 'frm_installed_addons', array() ) as $installed_addon ) {
+				if ( $installed_addon instanceof FrmAddon && $installed_addon->plugin_folder && (string) $installed_addon->download_id === (string) $addon['id'] ) {
+					return $installed_addon->plugin_folder;
+				}
+			}
+		}
+
+		if ( empty( $addon['title'] ) ) {
+			return $file_name;
+		}
+
+		$plugin_names = array( 'Formidable ' . $addon['title'], $addon['title'] );
+
+		foreach ( self::get_plugins() as $plugin_file => $plugin_data ) {
+			if ( in_array( $plugin_data['Name'] ?? '', $plugin_names, true ) ) {
+				return $plugin_file;
+			}
+		}
+
+		return $file_name;
 	}
 
 	/**

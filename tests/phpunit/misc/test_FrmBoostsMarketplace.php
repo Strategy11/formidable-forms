@@ -50,14 +50,15 @@ class test_FrmBoostsMarketplace extends FrmUnitTest {
 
 	/** @return void */
 	public function test_missing_excerpts_render_without_empty_paragraphs() {
-		foreach ( array( 'bulk-edit', 'brand-new-boost' ) as $slug ) {
+		// The API sends the folder-style slugs. Older cached feeds still send the short ones.
+		foreach ( array( 'bulk-edit', 'formidable-bulk-edit', 'formidable-tooltips', 'brand-new-boost' ) as $slug ) {
 			$addon = $this->addon( $slug );
 			$this->run_private_method( array( 'FrmAddonsController', 'override_addon_display' ), array( &$addon, $slug ) );
 
-			if ( 'bulk-edit' === $slug ) {
-				$this->assertNotEmpty( $addon['excerpt'] );
-			} else {
+			if ( 'brand-new-boost' === $slug ) {
 				$this->assertArrayNotHasKey( 'excerpt', $addon );
+			} else {
+				$this->assertNotEmpty( $addon['excerpt'] );
 			}
 
 			$pricing      = 'https://formidableforms.com/pricing/';
@@ -242,6 +243,61 @@ class test_FrmBoostsMarketplace extends FrmUnitTest {
 		$this->assertSame( 1, $this->run_private_method( array( $search, 'matching_addon' ), array( $feed, array( 'tooltips' ) ) ) );
 		unset( $feed['1'] );
 		$this->assertNull( $this->run_private_method( array( $search, 'matching_addon' ), array( $feed, array( 'tooltips' ) ) ) );
+	}
+
+	/**
+	 * An installed Boost keeps its toggle when the API plugin path differs from the installed folder.
+	 *
+	 * @covers FrmAddonsController::get_boost_plugin_file
+	 *
+	 * @return void
+	 */
+	public function test_installed_boost_is_found_when_the_api_path_differs() {
+		$addon          = $this->addon( 'field-tooltips' );
+		$addon['id']    = 123;
+		$addon['title'] = 'Tooltips';
+		$api_file       = 'field-tooltips/field-tooltips.php';
+		$cached         = wp_cache_get( 'plugins', 'plugins' );
+
+		wp_cache_set(
+			'plugins',
+			array(
+				'' => array(
+					'formidable-tooltips/formidable-tooltips.php' => array( 'Name' => 'Formidable Tooltips' ),
+					'formidable-other/formidable-other.php'       => array( 'Name' => 'Formidable Other' ),
+				),
+			),
+			'plugins'
+		);
+
+		$updater                = ( new ReflectionClass( 'FrmAddon' ) )->newInstanceWithoutConstructor();
+		$updater->download_id   = 123;
+		$updater->plugin_folder = 'renamed-tooltips/renamed-tooltips.php';
+		$register               = static function ( $plugins ) use ( $updater ) {
+			$plugins['tooltips'] = $updater;
+			return $plugins;
+		};
+
+		$resolve = function ( $addon ) use ( $api_file ) {
+			return $this->run_private_method( array( 'FrmAddonsController', 'get_boost_plugin_file' ), array( $addon, $api_file ) );
+		};
+
+		try {
+			// Inactive Boost: matched by its plugin name.
+			$this->assertSame( 'formidable-tooltips/formidable-tooltips.php', $resolve( $addon ) );
+
+			// Active Boost: matched by its updater download id first.
+			add_filter( 'frm_installed_addons', $register );
+			$this->assertSame( 'renamed-tooltips/renamed-tooltips.php', $resolve( $addon ) );
+			remove_filter( 'frm_installed_addons', $register );
+
+			// Not installed: the API path is kept.
+			$addon['title'] = 'Celebrations';
+			$this->assertSame( $api_file, $resolve( $addon ) );
+		} finally {
+			remove_filter( 'frm_installed_addons', $register );
+			wp_cache_set( 'plugins', $cached, 'plugins' );
+		}
 	}
 
 	/**
