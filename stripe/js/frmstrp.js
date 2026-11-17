@@ -665,17 +665,25 @@
 			return;
 		}
 
+		const backdrop = getBackdropColor( cardElement );
+
 		// Customize the Stripe elements using the Stripe Appearance API.
 		const appearance = {
 			theme: 'stripe',
 			variables: {
 				fontSizeBase: frm_stripe_vars.baseFontSize,
-				colorText: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules[ '.Input' ].color ),
-				colorBackground: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules[ '.Input' ].backgroundColor ),
+				colorText: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules[ '.Input' ].color, backdrop ),
+				colorBackground: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules[ '.Input' ].backgroundColor, backdrop ),
 				fontSmooth: 'auto'
 			},
 			rules: getAppearanceRules()
 		};
+
+		const primaryColor = frm_stripe_vars.appearanceRules[ '.Input:focus' ]?.borderColor;
+		if ( primaryColor ) {
+			appearance.variables.colorPrimary = maybeAdjustColorForStripe( primaryColor, backdrop );
+		}
+
 		elements = frmstripe.elements( { clientSecret, appearance } );
 		isStripeLink = true;
 
@@ -690,24 +698,44 @@
 	}
 
 	/**
-	 * Stripe doesn't support RGBA so convert it to HEX.
+	 * Stripe doesn't support RGBA so blend it over the backdrop and convert it to HEX.
+	 * Dropping the alpha instead turns a transparent field background into a solid one.
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
-	 * @param {string} color
+	 * @param {string}        color
+	 * @param {Array<number>} backdrop RGB channels that the color is blended over.
 	 * @return {string} Converted color value.
 	 */
-	function maybeAdjustColorForStripe( color ) {
+	function maybeAdjustColorForStripe( color, backdrop = [ 255, 255, 255 ] ) {
 		if ( 0 !== color.indexOf( 'rgba' ) ) {
 			return color;
 		}
 
 		const rgba = color.replace( /^rgba?\(|\s+|\)$/g, '' ).split( ',' );
+		const alpha = isNaN( parseFloat( rgba[ 3 ] ) ) ? 1 : parseFloat( rgba[ 3 ] );
+		const hex = [ 0, 1, 2 ].map( i => Math.round( ( alpha * parseInt( rgba[ i ], 10 ) ) + ( ( 1 - alpha ) * backdrop[ i ] ) ).toString( 16 ).padStart( 2, '0' ) );
 
-		// eslint-disable-next-line no-bitwise -- Bitwise shifts are intentional for RGBA to hex conversion
-		return `#${ ( ( 1 << 24 ) + ( parseInt( rgba[ 0 ], 10 ) << 16 ) + ( parseInt( rgba[ 1 ], 10 ) << 8 ) + parseInt( rgba[ 2 ], 10 ) )
-			.toString( 16 )
-			.slice( 1 ) }`;
+		return `#${ hex.join( '' ) }`;
+	}
+
+	/**
+	 * Get the RGB channels of the first solid background behind an element.
+	 * A partly transparent ancestor is skipped, so the result is approximate there.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Element} element
+	 * @return {Array<number>} RGB channels, white when no ancestor has a solid background.
+	 */
+	function getBackdropColor( element ) {
+		for ( let parent = element.parentElement; parent; parent = parent.parentElement ) {
+			const channels = window.getComputedStyle( parent ).backgroundColor.match( /[\d.]+/g );
+			if ( channels && ( 3 === channels.length || 1 === parseFloat( channels[ 3 ] ) ) ) {
+				return channels.slice( 0, 3 ).map( Number );
+			}
+		}
+		return [ 255, 255, 255 ];
 	}
 
 	/**
