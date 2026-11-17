@@ -134,6 +134,10 @@ export function restoreFieldSettingValues( snapshot, settings ) {
 	const preserved = new Set( [ 'field_key', 'field_order', 'id', 'form_id' ].map(
 		key => `field_options[${ key }_${ toId }]`
 	) );
+	if ( settings.querySelector( '.frm_repeat_field' )?.value === '1' ) {
+		// PHP created a separate child form for this repeater's copied fields.
+		preserved.add( `field_options[form_select_${ toId }]` );
+	}
 	const changed = [];
 	snapshot.controls.forEach( control => {
 		const name = copyControlName( control.name, fromId, toId );
