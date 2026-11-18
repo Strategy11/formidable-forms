@@ -199,15 +199,15 @@ class FrmEntriesHelper {
 			return $message;
 		}
 
-		if ( ! $message ) {
-			$message = '[default-message]';
-		}
-
+		$message = $message ? $message : '[default-message]';
 		preg_match_all( "/\[(default-message|default_message)\b(.*?)(?:(\/))?\]/s", $message, $shortcodes, PREG_PATTERN_ORDER );
 
 		foreach ( $shortcodes[0] as $short_key => $tag ) {
+			// Array and json values are read by code, so they are only escaped when the caller asks, like FrmEmail does.
 			$add_atts  = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
-			$this_atts = array_merge( $atts, $add_atts, array( 'esc_shortcodes' => $atts['esc_shortcodes'] ?? empty( $atts['plain_text'] ) ) );
+			$format    = $add_atts['format'] ?? $atts['format'] ?? '';
+			$escape    = $atts['esc_shortcodes'] ?? ( empty( $atts['plain_text'] ) && ! in_array( $format, array( 'array', 'json' ), true ) );
+			$this_atts = array_merge( $atts, $add_atts, array( 'esc_shortcodes' => $escape ) );
 			$default   = FrmEntriesController::show_entry_shortcode( $this_atts );
 
 			// Add the default message.

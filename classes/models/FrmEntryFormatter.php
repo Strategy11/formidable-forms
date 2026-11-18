@@ -945,7 +945,7 @@ class FrmEntryFormatter {
 	protected function prepare_display_value_for_html_table( $display_value, $field_type = '' ) {
 		$display_value = $this->flatten_array( $display_value );
 
-		if ( '' !== $field_type && is_string( $display_value ) ) {
+		if ( '' !== $field_type && $this->should_sanitize_shortcodes() && is_string( $display_value ) ) {
 			FrmFieldsHelper::sanitize_embedded_shortcodes( array( 'entry' => $this->entry ), $display_value );
 		}
 

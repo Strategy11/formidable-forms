@@ -92,22 +92,8 @@ class FrmTransLiteActionsController {
 
 		$gateway = self::get_gateway_for_action( $action );
 
-		if ( ! $gateway ) {
-			return;
-		}
-
-		$class_name = FrmTransLiteAppHelper::get_setting_for_gateway( $gateway, 'class' );
-
-		if ( ! $class_name ) {
-			return;
-		}
-
-		$class_name = 'Frm' . $class_name . 'ActionsController';
-		$response   = $class_name::trigger_gateway( $action, $entry, $form );
-
-		if ( ! $response['success'] && $response['show_errors'] ) {
-			// The payment failed
-			self::show_failed_message( compact( 'action', 'entry', 'form', 'response' ) );
+		if ( $gateway ) {
+			self::trigger_gateway_for_action( $action, $entry, $form, $gateway );
 		}
 	}
 
@@ -140,36 +126,57 @@ class FrmTransLiteActionsController {
 			$gateway = reset( $gateway );
 		}
 
-		if ( ! $gateway ) {
-			return;
-		}
-
-		$class_name = FrmTransLiteAppHelper::get_setting_for_gateway( $gateway, 'class' );
-
-		if ( ! $class_name ) {
+		if ( ! $gateway || ! FrmTransLiteAppHelper::get_setting_for_gateway( $gateway, 'class' ) ) {
 			return;
 		}
 
 		self::prepare_description( $action, compact( 'entry', 'form' ) );
 
+		$response = self::trigger_gateway_for_action( $action, $entry, $form, $gateway );
+
+		if ( ! $response || ! $response['success'] || empty( $response['run_triggers'] ) ) {
+			return;
+		}
+
+		// The add-on's Stripe gateway expects its caller to run the triggers for a completed charge.
+		// The submodule's version also sets the After Payment fields, which Pro leaves to it for Stripe payments.
+		$status = 'complete';
+
+		if ( is_callable( array( 'FrmTransActionsController', 'trigger_payment_status_change' ) ) ) {
+			FrmTransActionsController::trigger_payment_status_change( compact( 'status', 'action', 'entry' ) );
+		} else {
+			self::trigger_payment_status_change( compact( 'status', 'entry' ) );
+		}
+	}
+
+	/**
+	 * Send a payment action to its gateway and show the error message when the payment fails.
+	 *
+	 * @since 7.1
+	 *
+	 * @param WP_Post $action  The payment action.
+	 * @param object  $entry   The entry being submitted.
+	 * @param object  $form    The form being submitted.
+	 * @param string  $gateway The gateway key, like stripe, square or paypal.
+	 *
+	 * @return array|false The gateway response, or false when the gateway has no controller.
+	 */
+	private static function trigger_gateway_for_action( $action, $entry, $form, $gateway ) {
+		$class_name = FrmTransLiteAppHelper::get_setting_for_gateway( $gateway, 'class' );
+
+		if ( ! $class_name ) {
+			return false;
+		}
+
 		$class_name = 'Frm' . $class_name . 'ActionsController';
 		$response   = $class_name::trigger_gateway( $action, $entry, $form );
 
-		if ( ! $response['success'] ) {
-			if ( $response['show_errors'] ) {
-				self::show_failed_message( compact( 'action', 'entry', 'form', 'response' ) );
-			}
-		} elseif ( ! empty( $response['run_triggers'] ) ) {
-			// The add-on's Stripe gateway expects its caller to run the triggers for a completed charge.
-			// The submodule's version also sets the After Payment fields, which Pro leaves to it for Stripe payments.
-			$status = 'complete';
-
-			if ( is_callable( array( 'FrmTransActionsController', 'trigger_payment_status_change' ) ) ) {
-				FrmTransActionsController::trigger_payment_status_change( compact( 'status', 'action', 'entry' ) );
-			} else {
-				self::trigger_payment_status_change( compact( 'status', 'entry' ) );
-			}
+		if ( ! $response['success'] && $response['show_errors'] ) {
+			// The payment failed
+			self::show_failed_message( compact( 'action', 'entry', 'form', 'response' ) );
 		}
+
+		return $response;
 	}
 
 	/**
