@@ -10,11 +10,12 @@ class FrmField {
 	 *
 	 * Covers frm_field_created and frm_field_updated, plus frm_field_order_updated for
 	 * builder saves that write the field order of many fields in one query without frm_field_updated.
-	 * Includes the previous form ID when frm_field_updated moves a field between forms.
+	 * Version 2 passes the previous form ID to frm_field_updated, so a field moved
+	 * between forms can refresh both forms.
 	 *
 	 * @since x.x
 	 */
-	const WRITE_HOOKS_VERSION = 1;
+	const WRITE_HOOKS_VERSION = 2;
 
 	/**
 	 * @var bool
