@@ -19,10 +19,16 @@ if ( ! isset( $frm_style ) ) {
 
 $styles           = $frm_style->get_all();
 $default_style    = $frm_style->get_default_style( $styles );
-$defaults         = FrmStylesHelper::get_settings_for_output( $default_style );
-$important        = ! empty( $defaults['important_style'] ) ? ' !important' : '';
 $pro_is_installed = FrmAppHelper::pro_is_installed();
-$use_chosen_js    = FrmStylesHelper::use_chosen_js();
+
+if ( ! $pro_is_installed && $default_style ) {
+	// Per-form styles are a Pro feature, so only the default style is ever used without Pro.
+	$styles = array( $default_style->ID => $default_style );
+}
+
+$defaults      = FrmStylesHelper::get_settings_for_output( $default_style );
+$important     = ! empty( $defaults['important_style'] ) ? ' !important' : '';
+$use_chosen_js = FrmStylesHelper::use_chosen_js();
 
 ?>
 .with_frm_style{
@@ -370,6 +376,7 @@ legend.frm_hidden{
 
 .with_frm_style .frm_primary_label{
 	max-width:100%;
+	line-height: inherit;
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
 	font-family: var(--font);
 <?php } ?>
@@ -520,6 +527,7 @@ legend.frm_hidden{
 .with_frm_style select[multiple="multiple"]{
 	height:auto;
 	line-height:normal;
+	background-image: none; /* Some themes add a dropdown arrow to every select. */
 }
 
 <?php if ( $pro_is_installed ) { ?>
@@ -569,7 +577,6 @@ legend.frm_hidden{
 	padding:5px;
 <?php } ?>
 <?php if ( ! empty( $defaults['border_radius'] ) ) { ?>
-	border-radius:<?php echo esc_html( $defaults['border_radius'] . $important ); ?>;
 	border-radius:var(--border-radius)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['submit_font_size'] ) ) { ?>
@@ -728,6 +735,25 @@ legend.frm_hidden{
 	gap: 2%;
 }
 
+.with_frm_style.frm_inline_top .frm_submit.frm_flex,
+.with_frm_style .frm_submit.frm_flex.frm_inline_submit {
+	align-items: flex-start;
+	align-content: flex-start;
+	row-gap: 0;
+}
+
+.with_frm_style.frm_inline_top .frm_submit.frm_flex::before,
+.with_frm_style .frm_submit.frm_flex.frm_inline_submit::before {
+	flex-basis: 100%;
+	order: -2;
+}
+
+/* formidable.js sets the offset when a theme restyles the labels and the spacer no longer matches them. It must outrank the margin in each style's spacer rule. */
+.frm_forms.with_frm_style.frm_inline_top .frm_fields_container .frm_submit::before,
+.frm_forms.with_frm_style .frm_fields_container .frm_submit.frm_inline_submit::before {
+	margin-bottom: var(--frm-inline-submit-offset, 0);
+}
+
 <?php if ( $pro_is_installed ) { ?>
 .with_frm_style .frm_submit.frm_flex button.frm_button_submit ~ .frm_prev_page {
 	order: -1;
@@ -816,6 +842,11 @@ a.frm_save_draft{
 	display: inline-block;
 	vertical-align: middle;
 	white-space:normal;
+}
+
+.with_frm_style .frm_checkbox label:not(.frm_screen_reader),
+.with_frm_style .frm_radio label:not(.frm_screen_reader) {
+	margin-bottom: 0; /* Override Bootstrap themes. */
 }
 
 .with_frm_style .frm_checkbox label input[type=checkbox],
@@ -974,6 +1005,11 @@ a.frm_save_draft{
 .frm_success_style{
 	border-radius:4px;
 	padding:15px;
+}
+
+.with_frm_style .frm_error_style:focus:not(:focus-visible) {
+	/* The error summary receives focus after submit. Don't show a theme focus ring for it. */
+	outline: none;
 }
 
 .with_frm_style .frm_message p {
@@ -1358,103 +1394,6 @@ select.frm_loading_lookup{
 .frm_grid_first .frm_checkbox,
 .frm_grid_odd .frm_checkbox{
 	display:inline;
-}
-
-.frm_grid_2 .frm_radio,
-.frm_grid_2 .frm_checkbox,
-.frm_grid_2 .frm_primary_label{
-	width:48% !important;
-}
-
-.frm_grid_2 .frm_radio,
-.frm_grid_2 .frm_checkbox{
-	margin-right:4%;
-}
-
-.frm_grid_3 .frm_radio,
-.frm_grid_3 .frm_checkbox,
-.frm_grid_3 .frm_primary_label{
-	width:30% !important;
-}
-
-.frm_grid_3 .frm_radio,
-.frm_grid_3 .frm_checkbox{
-	margin-right:3%;
-}
-
-.frm_grid_4 .frm_radio,
-.frm_grid_4 .frm_checkbox{
-	width:20% !important;
-}
-
-.frm_grid_4 .frm_primary_label{
-	width:28% !important;
-}
-
-.frm_grid_4 .frm_radio,
-.frm_grid_4 .frm_checkbox{
-	margin-right:4%;
-}
-
-.frm_grid_5 .frm_primary_label,
-.frm_grid_7 .frm_primary_label{
-	width:24% !important;
-}
-
-.frm_grid_5 .frm_radio,
-.frm_grid_5 .frm_checkbox{
-	width:17% !important;
-	margin-right:2%;
-}
-
-.frm_grid_6 .frm_primary_label{
-	width:25% !important;
-}
-
-.frm_grid_6 .frm_radio,
-.frm_grid_6 .frm_checkbox{
-	width:14% !important;
-	margin-right:1%;
-}
-
-.frm_grid_7 .frm_primary_label{
-	width:22% !important;
-}
-
-.frm_grid_7 .frm_radio,
-.frm_grid_7 .frm_checkbox{
-	width:12% !important;
-	margin-right:1%;
-}
-
-.frm_grid_8 .frm_primary_label{
-	width:23% !important;
-}
-
-.frm_grid_8 .frm_radio,
-.frm_grid_8 .frm_checkbox{
-	width:10% !important;
-	margin-right:1%;
-}
-
-.frm_grid_9 .frm_primary_label{
-	width:20% !important;
-}
-
-.frm_grid_9 .frm_radio,
-.frm_grid_9 .frm_checkbox{
-	width:9% !important;
-	margin-right:1%;
-}
-
-.frm_grid_10 .frm_primary_label{
-	width:19% !important;
-}
-
-.frm_grid_10 .frm_radio,
-.frm_grid_10 .frm_checkbox{
-	width:8% !important;
-	margin-right:1%;
 }
 
 .frm_form_field.frm_inline_container .frm_opt_container,

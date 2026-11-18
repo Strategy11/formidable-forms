@@ -163,6 +163,7 @@ parameters:
 			paths:
 				- stripe/controllers/FrmTransLiteActionsController.php
 				- paypal/controllers/FrmPayPalLiteActionsController.php
+				- paypal/controllers/FrmPayPalLiteAppController.php
 				- paypal/helpers/FrmPayPalLiteConnectHelper.php
 		-
 			message: '#fwrite expects resource, resource\|null given#'

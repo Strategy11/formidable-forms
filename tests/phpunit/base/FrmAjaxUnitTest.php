@@ -3,12 +3,23 @@
 /**
  * @group ajax
  */
+#[\PHPUnit\Framework\Attributes\Group( 'ajax' )]
 class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
+
+	use FrmPHPUnitCompatibility;
 
 	protected $field_id         = 0;
 	protected $user_id          = 0;
 	protected $is_pro_active    = false;
 	protected $contact_form_key = 'contact-with-email';
+
+	/**
+	 * Narrows the inherited property to the Formidable factory so static analysis
+	 * can resolve $this->factory->form, ->field and ->entry.
+	 *
+	 * @var FrmUnitTestFactory
+	 */
+	protected $factory;
 
 	public static function wpSetUpBeforeClass( $factory ) {
 		$_POST = array();
@@ -19,8 +30,25 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 	public static function wpTearDownAfterClass() {
 	}
 
+	/**
+	 * Keep WordPress deprecation assertions working after PHPUnit 9.
+	 *
+	 * @return void
+	 */
+	public function expectDeprecated() {
+		if ( version_compare( \PHPUnit\Runner\Version::id(), '10.0', '<' ) ) {
+			parent::expectDeprecated();
+			return;
+		}
+
+		$this->set_up_deprecation_expectations();
+	}
+
 	public function setUp(): void {
 		parent::setUp();
+
+		// CLI tests have no HTTP response on which to send admin headers.
+		remove_action( 'admin_init', 'wp_admin_headers' );
 
 		FrmHooksController::trigger_load_hook( 'load_ajax_hooks' );
 		FrmHooksController::trigger_load_hook( 'load_form_hooks' );

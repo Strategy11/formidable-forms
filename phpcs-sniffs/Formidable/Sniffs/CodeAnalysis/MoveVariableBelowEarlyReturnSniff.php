@@ -92,6 +92,14 @@ class MoveVariableBelowEarlyReturnSniff implements Sniff {
 				continue;
 			}
 
+			// Skip property writes such as self::$x, static::$x or Foo::$x. Moving one below a
+			// guard changes when the property is set, and the fix copies from the variable token
+			// onwards, which would drop the qualifier and silently turn the write into a local.
+			if ( $this->isQualifiedPropertyWrite( $phpcsFile, $varToken ) ) {
+				$current = $varToken + 1;
+				continue;
+			}
+
 			$variableName = $tokens[ $varToken ]['content'];
 
 			// Check if this variable is a function parameter.
@@ -224,6 +232,29 @@ class MoveVariableBelowEarlyReturnSniff implements Sniff {
 
 		// This is a valid early return that doesn't use the variable.
 		return $ifCloser;
+	}
+
+	/**
+	 * Check whether a variable token is the property half of a static property write.
+	 *
+	 * Instance writes ( $this->x = 1 ) never reach this check, because the token after the
+	 * variable is an object operator rather than an equals sign.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $varToken  The variable token position.
+	 *
+	 * @return bool
+	 */
+	private function isQualifiedPropertyWrite( File $phpcsFile, $varToken ) {
+		$before = $phpcsFile->findPrevious( T_WHITESPACE, $varToken - 1, null, true );
+
+		if ( false === $before ) {
+			return false;
+		}
+
+		$tokens = $phpcsFile->getTokens();
+
+		return $tokens[ $before ]['code'] === T_DOUBLE_COLON;
 	}
 
 	/**

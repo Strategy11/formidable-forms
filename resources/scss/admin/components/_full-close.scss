@@ -16,8 +16,33 @@
 	align-items: center;
 }
 
+/**
+ * Icon button
+ *
+ * Sized from the icon button component in the Formidable System file (node 2336:10747). The
+ * anchor had no size, so the target was only as big as the 20px glyph.
+ */
 .frm-full-close a {
-	display: block;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	border-radius: var(--small-radius);
+	transition: 0.12s background-color ease;
+
+	/* One step above the component's Gray/50: with no border to carry weight, a 1.045:1 fill on
+	   the white toolbar was barely perceptible. */
+	&:hover {
+		background-color: var(--grey-100);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.frm-full-close a {
+		transition: none;
+	}
 }
 
 .frm-full-close .frmsvg {

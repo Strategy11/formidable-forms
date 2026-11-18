@@ -9,7 +9,6 @@
  * @var array<string, array> $addons            Available add-ons keyed by slug.
  * @var array                $errors            API errors, if any.
  * @var string               $license_type      Current license type or empty string.
- * @var string               $request_addon_url URL for requesting a new add-on.
  * @var array                $pro               Pro add-on entry prepended to $addons.
  * @var string               $pricing           Upgrade URL used for CTAs.
  * @var array<string, array> $categories        Add-on categories keyed by slug, each with 'name' and 'count'.

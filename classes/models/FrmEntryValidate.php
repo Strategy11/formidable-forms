@@ -27,6 +27,23 @@ class FrmEntryValidate {
 			return $errors;
 		}
 
+		/**
+		 * Filters the entry values before required, type and visibility validation begins.
+		 *
+		 * Only the values that are validated change. A filtered array without "form_id" and
+		 * "item_meta" is ignored, and changed values are sanitized again.
+		 *
+		 * @since 7.0
+		 *
+		 * @param array $values Submitted entry values, including "form_id" and "item_meta".
+		 */
+		$filtered_values = apply_filters( 'frm_pre_validate_entry', $values );
+
+		if ( is_array( $filtered_values ) && $values !== $filtered_values && isset( $filtered_values['form_id'], $filtered_values['item_meta'] ) ) {
+			$values = $filtered_values;
+			FrmEntry::sanitize_entry_post( $values );
+		}
+
 		if ( FrmAppHelper::is_admin() && is_user_logged_in() && ( ! isset( $values[ 'frm_submit_entry_' . $values['form_id'] ] ) || ! wp_verify_nonce( $values[ 'frm_submit_entry_' . $values['form_id'] ], 'frm_submit_entry_nonce' ) ) ) { // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			$frm_settings   = FrmAppHelper::get_settings();
 			$errors['form'] = $frm_settings->admin_permission;
@@ -38,7 +55,10 @@ class FrmEntryValidate {
 		$posted_fields = self::get_fields_to_validate( $values, $exclude );
 
 		// Pass exclude value to validate_field function so it can be used for repeating sections
-		$args = array( 'exclude' => $exclude );
+		$args = array(
+			'exclude'  => $exclude,
+			'entry_id' => self::is_new_submission( $values ) ? 0 : absint( $values['id'] ?? 0 ),
+		);
 
 		foreach ( $posted_fields as $posted_field ) {
 			self::validate_field( $posted_field, $errors, $values, $args );
@@ -147,7 +167,8 @@ class FrmEntryValidate {
 			'key_pointer'     => '',
 			// Exclude these field types from validation.
 			'exclude'         => array(),
-
+			// The entry being edited, or 0 for a new entry.
+			'entry_id'        => 0,
 		);
 		$args  = wp_parse_args( $args, $defaults );
 		$value = ! empty( $args['parent_field_id'] ) ? $values : ( $values['item_meta'][ $args['id'] ] ?? '' );
@@ -177,7 +198,7 @@ class FrmEntryValidate {
 		FrmEntriesHelper::set_posted_value( $posted_field, $value, $args );
 
 		self::validate_options( $errors, $posted_field, $value, $args );
-		self::validate_field_types( $errors, $posted_field, $value, $args );
+		self::validate_field_types( $errors, $posted_field, $value, array_merge( $args, array( 'is_new_submission' => self::is_new_submission( $values ) ) ) );
 
 		// Field might want to modify value before other parts of the system
 		// e.g. trim off excess values like in the case of fields with limit.
@@ -211,7 +232,7 @@ class FrmEntryValidate {
 			return;
 		}
 
-		$option_is_valid = self::option_is_valid( $posted_field, $value, $posted_field->options );
+		$option_is_valid = self::option_is_valid( $posted_field, $value, $posted_field->options, (int) $args['entry_id'] );
 
 		/**
 		 * @since 6.21
@@ -231,14 +252,16 @@ class FrmEntryValidate {
 	 * Validate that value matches one of the options for the field.
 	 *
 	 * @since 6.21
+	 * @since 7.1 Added the $entry_id parameter.
 	 *
 	 * @param stdClass     $field
 	 * @param array|string $value
 	 * @param array        $options
+	 * @param int          $entry_id The entry being edited, or 0 for a new entry.
 	 *
 	 * @return bool
 	 */
-	private static function option_is_valid( $field, $value, $options ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
+	private static function option_is_valid( $field, $value, $options, $entry_id = 0 ) {
 		if ( '' === $value ) {
 			return true;
 		}
@@ -280,32 +303,9 @@ class FrmEntryValidate {
 					$option_value = $option;
 				}
 
-				/**
-				 * @var string $current_value
-				 */
-				$match = trim( $current_value ) === trim( $option_value );
-
-				if ( $match ) {
-					break;
-				}
-
-				$match = trim( $current_value ) === trim( do_shortcode( $option_value ) );
-
-				if ( $match ) {
-					break;
-				}
-
-				$match = self::is_filtered_match( $current_value, $option_value );
-
-				if ( $match ) {
-					break;
-				}
-
-				if ( ! is_numeric( $current_value ) ) {
-					continue;
-				}
-
-				$match = (int) $current_value === (int) $option_value;
+				// Preserve the numeric comparison used for saved options before setup hook validation.
+				$match = self::value_matches_option( $current_value, $option_value )
+				|| ( is_numeric( $current_value ) && (int) $current_value === (int) $option_value );
 
 				if ( $match ) {
 					break;
@@ -313,11 +313,79 @@ class FrmEntryValidate {
 			}//end foreach
 
 			if ( ! $match ) {
-				return self::options_are_dynamic_based_on_hook( $field, $value );
+				return self::setup_hooks_allow_value( $field, $value, $entry_id );
 			}
 		}//end foreach
 
 		return true;
+	}
+
+	/**
+	 * Check a value that is missing from the saved options against the setup hooks.
+	 *
+	 * @since 7.1
+	 *
+	 * @param stdClass     $field    The field being validated.
+	 * @param array|string $value    The value to validate.
+	 * @param int          $entry_id The entry being edited, or 0 for a new entry.
+	 *
+	 * @return bool
+	 */
+	private static function setup_hooks_allow_value( $field, $value, $entry_id ) {
+		if ( self::hook_options_allow_value( $field, $value, $entry_id ) ) {
+			return true;
+		}
+
+		// Older snippets may only register the new-entry hook, which also ran on edits before.
+		return $entry_id && self::has_new_entry_only_setup_callbacks() && self::hook_options_allow_value( $field, $value );
+	}
+
+	/**
+	 * Check if a posted value matches a single option value.
+	 *
+	 * @since 7.1
+	 *
+	 * @param string $current_value The posted value.
+	 * @param string $option_value  The option value to compare against.
+	 *
+	 * @return bool
+	 */
+	private static function value_matches_option( $current_value, $option_value ) {
+		if ( trim( $current_value ) === trim( $option_value ) ) {
+			return true;
+		}
+
+		if ( trim( $current_value ) === trim( do_shortcode( $option_value ) ) ) {
+			return true;
+		}
+
+		if ( self::is_filtered_match( $current_value, $option_value ) ) {
+			return true;
+		}
+
+		return self::is_same_integer( $current_value, $option_value );
+	}
+
+	/**
+	 * Compare two values as integers only when both are whole numbers, so "01" matches "1"
+	 * but a decimal like "101.9" does not match "101".
+	 *
+	 * @since 7.1
+	 *
+	 * @param string $current_value The posted value.
+	 * @param string $option_value  The option value to compare against.
+	 *
+	 * @return bool
+	 */
+	private static function is_same_integer( $current_value, $option_value ) {
+		$current_value = trim( $current_value );
+		$option_value  = trim( $option_value );
+
+		if ( ! preg_match( '/^\d+$/', $current_value ) || ! preg_match( '/^\d+$/', $option_value ) ) {
+			return false;
+		}
+
+		return (int) $current_value === (int) $option_value;
 	}
 
 	/**
@@ -350,35 +418,146 @@ class FrmEntryValidate {
 	}
 
 	/**
-	 * Do not validate options if they have been modified with a hook.
-	 * This is to help avoid issues where the options could be based on a URL param for example.
+	 * Accept options produced by setup hooks and preserve the bypass for changed option lists.
 	 *
 	 * @since 6.21
+	 * @since 7.1 Added the $entry_id parameter and renamed from options_are_dynamic_based_on_hook.
 	 *
 	 * @param object       $field_object The field object.
 	 * @param array|string $value        The value to validate.
+	 * @param int          $entry_id     The entry being edited, or 0 for a new entry.
 	 *
 	 * @return bool
 	 */
-	private static function options_are_dynamic_based_on_hook( $field_object, $value ) {
+	private static function hook_options_allow_value( $field_object, $value, $entry_id = 0 ) {
 		$values          = (array) $field_object;
 		$values['value'] = $value;
-		FrmFieldsHelper::prepare_new_front_field( $values, $field_object );
+
+		if ( $entry_id ) {
+			FrmFieldsHelper::prepare_edit_front_field( $values, $field_object, $entry_id );
+		} else {
+			FrmFieldsHelper::prepare_new_front_field( $values, $field_object );
+		}
+
+		if ( self::value_matches_prepared_options( $value, $values ) ) {
+			return true;
+		}
 
 		$separate_value = FrmField::get_option( $field_object, 'separate_value' );
-		$map_callback   = function ( $option ) use ( $separate_value ) {
+
+		$map_callback = static function ( $option ) use ( $separate_value ) {
 			if ( is_array( $option ) ) {
-				$option_value = $separate_value ? $option['value'] : $option['label'];
-			} else {
-				$option_value = $option;
+				$option = $separate_value ? $option['value'] : $option['label'];
 			}
-			return do_shortcode( $option_value );
+			return do_shortcode( $option );
 		};
 
-		$values_options       = array_map( $map_callback, $values['options'] );
-		$field_object_options = array_map( $map_callback, $field_object->options );
+		$values_options = array_map( $map_callback, $values['options'] );
+		$saved_options  = array_map( $map_callback, $field_object->options );
 
-		return $values_options !== $field_object_options;
+		if ( $values_options === $saved_options ) {
+			return false;
+		}
+
+		/**
+		 * Setup options can depend on render-time URL parameters, time, or other custom context,
+		 * so a changed list cannot reliably validate what was offered when the form rendered.
+		 * By default any value is accepted for that field. Return false to require the posted
+		 * value to match one of the options the setup hooks return at submission time.
+		 *
+		 * @since 7.1
+		 *
+		 * @param bool     $skip_validation Whether to accept any value for this field.
+		 * @param stdClass $field           The field being validated.
+		 * @param array    $values          The field array after the setup hooks run.
+		 * @param int      $entry_id        The entry being edited, or 0 for a new entry.
+		 */
+		return (bool) apply_filters( 'frm_skip_changed_option_validation', true, $field_object, $values, $entry_id );
+	}
+
+	/**
+	 * Check if the new-entry setup hook has a callback that did not already run through
+	 * the edit setup hook. Only those callbacks can make a value valid on the fallback check.
+	 *
+	 * @since 7.1
+	 *
+	 * @return bool
+	 */
+	private static function has_new_entry_only_setup_callbacks() {
+		global $wp_filter;
+
+		if ( empty( $wp_filter['frm_setup_new_fields_vars']->callbacks ) ) {
+			return false;
+		}
+
+		$edit_callbacks = array();
+
+		if ( ! empty( $wp_filter['frm_setup_edit_fields_vars']->callbacks ) ) {
+			foreach ( $wp_filter['frm_setup_edit_fields_vars']->callbacks as $callbacks ) {
+				$edit_callbacks = array_merge( $edit_callbacks, array_keys( $callbacks ) );
+			}
+		}
+
+		// Pro prepares new and edited fields with separate callbacks that apply the same options.
+		$edit_callbacks[] = 'FrmProFieldsHelper::setup_new_vars';
+
+		foreach ( $wp_filter['frm_setup_new_fields_vars']->callbacks as $callbacks ) {
+			if ( array_diff( array_keys( $callbacks ), $edit_callbacks ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check the posted value against the options after the setup hooks run, using the
+	 * same option values the field renders with. This includes the option key when a
+	 * hook sets use_key, which does not change the option list itself.
+	 *
+	 * @since 7.1
+	 *
+	 * @param array|string $value  The value to validate.
+	 * @param array        $values The field array after the setup hooks run.
+	 *
+	 * @return bool
+	 */
+	private static function value_matches_prepared_options( $value, $values ) {
+		if ( empty( $values['options'] ) || ! is_array( $values['options'] ) ) {
+			return false;
+		}
+
+		foreach ( (array) $value as $current_value ) {
+			if ( ! self::value_matches_prepared_option( $current_value, $values ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * @since 7.1
+	 *
+	 * @param string $current_value The posted value.
+	 * @param array  $values        The field array after the setup hooks run.
+	 *
+	 * @return bool
+	 */
+	private static function value_matches_prepared_option( $current_value, $values ) {
+		foreach ( $values['options'] as $opt_key => $opt ) {
+			if ( str_starts_with( (string) $opt_key, 'other_' ) ) {
+				return true;
+			}
+
+			$option_value = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $values );
+
+			if ( is_scalar( $option_value ) && self::value_matches_option( $current_value, (string) $option_value ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -441,6 +620,19 @@ class FrmEntryValidate {
 		$args['errors'] = $errors;
 
 		$new_errors = $field_obj->validate( $args );
+
+		if ( $new_errors && $field_obj instanceof FrmFieldCaptcha && ! empty( $args['is_new_submission'] ) ) {
+			$error_key = 'field' . $args['id'];
+			$reason    = $field_obj->get_validation_failure_reason();
+
+			if ( '' === $reason ) {
+				$reason = $new_errors[ $error_key ] ?? '';
+			}
+
+			if ( isset( $new_errors[ $error_key ] ) && FrmSpamEntriesHelper::maybe_flag_submission( $posted_field->form_id, $field_obj->get_spam_source(), $reason ) ) {
+				unset( $new_errors[ $error_key ] );
+			}
+		}
 
 		if ( $new_errors ) {
 			$errors = array_merge( $errors, $new_errors );
@@ -563,26 +755,59 @@ class FrmEntryValidate {
 
 		$antispam_check = self::is_antispam_check( $values['form_id'] );
 		$spam_msg       = FrmAntiSpamController::get_default_spam_message();
+		$spam_source    = '';
 
 		if ( is_string( $antispam_check ) ) {
 			$errors['spam'] = $antispam_check;
-		} elseif ( self::is_honeypot_spam( $values ) || self::is_spam_bot() ) {
+			$spam_source    = 'antispam';
+		} elseif ( self::is_honeypot_spam( $values ) ) {
 			$errors['spam'] = $spam_msg;
+			$spam_source    = 'honeypot';
+		} elseif ( self::is_spam_bot() ) {
+			$errors['spam'] = $spam_msg;
+			$spam_source    = 'no_ip';
 		} else {
-			$is_spam = FrmAntiSpamController::is_spam( $values );
+			$detected = FrmAntiSpamController::detect_spam( $values );
 
-			if ( $is_spam ) {
-				$errors['spam'] = $is_spam;
+			if ( $detected ) {
+				$errors['spam'] = $detected['message'];
+				$spam_source    = $detected['source'];
 			}
 		}
 
-		if ( isset( $errors['spam'] ) || self::form_is_in_progress( $values ) ) {
+		if (
+			! isset( $errors['spam'] ) && ! self::form_is_in_progress( $values ) &&
+			self::is_akismet_enabled_for_user( $values['form_id'] ) && self::is_akismet_spam( $values, $spam_source )
+		) {
+			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
+		}
+
+		if ( ! $spam_source || ! self::is_new_submission( $values ) || ! FrmSpamEntriesHelper::maybe_flag_submission( $values['form_id'], $spam_source ) ) {
 			return;
 		}
 
-		if ( self::is_akismet_enabled_for_user( $values['form_id'] ) && self::is_akismet_spam( $values ) ) {
-			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
+		// Save the entry as spam instead of showing an error, so the submitter sees the normal success response.
+		unset( $errors['spam'] );
+
+		if ( 'honeypot' !== $spam_source ) {
+			return;
 		}
+
+		$honeypot = new FrmHoneypot( $values['form_id'] );
+		$honeypot->remove_posted_value();
+	}
+
+	/**
+	 * Spam is only saved as a spam entry when an entry is created. Edits keep showing the spam error.
+	 *
+	 * @since 7.0
+	 *
+	 * @param array $values The submitted values.
+	 *
+	 * @return bool
+	 */
+	private static function is_new_submission( $values ) {
+		return empty( $values['id'] ) && 'update' !== ( $values['frm_action'] ?? '' );
 	}
 
 	/**
@@ -630,13 +855,21 @@ class FrmEntryValidate {
 	}
 
 	/**
-	 * @param array $values
+	 * @param array  $values Entry values.
+	 * @param string $source The detected Akismet spam source.
 	 *
 	 * @return bool
 	 */
-	private static function is_akismet_spam( $values ) {
+	private static function is_akismet_spam( $values, &$source = '' ) {
 		global $wpcom_api_key;
-		return is_callable( 'Akismet::http_post' ) && ( get_option( 'wordpress_api_key' ) || $wpcom_api_key ) && self::akismet( $values );
+		$akismet_enabled = is_callable( 'Akismet::http_post' ) && ( get_option( 'wordpress_api_key' ) || $wpcom_api_key );
+
+		if ( ! $akismet_enabled ) {
+			return false;
+		}
+
+		$source = self::get_akismet_spam_source( $values );
+		return '' !== $source;
 	}
 
 	/**
@@ -668,8 +901,21 @@ class FrmEntryValidate {
 	 * @return bool true if is spam
 	 */
 	public static function akismet( $values ) {
+		return '' !== self::get_akismet_spam_source( $values );
+	}
+
+	/**
+	 * Check Akismet and identify regular or blatant spam.
+	 *
+	 * @since 7.0
+	 *
+	 * @param array $values Entry values.
+	 *
+	 * @return string The spam source, or an empty string for a non-spam response.
+	 */
+	private static function get_akismet_spam_source( $values ) {
 		if ( empty( $values['item_meta'] ) ) {
-			return false;
+			return '';
 		}
 
 		$datas = array(
@@ -689,7 +935,34 @@ class FrmEntryValidate {
 		$query_string = _http_build_query( $datas, '', '&' );
 		$response     = Akismet::http_post( $query_string, 'comment-check' );
 
-		return is_array( $response ) && $response[1] === 'true';
+		return self::get_akismet_response_source( $response );
+	}
+
+	/**
+	 * Identify the spam source from an Akismet response.
+	 *
+	 * @since 7.0
+	 *
+	 * @param mixed $response Response headers and body returned by Akismet.
+	 *
+	 * @return string The spam source, or an empty string when Akismet did not flag spam.
+	 */
+	private static function get_akismet_response_source( $response ) {
+		if ( ! is_array( $response ) || 'true' !== ( $response[1] ?? '' ) ) {
+			return '';
+		}
+
+		$headers = $response[0] ?? array();
+
+		if ( is_array( $headers ) ) {
+			$headers = array_change_key_case( $headers, CASE_LOWER );
+		}
+
+		if ( ( is_array( $headers ) || $headers instanceof ArrayAccess ) && 'discard' === ( $headers['x-akismet-pro-tip'] ?? '' ) ) {
+			return 'akismet_discard';
+		}
+
+		return 'akismet';
 	}
 
 	/**

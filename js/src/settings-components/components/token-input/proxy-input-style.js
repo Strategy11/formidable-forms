@@ -7,12 +7,13 @@
 import { CLASS_NAMES, PROXY_INPUT_HEIGHT, TOKEN_GAP } from './constants';
 
 /**
- * Adjust styling for all proxy inputs on the current settings
+ * Adjust styling for all proxy inputs in a settings panel.
  *
+ * @param {HTMLElement|Document} settings The container whose token inputs need adjustment.
  * @return {void}
  */
-export function adjustAllProxyInputStyles() {
-	document.querySelectorAll( `.${ CLASS_NAMES.CONTAINER }` ).forEach( container =>
+export function adjustAllProxyInputStyles( settings = document ) {
+	settings.querySelectorAll( `.${ CLASS_NAMES.CONTAINER }` ).forEach( container =>
 		adjustProxyInputStyle(
 			container.querySelector( `.${ CLASS_NAMES.TOKEN_PROXY_INPUT }` ),
 			container.querySelector( `.${ CLASS_NAMES.TOKENS_WRAPPER }` )

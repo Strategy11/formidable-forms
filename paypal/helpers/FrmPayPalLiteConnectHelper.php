@@ -352,8 +352,12 @@ class FrmPayPalLiteConnectHelper {
 	 * @return void
 	 */
 	public static function render_settings_for_mode( $mode ) {
-		$connected = (bool) self::get_merchant_id( $mode );
-		include FrmPayPalLiteAppHelper::plugin_path() . '/views/settings/connect-settings-box.php';
+		$connected              = (bool) self::get_merchant_id( $mode );
+		$column_class           = 'frm6';
+		$gateway_slug           = 'paypal';
+		$icon_font_class        = 'frmfont';
+		$extra_content_callback = array( 'FrmPayPalLiteConnectHelper', 'render_seller_status_placeholder' );
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/payment-connect-mode-box.php';
 	}
 
 	/**
@@ -384,6 +388,8 @@ class FrmPayPalLiteConnectHelper {
 			'password'            => self::generate_client_password( $mode ),
 			'user_id'             => get_current_user_id(),
 			'frm_paypal_api_mode' => $mode,
+			// The Connect server sends this back when it verifies the site identifier.
+			'verify_token'        => FrmTransLiteConnectVerifyHelper::start_request( 'paypal' ),
 		);
 
 		if ( $tracking_id ) {
@@ -391,8 +397,6 @@ class FrmPayPalLiteConnectHelper {
 			$additional_body['tracking_id'] = $tracking_id;
 		}
 
-		// Clear the transient so it doesn't fail.
-		delete_option( 'frm_paypal_lite_last_verify_attempt' );
 		$data = self::post_to_connect_server( 'oauth_request', $additional_body );
 
 		if ( is_string( $data ) ) {
@@ -734,6 +738,12 @@ class FrmPayPalLiteConnectHelper {
 
 	private static function redirect_oauth() {
 		$connected = self::check_server_for_oauth_merchant_id();
+
+		if ( $connected ) {
+			// Onboarding is done, so the verify endpoint can stop answering.
+			FrmTransLiteConnectVerifyHelper::clear_request( 'paypal' );
+		}
+
 		wp_safe_redirect( self::get_url_for_paypal_settings( $connected ) );
 		exit;
 	}
@@ -796,7 +806,19 @@ class FrmPayPalLiteConnectHelper {
 	 * @return false|object
 	 */
 	private static function post_with_authenticated_body( $action, $additional_body = array() ) {
-		$body     = array_merge( self::get_standard_authenticated_body(), $additional_body );
+		$body = array_merge( self::get_standard_authenticated_body(), $additional_body );
+
+		if ( 'disconnected' === FrmTransLiteAppHelper::get_gateway_connection_state( 'paypal', $body['frm_paypal_api_mode'] ) ) {
+			// There are no credentials for this mode, so the connect server would reject the request
+			// with an error about the signature. Report the missing connection instead.
+			self::$latest_error_from_paypal_api    = FrmTransLiteAppHelper::get_gateway_connection_error( 'paypal', $body['frm_paypal_api_mode'] );
+			self::$latest_debug_id_from_paypal_api = '';
+
+			FrmTransLiteLog::log_message( 'PayPal API Error', self::$latest_error_from_paypal_api );
+
+			return false;
+		}
+
 		$response = self::post_to_connect_server( $action, $body );
 
 		if ( is_object( $response ) ) {
@@ -988,25 +1010,13 @@ class FrmPayPalLiteConnectHelper {
 
 	/**
 	 * Verify a site identifier is a match.
+	 *
+	 * @since 7.0 Moved the checks into FrmTransLiteConnectVerifyHelper.
+	 *
+	 * @return void
 	 */
 	public static function verify() {
-		$option_name  = 'frm_paypal_lite_last_verify_attempt';
-		$last_request = get_option( $option_name );
-
-		if ( $last_request && $last_request > strtotime( '-1 day' ) ) {
-			wp_send_json_error( 'Too many requests' );
-		}
-
-		$site_identifier = FrmAppHelper::get_post_param( 'site_identifier' );
-		$usage           = new FrmUsage();
-
-		update_option( $option_name, time() );
-
-		if ( $site_identifier === $usage->uuid() ) {
-			wp_send_json_success();
-		}
-
-		wp_send_json_error();
+		FrmTransLiteConnectVerifyHelper::handle_request( 'paypal' );
 	}
 
 	/**
@@ -1035,7 +1045,7 @@ class FrmPayPalLiteConnectHelper {
 	 *
 	 * @return string
 	 */
-	private static function get_brand_name() {
+	public static function get_brand_name() {
 		$brand_name = get_bloginfo( 'name' );
 
 		/**

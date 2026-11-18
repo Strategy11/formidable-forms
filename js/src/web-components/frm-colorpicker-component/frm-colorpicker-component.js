@@ -45,15 +45,10 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 	}
 
 	afterViewInit() {
-		const colorPickerOptions = {
+		frmDom.colorPicker.init( this.input, {
 			defaultColor: this.#defaultValue,
-		};
-		if ( 'function' === typeof this.#onChange ) {
-			// Use the setTimeout when calling the callback for onChange to make sure the latest color is fetched.
-			colorPickerOptions.change = ( event, ui ) => setTimeout( () => this.#onChange( event, ui ), 20 );
-		}
-
-		jQuery( this.input ).wpColorPicker( colorPickerOptions );
+			change: event => this.#onChange( event, null ),
+		} );
 	}
 
 	/**
@@ -62,7 +57,7 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 	 * @return {string} - The color value.
 	 */
 	get color() {
-		return jQuery( this.input ).wpColorPicker( 'color' );
+		return this.input.value;
 	}
 
 	/**
@@ -74,6 +69,7 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 	set color( value ) {
 		this.#defaultValue = value;
 		this.input.value = value;
+		this.input.dispatchEvent( new Event( 'frm:color-sync' ) );
 	}
 
 	/**

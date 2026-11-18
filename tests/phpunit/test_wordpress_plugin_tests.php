@@ -8,7 +8,7 @@ class WP_Test_WordPress_Plugin_Tests extends FrmUnitTest {
 
 	public function test_wpml_install() {
 		if ( ! is_callable( 'FrmProCopy::install' ) ) {
-			return;
+			$this->markTestSkipped( 'Formidable Pro is required for the WPML install test.' );
 		}
 
 		$copy = new FrmProCopy();

@@ -30,6 +30,26 @@ abstract class FrmFieldType {
 	protected $type;
 
 	/**
+	 * Whether this field can be placed in a repeater.
+	 *
+	 * @since 7.1
+	 *
+	 * @var bool
+	 */
+	protected $allow_in_repeater = true;
+
+	/**
+	 * Get the repeater placement policy, including declarations from add-ons.
+	 *
+	 * @since 7.1
+	 *
+	 * @return bool
+	 */
+	public function allows_in_repeater() {
+		return $this->allow_in_repeater && ! in_array( $this->type, array( 'captcha', 'submit', 'gdpr', 'summary', 'break', 'divider', 'form', 'tabs', 'accordion' ), true );
+	}
+
+	/**
 	 * Does the html for this field label need to include "for"?
 	 *
 	 * @var bool
@@ -300,8 +320,9 @@ DEFAULT_HTML;
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<label class="frm_primary_label" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
-			<?php FrmAppHelper::kses_echo( force_balance_tags( $field['name'] ), 'all' ); ?>
-			<span class="frm_required <?php echo esc_attr( FrmField::is_required( $field ) ? '' : 'frm_hidden' ); ?>">
+			<span class="frm_builder_field_name"><?php FrmAppHelper::kses_echo( force_balance_tags( $field['name'] ), 'all' ); ?></span>
+			<span id="frm_required_indicator_<?php echo esc_attr( $field['id'] ); ?>"
+				class="frm_required <?php echo esc_attr( FrmField::is_required( $field ) ? '' : 'frm_hidden' ); ?>">
 				<?php echo esc_html( $field['required_indicator'] ); ?>
 			</span>
 			<span class="frm-sub-label frm-collapsed-label">
@@ -315,7 +336,7 @@ DEFAULT_HTML;
 			 * required indicator above does. Anything echoed here lands inside
 			 * the label, so keep it inline and decorative.
 			 *
-			 * @since x.x
+			 * @since 6.35
 			 *
 			 * @param array $field The field settings, as prepared by
 			 *                     FrmFieldsHelper::setup_edit_vars().
@@ -345,9 +366,69 @@ DEFAULT_HTML;
 		$field['html_name']     = $field_name;
 		$field['html_id']       = $html_id;
 		$field['default_value'] = $this->maybe_decode_value( $field['default_value'] );
+		$this->prepare_builder_dropdown_options( $field );
 
 		$display = $this->display_field_settings();
 		include $this->include_form_builder_file();
+	}
+
+	/**
+	 * Keep only displayed choices in a dropdown preview. Settings retain every choice.
+	 *
+	 * @since 7.1
+	 *
+	 * @param array $field The prepared builder field.
+	 *
+	 * @return void
+	 */
+	protected function prepare_builder_dropdown_options( array &$field ) {
+		$is_dropdown = 'select' === $field['type'] ||
+		( 'product' === $field['type'] && 'select' === ( $field['data_type'] ?? 'select' ) );
+
+		if ( ! $is_dropdown || ! is_array( $field['options'] ) ) {
+			return;
+		}
+
+		$placeholder = $field['placeholder'] ?? '';
+
+		if ( ! $placeholder ) {
+			$placeholder = FrmFieldsController::get_default_value_from_name( $field );
+		}
+
+		$selected = array();
+		$first    = array();
+
+		foreach ( $field['options'] as $key => $option ) {
+			if ( FrmFieldsHelper::should_hide_field_choice( $key, $field ) ) {
+				continue;
+			}
+
+			$label = FrmFieldsHelper::get_label_from_array( $option, $key, $field );
+
+			if ( '' !== $placeholder && '' === $label ) {
+				continue;
+			}
+
+			$value      = FrmFieldsHelper::get_value_from_array( $option, $key, $field );
+			$is_default = FrmAppHelper::check_selected( $field['value'], $value );
+
+			if ( $is_default ) {
+				$selected[ $key ] = $option;
+			}
+
+			if ( ! $first && ! FrmFieldsHelper::should_disable_choice( $key, $is_default, $field ) ) {
+				$first[ $key ] = $option;
+			}
+		}//end foreach
+
+		if ( $selected ) {
+			$field['options']     = ! empty( $field['multiple'] ) ? $selected : array_slice( $selected, -1, 1, true );
+			$field['placeholder'] = '';
+			$field['label']       = '';
+			return;
+		}
+
+		$field['options'] = '' !== $placeholder ? array() : $first;
 	}
 
 	/**
@@ -389,7 +470,56 @@ DEFAULT_HTML;
 			$input_atts['disabled'] = 'disabled';
 		}
 
+		$size_style = $this->get_builder_size_style();
+
+		if ( $size_style ) {
+			$input_atts['style'] = $size_style;
+		}
+
 		return '<input ' . FrmAppHelper::array_to_html_params( $input_atts ) . ' />';
+	}
+
+	/**
+	 * Get the inline width style that shows the Field Size setting in the form builder preview.
+	 *
+	 * The width is printed with the field so the preview renders at its final size, with no
+	 * resize after the builder scripts load. The builder updates it live as the setting changes.
+	 *
+	 * @since 7.1
+	 *
+	 * @return string The style attribute value, or an empty string when no size applies.
+	 */
+	protected function get_builder_size_style() {
+		$display = $this->display_field_settings();
+
+		if ( ! $this->should_show_size_setting( $display ) ) {
+			return '';
+		}
+
+		$size = FrmField::get_option( $this->field, 'size' );
+
+		if ( ! $size || ! is_scalar( $size ) ) {
+			return '';
+		}
+
+		if ( is_numeric( $size ) ) {
+			$size .= 'px';
+		}
+
+		return 'width:' . $size . ';';
+	}
+
+	/**
+	 * Whether the field settings panel offers a width control.
+	 *
+	 * @since 7.1
+	 *
+	 * @param array $display Display options for the field settings panel.
+	 *
+	 * @return bool
+	 */
+	public function should_show_size_setting( array $display ) {
+		return ! empty( $display['size'] ) && ! in_array( $this->type, array( 'select', 'data', 'time' ), true );
 	}
 
 	/**
@@ -446,6 +576,7 @@ DEFAULT_HTML;
 			'format'            => false,
 			'show_image'        => false,
 			'default'           => true,
+			'autocomplete'      => false,
 		);
 	}
 
@@ -496,6 +627,11 @@ DEFAULT_HTML;
 	 */
 	public function form_builder_classes( $display_type ) {
 		$classes = 'form-field edit_form_item frm_field_box frm_top_container frm_not_divider edit_field_type_' . $display_type;
+
+		if ( ! $this->allows_in_repeater() ) {
+			$classes .= ' frm-no-repeater';
+		}
+
 		return $this->alter_builder_classes( $classes );
 	}
 
@@ -823,6 +959,28 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * Get the autocomplete attribute values that can be selected for this field type.
+	 *
+	 * @since 7.0 This was moved from the FrmProFieldAutocompleteField trait.
+	 *
+	 * @return array<string,string>
+	 */
+	public function autocomplete_options() {
+		return FrmFieldsHelper::get_autocomplete_options( $this->get_autocomplete_filter_keys() );
+	}
+
+	/**
+	 * Limit the autocomplete options to the values that make sense for this field type.
+	 *
+	 * @since 7.0
+	 *
+	 * @return array<string> An empty array will include every key.
+	 */
+	protected function get_autocomplete_filter_keys() {
+		return array();
+	}
+
+	/**
 	 * @since 4.0
 	 *
 	 * @param mixed $default_value Default value passed by reference.
@@ -929,6 +1087,7 @@ DEFAULT_HTML;
 			'format'             => '',
 			'placeholder'        => '',
 			'draft'              => 0,
+			'autocomplete'       => '',
 		);
 		$opts        = array_merge( $opts, $this->extra_field_opts() );
 		$filter_args = array(
@@ -1176,7 +1335,24 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	public function set_aria_invalid_error( &$shortcode_atts, $args ) {
-		$shortcode_atts['aria-invalid'] = isset( $args['errors'][ 'field' . $this->field_id ] ) ? 'true' : 'false';
+		$shortcode_atts['aria-invalid'] = isset( $args['errors'][ 'field' . $this->get_error_key_id( $args ) ] ) ? 'true' : 'false';
+	}
+
+	/**
+	 * Get the field ID that error keys are indexed by while this field is being rendered.
+	 *
+	 * A field in a repeater row is rendered with an ID of '{field_id}-{section_id}-{row}', and
+	 * validation keys its errors by that same ID. The field object only knows the plain field ID,
+	 * which matches no error key inside a repeater, so prefer the ID the row is rendering with.
+	 *
+	 * @since 7.0
+	 *
+	 * @param array $args Rendering context. May include `field_id`.
+	 *
+	 * @return int|string
+	 */
+	protected function get_error_key_id( $args ) {
+		return ! empty( $args['field_id'] ) ? $args['field_id'] : $this->field_id;
 	}
 
 	/**
@@ -1195,6 +1371,7 @@ DEFAULT_HTML;
 		}
 
 		$this->add_aria_description_to_inputs( $args, $input );
+		$this->maybe_add_aria_labelledby_for_hidden_label( $args, $input );
 		$this->load_field_scripts( $args );
 
 		return $input;
@@ -1241,8 +1418,25 @@ DEFAULT_HTML;
 					return $matches[0];
 				}
 
-				$atts = $matches[2];
-				$this->add_aria_description( $args, $atts );
+				$atts       = $matches[2];
+				$input_args = $args;
+
+				// Compound fields share a description, but each subfield has its own error.
+				if ( ! isset( $args['errors'][ 'field' . $args['field_id'] ] ) && preg_match( '/(?:^|\s)id="([^"]+)"/', $atts, $input_id ) ) {
+					$prefix = $args['html_id'] . '_';
+
+					if ( str_starts_with( $input_id[1], $prefix ) ) {
+						$subfield  = substr( $input_id[1], strlen( $prefix ) );
+						$error_key = 'field' . $args['field_id'] . '-' . $subfield;
+
+						if ( isset( $args['errors'][ $error_key ] ) ) {
+							$input_args['errors'][ 'field' . $args['field_id'] ] = $args['errors'][ $error_key ];
+							$input_args['error_html_id']                         = $input_id[1];
+						}
+					}
+				}
+
+				$this->add_aria_description( $input_args, $atts );
 
 				return '<' . $matches[1] . $atts . $matches[3] . '>';
 			},
@@ -1375,7 +1569,8 @@ DEFAULT_HTML;
 		$step = FrmField::get_option( $this->field, 'step' );
 
 		if ( ! is_numeric( $step ) && $step !== 'any' ) {
-			$step = 1;
+			$defaults = $this->extra_field_opts();
+			$step     = $defaults['step'] ?? 1;
 		}
 
 		$input_html .= ' min="' . esc_attr( $min ) . '" max="' . esc_attr( $max ) . '" step="' . esc_attr( $step ) . '"';
@@ -1634,9 +1829,9 @@ DEFAULT_HTML;
 
 		if ( isset( $args['errors'][ 'field' . $args['field_id'] ] ) && ! $custom_error_fields ) {
 			if ( $error_comes_first ) {
-				array_unshift( $describedby, 'frm_error_' . $args['html_id'] );
+				array_unshift( $describedby, 'frm_error_' . ( $args['error_html_id'] ?? $args['html_id'] ) );
 			} else {
-				array_push( $describedby, 'frm_error_' . $args['html_id'] );
+				array_push( $describedby, 'frm_error_' . ( $args['error_html_id'] ?? $args['html_id'] ) );
 			}
 		}
 
@@ -1661,6 +1856,59 @@ DEFAULT_HTML;
 		}
 
 		$this->aria_description_added = true;
+	}
+
+	/**
+	 * A "Hidden" label position still renders a real <label for>, only
+	 * visually hidden (visibility:hidden, to keep a sibling field's label
+	 * the same row height) - that also drops it from the accessibility
+	 * tree, so the input needs an explicit aria-labelledby (IBM Equal
+	 * Access input_label_exists). Skipped for field types with no
+	 * `for`-associated label (`$has_for_label = false`), which already get
+	 * an equivalent aria-labelledby from multiple_input_html()'s wrapper.
+	 *
+	 * Called unconditionally from include_front_field_input() rather than
+	 * nested inside add_aria_description_to_inputs()'s own callback, since
+	 * that method is designed to be skippable by an overriding field type
+	 * (e.g. Pro's FrmProFieldText::front_field_input() already calling
+	 * add_aria_description() itself and setting aria_description_added,
+	 * which short-circuits add_aria_description_to_inputs() entirely).
+	 *
+	 * @since 7.0
+	 *
+	 * @param array  $args Rendering context. May include `html_id`.
+	 * @param string $input_html Full field HTML, passed by reference.
+	 *
+	 * @return void
+	 */
+	protected function maybe_add_aria_labelledby_for_hidden_label( $args, &$input_html ) {
+		if ( '' === $input_html || ! $this->has_for_label || 'hidden' !== $this->get_field_column( 'label' ) ) {
+			return;
+		}
+
+		// Match the label's own id, which is always derived via html_id() (the frm_field_get_html_id filter), not FrmFieldsHelper::get_html_id()'s frm_field_html_id filter.
+		if ( empty( $args['html_id'] ) ) {
+			$args['html_id'] = $this->html_id();
+		}
+
+		$html_id = $args['html_id'];
+
+		$input_html = preg_replace_callback(
+			'/<(input|select|textarea)\b([^>]*?)(\s*\/?)>/i',
+			function ( $matches ) use ( $html_id ) {
+				if ( 'input' === strtolower( $matches[1] ) && preg_match( '/type\s*=\s*["\']hidden["\']/i', $matches[2] ) ) {
+					return $matches[0];
+				}
+
+				// aria-labelledby wins over aria-label per the accname spec - don't silently override an existing aria-label.
+				if ( preg_match( '/aria-label(?:ledby)?=/', $matches[2] ) ) {
+					return $matches[0];
+				}
+
+				return '<' . $matches[1] . $matches[2] . ' aria-labelledby="' . esc_attr( $html_id ) . '_label"' . $matches[3] . '>';
+			},
+			$input_html
+		);
 	}
 
 	/**

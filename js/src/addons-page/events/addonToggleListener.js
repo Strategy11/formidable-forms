@@ -36,6 +36,11 @@ const onAddonToggleClick = event => {
 	}
 
 	const addonToggle = event.currentTarget;
+
+	if ( addonToggle.querySelector( 'input[disabled]' ) ) {
+		return;
+	}
+
 	const addon = addonToggle.closest( '.frm-card-item' );
 
 	const actionMap = new Map( [

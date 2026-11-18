@@ -1,10 +1,11 @@
 <?php
 
+/**
+ * @covers FrmCurrencyHelper
+ */
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmCurrencyHelper::class )]
 class test_FrmCurrencyHelper extends FrmUnitTest {
 
-	/**
-	 * @covers FrmCurrencyHelper::get_currency
-	 */
 	public function test_get_currency() {
 		// Do a lower case check.
 		$usd = FrmCurrencyHelper::get_currency( 'usd' );

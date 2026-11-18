@@ -104,12 +104,14 @@
 	</rule>
 
 	<!-- Add some rules from the Slevomat Coding Standard -->
-	<rule ref="SlevomatCodingStandard.PHP.UselessParentheses" />
+	<!-- Formidable wrapper around SlevomatCodingStandard.PHP.UselessParentheses, without its ternary condition fixer bug. -->
+	<rule ref="Formidable.CodeAnalysis.RemoveUselessParentheses" />
 	<rule ref="SlevomatCodingStandard.Variables.UselessVariable" />
 
 	<rule ref="SlevomatCodingStandard.Files.LineLength">
 		<properties>
 			<property name="lineLengthLimit" value="180" />
+			<property name="ignoreComments" value="true"/>
 		</properties>
 		<exclude-pattern>views/*</exclude-pattern>
 		<exclude-pattern>css/*</exclude-pattern>

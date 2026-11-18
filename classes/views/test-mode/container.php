@@ -77,17 +77,21 @@ if ( ! empty( $should_show_warning ) ) {
 			FrmAppHelper::tooltip_icon( __( 'Selected form actions will be triggered when this test entry is submitted', 'formidable' ) );
 			?>
 			<div id="frm_testmode_enabled_form_actions_container" class="frm-fields">
-				<select id="frm_testmode_enabled_form_actions" multiple class="frm_multiselect" name="frm_testmode[enabled_form_actions][]" <?php disabled( ! $enabled ); ?>>
-				<?php
-				foreach ( $form_actions as $form_action ) {
-					?>
-					<option value="<?php echo esc_attr( $form_action->ID ); ?>" <?php selected( in_array( $form_action->ID, $enabled_form_actions, true ), true ); ?>>
-						<?php echo esc_html( $form_action->post_title ) . ' (' . absint( $form_action->ID ) . ')'; ?>
-					</option>
+				<?php if ( $form_actions ) { ?>
+					<select id="frm_testmode_enabled_form_actions" multiple class="frm_multiselect" name="frm_testmode[enabled_form_actions][]" <?php disabled( ! $enabled ); ?>>
 					<?php
-				}
-				?>
-				</select>
+					foreach ( $form_actions as $form_action ) {
+						?>
+						<option value="<?php echo esc_attr( $form_action->ID ); ?>" <?php selected( in_array( $form_action->ID, $enabled_form_actions, true ), true ); ?>>
+							<?php echo esc_html( $form_action->post_title ) . ' (' . absint( $form_action->ID ) . ')'; ?>
+						</option>
+						<?php
+					}
+					?>
+					</select>
+				<?php } else { ?>
+					<span class="frm-testmode-no-actions"><?php echo esc_html_x( 'None', 'no form actions to enable', 'formidable' ); ?></span>
+				<?php }//end if ?>
 
 				<?php
 				/**
@@ -102,6 +106,14 @@ if ( ! empty( $should_show_warning ) ) {
 			</div>
 		</label>
 	</div>
+	<?php
+	/**
+	 * Render add-on controls inside the Test Mode container.
+	 *
+	 * @param array $form_actions The form's configured actions.
+	 */
+	do_action( 'frm_test_mode_extra_controls', $form_actions );
+	?>
 	<hr>
 	<div>
 		<label id="frm_quick_jump_label"><?php esc_html_e( 'Quick jump to page:', 'formidable' ); ?></label>
@@ -136,7 +148,7 @@ if ( ! empty( $should_show_warning ) ) {
 		<?php esc_html_e( 'Reset', 'formidable' ); ?>
 	</a>
 	<?php if ( ! empty( $should_show_upsell ) ) { ?>
-		<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'test-mode' ) ); ?>" class="frm-gradient" id="frm_testmode_upgrade">
+		<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'test-mode' ) ); ?>" class="frm-gradient" id="frm_testmode_upgrade" target="_blank" rel="noopener">
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm_speaker_icon', array( 'aria-hidden' => 'true' ) ); ?>
 			<?php esc_html_e( 'Unlock these powerful, time saving testing features by upgrading!', 'formidable' ); ?>
 		</a>

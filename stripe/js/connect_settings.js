@@ -1,8 +1,8 @@
 ( function() {
 	function setupStripeConnectListener() {
-		onclickPreventDefault( '#frm_disconnect_stripe', handleStripeDisconnectClick );
-		onclickPreventDefault( '#frm_reauth_stripe', handleStripeReauthClick );
-		onclickPreventDefault( '#frm_connect_with_oauth', handleConnectWithOauth );
+		onclickPreventDefault( '.frm_disconnect_stripe', handleStripeDisconnectClick );
+		onclickPreventDefault( '.frm_reauth_stripe', handleStripeReauthClick );
+		onclickPreventDefault( '.frm_connect_with_oauth', handleConnectWithOauth );
 		renderStripeConnectSettingsButton();
 	}
 

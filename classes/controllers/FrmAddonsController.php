@@ -18,11 +18,6 @@ class FrmAddonsController {
 	/**
 	 * @var string
 	 */
-	private static $request_addon_url;
-
-	/**
-	 * @var string
-	 */
 	protected static $plugin;
 
 	/**
@@ -37,8 +32,6 @@ class FrmAddonsController {
 		if ( ! FrmAppHelper::is_admin_page( 'formidable-addons' ) ) {
 			return;
 		}
-
-		self::$request_addon_url = 'https://connect.formidableforms.com/add-on-request/';
 
 		add_action( 'admin_enqueue_scripts', self::class . '::enqueue_assets', 15 );
 		add_filter( 'frm_show_footer_links', '__return_false' );
@@ -87,8 +80,7 @@ class FrmAddonsController {
 	 */
 	private static function get_js_variables() {
 		return array(
-			'proIsIncluded'   => FrmAppHelper::pro_is_included(),
-			'addonRequestURL' => self::$request_addon_url,
+			'proIsIncluded' => FrmAppHelper::pro_is_included(),
 		);
 	}
 
@@ -100,10 +92,17 @@ class FrmAddonsController {
 			return;
 		}
 
-		$label = __( 'Add-Ons', 'formidable' );
+		$label = __( 'Add-Ons/Boosts', 'formidable' );
 		$label = '<span style="color:#3FCA89">' . esc_html( $label ) . '</span>';
 
-		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Add-Ons', 'formidable' ), $label, 'frm_view_forms', 'formidable-addons', 'FrmAddonsController::list_addons' );
+		add_submenu_page(
+			'formidable',
+			'Formidable | ' . __( 'Add-Ons/Boosts', 'formidable' ),
+			$label,
+			'frm_view_forms',
+			'formidable-addons',
+			'FrmAddonsController::list_addons'
+		);
 
 		// Remove default created subpage, make the page with highest priority as default.
 		remove_submenu_page( 'formidable', 'formidable' );
@@ -138,12 +137,11 @@ class FrmAddonsController {
 	public static function list_addons() {
 		FrmAppHelper::include_svg();
 
-		$view_path         = FrmAppHelper::plugin_path() . '/classes/views/addons/';
-		$installed_addons  = apply_filters( 'frm_installed_addons', array() );
-		$addons            = self::get_api_addons();
-		$errors            = array();
-		$license_type      = '';
-		$request_addon_url = self::$request_addon_url;
+		$view_path        = FrmAppHelper::plugin_path() . '/classes/views/addons/';
+		$installed_addons = apply_filters( 'frm_installed_addons', array() );
+		$addons           = self::get_api_addons();
+		$errors           = array();
+		$license_type     = '';
 
 		if ( isset( $addons['error'] ) ) {
 			$api          = new FrmFormApi();
@@ -163,7 +161,8 @@ class FrmAddonsController {
 				'excerpt'    => 'Create calculators, surveys, smart forms, and data-driven applications. Build directories, real estate listings, job boards, and much more.',
 			),
 		);
-		$addons = $pro + $addons;
+		$addons = $pro + self::get_built_in_addons() + $addons;
+		$addons = self::move_addon_after( $addons, 'stripe', 'stripe-payments' );
 		self::prepare_addons( $addons );
 
 		$pricing = FrmAppHelper::admin_upgrade_link( 'addons' );
@@ -172,6 +171,161 @@ class FrmAddonsController {
 		$categories = self::$categories;
 
 		include $view_path . 'index.php';
+	}
+
+	/**
+	 * Get the payment gateways that ship inside Lite so they render as active add-on cards.
+	 *
+	 * These are not installable plugins. The `built_in` flag gives them an active
+	 * status, keeps them unlocked, and limits the card footer to the docs link.
+	 *
+	 * @since 7.0
+	 *
+	 * @return array<string,array<string,mixed>>
+	 */
+	protected static function get_built_in_addons() {
+		return array(
+			'stripe-payments' => array(
+				'slug'       => 'stripe-payments',
+				'title'      => 'Stripe',
+				'built_in'   => true,
+				'categories' => array( 'Ecommerce' ),
+				'docs'       => 'knowledgebase/stripe/',
+				'excerpt'    => 'Any Formidable forms on your site can accept credit card payments without users ever leaving your site.',
+			),
+			'square-payments' => array(
+				'slug'       => 'square-payments',
+				'title'      => 'Square',
+				'built_in'   => true,
+				'categories' => array( 'Ecommerce' ),
+				'docs'       => 'knowledgebase/square/',
+				'excerpt'    => 'Take one-time payments with Square, with support for Apple Pay and Google Pay.',
+			),
+			'paypal-commerce' => array(
+				'slug'       => 'paypal-commerce',
+				'title'      => 'PayPal Commerce',
+				'built_in'   => true,
+				'categories' => array( 'Ecommerce' ),
+				'docs'       => 'knowledgebase/formidable-paypal/',
+				'excerpt'    => 'Collect instant payments and recurring payments with PayPal Commerce on any Formidable form.',
+			),
+		);
+	}
+
+	/**
+	 * Move an add-on to display immediately after another one.
+	 *
+	 * Used to keep "Stripe Pro" next to the always-on "Stripe" card, since
+	 * the API add-ons are otherwise appended after all built-in gateways.
+	 * Add-ons are matched by their normalized slug rather than their array
+	 * key, because API-sourced add-ons are keyed by a numeric download id
+	 * with the real slug in their `slug` field.
+	 *
+	 * @since 7.0
+	 *
+	 * @param array<int|string,array<string,mixed>> $addons     The full addons array, keyed by slug or id.
+	 * @param string                                $slug       Normalized slug of the add-on to move.
+	 * @param string                                $after_slug Normalized slug of the add-on it should follow.
+	 *
+	 * @return array<int|string,array<string,mixed>>
+	 */
+	protected static function move_addon_after( $addons, $slug, $after_slug ) {
+		$target_id = self::find_addon_id_by_slug( $addons, $slug );
+		$after_id  = self::find_addon_id_by_slug( $addons, $after_slug );
+
+		if ( null === $target_id || null === $after_id ) {
+			return $addons;
+		}
+
+		$addon = $addons[ $target_id ];
+		unset( $addons[ $target_id ] );
+
+		$reordered = array();
+
+		foreach ( $addons as $id => $value ) {
+			$reordered[ $id ] = $value;
+
+			if ( $id === $after_id ) {
+				$reordered[ $target_id ] = $addon;
+			}
+		}
+
+		return $reordered;
+	}
+
+	/**
+	 * Find an add-on's array key by its normalized slug.
+	 *
+	 * Mirrors the slug derivation in prepare_addons(): a numeric key names
+	 * an API-sourced add-on whose real slug lives in its `slug` field,
+	 * while a string key (built-in gateways, the fallback list) already is
+	 * the slug.
+	 *
+	 * @since 7.0
+	 *
+	 * @param array<int|string,array<string,mixed>> $addons The full addons array, keyed by slug or id.
+	 * @param string                                $slug   Normalized slug to find.
+	 *
+	 * @return int|string|null
+	 */
+	protected static function find_addon_id_by_slug( $addons, $slug ) {
+		foreach ( $addons as $id => $addon ) {
+			$addon_slug = is_numeric( $id )
+			? str_replace( array( '-wordpress-plugin', '-wordpress' ), '', $addon['slug'] )
+			: $id;
+
+			if ( $addon_slug === $slug ) {
+				return $id;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Override how an add-on is presented on the Add-Ons page.
+	 *
+	 * The built-in gateways cover base payment processing, so the add-ons that
+	 * extend them are presented as their Pro/Legacy tiers until the API reflects
+	 * it. Boost excerpts use temporary defaults when the API has none. Unmapped Boosts
+	 * remain listed without a description paragraph when no excerpt is available.
+	 *
+	 * @since 7.0
+	 *
+	 * @param array  $addon The addon array that will be modified by reference.
+	 * @param string $slug  The addon slug.
+	 *
+	 * @return void
+	 */
+	protected static function override_addon_display( &$addon, $slug ) {
+		$overrides = array(
+			'stripe'          => array(
+				'display_name' => 'Stripe Pro',
+			),
+			'paypal-standard' => array(
+				'display_name' => 'PayPal Legacy',
+			),
+		);
+
+		if ( isset( $overrides[ $slug ] ) ) {
+			$addon = array_merge( $addon, $overrides[ $slug ] );
+		}
+
+		if ( ! FrmAddonsHelper::is_boost( $addon ) || ! empty( $addon['excerpt'] ) ) {
+			return;
+		}
+
+		$excerpts = array(
+			'formidable-advanced-modals' => __( 'Open forms and content in smart popups with various trigger options.', 'formidable' ),
+			'formidable-color-picker'    => __( 'Select custom or pre-set colors, including optional transparency', 'formidable' ),
+			'formidable-bulk-edit'       => __( 'Update multiple entries at once, no CSV export/import needed.', 'formidable' ),
+			'formidable-celebrations'    => __( 'Reward submissions with emoji fountains and celebratory sounds.', 'formidable' ),
+			'formidable-tooltips'        => __( 'Add customized hover-and-tap help to any field.', 'formidable' ),
+		);
+
+		if ( isset( $excerpts[ $slug ] ) ) {
+			$addon['excerpt'] = $excerpts[ $slug ];
+		}
 	}
 
 	/**
@@ -192,6 +346,8 @@ class FrmAddonsController {
 				'case_lower'  => true,
 			)
 		);
+
+		$plans[] = 'boosts';
 
 		// Extract the elements to move
 		foreach ( $plans as $plan ) {
@@ -242,15 +398,18 @@ class FrmAddonsController {
 	 * @return void
 	 */
 	protected static function set_categories( &$addon ) {
-		if ( ! isset( $addon['categories'] ) ) {
+		$is_boost = FrmAddonsHelper::is_boost( $addon );
+
+		if ( ! $is_boost && ! isset( $addon['categories'] ) ) {
 			return;
 		}
 
+		$categories              = $is_boost ? array( __( 'Boosts', 'formidable' ) ) : $addon['categories'];
 		$addon['category-slugs'] = array();
 
-		foreach ( $addon['categories'] as $category ) {
+		foreach ( $categories as $category ) {
 			$category      = FrmFormsHelper::convert_legacy_package_names( $category );
-			$category_slug = sanitize_title( $category );
+			$category_slug = $is_boost ? 'boosts' : sanitize_title( $category );
 
 			// Add the slug to the new array.
 			$addon['category-slugs'][] = $category_slug;
@@ -294,7 +453,7 @@ class FrmAddonsController {
 		}
 
 		foreach ( $addons as $k => $addon ) {
-			if ( empty( $addon['excerpt'] ) && $k !== 'error' ) {
+			if ( $k !== 'error' && empty( $addon['excerpt'] ) && ! FrmAddonsHelper::is_boost( $addon ) ) {
 				unset( $addons[ $k ] );
 			}
 		}
@@ -310,7 +469,15 @@ class FrmAddonsController {
 	 * @return int Count of addons.
 	 */
 	public static function get_addons_count() {
-		return count( self::get_api_addons() );
+		$addons = array_filter(
+			self::get_api_addons(),
+			function ( $addon ) {
+				// Boosts are purchased separately, so they are not counted with the add-ons a license unlocks.
+				return ! is_array( $addon ) || ! FrmAddonsHelper::is_boost( $addon );
+			}
+		);
+
+		return count( $addons );
 	}
 
 	/**
@@ -491,7 +658,9 @@ class FrmAddonsController {
 	/**
 	 * Determine the license status for payment fee decisions.
 	 *
-	 * Mirrors the API's determine_status_from_license_details logic.
+	 * Mirrors determine_status_from_license_details in the Stripe Connect service,
+	 * including its 2016-04-26 grandfathered cutoff. Square and PayPal Commerce use a
+	 * later cutoff, so read their fees through payment_fees_apply instead.
 	 *
 	 * @since 6.31
 	 *
@@ -506,14 +675,14 @@ class FrmAddonsController {
 
 		$error = $version_info['error'] ?? array();
 
-		if ( is_array( $error ) ) {
-			$code = $error['code'] ?? '';
+		if ( is_array( $error ) && 'expired' === ( $error['code'] ?? '' ) ) {
+			return 'expired';
+		}
 
-			if ( 'expired' === $code ) {
-				return 'expired';
-			}
+		if ( self::is_grandfathered_license() ) {
+			$expires = self::get_grandfathered_expiration( $version_info );
 
-			if ( 'grandfathered' === $code && isset( $error['expires'] ) && gmdate( 'Y-m-d', $error['expires'] ) < '2016-04-26' ) {
+			if ( $expires && gmdate( 'Y-m-d', $expires ) < '2016-04-26' ) {
 				return 'free';
 			}
 		}
@@ -523,6 +692,81 @@ class FrmAddonsController {
 		}
 
 		return 'free';
+	}
+
+	/**
+	 * Check if a connect service charges its per-transaction fee for this license.
+	 *
+	 * Square and PayPal Commerce launched long after lifetime licenses stopped being
+	 * sold, so their services charge every grandfathered license. Stripe's predates
+	 * them and exempts most of them, which get_payment_license_status mirrors.
+	 *
+	 * @since 6.34
+	 *
+	 * @param string $service The connect service: 'stripe', 'square', or 'paypal'.
+	 *
+	 * @return bool
+	 */
+	public static function payment_fees_apply( $service ) {
+		if ( 'active' !== self::get_payment_license_status() ) {
+			return true;
+		}
+
+		if ( in_array( $service, array( 'square', 'paypal' ), true ) ) {
+			return self::is_grandfathered_license();
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if the primary license is grandfathered.
+	 *
+	 * The API reports this on the Pro add-on itself, the same place
+	 * FrmProAddonsController::license_type reads it from. Older responses put it
+	 * in the top level error instead, so check both.
+	 *
+	 * @since 6.34
+	 *
+	 * @return bool
+	 */
+	public static function is_grandfathered_license() {
+		$version_info = self::get_primary_license_info();
+
+		if ( ! $version_info ) {
+			return false;
+		}
+
+		$error = $version_info['error'] ?? array();
+
+		if ( is_array( $error ) && 'grandfathered' === ( $error['code'] ?? '' ) ) {
+			return true;
+		}
+
+		$pro = self::get_pro_from_addons( $version_info );
+
+		return 'grandfathered' === ( $pro['code'] ?? '' );
+	}
+
+	/**
+	 * Get the expiration timestamp reported alongside a grandfathered license.
+	 *
+	 * @since 6.34
+	 *
+	 * @param array $version_info The license info from get_primary_license_info.
+	 *
+	 * @return int
+	 */
+	private static function get_grandfathered_expiration( $version_info ) {
+		$error = $version_info['error'] ?? array();
+
+		if ( is_array( $error ) && ! empty( $error['expires'] ) ) {
+			return (int) $error['expires'];
+		}
+
+		$pro = self::get_pro_from_addons( $version_info );
+
+		return (int) ( $pro['expires'] ?? 0 );
 	}
 
 	/**
@@ -899,6 +1143,13 @@ class FrmAddonsController {
 				}
 			}
 
+			self::override_addon_display( $addon, $slug );
+
+			if ( FrmAddonsHelper::is_boost( $addon ) ) {
+				$file_name       = self::get_boost_plugin_file( $addon, $file_name );
+				$addon['plugin'] = $file_name;
+			}
+
 			$addon['installed'] = self::is_installed( $file_name );
 
 			if ( 'highrise' === $slug && ! $addon['installed'] ) {
@@ -941,6 +1192,48 @@ class FrmAddonsController {
 
 			$addons[ $id ] = $addon;
 		}//end foreach
+	}
+
+	/**
+	 * Find the plugin file of an installed Boost.
+	 *
+	 * The plugin path the API sends for a Boost does not always match the folder
+	 * it is installed in. When it does not, match the installed copy by its
+	 * updater download id (active Boosts), then by its plugin name (inactive Boosts).
+	 *
+	 * @since 7.1
+	 *
+	 * @param array  $addon     The Boost data from the API.
+	 * @param string $file_name The plugin file the API sends for the Boost.
+	 *
+	 * @return string The installed plugin file, or the API plugin file when the Boost is not installed.
+	 */
+	private static function get_boost_plugin_file( $addon, $file_name ) {
+		if ( self::is_installed( $file_name ) ) {
+			return $file_name;
+		}
+
+		if ( ! empty( $addon['id'] ) ) {
+			foreach ( apply_filters( 'frm_installed_addons', array() ) as $installed_addon ) {
+				if ( $installed_addon instanceof FrmAddon && $installed_addon->plugin_folder && (string) $installed_addon->download_id === (string) $addon['id'] ) {
+					return $installed_addon->plugin_folder;
+				}
+			}
+		}
+
+		if ( empty( $addon['title'] ) ) {
+			return $file_name;
+		}
+
+		$plugin_names = array( 'Formidable ' . $addon['title'], $addon['title'] );
+
+		foreach ( self::get_plugins() as $plugin_file => $plugin_data ) {
+			if ( in_array( $plugin_data['Name'] ?? '', $plugin_names, true ) ) {
+				return $plugin_file;
+			}
+		}
+
+		return $file_name;
 	}
 
 	/**
@@ -1001,7 +1294,12 @@ class FrmAddonsController {
 	 * @return void
 	 */
 	protected static function set_addon_status( &$addon ) {
-		if ( ! empty( $addon['activate_url'] ) ) {
+		if ( ! empty( $addon['built_in'] ) ) {
+			$addon['status'] = array(
+				'type'  => 'active',
+				'label' => __( 'Active', 'formidable' ),
+			);
+		} elseif ( ! empty( $addon['activate_url'] ) ) {
 			$addon['status'] = array(
 				'type'  => 'installed',
 				'label' => __( 'Installed', 'formidable' ),
@@ -1016,7 +1314,7 @@ class FrmAddonsController {
 				'type'  => 'not-installed',
 				'label' => __( 'Not Installed', 'formidable' ),
 			);
-		}
+		}//end if
 	}
 
 	/**
@@ -1380,11 +1678,18 @@ class FrmAddonsController {
 	 * @return string
 	 */
 	public static function connect_link() {
+		$user_id = get_current_user_id();
+
+		if ( ! self::user_can_connect_account( $user_id ) ) {
+			return '';
+		}
+
 		$auth = get_option( 'frm_connect_token' );
 
-		if ( ! $auth ) {
-			$auth = hash( 'sha512', wp_rand() );
+		if ( ! $auth || ! self::user_can_connect_account( (int) get_option( 'frm_connect_user' ) ) ) {
+			$auth = hash( 'sha512', wp_generate_password( 64, true, true ) );
 			update_option( 'frm_connect_token', $auth, false );
+			update_option( 'frm_connect_user', $user_id, false );
 		}
 
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title', 'formidable-settings' );
@@ -1403,6 +1708,23 @@ class FrmAddonsController {
 	}
 
 	/**
+	 * Check whether a user can authorize the account connection.
+	 *
+	 * @since 7.0
+	 *
+	 * @param int $user_id The user authorizing the account connection.
+	 *
+	 * @return bool
+	 */
+	private static function user_can_connect_account( $user_id ) {
+		if ( ! $user_id || ! user_can( $user_id, 'activate_plugins' ) ) {
+			return false;
+		}
+
+		return user_can( $user_id, 'install_plugins' ) || FrmAppHelper::pro_is_included() || self::is_installed( 'formidable-pro/formidable-pro.php' );
+	}
+
+	/**
 	 * Check the auth value for install permission.
 	 *
 	 * @since 4.08
@@ -1410,12 +1732,17 @@ class FrmAddonsController {
 	 * @return bool
 	 */
 	public static function can_install_addon_api() {
+		// The external callback uses the permissions of the user who initiated the connection.
+		if ( ! self::user_can_connect_account( (int) get_option( 'frm_connect_user' ) ) ) {
+			return false;
+		}
+
 		// Verify params present (auth & download link).
 		$post_auth = FrmAppHelper::get_param( 'token', '', 'request', 'sanitize_text_field' );
 		$post_url  = FrmAppHelper::get_param( 'file_url', '', 'request', 'sanitize_text_field' );
 
 		// The download link is not required if already installed.
-		$is_installed = FrmAppHelper::pro_is_included();
+		$is_installed = FrmAppHelper::pro_is_included() || self::is_installed( 'formidable-pro/formidable-pro.php' );
 		$file_missing = ! $is_installed && ! $post_url;
 
 		if ( ! $post_auth || $file_missing ) {
@@ -1435,15 +1762,24 @@ class FrmAddonsController {
 	 * @return array
 	 */
 	public static function install_addon_api() {
-		self::$plugin = FrmAppHelper::get_param( 'file_url', '', 'request', 'esc_url_raw' );
+		self::$plugin        = FrmAppHelper::get_param( 'file_url', '', 'request', 'esc_url_raw' );
+		$can_install_plugins = user_can( (int) get_option( 'frm_connect_user' ), 'install_plugins' );
 
 		// Delete so cannot replay.
 		delete_option( 'frm_connect_token' );
+		delete_option( 'frm_connect_user' );
 
 		// It's already installed and active.
 		$active = self::activate_plugin( 'formidable-pro/formidable-pro.php', false, false, true );
 
 		if ( is_wp_error( $active ) ) {
+			if ( ! $can_install_plugins ) {
+				return array(
+					'success' => false,
+					'message' => __( 'You do not have permission to install plugins.', 'formidable' ),
+				);
+			}
+
 			$response = self::maybe_download_and_activate();
 
 			if ( is_array( $response ) ) {
@@ -1574,7 +1910,12 @@ class FrmAddonsController {
 			$upgrade_link .= '&utm_content=' . $addon['slug'];
 		}
 
-		if ( $addon && isset( $addon['categories'] ) && in_array( 'Solution', $addon['categories'], true ) ) {
+		if ( $addon && FrmAddonsHelper::is_boost( $addon ) ) {
+			$text         = ! empty( $atts['text'] ) ? $atts['text'] : __( 'Get Boost', 'formidable' );
+			$upgrade_link = ! empty( $addon['buy_url'] ) ? $addon['buy_url'] : ( $addon['link'] ?? $upgrade_link );
+			self::prepare_addon_link( $upgrade_link );
+			$upgrade_link = add_query_arg( 'utm_content', $addon['slug'], $upgrade_link );
+		} elseif ( $addon && isset( $addon['categories'] ) && in_array( 'Solution', $addon['categories'], true ) ) {
 			// Solutions will go to a separate page.
 			$upgrade_link = FrmAppHelper::admin_upgrade_link( 'addons', $addon['link'] );
 		}
@@ -1584,9 +1925,11 @@ class FrmAddonsController {
 		if ( ! str_contains( $class, 'frm-button' ) ) {
 			$class .= ' frm-button-secondary frm-button-sm';
 		}
+
+		$button_class = $addon && FrmAddonsHelper::is_boost( $addon ) ? 'frm-boost-buy ' : 'install-now button ';
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
-		<a class="install-now button <?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
+		<a class="<?php echo esc_attr( $button_class . $class ); ?>" href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank" rel="noopener" aria-label="<?php echo esc_attr( $text ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 			<?php echo esc_html( $text ); ?>
 		</a>
 		<?php

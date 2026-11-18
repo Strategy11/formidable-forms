@@ -56,17 +56,19 @@ class FrmUsageController {
 	/**
 	 * Adds once weekly to the existing schedules.
 	 *
-	 * @since 3.06.04
+	 * WordPress core registers an identical 'weekly' schedule of its own, so this adds nothing.
+	 * The 'cron_schedules' registration is gone, and with it the translated label that made
+	 * this run before the text domain loaded.
 	 *
-	 * @param array $schedules Schedules.
+	 * @since 3.06.04
+	 * @deprecated 6.35
+	 *
+	 * @param array $schedules Unused. The registered cron schedules, keyed by schedule name.
 	 *
 	 * @return array
 	 */
 	public static function add_schedules( $schedules = array() ) {
-		$schedules['weekly'] = array(
-			'interval' => DAY_IN_SECONDS * 7,
-			'display'  => __( 'Once Weekly', 'formidable' ),
-		);
+		_deprecated_function( __METHOD__, '6.35' );
 		return $schedules;
 	}
 

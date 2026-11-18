@@ -22,7 +22,11 @@ class FrmStrpLiteConnectApiAdapter {
 	 * @return bool
 	 */
 	public static function cancel_subscription( $sub_id ) {
-		if ( current_user_can( 'administrator' ) ) {
+		if ( ! FrmTransLiteSubscription::current_user_can_cancel( $sub_id, 'stripe' ) ) {
+			return false;
+		}
+
+		if ( FrmAppHelper::current_user_can( 'frm_edit_entries' ) || current_user_can( 'administrator' ) ) {
 			$customer_id = false;
 		} else {
 			$customer = self::get_customer_by_id( get_current_user_id() );
@@ -35,6 +39,22 @@ class FrmStrpLiteConnectApiAdapter {
 		}
 
 		return FrmStrpLiteConnectHelper::cancel_subscription( $sub_id, $customer_id );
+	}
+
+	/**
+	 * Cancel a subscription without checking that it belongs to the current user.
+	 * Use this when there is no logged in user, like when a webhook event is processed.
+	 * The customer check in self::cancel_subscription would always fail there because the current user ID is 0.
+	 *
+	 * @since 6.35
+	 *
+	 * @param string $sub_id
+	 * @param string $mode   'auto', 'live', or 'test'.
+	 *
+	 * @return bool
+	 */
+	public static function cancel_subscription_without_customer_check( $sub_id, $mode = 'auto' ) {
+		return FrmStrpLiteConnectHelper::cancel_subscription( $sub_id, false, $mode );
 	}
 
 	/**
@@ -197,11 +217,12 @@ class FrmStrpLiteConnectApiAdapter {
 	/**
 	 * @param string $intent_id
 	 * @param array  $data
+	 * @param string $mode      'auto', 'live', or 'test'.
 	 *
 	 * @return mixed
 	 */
-	public static function update_intent( $intent_id, $data ) {
-		return FrmStrpLiteConnectHelper::update_intent( $intent_id, $data );
+	public static function update_intent( $intent_id, $data, $mode = 'auto' ) {
+		return FrmStrpLiteConnectHelper::update_intent( $intent_id, $data, $mode );
 	}
 
 	/**

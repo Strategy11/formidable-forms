@@ -1,4 +1,6 @@
 ( function() {
+	const SETUP_INTENT_PREFIX = 'seti_';
+	let stripeRequiresHttps = false;
 	let thisForm = false;
 	let formID = 0;
 	let event = false;
@@ -8,6 +10,8 @@
 	let isStripeLink = false;
 	let linkAuthenticationElementIsComplete = false;
 	let stripeLinkElementIsComplete = false;
+	let linkSubmitController = false;
+	let priceChangedTimer = 0;
 
 	const triggerCustomEvent = function( el, eventName, data ) {
 		frmFrontForm.triggerCustomEvent( el, eventName, data );
@@ -22,6 +26,10 @@
 
 		if ( shouldProcessForm() ) {
 			e.preventDefault();
+			if ( stripeRequiresHttps ) {
+				showHttpsError();
+				return;
+			}
 			event = e;
 			processForm();
 			return;
@@ -107,7 +115,13 @@
 	function stripeLinkSubmit( object, meta ) {
 		object.classList.add( 'frm_trigger_event_on_submit', 'frm_ajax_submit' );
 
-		object.addEventListener( 'frmSubmitEvent', confirmPayment );
+		// Replace the previous listener even when validation did not trigger a submit event.
+		if ( linkSubmitController ) {
+			linkSubmitController.abort();
+		}
+
+		linkSubmitController = new AbortController();
+		object.addEventListener( 'frmSubmitEvent', confirmPayment, { once: true, signal: linkSubmitController.signal } );
 		running = 0;
 		submitForm();
 
@@ -116,12 +130,7 @@
 				return;
 			}
 
-			window.onpageshow = function( event ) {
-				// Force the form to reload on back button after submitting.
-				if ( event.persisted || ( window.performance && window.performance.getEntriesByType( 'navigation' )[ 0 ].type === 'back_forward' ) ) {
-					window.location.reload();
-				}
-			};
+			reloadOnBackForward();
 
 			let params = {
 				elements,
@@ -133,6 +142,11 @@
 			params = addBillingDetailsToParams( params, meta );
 
 			const confirmFunction = isRecurring() ? 'confirmSetup' : 'confirmPayment';
+			const billingDetails = params.confirmParams.payment_method_data.billing_details;
+
+			if ( 'confirmPayment' === confirmFunction && billingDetails.address?.line1?.trim() && billingDetails.name?.trim() ) {
+				params.confirmParams.shipping = billingDetails;
+			}
 
 			frmstripe[ confirmFunction ]( params ).then( handleConfirmPromise );
 		}
@@ -152,12 +166,9 @@
 
 		function handleConfirmPaymentError( error ) {
 			running--;
-			enableSubmit();
 
 			const fieldset = jQuery( object ).find( '.frm_form_field' );
 			fieldset.removeClass( 'frm_doing_ajax' );
-
-			object.classList.remove( 'frm_loading_form' );
 
 			// Don't show validation_error here as those are added automatically to the email and postal code fields, etc.
 			if ( 'card_error' === error.type || 'invalid_request_error' === error.type || 'form_submit_error' === error.type ) {
@@ -166,6 +177,14 @@
 					cardErrors.textContent = error.message;
 				}
 			}
+
+			// Keep submit disabled until the failed records are cleaned up.
+			// Otherwise a fast retry could create a payment row that the cleanup then marks as failed.
+			const afterCleanup = () => {
+				enableSubmit();
+				object.classList.remove( 'frm_loading_form' );
+			};
+			checkFailedPayment( object, error ).then( afterCleanup, afterCleanup );
 		}
 
 		/**
@@ -510,15 +529,41 @@
 			}
 		}
 		if ( run ) {
+			clearTimeout( priceChangedTimer );
+			priceChangedTimer = setTimeout( updateIntentAmount( field ), 600 );
+		}
+	}
+
+	/**
+	 * Get a callback that sends the current form values so the intent amount can be updated.
+	 * The call is skipped when the form has no intents to update.
+	 *
+	 * @since 6.35
+	 *
+	 * @param {Element} field The price field that changed.
+	 * @return {Function} Callback for the debounce timer.
+	 */
+	function updateIntentAmount( field ) {
+		return function() {
+			const form = jQuery( field ).closest( 'form' );
+			const formId = form.find( '[name="form_id"]' ).val();
+
+			if ( ! form.find( `[name^="frmintent${ formId }"]` ).length ) {
+				// There are no intents to update.
+				return;
+			}
+
 			const data = {
 				action: 'frm_strp_amount',
-				form: JSON.stringify( jQuery( field ).closest( 'form' ).serializeArray() ),
+				form: JSON.stringify( form.serializeArray() ),
 				nonce: frm_stripe_vars.nonce
 			};
-			postAjax( data, function() {
-				// Amount has been conditionally updated.
+			postAjax( data, response => {
+				if ( response?.success && response.data?.intents?.some( intent => intent.changed ) && elements ) {
+					elements.fetchUpdates();
+				}
 			} );
-		}
+		};
 	}
 
 	function postAjax( data, success ) {
@@ -551,6 +596,11 @@
 	}
 
 	function loadElements() {
+		if ( stripeRequiresHttps ) {
+			showHttpsError();
+			return;
+		}
+
 		if ( document.getElementsByClassName( 'frm-card-element' ).length ) {
 			maybeLoadStripeLink();
 		}
@@ -615,17 +665,25 @@
 			return;
 		}
 
+		const backdrop = getBackdropColor( cardElement );
+
 		// Customize the Stripe elements using the Stripe Appearance API.
 		const appearance = {
 			theme: 'stripe',
 			variables: {
 				fontSizeBase: frm_stripe_vars.baseFontSize,
-				colorText: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules[ '.Input' ].color ),
-				colorBackground: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules[ '.Input' ].backgroundColor ),
+				colorText: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules[ '.Input' ].color, backdrop ),
+				colorBackground: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules[ '.Input' ].backgroundColor, backdrop ),
 				fontSmooth: 'auto'
 			},
-			rules: frm_stripe_vars.appearanceRules
+			rules: getAppearanceRules()
 		};
+
+		const primaryColor = frm_stripe_vars.appearanceRules[ '.Input:focus' ]?.borderColor;
+		if ( primaryColor ) {
+			appearance.variables.colorPrimary = maybeAdjustColorForStripe( primaryColor, backdrop );
+		}
+
 		elements = frmstripe.elements( { clientSecret, appearance } );
 		isStripeLink = true;
 
@@ -640,24 +698,83 @@
 	}
 
 	/**
-	 * Stripe doesn't support RGBA so convert it to HEX.
+	 * Stripe doesn't support RGBA so blend it over the backdrop and convert it to HEX.
+	 * Dropping the alpha instead turns a transparent field background into a solid one.
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
-	 * @param {string} color
+	 * @param {string}        color
+	 * @param {Array<number>} backdrop RGB channels that the color is blended over.
 	 * @return {string} Converted color value.
 	 */
-	function maybeAdjustColorForStripe( color ) {
+	function maybeAdjustColorForStripe( color, backdrop = [ 255, 255, 255 ] ) {
 		if ( 0 !== color.indexOf( 'rgba' ) ) {
 			return color;
 		}
 
-		const rgba = color.replace( /^rgba?\(|\s+|\)$/g, '' ).split( ',' );
+		const rgba = color.replace( /^rgba?\(|\)$/g, '' ).trim().split( /[\s,/]+/ );
+		const alpha = getColorAlpha( rgba[ 3 ] );
+		const rgb = getColorChannelsForStripe( rgba );
+		const hex = rgb.map( ( channel, i ) => Math.round( ( alpha * channel ) + ( ( 1 - alpha ) * backdrop[ i ] ) ).toString( 16 ).padStart( 2, '0' ) );
 
-		// eslint-disable-next-line no-bitwise -- Bitwise shifts are intentional for RGBA to hex conversion
-		return `#${ ( ( 1 << 24 ) + ( parseInt( rgba[ 0 ], 10 ) << 16 ) + ( parseInt( rgba[ 1 ], 10 ) << 8 ) + parseInt( rgba[ 2 ], 10 ) )
-			.toString( 16 )
-			.slice( 1 ) }`;
+		return `#${ hex.join( '' ) }`;
+	}
+
+	/**
+	 * Normalize numeric and percentage alpha values to the range Stripe colors need.
+	 *
+	 * @since 7.1
+	 *
+	 * @param {string} rawAlpha CSS alpha component.
+	 * @return {number} Alpha between zero and one, defaulting to one.
+	 */
+	function getColorAlpha( rawAlpha = '' ) {
+		const parsed = parseFloat( rawAlpha );
+		const alpha = rawAlpha.endsWith( '%' ) ? parsed / 100 : parsed;
+		return isNaN( alpha ) ? 1 : Math.max( 0, Math.min( 1, alpha ) );
+	}
+
+	/**
+	 * Normalize RGB percentages and sRGB values to byte channels.
+	 *
+	 * @since 7.1
+	 *
+	 * @param {Array<string>} channels CSS color components.
+	 * @param {boolean}       isSRGB   Whether numeric channels use the zero to one scale.
+	 * @return {Array<number>} RGB channels between zero and 255.
+	 */
+	function getColorChannelsForStripe( channels, isSRGB = false ) {
+		return channels.slice( 0, 3 ).map( channel => {
+			const value = parseFloat( channel );
+			const scaled = channel.endsWith( '%' ) ? value / 100 * 255 : value * ( isSRGB ? 255 : 1 );
+			return Math.round( Math.max( 0, Math.min( 255, scaled ) ) );
+		} );
+	}
+
+	/**
+	 * Get the RGB channels of the first solid background behind an element.
+	 * A partly transparent ancestor is skipped, so the result is approximate there.
+	 *
+	 * @since 7.1
+	 *
+	 * @param {Element} element
+	 * @return {Array<number>} RGB channels, white when no ancestor has a solid background.
+	 */
+	function getBackdropColor( element ) {
+		for ( let parent = element.parentElement; parent; parent = parent.parentElement ) {
+			const color = window.getComputedStyle( parent ).backgroundColor;
+			const match = color.match( /^(rgba?\(|color\(srgb )([^)]+)\)$/ );
+			if ( ! match ) {
+				continue;
+			}
+			const channels = match[ 2 ].trim().split( /[\s,/]+/ );
+			if ( 1 !== getColorAlpha( channels[ 3 ] ) ) {
+				continue;
+			}
+			const isSRGB = match[ 1 ].startsWith( 'color(' );
+			return getColorChannelsForStripe( channels, isSRGB );
+		}
+		return [ 255, 255, 255 ];
 	}
 
 	/**
@@ -713,6 +830,97 @@
 		);
 		authenticationElement.mount( '.frm-link-authentication-element' );
 		authenticationElement.on( 'change', getAuthenticationChangeHandler( cardElement, emailInput ) );
+
+		/**
+		 * Stripe does not support the red required asterisk that we show on our other fields.
+		 * So we add one ourselves positioned absolute on top of the iframe.
+		 */
+		authenticationElement.on( 'ready', function() {
+			authenticationMountTarget.style.position = 'relative';
+
+			const requiredIndicator = document.createElement( 'span' );
+			requiredIndicator.textContent = '*';
+			requiredIndicator.className = 'frm_required';
+			requiredIndicator.style.position = 'absolute';
+			requiredIndicator.style.fontSize = 'var(--font-size)';
+			requiredIndicator.style.top = '-4px';
+			requiredIndicator.style.left = `${ getEmailAsteriskOffset() }px`;
+			requiredIndicator.style.padding = 'var(--label-padding)';
+			requiredIndicator.style.paddingLeft = '0';
+			requiredIndicator.setAttribute( 'aria-hidden', 'true' );
+			authenticationMountTarget.append( requiredIndicator );
+		} );
+	}
+
+	/**
+	 * Get the appearance rules to send to Stripe.
+	 * Fonts are limited to families the Stripe iframe can render, so the page can measure the same Label text.
+	 *
+	 * @since 7.0
+	 *
+	 * @return {Object} Appearance rules.
+	 */
+	function getAppearanceRules() {
+		const rules = Object.assign( {}, frm_stripe_vars.appearanceRules );
+		[ '.Input', '.Label' ].forEach( selector => {
+			if ( rules[ selector ]?.fontFamily ) {
+				rules[ selector ] = Object.assign( {}, rules[ selector ], { fontFamily: removeWebFonts( rules[ selector ].fontFamily ) } );
+			}
+		} );
+		return rules;
+	}
+
+	/**
+	 * Remove families that the page loads as web fonts from a font stack.
+	 * The Stripe iframe does not load them, so it falls back to the rest of the stack.
+	 *
+	 * @since 6.35
+	 *
+	 * @param {string} fontFamily
+	 * @return {string} The font stack without web fonts.
+	 */
+	function removeWebFonts( fontFamily ) {
+		const unquote = family => family.trim().replace( /^['"]|['"]$/g, '' ).toLowerCase();
+		const webFonts = Array.from( document.fonts, font => unquote( font.family ) );
+		const families = fontFamily.split( ',' ).filter( family => family.trim() && ! webFonts.includes( unquote( family ) ) );
+		return families.length ? families.map( family => family.trim() ).join( ', ' ) : 'sans-serif';
+	}
+
+	/**
+	 * Create a temporary label element to determine the width of the Email label.
+	 * The asterisk is positioned after the label that Stripe renders inside of the iframe.
+	 * The label is styled from the same appearance rules that Stripe uses, so it does not inherit page styles.
+	 * The probe text is the English word, so the offset can be off when Stripe renders a localized label.
+	 *
+	 * @since 6.35
+	 *
+	 * @return {number} The label width in pixels.
+	 */
+	function getEmailAsteriskOffset() {
+		const rules = getAppearanceRules()[ '.Label' ] || {};
+		const label = document.createElement( 'span' );
+		label.innerHTML = 'Email&nbsp;';
+
+		Object.assign(
+			label.style,
+			{
+				position: 'absolute',
+				visibility: 'hidden',
+				whiteSpace: 'nowrap',
+				fontFamily: rules.fontFamily || 'system-ui, sans-serif',
+				fontSize: rules.fontSize,
+				fontWeight: rules.fontWeight,
+				padding: rules.padding,
+				letterSpacing: 'normal',
+				textTransform: 'none'
+			}
+		);
+
+		document.body.append( label );
+		const labelWidth = label.getBoundingClientRect().width;
+		label.remove();
+
+		return labelWidth;
 	}
 
 	/**
@@ -997,6 +1205,39 @@
 	}
 
 	/**
+	 * Handle frmPageChanged events.
+	 *
+	 * @since 6.35
+	 *
+	 * @return {void}
+	 */
+	function onPageChange() {
+		loadElements();
+		runConditionalLogicOnPaymentFailure();
+	}
+
+	/**
+	 * The frmPageChanged event is triggered when a payment fails when submitting with AJAX.
+	 * When the payment fails, we run conditional logic.
+	 * Otherwise fields may be visible when they should be hidden.
+	 *
+	 * @since 6.35
+	 *
+	 * @return {void}
+	 */
+	function runConditionalLogicOnPaymentFailure() {
+		if ( ! document.querySelector( '.frm_error_style' ) ) {
+			return;
+		}
+
+		if ( 'undefined' === typeof __frmHideOrShowFields || 'object' !== typeof window.frmProForm ) {
+			return;
+		}
+
+		window.frmProForm.hideOrShowFields( __frmHideOrShowFields, 'pageLoad' );
+	}
+
+	/**
 	 * Create and return a new element to use for mounting a Stripe element to.
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
@@ -1050,6 +1291,124 @@
 		);
 	}
 
+	/**
+	 * Explain why live Stripe payments cannot load on an HTTP page.
+	 *
+	 * @since 7.0
+	 *
+	 * @return {void}
+	 */
+	function showHttpsError() {
+		document.querySelectorAll( '.frm-show-form' ).forEach( form => {
+			const formId = form.querySelector( 'input[name="form_id"]' );
+			if ( ! formId || formId.value !== String( frm_stripe_vars.form_id ) ) {
+				return;
+			}
+
+			form.querySelectorAll( '.frm-card-errors' ).forEach( error => {
+				error.textContent = frm_stripe_vars.https_error;
+			} );
+		} );
+	}
+
+	/**
+	 * Reuse the intent returned by confirmation, or retrieve its status directly from Stripe.
+	 * A failed lookup is not evidence that a payment failed.
+	 *
+	 * @since 7.0
+	 *
+	 * @param {string} secret The intent's client secret.
+	 * @param {Object} error  The confirmation error, which may include the failed intent.
+	 * @return {Promise<string|false>} The client secret when the intent has failed.
+	 */
+	async function getFailedIntentSecret( secret, error ) {
+		const isSetupIntent = secret.startsWith( SETUP_INTENT_PREFIX );
+		const errorIntent = isSetupIntent ? error.setup_intent : error.payment_intent;
+		let intent = errorIntent;
+
+		if ( ! intent || intent.client_secret !== secret ) {
+			const retrieve = isSetupIntent ? 'retrieveSetupIntent' : 'retrievePaymentIntent';
+			let result;
+
+			try {
+				result = await frmstripe[ retrieve ]( secret );
+			} catch {
+				// Leave records alone when Stripe cannot tell us whether this intent failed.
+				return false;
+			}
+
+			intent = isSetupIntent ? result.setupIntent : result.paymentIntent;
+		}
+
+		if ( ! intent || intent.client_secret !== secret ) {
+			return false;
+		}
+
+		if ( 'canceled' === intent.status ) {
+			return secret;
+		}
+
+		return 'requires_payment_method' === intent.status &&
+			( intent.last_payment_error || intent.last_setup_error ) ? secret : false;
+	}
+
+	/**
+	 * Only ask PHP to clean up intents Stripe.js reports as failed.
+	 * PHP still verifies the current Stripe state before changing any records.
+	 *
+	 * @since 7.0
+	 *
+	 * @param {HTMLFormElement} form  The form whose payment attempt failed.
+	 * @param {Object}          error The confirmation or form submission error.
+	 * @return {Promise<void>} Resolves once the cleanup request has finished, or right away when there is nothing to clean up.
+	 */
+	async function checkFailedPayment( form, error ) {
+		if ( 'form_submit_error' === error.type ) {
+			return;
+		}
+
+		const formId = form.querySelector( '[name="form_id"]' ).value;
+		const inputName = `frmintent${ formId }[]`;
+		const inputs = form.querySelectorAll( `input[name="${ inputName }"]` );
+		const secrets = [ ...new Set( Array.from( inputs, input => input.value ) ) ];
+		const failedInputs = [];
+
+		for ( const secret of secrets ) {
+			const failedSecret = await getFailedIntentSecret( secret, error );
+
+			if ( failedSecret ) {
+				failedInputs.push( { name: inputName, value: failedSecret } );
+			}
+		}
+
+		if ( ! failedInputs.length ) {
+			return;
+		}
+
+		const data = {
+			action: 'frm_failed_payment',
+			form: JSON.stringify( [ { name: 'form_id', value: formId }, ...failedInputs ] ),
+			nonce: frm_stripe_vars.nonce
+		};
+		const xmlHttp = postAjax( data, () => {} );
+		await new Promise( resolve => xmlHttp.addEventListener( 'loadend', resolve ) );
+	}
+
+	/**
+	 * Reload on back/forward so the form gets a fresh payment intent and an empty card field.
+	 * Registered after submitting, not on load, since a restored page only needs this once an intent is used.
+	 *
+	 * @return {void}
+	 */
+	function reloadOnBackForward() {
+		window.onpageshow = function( event ) {
+			// Force the form to reload on back button after submitting.
+			if ( event.persisted || ( window.performance && window.performance.getEntriesByType( 'navigation' )[ 0 ].type === 'back_forward' ) ) {
+				window.location.reload();
+			}
+		};
+	}
+
 	jQuery( document ).ready(
 		function() {
 			const stripeParams = {
@@ -1057,9 +1416,12 @@
 				stripeAccount: frm_stripe_vars.account_id
 			};
 
-			frmstripe = Stripe( frm_stripe_vars.publishable_key, stripeParams );
+			stripeRequiresHttps = window.location.protocol === 'http:' && frm_stripe_vars.publishable_key.startsWith( 'pk_live_' );
+			if ( ! stripeRequiresHttps ) {
+				frmstripe = Stripe( frm_stripe_vars.publishable_key, stripeParams );
+			}
 			loadElements();
-			jQuery( document ).on( 'frmPageChanged', loadElements );
+			jQuery( document ).on( 'frmPageChanged', onPageChange );
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
 			jQuery( document ).on( 'submit.frmstrp', '.frm-show-form', validateForm );
 			jQuery( document ).on( 'frmFieldChanged', priceChanged );

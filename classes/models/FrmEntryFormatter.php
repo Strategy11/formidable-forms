@@ -416,9 +416,9 @@ class FrmEntryFormatter {
 		}
 
 		if ( $this->format === 'json' ) {
-			$content = json_encode( $this->prepare_array() );
+			$content = json_encode( $this->maybe_sanitize_shortcodes_in_array( $this->prepare_array() ) );
 		} elseif ( $this->format === 'array' ) {
-			$content = $this->prepare_array();
+			$content = $this->maybe_sanitize_shortcodes_in_array( $this->prepare_array() );
 		} elseif ( $this->format === 'table' ) {
 			$content = $this->prepare_html_table();
 		} elseif ( $this->format === 'plain_text_block' ) {
@@ -554,9 +554,33 @@ class FrmEntryFormatter {
 		$output[ $this->get_key_or_id( $field_value ) ] = $displayed_value;
 		$has_separate_value                             = (bool) $field_value->get_field_option( 'separate_value' );
 
-		if ( $has_separate_value || $displayed_value !== $field_value->get_saved_value() ) {
+		if ( $has_separate_value || ! $this->is_same_value_ignoring_line_endings( $displayed_value, $field_value->get_saved_value() ) ) {
 			$output[ $this->get_key_or_id( $field_value ) . '-value' ] = $field_value->get_saved_value();
 		}
+	}
+
+	/**
+	 * Compare a displayed value with its saved value, ignoring line ending differences.
+	 * Since WordPress 7.2, wp_kses converts CRLF line endings to LF, so a paragraph value
+	 * submitted from a textarea would otherwise always look different from its display value.
+	 *
+	 * @since 7.0
+	 *
+	 * @param mixed $displayed_value The value prepared for display.
+	 * @param mixed $saved_value     The value saved in the database.
+	 *
+	 * @return bool
+	 */
+	private function is_same_value_ignoring_line_endings( $displayed_value, $saved_value ) {
+		if ( $displayed_value === $saved_value ) {
+			return true;
+		}
+
+		if ( ! is_string( $displayed_value ) || ! is_string( $saved_value ) ) {
+			return false;
+		}
+
+		return str_replace( "\r\n", "\n", $displayed_value ) === str_replace( "\r\n", "\n", $saved_value );
 	}
 
 	/**
@@ -921,6 +945,10 @@ class FrmEntryFormatter {
 	protected function prepare_display_value_for_html_table( $display_value, $field_type = '' ) {
 		$display_value = $this->flatten_array( $display_value );
 
+		if ( '' !== $field_type && $this->should_sanitize_shortcodes() && is_string( $display_value ) ) {
+			FrmFieldsHelper::sanitize_embedded_shortcodes( array( 'entry' => $this->entry ), $display_value );
+		}
+
 		if ( ! isset( $this->atts['line_breaks'] ) || ! empty( $this->atts['line_breaks'] ) ) {
 			return str_replace( array( "\r\n", "\n" ), '<br/>', $display_value );
 		}
@@ -939,7 +967,51 @@ class FrmEntryFormatter {
 	 */
 	protected function prepare_display_value_for_plain_text_content( $display_value ) {
 		$display_value = $this->flatten_array( $display_value );
-		return $this->strip_html( $display_value );
+		$display_value = $this->strip_html( $display_value );
+
+		if ( $this->should_sanitize_shortcodes() && is_string( $display_value ) ) {
+			FrmFieldsHelper::sanitize_embedded_shortcodes( array( 'entry' => $this->entry ), $display_value );
+		}
+
+		return $display_value;
+	}
+
+	/**
+	 * Check if shortcodes in the entry values should be escaped.
+	 *
+	 * @since 7.1
+	 *
+	 * @return bool
+	 */
+	private function should_sanitize_shortcodes() {
+		return ! empty( $this->atts['esc_shortcodes'] );
+	}
+
+	/**
+	 * Escape shortcodes in the submitted values of an array or json output.
+	 * Keys are field keys or ids, so only the values are changed.
+	 *
+	 * @since 7.1
+	 *
+	 * @param array $values The prepared entry values.
+	 *
+	 * @return array
+	 */
+	private function maybe_sanitize_shortcodes_in_array( $values ) {
+		if ( ! $this->should_sanitize_shortcodes() ) {
+			return $values;
+		}
+
+		foreach ( $values as $key => $value ) {
+			if ( is_array( $value ) ) {
+				$values[ $key ] = $this->maybe_sanitize_shortcodes_in_array( $value );
+			} elseif ( is_string( $value ) ) {
+				FrmFieldsHelper::sanitize_embedded_shortcodes( array( 'entry' => $this->entry ), $value );
+				$values[ $key ] = $value;
+			}
+		}
+
+		return $values;
 	}
 
 	/**
