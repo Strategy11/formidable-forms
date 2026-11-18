@@ -92,6 +92,7 @@ class test_FrmAltchaReplayHelper extends FrmUnitTest {
 		}
 
 		$this->assertFalse( $result, 'A claim should fail when storage cannot be created.' );
+		$this->assertTrue( FrmAltchaReplayHelper::storage_failed(), 'A storage failure should be reported apart from a replay.' );
 		$this->assertFalse( wp_next_scheduled( FrmAltchaReplayHelper::PURGE_HOOK ), 'Failed creation should not schedule cleanup.' );
 	}
 
@@ -105,6 +106,7 @@ class test_FrmAltchaReplayHelper extends FrmUnitTest {
 
 		$this->assertTrue( FrmAltchaReplayHelper::claim( $id, $expires ), 'The first claim should succeed.' );
 		$this->assertFalse( FrmAltchaReplayHelper::claim( $id, $expires + 60 ), 'A second claim should fail.' );
+		$this->assertFalse( FrmAltchaReplayHelper::storage_failed(), 'A replayed challenge is not a storage failure.' );
 		$this->assertTrue( FrmAltchaReplayHelper::is_used( $id ), 'A claimed challenge should be used.' );
 
 		$row = $wpdb->get_row(

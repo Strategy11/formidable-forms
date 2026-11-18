@@ -118,20 +118,25 @@ class FrmAltchaController {
 			return $errors;
 		}
 
-		if ( ! FrmAltchaReplayHelper::claim( $pending['id'], $pending['expires'] ) ) {
-			/**
-			 * Fires when an ALTCHA solution is rejected after the rest of the entry was valid.
-			 *
-			 * Other rejections go through Lite's frm_captcha_validation_failed action.
-			 *
-			 * @since x.x
-			 *
-			 * @param string      $reason Always replayed.
-			 * @param object|null $field  The captcha field.
-			 */
-			do_action( 'frm_altcha_validation_failed', 'replayed', FrmField::getOne( $pending['field_id'] ) );
-			$errors[ 'field' . $pending['field_id'] ] = $pending['message'];
+		if ( FrmAltchaReplayHelper::claim( $pending['id'], $pending['expires'] ) ) {
+			return $errors;
 		}
+
+		$reason = FrmAltchaReplayHelper::storage_failed() ? 'storage_failed' : 'replayed';
+
+		/**
+		 * Fires when an ALTCHA solution is rejected after the rest of the entry was valid.
+		 *
+		 * Other rejections go through Lite's frm_captcha_validation_failed action.
+		 *
+		 * @since x.x
+		 *
+		 * @param string      $reason replayed when the solution was already spent, or storage_failed
+		 *                            when the replay table could not be created or written.
+		 * @param object|null $field  The captcha field.
+		 */
+		do_action( 'frm_altcha_validation_failed', $reason, FrmField::getOne( $pending['field_id'] ) );
+		$errors[ 'field' . $pending['field_id'] ] = $pending['message'];
 
 		return $errors;
 	}
@@ -216,11 +221,13 @@ class FrmAltchaController {
 			return '';
 		}
 
-		$base      = explode( '-', $language )[0];
-		$path      = FrmAppHelper::plugin_path() . '/js/altcha/i18n/';
+		$base = explode( '-', $language )[0];
+		$path = FrmAppHelper::plugin_path() . '/js/altcha/i18n/';
+		// Regional locales without their own file, such as fr-be or es-mx, use the closest shipped variant.
+		// Spanish outside Spain uses the Latin American translation.
 		$variants  = array(
-			'es' => 'es-es',
-			'fr' => 'fr-ca',
+			'es' => 'es' === $language ? 'es-es' : 'es-419',
+			'fr' => 'fr-fr',
 			'pt' => 'pt-pt',
 			'zh' => 'zh-cn',
 		);

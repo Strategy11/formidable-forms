@@ -47,6 +47,15 @@ class FrmAltchaReplayHelper {
 	private static $ready_tables = array();
 
 	/**
+	 * Whether the last claim failed because the replay table could not be created or written.
+	 *
+	 * @since x.x
+	 *
+	 * @var bool
+	 */
+	private static $storage_failed = false;
+
+	/**
 	 * Get the replay table for the current site.
 	 *
 	 * @since x.x
@@ -151,9 +160,11 @@ class FrmAltchaReplayHelper {
 	 * @param string $id      Challenge ID from FrmAltchaChallengeHelper::verify().
 	 * @param int    $expires Unix time the challenge expires. The row can be deleted after that.
 	 *
-	 * @return bool False when the challenge was already spent.
+	 * @return bool False when the challenge was already spent or could not be stored. See storage_failed().
 	 */
 	public static function claim( $id, $expires ) {
+		self::$storage_failed = false;
+
 		if ( ! self::is_valid_id( $id ) ) {
 			return false;
 		}
@@ -162,6 +173,7 @@ class FrmAltchaReplayHelper {
 		global $wpdb;
 
 		if ( ! self::table_exists() && ! self::create_table() ) {
+			self::$storage_failed = true;
 			return false;
 		}
 
@@ -174,11 +186,30 @@ class FrmAltchaReplayHelper {
 			)
 		);
 
+		if ( false === $inserted ) {
+			self::$storage_failed = true;
+			return false;
+		}
+
 		if ( 1 === $inserted && false === wp_next_scheduled( self::PURGE_HOOK ) ) {
 			wp_schedule_event( time() + HOUR_IN_SECONDS, 'hourly', self::PURGE_HOOK );
 		}
 
 		return 1 === $inserted;
+	}
+
+	/**
+	 * Whether the last claim() failed on storage rather than on a spent challenge.
+	 *
+	 * A database user without CREATE permission, for example, rejects every submission.
+	 * This tells that apart from a replayed solution.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function storage_failed() {
+		return self::$storage_failed;
 	}
 
 	/**
