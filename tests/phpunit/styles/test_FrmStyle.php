@@ -317,6 +317,23 @@ class test_FrmStyle extends FrmUnitTest {
 	}
 
 	/**
+	 * Inline buttons reserve a label row without aligning to descriptions or errors below inputs.
+	 *
+	 * @see https://github.com/Strategy11/formidable-pro/issues/6894
+	 */
+	public function test_generated_css_aligns_inline_submit_with_inputs() {
+		$css             = $this->run_private_method(
+			array( new FrmStyle(), 'get_css_content' ),
+			array( FrmAppHelper::plugin_path() . '/css/custom_theme.css.php' )
+		);
+		$submit_selector = '.with_frm_style.frm_inline_top .frm_submit.frm_flex,.with_frm_style .frm_submit.frm_flex.frm_inline_submit';
+
+		\PHPUnit\Framework\Assert::assertStringContainsString( $submit_selector . ' {align-items: flex-start;align-content: flex-start;row-gap: 0;}', $css );
+		\PHPUnit\Framework\Assert::assertStringContainsString( 'flex-basis: 100%;order: -2;', $css );
+		\PHPUnit\Framework\Assert::assertStringContainsString( 'margin-bottom: var(--frm-inline-submit-offset, 0);', $css );
+	}
+
+	/**
 	 * The CSS version must be a zero-padded timestamp so distinct save times
 	 * never collide (e.g. 1 Jan 10:59 and 11 Jan 00:59 both produced "111059").
 	 */

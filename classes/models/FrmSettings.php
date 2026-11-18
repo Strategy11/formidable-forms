@@ -510,7 +510,7 @@ class FrmSettings {
 	/**
 	 * Use a configured provider when the saved CAPTCHA type is unsupported.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return void
 	 */

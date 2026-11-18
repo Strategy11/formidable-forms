@@ -50,14 +50,14 @@ class test_FrmBoostsMarketplace extends FrmUnitTest {
 
 	/** @return void */
 	public function test_missing_excerpts_render_without_empty_paragraphs() {
-		foreach ( array( 'bulk-edit', 'brand-new-boost' ) as $slug ) {
+		foreach ( array( 'formidable-bulk-edit', 'formidable-tooltips', 'brand-new-boost' ) as $slug ) {
 			$addon = $this->addon( $slug );
 			$this->run_private_method( array( 'FrmAddonsController', 'override_addon_display' ), array( &$addon, $slug ) );
 
-			if ( 'bulk-edit' === $slug ) {
-				$this->assertNotEmpty( $addon['excerpt'] );
-			} else {
+			if ( 'brand-new-boost' === $slug ) {
 				$this->assertArrayNotHasKey( 'excerpt', $addon );
+			} else {
+				$this->assertNotEmpty( $addon['excerpt'] );
 			}
 
 			$pricing      = 'https://formidableforms.com/pricing/';
@@ -208,7 +208,7 @@ class test_FrmBoostsMarketplace extends FrmUnitTest {
 	public function test_boosts_are_not_counted_or_searched_as_addons() {
 		// The Boost comes first so a search that does not skip Boosts would match it.
 		$feed = array(
-			'2' => $this->addon( 'field-tooltips' ) + array(
+			'2' => $this->addon( 'formidable-tooltips' ) + array(
 				'name'         => 'Tooltips',
 				'excerpt'      => 'Add tooltips.',
 				'search_terms' => 'tooltips',
@@ -242,6 +242,62 @@ class test_FrmBoostsMarketplace extends FrmUnitTest {
 		$this->assertSame( 1, $this->run_private_method( array( $search, 'matching_addon' ), array( $feed, array( 'tooltips' ) ) ) );
 		unset( $feed['1'] );
 		$this->assertNull( $this->run_private_method( array( $search, 'matching_addon' ), array( $feed, array( 'tooltips' ) ) ) );
+	}
+
+	/**
+	 * An installed Boost keeps its toggle when the API plugin path differs from the installed folder.
+	 *
+	 * @covers FrmAddonsController::get_boost_plugin_file
+	 *
+	 * @return void
+	 */
+	public function test_installed_boost_is_found_when_the_api_path_differs() {
+		// The API sends this path, but Advanced Modals ships its main file as frm-advanced-modals.php.
+		$addon          = $this->addon( 'formidable-advanced-modals' );
+		$addon['id']    = 123;
+		$addon['title'] = 'Advanced Modals';
+		$api_file       = 'formidable-advanced-modals/formidable-advanced-modals.php';
+		$cached         = wp_cache_get( 'plugins', 'plugins' );
+
+		wp_cache_set(
+			'plugins',
+			array(
+				'' => array(
+					'formidable-advanced-modals/frm-advanced-modals.php' => array( 'Name' => 'Formidable Advanced Modals' ),
+					'formidable-other/formidable-other.php'              => array( 'Name' => 'Formidable Other' ),
+				),
+			),
+			'plugins'
+		);
+
+		$updater                = ( new ReflectionClass( 'FrmAddon' ) )->newInstanceWithoutConstructor();
+		$updater->download_id   = 123;
+		$updater->plugin_folder = 'renamed-modals/frm-advanced-modals.php';
+		$register               = static function ( $plugins ) use ( $updater ) {
+			$plugins['advanced-modals'] = $updater;
+			return $plugins;
+		};
+
+		$resolve = function ( $addon ) use ( $api_file ) {
+			return $this->run_private_method( array( 'FrmAddonsController', 'get_boost_plugin_file' ), array( $addon, $api_file ) );
+		};
+
+		try {
+			// Inactive Boost: matched by its plugin name.
+			$this->assertSame( 'formidable-advanced-modals/frm-advanced-modals.php', $resolve( $addon ) );
+
+			// Active Boost: matched by its updater download id first.
+			add_filter( 'frm_installed_addons', $register );
+			$this->assertSame( 'renamed-modals/frm-advanced-modals.php', $resolve( $addon ) );
+			remove_filter( 'frm_installed_addons', $register );
+
+			// Not installed: the API path is kept.
+			$addon['title'] = 'Celebrations';
+			$this->assertSame( $api_file, $resolve( $addon ) );
+		} finally {
+			remove_filter( 'frm_installed_addons', $register );
+			wp_cache_set( 'plugins', $cached, 'plugins' );
+		}
 	}
 
 	/**

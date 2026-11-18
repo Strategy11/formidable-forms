@@ -8,7 +8,7 @@ class FrmFieldGridHelper {
 	/**
 	 * Get the builder grid provider, with the original helper as a fallback.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return FrmFieldGridHelper
 	 */
@@ -16,7 +16,7 @@ class FrmFieldGridHelper {
 		/**
 		 * Filters the helper used to arrange fields in the builder.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param FrmFieldGridHelper|null $helper The optional helper supplied by a field provider.
 		 */
