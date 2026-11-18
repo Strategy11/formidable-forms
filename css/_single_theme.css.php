@@ -5,6 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $settings = FrmStylesHelper::get_settings_for_output( $style );
 extract( $settings ); // phpcs:ignore WordPress.PHP.DontExtract
+$style_class = $settings['style_class'];
 
 $is_loaded_via_ajax = $is_loaded_via_ajax ?? false;
 FrmStylesPreviewHelper::get_additional_preview_style( $settings, $is_loaded_via_ajax );

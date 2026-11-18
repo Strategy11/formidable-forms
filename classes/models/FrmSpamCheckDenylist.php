@@ -687,7 +687,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		list( $net, $mask ) = explode( '/', $cidr_ip );
 
 		$ip_net  = ip2long( $net );
-		$ip_mask = ~( ( 1 << ( 32 - intval( $mask ) ) ) - 1 ); // phpcs:ignore SlevomatCodingStandard.PHP.UselessParentheses.UselessParentheses
+		$ip_mask = ~( ( 1 << ( 32 - intval( $mask ) ) ) - 1 ); // phpcs:ignore Formidable.CodeAnalysis.RemoveUselessParentheses.UselessParentheses
 
 		$ip_ip = ip2long( $ip );
 

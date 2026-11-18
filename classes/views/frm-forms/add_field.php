@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Filters the builder container presentation. Defaults preserve section markup.
  *
- * @since x.x
+ * @since 7.1
  *
  * @param string $container_type The presentation type.
  * @param array $field The builder field.
@@ -19,7 +19,7 @@ if ( $container_type === 'divider' ) {
 	/**
 	 * Filters the icon shown at the start of a builder container.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param string $icon_class The icon class without the frmfont marker.
 	 * @param array  $field      The builder field.
@@ -146,7 +146,7 @@ if ( isset( $values['deferred_settings'] ) ) {
 /**
  * Lets field providers render their builder child list, retaining the legacy fallback.
  *
- * @since x.x
+ * @since 7.1
  *
  * @param bool $handled Whether a provider rendered the child list boundary.
  * @param array $field The builder field.
