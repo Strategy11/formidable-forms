@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '7.0';
+	public static $plug_version = '7.1';
 
 	/**
 	 * @var bool
@@ -1532,30 +1532,9 @@ class FrmAppHelper {
 	public static function allow_style( $allow_css, $css_string ) {
 		if ( ! $allow_css && str_starts_with( $css_string, '--primary-700:' ) ) {
 			$split     = explode( ':', $css_string, 2 );
-			$allow_css = 2 === count( $split ) && self::is_a_valid_color( $split[1] );
+			$allow_css = 2 === count( $split ) && FrmStylesHelper::is_valid_color( $split[1] );
 		}
 		return $allow_css;
-	}
-
-	/**
-	 * @since 5.0.13
-	 *
-	 * @param string $value
-	 *
-	 * @return bool
-	 */
-	private static function is_a_valid_color( $value ) {
-		$match = 0;
-
-		if ( str_starts_with( $value, 'rgba(' ) ) {
-			$match = preg_match( '/^rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d*(?:\.\d+)?)\)$/', $value );
-		} elseif ( str_starts_with( $value, 'rgb(' ) ) {
-			$match = preg_match( '/^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/', $value );
-		} elseif ( str_starts_with( $value, '#' ) ) {
-			$match = preg_match( '/^#([a-f0-9]{6}|[a-f0-9]{3})\b$/', $value );
-		}
-
-		return (bool) $match;
 	}
 
 	/**
@@ -2781,23 +2760,21 @@ class FrmAppHelper {
 			$key = self::generate_new_key( $num_chars );
 		}
 
-		$key = self::prevent_numeric_and_reserved_keys( $key );
-
-		$similar_keys = FrmDb::get_col(
-			$table_name,
-			array(
-				$column . ' like%' => $key,
-				'ID !'             => $id,
-			),
-			$column
-		);
+		$key          = self::prevent_numeric_and_reserved_keys( $key );
+		$similar_keys = self::get_similar_keys( $key, $table_name, $column, $id );
 
 		// Create a unique field id if it has already been used.
 		if ( ! in_array( $key, $similar_keys, true ) ) {
 			return $key;
 		}
 
-		$key = self::maybe_truncate_key_before_appending( $column, $key );
+		$truncated_key = self::maybe_truncate_key_before_appending( $column, $key );
+
+		if ( $truncated_key !== $key ) {
+			// Keys already created from the truncated key aren't in the list loaded for the full key.
+			$key          = $truncated_key;
+			$similar_keys = self::get_similar_keys( $key, $table_name, $column, $id );
+		}
 
 		/**
 		 * Allow for a custom separator between the attempted key and the generated suffix.
@@ -2816,6 +2793,25 @@ class FrmAppHelper {
 		} while ( in_array( $key_check, $similar_keys, true ) );
 
 		return $key_check;
+	}
+
+	/**
+	 * @param string $key
+	 * @param string $table_name
+	 * @param string $column
+	 * @param int    $id
+	 *
+	 * @return array<string>
+	 */
+	private static function get_similar_keys( $key, $table_name, $column, $id ) {
+		return FrmDb::get_col(
+			$table_name,
+			array(
+				$column . ' like%' => $key,
+				'ID !'             => $id,
+			),
+			$column
+		);
 	}
 
 	/**

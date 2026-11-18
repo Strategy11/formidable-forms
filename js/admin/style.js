@@ -1314,9 +1314,11 @@
 				continue;
 			}
 
-			targetInput.value = defaultValues[ key ];
+			const isColor = targetInput.classList.contains( 'hex' );
+			// Default hex colors have no leading '#'. Add it like syncQuickSettingsSwatch so the color picker can read the value.
+			targetInput.value = isColor ? addColorHash( defaultValues[ key ] ) : defaultValues[ key ];
 
-			if ( targetInput.classList.contains( 'hex' ) ) {
+			if ( isColor ) {
 				// Trigger a change event so the color pickers sync. Otherwise they stay the same color after reset.
 				targetInput.dispatchEvent( new Event( 'frm:color-sync' ) );
 			}
@@ -1350,10 +1352,21 @@
 		}
 
 		// Stored hex colors have no leading '#'. PHP adds it at render time (FrmStylesHelper::get_color_output()); match that here.
-		const color = /^[0-9a-f]{3,8}$/i.test( value ) ? `#${ value }` : value;
-
-		swatch.value = color;
+		swatch.value = addColorHash( value );
 		swatch.dispatchEvent( new Event( 'frm:color-sync' ) );
+	}
+
+	/**
+	 * Prepend '#' to a hex color saved without it. This matches FrmStylesHelper::add_color_hash_if_needed.
+	 *
+	 * @since 7.1
+	 *
+	 * @param {string} value The color value.
+	 * @return {string} The color, with a '#' when it is a hex color without one.
+	 */
+	function addColorHash( value ) {
+		const trimmed = String( value ).trim();
+		return /^(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test( trimmed ) ? `#${ trimmed }` : trimmed;
 	}
 
 	/**
@@ -1483,7 +1496,7 @@
 		 * When every changed setting only feeds a CSS variable, the variables are updated right away with JavaScript.
 		 * Anything else requests new CSS from the server.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param {boolean} isRecheck True when called again after a change event that did not change any values yet.
 		 * @param {boolean} isTyping  True when called from an input event, while a value may still be incomplete.
@@ -1545,7 +1558,7 @@
 		/**
 		 * Check for a color setting that holds part of a hex color, like #1 or #1234.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param {string}           key   The setting key.
 		 * @param {string|undefined} value The setting value.
@@ -1562,7 +1575,7 @@
 		}
 
 		/**
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @return {HTMLElement[]} The inputs that are sent to the server when requesting new CSS.
 		 */
@@ -1573,7 +1586,7 @@
 		}
 
 		/**
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @return {Object} Style setting values keyed by setting name, plus the style_name value.
 		 */
@@ -1589,7 +1602,7 @@
 		/**
 		 * Check if a setting can be updated without new CSS from the server.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param {string} key    The setting key.
 		 * @param {Object} values All current setting values.
@@ -1607,7 +1620,7 @@
 		/**
 		 * This matches the check in FrmStylesHelper::update_base_font_size.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param {Object} values All current setting values.
 		 * @return {boolean} True if font sizes are scaled from the base font size.
@@ -1620,7 +1633,7 @@
 		/**
 		 * Values that the server would sanitize or skip are left to the server, so both ways of updating the preview always match.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param {string|undefined} value The setting value. It is undefined when the input is not submitted, like an unchecked checkbox.
 		 * @return {boolean} True if the value can be used as is.
@@ -1641,24 +1654,20 @@
 		/**
 		 * This matches the formatting in FrmStylesHelper::get_color_output.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param {string} key   The setting key.
 		 * @param {string} value The setting value.
 		 * @return {string} The value to use for the CSS variable.
 		 */
 		function prepareLiveValue( key, value ) {
-			const trimmed = value.trim();
-			if ( livePreview.colorSettings.has( key ) && ! trimmed.includes( '#' ) && ! /(rgba?|hsla?|hwb)\(/.test( trimmed ) ) {
-				return `#${ trimmed }`;
-			}
-			return trimmed;
+			return livePreview.colorSettings.has( key ) ? addColorHash( value ) : value.trim();
 		}
 
 		/**
 		 * This matches the variable names from FrmStylesHelper::output_vars.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param {string} key The setting key.
 		 * @return {string} The CSS variable name.
@@ -1670,7 +1679,7 @@
 		/**
 		 * Write the CSS variables set with JavaScript to a style tag after #this_css, so they take priority over the last server response.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @return {void}
 		 */
