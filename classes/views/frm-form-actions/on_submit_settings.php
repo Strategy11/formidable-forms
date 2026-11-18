@@ -35,6 +35,17 @@ $types = array(
 	),
 );
 
+/**
+ * Filters the Confirmation action types and the settings shown for each.
+ *
+ * @since x.x
+ *
+ * @param array  $types    Action types keyed by type, each with `label`, `icon` and `sub_settings`.
+ * @param object $instance Form action post object.
+ * @param array  $args     Contains `form`, `action_key`, `values`.
+ */
+$types = apply_filters( 'frm_on_submit_types', $types, $instance, $args );
+
 $col_count = count( $types );
 
 if ( $col_count <= 4 ) {
