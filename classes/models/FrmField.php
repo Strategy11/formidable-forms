@@ -856,7 +856,7 @@ class FrmField {
 		$previous_form_id = 0;
 
 		if ( isset( $values['form_id'] ) ) {
-			$previous_form_id = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT form_id FROM %i WHERE id = %d', $wpdb->prefix . 'frm_fields', $id ) );
+			$previous_form_id = (int) self::get_type( $id, 'form_id' );
 		}
 
 		$query_results = $wpdb->update( $wpdb->prefix . 'frm_fields', $values, array( 'id' => $id ) );
