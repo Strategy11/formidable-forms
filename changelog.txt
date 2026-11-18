@@ -1,15 +1,19 @@
 == Changelog ==
 = 7.1 =
+* Security: Additional protection has been added to prevent unauthenticated shortcode execution.
+* Security: Additional validation has been added to PayPal Commerce orders and subscriptions to help prevent payment tampering.
 * New: The form builder now loads long forms with AJAX automatically. The "Load and save form builder page with AJAX" setting has been removed.
 * New: Large forms now load previews and field settings in smaller batches. Previews below the screen wait until you scroll near them.
 * New: The builder now blocks fields that don't work in a Repeater or Section, such as CAPTCHA, Submit, GDPR, Summary, Page Break, and embedded forms.
 * New: The style editor now uses a new color picker. Colors save in the format you pick: RGB, HSL, or Hex.
 * New: Style changes in the visual styler now show in the preview right away, without waiting for the server.
 * New: Phone fields now have an Autocomplete setting.
+* New: A new CAPTCHA service unavailable spam setting saves a submission as a spam entry when the CAPTCHA can't be verified because the service is down or its response can't be read.
 * New: Boosts now show in their own section on the Add-Ons page.
 * New: Stripe Link elements now share additional form styling to closer match other inputs.
 * New: Formidable AI has a new get-ai-status ability so AI tools can see how to turn on access, and a new mark-entry-spam ability.
 * New: Forms created with the create-form ability now start with anti-spam on and an email action, like forms made in the builder.
+* New: The list-entries ability can now list spam entries, and the update-form ability can turn entry editing on or off.
 * New: New frm_no_save_fields, frm_embed_modal_options, frm_field_created, frm_field_updated, frm_field_destroyed, and frm_field_order_updated hooks, plus a new hook that runs before a form is destroyed.
 * New: The frm_add_entry_meta filter now receives the original value as a second argument.
 * Performance: Moving a field in a large form now saves only the new field order. The builder uses fewer database queries when creating, updating, or reordering many fields.
@@ -49,6 +53,7 @@
 * Fix: Duplicate-entry errors now show in the error summary when submitting with AJAX.
 * Fix: The Square script no longer shows a Missing Dependencies warning in the visual styler.
 * Fix: The list-entries, list-forms, list-fields, list-payments, and list-subscriptions abilities now return correct defaults and no longer error on star rating or scale fields, spam entries, or a missing payments table.
+* Fix: The create-field and update-field abilities skipped the settings clean-up that the builder runs.
 
 = 7.0 =
 * Security: Additional permission checks have been added to prevent unauthorized plugin installations.

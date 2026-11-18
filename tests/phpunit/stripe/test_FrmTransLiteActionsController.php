@@ -91,6 +91,40 @@ class test_FrmTransLiteActionsController extends FrmUnitTest {
 	}
 
 	/**
+	 * Stripe loads a payment, saves the new status, then passes the copy it loaded first.
+	 * The payment actions must see the saved status, or a pending copy stops them from running.
+	 *
+	 * @covers FrmTransLiteActionsController::trigger_payment_status_change
+	 */
+	public function test_trigger_payment_status_change_uses_the_saved_status() {
+		$entry       = $this->create_entry_with_payments( array( 'pending' ) );
+		$payment_id  = $entry['payment_ids'][0];
+		$frm_payment = new FrmTransLitePayment();
+		$stale       = $frm_payment->get_one( $payment_id );
+
+		$frm_payment->update( $payment_id, array( 'status' => 'complete' ) );
+
+		$received = null;
+		$callback = function ( $hook_atts ) use ( &$received ) {
+			$received = $hook_atts;
+		};
+
+		add_action( 'frm_payment_status_complete', $callback );
+		FrmTransLiteActionsController::trigger_payment_status_change(
+			array(
+				'status'  => 'complete',
+				'payment' => $stale,
+			)
+		);
+		remove_action( 'frm_payment_status_complete', $callback );
+
+		$this->assertSame( 'pending', $stale->status, 'The test should pass a copy loaded before the update.' );
+		$this->assertNotNull( $received );
+		$this->assertEquals( $payment_id, $received['payment']->id, 'The passed payment should still be used.' );
+		$this->assertSame( 'complete', $received['payment']->status, 'The payment should have the saved status, so payment actions run.' );
+	}
+
+	/**
 	 * @covers FrmTransLiteActionsController::trigger_payment_status_change
 	 */
 	public function test_trigger_payment_status_change_loads_payment_for_entry() {

@@ -25,6 +25,15 @@ class FrmFieldCaptcha extends FrmFieldType {
 	private $validation_failure_reason = '';
 
 	/**
+	 * The spam source for the most recent CAPTCHA validation failure.
+	 *
+	 * @since 7.1
+	 *
+	 * @var string
+	 */
+	private $spam_source = 'captcha';
+
+	/**
 	 * Get the service explanation and error codes for the validation failure.
 	 *
 	 * @since 7.0
@@ -33,6 +42,19 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 */
 	public function get_validation_failure_reason() {
 		return $this->validation_failure_reason;
+	}
+
+	/**
+	 * Get the spam source that decides how the most recent validation failure is handled.
+	 * A CAPTCHA that could not be verified because of the service is handled separately
+	 * from a CAPTCHA the visitor failed.
+	 *
+	 * @since 7.1
+	 *
+	 * @return string
+	 */
+	public function get_spam_source() {
+		return $this->spam_source;
 	}
 
 	/**
@@ -328,7 +350,10 @@ class FrmFieldCaptcha extends FrmFieldType {
 		$resp         = $this->send_api_check();
 		$response     = json_decode( wp_remote_retrieve_body( $resp ), true );
 
+		$this->spam_source = 'captcha';
+
 		if ( is_wp_error( $resp ) ) {
+			$this->spam_source                = 'captcha_unavailable';
 			$error_string                     = $resp->get_error_message();
 			$errors[ 'field' . $args['id'] ]  = __( 'There was a problem verifying your captcha', 'formidable' );
 			$errors[ 'field' . $args['id'] ] .= ' ' . $error_string;
@@ -339,7 +364,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 		}
 
 		if ( ! is_array( $response ) || ! array_key_exists( 'success', $response ) ) {
-			$reason = __( 'The CAPTCHA service response could not be read, so the CAPTCHA could not be verified.', 'formidable' );
+			$reason            = __( 'The CAPTCHA service response could not be read, so the CAPTCHA could not be verified.', 'formidable' );
+			$this->spam_source = 'captcha_unavailable';
 
 			$this->record_validation_failure( $reason, array() );
 

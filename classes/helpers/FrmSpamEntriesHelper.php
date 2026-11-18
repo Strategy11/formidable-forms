@@ -135,15 +135,19 @@ class FrmSpamEntriesHelper {
 	 *
 	 * Bot checks are rejected by default because bots can send a high volume of submissions.
 	 * Content checks are saved by default so a false positive can be recovered from the Spam tab.
+	 * A CAPTCHA that could not be verified because the service failed is saved too, so an outage
+	 * does not lose real submissions.
 	 * This runs while the global settings load, so it must not translate anything.
 	 *
 	 * @since 7.0
+	 * @since 7.1 Added captcha_unavailable.
 	 *
 	 * @return array<string, string>
 	 */
 	public static function get_default_handling() {
 		return array(
 			'captcha'             => self::BLOCK,
+			'captcha_unavailable' => self::SAVE,
 			'honeypot'            => self::BLOCK,
 			'antispam'            => self::BLOCK,
 			'no_ip'               => self::BLOCK,
@@ -182,6 +186,7 @@ class FrmSpamEntriesHelper {
 	public static function get_sources() {
 		$labels   = array(
 			'captcha'             => __( 'CAPTCHA errors', 'formidable' ),
+			'captcha_unavailable' => __( 'CAPTCHA service unavailable', 'formidable' ),
 			'honeypot'            => __( 'Honeypot', 'formidable' ),
 			'antispam'            => __( 'JavaScript anti-spam check', 'formidable' ),
 			'no_ip'               => __( 'Missing IP address', 'formidable' ),

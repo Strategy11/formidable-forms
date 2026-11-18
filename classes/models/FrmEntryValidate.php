@@ -629,7 +629,7 @@ class FrmEntryValidate {
 				$reason = $new_errors[ $error_key ] ?? '';
 			}
 
-			if ( isset( $new_errors[ $error_key ] ) && FrmSpamEntriesHelper::maybe_flag_submission( $posted_field->form_id, 'captcha', $reason ) ) {
+			if ( isset( $new_errors[ $error_key ] ) && FrmSpamEntriesHelper::maybe_flag_submission( $posted_field->form_id, $field_obj->get_spam_source(), $reason ) ) {
 				unset( $new_errors[ $error_key ] );
 			}
 		}

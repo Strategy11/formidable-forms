@@ -223,9 +223,18 @@ class FrmTransLiteActionsController {
 			'payment'  => $atts['payment'] ?? null,
 		);
 
+		$frm_payment = new FrmTransLitePayment();
+
 		if ( ! isset( $atts['payment'] ) ) {
-			$frm_payment     = new FrmTransLitePayment();
 			$atts['payment'] = $frm_payment->get_one_by( $entry_id, 'item_id' );
+		} elseif ( ! empty( $atts['payment']->id ) ) {
+			// Callers pass the payment as it was loaded before they saved the new status.
+			// Load it again so the hooks and payment actions see the current status.
+			$current_payment = $frm_payment->get_one( $atts['payment']->id );
+
+			if ( $current_payment ) {
+				$atts['payment'] = $current_payment;
+			}
 		}
 
 		if ( ! isset( $atts['trigger'] ) ) {

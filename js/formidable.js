@@ -2331,12 +2331,49 @@ function frmFrontFormJS() {
 
 		observeFields();
 		// AJAX validation and pagination replace nodes. Newly inserted forms need observers too.
-		const mutationObserver = new MutationObserver( observeFields );
+		// Other DOM changes on the page, like a ticker or chat widget, are skipped without querying the document.
+		const mutationObserver = new MutationObserver( mutations => {
+			if ( mutations.some( mutation => isInlineFormMutation( mutation, observed ) ) ) {
+				observeFields();
+			}
+		} );
 		mutationObserver.observe( document.body, { childList: true, subtree: true } );
 
 		if ( document.fonts?.ready ) {
 			document.fonts.ready.then( scheduleAlignment );
 		}
+	}
+
+	/**
+	 * Check if a DOM change could add, remove, or move fields in an inline form.
+	 *
+	 * @since 7.1
+	 *
+	 * @param {MutationRecord} mutation The DOM change.
+	 * @param {Set<Element>}   observed The fields that are watched for size changes.
+	 * @return {boolean} True when the inline form fields need to be checked again.
+	 */
+	function isInlineFormMutation( mutation, observed ) {
+		if ( mutation.target.closest?.( '.frm_inline_form' ) ) {
+			return true;
+		}
+
+		for ( const node of mutation.addedNodes ) {
+			if ( node.nodeType === Node.ELEMENT_NODE && ( node.matches( '.frm_inline_form' ) || node.querySelector( '.frm_inline_form' ) ) ) {
+				return true;
+			}
+		}
+
+		// A removed form leaves detached fields behind that should stop being observed.
+		if ( mutation.removedNodes.length ) {
+			for ( const element of observed ) {
+				if ( ! element.isConnected ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	/**
