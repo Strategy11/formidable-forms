@@ -39,13 +39,13 @@ class FrmEntriesHelper {
 	public static function setup_new_vars( $fields, $form = '', $reset = false, $args = array() ) {
 		remove_action( 'media_buttons', 'FrmFormsController::insert_form_button' );
 
-		$values = array(
+		$posted_key = FrmAppHelper::get_post_param( 'item_key', '', 'sanitize_title' );
+		$values     = array(
 			'name'        => '',
 			'description' => '',
-			'item_key'    => '',
+			'item_key'    => ! $reset && is_string( $posted_key ) ? $posted_key : '',
+			'fields'      => array(),
 		);
-
-		$values['fields'] = array();
 
 		if ( ! $fields ) {
 			return apply_filters( 'frm_setup_new_entry', $values );
@@ -203,15 +203,15 @@ class FrmEntriesHelper {
 			return $message;
 		}
 
-		if ( ! $message ) {
-			$message = '[default-message]';
-		}
-
+		$message = $message ? $message : '[default-message]';
 		preg_match_all( "/\[(default-message|default_message)\b(.*?)(?:(\/))?\]/s", $message, $shortcodes, PREG_PATTERN_ORDER );
 
 		foreach ( $shortcodes[0] as $short_key => $tag ) {
+			// Array and json values are read by code, so they are only escaped when the caller asks, like FrmEmail does.
 			$add_atts  = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
-			$this_atts = $add_atts ? array_merge( $atts, $add_atts ) : $atts;
+			$format    = $add_atts['format'] ?? $atts['format'] ?? '';
+			$escape    = $atts['esc_shortcodes'] ?? ( empty( $atts['plain_text'] ) && ! in_array( $format, array( 'array', 'json' ), true ) );
+			$this_atts = array_merge( $atts, $add_atts, array( 'esc_shortcodes' => $escape ) );
 			$default   = FrmEntriesController::show_entry_shortcode( $this_atts );
 
 			// Add the default message.

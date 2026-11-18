@@ -126,6 +126,10 @@ class FrmFormApi {
 			$url .= '?l=' . urlencode( base64_encode( $this->license ) );
 		}
 
+		if ( $this->include_boosts() ) {
+			$url = add_query_arg( 'include_boosts', 1, $url );
+		}
+
 		if ( $this->force ) {
 			$addons      = false;
 			$this->force = false;
@@ -263,11 +267,21 @@ class FrmFormApi {
 	 * @return string
 	 */
 	protected function api_url() {
-		if ( ! $this->license ) {
-			// Direct traffic to Cloudflare worker when there is no license.
-			return 'https://plapi.formidableforms.com/list/';
-		}
 		return 'https://formidableforms.com/wp-json/s11edd/v1/updates/';
+	}
+
+	/**
+	 * Only the add-ons feed lists Boosts. Subclasses that request other feeds leave them out.
+	 *
+	 * This checks the cache rather than the class, so a subclass that reads the add-ons feed,
+	 * like FrmAILicense in Formidable AI, caches the same Boosts as this class.
+	 *
+	 * @since 7.1
+	 *
+	 * @return bool
+	 */
+	protected function include_boosts() {
+		return str_starts_with( $this->cache_key, 'frm_addons_l' );
 	}
 
 	/**

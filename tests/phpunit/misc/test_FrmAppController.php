@@ -123,7 +123,7 @@ class test_FrmAppController extends FrmUnitTest {
 				'expected' => true,
 			),
 			array(
-				'version'  => '7.0', // This version should be later than the current version (Bump this to 8 when v7.0 is released).
+				'version'  => '8.0', // This version should be later than the current version (Bump this to 9 when v8.0 is released).
 				'db'       => FrmAppHelper::$db_version + 1,
 				'expected' => false,
 			),
@@ -184,5 +184,15 @@ class test_FrmAppController extends FrmUnitTest {
 	public function test_network_upgrade_site() {
 		FrmAppController::network_upgrade_site();
 		$this->addToAssertionCount( 1 );
+	}
+
+	public function test_drop_tables() {
+		global $wpdb;
+
+		$tables = FrmAppController::drop_tables( array() );
+
+		foreach ( array( 'frm_fields', 'frm_forms', 'frm_items', 'frm_item_metas', 'frm_payments', 'frm_subscriptions', 'frm_gated_tokens' ) as $table ) {
+			$this->assertContains( $wpdb->prefix . $table, $tables, $table . ' is not dropped with the site.' );
+		}
 	}
 }

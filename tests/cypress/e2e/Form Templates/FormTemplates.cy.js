@@ -398,10 +398,13 @@ describe( 'Form Templates page', () => {
 		cy.get( ':nth-child(3) > label' ).should( 'contain', 'Description' );
 		cy.get( '#frm_create_template_description' ).type( 'Test description' );
 		cy.get( '#frm-create-template-button' ).should( 'be.visible' ).and( 'contain', 'Create Template' ).click();
+		// Create Template opens the new template in the builder. Templates are not listed with
+		// the forms, so closing the builder must not show a "Form Template Test Template" form.
 		cy.get( "a[aria-label='Close'] svg", { timeout: 10000 } )
 			.should( 'be.visible' )
 			.click();
-		cy.get( '.row-title' ).should( 'contain', 'Form Template Test Template' );
+		cy.get( '.row-title' ).should( 'contain', 'Form Template Test' );
+		cy.get( '.row-title' ).should( 'not.contain', 'Form Template Test Template' );
 
 		cy.get( '#toplevel_page_formidable > .wp-submenu > :nth-child(8) > a' ).should( 'contain', 'Form Templates' ).click();
 		cy.get( '[data-category="custom"]' ).click();

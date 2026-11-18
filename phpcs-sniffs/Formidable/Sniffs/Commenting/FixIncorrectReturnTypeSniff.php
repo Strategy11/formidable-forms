@@ -3,7 +3,8 @@
  * Formidable_Sniffs_Commenting_FixIncorrectReturnTypeSniff
  *
  * Detects functions with @return docblock that have no return statement
- * and changes them to @return void.
+ * and changes them to @return void. Generators (functions that yield) are
+ * skipped, and so are @return types that continue onto the next docblock line.
  *
  * @package Formidable\Sniffs
  */
@@ -81,8 +82,8 @@ class FixIncorrectReturnTypeSniff implements Sniff {
 
 		$returnType = $this->getReturnType( $phpcsFile, $returnTag );
 
-		// Skip if already void.
-		if ( 'void' === $returnType ) {
+		// Skip if already void, or if the type could not be read in full (multi-line generics).
+		if ( '' === $returnType || 'void' === $returnType ) {
 			return;
 		}
 
@@ -99,7 +100,7 @@ class FixIncorrectReturnTypeSniff implements Sniff {
 	}
 
 	/**
-	 * Check if a function has a return statement with a value.
+	 * Check if a function has a return statement with a value, or is a generator.
 	 *
 	 * @param File $phpcsFile The file being scanned.
 	 * @param int  $stackPtr  The function token position.
@@ -111,6 +112,10 @@ class FixIncorrectReturnTypeSniff implements Sniff {
 
 		$scopeOpener = $tokens[ $stackPtr ]['scope_opener'];
 		$scopeCloser = $tokens[ $stackPtr ]['scope_closer'];
+
+		if ( $this->isGenerator( $phpcsFile, $stackPtr ) ) {
+			return true;
+		}
 
 		// Find all return statements in the function.
 		$current = $scopeOpener;
@@ -139,6 +144,34 @@ class FixIncorrectReturnTypeSniff implements Sniff {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Check if a function yields directly, which makes it return a Generator.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The function token position.
+	 *
+	 * @return bool
+	 */
+	private function isGenerator( File $phpcsFile, $stackPtr ) {
+		$tokens      = $phpcsFile->getTokens();
+		$scopeCloser = $tokens[ $stackPtr ]['scope_closer'];
+		$current     = $tokens[ $stackPtr ]['scope_opener'];
+
+		while ( true ) {
+			$yield = $phpcsFile->findNext( array( T_YIELD, T_YIELD_FROM ), $current + 1, $scopeCloser );
+
+			if ( false === $yield ) {
+				return false;
+			}
+
+			if ( ! $this->isInsideNestedScope( $phpcsFile, $yield, $stackPtr ) ) {
+				return true;
+			}
+
+			$current = $yield;
+		}
 	}
 
 	/**
@@ -237,14 +270,46 @@ class FixIncorrectReturnTypeSniff implements Sniff {
 		$typeToken = $phpcsFile->findNext( T_DOC_COMMENT_WHITESPACE, $returnTag + 1, null, true );
 
 		if ( false !== $typeToken && $tokens[ $typeToken ]['code'] === T_DOC_COMMENT_STRING ) {
-			$content = $tokens[ $typeToken ]['content'];
-			// Get just the type (first word).
-			$parts = preg_split( '/\s+/', $content, 2 );
+			$parts = $this->splitType( $tokens[ $typeToken ]['content'] );
 
-			return $parts[0];
+			return false === $parts ? '' : $parts[0];
 		}
 
 		return '';
+	}
+
+	/**
+	 * Split a @return tag's content into the type and the rest (description).
+	 *
+	 * The type ends at the first whitespace outside brackets, so generics and
+	 * array shapes such as `array{a: int, b: string}` stay whole.
+	 *
+	 * @param string $content The doc comment string after @return.
+	 *
+	 * @return array{0: string, 1: string}|false False when the brackets do not
+	 *                                           close on this line.
+	 */
+	private function splitType( $content ) {
+		$depth  = 0;
+		$length = strlen( $content );
+
+		for ( $i = 0; $i < $length; $i++ ) {
+			$char = $content[ $i ];
+
+			if ( false !== strpos( '<{([', $char ) ) {
+				++$depth;
+			} elseif ( false !== strpos( '>})]', $char ) ) {
+				--$depth;
+			} elseif ( 0 === $depth && ctype_space( $char ) ) {
+				return array( substr( $content, 0, $i ), ltrim( substr( $content, $i ) ) );
+			}
+		}
+
+		if ( 0 !== $depth ) {
+			return false;
+		}
+
+		return array( $content, '' );
 	}
 
 	/**
@@ -263,15 +328,14 @@ class FixIncorrectReturnTypeSniff implements Sniff {
 		$typeToken = $phpcsFile->findNext( T_DOC_COMMENT_WHITESPACE, $returnTag + 1, null, true );
 
 		if ( false !== $typeToken && $tokens[ $typeToken ]['code'] === T_DOC_COMMENT_STRING ) {
-			$content = $tokens[ $typeToken ]['content'];
-			// Replace just the type, keeping any description.
-			$parts = preg_split( '/\s+/', $content, 2 );
+			$parts = $this->splitType( $tokens[ $typeToken ]['content'] );
 
-			if ( count( $parts ) > 1 ) {
-				$fixer->replaceToken( $typeToken, 'void ' . $parts[1] );
-			} else {
-				$fixer->replaceToken( $typeToken, 'void' );
+			if ( false === $parts ) {
+				return;
 			}
+
+			// Replace just the type, keeping any description.
+			$fixer->replaceToken( $typeToken, '' === $parts[1] ? 'void' : 'void ' . $parts[1] );
 		}
 	}
 }

@@ -5,12 +5,7 @@
 .formidable_page_formidable-styles .frm-right-panel .frm-style-component.frm-background-image-component {
 
 	> div {
-		max-width: 216px;
-	}
-
-	.wp-picker-container {
-		max-width: calc(100% - 44px);
-		position: relative;
+		width: 100%;
 	}
 
 	button.frm_choose_image_box {

@@ -472,7 +472,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * @return void
 	 */
 	public static function load_scripts( $form_id ) {
-		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
+		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) || FrmAppHelper::is_style_editor_page() ) {
 			return;
 		}
 

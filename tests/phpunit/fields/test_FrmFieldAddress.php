@@ -223,6 +223,28 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	}
 
 	/**
+	 * Test get_country_codes returns the name to code map.
+	 *
+	 * @covers FrmAddressesController::get_country_codes
+	 */
+	public function test_get_country_codes_returns_name_to_code_map() {
+		$codes = FrmAddressesController::get_country_codes();
+		$this->assertSame( 'US', $codes['United States'] );
+		$this->assertSame( 'CA', $codes['Canada'] );
+	}
+
+	/**
+	 * Test get_country_code and get_country_codes read from the same source.
+	 *
+	 * @covers FrmAddressesController::get_country_codes
+	 */
+	public function test_get_country_codes_matches_get_country_code() {
+		foreach ( array( 'United Kingdom', 'Germany' ) as $country ) {
+			$this->assertSame( FrmAddressesController::get_country_code( $country ), FrmAddressesController::get_country_codes()[ $country ] );
+		}
+	}
+
+	/**
 	 * Test get_export_headings adds address columns.
 	 */
 	public function test_get_export_headings_adds_address_columns() {
@@ -289,7 +311,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	}
 
 	/**
-	 * @return void array<(array<string> | string)>>
+	 * @return \Iterator<string, array<(array<string> | string)>>
 	 */
 	public static function address_type_provider() {
 		yield 'international' => array( 'international', array( 'line1', 'line2', 'city', 'state', 'zip', 'country' ) );
@@ -346,7 +368,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	}
 
 	/**
-	 * @return void array<(array<string> | string)>>
+	 * @return \Iterator<string, array{string, bool}>
 	 */
 	public static function us_zip_provider() {
 		yield 'five digits' => array( '62704', true );
@@ -581,7 +603,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	}
 
 	/**
-	 * @return void array<(array | string)>>
+	 * @return \Iterator<string, array{(array<string, string> | string | null), array<string, string>}>
 	 */
 	public static function address_string_provider() {
 		yield 'six parts map in order' => array(
@@ -655,7 +677,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	}
 
 	/**
-	 * @return void array<(array | string)>>
+	 * @return \Iterator<string, array<(array | string)>>
 	 */
 	public static function import_value_provider() {
 		yield 'six parts include line2 and country' => array(
@@ -755,7 +777,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	}
 
 	/**
-	 * @return void array<(array<string> | string)>>
+	 * @return \Iterator<string, array<(array<string> | string)>>
 	 */
 	public static function processed_sub_fields_provider() {
 		yield 'international' => array( 'international', array( 'line1', 'line2', 'city', 'state', 'zip', 'country' ) );

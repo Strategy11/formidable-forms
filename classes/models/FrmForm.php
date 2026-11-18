@@ -268,6 +268,10 @@ class FrmForm {
 		$form_fields = array( 'form_key', 'name', 'description', 'status', 'parent_form_id' );
 		$new_values  = self::set_update_options( array(), $values, array( 'form_id' => $id ) );
 
+		if ( isset( $values['editable'] ) ) {
+			$new_values['editable'] = (int) ! empty( $values['editable'] );
+		}
+
 		foreach ( $values as $value_key => $value ) {
 			if ( $value_key && in_array( $value_key, $form_fields, true ) ) {
 				$new_values[ $value_key ] = 'name' === $value_key ? FrmAppHelper::truncate( $value, 255, 1, '', true ) : $value;
@@ -291,10 +295,89 @@ class FrmForm {
 
 		$values = self::update_fields( $id, $values );
 
+		if ( ! self::update_field_order( $id, $values ) ) {
+			$query_results = false;
+		}
+
 		do_action( 'frm_update_form', $id, $values );
 		do_action( 'frm_update_form_' . $id, $values );
 
 		return $query_results;
+	}
+
+	/**
+	 * Save builder order changes after active field settings have been updated.
+	 *
+	 * @since 7.1
+	 *
+	 * @param int|string $form_id Form being saved.
+	 * @param array      $values Form values including the JSON field ID to order map.
+	 *
+	 * @return bool Whether the order update succeeded or no update was needed.
+	 */
+	private static function update_field_order( $form_id, $values ) {
+		if ( (int) $form_id < 1 || empty( $values['frm_field_order'] ) || ! is_string( $values['frm_field_order'] ) ) {
+			return true;
+		}
+
+		$orders = json_decode( $values['frm_field_order'], true );
+
+		if ( ! is_array( $orders ) || ! $orders ) {
+			return true;
+		}
+
+		$ids  = array();
+		$args = array();
+
+		foreach ( $orders as $field_id => $order ) {
+			if ( ! preg_match( '/^[1-9][0-9]*$/D', (string) $field_id ) || ! is_int( $order ) || $order < 1 || (int) $field_id < 1 ) {
+				continue;
+			}
+
+			$args[] = (int) $field_id;
+			$args[] = $order;
+			$ids[]  = (int) $field_id;
+		}
+
+		if ( ! $ids ) {
+			return true;
+		}
+
+		global $wpdb;
+		$form_ids   = FrmDb::get_col( 'frm_forms', array( 'parent_form_id' => (int) $form_id ) );
+		$form_ids[] = (int) $form_id;
+		$form_ids   = array_unique( $form_ids );
+		$args       = array_merge( array( $wpdb->prefix . 'frm_fields' ), $args, $ids, $form_ids );
+		$result     = $wpdb->query(
+			$wpdb->prepare(
+				'UPDATE %i SET field_order = CASE id ' . implode( ' ', array_fill( 0, count( $ids ), 'WHEN %d THEN %d' ) ) .
+				' END WHERE id IN (' . implode( ',', array_fill( 0, count( $ids ), '%d' ) ) .
+				') AND form_id IN (' . implode( ',', array_fill( 0, count( $form_ids ), '%d' ) ) . ')',
+				$args
+			)
+		);
+
+		if ( false === $result ) {
+			return false;
+		}
+
+		foreach ( $form_ids as $affected_form_id ) {
+			FrmField::delete_form_transient( $affected_form_id );
+		}
+
+		/**
+		 * Fires after the builder saves the field order in one query.
+		 *
+		 * This write does not fire frm_field_updated for each field.
+		 *
+		 * @since 7.1
+		 *
+		 * @param int[] $ids     IDs of the fields whose order was sent. Fields outside the form are skipped by the query.
+		 * @param int   $form_id The form being saved.
+		 */
+		do_action( 'frm_field_order_updated', $ids, (int) $form_id );
+
+		return true;
 	}
 
 	/**
@@ -725,7 +808,7 @@ class FrmForm {
 		/**
 		 * Fires before a form and its children are permanently deleted.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param int $id The form ID being deleted.
 		 */

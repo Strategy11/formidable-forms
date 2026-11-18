@@ -376,6 +376,7 @@ legend.frm_hidden{
 
 .with_frm_style .frm_primary_label{
 	max-width:100%;
+	line-height: inherit;
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
 	font-family: var(--font);
 <?php } ?>
@@ -526,6 +527,7 @@ legend.frm_hidden{
 .with_frm_style select[multiple="multiple"]{
 	height:auto;
 	line-height:normal;
+	background-image: none; /* Some themes add a dropdown arrow to every select. */
 }
 
 <?php if ( $pro_is_installed ) { ?>
@@ -733,6 +735,25 @@ legend.frm_hidden{
 	gap: 2%;
 }
 
+.with_frm_style.frm_inline_top .frm_submit.frm_flex,
+.with_frm_style .frm_submit.frm_flex.frm_inline_submit {
+	align-items: flex-start;
+	align-content: flex-start;
+	row-gap: 0;
+}
+
+.with_frm_style.frm_inline_top .frm_submit.frm_flex::before,
+.with_frm_style .frm_submit.frm_flex.frm_inline_submit::before {
+	flex-basis: 100%;
+	order: -2;
+}
+
+/* formidable.js sets the offset when a theme restyles the labels and the spacer no longer matches them. It must outrank the margin in each style's spacer rule. */
+.frm_forms.with_frm_style.frm_inline_top .frm_fields_container .frm_submit::before,
+.frm_forms.with_frm_style .frm_fields_container .frm_submit.frm_inline_submit::before {
+	margin-bottom: var(--frm-inline-submit-offset, 0);
+}
+
 <?php if ( $pro_is_installed ) { ?>
 .with_frm_style .frm_submit.frm_flex button.frm_button_submit ~ .frm_prev_page {
 	order: -1;
@@ -821,6 +842,11 @@ a.frm_save_draft{
 	display: inline-block;
 	vertical-align: middle;
 	white-space:normal;
+}
+
+.with_frm_style .frm_checkbox label:not(.frm_screen_reader),
+.with_frm_style .frm_radio label:not(.frm_screen_reader) {
+	margin-bottom: 0; /* Override Bootstrap themes. */
 }
 
 .with_frm_style .frm_checkbox label input[type=checkbox],
@@ -979,6 +1005,11 @@ a.frm_save_draft{
 .frm_success_style{
 	border-radius:4px;
 	padding:15px;
+}
+
+.with_frm_style .frm_error_style:focus:not(:focus-visible) {
+	/* The error summary receives focus after submit. Don't show a theme focus ring for it. */
+	outline: none;
 }
 
 .with_frm_style .frm_message p {

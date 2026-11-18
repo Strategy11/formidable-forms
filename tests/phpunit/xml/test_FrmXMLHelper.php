@@ -202,7 +202,7 @@ class test_FrmXMLHelper extends FrmUnitTest {
 	}
 
 	/**
-	 * @return void array<string>>
+	 * @return \Iterator<string, array<string>>
 	 */
 	public static function unreadable_field_options_provider(): \Iterator {
 		yield 'serialized null' => array( 'N;' );
