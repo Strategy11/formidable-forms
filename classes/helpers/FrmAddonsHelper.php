@@ -180,12 +180,11 @@ class FrmAddonsHelper {
 	 */
 	public static function get_addon_icon( $slug ) {
 		$icons_map = array(
-			'advanced-modals'                 => 'boost_popups',
-			'simply-popups'                   => 'boost_popups',
-			'bulk-edit'                       => 'boost_bulk_edit',
-			'celebrations'                    => 'boost_celebrations',
-			'color-picker'                    => 'boost_color_picker',
-			'field-tooltips'                  => 'boost_tooltips',
+			'formidable-advanced-modals'      => 'boost_popups',
+			'formidable-bulk-edit'            => 'boost_bulk_edit',
+			'formidable-celebrations'         => 'boost_celebrations',
+			'formidable-color-picker'         => 'boost_color_picker',
+			'formidable-tooltips'             => 'boost_tooltips',
 			'acf-forms'                       => 'acfforms',
 			'activecampaign-wordpress-plugin' => 'activecampaign',
 			'ai'                              => 'ai-form',

@@ -2168,6 +2168,25 @@
 	}
 
 	/**
+	 * Check if the form is going to the previous page or saving a draft, using Pro's helpers when available.
+	 *
+	 * @return {boolean} True if the form is going back or saving a draft.
+	 */
+	function goingBackOrSavingDraft() {
+		const proForm = window.frmProForm;
+
+		if ( 'object' !== typeof proForm ) {
+			return false;
+		}
+
+		if ( 'function' === typeof proForm.goingToPreviousPage && proForm.goingToPreviousPage( thisForm ) ) {
+			return true;
+		}
+
+		return 'function' === typeof proForm.savingDraft && 1 === parseInt( proForm.savingDraft( thisForm ), 10 );
+	}
+
+	/**
 	 * Check if the current form action type should trigger payment processing.
 	 *
 	 * @return {boolean} True if current action type should be processed.
@@ -2176,7 +2195,8 @@
 		const action = jQuery( thisForm ).find( 'input[name="frm_action"]' ).val();
 
 		if ( 'object' !== typeof window.frmProForm || 'function' !== typeof window.frmProForm.currentActionTypeShouldBeProcessed ) {
-			return 'create' === action;
+			// Pro's frmpplite.js may not be enqueued, but going back or saving a draft must never submit the card.
+			return 'create' === action && ! goingBackOrSavingDraft();
 		}
 
 		return window.frmProForm.currentActionTypeShouldBeProcessed(
@@ -2257,10 +2277,12 @@
 	 */
 	function getBillingAddress() {
 		let addressID = '';
+		let addressType = '';
 
 		getPayPalSettings().forEach( function( setting ) {
 			if ( setting.address ) {
 				addressID = setting.address;
+				addressType = setting.addressType || '';
 			}
 		} );
 
@@ -2309,7 +2331,7 @@
 			return null;
 		}
 
-		const countryCode = getCountryCode( addressContainer, prefix );
+		const countryCode = getCountryCode( addressContainer, prefix, addressType );
 
 		if ( countryCode ) {
 			billingAddress.countryCode = countryCode;
@@ -2321,15 +2343,17 @@
 	/**
 	 * Get the two letter country code for the filled address.
 	 * The country dropdown holds the code in a data-code attribute.
-	 * US type address fields have a state dropdown and no country field, so US is assumed for them.
+	 * When the address is on an earlier page, the dropdown is a hidden input holding the country name instead.
+	 * US type address fields have no country field, so US is assumed for them.
 	 *
 	 * @since 6.34
 	 *
 	 * @param {Element} addressContainer
 	 * @param {string}  prefix
+	 * @param {string}  addressType      The address field type, such as us or international.
 	 * @return {string} Country code, or an empty string when the country is unknown.
 	 */
-	function getCountryCode( addressContainer, prefix ) {
+	function getCountryCode( addressContainer, prefix, addressType ) {
 		const countryDropdown = addressContainer.querySelector( `select[name$="[${ prefix }country]"]` );
 
 		if ( countryDropdown ) {
@@ -2337,8 +2361,15 @@
 			return countryOption?.getAttribute( 'data-code' ) || '';
 		}
 
+		const countryInput = addressContainer.querySelector( `input[name$="[${ prefix }country]"]` );
+
+		if ( countryInput?.value ) {
+			const code = frmPayPalVars.countryCodes?.[ countryInput.value ];
+			return 'string' === typeof code ? code : '';
+		}
+
 		const stateDropdown = addressContainer.querySelector( `select[name$="[${ prefix }state]"]` );
-		return stateDropdown ? 'US' : '';
+		return stateDropdown || 'us' === addressType ? 'US' : '';
 	}
 
 	// ---- Price / Pay Later ----
