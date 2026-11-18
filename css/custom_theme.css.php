@@ -382,6 +382,7 @@ legend.frm_hidden{
 
 .with_frm_style .frm_primary_label{
 	max-width:100%;
+	line-height: inherit;
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
 	font-family: var(--font);
 <?php } ?>
@@ -738,6 +739,25 @@ legend.frm_hidden{
 .with_frm_style .frm_submit.frm_flex {
 	align-items: center;
 	gap: 2%;
+}
+
+.with_frm_style.frm_inline_top .frm_submit.frm_flex,
+.with_frm_style .frm_submit.frm_flex.frm_inline_submit {
+	align-items: flex-start;
+	align-content: flex-start;
+	row-gap: 0;
+}
+
+.with_frm_style.frm_inline_top .frm_submit.frm_flex::before,
+.with_frm_style .frm_submit.frm_flex.frm_inline_submit::before {
+	flex-basis: 100%;
+	order: -2;
+}
+
+/* formidable.js sets the offset when a theme restyles the labels and the spacer no longer matches them. It must outrank the margin in each style's spacer rule. */
+.frm_forms.with_frm_style.frm_inline_top .frm_fields_container .frm_submit::before,
+.frm_forms.with_frm_style .frm_fields_container .frm_submit.frm_inline_submit::before {
+	margin-bottom: var(--frm-inline-submit-offset, 0);
 }
 
 <?php if ( $pro_is_installed ) { ?>
