@@ -1,7 +1,7 @@
 /**
  * Preserve the input's RGB or HSL format when WordPress returns hexadecimal.
  *
- * @since x.x
+ * @since 7.1
  * @param {string} hex            Color returned by WordPress.
  * @param {string} previous       Previously saved color.
  * @param {string} selectedFormat Selected picker format.
@@ -54,14 +54,65 @@ export function formatColor( hex, previous, selectedFormat ) {
 }
 
 /**
+ * Check if a value is a hexadecimal color without its leading hash.
+ *
+ * This matches FrmStylesHelper::is_hex.
+ *
+ * @since 7.1
+ * @param {string} color Color value.
+ * @return {boolean} True when the value is a bare hex color.
+ */
+export function isBareHex( color ) {
+	return /^(?:[\da-f]{3,4}|[\da-f]{6}|[\da-f]{8})$/i.test( color );
+}
+
+/**
+ * Prepend the hash to a bare hex color, like FrmStylesHelper::add_color_hash_if_needed.
+ *
+ * Style settings save hex colors without the hash.
+ *
+ * @since 7.1
+ * @param {string} color Color value.
+ * @return {string} The color, with a hash when it is a bare hex color.
+ */
+export function addColorHash( color ) {
+	const trimmed = color.trim();
+	return isBareHex( trimmed ) ? `#${ trimmed }` : trimmed;
+}
+
+/**
+ * Check if text typed in the picker's hex field is a complete hex color.
+ *
+ * @since 7.1
+ * @param {string} value Hex field text, with or without the hash.
+ * @return {boolean} True when the text is a complete hex color.
+ */
+export function isTypedHexValid( value ) {
+	return isBareHex( value.trim().replace( /^#/, '' ) );
+}
+
+/**
+ * Check if an input in the WordPress color picker is its hex text field.
+ *
+ * The hex field is a text input limited to 7 or 9 characters. The RGB and HSL fields are number inputs.
+ *
+ * @since 7.1
+ * @param {HTMLInputElement} input An input rendered by the color picker.
+ * @return {boolean} True for the hex text field.
+ */
+export function isHexField( input ) {
+	return 'number' !== input.type && [ '7', '9' ].includes( input.getAttribute( 'maxlength' ) );
+}
+
+/**
  * Convert a saved picker value to the hexadecimal value WordPress emits.
  *
- * @since x.x
+ * @since 7.1
  * @param {string} color Saved color value.
  * @return {string} Hex color, or an empty string when unsupported.
  */
 export function colorToHex( color ) {
-	color = color.trim().toLowerCase();
+	color = addColorHash( color ).toLowerCase();
 	if ( color === 'transparent' ) {
 		return '#00000000';
 	}

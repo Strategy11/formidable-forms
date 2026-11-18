@@ -128,7 +128,7 @@
 	 */
 	async function paypalInit() {
 		const cardElement = document.querySelector( '.frm-card-element' );
-		if ( ! cardElement ) {
+		if ( ! cardElement || ! window.paypal ) {
 			return;
 		}
 
@@ -182,12 +182,20 @@
 			isRecurring
 		} );
 
+		if ( runId !== initRunId ) {
+			return;
+		}
+
 		// 1b. Discover Google Pay / Apple Pay. Their SDKs (pay.js / PayPal applepay
 		// component) load asynchronously and are frequently not ready during the first
 		// run, which previously left these buttons missing on first load. We wait
 		// (bounded) for them here so every eligible method appears together in one
 		// render instead of popping in afterward.
-		await discoverDeferredPaymentMethods( { buttonsAreEnabled, isRecurring } );
+		await discoverDeferredPaymentMethods( { buttonsAreEnabled, isRecurring, runId } );
+
+		if ( runId !== initRunId ) {
+			return;
+		}
 
 		if ( paymentMethods.size === 0 ) {
 			displayPaymentFailure( 'No payment methods available.' );
@@ -226,6 +234,9 @@
 				} catch ( err ) {
 					console.error( `Failed to pre-render payment method: ${ key }`, err );
 				}
+				if ( runId !== initRunId ) {
+					return;
+				}
 			}
 		}
 
@@ -233,13 +244,17 @@
 		const firstKey = paymentMethods.keys().next().value;
 		await selectPaymentMethod( firstKey );
 
+		if ( runId !== initRunId ) {
+			return;
+		}
+
 		// 6. Attach form submit handler (for card method).
 		thisForm.addEventListener( 'submit', handleFormSubmission );
 
 		// 7. Pay Later messages.
 		if ( paymentMethods.has( 'paylater' ) ) {
 			renderMessages();
-			jQuery( document ).on( 'frmFieldChanged', priceChanged );
+			jQuery( document ).off( 'frmFieldChanged', priceChanged ).on( 'frmFieldChanged', priceChanged );
 			checkPriceFieldsOnLoad();
 		}
 
@@ -253,7 +268,7 @@
 
 			// priceChanged already refreshes the amount when Pay Later messages are on.
 			if ( ! paymentMethods.has( 'paylater' ) ) {
-				jQuery( document ).on( 'frmFieldChanged', refreshCachedAmountOnFieldChange );
+				jQuery( document ).off( 'frmFieldChanged', refreshCachedAmountOnFieldChange ).on( 'frmFieldChanged', refreshCachedAmountOnFieldChange );
 			}
 		}
 	}
@@ -343,7 +358,7 @@
 	 * @return {Promise<void>}
 	 */
 	async function discoverDeferredPaymentMethods( opts ) {
-		const { buttonsAreEnabled, isRecurring } = opts;
+		const { buttonsAreEnabled, isRecurring, runId } = opts;
 
 		if ( ! buttonsAreEnabled || isRecurring ) {
 			return;
@@ -365,6 +380,10 @@
 			frmPayPalVars.includeGooglePay ? resolveGooglePayEligibility() : false,
 			frmPayPalVars.includeApplePay ? resolveApplePayEligibility() : false
 		] );
+
+		if ( runId !== initRunId ) {
+			return;
+		}
 
 		if ( googlePayEligible ) {
 			registerMethod( 'google_pay', {
@@ -2149,6 +2168,25 @@
 	}
 
 	/**
+	 * Check if the form is going to the previous page or saving a draft, using Pro's helpers when available.
+	 *
+	 * @return {boolean} True if the form is going back or saving a draft.
+	 */
+	function goingBackOrSavingDraft() {
+		const proForm = window.frmProForm;
+
+		if ( 'object' !== typeof proForm ) {
+			return false;
+		}
+
+		if ( 'function' === typeof proForm.goingToPreviousPage && proForm.goingToPreviousPage( thisForm ) ) {
+			return true;
+		}
+
+		return 'function' === typeof proForm.savingDraft && 1 === parseInt( proForm.savingDraft( thisForm ), 10 );
+	}
+
+	/**
 	 * Check if the current form action type should trigger payment processing.
 	 *
 	 * @return {boolean} True if current action type should be processed.
@@ -2157,7 +2195,8 @@
 		const action = jQuery( thisForm ).find( 'input[name="frm_action"]' ).val();
 
 		if ( 'object' !== typeof window.frmProForm || 'function' !== typeof window.frmProForm.currentActionTypeShouldBeProcessed ) {
-			return 'create' === action;
+			// Pro's frmpplite.js may not be enqueued, but going back or saving a draft must never submit the card.
+			return 'create' === action && ! goingBackOrSavingDraft();
 		}
 
 		return window.frmProForm.currentActionTypeShouldBeProcessed(
@@ -2238,10 +2277,12 @@
 	 */
 	function getBillingAddress() {
 		let addressID = '';
+		let addressType = '';
 
 		getPayPalSettings().forEach( function( setting ) {
 			if ( setting.address ) {
 				addressID = setting.address;
+				addressType = setting.addressType || '';
 			}
 		} );
 
@@ -2290,7 +2331,7 @@
 			return null;
 		}
 
-		const countryCode = getCountryCode( addressContainer, prefix );
+		const countryCode = getCountryCode( addressContainer, prefix, addressType );
 
 		if ( countryCode ) {
 			billingAddress.countryCode = countryCode;
@@ -2302,15 +2343,17 @@
 	/**
 	 * Get the two letter country code for the filled address.
 	 * The country dropdown holds the code in a data-code attribute.
-	 * US type address fields have a state dropdown and no country field, so US is assumed for them.
+	 * When the address is on an earlier page, the dropdown is a hidden input holding the country name instead.
+	 * US type address fields have no country field, so US is assumed for them.
 	 *
 	 * @since 6.34
 	 *
 	 * @param {Element} addressContainer
 	 * @param {string}  prefix
+	 * @param {string}  addressType      The address field type, such as us or international.
 	 * @return {string} Country code, or an empty string when the country is unknown.
 	 */
-	function getCountryCode( addressContainer, prefix ) {
+	function getCountryCode( addressContainer, prefix, addressType ) {
 		const countryDropdown = addressContainer.querySelector( `select[name$="[${ prefix }country]"]` );
 
 		if ( countryDropdown ) {
@@ -2318,8 +2361,15 @@
 			return countryOption?.getAttribute( 'data-code' ) || '';
 		}
 
+		const countryInput = addressContainer.querySelector( `input[name$="[${ prefix }country]"]` );
+
+		if ( countryInput?.value ) {
+			const code = frmPayPalVars.countryCodes?.[ countryInput.value ];
+			return 'string' === typeof code ? code : '';
+		}
+
 		const stateDropdown = addressContainer.querySelector( `select[name$="[${ prefix }state]"]` );
-		return stateDropdown ? 'US' : '';
+		return stateDropdown || 'us' === addressType ? 'US' : '';
 	}
 
 	// ---- Price / Pay Later ----
@@ -2689,7 +2739,10 @@
 
 	// ---- Bootstrap ----
 
-	document.addEventListener( 'DOMContentLoaded', async function() {
+	/**
+	 * Start PayPal once its SDK is available.
+	 */
+	function bootstrap() {
 		if ( window.paypal ) {
 			paypalInit();
 			return;
@@ -2704,7 +2757,14 @@
 			},
 			50
 		);
-	} );
+	}
+
+	// This script can be loaded async, so DOMContentLoaded may have already fired.
+	if ( 'loading' === document.readyState ) {
+		document.addEventListener( 'DOMContentLoaded', bootstrap );
+	} else {
+		bootstrap();
+	}
 
 	jQuery( document ).on( 'frmPageChanged', function() {
 		paypalInit();

@@ -8,7 +8,10 @@ class FrmField {
 	/**
 	 * Version of the persistent field write hooks available to derived indexes.
 	 *
-	 * @since x.x
+	 * Version 1 covers frm_field_created and frm_field_updated, plus frm_field_order_updated for
+	 * builder saves that write the field order of many fields in one query without frm_field_updated.
+	 *
+	 * @since 7.1
 	 */
 	const WRITE_HOOKS_VERSION = 1;
 
@@ -25,7 +28,7 @@ class FrmField {
 	/**
 	 * Set by create_copy() so the next create() keeps the source placement.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @var bool
 	 */
@@ -546,7 +549,7 @@ class FrmField {
 		/**
 		 * Fires after a field is saved to the database.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param int $new_id Created field ID.
 		 */
@@ -570,7 +573,7 @@ class FrmField {
 	 * field there, so forms saved before a rule existed keep their layout. Callers that build a new
 	 * field from user input must use create() so the placement rules apply.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array $values Field values, as passed to create().
 	 * @param bool  $return Whether to return the new field ID.
@@ -696,8 +699,10 @@ class FrmField {
 			'id' => $copy_field->id,
 		);
 		FrmFieldsHelper::fill_field( $values, $copy_field, $copy_field->form_id );
-		$values   = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
-		$field_id = self::create( $values );
+		$values = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
+
+		// A copy keeps the placement of its source, even one saved before a placement rule existed.
+		$field_id = self::create_copy( $values );
 
 		/**
 		 * Fires after duplicating a field.
@@ -874,7 +879,7 @@ class FrmField {
 			/**
 			 * Fires after a field update succeeds, including updates with unchanged values.
 			 *
-			 * @since x.x
+			 * @since 7.1
 			 *
 			 * @param int $id Updated field ID.
 			 */
@@ -926,7 +931,7 @@ class FrmField {
 			/**
 			 * Fires after a field is deleted from the database.
 			 *
-			 * @since x.x
+			 * @since 7.1
 			 *
 			 * @param int $id Deleted field ID.
 			 */
@@ -970,7 +975,7 @@ class FrmField {
 	 * The LIKE prefixes are escaped so the underscores are matched literally.
 	 * Unescaped, the leading underscore is a wildcard and MySQL scans the whole options table.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param int $form_id Form ID.
 	 *
@@ -1517,7 +1522,7 @@ class FrmField {
 		/**
 		 * Filters the field types that do not store entry metadata.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param string[] $field_types Display-only field types.
 		 */

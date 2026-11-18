@@ -56,7 +56,7 @@ class FrmPayPalLiteAppHelper {
 	 * Apple rejects the merchant session when the name has characters outside ASCII (like the
 	 * en dash in "Page – Site" page titles), so the brand name is reduced to plain ASCII, max 64 characters.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return string
 	 */
