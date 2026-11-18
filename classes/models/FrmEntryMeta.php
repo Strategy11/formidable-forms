@@ -61,7 +61,7 @@ class FrmEntryMeta {
 		/**
 		 * Filter entry metadata before insertion.
 		 *
-		 * @since x.x Added the original value parameter for fields that preserve whitespace.
+		 * @since 7.1 Added the original value parameter for fields that preserve whitespace.
 		 *
 		 * @param array $new_values Prepared metadata columns.
 		 * @param mixed $meta_value Original value before trimming or serialization.

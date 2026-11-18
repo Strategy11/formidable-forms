@@ -898,24 +898,52 @@ class FrmEntry {
 			$values['item_key'] = '';
 		}
 
-		$item_name  = self::get_new_entry_name( $values, $values['item_key'] );
-		$new_values = array(
+		$item_name     = self::get_new_entry_name( $values, $values['item_key'] );
+		$column_values = self::remove_posted_columns( $values, $type, array( 'frm_create_entries', 'frm_edit_entries' ) );
+		$new_values    = array(
 			'item_key'       => FrmAppHelper::get_unique_key( $values['item_key'], $wpdb->prefix . 'frm_items', 'item_key' ),
 			'name'           => FrmAppHelper::truncate( $item_name, 255, 1, '', true ),
 			'ip'             => self::get_ip( $values ),
-			'is_draft'       => self::get_is_draft_value( $values, $type ),
+			'is_draft'       => self::get_is_draft_value( $column_values, $type ),
 			'form_id'        => (int) self::get_entry_value( $values, 'form_id', null ),
-			'post_id'        => (int) self::get_entry_value( $values, 'post_id', 0 ),
-			'parent_item_id' => (int) self::get_entry_value( $values, 'parent_item_id', 0 ),
-			'created_at'     => self::get_created_at( $values ),
-			'updated_at'     => self::get_updated_at( $values ),
-			'description'    => self::get_entry_description( $values ),
+			'post_id'        => (int) self::get_entry_value( $column_values, 'post_id', 0 ),
+			'parent_item_id' => (int) self::get_entry_value( $column_values, 'parent_item_id', 0 ),
+			'created_at'     => self::get_created_at( $column_values ),
+			'updated_at'     => self::get_updated_at( $column_values ),
+			'description'    => self::get_entry_description( $column_values ),
 			'user_id'        => self::get_entry_user_id( $values, $type ),
 		);
 
 		$new_values['updated_by'] = self::get_updated_by( $values, $type, $new_values['user_id'] );
 
 		return $new_values;
+	}
+
+	/**
+	 * Remove entry columns that were included in the posted form data.
+	 *
+	 * @since 7.1
+	 *
+	 * @param array         $values       The entry values.
+	 * @param string        $type         The create/update type. 'xml' for an import.
+	 * @param array<string> $capabilities Any of these capabilities allows the request to set the columns.
+	 *
+	 * @return array
+	 */
+	private static function remove_posted_columns( $values, $type, $capabilities ) {
+		if ( self::is_trusted_import( $type ) || FrmAppHelper::user_has_permission( array_merge( $capabilities, array( 'administrator' ) ) ) ) {
+			return $values;
+		}
+
+		$columns = array( 'post_id', 'parent_item_id', 'created_at', 'updated_at', 'is_draft', 'description' );
+
+		foreach ( $columns as $column ) {
+			if ( null !== FrmAppHelper::get_post_param( $column, null, '' ) ) {
+				unset( $values[ $column ] );
+			}
+		}
+
+		return $values;
 	}
 
 	/**
@@ -1348,6 +1376,7 @@ class FrmEntry {
 	private static function package_entry_to_update( $id, $values, $update_type = 'standard' ) {
 		global $wpdb;
 
+		$values     = self::remove_posted_columns( $values, $update_type, array( 'frm_edit_entries' ) );
 		$new_values = array(
 			'name'       => FrmAppHelper::truncate( self::get_new_entry_name( $values ), 255, 1, '', true ),
 			'form_id'    => (int) self::get_entry_value( $values, 'form_id', null ),
