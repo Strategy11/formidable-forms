@@ -665,17 +665,25 @@
 			return;
 		}
 
+		const backdrop = getBackdropColor( cardElement );
+
 		// Customize the Stripe elements using the Stripe Appearance API.
 		const appearance = {
 			theme: 'stripe',
 			variables: {
 				fontSizeBase: frm_stripe_vars.baseFontSize,
-				colorText: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules[ '.Input' ].color ),
-				colorBackground: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules[ '.Input' ].backgroundColor ),
+				colorText: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules[ '.Input' ].color, backdrop ),
+				colorBackground: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules[ '.Input' ].backgroundColor, backdrop ),
 				fontSmooth: 'auto'
 			},
 			rules: getAppearanceRules()
 		};
+
+		const primaryColor = frm_stripe_vars.appearanceRules[ '.Input:focus' ]?.borderColor;
+		if ( primaryColor ) {
+			appearance.variables.colorPrimary = maybeAdjustColorForStripe( primaryColor, backdrop );
+		}
+
 		elements = frmstripe.elements( { clientSecret, appearance } );
 		isStripeLink = true;
 
@@ -690,24 +698,83 @@
 	}
 
 	/**
-	 * Stripe doesn't support RGBA so convert it to HEX.
+	 * Stripe doesn't support RGBA so blend it over the backdrop and convert it to HEX.
+	 * Dropping the alpha instead turns a transparent field background into a solid one.
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
-	 * @param {string} color
+	 * @param {string}        color
+	 * @param {Array<number>} backdrop RGB channels that the color is blended over.
 	 * @return {string} Converted color value.
 	 */
-	function maybeAdjustColorForStripe( color ) {
+	function maybeAdjustColorForStripe( color, backdrop = [ 255, 255, 255 ] ) {
 		if ( 0 !== color.indexOf( 'rgba' ) ) {
 			return color;
 		}
 
-		const rgba = color.replace( /^rgba?\(|\s+|\)$/g, '' ).split( ',' );
+		const rgba = color.replace( /^rgba?\(|\)$/g, '' ).trim().split( /[\s,/]+/ );
+		const alpha = getColorAlpha( rgba[ 3 ] );
+		const rgb = getColorChannelsForStripe( rgba );
+		const hex = rgb.map( ( channel, i ) => Math.round( ( alpha * channel ) + ( ( 1 - alpha ) * backdrop[ i ] ) ).toString( 16 ).padStart( 2, '0' ) );
 
-		// eslint-disable-next-line no-bitwise -- Bitwise shifts are intentional for RGBA to hex conversion
-		return `#${ ( ( 1 << 24 ) + ( parseInt( rgba[ 0 ], 10 ) << 16 ) + ( parseInt( rgba[ 1 ], 10 ) << 8 ) + parseInt( rgba[ 2 ], 10 ) )
-			.toString( 16 )
-			.slice( 1 ) }`;
+		return `#${ hex.join( '' ) }`;
+	}
+
+	/**
+	 * Normalize numeric and percentage alpha values to the range Stripe colors need.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} rawAlpha CSS alpha component.
+	 * @return {number} Alpha between zero and one, defaulting to one.
+	 */
+	function getColorAlpha( rawAlpha = '' ) {
+		const parsed = parseFloat( rawAlpha );
+		const alpha = rawAlpha.endsWith( '%' ) ? parsed / 100 : parsed;
+		return isNaN( alpha ) ? 1 : Math.max( 0, Math.min( 1, alpha ) );
+	}
+
+	/**
+	 * Normalize RGB percentages and sRGB values to byte channels.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Array<string>} channels CSS color components.
+	 * @param {boolean}       isSRGB   Whether numeric channels use the zero to one scale.
+	 * @return {Array<number>} RGB channels between zero and 255.
+	 */
+	function getColorChannelsForStripe( channels, isSRGB = false ) {
+		return channels.slice( 0, 3 ).map( channel => {
+			const value = parseFloat( channel );
+			const scaled = channel.endsWith( '%' ) ? value / 100 * 255 : value * ( isSRGB ? 255 : 1 );
+			return Math.round( Math.max( 0, Math.min( 255, scaled ) ) );
+		} );
+	}
+
+	/**
+	 * Get the RGB channels of the first solid background behind an element.
+	 * A partly transparent ancestor is skipped, so the result is approximate there.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Element} element
+	 * @return {Array<number>} RGB channels, white when no ancestor has a solid background.
+	 */
+	function getBackdropColor( element ) {
+		for ( let parent = element.parentElement; parent; parent = parent.parentElement ) {
+			const color = window.getComputedStyle( parent ).backgroundColor;
+			const match = color.match( /^(rgba?\(|color\(srgb )([^)]+)\)$/ );
+			if ( ! match ) {
+				continue;
+			}
+			const channels = match[ 2 ].trim().split( /[\s,/]+/ );
+			if ( 1 !== getColorAlpha( channels[ 3 ] ) ) {
+				continue;
+			}
+			const isSRGB = match[ 1 ].startsWith( 'color(' );
+			return getColorChannelsForStripe( channels, isSRGB );
+		}
+		return [ 255, 255, 255 ];
 	}
 
 	/**
