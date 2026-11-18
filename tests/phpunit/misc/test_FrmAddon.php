@@ -103,7 +103,7 @@ class test_FrmAddon extends FrmUnitTest {
 	 *
 	 * @param mixed $payload What the API request should come back with.
 	 *
-	 * @return \PHPUnit\Framework\MockObject\MockObject
+	 * @return FrmTestAddon&\PHPUnit\Framework\MockObject\MockObject
 	 */
 	private function get_licensed_addon( $payload ) {
 		$addon = $this->getMockBuilder( 'FrmTestAddon' )

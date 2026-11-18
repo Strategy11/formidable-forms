@@ -1,7 +1,7 @@
 /**
  * Keep preview data in memory until its placeholder approaches the viewport.
  *
- * @since x.x
+ * @since 7.1
  */
 const pending = new Map();
 const visible = new Set();
@@ -16,7 +16,7 @@ let scheduled = false;
 /**
  * Render small forms eagerly and reserve viewport loading for fields after the first fifteen.
  *
- * @since x.x
+ * @since 7.1
  * @param {NodeList|HTMLElement[]} fields All builder fields in form order, including rendered fields.
  * @return {void}
  */
@@ -26,7 +26,7 @@ export function setInitialFieldPreviews( fields ) {
 }
 
 /**
- * @since x.x
+ * @since 7.1
  * @param {HTMLElement} placeholder The field's sized placeholder.
  * @param {Function}    render      Replaces the placeholder and returns initialization data.
  * @param {Function}    initialize  Initializes the fields drawn in one slice.
@@ -59,7 +59,7 @@ export function queueFieldPreview( placeholder, render, initialize ) {
 }
 
 /**
- * @since x.x
+ * @since 7.1
  * @param {string} fieldId Numeric field ID.
  * @return {void}
  */
@@ -76,7 +76,7 @@ export function forgetFieldPreview( fieldId ) {
 /**
  * Draw a preview immediately when an interaction needs its controls.
  *
- * @since x.x
+ * @since 7.1
  * @param {string} fieldId Numeric field ID.
  * @return {Object|null} Initialization data for the drawn field.
  */

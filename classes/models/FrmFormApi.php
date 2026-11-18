@@ -276,12 +276,12 @@ class FrmFormApi {
 	 * This checks the cache rather than the class, so a subclass that reads the add-ons feed,
 	 * like FrmAILicense in Formidable AI, caches the same Boosts as this class.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return bool
 	 */
 	protected function include_boosts() {
-		return str_starts_with( (string) $this->cache_key, 'frm_addons_l' );
+		return str_starts_with( $this->cache_key, 'frm_addons_l' );
 	}
 
 	/**

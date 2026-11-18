@@ -203,7 +203,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 	/**
 	 * Gets the country name to country code mapping.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return array
 	 */

@@ -50,7 +50,7 @@ export function addFieldSettingsMetadata( field, fieldId, metadata ) {
 /**
  * Keep a setting change for a panel that has not loaded yet, so it is applied when the panel is inserted.
  *
- * @since x.x
+ * @since 7.1
  * @param {string} fieldId Numeric field ID.
  * @param {string} name    Setting name, without the field ID suffix.
  * @param {string} id      ID of the matching input in the settings panel.
@@ -171,7 +171,7 @@ export function materializeFieldSettings( fieldId, initialize ) {
 	 *   frmShowedFieldSettings, and keep that initialization idempotent.
 	 * - No jQuery events and no frm_added_field event fire for this insert.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 * @param {HTMLElement} settings The inserted field settings panel.
 	 */
 	wp.hooks.doAction( 'frm_field_settings_loaded', settings );

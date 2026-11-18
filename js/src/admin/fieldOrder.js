@@ -3,7 +3,7 @@ const pendingOrders = new Map();
 /**
  * Track order changes without activating settings, and synchronize existing controls.
  *
- * @since x.x
+ * @since 7.1
  * @param {HTMLFormElement} form The builder save form.
  * @return {boolean} Whether any order changed.
  */
@@ -60,7 +60,7 @@ export function syncFieldOrder( form ) {
 /**
  * Clear confirmed changes while keeping any order edits made during the save request.
  *
- * @since x.x
+ * @since 7.1
  * @param {HTMLFormElement} form        The builder save form.
  * @param {string}          savedOrders The JSON map sent with the successful save.
  * @return {void}

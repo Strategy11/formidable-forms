@@ -836,7 +836,7 @@ class FrmAppController {
 	 * The picker CSS ships in frm_admin.css, so the style handle has no file of its own.
 	 * Enqueue the formidable-color-picker style with the script on any page that uses the picker.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param string $plugin_url Plugin asset URL.
 	 * @param string $version    Plugin asset version.
@@ -1055,7 +1055,7 @@ class FrmAppController {
 	 * Check the popper handle again after other plugins have enqueued their scripts.
 	 * Most plugins register scripts on admin_enqueue_scripts, after admin_js() has run.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return void
 	 */

@@ -947,6 +947,7 @@ class FrmEntriesController {
 			'child_array'     => false,
 			'line_breaks'     => true,
 			'array_separator' => ', ',
+			'esc_shortcodes'  => false,
 		);
 		$defaults = apply_filters( 'frm_show_entry_defaults', $defaults );
 		$atts     = shortcode_atts( $defaults, $atts );

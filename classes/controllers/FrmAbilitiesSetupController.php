@@ -6,14 +6,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Exposes setup discovery even while Formidable AI access is disabled.
  *
- * @since x.x
+ * @since 7.1
  */
 class FrmAbilitiesSetupController {
 
 	/**
 	 * Register the read-only setup ability independently of the operational gate.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return void
 	 */
@@ -70,7 +70,7 @@ class FrmAbilitiesSetupController {
 	/**
 	 * Allow users who can view forms to discover setup, like the other read abilities.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return bool
 	 */
@@ -82,7 +82,7 @@ class FrmAbilitiesSetupController {
 	/**
 	 * Describe availability without enabling access or booting the MCP adapter.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return array
 	 */

@@ -368,7 +368,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	}
 
 	/**
-	 * @return \Iterator<string, array<(array<string> | string)>>
+	 * @return \Iterator<string, array{string, bool}>
 	 */
 	public static function us_zip_provider() {
 		yield 'five digits' => array( '62704', true );
@@ -603,7 +603,7 @@ class test_FrmFieldAddress extends FrmUnitTest {
 	}
 
 	/**
-	 * @return \Iterator<string, array<(array | string)>>
+	 * @return \Iterator<string, array{(array<string, string> | string | null), array<string, string>}>
 	 */
 	public static function address_string_provider() {
 		yield 'six parts map in order' => array(

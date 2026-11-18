@@ -120,7 +120,7 @@ class FrmFormsController {
 	 * Create the default email action
 	 *
 	 * @since 2.02.11
-	 * @since x.x Changed from private to public.
+	 * @since 7.1 Changed from private to public.
 	 *
 	 * @param int|object $form
 	 *
@@ -444,7 +444,7 @@ class FrmFormsController {
 	 * An AJAX save gets a 500 response with the X-Frm-Form-Saved: 0 header, and the builder keeps
 	 * the unsaved field order to send again.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param int $id Form ID.
 	 *
@@ -2791,7 +2791,7 @@ class FrmFormsController {
 	 * The preview page adds a nonce to the draft form, so this does not depend on the Referer header,
 	 * which a Referrer-Policy can strip. Only a visitor who could already open the preview has the nonce.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param object $form The form being shown.
 	 *
@@ -2811,7 +2811,7 @@ class FrmFormsController {
 	 * Add a preview nonce so AJAX responses can display draft forms, including embedded drafts.
 	 * Published preview forms need it too when they contain an embedded draft.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param object $form The form being rendered.
 	 *
@@ -2829,7 +2829,7 @@ class FrmFormsController {
 	/**
 	 * Get the nonce action and field name used to show a draft form again after an AJAX submit from the preview page.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param object $form The draft form.
 	 *
