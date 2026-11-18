@@ -308,7 +308,7 @@ class FrmForm {
 	/**
 	 * Save builder order changes after active field settings have been updated.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param int|string $form_id Form being saved.
 	 * @param array      $values Form values including the JSON field ID to order map.
@@ -364,6 +364,18 @@ class FrmForm {
 		foreach ( $form_ids as $affected_form_id ) {
 			FrmField::delete_form_transient( $affected_form_id );
 		}
+
+		/**
+		 * Fires after the builder saves the field order in one query.
+		 *
+		 * This write does not fire frm_field_updated for each field.
+		 *
+		 * @since 7.1
+		 *
+		 * @param int[] $ids     IDs of the fields whose order was sent. Fields outside the form are skipped by the query.
+		 * @param int   $form_id The form being saved.
+		 */
+		do_action( 'frm_field_order_updated', $ids, (int) $form_id );
 
 		return true;
 	}
@@ -796,7 +808,7 @@ class FrmForm {
 		/**
 		 * Fires before a form and its children are permanently deleted.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param int $id The form ID being deleted.
 		 */

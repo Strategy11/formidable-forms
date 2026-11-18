@@ -29,14 +29,6 @@
 		"frm_admin_js": "readonly",
 		"ajaxurl": "readonly"
 	},
-	"overrides": [
-		{
-			"files": ["tests/js/*.test.mjs"],
-			"rules": {
-				"import/no-nodejs-modules": "off"
-			}
-		}
-	],
 	"rules": {
 		// Turn off rules that conflict with your codebase patterns.
 		"no-unused-vars": "off",
@@ -192,7 +184,7 @@
 			"rules": {
 				"import/no-nodejs-modules": [
 					"error",
-					{ "allow": ["node:test", "node:assert/strict"] }
+					{ "allow": ["node:test", "node:assert/strict", "node:fs", "node:vm", "node:module"] }
 				]
 			}
 		}

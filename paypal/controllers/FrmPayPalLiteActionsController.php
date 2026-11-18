@@ -401,7 +401,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return 'This order status is not valid for capture.';
 		}
 
-		if ( ! self::validate_order_amount( $order, $atts['amount'] ) ) {
+		if ( ! self::validate_order_amount( $order, $atts['amount'], self::get_action_currency_code( $atts['action'] ) ) ) {
 			return 'This order amount appears to be tampered with.';
 		}
 
@@ -435,12 +435,19 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return self::get_paypal_error_message( $response, __( 'Failed to capture order.', 'formidable' ) );
 		}
 
-		$capture_id = self::get_capture_id_from_response( $response );
+		$capture_id     = self::get_capture_id_from_response( $response );
+		$capture_status = self::get_capture_status_from_response( $response );
+
+		if ( $capture_status && ! in_array( $capture_status, array( 'COMPLETED', 'PENDING' ), true ) ) {
+			return self::convert_issue_to_message( 'INSTRUMENT_DECLINED' );
+		}
 
 		self::sync_entry_data_with_capture_response( $response, $atts );
 
+		self::$pending_capture = 'PENDING' === $capture_status;
+
 		// Create a payment record.
-		$atts['status']         = 'complete';
+		$atts['status']         = self::$pending_capture ? 'pending' : 'complete';
 		$atts['charge']         = new stdClass();
 		$atts['charge']->id     = $capture_id ? $capture_id : $paypal_order_id;
 		$atts['charge']->amount = $atts['amount'];
@@ -676,19 +683,40 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 	/**
 	 * @since 6.31
+	 * @since 7.1 The order currency must match the currency of the payment action.
 	 *
 	 * @param stdClass $order
-	 * @param string   $expected_amount This is as a whole number (in cents for currencies that include decimals).
+	 * @param string   $expected_amount   This is as a whole number (in cents for currencies that include decimals).
+	 * @param string   $expected_currency The currency code set in the payment action.
 	 *
 	 * @return bool
 	 */
-	private static function validate_order_amount( $order, $expected_amount ) {
+	private static function validate_order_amount( $order, $expected_amount, $expected_currency ) {
+		$order_currency = $order->purchase_units[0]->amount->currency_code ?? '';
+
+		if ( ! is_string( $order_currency ) || 0 !== strcasecmp( $order_currency, $expected_currency ) ) {
+			return false;
+		}
+
 		$order_amount = $order->purchase_units[0]->amount->value ?? '';
 
 		// The order amount is in dollars, but the expected amount is in cents, so we need to convert.
 		$order_amount = str_replace( '.', '', $order_amount );
 
 		return $order_amount === $expected_amount;
+	}
+
+	/**
+	 * Get the currency code for a payment action, in the same format sent to the PayPal SDK.
+	 *
+	 * @since 7.1
+	 *
+	 * @param WP_Post $action The payment action.
+	 *
+	 * @return string
+	 */
+	private static function get_action_currency_code( $action ) {
+		return strtoupper( $action->post_content['currency'] ?? 'USD' );
 	}
 
 	/**
@@ -713,17 +741,25 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @since 6.31
 	 *
-	 * @param stdClass $subscription    The PayPal subscription object.
-	 * @param string   $expected_amount The expected amount as a whole number (in cents for currencies that include decimals).
+	 * @param stdClass $subscription      The PayPal subscription object.
+	 * @param string   $expected_amount   The expected amount as a whole number (in cents for currencies that include decimals).
+	 * @param string   $expected_currency The currency code set in the payment action.
 	 *
 	 * @return bool
 	 */
-	private static function validate_subscription_amount( $subscription, $expected_amount ) {
-		$subscription_amount = $subscription->billing_info->last_payment->amount->value ?? $subscription->plan->billing_cycles[0]->pricing_scheme->fixed_price->value ?? '';
+	private static function validate_subscription_amount( $subscription, $expected_amount, $expected_currency ) {
+		$money = $subscription->billing_info->last_payment->amount ?? $subscription->plan->billing_cycles[0]->pricing_scheme->fixed_price ?? null;
 
-		if ( ! $subscription_amount ) {
+		if ( ! is_object( $money ) || empty( $money->value ) ) {
 			return false;
 		}
+
+		// PayPal includes the currency with every amount. Check it whenever it is there.
+		if ( isset( $money->currency_code ) && ( ! is_string( $money->currency_code ) || 0 !== strcasecmp( $money->currency_code, $expected_currency ) ) ) {
+			return false;
+		}
+
+		$subscription_amount = $money->value;
 
 		$subscription_amount = number_format( (float) $subscription_amount, 2, '.', '' );
 		$expected_amount     = number_format( ( (float) $expected_amount ) / 100, 2, '.', '' );
@@ -756,6 +792,31 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 			foreach ( $captures as $capture ) {
 				return $capture->id;
+			}
+		}
+
+		return '';
+	}
+
+	/**
+	 * Get the status of the first capture in the order response.
+	 *
+	 * @since 7.1
+	 *
+	 * @param object $response The captured PayPal order.
+	 *
+	 * @return string
+	 */
+	private static function get_capture_status_from_response( $response ) {
+		foreach ( $response->purchase_units ?? array() as $purchase_unit ) {
+			$captures = $purchase_unit->payments->captures ?? array();
+
+			if ( ! is_array( $captures ) ) {
+				continue;
+			}
+
+			foreach ( $captures as $capture ) {
+				return $capture->status ?? '';
 			}
 		}
 
@@ -1103,6 +1164,11 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return __( 'No PayPal subscription ID found.', 'formidable' );
 		}
 
+		if ( ( new FrmTransLiteSubscription() )->get_one_by( $subscription_id, 'sub_id' ) ) {
+			// Each PayPal subscription can only pay for one entry.
+			return 'This subscription has already been used.';
+		}
+
 		$subscription = FrmPayPalLiteConnectHelper::get_subscription( $subscription_id );
 
 		if ( false === $subscription ) {
@@ -1113,7 +1179,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return 'This subscription status is not valid.';
 		}
 
-		if ( ! self::validate_subscription_amount( $subscription, $atts['amount'] ) ) {
+		if ( ! self::validate_subscription_amount( $subscription, $atts['amount'], self::get_action_currency_code( $atts['action'] ) ) ) {
 			return 'This subscription amount appears to be tampered with.';
 		}
 
@@ -1296,6 +1362,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 				$payment_action_by_id[ $payment_action->ID ] = $payment_action;
 				$settings_for_action['paypalLayout']         = ! empty( $payment_action->post_content['paypal_layout'] ) ? $payment_action->post_content['paypal_layout'] : 'card_and_checkout'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				$settings_for_action['logic_fields']         = self::get_logic_field_ids( $payment_action );
+				$settings_for_action['addressType']          = self::get_billing_address_type( $settings_for_action['address'] );
 				return $settings_for_action;
 			},
 			10,
@@ -1502,6 +1569,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			'nonce'                    => wp_create_nonce( 'frm_paypal_ajax' ),
 			'ajax'                     => esc_url_raw( FrmAppHelper::get_ajax_url() ),
 			'settings'                 => $action_settings,
+			'countryCodes'             => self::get_country_codes_for_js( $action_settings ),
 			'style'                    => self::get_style_for_js( $form_id ),
 			'buttonStyle'              => self::get_button_style_for_js( $action ),
 			'imagesUrl'                => FrmPayPalLiteAppHelper::plugin_url() . 'images/',
@@ -1513,6 +1581,49 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		);
 
 		wp_localize_script( 'formidable-paypal', 'frmPayPalVars', $paypal_vars );
+	}
+
+	/**
+	 * Get the address type of the field mapped as the billing address.
+	 *
+	 * @since 7.1
+	 *
+	 * @param int|string $field_id
+	 *
+	 * @return string The address type, or an empty string when no address field is mapped.
+	 */
+	private static function get_billing_address_type( $field_id ) {
+		if ( ! $field_id ) {
+			return '';
+		}
+
+		$field = FrmField::getOne( $field_id );
+
+		if ( ! $field || 'address' !== $field->type ) {
+			return '';
+		}
+
+		return $field->field_options['address_type'] ?? 'international';
+	}
+
+	/**
+	 * The country name to code map is only needed when a mapped address can sit on an earlier page and
+	 * only has the country name left in a hidden input.
+	 *
+	 * @since 7.1
+	 *
+	 * @param array $action_settings
+	 *
+	 * @return array
+	 */
+	private static function get_country_codes_for_js( $action_settings ) {
+		foreach ( $action_settings as $setting ) {
+			if ( in_array( $setting['addressType'] ?? '', array( 'international', 'europe' ), true ) ) {
+				return FrmAddressesController::get_country_codes();
+			}
+		}
+
+		return array();
 	}
 
 	/**

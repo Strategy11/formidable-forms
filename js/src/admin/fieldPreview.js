@@ -1,7 +1,7 @@
 /**
  * Render the displayed choices without populating an interactive option list.
  *
- * @since x.x
+ * @since 7.1
  * @param {HTMLSelectElement} field       The preview dropdown.
  * @param {Array}             choices     Choices from the field settings.
  * @param {string}            placeholder The current placeholder text.
@@ -39,7 +39,7 @@ export function renderDropdownPreview( field, choices, placeholder = '' ) {
 /**
  * Refresh an address dropdown from its default and placeholder settings.
  *
- * @since x.x
+ * @since 7.1
  * @param {HTMLSelectElement} field    The address preview dropdown.
  * @param {HTMLElement}       settings The field settings panel.
  * @return {void}
@@ -58,7 +58,7 @@ export function updateComboSelectPreview( field, settings ) {
 /**
  * Replace an address layout and restore the current, unsaved subfield settings.
  *
- * @since x.x
+ * @since 7.1
  * @param {HTMLSelectElement} setting       The address type setting.
  * @param {Function}          updatePreview The shared field preview updater.
  * @return {void}

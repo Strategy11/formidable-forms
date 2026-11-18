@@ -11,6 +11,8 @@ class FrmTransLiteHooksController {
 	public static function load_hooks() {
 		// Exit early, let the Payments submodule handle everything.
 		if ( class_exists( 'FrmTransHooksController', false ) ) {
+			// Except forms without a Gateway field, which the submodule skips without charging.
+			add_action( 'frm_trigger_payment_action', 'FrmTransLiteActionsController::trigger_action_without_gateway_field', 10, 3 );
 			return;
 		}
 

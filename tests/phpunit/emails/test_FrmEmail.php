@@ -745,4 +745,31 @@ LINE 1<br>LINE 2<br></body></html>'
 			$this->assertSame( $expected, $actual );
 		}
 	}
+
+	/**
+	 * Square brackets in a field value show as typed in a plain text email.
+	 *
+	 * @see FrmEmail::set_subject
+	 * @see FrmEmail::set_message
+	 */
+	public function test_plain_text_email_shows_brackets_in_field_values() {
+		$entry_clone                    = clone $this->entry;
+		$name_id                        = FrmField::get_id_by_key( $this->name_field_key );
+		$entry_clone->metas[ $name_id ] = 'Item [A]';
+
+		$this->email_action->post_content['email_to']      = 'jw@test.com';
+		$this->email_action->post_content['cc']            = '';
+		$this->email_action->post_content['bcc']           = '';
+		$this->email_action->post_content['email_subject'] = 'Order [' . $name_id . ']';
+		$this->email_action->post_content['email_message'] = 'Product: [' . $name_id . ']';
+		$this->email_action->post_content['plain_text']    = true;
+
+		FrmNotification::trigger_email( $this->email_action, $entry_clone, $this->contact_form );
+
+		$mock_email = end( $GLOBALS['phpmailer']->mock_sent );
+
+		$this->assertStringContainsString( 'Order Item [A]', $mock_email['subject'], 'The subject should show the brackets as typed.' );
+		$this->assertStringContainsString( 'Product: Item [A]', $mock_email['body'], 'The plain text message should show the brackets as typed.' );
+		$this->assertStringNotContainsString( '&#91;', $mock_email['body'], 'The plain text message should not include an encoded bracket.' );
+	}
 }
