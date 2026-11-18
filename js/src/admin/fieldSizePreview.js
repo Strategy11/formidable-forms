@@ -12,7 +12,7 @@ const SKIPPED_INPUT_TYPES = new Set( [ 'hidden', 'checkbox', 'radio', 'range', '
 /**
  * Listen for Field Size changes in the field settings.
  *
- * @since x.x
+ * @since 7.1
  *
  * @return {void}
  */

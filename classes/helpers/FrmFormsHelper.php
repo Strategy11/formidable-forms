@@ -8,7 +8,7 @@ class FrmFormsHelper {
 	/**
 	 * Forms with more fields than this load and save in the builder with AJAX.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @var int
 	 */
@@ -761,7 +761,7 @@ class FrmFormsHelper {
 	 * Rendering every field on page load slows down exponentially as a form grows,
 	 * so long forms always use AJAX.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param int $field_count The number of fields in the form.
 	 * @param int $form_id     The id of the form being edited.
@@ -773,7 +773,7 @@ class FrmFormsHelper {
 		 * Allows turning AJAX loading in the form builder on or off.
 		 * Use __return_false to always load every field with the page.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param bool  $ajax_load True when the form has more than AJAX_BUILDER_FIELD_THRESHOLD fields.
 		 * @param array $args      Contains `field_count` and `form_id`.
@@ -788,7 +788,7 @@ class FrmFormsHelper {
 	/**
 	 * Count the fields in a form the way a user sees them, without the Submit field.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array $fields Field objects or arrays.
 	 *

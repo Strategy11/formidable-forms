@@ -85,8 +85,8 @@ class FrmAbilitiesFieldsController {
 									'Field choices: strings, numbers (star rating, scale), or {"label", "value"} objects for separate values, or an object keyed by option key.',
 									'formidable'
 								),
-								'items'                => array( 'type' => array( 'string', 'number', 'object' ) ),
-								'additionalProperties' => array( 'type' => array( 'string', 'number', 'object' ) ),
+								'items'                => array( 'type' => array( 'string', 'integer', 'number', 'object' ) ),
+								'additionalProperties' => array( 'type' => array( 'string', 'integer', 'number', 'object' ) ),
 							),
 							'field_order'   => array(
 								'type'        => 'integer',
@@ -177,10 +177,10 @@ class FrmAbilitiesFieldsController {
 								'formidable'
 							),
 							'items'                => array(
-								'type' => array( 'string', 'number', 'object' ),
+								'type' => array( 'string', 'integer', 'number', 'object' ),
 							),
 							'additionalProperties' => array(
-								'type' => array( 'string', 'number', 'object' ),
+								'type' => array( 'string', 'integer', 'number', 'object' ),
 							),
 						),
 						'default_value' => array(
@@ -567,7 +567,7 @@ class FrmAbilitiesFieldsController {
 	 * such hook, so without this a new field keeps its options exactly as sent.
 	 * The field ID is 0 because the field does not exist yet.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array $prepared Prepared field data.
 	 *
@@ -833,7 +833,7 @@ class FrmAbilitiesFieldsController {
 	 * unfiltered_html, so re-saving it everywhere would strip markup an admin authored
 	 * from a label the request did not change.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param stdClass $field      The stored field object.
 	 * @param array    $field_data Non-empty field data to update.

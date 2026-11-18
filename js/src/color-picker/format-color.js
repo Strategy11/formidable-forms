@@ -1,7 +1,7 @@
 /**
  * Preserve the input's RGB or HSL format when WordPress returns hexadecimal.
  *
- * @since x.x
+ * @since 7.1
  * @param {string} hex            Color returned by WordPress.
  * @param {string} previous       Previously saved color.
  * @param {string} selectedFormat Selected picker format.
@@ -58,7 +58,7 @@ export function formatColor( hex, previous, selectedFormat ) {
  *
  * This matches FrmStylesHelper::is_hex.
  *
- * @since x.x
+ * @since 7.1
  * @param {string} color Color value.
  * @return {boolean} True when the value is a bare hex color.
  */
@@ -71,7 +71,7 @@ export function isBareHex( color ) {
  *
  * Style settings save hex colors without the hash.
  *
- * @since x.x
+ * @since 7.1
  * @param {string} color Color value.
  * @return {string} The color, with a hash when it is a bare hex color.
  */
@@ -83,7 +83,7 @@ export function addColorHash( color ) {
 /**
  * Check if text typed in the picker's hex field is a complete hex color.
  *
- * @since x.x
+ * @since 7.1
  * @param {string} value Hex field text, with or without the hash.
  * @return {boolean} True when the text is a complete hex color.
  */
@@ -96,7 +96,7 @@ export function isTypedHexValid( value ) {
  *
  * The hex field is a text input limited to 7 or 9 characters. The RGB and HSL fields are number inputs.
  *
- * @since x.x
+ * @since 7.1
  * @param {HTMLInputElement} input An input rendered by the color picker.
  * @return {boolean} True for the hex text field.
  */
@@ -107,7 +107,7 @@ export function isHexField( input ) {
 /**
  * Convert a saved picker value to the hexadecimal value WordPress emits.
  *
- * @since x.x
+ * @since 7.1
  * @param {string} color Saved color value.
  * @return {string} Hex color, or an empty string when unsupported.
  */
