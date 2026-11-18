@@ -876,11 +876,7 @@ class FrmField {
 		unset( $values );
 
 		if ( $query_results ) {
-			wp_cache_delete( $id, 'frm_field' );
-
-			if ( $form_id ) {
-				self::delete_form_transient( $form_id );
-			}
+			self::clear_cache_after_update( $id, $form_id, $previous_form_id );
 		}
 
 		if ( false !== $query_results ) {
@@ -896,6 +892,30 @@ class FrmField {
 		}
 
 		return $query_results;
+	}
+
+	/**
+	 * Clear cached field data after a field row changes.
+	 *
+	 * @since x.x
+	 *
+	 * @param int        $id               Updated field ID.
+	 * @param int|string $form_id          Form ID the field belongs to after the update.
+	 * @param int        $previous_form_id Form ID before the update when form_id was updated, otherwise zero.
+	 *
+	 * @return void
+	 */
+	private static function clear_cache_after_update( $id, $form_id, $previous_form_id ) {
+		wp_cache_delete( $id, 'frm_field' );
+
+		if ( $form_id ) {
+			self::delete_form_transient( $form_id );
+		}
+
+		if ( $previous_form_id && $previous_form_id !== (int) $form_id ) {
+			// The field moved, so the source form's cached field list is stale too.
+			self::delete_form_transient( $previous_form_id );
+		}
 	}
 
 	/**

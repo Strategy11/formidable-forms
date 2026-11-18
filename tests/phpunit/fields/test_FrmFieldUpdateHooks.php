@@ -54,6 +54,41 @@ class test_FrmFieldUpdateHooks extends FrmUnitTest {
 		$this->assertSame( $target, (int) FrmField::getOne( $field_id )->form_id, 'The field should belong to the requested destination after the update.' );
 	}
 
+	public function test_moving_a_field_clears_the_source_form_field_cache() {
+		$source   = (int) $this->factory->form->create();
+		$target   = (int) $this->factory->form->create();
+		$field_id = (int) $this->factory->field->create(
+			array(
+				'form_id' => $source,
+				'type'    => 'text',
+			)
+		);
+		$this->factory->field->create(
+			array(
+				'form_id' => $source,
+				'type'    => 'text',
+			)
+		);
+
+		$this->assertArrayHasKey( $field_id, $this->field_ids( FrmField::get_all_for_form( $source ) ), 'The cached source field list should include the field.' );
+
+		FrmField::update( $field_id, array( 'form_id' => $target ) );
+
+		$this->assertArrayNotHasKey( $field_id, $this->field_ids( FrmField::get_all_for_form( $source ) ), 'The source form field list should not keep a field that moved away.' );
+		$this->assertArrayHasKey( $field_id, $this->field_ids( FrmField::get_all_for_form( $target ) ), 'The destination form field list should include the moved field.' );
+	}
+
+	/**
+	 * Index field rows by ID.
+	 *
+	 * @param array $fields Field rows.
+	 *
+	 * @return array
+	 */
+	private function field_ids( $fields ) {
+		return array_flip( array_map( 'intval', wp_list_pluck( $fields, 'id' ) ) );
+	}
+
 	/**
 	 * @return array
 	 */
