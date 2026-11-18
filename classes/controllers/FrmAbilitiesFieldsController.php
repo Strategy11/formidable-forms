@@ -85,8 +85,8 @@ class FrmAbilitiesFieldsController {
 									'Field choices: strings, numbers (star rating, scale), or {"label", "value"} objects for separate values, or an object keyed by option key.',
 									'formidable'
 								),
-								'items'                => array( 'type' => array( 'string', 'number', 'object' ) ),
-								'additionalProperties' => array( 'type' => array( 'string', 'number', 'object' ) ),
+								'items'                => array( 'type' => array( 'string', 'integer', 'number', 'object' ) ),
+								'additionalProperties' => array( 'type' => array( 'string', 'integer', 'number', 'object' ) ),
 							),
 							'field_order'   => array(
 								'type'        => 'integer',
@@ -177,10 +177,10 @@ class FrmAbilitiesFieldsController {
 								'formidable'
 							),
 							'items'                => array(
-								'type' => array( 'string', 'number', 'object' ),
+								'type' => array( 'string', 'integer', 'number', 'object' ),
 							),
 							'additionalProperties' => array(
-								'type' => array( 'string', 'number', 'object' ),
+								'type' => array( 'string', 'integer', 'number', 'object' ),
 							),
 						),
 						'default_value' => array(
