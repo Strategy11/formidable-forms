@@ -723,7 +723,7 @@
 	/**
 	 * Normalize numeric and percentage alpha values to the range Stripe colors need.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param {string} rawAlpha CSS alpha component.
 	 * @return {number} Alpha between zero and one, defaulting to one.
@@ -737,7 +737,7 @@
 	/**
 	 * Normalize RGB percentages and sRGB values to byte channels.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param {Array<string>} channels CSS color components.
 	 * @param {boolean}       isSRGB   Whether numeric channels use the zero to one scale.
@@ -755,7 +755,7 @@
 	 * Get the RGB channels of the first solid background behind an element.
 	 * A partly transparent ancestor is skipped, so the result is approximate there.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param {Element} element
 	 * @return {Array<number>} RGB channels, white when no ancestor has a solid background.

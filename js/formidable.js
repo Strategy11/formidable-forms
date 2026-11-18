@@ -2290,7 +2290,7 @@ function frmFrontFormJS() {
 	/**
 	 * Line up inline submit buttons with the inputs in the same row, then keep them lined up.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return {void}
 	 */
@@ -2344,7 +2344,7 @@ function frmFrontFormJS() {
 	 * A theme that restyles labels (for example `label { line-height: 1 }`) makes the real label
 	 * taller or shorter than the spacer, so measure the difference and correct the spacer with it.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return {void}
 	 */
@@ -2353,7 +2353,7 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param {HTMLElement} submitContainer The .frm_submit element.
 	 * @return {void}
@@ -2386,7 +2386,7 @@ function frmFrontFormJS() {
 	/**
 	 * Get the input closest to the submit button when it sits in the same row as the button.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param {HTMLElement} submitContainer The .frm_submit element.
 	 * @return {HTMLElement|null} The input, or null when the closest field is on another row.

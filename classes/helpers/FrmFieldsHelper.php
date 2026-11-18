@@ -73,7 +73,7 @@ class FrmFieldsHelper {
 	/**
 	 * Check if a form is the child form of a repeater.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param int|string $form_id The ID of the form the field is added to.
 	 *

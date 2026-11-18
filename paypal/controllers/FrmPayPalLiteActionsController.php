@@ -1552,7 +1552,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Get the address type of the field mapped as the billing address.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param int|string $field_id
 	 *
@@ -1576,7 +1576,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * The country name to code map is only needed when a mapped address can sit on an earlier page and
 	 * only has the country name left in a hidden input.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array $action_settings
 	 *
