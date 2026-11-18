@@ -112,7 +112,7 @@ class FrmFieldUserID extends FrmFieldType {
 	 *
 	 * Matches the check FrmEntry uses before it accepts a submitted entry owner.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return bool
 	 */
@@ -123,7 +123,7 @@ class FrmFieldUserID extends FrmFieldType {
 	/**
 	 * Gets the value to save for a user without entry management access.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param int $entry_id The entry being edited, or 0 for a new entry.
 	 *

@@ -683,7 +683,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 	/**
 	 * @since 6.31
-	 * @since x.x The order currency must match the currency of the payment action.
+	 * @since 7.1 The order currency must match the currency of the payment action.
 	 *
 	 * @param stdClass $order
 	 * @param string   $expected_amount   This is as a whole number (in cents for currencies that include decimals).
@@ -709,7 +709,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Get the currency code for a payment action, in the same format sent to the PayPal SDK.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param WP_Post $action The payment action.
 	 *

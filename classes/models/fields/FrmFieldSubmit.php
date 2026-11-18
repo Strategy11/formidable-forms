@@ -122,7 +122,7 @@ DEFAULT_HTML;
 	/**
 	 * Builds the values used to render the submit button from the saved form.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param object $form The form being rendered.
 	 *

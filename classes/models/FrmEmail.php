@@ -442,7 +442,7 @@ class FrmEmail {
 	 * This must run after every filter that could process shortcodes.
 	 * wp_kses_post() pads the entity, so &#091; is decoded too.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param string $text The plain text subject or message.
 	 *
@@ -482,7 +482,7 @@ class FrmEmail {
 	/**
 	 * Prepare a user information value for the email message.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param mixed $value The user information value from the entry.
 	 *

@@ -890,7 +890,7 @@ class FrmEntry {
 	/**
 	 * Remove entry columns that were included in the posted form data.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array         $values       The entry values.
 	 * @param string        $type         The create/update type. 'xml' for an import.

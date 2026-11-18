@@ -979,7 +979,7 @@ class FrmEntryFormatter {
 	/**
 	 * Check if shortcodes in the entry values should be escaped.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return bool
 	 */
@@ -991,7 +991,7 @@ class FrmEntryFormatter {
 	 * Escape shortcodes in the submitted values of an array or json output.
 	 * Keys are field keys or ids, so only the values are changed.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array $values The prepared entry values.
 	 *

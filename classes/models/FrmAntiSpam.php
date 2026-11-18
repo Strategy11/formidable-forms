@@ -258,7 +258,7 @@ class FrmAntiSpam extends FrmValidate {
 	/**
 	 * Check if a user who may manage entries is submitting from the admin entries page.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return bool
 	 */
