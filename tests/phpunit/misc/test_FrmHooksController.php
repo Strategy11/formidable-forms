@@ -3,6 +3,7 @@
 /**
  * @group hooks
  */
+#[\PHPUnit\Framework\Attributes\Group( 'hooks' )]
 class test_FrmHooksController extends FrmUnitTest {
 
 	public function test_trigger_load_form_hooks() {

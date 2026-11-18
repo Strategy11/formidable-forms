@@ -91,6 +91,10 @@ class FrmFieldValue {
 		}
 
 		$this->clean_saved_value();
+
+		if ( $this->field->type !== 'html' && FrmSpamEntriesHelper::is_spam( $entry ) ) {
+			$this->saved_value = FrmSpamEntriesHelper::escape_value( $this->saved_value );
+		}
 	}
 
 	/**
@@ -210,7 +214,7 @@ class FrmFieldValue {
 			return __( 'The display value has not been prepared. Please use the prepare_display_value() method before calling get_displayed_value().', 'formidable' );
 		}
 
-		return $this->displayed_value;
+		return FrmSpamEntriesHelper::is_spam( $this->entry ) ? FrmSpamEntriesHelper::escape_value( $this->displayed_value ) : $this->displayed_value;
 	}
 
 	/**

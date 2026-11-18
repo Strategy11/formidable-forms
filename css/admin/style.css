@@ -55,8 +55,14 @@ This file is added to the visual styler admin page, accessed from the style tab.
 }
 
 .frm-style-card .frm-dropdown-toggle svg,
-#frm_styling_form .frm-dropdown-toggle svg {
+#frm_styling_form .frm-dropdown-toggle:not(.frm-dark-style .frm-dropdown-toggle) svg {
 	color: var(--grey-500);
+}
+
+/* Paired with the rule above so the ID selector cannot outrank the hover. */
+.frm-style-card:not(.frm-dark-style) .frm-dropdown-toggle:hover svg,
+#frm_styling_form .frm-dropdown-toggle:hover:not(.frm-dark-style .frm-dropdown-toggle) svg {
+	color: var(--grey-900);
 }
 
 .frm-style-card.frm-currently-set-style-card .frm-style-card-title-wrapper svg {
@@ -75,6 +81,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 .frm-style-card > div:first-child {
 	display: flex;
 	flex: 1;
+	min-width: 0;
 	flex-direction: column;
 	gap: var(--gap-sm);
 }
@@ -99,6 +106,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 }
 
 #frm_style_sidebar .frm-style-card .dropdown {
+	flex-shrink: 0;
 	overflow: visible;
 	padding-left: 0;
 	align-self: flex-start;

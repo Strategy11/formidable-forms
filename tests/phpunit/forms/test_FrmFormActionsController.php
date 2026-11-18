@@ -2,7 +2,11 @@
 
 /**
  * @group forms
+ *
+ * @covers FrmFormActionsController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'forms' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFormActionsController::class )]
 class test_FrmFormActionsController extends FrmUnitTest {
 
 	/**
@@ -16,9 +20,6 @@ class test_FrmFormActionsController extends FrmUnitTest {
 		$this->assertContains( $action_post_type, get_post_types(), 'The ' . $action_post_type . ' is missing' );
 	}
 
-	/**
-	 * @covers FrmFormActionsController::maybe_show_limit_warning
-	 */
 	public function test_limit_warning_tags_the_doc_link_and_drops_the_raw_url_as_anchor_text() {
 		$form_id      = $this->factory->form->create();
 		$form_actions = array_fill( 0, 99, null );

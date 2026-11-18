@@ -122,7 +122,7 @@ if ( ! function_exists( 'load_frm_autoresponder' ) && in_array( $form_action->po
 			)
 		);
 		?>
-		<label for="frm_autoresponder_cta_<?php echo esc_attr( $action_key ); ?>" class="frm_noallow">
+		<label for="frm_autoresponder_cta_<?php echo esc_attr( $action_key ); ?>" id="frm_autoresponder_cta_<?php echo esc_attr( $action_key ); ?>_label" class="frm_noallow">
 			<?php esc_html_e( 'Setup Automation', 'formidable' ); ?>
 		</label>
 	</div>

@@ -2,13 +2,13 @@
 
 /**
  * @group addons
+ *
+ * @covers FrmAddonsController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'addons' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmAddonsController::class )]
 class test_FrmAddonsController extends FrmUnitTest {
 
-	/**
-	 * @covers FrmAddonsController::url_is_allowed
-	 * @covers FrmAddonsController::allowed_external_urls
-	 */
 	public function test_url_is_allowed() {
 		add_filter( 'frm_allowed_external_urls', '__return_empty_array' );
 		$allowed_download_urls = $this->run_private_method( array( 'FrmAddonsController', 'allowed_external_urls' ) );

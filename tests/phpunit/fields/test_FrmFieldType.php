@@ -2,12 +2,98 @@
 
 /**
  * @group fields
+ *
+ * @covers FrmFieldCombo
+ * @covers FrmFieldNumber
+ * @covers FrmFieldPhone
+ * @covers FrmFieldType
  */
+#[\PHPUnit\Framework\Attributes\Group( 'fields' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldCombo::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldNumber::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldPhone::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldType::class )]
 class test_FrmFieldType extends FrmUnitTest {
 
-	/**
-	 * @covers FrmFieldNumber::add_min_max
-	 */
+	public function test_phone_autocomplete_defaults_to_tel_without_format() {
+		$field_type = FrmFieldFactory::get_field_type( 'phone' );
+		$options    = $field_type->get_default_field_options();
+
+		$this->assertSame( 'tel', $options['autocomplete'], 'Phone fields without a format should default to tel autocomplete.' );
+	}
+
+	public function test_phone_autocomplete_default_is_empty_with_format() {
+		$field_type = FrmFieldFactory::get_field_type(
+			'phone',
+			array(
+				'type'          => 'phone',
+				'field_options' => array( 'format' => 'custom' ),
+			)
+		);
+		$options    = $field_type->get_default_field_options();
+
+		$this->assertSame( '', $options['autocomplete'], 'Phone fields with a format should keep autocomplete empty by default.' );
+	}
+
+	public function test_phone_saved_empty_autocomplete_stays_empty() {
+		$field_type = FrmFieldFactory::get_field_type(
+			'phone',
+			array(
+				'type'          => 'phone',
+				'field_options' => array( 'autocomplete' => '' ),
+			)
+		);
+		$options    = $field_type->get_default_field_options();
+
+		$this->assertSame( '', $options['autocomplete'], 'A saved empty autocomplete value should stay empty.' );
+	}
+
+	public function test_phone_saved_field_without_autocomplete_key_stays_empty() {
+		$field_type = FrmFieldFactory::get_field_type(
+			'phone',
+			array(
+				'id'            => 1,
+				'type'          => 'phone',
+				'field_options' => array(),
+			)
+		);
+		$options    = $field_type->get_default_field_options();
+
+		$this->assertSame( '', $options['autocomplete'], 'Saved phone fields without an autocomplete setting should not gain tel autocomplete.' );
+	}
+
+	public function test_phone_autocomplete_default_is_empty_in_repeater() {
+		$parent_form_id = $this->factory->form->create();
+		$child_form_id  = $this->factory->form->create( array( 'parent_form_id' => $parent_form_id ) );
+		$child_values   = FrmFieldsHelper::setup_new_vars( 'phone', $child_form_id );
+		$parent_values  = FrmFieldsHelper::setup_new_vars( 'phone', $parent_form_id );
+
+		$this->assertSame( '', $child_values['field_options']['autocomplete'], 'New phone fields in a repeater should not default to tel autocomplete.' );
+		$this->assertSame( 'tel', $parent_values['field_options']['autocomplete'], 'New phone fields outside a repeater should still default to tel autocomplete.' );
+	}
+
+	public function test_email_autocomplete_default_is_kept_in_repeater() {
+		$parent_form_id = $this->factory->form->create();
+		$child_form_id  = $this->factory->form->create( array( 'parent_form_id' => $parent_form_id ) );
+		$child_values   = FrmFieldsHelper::setup_new_vars( 'email', $child_form_id );
+
+		$this->assertSame( 'email', $child_values['field_options']['autocomplete'], 'Only the phone tel default should be skipped in a repeater.' );
+	}
+
+	public function test_phone_autocomplete_default_can_be_filtered() {
+		$filter = function ( $options ) {
+			$options['autocomplete'] = '';
+			return $options;
+		};
+		add_filter( 'frm_default_field_options', $filter );
+
+		$options = FrmFieldFactory::get_field_type( 'phone' )->get_default_field_options();
+
+		remove_filter( 'frm_default_field_options', $filter );
+
+		$this->assertSame( '', $options['autocomplete'], 'The frm_default_field_options filter should be able to clear the tel default.' );
+	}
+
 	public function test_html_min_number() {
 		$form_id = $this->factory->form->create();
 		$field   = $this->factory->field->create_and_get(
@@ -33,9 +119,6 @@ class test_FrmFieldType extends FrmUnitTest {
 		$this->assertStringContainsString( ' step="any"', $form );
 	}
 
-	/**
-	 * @covers FrmFieldType::sanitize_value
-	 */
 	public function test_sanitize_value() {
 		$this->set_current_user_to_1();
 		$frm_field_type = new FrmFieldDefault();
@@ -163,9 +246,6 @@ class test_FrmFieldType extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmFieldType::get_import_value
-	 */
 	public function test_get_import_value() {
 		$field          = new stdClass();
 		$field->type    = 'checkbox';
@@ -203,9 +283,6 @@ class test_FrmFieldType extends FrmUnitTest {
 		$this->assertSame( 'a,b,c', $checkbox->get_import_value( 'a,b,c' ) );
 	}
 
-	/**
-	 * @covers FrmFieldType::is_not_unique
-	 */
 	public function test_is_not_unique() {
 		$form_id = $this->factory->form->create();
 		$field1  = $this->factory->field->create_and_get(
@@ -241,9 +318,6 @@ class test_FrmFieldType extends FrmUnitTest {
 		$this->assertFalse( $field_object3->is_not_unique( 'First', $entry_id ), 'a field object for another field should not flag a duplicate' );
 	}
 
-	/**
-	 * @covers FrmFieldType::add_aria_description
-	 */
 	public function test_add_aria_description() {
 		$form_id = $this->factory->form->create();
 		$field   = $this->factory->field->create_and_get(
@@ -266,20 +340,91 @@ class test_FrmFieldType extends FrmUnitTest {
 			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="my_custom_aria_describedby" aria-invalid="true" ' =>
 			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_error_field_' . $field->field_key . ' my_custom_aria_describedby frm_desc_field_' . $field->field_key . '" aria-invalid="true" ', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
-			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-invalid="true"' =>
-			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-invalid="true" aria-describedby="frm_error_field_' . $field->field_key . ' frm_desc_field_' . $field->field_key . '"', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-invalid="true"' =>
+		' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-invalid="true" aria-describedby="frm_error_field_' . $field->field_key . ' frm_desc_field_' . $field->field_key . '"', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
-			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_field_custom frm_error_field_custom" aria-invalid="true"' => // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_field_' . $field->field_key . ' frm_desc_field_custom frm_error_field_custom" aria-invalid="true" data-error-first="0"', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_field_custom frm_error_field_custom" aria-invalid="true"' => // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_field_' . $field->field_key . ' frm_desc_field_custom frm_error_field_custom" aria-invalid="true" data-error-first="0"', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
-			// Make sure that a duplicate description ID is not added.
-			'aria-describedby="frm_desc_field_' . $field->field_key . '"' => 'aria-describedby="frm_error_field_' . $field->field_key . ' frm_desc_field_' . $field->field_key . '"', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		// Make sure that a duplicate description ID is not added.
+		'aria-describedby="frm_desc_field_' . $field->field_key . '"' => 'aria-describedby="frm_error_field_' . $field->field_key . ' frm_desc_field_' . $field->field_key . '"', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		);
 
 		foreach ( $input_html_actual_expected as $actual => $expected ) {
 			$this->run_private_method( array( $field_object, 'add_aria_description' ), array( $args, &$actual ) );
 			$this->assertSame( $expected, $actual );
 		}
+	}
+
+	/**
+	 * A field with its label position set to "Hidden" still renders a real
+	 * <label for="...">, but only visually hides it - the input still needs
+	 * an explicit aria-labelledby pointing at that label's id, since the
+	 * visual hiding technique also drops the label out of the accessibility
+	 * tree (IBM Equal Access input_label_exists, formidable-pro#6757).
+	 *
+	 * @covers FrmFieldType::add_aria_description_to_inputs
+	 */
+	public function test_prepare_field_html_with_hidden_label() {
+		$form_id = $this->factory->form->create();
+		$field   = $this->factory->field->create_and_get(
+			array(
+				'type'          => 'text',
+				'form_id'       => $form_id,
+				'field_options' => array( 'label' => 'hidden' ),
+			)
+		);
+
+		$field_array  = FrmFieldsHelper::setup_edit_vars( $field );
+		$field_object = FrmFieldFactory::get_field_type( 'text', $field_array );
+
+		$args = array(
+			'errors' => array(),
+			'form'   => FrmForm::getOne( $form_id ),
+		);
+		$html = $field_object->prepare_field_html( $args );
+
+		$this->assertStringContainsString( 'id="field_' . $field->field_key . '_label"', $html );
+		$this->assertStringContainsString( 'aria-labelledby="field_' . $field->field_key . '_label"', $html );
+	}
+
+	/**
+	 * A front_field_input() override that calls add_aria_description() itself
+	 * and sets aria_description_added = true before returning (what Pro's
+	 * FrmProFieldText does) used to skip the hidden-label aria-labelledby fix
+	 * entirely, since it was nested inside add_aria_description_to_inputs()'s
+	 * own callback - the exact method that override is designed to skip
+	 * (formidable-pro#6757).
+	 *
+	 * @covers FrmFieldType::maybe_add_aria_labelledby_for_hidden_label
+	 */
+	public function test_prepare_field_html_with_hidden_label_and_front_field_input_override() {
+		$form_id = $this->factory->form->create();
+		$field   = $this->factory->field->create_and_get(
+			array(
+				'type'          => 'text',
+				'form_id'       => $form_id,
+				'field_options' => array( 'label' => 'hidden' ),
+			)
+		);
+
+		$field_array  = FrmFieldsHelper::setup_edit_vars( $field );
+		$field_object = new class( $field_array, 'text' ) extends FrmFieldText {
+			public function front_field_input( $args, $shortcode_atts ) {
+				$input_html = parent::front_field_input( $args, $shortcode_atts );
+				$this->add_aria_description( $args, $input_html );
+				$this->aria_description_added = true;
+				return $input_html;
+			}
+		};
+
+		$args = array(
+			'errors' => array(),
+			'form'   => FrmForm::getOne( $form_id ),
+		);
+		$html = $field_object->prepare_field_html( $args );
+
+		$this->assertStringContainsString( 'aria-labelledby="field_' . $field->field_key . '_label"', $html );
 	}
 
 	/**
@@ -367,7 +512,7 @@ class test_FrmFieldType extends FrmUnitTest {
 	 * A field in a repeater row is rendered with an id of '{field_id}-{section_id}-{row}', and its
 	 * errors are keyed by that same id, so the plain field id matches nothing inside a repeater.
 	 *
-	 * @covers FrmFieldType::set_aria_invalid_error
+	 * @see FrmFieldType::set_aria_invalid_error
 	 */
 	public function test_set_aria_invalid_error_in_repeater() {
 		$form_id = $this->factory->form->create();
@@ -409,7 +554,7 @@ class test_FrmFieldType extends FrmUnitTest {
 	 * The sub field of a combo field that failed validation is what an error summary link focuses,
 	 * so it needs to be flagged in a repeater row too.
 	 *
-	 * @covers FrmFieldCombo::set_aria_invalid_error
+	 * @see FrmFieldCombo::set_aria_invalid_error
 	 */
 	public function test_set_aria_invalid_error_for_combo_field_in_repeater() {
 		$form_id = $this->factory->form->create();

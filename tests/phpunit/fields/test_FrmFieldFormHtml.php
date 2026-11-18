@@ -1,11 +1,12 @@
 <?php
 /**
  * @group fields
+ *
+ * @covers FrmFieldFormHtml
  */
+#[\PHPUnit\Framework\Attributes\Group( 'fields' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldFormHtml::class )]
 class test_FrmFieldFormHtml extends FrmUnitTest {
-	/**
-	 * @covers FrmFieldFormHtml::add_multiple_input_attributes
-	 */
 	public function test_add_multiple_input_attributes() {
 		$form_id             = $this->factory->form->create();
 		$form                = FrmForm::getOne( $form_id );

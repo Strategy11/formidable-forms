@@ -30,6 +30,10 @@ class FrmSquareLiteApiHelper {
 	 * @return bool
 	 */
 	public static function cancel_subscription( $sub_id ) {
+		if ( ! FrmTransLiteSubscription::current_user_can_cancel( $sub_id, 'square' ) ) {
+			return false;
+		}
+
 		return FrmSquareLiteConnectHelper::cancel_subscription( $sub_id );
 	}
 }

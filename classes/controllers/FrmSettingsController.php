@@ -291,9 +291,9 @@ class FrmSettingsController {
 			array(
 				'medium'        => 'api-settings',
 				'upgrade'       => __( 'API settings', 'formidable' ),
-				'message'       => __( 'Send entries to any site with a REST API, and let AI assistants build your forms. Upgrade to get the API add-on.', 'formidable' ),
+				'message'       => __( 'Send entries to other sites, connect external services, and embed your forms with the API add-on.', 'formidable' ),
 				'learn-more'    => FrmAppHelper::get_doc_url( 'formidable-api', 'api-global-settings' ),
-				'upsell-images' => 'api-settings-1.png,api-settings-2.png,api-settings-3.png',
+				'upsell-images' => 'api-settings-2.png,api-settings-3.png',
 			)
 		);
 

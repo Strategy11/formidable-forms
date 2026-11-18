@@ -3,6 +3,7 @@
 /**
  * @group settings
  */
+#[\PHPUnit\Framework\Attributes\Group( 'settings' )]
 class Test_FrmSettings extends FrmUnitTest {
 	private $frm_settings;
 

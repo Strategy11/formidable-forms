@@ -4,8 +4,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_fieldset_color"
+	<label
+		for="frm_title_color"
 		class="frm-style-item-heading"><?php esc_html_e( 'Color', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$frm_style->get_field_name( 'title_color' ),
 		$style->post_content['title_color'],
 		array(
-			'id'          => 'frm_fieldset_color',
+			'id'          => 'frm_title_color',
 			'action_slug' => 'title_color',
 		)
 	);
@@ -22,9 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_title_size"
-		class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?></label>
+	<?php FrmSliderStyleComponent::style_item_heading( $style, 'title_size', 'frm_title_size-value', __( 'Font Size', 'formidable' ) ); ?>
 </div>
 <div class="frm7 frm_form_field">
 	<?php
@@ -40,9 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_title_margins"
-		class="frm-style-item-heading"><?php esc_html_e( 'Margin', 'formidable' ); ?></label>
+	<?php FrmSliderStyleComponent::style_item_heading( $style, 'title_margin_top', 'frm_title_margins-value', __( 'Margin', 'formidable' ) ); ?>
 </div>
 <div class="frm7 frm_form_field">
 	<?php

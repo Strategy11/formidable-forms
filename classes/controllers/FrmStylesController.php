@@ -141,7 +141,7 @@ class FrmStylesController {
 		$version = FrmAppHelper::plugin_version();
 
 		if ( FrmAppHelper::is_style_editor_page( 'edit' ) ) {
-			wp_enqueue_style( 'wp-color-picker' );
+			wp_enqueue_style( 'formidable-color-picker' );
 		}
 
 		wp_enqueue_style( 'frm-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_css&frm_scope_custom_css=1' ), array(), $version );
@@ -589,11 +589,24 @@ class FrmStylesController {
 		$version         = FrmAppHelper::plugin_version();
 		$js_dependencies = array( 'wp-i18n', 'wp-hooks', 'formidable_dom' );
 
+		if ( FrmAppHelper::is_style_editor_page( 'edit' ) ) {
+			$js_dependencies[] = 'formidable-color-picker';
+		}
+
 		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::use_jquery_datepicker' ) && FrmProAppHelper::use_jquery_datepicker() ) {
 			$js_dependencies[] = 'jquery-ui-datepicker';
 		}
 
 		wp_register_script( 'formidable_style', $plugin_url . '/js/admin/style.js', $js_dependencies, $version );
+		wp_localize_script(
+			'formidable_style',
+			'frmStyleLivePreview',
+			array(
+				'settings'             => FrmStylesHelper::get_live_preview_settings(),
+				'colorSettings'        => array_values( ( new FrmStyle() )->get_color_settings() ),
+				'baseFontSizeSettings' => FrmStylesHelper::get_base_font_size_settings(),
+			)
+		);
 		wp_register_style( 'formidable_style', $plugin_url . '/css/admin/style.css', array(), $version );
 		wp_print_styles( 'formidable_style' );
 
@@ -1022,7 +1035,7 @@ class FrmStylesController {
 	 * From the list view, it persists the reset immediately, and returns the default card style attributes so the style card can be reset as well.
 	 *
 	 * @since 6.0 When a style_id is passed to this action, the style will actually be reset.
-	 * @since x.x A style_id is now always expected, so the edit view can look up that style's own default template instead of the generic defaults. The list view now also sends persist=1 to trigger the actual database update.
+	 * @since 7.0 A style_id is now always expected, so the edit view can look up that style's own default template instead of the generic defaults. The list view now also sends persist=1 to trigger the actual database update.
 	 *
 	 * @return void
 	 */
@@ -1347,6 +1360,11 @@ class FrmStylesController {
 
 		$frm_style = new FrmStyle( $style );
 		$style     = $frm_style->get_one();
+
+		if ( ! $style ) {
+			// The style was deleted, so use the default style.
+			$style = ( new FrmStyle( 'default' ) )->get_one();
+		}
 
 		if ( $style ) {
 			$class .= ' frm_style_' . $style->post_name;

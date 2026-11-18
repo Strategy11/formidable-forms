@@ -38,7 +38,9 @@ foreach ( $field['options'] as $opt_key => $opt ) {
 	<div class="<?php echo esc_attr( apply_filters( 'frm_' . $display_type . '_class', 'frm_' . $display_type, $field, $field_val ) ); ?>" id="<?php echo esc_attr( FrmFieldsHelper::get_checkbox_id( $field, $opt_key, $display_type ) ); ?>"><?php
 
 	if ( empty( $hide_label ) ) {
-		?><label for="<?php echo esc_attr( $html_id ); ?>-<?php echo esc_attr( $opt_key ); ?>"><?php
+		// No `for` attribute -- the label already wraps the input below,
+		// so adding one too makes Safari VoiceOver announce it twice.
+		?><label><?php
 	}
 	?>
 	<input type="<?php echo esc_attr( $display_type ); ?>" name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $html_id . '-' . $opt_key ); ?>" value="<?php echo esc_attr( $field_val ); ?>"<?php

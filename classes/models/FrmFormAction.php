@@ -1029,7 +1029,7 @@ class FrmFormAction {
 				)
 			);
 			?>
-			<label for="frm_logic_cta_<?php echo esc_attr( $action_key ); ?>" class="frm_noallow">
+			<label for="frm_logic_cta_<?php echo esc_attr( $action_key ); ?>" id="frm_logic_cta_<?php echo esc_attr( $action_key ); ?>_label" class="frm_noallow">
 				<?php esc_html_e( 'Use Conditional Logic', 'formidable' ); ?>
 			</label>
 		</div>

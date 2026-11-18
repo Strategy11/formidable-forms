@@ -30,6 +30,24 @@ class FrmAddonsHelper {
 	private static $built_in = false;
 
 	/**
+	 * Whether the current Boost needs to be purchased.
+	 *
+	 * @since 7.1
+	 *
+	 * @var bool
+	 */
+	private static $boost_locked = false;
+
+	/**
+	 * Whether the add-on being rendered is a Boost.
+	 *
+	 * @since 7.1
+	 *
+	 * @var bool
+	 */
+	private static $boost = false;
+
+	/**
 	 * Show the CTA to upgrade or renew.
 	 *
 	 * @since 6.15
@@ -162,6 +180,11 @@ class FrmAddonsHelper {
 	 */
 	public static function get_addon_icon( $slug ) {
 		$icons_map = array(
+			'formidable-advanced-modals'      => 'boost_popups',
+			'formidable-bulk-edit'            => 'boost_bulk_edit',
+			'formidable-celebrations'         => 'boost_celebrations',
+			'formidable-color-picker'         => 'boost_color_picker',
+			'formidable-tooltips'             => 'boost_tooltips',
 			'acf-forms'                       => 'acfforms',
 			'activecampaign-wordpress-plugin' => 'activecampaign',
 			'ai'                              => 'ai-form',
@@ -214,7 +237,7 @@ class FrmAddonsHelper {
 
 		$attributes = array(
 			'tabindex'        => '0',
-			'frm-search-text' => strtolower( $addon['title'] . ' ' . esc_html( $addon['excerpt'] ) ),
+			'frm-search-text' => strtolower( $addon['title'] . ' ' . esc_html( $addon['excerpt'] ?? '' ) ),
 		);
 
 		// Set 'data-slug' attribute.
@@ -246,6 +269,10 @@ class FrmAddonsHelper {
 		$class_names[] = 'plugin-card-' . $addon['slug'];
 		$class_names[] = 'frm-addon-' . $addon['status']['type'];
 
+		if ( self::is_boost( $addon ) ) {
+			$class_names[] = 'frm-addon-boost';
+		}
+
 		if ( self::is_locked() ) {
 			$class_names[] = 'frm-locked-item';
 		}
@@ -263,13 +290,44 @@ class FrmAddonsHelper {
 			return false;
 		}
 
+		if ( self::$boost ) {
+			return self::$boost_locked;
+		}
+
 		return self::$plan_required || ! FrmAppHelper::pro_is_installed();
+	}
+
+	/**
+	 * Check whether an add-on belongs to the Boosts category.
+	 *
+	 * @since 7.1
+	 *
+	 * @param array $addon The add-on data from the API or prepared for display.
+	 *
+	 * @return bool
+	 */
+	public static function is_boost( $addon ) {
+		if ( ! empty( $addon['is_boost'] ) ) {
+			return true;
+		}
+
+		if ( isset( $addon['category-slugs'] ) ) {
+			$categories = $addon['category-slugs'];
+		} else {
+			$categories = array();
+
+			foreach ( $addon['categories'] ?? array() as $category ) {
+				$categories[] = sanitize_title( $category );
+			}
+		}
+
+		return in_array( 'boost', $categories, true ) || in_array( 'boosts', $categories, true );
 	}
 
 	/**
 	 * Check if the add-on being rendered is built into Lite.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool
 	 */
@@ -293,6 +351,8 @@ class FrmAddonsHelper {
 	private static function set_plan_required( $addon ) {
 		self::$plan_required = FrmFormsHelper::get_plan_required( $addon );
 		self::$built_in      = ! empty( $addon['built_in'] );
+		self::$boost         = self::is_boost( $addon );
+		self::$boost_locked  = self::$boost && empty( $addon['installed'] ) && empty( $addon['url'] );
 	}
 
 	/**
@@ -334,12 +394,15 @@ class FrmAddonsHelper {
 	 *
 	 * @since 6.17
 	 *
+	 * @param string $alt Accessible name for the icon. Leave blank when adjacent text already
+	 *                    describes the guarantee, so the icon stays decorative.
+	 *
 	 * @return void
 	 */
-	public static function guarantee_icon() {
+	public static function guarantee_icon( $alt = '' ) {
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
-		<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/guarantee.svg' ); ?>" alt="" />
+		<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/guarantee.svg' ); ?>" alt="<?php echo esc_attr( $alt ); ?>" />
 		<?php
 		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}

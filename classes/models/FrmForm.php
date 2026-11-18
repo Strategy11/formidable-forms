@@ -268,6 +268,10 @@ class FrmForm {
 		$form_fields = array( 'form_key', 'name', 'description', 'status', 'parent_form_id' );
 		$new_values  = self::set_update_options( array(), $values, array( 'form_id' => $id ) );
 
+		if ( isset( $values['editable'] ) ) {
+			$new_values['editable'] = (int) ! empty( $values['editable'] );
+		}
+
 		foreach ( $values as $value_key => $value ) {
 			if ( $value_key && in_array( $value_key, $form_fields, true ) ) {
 				$new_values[ $value_key ] = 'name' === $value_key ? FrmAppHelper::truncate( $value, 255, 1, '', true ) : $value;
@@ -291,10 +295,89 @@ class FrmForm {
 
 		$values = self::update_fields( $id, $values );
 
+		if ( ! self::update_field_order( $id, $values ) ) {
+			$query_results = false;
+		}
+
 		do_action( 'frm_update_form', $id, $values );
 		do_action( 'frm_update_form_' . $id, $values );
 
 		return $query_results;
+	}
+
+	/**
+	 * Save builder order changes after active field settings have been updated.
+	 *
+	 * @since 7.1
+	 *
+	 * @param int|string $form_id Form being saved.
+	 * @param array      $values Form values including the JSON field ID to order map.
+	 *
+	 * @return bool Whether the order update succeeded or no update was needed.
+	 */
+	private static function update_field_order( $form_id, $values ) {
+		if ( (int) $form_id < 1 || empty( $values['frm_field_order'] ) || ! is_string( $values['frm_field_order'] ) ) {
+			return true;
+		}
+
+		$orders = json_decode( $values['frm_field_order'], true );
+
+		if ( ! is_array( $orders ) || ! $orders ) {
+			return true;
+		}
+
+		$ids  = array();
+		$args = array();
+
+		foreach ( $orders as $field_id => $order ) {
+			if ( ! preg_match( '/^[1-9][0-9]*$/D', (string) $field_id ) || ! is_int( $order ) || $order < 1 || (int) $field_id < 1 ) {
+				continue;
+			}
+
+			$args[] = (int) $field_id;
+			$args[] = $order;
+			$ids[]  = (int) $field_id;
+		}
+
+		if ( ! $ids ) {
+			return true;
+		}
+
+		global $wpdb;
+		$form_ids   = FrmDb::get_col( 'frm_forms', array( 'parent_form_id' => (int) $form_id ) );
+		$form_ids[] = (int) $form_id;
+		$form_ids   = array_unique( $form_ids );
+		$args       = array_merge( array( $wpdb->prefix . 'frm_fields' ), $args, $ids, $form_ids );
+		$result     = $wpdb->query(
+			$wpdb->prepare(
+				'UPDATE %i SET field_order = CASE id ' . implode( ' ', array_fill( 0, count( $ids ), 'WHEN %d THEN %d' ) ) .
+				' END WHERE id IN (' . implode( ',', array_fill( 0, count( $ids ), '%d' ) ) .
+				') AND form_id IN (' . implode( ',', array_fill( 0, count( $form_ids ), '%d' ) ) . ')',
+				$args
+			)
+		);
+
+		if ( false === $result ) {
+			return false;
+		}
+
+		foreach ( $form_ids as $affected_form_id ) {
+			FrmField::delete_form_transient( $affected_form_id );
+		}
+
+		/**
+		 * Fires after the builder saves the field order in one query.
+		 *
+		 * This write does not fire frm_field_updated for each field.
+		 *
+		 * @since 7.1
+		 *
+		 * @param int[] $ids     IDs of the fields whose order was sent. Fields outside the form are skipped by the query.
+		 * @param int   $form_id The form being saved.
+		 */
+		do_action( 'frm_field_order_updated', $ids, (int) $form_id );
+
+		return true;
 	}
 
 	/**
@@ -723,6 +806,15 @@ class FrmForm {
 
 		$id = $form->id;
 
+		/**
+		 * Fires before a form and its children are permanently deleted.
+		 *
+		 * @since 7.1
+		 *
+		 * @param int $id The form ID being deleted.
+		 */
+		do_action( 'frm_before_destroy_form', $id );
+
 		// Disconnect the entries from this form
 		$entries = FrmDb::get_col( 'frm_items', array( 'form_id' => $id ) );
 
@@ -970,14 +1062,60 @@ class FrmForm {
 	 * @return array|object Array of forms. A single form object is returned if $limit is set to 1.
 	 */
 	public static function get_published_forms( $query = array(), $limit = 999, $inc_children = 'exclude' ) {
+		self::add_published_forms_where( $query, $inc_children );
+		return self::getAll( $query, 'name', $limit );
+	}
+
+	/**
+	 * Get the id, name, key and parent form id of published forms, with an optional description, for lightweight lists.
+	 * This skips loading and unserializing the options column for every form.
+	 *
+	 * @since 7.0
+	 *
+	 * @param array $query Additional where conditions.
+	 * @param array $args  Query options, including include_description, inc_children (default 'exclude') and limit (default unlimited).
+	 *
+	 * @return array Array of objects with id, name, form_key, parent_form_id and optionally description properties.
+	 */
+	public static function get_published_form_names( $query = array(), $args = array() ) {
+		self::add_published_forms_where( $query, $args['inc_children'] ?? 'exclude' );
+
+		$columns = 'id, name, form_key, parent_form_id';
+
+		if ( ! empty( $args['include_description'] ) ) {
+			$columns .= ', description';
+		}
+
+		$results = FrmDb::get_results(
+			'frm_forms',
+			$query,
+			$columns,
+			array(
+				'order_by' => 'name',
+				'limit'    => $args['limit'] ?? '',
+			)
+		);
+
+		return wp_unslash( $results );
+	}
+
+	/**
+	 * Add the where conditions shared by all published form queries.
+	 *
+	 * @since 7.0
+	 *
+	 * @param array  $query        Where conditions, modified by reference.
+	 * @param string $inc_children Set to 'exclude' to skip child forms.
+	 *
+	 * @return void
+	 */
+	private static function add_published_forms_where( &$query, $inc_children ) {
 		$query['is_template'] = 0;
 		$query['status']      = array( null, '', 'published' );
 
 		if ( $inc_children === 'exclude' ) {
 			$query['parent_form_id'] = array( null, 0 );
 		}
-
-		return self::getAll( $query, 'name', $limit );
 	}
 
 	/**

@@ -127,32 +127,50 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="misc-pub-section">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_browser_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				<?php esc_html_e( 'Browser/OS:', 'formidable' ); ?>
-				<b><?php echo wp_kses_post( $browser ); ?></b>
+				<b><?php echo esc_html( $browser ); ?></b>
 			</div>
 		<?php } ?>
 
-		<?php if ( isset( $data['referrer'] ) ) { ?>
+		<?php if ( ! empty( $data['referrer'] ) ) { ?>
 			<div class="misc-pub-section frm_force_wrap">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_history_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				<?php esc_html_e( 'Referrer:', 'formidable' ); ?>
-				<?php echo wp_kses_post( str_replace( "\r\n", '<br/>', $data['referrer'] ) ); ?>
+				<?php echo wp_kses( nl2br( esc_html( $data['referrer'] ) ), array( 'br' => array() ) ); ?>
 			</div>
 		<?php } ?>
 
 		<?php
 		foreach ( (array) $data as $k => $d ) {
-			if ( in_array( $k, array( 'browser', 'referrer', 'user_journey' ), true ) ) {
+			if ( in_array( $k, array( 'browser', 'referrer', 'user_journey', 'test_sample', 'spam_reason', 'spam_marked_at' ), true ) ) {
 				continue;
+			}
+
+			// An entry marked as not spam keeps its spam details, but they no longer apply.
+			if ( 'spam_source' === $k && ! FrmSpamEntriesHelper::is_spam( $entry ) ) {
+				continue;
+			}
+
+			$label = ucfirst( str_replace( '-', ' ', $k ) );
+			$icon  = 'frmfont frm_attach_file_icon';
+
+			if ( 'spam_source' === $k ) {
+				$label = __( 'Spam reason', 'formidable' );
+				$icon  = 'frmfont frm_alert_icon';
+				$d     = FrmSpamEntriesHelper::get_source_label( (object) array( 'description' => $data ) );
+
+				if ( '' === $d ) {
+					$d = __( 'Not recorded', 'formidable' );
+				}
 			}
 			?>
 			<div class="misc-pub-section">
-				<?php FrmAppHelper::icon_by_class( 'frmfont frm_attach_file_icon', array( 'aria-hidden' => 'true' ) ); ?>
-				<?php echo esc_html( ucfirst( str_replace( '-', ' ', $k ) ) ); ?>:
-				<b><?php echo wp_kses_post( implode( ', ', (array) $d ) ); ?></b>
+				<?php FrmAppHelper::icon_by_class( $icon, array( 'aria-hidden' => 'true' ) ); ?>
+				<?php echo esc_html( $label ); ?>:
+				<b><?php echo esc_html( implode( ', ', (array) $d ) ); ?></b>
 			</div>
 			<?php
 			unset( $k, $d );
-		}
+		}//end foreach
 		?>
 	</div>
 </div>

@@ -1,0 +1,90 @@
+/**
+ * Deprecated admin toggle
+ *
+ * The long on/off toggle with text labels. Admin only, so it is kept out of
+ * frm_testing_mode.css. New toggles use FrmHtmlHelper::toggle().
+ */
+
+.frm_toggle_off,
+.frm_toggle_on {
+	display: none;
+	color: #fff;
+	z-index: 999;
+	position: absolute;
+	font-size: 10px;
+	line-height: 20px;
+	left: 6px;
+}
+
+.frm_toggle_off {
+	display: inline;
+	left: auto;
+	right: 5px;
+	color: var(--grey-700);
+}
+
+.frm_toggle_long {
+	width: 80% !important;
+	height: 28px;
+	display: inline-block !important;
+}
+
+.frm_toggle_long .frm_toggle_slider {
+	background: var(--primary-700);
+	box-shadow: 0 0 0 2px var(--primary-700);
+}
+
+.frm_toggle_long .frm_toggle_off,
+.frm_toggle_long .frm_toggle_on {
+	width: 50%;
+	text-align: center;
+	font-size: 13px;
+	line-height: 28px;
+}
+
+.frm_toggle_long .frm_toggle_on {
+	left: 0;
+}
+
+.frm_toggle_long .frm_toggle_off {
+	right: 0;
+}
+
+.frm_toggle_long .frm_toggle_slider::before {
+	width: 50%;
+	left: 0;
+	top: 0;
+	border-radius: var(--border-radius) 0 0 var(--border-radius);
+	height: 100%;
+	background-color: #fff;
+	color: var(--primary-color);
+	content: "" !important;
+}
+
+.frm_toggle_long input:checked + .frm_toggle_slider::before {
+	transform: translateX(101%);
+	border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+
+input:checked + .frm_toggle_slider + .frm_toggle_on {
+	display: inline;
+}
+
+input:checked + .frm_toggle_slider + .frm_toggle_on + .frm_toggle_off {
+	display: none;
+}
+
+.frm_toggle_long .frm_toggle_on,
+.frm_toggle_long input:checked + .frm_toggle_slider + .frm_toggle_on + .frm_toggle_off {
+	display: inline;
+	color: var(--primary-500);
+	font-weight: 400;
+}
+
+.frm_toggle_long .frm_toggle_off,
+.frm_toggle_long input:checked + .frm_toggle_slider + .frm_toggle_on {
+	color: #fff;
+	font-weight: 700;
+}
+
+/* End toggle styling */

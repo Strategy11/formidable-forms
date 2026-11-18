@@ -5,10 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <div class="frm5 frm_form_field">
-	<label 
-		for="frm_form_desc_size"
-		class="frm-style-item-heading"><?php esc_html_e( 'Font Size', 'formidable' ); ?>
-	</label>
+	<?php FrmSliderStyleComponent::style_item_heading( $style, 'form_desc_size', 'frm_form_desc_size-value', __( 'Font Size', 'formidable' ) ); ?>
 </div>
 <div class="frm7 frm_form_field">
 	<?php
@@ -23,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </div>
 
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Color', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field"><label for="frm_form_desc_color" class="frm-style-item-heading"><?php esc_html_e( 'Color', 'formidable' ); ?></label></div>
 <div class="frm7 frm_form_field">
 	<?php
 	new FrmColorpickerStyleComponent(
@@ -37,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </div>
 
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Margin', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field"><?php FrmSliderStyleComponent::style_item_heading( $style, 'form_desc_margin_top', 'frm_form_desc_margin_top-value', __( 'Margin', 'formidable' ) ); ?></div>
 <div class="frm7 frm_form_field">
 	<?php
 	new FrmSliderStyleComponent(
@@ -66,7 +63,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </div>
 
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php esc_html_e( 'Padding', 'formidable' ); ?></label></div>
+<div class="frm5 frm_form_field"><?php FrmSliderStyleComponent::style_item_heading( $style, 'form_desc_padding', 'frm_form_desc_padding-value', __( 'Padding', 'formidable' ) ); ?></div>
 <div class="frm7 frm_form_field">
 	<?php
 	new FrmSliderStyleComponent(

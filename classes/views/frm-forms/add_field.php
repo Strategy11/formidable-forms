@@ -2,11 +2,29 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+/**
+ * Filters the builder container presentation. Defaults preserve section markup.
+ *
+ * @since 7.1
+ *
+ * @param string $container_type The presentation type.
+ * @param array $field The builder field.
+ */
+$container_type = apply_filters( 'frm_builder_container_type', $field['type'], $field );
 ?>
 <li id="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" class="<?php echo esc_attr( $li_classes ); ?>" data-fid="<?php echo esc_attr( $field['id'] ); ?>" data-formid="<?php echo esc_attr( 'divider' === $field['type'] && isset( $field['form_select'] ) ? $field['form_select'] : $field['form_id'] ); ?>" data-ftype="<?php echo esc_attr( $display['type'] ); ?>" data-type="<?php echo esc_attr( $field['type'] ); ?>" <?php FrmAppHelper::array_to_html_params( $extra_field_attributes, true ); ?>>
 <?php
-if ( $field['type'] === 'divider' ) {
+if ( $container_type === 'divider' ) {
 	$icon_class = ! empty( $field['form_select'] ) ? 'frm_repeat_icon' : 'frm-form-title-style';
+	/**
+	 * Filters the icon shown at the start of a builder container.
+	 *
+	 * @since 7.1
+	 *
+	 * @param string $icon_class The icon class without the frmfont marker.
+	 * @param array  $field      The builder field.
+	 */
+	$icon_class = apply_filters( 'frm_builder_container_icon', $icon_class, $field );
 	FrmAppHelper::icon_by_class( "frmfont $icon_class frm-divider-icon" );
 	?>
 <div class="divider_section_only">
@@ -25,7 +43,7 @@ do_action( 'frm_extra_field_actions', $field['id'] );
 			(ID <?php echo esc_html( $field['id'] ); ?>)
 		</div>
 
-		<?php if ( $field['type'] === 'divider' ) : ?>
+		<?php if ( $container_type === 'divider' ) : ?>
 			<a href="#" class="frm-collapse-section" title="<?php esc_attr_e( 'Expand/Collapse Section', 'formidable' ); ?>">
 				<?php
 				FrmAppHelper::icon_by_class(
@@ -107,9 +125,35 @@ if ( $display['conf_field'] && ! is_callable( 'FrmProFieldsController::add_confi
 	<?php
 }//end if
 
+if ( isset( $values['deferred_settings'] ) ) {
+	ob_start();
+}
+
 FrmFieldsController::load_single_field_settings( compact( 'field', 'field_obj', 'values', 'display' ) );
 
-if ( 'divider' === $field['type'] ) {
+if ( isset( $values['deferred_settings'] ) ) {
+	$values['deferred_settings']->html = ob_get_clean();
+	$values['deferred_settings']->meta = array(
+		'name'    => $field['name'],
+		'type'    => $field['type'],
+		'key'     => $field['field_key'],
+		'order'   => $field['field_order'],
+		'classes' => $display['css'] ? $field['classes'] : null,
+		'align'   => $field['align'] ?? null,
+	);
+}
+
+/**
+ * Lets field providers render their builder child list, retaining the legacy fallback.
+ *
+ * @since 7.1
+ *
+ * @param bool $handled Whether a provider rendered the child list boundary.
+ * @param array $field The builder field.
+ */
+$boundary_rendered = apply_filters( 'frm_builder_container_boundary', false, $field );
+
+if ( ! $boundary_rendered && 'divider' === $field['type'] ) {
 	?>
 </div>
 <div class="frm_no_section_fields">
@@ -118,13 +162,13 @@ if ( 'divider' === $field['type'] ) {
 <ul class="start_divider frm_sorting frm_grid_container">
 	<?php
 	FrmAppHelper::icon_by_class( 'frmfont frm-circle frm-divider-icon' );
-} elseif ( 'end_divider' === $field['type'] ) {
+} elseif ( ! $boundary_rendered && 'end_divider' === $field['type'] ) {
 	?>
 </ul>
 	<?php
 }
 
-if ( $field['type'] !== 'divider' ) {
+if ( $container_type !== 'divider' ) {
 	?>
 </li>
 	<?php

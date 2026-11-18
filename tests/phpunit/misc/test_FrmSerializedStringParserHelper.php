@@ -1,10 +1,11 @@
 <?php
 
+/**
+ * @covers FrmSerializedStringParserHelper
+ */
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmSerializedStringParserHelper::class )]
 class test_FrmSerializedStringParserHelper extends FrmUnitTest {
 
-	/**
-	 * @covers FrmSerializedStringParserHelper::parse
-	 */
 	public function test_parse() {
 		// Test an unexpected serialized string format.
 		// Arrays should never have an array as its key like in this example.

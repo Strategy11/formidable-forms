@@ -128,7 +128,7 @@
 	 */
 	async function paypalInit() {
 		const cardElement = document.querySelector( '.frm-card-element' );
-		if ( ! cardElement ) {
+		if ( ! cardElement || ! window.paypal ) {
 			return;
 		}
 
@@ -182,12 +182,20 @@
 			isRecurring
 		} );
 
+		if ( runId !== initRunId ) {
+			return;
+		}
+
 		// 1b. Discover Google Pay / Apple Pay. Their SDKs (pay.js / PayPal applepay
 		// component) load asynchronously and are frequently not ready during the first
 		// run, which previously left these buttons missing on first load. We wait
 		// (bounded) for them here so every eligible method appears together in one
 		// render instead of popping in afterward.
-		await discoverDeferredPaymentMethods( { buttonsAreEnabled, isRecurring } );
+		await discoverDeferredPaymentMethods( { buttonsAreEnabled, isRecurring, runId } );
+
+		if ( runId !== initRunId ) {
+			return;
+		}
 
 		if ( paymentMethods.size === 0 ) {
 			displayPaymentFailure( 'No payment methods available.' );
@@ -226,6 +234,9 @@
 				} catch ( err ) {
 					console.error( `Failed to pre-render payment method: ${ key }`, err );
 				}
+				if ( runId !== initRunId ) {
+					return;
+				}
 			}
 		}
 
@@ -233,13 +244,17 @@
 		const firstKey = paymentMethods.keys().next().value;
 		await selectPaymentMethod( firstKey );
 
+		if ( runId !== initRunId ) {
+			return;
+		}
+
 		// 6. Attach form submit handler (for card method).
 		thisForm.addEventListener( 'submit', handleFormSubmission );
 
 		// 7. Pay Later messages.
 		if ( paymentMethods.has( 'paylater' ) ) {
 			renderMessages();
-			jQuery( document ).on( 'frmFieldChanged', priceChanged );
+			jQuery( document ).off( 'frmFieldChanged', priceChanged ).on( 'frmFieldChanged', priceChanged );
 			checkPriceFieldsOnLoad();
 		}
 
@@ -253,7 +268,7 @@
 
 			// priceChanged already refreshes the amount when Pay Later messages are on.
 			if ( ! paymentMethods.has( 'paylater' ) ) {
-				jQuery( document ).on( 'frmFieldChanged', refreshCachedAmountOnFieldChange );
+				jQuery( document ).off( 'frmFieldChanged', refreshCachedAmountOnFieldChange ).on( 'frmFieldChanged', refreshCachedAmountOnFieldChange );
 			}
 		}
 	}
@@ -343,7 +358,7 @@
 	 * @return {Promise<void>}
 	 */
 	async function discoverDeferredPaymentMethods( opts ) {
-		const { buttonsAreEnabled, isRecurring } = opts;
+		const { buttonsAreEnabled, isRecurring, runId } = opts;
 
 		if ( ! buttonsAreEnabled || isRecurring ) {
 			return;
@@ -365,6 +380,10 @@
 			frmPayPalVars.includeGooglePay ? resolveGooglePayEligibility() : false,
 			frmPayPalVars.includeApplePay ? resolveApplePayEligibility() : false
 		] );
+
+		if ( runId !== initRunId ) {
+			return;
+		}
 
 		if ( googlePayEligible ) {
 			registerMethod( 'google_pay', {
@@ -772,7 +791,7 @@
 	 * Get the submit buttons PayPal controls in a form.
 	 * Previous page buttons are left alone, they never submit the form.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} form
 	 *
@@ -1241,7 +1260,7 @@
 			currencyCode: applePayConfig.currencyCode || 'USD',
 			requiredBillingContactFields: [ 'postalAddress' ],
 			total: {
-				label: document.title || 'Payment',
+				label: frmPayPalVars.walletDisplayName,
 				type: 'final',
 				amount: cachedAmount,
 			},
@@ -1252,7 +1271,7 @@
 		session.onvalidatemerchant = event => {
 			applePayInstance.validateMerchant( {
 				validationUrl: event.validationURL,
-				displayName: document.title || 'Payment'
+				displayName: frmPayPalVars.walletDisplayName
 			} )
 				.then( validateResult => {
 					session.completeMerchantValidation( validateResult.merchantSession );
@@ -1659,7 +1678,7 @@
 	 * The container is what conditional logic shows and hides, so it is what gets
 	 * checked to know whether the payment field is available.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} form
 	 *
@@ -1683,7 +1702,7 @@
 	 * While it is hidden there is nothing to pay with, so PayPal must not disable
 	 * the submit button or take over form submission.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} form
 	 *
@@ -1713,7 +1732,7 @@
 	 * leave the form with nothing to pay for, so PayPal must not disable the submit
 	 * button or take over form submission.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} form
 	 *
@@ -1726,7 +1745,7 @@
 	/**
 	 * Resolve once conditional logic is no longer hiding the payment field.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} form
 	 *
@@ -1773,7 +1792,7 @@
 	 * Toggle the submit button on and off as conditional logic shows or hides the
 	 * payment field or the section it belongs to.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} form
 	 *
@@ -1829,7 +1848,7 @@
 	 * conditions are met, with no knowledge of the payment field. Watch for that and
 	 * put it back until PayPal is ready for it.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} form
 	 *
@@ -1873,7 +1892,7 @@
 	 * Watch an element for attribute changes.
 	 * An element is only observed once, so re-initializing does not stack observers.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} element
 	 * @param {Function}    mutationHandler
@@ -1903,7 +1922,7 @@
 	 * PayPal must not enable it in that case, whatever state the payment methods
 	 * are in.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {number} formId
 	 *
@@ -1925,7 +1944,7 @@
 	 * only disabling it. PayPal must not show it again in that case, even when the
 	 * payment field goes away and the native submit button would normally return.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {number} formId
 	 *
@@ -1938,7 +1957,7 @@
 	/**
 	 * Check the submit button is conditionally "hidden". This is also used for the enabled check and is used in submitButtonIsConditionallyDisabled.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {number} formId
 	 *
@@ -1962,7 +1981,7 @@
 	/**
 	 * Check a form's form_id input for a form ID value.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {HTMLElement} form
 	 *
@@ -2149,6 +2168,25 @@
 	}
 
 	/**
+	 * Check if the form is going to the previous page or saving a draft, using Pro's helpers when available.
+	 *
+	 * @return {boolean} True if the form is going back or saving a draft.
+	 */
+	function goingBackOrSavingDraft() {
+		const proForm = window.frmProForm;
+
+		if ( 'object' !== typeof proForm ) {
+			return false;
+		}
+
+		if ( 'function' === typeof proForm.goingToPreviousPage && proForm.goingToPreviousPage( thisForm ) ) {
+			return true;
+		}
+
+		return 'function' === typeof proForm.savingDraft && 1 === parseInt( proForm.savingDraft( thisForm ), 10 );
+	}
+
+	/**
 	 * Check if the current form action type should trigger payment processing.
 	 *
 	 * @return {boolean} True if current action type should be processed.
@@ -2157,7 +2195,8 @@
 		const action = jQuery( thisForm ).find( 'input[name="frm_action"]' ).val();
 
 		if ( 'object' !== typeof window.frmProForm || 'function' !== typeof window.frmProForm.currentActionTypeShouldBeProcessed ) {
-			return 'create' === action;
+			// Pro's frmpplite.js may not be enqueued, but going back or saving a draft must never submit the card.
+			return 'create' === action && ! goingBackOrSavingDraft();
 		}
 
 		return window.frmProForm.currentActionTypeShouldBeProcessed(
@@ -2238,10 +2277,12 @@
 	 */
 	function getBillingAddress() {
 		let addressID = '';
+		let addressType = '';
 
 		getPayPalSettings().forEach( function( setting ) {
 			if ( setting.address ) {
 				addressID = setting.address;
+				addressType = setting.addressType || '';
 			}
 		} );
 
@@ -2290,7 +2331,7 @@
 			return null;
 		}
 
-		const countryCode = getCountryCode( addressContainer, prefix );
+		const countryCode = getCountryCode( addressContainer, prefix, addressType );
 
 		if ( countryCode ) {
 			billingAddress.countryCode = countryCode;
@@ -2302,15 +2343,17 @@
 	/**
 	 * Get the two letter country code for the filled address.
 	 * The country dropdown holds the code in a data-code attribute.
-	 * US type address fields have a state dropdown and no country field, so US is assumed for them.
+	 * When the address is on an earlier page, the dropdown is a hidden input holding the country name instead.
+	 * US type address fields have no country field, so US is assumed for them.
 	 *
 	 * @since 6.34
 	 *
 	 * @param {Element} addressContainer
 	 * @param {string}  prefix
+	 * @param {string}  addressType      The address field type, such as us or international.
 	 * @return {string} Country code, or an empty string when the country is unknown.
 	 */
-	function getCountryCode( addressContainer, prefix ) {
+	function getCountryCode( addressContainer, prefix, addressType ) {
 		const countryDropdown = addressContainer.querySelector( `select[name$="[${ prefix }country]"]` );
 
 		if ( countryDropdown ) {
@@ -2318,8 +2361,15 @@
 			return countryOption?.getAttribute( 'data-code' ) || '';
 		}
 
+		const countryInput = addressContainer.querySelector( `input[name$="[${ prefix }country]"]` );
+
+		if ( countryInput?.value ) {
+			const code = frmPayPalVars.countryCodes?.[ countryInput.value ];
+			return 'string' === typeof code ? code : '';
+		}
+
 		const stateDropdown = addressContainer.querySelector( `select[name$="[${ prefix }state]"]` );
-		return stateDropdown ? 'US' : '';
+		return stateDropdown || 'us' === addressType ? 'US' : '';
 	}
 
 	// ---- Price / Pay Later ----
@@ -2376,7 +2426,7 @@
 	/**
 	 * Get the IDs of the fields a payment action uses in its conditional logic.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {Object} setting A single entry from frmPayPalVars.settings.
 	 *
@@ -2391,7 +2441,7 @@
 	 * When one does, the applicable action, and the amount with it, can change as
 	 * the form is filled in, so the amount has to be refreshed on field changes.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return {boolean} True when at least one action has conditional logic.
 	 */
@@ -2480,7 +2530,7 @@
 	 * With no action applying there is no payment to collect, so PayPal hides its
 	 * payment methods and hands the form back to the native submit button.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param {boolean} matched True when a payment action applies.
 	 *
@@ -2689,7 +2739,10 @@
 
 	// ---- Bootstrap ----
 
-	document.addEventListener( 'DOMContentLoaded', async function() {
+	/**
+	 * Start PayPal once its SDK is available.
+	 */
+	function bootstrap() {
 		if ( window.paypal ) {
 			paypalInit();
 			return;
@@ -2704,7 +2757,14 @@
 			},
 			50
 		);
-	} );
+	}
+
+	// This script can be loaded async, so DOMContentLoaded may have already fired.
+	if ( 'loading' === document.readyState ) {
+		document.addEventListener( 'DOMContentLoaded', bootstrap );
+	} else {
+		bootstrap();
+	}
 
 	jQuery( document ).on( 'frmPageChanged', function() {
 		paypalInit();

@@ -2,7 +2,11 @@
 
 /**
  * @group ajax
+ *
+ * @covers FrmAppHelper
  */
+#[\PHPUnit\Framework\Attributes\Group( 'ajax' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmAppHelper::class )]
 class test_FrmAppHelperAjax extends FrmAjaxUnitTest {
 
 	public function setUp(): void {
@@ -12,9 +16,6 @@ class test_FrmAppHelperAjax extends FrmAjaxUnitTest {
 		wp_set_current_user( $this->user_id );
 	}
 
-	/**
-	 * @covers FrmAppHelper::dismiss_warning_message
-	 */
 	public function test_dismiss_warning_message() {
 		$option = 'test_option';
 		$action = 'frm_' . $option;
@@ -27,6 +28,8 @@ class test_FrmAppHelperAjax extends FrmAjaxUnitTest {
 
 		// Check if the warning message is not dismissed
 		$this->assertFalse( get_option( $option, false ) );
+
+		ob_start();
 
 		try {
 			// Call dismiss_warning_message method

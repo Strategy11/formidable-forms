@@ -110,7 +110,7 @@ class FrmEntriesAJAXSubmitController {
 			}
 		}//end if
 
-		$response = self::check_for_failed_form_submission( $response, $form->id );
+		$response = self::check_for_failed_form_submission( $response, $form );
 
 		echo json_encode( $response );
 		wp_die();
@@ -171,6 +171,18 @@ class FrmEntriesAJAXSubmitController {
 	 * @return string
 	 */
 	private static function maybe_modify_ajax_error( $error, $field_id, $form, $errors ) {
+		$sub_field = '';
+
+		if ( ! is_numeric( $field_id ) && preg_match( '/^(\d+)-([a-z]\w*)$/', $field_id, $matches ) ) {
+			// An error for a combo sub field, like 12-first. An empty one only flags the sub field.
+			if ( '' === $error ) {
+				return $error;
+			}
+
+			$field_id  = $matches[1];
+			$sub_field = $matches[2];
+		}
+
 		if ( ! is_numeric( $field_id ) ) {
 			return $error;
 		}
@@ -186,7 +198,7 @@ class FrmEntriesAJAXSubmitController {
 
 		if ( false !== $error_body ) {
 			$error = str_replace( '[error]', $error, $error_body );
-			$error = str_replace( '[key]', $use_field['field_key'], $error );
+			$error = str_replace( '[key]', $use_field['field_key'] . ( $sub_field ? '_' . $sub_field : '' ), $error );
 		}
 
 		return $error;
@@ -195,20 +207,35 @@ class FrmEntriesAJAXSubmitController {
 	/**
 	 * Confirm that the result of calling FrmFormsController::show_form added the failed message for a duplicate entry to the HTML.
 	 * If it did, move the message to the errors key instead of returning the content.
+	 * An empty error summary is included so the message has somewhere to show in the form.
 	 *
 	 * @since 6.2
 	 *
-	 * @param array      $response
-	 * @param int|string $form_id
+	 * @param array  $response
+	 * @param object $form
 	 *
 	 * @return array
 	 */
-	private static function check_for_failed_form_submission( $response, $form_id ) {
-		$frm_settings = FrmAppHelper::get_settings( array( 'current_form' => $form_id ) );
+	private static function check_for_failed_form_submission( $response, $form ) {
+		$frm_settings = FrmAppHelper::get_settings( array( 'current_form' => $form->id ) );
 
-		if ( str_contains( $response['content'], $frm_settings->failed_msg ) ) {
-			$response['errors']['failed'] = $frm_settings->failed_msg;
-			$response['content']          = '';
+		if ( '' === $frm_settings->failed_msg || ! str_contains( $response['content'], $frm_settings->failed_msg ) ) {
+			return $response;
+		}
+
+		$response['errors']['failed'] = $frm_settings->failed_msg;
+		$response['content']          = '';
+
+		if ( empty( $response['error_message'] ) ) {
+			$response['error_message'] = FrmFormsHelper::get_success_message(
+				array(
+					'message'  => '',
+					'form'     => $form,
+					'entry_id' => 0,
+					'class'    => FrmFormsHelper::form_error_class(),
+					'role'     => 'alert',
+				)
+			);
 		}
 
 		return $response;

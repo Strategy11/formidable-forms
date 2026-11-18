@@ -72,9 +72,9 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		<div class="<?php echo esc_attr( apply_filters( 'frm_checkbox_class', 'frm_checkbox', $field, $field_val ) ); ?>" id="<?php echo esc_attr( FrmFieldsHelper::get_checkbox_id( $field, $opt_key ) ); ?>"><?php
 
 		if ( empty( $hide_label ) ) {
-			$label_attributes = array(
-				'for' => $html_id . '-' . $opt_key,
-			);
+			// No `for` attribute -- the label already wraps the input below,
+			// so adding one too makes Safari VoiceOver announce it twice.
+			$label_attributes = array();
 
 			if ( $read_only || $should_echo_disabled_att ) {
 				$label_attributes['class'] = 'frm-label-disabled';

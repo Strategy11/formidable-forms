@@ -6,12 +6,14 @@ on:
 name: 🚀 Deploy website on push
 jobs:
   web-deploy:
-    if: contains(github.event.pull_request.labels.*.name, 'deploy')
+    if: >-
+      contains(github.event.pull_request.labels.*.name, 'deploy')
+      && (github.event.action != 'labeled' || github.event.label.name == 'deploy')
     name: 🎉 Deploy
     runs-on: ubuntu-latest
     steps:
     - name: 🚚 Get latest code
-      uses: actions/checkout@v3.5.0
+      uses: actions/checkout@v6
 
     - name: 🔄 Sanitize branch name
       id: sanitize
@@ -41,12 +43,14 @@ jobs:
           phpcs.xml
           phpunit.xml
   beta-deploy:
-    if: contains(github.event.pull_request.labels.*.name, 'beta deploy')
+    if: >-
+      contains(github.event.pull_request.labels.*.name, 'beta deploy')
+      && (github.event.action != 'labeled' || github.event.label.name == 'beta deploy')
     name: 🎉 Beta Deploy
     runs-on: ubuntu-latest
     steps:
     - name: 🚚 Get latest code
-      uses: actions/checkout@v3.5.0
+      uses: actions/checkout@v6
 
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.1
