@@ -338,13 +338,20 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return $errors;
 		}
 
-		if ( ! is_array( $response ) ) {
+		if ( ! is_array( $response ) || ! array_key_exists( 'success', $response ) ) {
+			$reason = __( 'The CAPTCHA service response could not be read, so the CAPTCHA could not be verified.', 'formidable' );
+
+			$this->record_validation_failure( $reason, array() );
+
+			$errors[ 'field' . $args['id'] ] = $this->get_invalid_message( array(), $reason );
+
 			return $errors;
 		}
 
-		$reason = '';
+		$reason          = '';
+		$is_recaptcha_v3 = $frm_settings->active_captcha === 'recaptcha' && 'v3' === $frm_settings->re_type;
 
-		if ( $frm_settings->active_captcha === 'recaptcha' && 'v3' === $frm_settings->re_type && array_key_exists( 'score', $response ) ) {
+		if ( $is_recaptcha_v3 && array_key_exists( 'score', $response ) ) {
 			$threshold = floatval( $frm_settings->re_threshold );
 			$score     = floatval( $response['score'] );
 
@@ -361,7 +368,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 			}
 		}
 
-		if ( ! isset( $response['success'] ) || $response['success'] ) {
+		if ( true === $response['success'] ) {
 			return $errors;
 		}
 

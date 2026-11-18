@@ -173,6 +173,16 @@ class test_FrmCaptchaSpam extends FrmUnitTest {
 		);
 	}
 
+	public function test_v3_success_without_score_passes() {
+		$settings                           = FrmAppHelper::get_settings();
+		$settings->spam_handling['captcha'] = FrmSpamEntriesHelper::SAVE;
+		$settings->re_type                  = 'v3';
+		$settings->re_threshold             = '0.5';
+		$this->response                     = array( 'body' => wp_json_encode( array( 'success' => true ) ) );
+		$this->assertSame( array(), $this->validate_captcha(), 'A successful v3 response without a score should pass.' );
+		$this->assertSame( '', FrmSpamEntriesHelper::get_flagged_source( array( 'form_id' => $this->captcha->form_id ) ), 'A response without a score should not be spam.' );
+	}
+
 	public function test_entry_updates_keep_captcha_errors() {
 		FrmAppHelper::get_settings()->spam_handling['captcha'] = FrmSpamEntriesHelper::SAVE;
 		$this->assertNotEmpty( $this->validate_captcha( array( 'id' => 123 ) ), 'Updates with an ID should remain blocked.' );
