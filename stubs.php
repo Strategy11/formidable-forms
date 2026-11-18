@@ -564,6 +564,15 @@ namespace {
 		public static function payment_columns( $columns = array() ) {
 		}
 	}
+	class FrmTransActionsController {
+		/**
+		 * @param array $atts
+		 *
+		 * @return void
+		 */
+		public static function trigger_payment_status_change( $atts ) {
+		}
+	}
 	class FrmProSettingsController {
 		/**
 		 * @param string $count

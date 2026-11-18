@@ -112,6 +112,90 @@ class FrmTransLiteActionsController {
 	}
 
 	/**
+	 * Process a payment the Payments submodule would skip.
+	 *
+	 * When the Stripe add-on is active, its Payments submodule handles payment actions instead of Lite.
+	 * It only finds the gateway through a Gateway field, and returns without charging when a form has none.
+	 * That covers Square, PayPal and Stripe forms built while the add-on was inactive, and forms created
+	 * through MCP or imported. The entry would be saved and the success message shown with no payment.
+	 * Lite processes only those submissions, so the submodule and Lite never handle the same payment.
+	 * If the submodule starts falling back to the action's gateway, remove this or payments run twice.
+	 *
+	 * @since 7.1
+	 *
+	 * @param WP_Post $action The payment action.
+	 * @param object  $entry  The entry being submitted.
+	 * @param object  $form   The form being submitted.
+	 *
+	 * @return void
+	 */
+	public static function trigger_action_without_gateway_field( $action, $entry, $form ) {
+		if ( self::submodule_finds_gateway_field( $action ) ) {
+			return;
+		}
+
+		$gateway = self::get_gateway_for_action( $action );
+
+		if ( is_array( $gateway ) ) {
+			$gateway = reset( $gateway );
+		}
+
+		if ( ! $gateway ) {
+			return;
+		}
+
+		$class_name = FrmTransLiteAppHelper::get_setting_for_gateway( $gateway, 'class' );
+
+		if ( ! $class_name ) {
+			return;
+		}
+
+		self::prepare_description( $action, compact( 'entry', 'form' ) );
+
+		$class_name = 'Frm' . $class_name . 'ActionsController';
+		$response   = $class_name::trigger_gateway( $action, $entry, $form );
+
+		if ( ! $response['success'] ) {
+			if ( $response['show_errors'] ) {
+				self::show_failed_message( compact( 'action', 'entry', 'form', 'response' ) );
+			}
+		} elseif ( ! empty( $response['run_triggers'] ) ) {
+			// The add-on's Stripe gateway expects its caller to run the triggers for a completed charge.
+			// The submodule's version also sets the After Payment fields, which Pro leaves to it for Stripe payments.
+			$status = 'complete';
+
+			if ( is_callable( array( 'FrmTransActionsController', 'trigger_payment_status_change' ) ) ) {
+				FrmTransActionsController::trigger_payment_status_change( compact( 'status', 'action', 'entry' ) );
+			} else {
+				self::trigger_payment_status_change( compact( 'status', 'entry' ) );
+			}
+		}
+	}
+
+	/**
+	 * Check if the Payments submodule can find a gateway for this submission.
+	 * This matches FrmTransActionsController::get_gateway_for_entry() in the submodule.
+	 *
+	 * @since 7.1
+	 *
+	 * @param WP_Post $action The payment action.
+	 *
+	 * @return bool
+	 */
+	private static function submodule_finds_gateway_field( $action ) {
+		if ( FrmAppHelper::get_post_param( 'frm_gateway', '', 'absint' ) ) {
+			return true;
+		}
+
+		return (bool) FrmField::getAll(
+			array(
+				'fi.form_id' => $action->menu_order,
+				'type'       => 'gateway',
+			)
+		);
+	}
+
+	/**
 	 * @param WP_Post $action
 	 *
 	 * @return array|string

@@ -392,6 +392,7 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: PayPal Commerce Apple Pay failed when the page title had a non-ASCII character.
 * Fix: PayPal Commerce rejected cards when the Address field was on an earlier page, because the billing country code was missing.
 * Fix: Going to the previous page on a multi-page PayPal Commerce form no longer tries to submit the empty card.
+* Fix: Square rejected a different card entered after a declined card.
 * Fix: Deleting a multisite site now also removes the payments, subscriptions, and gated tokens tables.
 * Fix: The Denylist check no longer marks accented text, like "Máster", as spam.
 * Fix: The submit button could ignore the first click after fixing a field error.
