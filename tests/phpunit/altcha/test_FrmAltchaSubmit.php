@@ -165,6 +165,52 @@ class test_FrmAltchaSubmit extends FrmUnitTest {
 	}
 
 	/**
+	 * Simulate a database user that cannot write to the replay table.
+	 *
+	 * @param string $query The query about to execute.
+	 *
+	 * @return string
+	 */
+	public function reject_replay_insert( $query ) {
+		if ( str_starts_with( $query, 'INSERT IGNORE' ) && str_contains( $query, FrmAltchaReplayHelper::table_name() ) ) {
+			return 'SELECT 1 FROM frm_missing_replay_table';
+		}
+
+		return $query;
+	}
+
+	/**
+	 * A replay table that cannot be written rejects the entry with the setup message, not the retry message.
+	 *
+	 * @covers FrmAltchaController::claim_solution
+	 */
+	public function test_storage_failure_shows_setup_message() {
+		global $wpdb;
+		$payload  = FrmAltchaTestHelper::solve( FrmAltchaTestHelper::challenge() );
+		$reasons  = array();
+		$listener = function ( $reason ) use ( &$reasons ) {
+			$reasons[] = $reason;
+		};
+		$previous = $wpdb->suppress_errors();
+		add_filter( 'query', array( $this, 'reject_replay_insert' ) );
+		add_action( 'frm_altcha_validation_failed', $listener );
+
+		try {
+			$errors = $this->submit( $payload );
+		} finally {
+			remove_filter( 'query', array( $this, 'reject_replay_insert' ) );
+			remove_action( 'frm_altcha_validation_failed', $listener );
+			$wpdb->suppress_errors( $previous );
+		}
+
+		$this->assertSame( array( 'storage_failed' ), $reasons );
+		$this->assertSame(
+			__( 'The CAPTCHA on this form is not set up correctly. Please contact the site administrator.', 'formidable' ),
+			$errors[ 'field' . $this->altcha_id ] ?? ''
+		);
+	}
+
+	/**
 	 * A visitor who fixes another field and submits again keeps their solution.
 	 *
 	 * @covers FrmAltchaController::claim_solution
@@ -265,13 +311,10 @@ class test_FrmAltchaSubmit extends FrmUnitTest {
 
 		$this->assertSame(
 			array(
-				'difficulty'  => 'medium',
-				'expires'     => 1440,
-				'auto'        => 'onfocus',
-				'hide_footer' => 0,
-				'display'     => 'standard',
-				'widget_type' => 'checkbox',
-				'hide_logo'   => 0,
+				'difficulty' => 'medium',
+				'expires'    => 1440,
+				'auto'       => 'onfocus',
+				'display'    => 'standard',
 			),
 			$settings
 		);

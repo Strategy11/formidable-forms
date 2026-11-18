@@ -9,30 +9,29 @@
 class test_FrmAltchaVisitorSettings extends FrmUnitTest {
 
 	/**
-	 * Saved visitor controls reach the widget's configuration without changing verification.
+	 * The saved layout reaches the widget's configuration without changing verification.
 	 */
-	public function test_display_and_control_choices_reach_the_widget() {
+	public function test_display_choices_reach_the_widget() {
 		$provider = FrmCaptchaFactory::get_settings_object( 'altcha' );
 
 		foreach ( array_keys( FrmAltchaHelper::display_modes() ) as $display ) {
-			foreach ( array_keys( FrmAltchaHelper::widget_types() ) as $type ) {
-				update_option(
-					FrmAltchaHelper::SETTINGS_OPTION,
-					array(
-						'display'     => $display,
-						'widget_type' => $type,
-						'hide_logo'   => 1,
-					)
-				);
-				$attrs  = $provider->add_front_end_element_attributes( array(), array() );
-				$config = json_decode( $attrs['data-configuration'], true );
+			update_option(
+				FrmAltchaHelper::SETTINGS_OPTION,
+				array(
+					'display'     => $display,
+					'widget_type' => 'switch',
+					'hide_logo'   => 1,
+					'hide_footer' => 1,
+				)
+			);
+			$attrs  = $provider->add_front_end_element_attributes( array(), array() );
+			$config = json_decode( $attrs['data-configuration'], true );
 
-				$this->assertSame( $display, $config['display'], 'The selected layout should reach the widget.' );
-				$this->assertSame( $type, $config['type'], 'The selected interaction style should reach the widget.' );
-				$this->assertFalse( $config['hideLogo'], 'The presentation should preserve the ALTCHA logo.' );
-				$this->assertFalse( $config['hideFooter'], 'The presentation should preserve the ALTCHA footer.' );
-				$this->assertSame( 'frm-altcha-response', $attrs['data-name'], 'Visitor controls should preserve the validation token name.' );
-			}
+			$this->assertSame( $display, $config['display'], 'The selected layout should reach the widget.' );
+			$this->assertArrayNotHasKey( 'type', $config, 'The widget should use its default checkbox control.' );
+			$this->assertArrayNotHasKey( 'hideLogo', $config, 'The widget should keep the ALTCHA logo.' );
+			$this->assertArrayNotHasKey( 'hideFooter', $config, 'The widget should keep the ALTCHA footer.' );
+			$this->assertSame( 'frm-altcha-response', $attrs['data-name'], 'The layout should not change the validation token name.' );
 		}
 	}
 
@@ -46,12 +45,14 @@ class test_FrmAltchaVisitorSettings extends FrmUnitTest {
 					'display'     => $invalid,
 					'widget_type' => $invalid,
 					'hide_logo'   => $invalid,
+					'hide_footer' => $invalid,
 					'test'        => true,
 				)
 			);
 			$this->assertSame( 'standard', $settings['display'], 'Invalid layouts should fall back to inline display.' );
-			$this->assertSame( 'checkbox', $settings['widget_type'], 'Invalid controls should fall back to the checkbox.' );
-			$this->assertSame( 0, $settings['hide_logo'], 'Invalid branding values should preserve the logo.' );
+			$this->assertArrayNotHasKey( 'widget_type', $settings, 'Removed control settings should not be saved.' );
+			$this->assertArrayNotHasKey( 'hide_logo', $settings, 'Removed branding settings should not be saved.' );
+			$this->assertArrayNotHasKey( 'hide_footer', $settings, 'Removed branding settings should not be saved.' );
 			$this->assertArrayNotHasKey( 'test', $settings, 'Posted settings must not enable mock verification.' );
 		}
 	}

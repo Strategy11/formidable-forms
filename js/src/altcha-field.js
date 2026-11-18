@@ -6,6 +6,7 @@
  * including for form pages that load later over AJAX.
  */
 import 'altcha';
+import { skipsVerification } from './altcha-skip-verification';
 
 const WIDGET_SELECTOR = 'altcha-widget.frm-altcha-widget';
 const CAPTCHA_SELECTOR = '.frm-altcha';
@@ -89,7 +90,7 @@ const verifyThenSubmit = ( form, widgets, submitter ) => {
  * Finish verification before the form is sent, whatever the widget's automatic mode.
  *
  * Runs in the capture phase on the document, so it stops the submit before Formidable's own
- * handler sees it. Once every widget is verified the form is submitted again, and that
+ * handler sees it. Previous page and Save Draft submits go through without verifying. Once every widget is verified the form is submitted again, and that
  * submit goes through to Formidable, including its AJAX submit.
  *
  * @param {SubmitEvent} event Submit event.
@@ -98,7 +99,7 @@ const verifyThenSubmit = ( form, widgets, submitter ) => {
 const verifyBeforeSubmit = event => {
 	const form = event.target;
 
-	if ( ! ( form instanceof HTMLFormElement ) ) {
+	if ( ! ( form instanceof HTMLFormElement ) || skipsVerification( form, event.submitter ) ) {
 		return;
 	}
 

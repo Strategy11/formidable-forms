@@ -86,34 +86,18 @@ class FrmAltchaHelper {
 	}
 
 	/**
-	 * Interaction styles supported by the bundled widget.
-	 *
-	 * @since x.x
-	 *
-	 * @return array<string, string>
-	 */
-	public static function widget_types() {
-		return array(
-			'checkbox' => __( 'Checkbox (default)', 'formidable' ),
-		);
-	}
-
-	/**
 	 * Default settings.
 	 *
 	 * @since x.x
 	 *
-	 * @return array{difficulty: string, expires: int, auto: string, hide_footer: int, display: string, widget_type: string, hide_logo: int}
+	 * @return array{difficulty: string, expires: int, auto: string, display: string}
 	 */
 	public static function default_settings() {
 		return array(
-			'difficulty'  => 'medium',
-			'expires'     => 20,
-			'auto'        => 'onfocus',
-			'hide_footer' => 0,
-			'display'     => 'standard',
-			'widget_type' => 'checkbox',
-			'hide_logo'   => 0,
+			'difficulty' => 'medium',
+			'expires'    => 20,
+			'auto'       => 'onfocus',
+			'display'    => 'standard',
 		);
 	}
 
@@ -122,7 +106,7 @@ class FrmAltchaHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @return array{difficulty: string, expires: int, auto: string, hide_footer: int, display: string, widget_type: string, hide_logo: int}
+	 * @return array{difficulty: string, expires: int, auto: string, display: string}
 	 */
 	public static function get_settings() {
 		$saved = get_option( self::SETTINGS_OPTION, array() );
@@ -136,20 +120,17 @@ class FrmAltchaHelper {
 	 *
 	 * @param array $raw Unsanitized settings.
 	 *
-	 * @return array{difficulty: string, expires: int, auto: string, hide_footer: int, display: string, widget_type: string, hide_logo: int}
+	 * @return array{difficulty: string, expires: int, auto: string, display: string}
 	 */
 	public static function sanitize_settings( $raw ) {
 		$defaults = self::default_settings();
 		$expires  = isset( $raw['expires'] ) && is_numeric( $raw['expires'] ) ? (int) $raw['expires'] : $defaults['expires'];
 
 		return array(
-			'difficulty'  => self::sanitize_choice( $raw['difficulty'] ?? '', self::difficulty_levels(), $defaults['difficulty'] ),
-			'expires'     => max( 1, min( 1440, $expires ) ),
-			'auto'        => self::sanitize_choice( $raw['auto'] ?? '', self::auto_modes(), $defaults['auto'] ),
-			'hide_footer' => $defaults['hide_footer'],
-			'display'     => self::sanitize_choice( $raw['display'] ?? '', self::display_modes(), $defaults['display'] ),
-			'widget_type' => self::sanitize_choice( $raw['widget_type'] ?? '', self::widget_types(), $defaults['widget_type'] ),
-			'hide_logo'   => $defaults['hide_logo'],
+			'difficulty' => self::sanitize_choice( $raw['difficulty'] ?? '', self::difficulty_levels(), $defaults['difficulty'] ),
+			'expires'    => max( 1, min( 1440, $expires ) ),
+			'auto'       => self::sanitize_choice( $raw['auto'] ?? '', self::auto_modes(), $defaults['auto'] ),
+			'display'    => self::sanitize_choice( $raw['display'] ?? '', self::display_modes(), $defaults['display'] ),
 		);
 	}
 

@@ -35,7 +35,6 @@ class FrmAltchaUsageHelper {
 			'difficulty'     => $settings['difficulty'],
 			'expires'        => $settings['expires'],
 			'auto'           => $settings['auto'],
-			'hide_footer'    => $settings['hide_footer'],
 		);
 
 		return $snapshot;

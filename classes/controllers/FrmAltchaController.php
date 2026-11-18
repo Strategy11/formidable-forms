@@ -136,6 +136,12 @@ class FrmAltchaController {
 		 * @param object|null $field  The captcha field.
 		 */
 		do_action( 'frm_altcha_validation_failed', $reason, FrmField::getOne( $pending['field_id'] ) );
+
+		if ( 'storage_failed' === $reason ) {
+			// Trying again cannot help when the replay table cannot be written, so point the visitor to the site owner.
+			$pending['message'] = __( 'The CAPTCHA on this form is not set up correctly. Please contact the site administrator.', 'formidable' );
+		}
+
 		$errors[ 'field' . $pending['field_id'] ] = $pending['message'];
 
 		return $errors;
@@ -180,7 +186,7 @@ class FrmAltchaController {
 
 		self::styles();
 		// The same handle and dependency Lite uses, so the script is never loaded twice.
-		wp_enqueue_script( 'captcha-api', self::script_url(), array( 'formidable' ), '3', true );
+		wp_enqueue_script( 'captcha-api', self::script_url(), array( 'formidable' ), null, true );
 	}
 
 	/**
@@ -202,7 +208,7 @@ class FrmAltchaController {
 		}
 
 		// Register before Lite does, so both loading paths retain the translation dependency.
-		wp_register_script( 'captcha-api', $url, $dependencies, '3', true );
+		wp_register_script( 'captcha-api', $url, $dependencies, null, true );
 
 		return $url;
 	}
@@ -269,11 +275,7 @@ class FrmAltchaController {
 			return $url;
 		}
 
-		// Match the front end, which hides the footer link when the setting is on.
-		$settings = FrmAltchaHelper::get_settings();
-		$image    = 1 === $settings['hide_footer'] ? 'altcha-no-footer.svg' : 'altcha.svg';
-
-		return FrmAppHelper::plugin_url() . '/images/' . $image;
+		return FrmAppHelper::plugin_url() . '/images/altcha.svg';
 	}
 
 	/**

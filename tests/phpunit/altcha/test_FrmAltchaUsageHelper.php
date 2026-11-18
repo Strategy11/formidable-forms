@@ -34,7 +34,7 @@ class test_FrmAltchaUsageHelper extends FrmUnitTest {
 		$this->assertSame( 'high', $usage['difficulty'] );
 		$this->assertSame( 30, $usage['expires'] );
 		$this->assertSame( 'onload', $usage['auto'] );
-		$this->assertSame( 0, $usage['hide_footer'], 'The snapshot should report the visible ALTCHA footer.' );
+		$this->assertArrayNotHasKey( 'hide_footer', $usage, 'The snapshot should not report removed settings.' );
 		$this->assertContains( $usage['active'], array( 0, 1 ) );
 		$this->assertIsInt( $usage['captcha_fields'] );
 		$this->assertArrayNotHasKey( 'secret', $usage );

@@ -127,9 +127,6 @@ class FrmAltchaSettings extends FrmFieldCaptchaSettings {
 		$settings      = FrmAltchaHelper::get_settings();
 		$configuration = array(
 			'display'           => $settings['display'],
-			'type'              => $settings['widget_type'],
-			'hideLogo'          => 1 === $settings['hide_logo'],
-			'hideFooter'        => 1 === $settings['hide_footer'],
 			'validationMessage' => __( 'Please verify that you are not a robot.', 'formidable' ),
 		);
 
