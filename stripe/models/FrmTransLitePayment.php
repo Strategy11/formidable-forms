@@ -9,6 +9,23 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 	public $singular   = 'payment';
 
 	/**
+	 * Create a payment and notify integrations after it is stored.
+	 *
+	 * @param array $values Payment values.
+	 *
+	 * @return int
+	 */
+	public function create( $values ) {
+		$payment_id = parent::create( $values );
+
+		if ( $payment_id ) {
+			do_action( 'frm_after_create_payment', $payment_id, $values );
+		}
+
+		return $payment_id;
+	}
+
+	/**
 	 * @return array
 	 */
 	public function get_defaults() {

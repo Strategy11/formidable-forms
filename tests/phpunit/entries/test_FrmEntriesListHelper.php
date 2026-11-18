@@ -2,12 +2,13 @@
 
 /**
  * @group entries
+ *
+ * @covers FrmEntriesListHelper
  */
+#[\PHPUnit\Framework\Attributes\Group( 'entries' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmEntriesListHelper::class )]
 class test_FrmEntriesListHelper extends FrmUnitTest {
 
-	/**
-	 * @covers FrmEntriesListHelper::column_value
-	 */
 	public function test_column_value() {
 		FrmAppHelper::set_current_screen_and_hook_suffix();
 
@@ -41,6 +42,26 @@ class test_FrmEntriesListHelper extends FrmUnitTest {
 
 		$column_value = $this->column_value( $item, 'name' );
 		$this->assertSame( 'My entry name', $column_value );
+	}
+
+	/**
+	 * Reasons support stored metadata, manual moderation, and missing sources.
+	 */
+	public function test_spam_reason_column() {
+		FrmAppHelper::set_current_screen_and_hook_suffix();
+		$cases = array(
+			array( wp_json_encode( array( 'spam_source' => 'akismet' ) ), 'Akismet spam' ),
+			array( array( 'spam_source' => 'akismet_discard' ), 'Akismet blatant spam' ),
+			array( array( 'spam_source' => 'denylist' ), 'Denylist' ),
+			array( array( 'spam_source' => 'manual' ), 'Manual review' ),
+			array( array(), 'Not recorded' ),
+			array( array( 'spam_source' => 'unknown' ), 'Not recorded' ),
+		);
+
+		foreach ( $cases as $case ) {
+			$item = (object) array( 'description' => $case[0] );
+			$this->assertSame( $case[1], $this->column_value( $item, 'spam_reason' ) );
+		}
 	}
 
 	/**

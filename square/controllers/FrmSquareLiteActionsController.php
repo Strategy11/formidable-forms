@@ -115,8 +115,10 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			return $response;
 		}
 
-		if ( ! self::square_is_configured() ) {
-			$response['error'] = __( 'Square still needs to be configured.', 'formidable' );
+		$connection_error = FrmTransLiteAppHelper::get_gateway_connection_error( 'square' );
+
+		if ( $connection_error ) {
+			$response['error'] = $connection_error;
 			return $response;
 		}
 
@@ -394,15 +396,6 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
-	 * Check if Square integration is enabled.
-	 *
-	 * @return bool true if Square is set up.
-	 */
-	private static function square_is_configured() {
-		return (bool) FrmSquareLiteConnectHelper::get_merchant_id();
-	}
-
-	/**
 	 * Convert the amount from 10.00 to 1000.
 	 *
 	 * @param mixed $amount
@@ -479,7 +472,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * @return void
 	 */
 	public static function load_scripts( $form_id ) {
-		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
+		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) || FrmAppHelper::is_style_editor_page() ) {
 			return;
 		}
 

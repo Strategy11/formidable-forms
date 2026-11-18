@@ -72,6 +72,14 @@ class FrmSquareLiteAppController {
 	public static function verify_buyer() {
 		check_ajax_referer( 'frm_square_ajax', 'nonce' );
 
+		// Buyer verification is the first thing a card submission does, so an unconnected site
+		// gets the reason here instead of a card error later in the submission.
+		$connection_error = FrmTransLiteAppHelper::get_gateway_connection_error( 'square' );
+
+		if ( $connection_error ) {
+			wp_send_json_error( $connection_error );
+		}
+
 		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 
 		if ( ! $form_id ) {

@@ -11,14 +11,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * affordable: one query serves every form on a list page, and the cache is only invalidated
  * when a save actually changes which forms a post embeds.
  *
- * @since x.x
+ * @since 6.35
  */
 class FrmFormEmbedsHelper {
 
 	/**
 	 * The transient name that stores data for which posts a form is embedded in.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @var string
 	 */
@@ -27,7 +27,7 @@ class FrmFormEmbedsHelper {
 	/**
 	 * Embed posts keyed by form ID, read from the transient once per request.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @var array|null
 	 */
@@ -36,7 +36,7 @@ class FrmFormEmbedsHelper {
 	/**
 	 * Every post that embeds any Formidable form, queried once per request.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @var array|null
 	 */
@@ -45,7 +45,7 @@ class FrmFormEmbedsHelper {
 	/**
 	 * Every post ID that appears in the cache, flattened once per request.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @var array|null
 	 */
@@ -54,7 +54,7 @@ class FrmFormEmbedsHelper {
 	/**
 	 * Expanded affected form IDs, keyed by the embedded form IDs they came from.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @var array<string,array<int>>
 	 */
@@ -63,7 +63,7 @@ class FrmFormEmbedsHelper {
 	/**
 	 * Reads the embed posts cache, hitting the transient only once per request.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @return array
 	 */
@@ -79,7 +79,7 @@ class FrmFormEmbedsHelper {
 	/**
 	 * Saves the embed posts cache.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param array $cached_posts Embed posts keyed by form ID.
 	 *
@@ -94,7 +94,7 @@ class FrmFormEmbedsHelper {
 	/**
 	 * Matches the candidate posts against the search strings of several forms at once.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param array $search_map Search strings keyed by form ID.
 	 *
@@ -131,7 +131,7 @@ class FrmFormEmbedsHelper {
 	 * because the column JSON encodes this straight into a data-posts attribute it also puts
 	 * full post content, drafts included, into the admin page markup.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param array $posts Posts that embed a form.
 	 *
@@ -143,7 +143,7 @@ class FrmFormEmbedsHelper {
 		 *
 		 * Anything rendered by the Embeds dropdown has to be listed here to survive caching.
 		 *
-		 * @since x.x
+		 * @since 6.35
 		 *
 		 * @param string[] $fields Property names to keep.
 		 */
@@ -176,7 +176,7 @@ class FrmFormEmbedsHelper {
 	/**
 	 * Adds the links and fallback titles the Embeds dropdown expects.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param array $posts Posts that embed a form.
 	 *
@@ -224,13 +224,13 @@ class FrmFormEmbedsHelper {
 	 * at least one of these, because they are what narrows wp_posts to a candidate set in one
 	 * query rather than one query per form.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @return string[]
 	 */
 	private static function get_needles() {
 		/**
-		 * @since x.x
+		 * @since 6.35
 		 *
 		 * @param string[] $needles
 		 */
@@ -256,7 +256,7 @@ class FrmFormEmbedsHelper {
 	/**
 	 * Queries once for every post or page that embeds any Formidable form.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @return array
 	 */
@@ -300,7 +300,7 @@ class FrmFormEmbedsHelper {
 	 * Updates go through maybe_clear_on_update(), which can compare the content before and
 	 * after the change.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param int     $post_id Post ID.
 	 * @param WP_Post $post    Post object.
@@ -326,7 +326,7 @@ class FrmFormEmbedsHelper {
 	/**
 	 * Maybe clear the cache when a post is updated.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param int     $post_id     Post ID.
 	 * @param WP_Post $post_after  Post object after the update.
@@ -369,7 +369,7 @@ class FrmFormEmbedsHelper {
 	/**
 	 * Maybe clear the cache when a post is trashed, untrashed or deleted.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param int          $post_id Post ID.
 	 * @param WP_Post|null $post    Post object, when the hook provides one.
@@ -396,7 +396,7 @@ class FrmFormEmbedsHelper {
 	 * Revisions, autosaves and auto-drafts all fire wp_insert_post, and an active site creates
 	 * them constantly. Letting those clear the cache would keep it permanently cold.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param WP_Post $post Post object.
 	 *
@@ -420,7 +420,7 @@ class FrmFormEmbedsHelper {
 	 * Deliberately two string searches and nothing more. This runs on every post save on the
 	 * site, so it is the gate that keeps the parsing off the hot path.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param string $content Post content.
 	 *
@@ -441,7 +441,7 @@ class FrmFormEmbedsHelper {
 	 * FrmFormsListHelper::get_base_search_strings_for_form() looks for. A key= shortcode is
 	 * deliberately not matched, because the Embeds column cannot find it either.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param string $content Post content.
 	 *
@@ -494,7 +494,7 @@ class FrmFormEmbedsHelper {
 	 * makes form G's list match [formidable id=P] whenever form P embeds form G, so a change to
 	 * a post embedding P has to invalidate G too.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param array $form_ids Form IDs embedded in the post content.
 	 *
@@ -528,7 +528,7 @@ class FrmFormEmbedsHelper {
 		 * Anything that widens get_search_strings_for_form() has to widen this to match, or the
 		 * forms it added will keep a stale count.
 		 *
-		 * @since x.x
+		 * @since 6.35
 		 *
 		 * @param array $affected_form_ids Form IDs whose cached lists are affected.
 		 * @param array $form_ids          Form IDs embedded in the post content.
@@ -558,7 +558,7 @@ class FrmFormEmbedsHelper {
 	 * Built once per request, so a bulk operation reads the cache once and then answers each
 	 * post with an array lookup instead of walking every form's post list every time.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @return array
 	 */
@@ -587,7 +587,7 @@ class FrmFormEmbedsHelper {
 	/**
 	 * Gets the cached forms that currently list a post.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param int $post_id Post ID.
 	 *
@@ -625,7 +625,7 @@ class FrmFormEmbedsHelper {
 	 * At 100k posts a rebuild costs seconds, so keeping the forms that did not change is worth
 	 * far more than the cost of writing the map back.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param array $form_ids Form IDs to drop.
 	 *
@@ -678,7 +678,7 @@ class FrmFormEmbedsHelper {
 	 * frm_form_ids_affected_by_embed cannot tell us which extra forms a post reaches, so on
 	 * those installs the whole cache is cleared rather than risk leaving a stale count.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @return bool
 	 */
@@ -693,7 +693,7 @@ class FrmFormEmbedsHelper {
 	/**
 	 * Clears the embed posts cache.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @return void
 	 */

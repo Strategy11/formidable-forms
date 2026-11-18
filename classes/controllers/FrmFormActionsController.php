@@ -629,15 +629,15 @@ class FrmFormActionsController {
 			return;
 		}
 
-		$documentation_url = 'https://formidableforms.com/knowledgebase/frm_form_action_limit/#kb-increase-limit-of-form-actions';
+		$documentation_url = FrmAppHelper::get_doc_url( 'frm_form_action_limit/#kb-increase-limit-of-form-actions', 'form-action-limit' );
 
 		echo '<div class="frm_warning_style">';
 		FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon' );
 		echo '&nbsp;';
 		printf(
-			// translators: %s: URL to documentation
+			// translators: %s: Link to documentation
 			esc_html__( 'You have reached your form action limit. To increase this limit, you will require additional code. Visit our documentation at %s.', 'formidable' ),
-			'<a href="' . esc_url( $documentation_url ) . '" target="_blank">' . esc_html( $documentation_url ) . '</a>'
+			'<a href="' . esc_url( $documentation_url ) . '" target="_blank">' . esc_html__( 'Increase Limit of Form Actions', 'formidable' ) . '</a>'
 		);
 		echo '</div>';
 	}
@@ -951,6 +951,11 @@ class FrmFormActionsController {
 			}
 
 			if ( ! $entry || ( FrmEntriesHelper::DRAFT_ENTRY_STATUS === (int) $entry->is_draft && 'draft' !== $event ) ) {
+				continue;
+			}
+
+			if ( FrmSpamEntriesHelper::is_spam( $entry ) ) {
+				// Actions never run for spam. They can be triggered when the entry is marked as not spam.
 				continue;
 			}
 

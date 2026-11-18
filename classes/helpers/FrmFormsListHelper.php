@@ -97,17 +97,23 @@ class FrmFormsListHelper extends FrmListHelper {
 			$search_terms = array_map( 'trim', $matches[0] );
 
 			foreach ( $search_terms as $term ) {
-				$s_query[] = array(
+				$search_query = array(
 					'or'               => true,
 					'name LIKE'        => $term,
 					'description LIKE' => $term,
-					'created_at LIKE'  => $term,
 					'form_key LIKE'    => $term,
 					'id'               => $term,
 				);
+
+				// Keep partial date searches, but skip text that cannot occur in a datetime.
+				if ( preg_match( '/^[0-9 :\-]+$/D', $term ) ) {
+					$search_query['created_at LIKE'] = $term;
+				}
+
+				$s_query[] = $search_query;
 				unset( $term );
 			}
-		}
+		}//end if
 
 		$this->items       = FrmForm::getAll( $s_query, $orderby . ' ' . $order, $start . ',' . $per_page );
 		$total_items       = FrmDb::get_count( 'frm_forms', $s_query );
@@ -601,7 +607,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	/**
 	 * Checks if a column is hidden with Screen Options.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param string $column_name Column name.
 	 *
@@ -647,7 +653,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	/**
 	 * Scans for embeds once and caches the result for every form listed on the current page.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param stdClass $form The form whose column is currently rendering.
 	 *
@@ -686,7 +692,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	/**
 	 * Gets every form rendered on the current list page, keyed by form ID.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param stdClass $form The form whose column is currently rendering.
 	 *
@@ -711,7 +717,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	/**
 	 * Applies the frm_get_posts_contain_form filter to a form's embed posts.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param array    $posts Posts that embed the form.
 	 * @param stdClass $form  Form object.
@@ -801,7 +807,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	/**
 	 * Maybe clear the embed posts transient when a post is updated.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param int     $post_id     Post ID.
 	 * @param WP_Post $post_after  Post object after the update.
@@ -816,7 +822,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	/**
 	 * Maybe clear the embed posts transient when a post is trashed, untrashed or deleted.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param int          $post_id Post ID.
 	 * @param WP_Post|null $post    Post object, when the hook provides one.

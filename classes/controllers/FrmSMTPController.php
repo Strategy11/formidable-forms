@@ -79,6 +79,15 @@ class FrmSMTPController {
 	 * @return string
 	 */
 	public function link( $link ) {
+		// wp-mail-smtp-pro's own Core::get_upgrade_link() already tags $link with its own
+		// utm_* params before this filter runs, so maybe_add_missing_utm()'s fill-the-gaps
+		// behavior would leave those in place instead of applying our own attribution. Strip
+		// and retag before splicing in the hand-obfuscated `urllink` value below — running
+		// that value itself through add_query_arg() (inside maybe_add_missing_utm()) would
+		// url-decode/re-encode it and undo the obfuscation.
+		$link = remove_query_arg( array( 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_locale' ), $link );
+		$link = FrmAppHelper::maybe_add_missing_utm( $link, array( 'campaign' => 'wp-mail-smtp-upsell' ) );
+
 		$new_link = 'formidableforms.com/go-wp-mail-smtp/?urllink=wpmailsmtp%2Ecom%2Flite%2Dupgrade&';
 		return str_replace( 'wpmailsmtp.com/lite-upgrade/?', $new_link, $link );
 	}
@@ -230,22 +239,22 @@ class FrmSMTPController {
 
 		printf(
 			'<section class="step step-install">
-				<aside class="num">
-					%1$s
+				<aside class="num" aria-label="%1$s">
+					%2$s
 					<i class="loader hidden"></i>
 				</aside>
 				<div>
-					<h2>%2$s</h2>
-					<p>%3$s</p>
-					<span><a rel="%4$s" class="button button-primary frm-button-primary %5$s" aria-label="%6$s">%7$s</a></span>
-				</div>		
+					<h2>%3$s</h2>
+					<p>%4$s</p>
+					<span><a rel="%5$s" class="button button-primary frm-button-primary %6$s">%7$s</a></span>
+				</div>
 			</section>',
+			esc_attr__( 'Step 1', 'formidable' ),
 			FrmAppHelper::kses( $icon, array( 'a', 'i', 'span', 'use', 'svg' ) ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			esc_html( $label ),
 			esc_html__( 'Install WP Mail SMTP from the WordPress.org plugin repository.', 'formidable' ),
 			esc_attr( $step['plugin'] ),
 			esc_attr( $step['button_class'] ),
-			esc_attr( $step['button_action'] ),
 			esc_html( $step['button_text'] )
 		);
 	}
@@ -275,17 +284,18 @@ class FrmSMTPController {
 
 		printf(
 			'<section class="step step-setup %1$s">
-				<aside class="num">
-					%2$s
+				<aside class="num" aria-label="%2$s">
+					%3$s
 					<i class="loader hidden"></i>
 				</aside>
 				<div>
-					<h2>%3$s</h2>
-					<p>%4$s</p>
-					<span><a href="%5$s" class="button button-primary frm-button-primary %6$s">%7$s</a></span>
-				</div>		
+					<h2>%4$s</h2>
+					<p>%5$s</p>
+					<span><a href="%6$s" class="button button-primary frm-button-primary %7$s">%8$s</a></span>
+				</div>
 			</section>',
 			esc_attr( $step['section_class'] ),
+			esc_attr__( 'Step 2', 'formidable' ),
 			FrmAppHelper::kses( $icon, array( 'a', 'i', 'span', 'use', 'svg' ) ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			esc_html__( 'Set Up WP Mail SMTP', 'formidable' ),
 			esc_html__( 'Select and configure your mailer.', 'formidable' ),
@@ -312,18 +322,16 @@ class FrmSMTPController {
 		$this->output_data['plugin_setup']         = false;
 
 		$step = array(
-			'icon'          => 'frm_step1_icon',
-			'button_action' => '',
+			'icon' => 'frm_step1_icon',
 		);
 
 		$is_installed = $this->output_data['plugin_installed'] || $this->output_data['pro_plugin_installed'];
 
 		if ( ! $is_installed ) {
 			// Return the download url.
-			$step['button_text']   = __( 'Install WP Mail SMTP', 'formidable' );
-			$step['button_class']  = 'frm-install-addon';
-			$step['button_action'] = __( 'Install', 'formidable' );
-			$step['plugin']        = $this->config['lite_download_url'];
+			$step['button_text']  = __( 'Install WP Mail SMTP', 'formidable' );
+			$step['button_class'] = 'frm-install-addon';
+			$step['plugin']       = $this->config['lite_download_url'];
 			return $step;
 		}
 
@@ -337,9 +345,8 @@ class FrmSMTPController {
 			$step['button_text']  = __( 'WP Mail SMTP Installed & Activated', 'formidable' );
 			$step['button_class'] = 'grey disabled';
 		} else {
-			$step['button_text']   = __( 'Activate WP Mail SMTP', 'formidable' );
-			$step['button_class']  = 'frm-activate-addon';
-			$step['button_action'] = __( 'Activate', 'formidable' );
+			$step['button_text']  = __( 'Activate WP Mail SMTP', 'formidable' );
+			$step['button_class'] = 'frm-activate-addon';
 		}
 
 		return $step;

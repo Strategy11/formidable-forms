@@ -22,7 +22,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * Four measured best on the shipped denylists: shorter keys are not selective
 	 * enough, and longer ones push more lines below the length the index needs.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 */
 	const PREFIX_LENGTH = 4;
 
@@ -30,7 +30,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * Values shorter than this are not indexed. Comparing them is already cheap
 	 * enough that building the index would cost more than it saves.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 */
 	const MIN_LENGTH_TO_INDEX = 1024;
 
@@ -38,7 +38,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * Values longer than this are not indexed, so the index cannot grow without
 	 * bound on an unusually large submission.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 */
 	const MAX_LENGTH_TO_INDEX = 524288;
 
@@ -270,7 +270,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * The shipped denylist files hold tens of thousands of lines and a large form
 	 * posts more than a thousand values, so extracting per line is quadratic.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param array $denylist Denylist data, with the defaults already filled in.
 	 *
@@ -305,7 +305,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * Returns an empty array when the index would not answer for this denylist, or
 	 * would not pay for itself. Every line is then compared as before.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param array $denylist Denylist data, holding the values strings.
 	 *
@@ -341,7 +341,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * A `false` here does not mean the line matches, only that the index cannot
 	 * rule it out, so the caller still has to compare it.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param string $line The lowercased denylist line.
 	 * @param array  $args Check args, holding the index when there is one.
@@ -429,8 +429,8 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * @return string
 	 */
 	protected function convert_values_to_string( $values ) {
-		// Unslash the forward slashes so strings like /joomla/ are not stuck as \/joomla\/.
-		return str_replace( '\\/', '/', FrmAppHelper::maybe_json_encode( $values ) );
+		// Keep unicode and slashes as typed. Escaped (\u00e1), the hex digits false-match entries like "1ster".
+		return (string) wp_json_encode( $values, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
 	}
 
 	/**
@@ -687,7 +687,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		list( $net, $mask ) = explode( '/', $cidr_ip );
 
 		$ip_net  = ip2long( $net );
-		$ip_mask = ~( ( 1 << ( 32 - intval( $mask ) ) ) - 1 ); // phpcs:ignore SlevomatCodingStandard.PHP.UselessParentheses.UselessParentheses
+		$ip_mask = ~( ( 1 << ( 32 - intval( $mask ) ) ) - 1 ); // phpcs:ignore Formidable.CodeAnalysis.RemoveUselessParentheses.UselessParentheses
 
 		$ip_ip = ip2long( $ip );
 

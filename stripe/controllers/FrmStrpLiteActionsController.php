@@ -11,6 +11,38 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	private static $customer;
 
 	/**
+	 * Default style setting values, keyed the same as FrmStylesHelper::get_settings_for_output().
+	 * Guarantees get_appearance_rules() and its border helpers always have every
+	 * key present, including the no-form-context case where there's no style to read settings from.
+	 *
+	 * @since 7.0
+	 *
+	 * @var array
+	 */
+	private static $style_setting_defaults = array(
+		'text_color'          => '',
+		'font'                => '',
+		'field_font_size'     => '',
+		'text_color_disabled' => '',
+		'required_color'      => '',
+		'bg_color'            => '',
+		'field_pad'           => '',
+		'border_color'        => '',
+		'field_border_style'  => '',
+		'field_weight'        => '',
+		'bg_color_active'     => '',
+		'border_color_active' => '',
+		'label_color'         => '',
+		'font_size'           => '',
+		'weight'              => '',
+		'label_padding'       => '',
+		'border_color_error'  => '',
+		'field_shape_type'    => '',
+		'field_border_width'  => '',
+		'border_radius'       => '',
+	);
+
+	/**
 	 * @since 6.22
 	 *
 	 * @param string             $callback
@@ -123,19 +155,23 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			return $response;
 		}
 
-		if ( ! self::stripe_is_configured() ) {
-			$response['error'] = __( 'Stripe still needs to be configured.', 'formidable' );
+		$connection_error = FrmTransLiteAppHelper::get_gateway_connection_error( 'stripe' );
+
+		if ( $connection_error ) {
+			$response['error'] = $connection_error;
 			return $response;
 		}
 
-		$customer = self::set_customer_with_token( $atts, self::get_customer_id_from_posted_setup_intents( $form->id ) );
+		$setup_intent = 'recurring' === $action->post_content['type'] ? self::get_posted_setup_intent( $form->id ) : false;
+		$customer_id  = is_object( $setup_intent ) ? $setup_intent->customer : false;
+		$customer     = self::set_customer_with_token( $atts, $customer_id );
 
 		if ( ! is_object( $customer ) ) {
 			$response['error'] = $customer;
 			return $response;
 		}
 
-		$one_time_payment_args = compact( 'customer', 'form', 'entry', 'action', 'amount' );
+		$one_time_payment_args = compact( 'customer', 'form', 'entry', 'action', 'amount', 'setup_intent' );
 
 		if ( ! FrmStrpLiteLinkController::create_pending_stripe_link_payment( $one_time_payment_args ) ) {
 			$response['error'] = __( 'There was something wrong with the payment data.', 'formidable' );
@@ -147,26 +183,31 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
-	 * Check if either Stripe integration is enabled.
-	 *
-	 * @return bool true if Stripe Connect is set up.
-	 */
-	private static function stripe_is_configured() {
-		return FrmStrpLiteAppHelper::call_stripe_helper_class( 'initialize_api' );
-	}
-
-	/**
 	 * Get the customer id from a setup intent that was created for this submission.
 	 * A Stripe Link subscription builds its subscription from the setup intent's customer,
 	 * so reusing that customer here avoids creating a duplicate customer for guests.
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @param int|string $form_id
 	 *
 	 * @return false|string The Stripe customer id, or false if it can't be found.
 	 */
 	public static function get_customer_id_from_posted_setup_intents( $form_id ) {
+		$intent = self::get_posted_setup_intent( $form_id );
+		return is_object( $intent ) ? $intent->customer : false;
+	}
+
+	/**
+	 * Retrieve and verify the posted setup intent once for customer and payment validation.
+	 *
+	 * @since 7.0
+	 *
+	 * @param int|string $form_id The submitted form id.
+	 *
+	 * @return false|object
+	 */
+	private static function get_posted_setup_intent( $form_id ) {
 		$posted_intents = FrmStrpLiteAuth::get_payment_intents( 'frmintent' . $form_id );
 
 		if ( ! is_array( $posted_intents ) || ! $posted_intents ) {
@@ -174,7 +215,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$setup_intent_ids = array_filter(
-			$posted_intents,
+			FrmStrpLiteFormIntentHelper::flatten_client_secrets( $posted_intents ),
 			function ( $intent_id ) {
 				return str_starts_with( $intent_id, 'seti_' );
 			}
@@ -185,14 +226,15 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$first_setup_intent_id = reset( $setup_intent_ids );
-		$first_setup_intent_id = explode( '_secret_', $first_setup_intent_id )[0];
+		$client_secret         = $first_setup_intent_id;
+		$first_setup_intent_id = explode( '_secret_', $client_secret )[0];
 		$setup_intent          = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_setup_intent', $first_setup_intent_id );
 
-		if ( ! is_object( $setup_intent ) || empty( $setup_intent->customer ) ) {
+		if ( ! is_object( $setup_intent ) || $setup_intent->client_secret !== $client_secret || empty( $setup_intent->customer ) ) {
 			return false;
 		}
 
-		return $setup_intent->customer;
+		return $setup_intent;
 	}
 
 	/**
@@ -553,6 +595,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		$style_settings = self::get_style_settings_for_form( $form_id );
 		$stripe_vars    = array(
 			'publishable_key' => $publishable,
+			'https_error'     => __( 'Stripe payments require HTTPS. Please use a secure URL or contact the site administrator.', 'formidable' ),
 			'form_id'         => $form_id,
 			'nonce'           => wp_create_nonce( 'frm_strp_ajax' ),
 			'ajax'            => esc_url_raw( FrmAppHelper::get_ajax_url() ),
@@ -577,13 +620,13 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	private static function get_style_settings_for_form( $form_id ) {
 		if ( ! $form_id ) {
-			return array();
+			return self::$style_setting_defaults;
 		}
 
 		$style = FrmStylesController::get_form_style( $form_id );
 
 		if ( ! $style ) {
-			return array();
+			return self::$style_setting_defaults;
 		}
 
 		$settings   = FrmStylesHelper::get_settings_for_output( $style );
@@ -595,7 +638,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			}
 		}
 
-		return $settings;
+		return wp_parse_args( $settings, self::$style_setting_defaults );
 	}
 
 	/**
@@ -629,8 +672,10 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			),
 			'.Input:focus'        => array(
 				'backgroundColor' => $settings['bg_color_active'],
+				'borderColor'     => $settings['border_color_active'],
 			),
 			'.Label'              => array(
+				'fontFamily'   => $settings['font'],
 				'color'        => $settings['label_color'],
 				'fontSize'     => $settings['font_size'],
 				'fontWeight'   => $settings['weight'],
@@ -641,6 +686,11 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 				'color' => $settings['border_color_error'],
 			),
 		);
+
+		if ( '' === (string) $settings['font'] ) {
+			// Leave the font out so Stripe uses its default stack instead of an empty value.
+			unset( $rules['.Input']['fontFamily'], $rules['.Label']['fontFamily'] );
+		}
 
 		/*
 		 * Filters the appearance rules for Stripe elements.
@@ -726,5 +776,26 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		return FrmTransLiteActionsController::remove_cc_errors( $errors, $field );
+	}
+
+	/**
+	 * Resolve the payment action that created a payment row.
+	 *
+	 * Use the action recorded on the payment, even if the form settings changed after submission.
+	 *
+	 * @since 7.0
+	 *
+	 * @param object $payment A row from the payments table.
+	 *
+	 * @return false|WP_Post
+	 */
+	public static function get_action_for_payment( $payment ) {
+		if ( empty( $payment->action_id ) ) {
+			return false;
+		}
+
+		$action = FrmFormAction::get_single_action_type( (int) $payment->action_id, 'payment' );
+
+		return is_object( $action ) ? $action : false;
 	}
 }

@@ -405,15 +405,19 @@ class FrmCSVExportHelper {
 			$max           = array_fill_keys( $repeater_ids, 0 );
 
 			foreach ( $repeater_meta as $row ) {
-				$start  = strpos( $row->meta_value, 'a:' ) + 2;
-				$end    = strpos( $row->meta_value, ':{' );
-				$length = substr( $row->meta_value, $start, $end - $start );
+				// Read the row count from the serialized array header without unserializing every value.
+				// Values that are not a serialized array, like plain text saved by custom code, are skipped.
+				if ( ! is_string( $row->meta_value ) || ! preg_match( '/^a:(\d+):\{/', $row->meta_value, $matches ) ) {
+					continue;
+				}
+
+				$length = (int) $matches[1];
 
 				if ( $length > $max[ $row->field_id ] ) {
 					$max[ $row->field_id ] = $length;
 				}
 			}
-			unset( $start, $end, $length, $row, $repeater_meta, $where );
+			unset( $matches, $length, $row, $repeater_meta, $where );
 
 			$flat = array();
 

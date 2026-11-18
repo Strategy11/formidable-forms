@@ -2,7 +2,13 @@
 
 /**
  * @group onboarding-wizard
+ *
+ * @covers FrmFormTemplatesController
+ * @covers FrmOnboardingWizardController
  */
+#[\PHPUnit\Framework\Attributes\Group( 'onboarding-wizard' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFormTemplatesController::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmOnboardingWizardController::class )]
 class test_FrmOnboardingWizardController extends FrmUnitTest {
 	private $controller;
 
@@ -16,9 +22,6 @@ class test_FrmOnboardingWizardController extends FrmUnitTest {
 		$this->controller = 'FrmOnboardingWizardController';
 	}
 
-	/**
-	 * @covers FrmOnboardingWizardController::do_admin_redirects
-	 */
 	public function test_do_admin_redirects() {
 		// Set the initial condition by setting the expected transient.
 		set_transient( $this->controller::TRANSIENT_NAME, $this->controller::TRANSIENT_VALUE, 60 );
@@ -49,9 +52,6 @@ class test_FrmOnboardingWizardController extends FrmUnitTest {
 		delete_transient( $this->controller::TRANSIENT_NAME );
 	}
 
-	/**
-	 * @covers FrmOnboardingWizardController::menu
-	 */
 	public function test_menu() {
 		// Simulate the is_onboarding_wizard_page method as true.
 		$this->set_admin_screen();
@@ -62,18 +62,15 @@ class test_FrmOnboardingWizardController extends FrmUnitTest {
 		$this->assertSame( 99, has_action( 'admin_menu', $this->controller . '::menu' ) );
 	}
 
-	/**
-	 * @covers FrmOnboardingWizardController::remove_menu
-	 */
 	public function test_remove_menu() {
 		global $submenu;
 
 		// Set up the initial submenu state.
 		$submenu['formidable'][] = array( // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-			'Onboarding Wizard',
-			$this->controller::REQUIRED_CAPABILITY,
-			$this->controller::PAGE_SLUG,
-			'Onboarding Wizard',
+		'Onboarding Wizard',
+		$this->controller::REQUIRED_CAPABILITY,
+		$this->controller::PAGE_SLUG,
+		'Onboarding Wizard',
 		);
 
 		// Ensure the submenu is added correctly.
@@ -86,9 +83,6 @@ class test_FrmOnboardingWizardController extends FrmUnitTest {
 		$this->assertEmpty( $submenu['formidable'], 'The formidable submenu should be empty after removal.' );
 	}
 
-	/**
-	 * @covers FrmFormTemplatesController::enqueue_assets
-	 */
 	public function test_enqueue_assets() {
 		// Case 1: Not on the Onboarding Wizard page.
 		$this->set_admin_screen();

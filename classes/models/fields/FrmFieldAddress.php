@@ -44,7 +44,7 @@ class FrmFieldAddress extends FrmFieldCombo {
 	 * Gets the label for each part of an address, keyed by the value the part is
 	 * shown with in a shortcode, like [25 show=city].
 	 *
-	 * @since x.x
+	 * @since 6.35
 	 *
 	 * @return array
 	 */

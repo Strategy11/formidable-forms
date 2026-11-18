@@ -6,14 +6,13 @@ import { __ } from '@wordpress/i18n';
 /**
  * External dependencies
  */
-import { showElements } from 'core/utils';
+import { showElements, hideElements } from 'core/utils';
 
 /**
  * Internal dependencies
  */
 import { getElements } from '../elements';
 import { getState } from '../shared';
-import { addonRequestURL } from '../constants';
 
 /**
  * Display the search-empty state.
@@ -33,9 +32,6 @@ export function showEmptyState() {
 		'formidable'
 	);
 
-	emptyStateButton.textContent = __( 'Request Add-On', 'formidable' );
-	emptyStateButton.href = addonRequestURL;
-	emptyStateButton.setAttribute( 'target', '_blank' );
-
-	showElements( [ emptyState, emptyStateButton ] );
+	hideElements( [ emptyStateButton ] );
+	showElements( [ emptyState ] );
 }

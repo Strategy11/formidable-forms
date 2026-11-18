@@ -2,12 +2,52 @@
 
 /**
  * @group entries
+ *
+ * @covers FrmEntryMeta
  */
+#[\PHPUnit\Framework\Attributes\Group( 'entries' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmEntryMeta::class )]
 class test_FrmEntryMeta extends FrmUnitTest {
 
 	/**
-	 * @covers FrmEntryMeta::update_entry_metas
+	 * Integrations can restore source whitespace while ordinary fields retain trimming.
 	 */
+	public function test_add_entry_meta_filter_receives_original_source() {
+		$form_id  = $this->factory->form->create();
+		$entry_id = $this->factory->entry->create( array( 'form_id' => $form_id ) );
+		$field_id = $this->factory->field->create( array( 'form_id' => $form_id ) );
+		$source   = "\n\tcode sample\n\n";
+
+		add_filter( 'frm_add_entry_meta', array( $this, 'restore_original_source' ), 10, 2 );
+
+		try {
+			$meta_id = FrmEntryMeta::add_entry_meta( $entry_id, $field_id, '', $source );
+			$this->assertNotFalse( $meta_id, 'The filtered metadata should be stored.' );
+			$this->assertSame( $source, FrmEntryMeta::get_entry_meta_by_field( $entry_id, $field_id ), 'The filter should preserve exact leading and trailing whitespace.' );
+		} finally {
+			remove_filter( 'frm_add_entry_meta', array( $this, 'restore_original_source' ) );
+		}
+
+		$field_id = $this->factory->field->create( array( 'form_id' => $form_id ) );
+		FrmEntryMeta::add_entry_meta( $entry_id, $field_id, '', $source );
+		$this->assertSame( trim( $source ), FrmEntryMeta::get_entry_meta_by_field( $entry_id, $field_id ), 'Ordinary metadata should retain its existing trimming behavior.' );
+	}
+
+	/**
+	 * Restore source after checking the prepared and original hook arguments.
+	 *
+	 * @param array  $values Prepared metadata columns.
+	 * @param string $source Original source before trimming.
+	 *
+	 * @return array
+	 */
+	public function restore_original_source( $values, $source ) {
+		$this->assertSame( "\n\tcode sample\n\n", $source, 'The second hook argument should contain the original source.' );
+		$this->assertSame( trim( $source ), $values['meta_value'], 'The first hook argument should retain the prepared value.' );
+		$values['meta_value'] = $source;
+		return $values;
+	}
+
 	public function test_update_entry_metas() {
 		$form       = $this->factory->form->create_and_get();
 		$field_id   = $this->factory->field->create(
@@ -87,7 +127,7 @@ class test_FrmEntryMeta extends FrmUnitTest {
 	 * The packing has to follow the field that was passed, otherwise the argument is being
 	 * ignored and the second lookup is back.
 	 *
-	 * @covers FrmEntryMeta::set_value_before_save
+	 * @see FrmEntryMeta::set_value_before_save
 	 */
 	public function test_set_value_before_save_packs_with_the_field_that_was_passed() {
 		list( , $text_field_id ) = $this->create_text_and_number_fields();
@@ -117,8 +157,8 @@ class test_FrmEntryMeta extends FrmUnitTest {
 	 * called with four arguments from dozens of places across the add-ons, and those callers
 	 * ship on their own release cycles.
 	 *
-	 * @covers FrmEntryMeta::add_entry_meta
-	 * @covers FrmEntryMeta::update_entry_meta
+	 * @see FrmEntryMeta::add_entry_meta
+	 * @see FrmEntryMeta::update_entry_meta
 	 */
 	public function test_entry_meta_writers_still_accept_four_arguments() {
 		foreach ( array( 'add_entry_meta', 'update_entry_meta' ) as $method ) {
@@ -141,7 +181,7 @@ class test_FrmEntryMeta extends FrmUnitTest {
 	 * Packing two field types in one call proves each value is packed with its own field, rather
 	 * than one iteration's field leaking into the next.
 	 *
-	 * @covers FrmEntryMeta::update_entry_metas
+	 * @see FrmEntryMeta::update_entry_metas
 	 */
 	public function test_update_entry_metas_packs_each_existing_value_with_its_own_field() {
 		list( $form, $text_field_id, $number_field_id ) = $this->create_text_and_number_fields();
@@ -164,7 +204,7 @@ class test_FrmEntryMeta extends FrmUnitTest {
 	 * The same has to hold on the insert path, which runs for any field that has no row on the
 	 * entry yet. That is every field on a later page of a multi-page form.
 	 *
-	 * @covers FrmEntryMeta::update_entry_metas
+	 * @see FrmEntryMeta::update_entry_metas
 	 */
 	public function test_update_entry_metas_packs_each_new_value_with_its_own_field() {
 		$form = $this->factory->form->create_and_get();
@@ -215,7 +255,7 @@ class test_FrmEntryMeta extends FrmUnitTest {
 	 * writers is the one resolved from that key. A mix of both keying styles in one call has to
 	 * still pack every value with the right field.
 	 *
-	 * @covers FrmEntryMeta::update_entry_metas
+	 * @see FrmEntryMeta::update_entry_metas
 	 */
 	public function test_update_entry_metas_packs_values_keyed_by_field_key_with_the_resolved_field() {
 		list( $form, $text_field_id, $number_field_id ) = $this->create_text_and_number_fields();
@@ -237,9 +277,6 @@ class test_FrmEntryMeta extends FrmUnitTest {
 		$this->assertSame( '0', $stored_number, 'A value keyed by field id alongside it should still be packed with the number field.' );
 	}
 
-	/**
-	 * @covers FrmEntryMeta::should_join_fields_table
-	 */
 	public function test_should_join_fields_table() {
 		$where = 'fi.form_id=123';
 		$this->assertFalse( $this->run_private_method( array( 'FrmEntryMeta', 'should_join_fields_table' ), array( &$where ) ) );
@@ -269,9 +306,6 @@ class test_FrmEntryMeta extends FrmUnitTest {
 		$this->assertSame( array( 'e.form_id' => 456 ), $where );
 	}
 
-	/**
-	 * @covers FrmEntryMeta::delete_entry_meta
-	 */
 	public function test_delete_entry_meta() {
 		$form     = $this->factory->form->create_and_get();
 		$field_id = $this->factory->field->create(
@@ -293,9 +327,6 @@ class test_FrmEntryMeta extends FrmUnitTest {
 		$this->assertNull( FrmEntryMeta::get_entry_meta_by_field( $entry_id, $field_id ) );
 	}
 
-	/**
-	 * @covers FrmEntryMeta::get_entry_metas_for_field
-	 */
 	public function test_get_entry_metas_for_field() {
 		$form     = $this->factory->form->create_and_get();
 		$field_id = $this->factory->field->create(
@@ -320,9 +351,6 @@ class test_FrmEntryMeta extends FrmUnitTest {
 		$this->assertContains( 'Meta value to find', $values );
 	}
 
-	/**
-	 * @covers FrmEntryMeta::search_entry_metas
-	 */
 	public function test_search_entry_metas() {
 		$form     = $this->factory->form->create_and_get();
 		$field_id = $this->factory->field->create(

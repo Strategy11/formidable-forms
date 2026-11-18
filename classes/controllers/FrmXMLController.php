@@ -731,6 +731,9 @@ class FrmXMLController {
 			$query['id'] = $item_id;
 		}
 
+		// Spam entries are only exported when they are selected.
+		$query = FrmSpamEntriesHelper::exclude_spam( $query );
+
 		/**
 		 * Allows the query to be changed for fetching the entry ids to include in the export
 		 *

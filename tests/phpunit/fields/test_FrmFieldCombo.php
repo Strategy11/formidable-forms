@@ -2,7 +2,11 @@
 
 /**
  * @group fields
+ *
+ * @covers FrmFieldCombo
  */
+#[\PHPUnit\Framework\Attributes\Group( 'fields' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldCombo::class )]
 class test_FrmFieldCombo extends FrmUnitTest {
 
 	protected function get_combo_field_without_sub_field_options() {
@@ -220,9 +224,6 @@ class test_FrmFieldCombo extends FrmUnitTest {
 		);
 	}
 
-	/**
-	 * @covers FrmFieldCombo::print_input_atts
-	 */
 	public function test_print_input_atts() {
 		$combo_field = new FrmFieldCombo();
 
@@ -311,8 +312,8 @@ class test_FrmFieldCombo extends FrmUnitTest {
 			)
 		);
 
-		$field_id   = $field['id'];
-		$field_name = $field['name'];
+		$field_id   = (int) $field['id'];
+		$field_name = (string) $field['name'];
 
 		$this->set_private_property( $combo_field, 'field', $field );
 

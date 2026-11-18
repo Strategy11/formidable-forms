@@ -49,8 +49,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<ul id="frm-show-fields" class="frm_sorting inside">
 		<?php
 		if ( ! empty( $values['fields'] ) ) {
-			$grid_helper     = new FrmFieldGridHelper();
+			$grid_helper     = FrmFieldGridHelper::get_instance();
 			$values['count'] = 0;
+
+			if ( ! empty( $values['ajax_load'] ) ) {
+				$values['placeholder_manifest'] = (object) array(
+					'definitions' => array(),
+					'fields'      => array(),
+				);
+				$values['preview_manifest']     = (object) array(
+					'definitions' => array(),
+					'fields'      => array(),
+				);
+			}
 
 			foreach ( $values['fields'] as $field ) {
 				++$values['count'];
@@ -62,9 +73,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 			$grid_helper->force_close_field_wrapper();
 			unset( $grid_helper );
-		}
+		}//end if
 		?>
 	</ul>
+
+	<?php
+	if ( isset( $values['preview_manifest'] ) ) {
+		FrmBuilderPreviewHelper::print_manifest( $values['preview_manifest'] );
+	}
+
+	if ( ! empty( $values['placeholder_manifest']->fields ) ) {
+		wp_print_inline_script_tag(
+			wp_json_encode( $values['placeholder_manifest'], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ),
+			array(
+				'id'   => 'frm-field-placeholders',
+				'type' => 'application/json',
+			)
+		);
+	}
+	?>
 
 	<?php if ( ! FrmAppHelper::is_admin_page() ) : ?>
 		<p id="frm-form-button">
