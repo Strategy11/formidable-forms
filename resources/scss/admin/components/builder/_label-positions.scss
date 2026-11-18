@@ -1,0 +1,109 @@
+/**
+ * Builder - Label Positions
+ *
+ * Lays out each field preview the way its Label Position setting shows it on the form.
+ * PHP prints the frm-label-position-* class, so the layout is in place on first paint,
+ * and admin.js swaps it when the setting changes.
+ *
+ * Left, right, inline and inside labels leave no label row for the action icons to share,
+ * so a band the height of that row (21px plus its 6px gap) is kept above the field for them.
+ * The card stays the same height as a top label card, and nothing covers the label on hover.
+ */
+
+#frm-show-fields li.ui-state-default.frm_not_divider:is(.frm-label-position-left, .frm-label-position-right, .frm-label-position-inline, .frm-label-position-inside) > .frm_inner_field_container {
+	display: grid;
+	grid-auto-rows: min-content;
+	padding-top: 27px;
+
+	> .frm-field-action-icons {
+		position: absolute;
+		top: 0;
+		right: 0;
+		z-index: 2;
+	}
+
+	> .frm_primary_label {
+		max-width: none;
+		margin: 0;
+	}
+
+	> .frm_form_fields {
+		margin-top: 0;
+	}
+}
+
+/* Left, right and inline */
+#frm-show-fields li.ui-state-default.frm_not_divider:is(.frm-label-position-left, .frm-label-position-right, .frm-label-position-inline) > .frm_inner_field_container {
+	grid-template-columns: var(--frm-builder-label-width, 150px) minmax(0, 1fr);
+	column-gap: 10px;
+
+	> .frm_primary_label {
+		grid-row: 1 / span 2;
+		grid-column: 1;
+		align-self: start;
+		padding-top: 4px;
+		white-space: normal;
+		overflow-wrap: anywhere;
+	}
+
+	> .frm_form_fields,
+	> .frm_description {
+		grid-column: 2;
+	}
+
+	> .frm_form_fields {
+		grid-row: 1;
+	}
+}
+
+#frm-show-fields li.ui-state-default.frm_not_divider.frm-label-position-inline > .frm_inner_field_container {
+	grid-template-columns: repeat(2, minmax(auto, max-content));
+}
+
+#frm-show-fields li.ui-state-default.frm_not_divider.frm-label-position-right > .frm_inner_field_container {
+	grid-template-columns: minmax(0, 1fr) var(--frm-builder-label-width, 150px);
+
+	> .frm_primary_label {
+		grid-column: 2;
+		text-align: right;
+	}
+
+	> .frm_form_fields,
+	> .frm_description {
+		grid-column: 1;
+	}
+}
+
+/* Inside: the label sits in the field like a placeholder until the field has a value. */
+#frm-show-fields li.ui-state-default.frm_not_divider.frm-label-position-inside > .frm_inner_field_container {
+	grid-template-columns: minmax(0, 1fr);
+}
+
+#frm-show-fields li.ui-state-default.frm_not_divider.frm-label-position-inside:not(.frm-label-float-top) > .frm_inner_field_container {
+
+	> .frm_primary_label,
+	> .frm_form_fields {
+		grid-area: 1 / 1;
+	}
+
+	> .frm_primary_label {
+		z-index: 1;
+		align-self: start;
+		padding: 10px 13px;
+		color: var(--grey-500);
+		pointer-events: none;
+	}
+
+	> .frm_form_fields :is(input, textarea)::placeholder {
+		opacity: 0;
+	}
+}
+
+#frm-show-fields li.ui-state-default.frm_not_divider.frm-label-position-inside.frm-label-float-top > .frm_inner_field_container > .frm_primary_label {
+	font-size: calc(0.85 * var(--text-sm));
+}
+
+/* Hidden and None labels stay faintly visible, so the field can still be found in the builder. */
+#frm-show-fields li.ui-state-default.frm_not_divider:is(.frm-label-position-none, .frm-label-position-hidden) > .frm_inner_field_container > .frm_primary_label {
+	opacity: 0.45;
+}

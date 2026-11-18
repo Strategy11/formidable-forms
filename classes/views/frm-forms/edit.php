@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_field_links.php'; ?>
 	<div id="post-body-content">
 
-	<div class="frm_form_builder with_frm_style">
+	<div <?php FrmAppHelper::array_to_html_params( FrmStylesHelper::get_form_builder_attributes( $form ), true ); ?>>
 
 		<p class="frm_hidden frm-no-margin">
 			<button class="frm_submit_<?php echo ! empty( $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary">

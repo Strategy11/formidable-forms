@@ -462,7 +462,9 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 						'name' => 'field_options[label_' . $field['id'] . ']',
 					),
 					$label_options,
-					$field['label']
+					$field['label'],
+					// Let the builder preview show the style's position when Default is picked.
+					array( '' => array( 'data-label-position' => FrmFieldsHelper::get_builder_label_position( $field, '' ) ) )
 				);
 				?>
 			</p>

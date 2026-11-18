@@ -456,6 +456,7 @@ class FrmFieldsController {
 	 */
 	private static function get_classes_for_builder_field( $field, $display, $field_info ) {
 		$li_classes  = $field_info->form_builder_classes( $display['type'] );
+		$li_classes .= self::get_builder_label_position_classes( $field, $display );
 		$li_classes .= ' frm_form_field frmstart ';
 
 		$style_align_class = self::get_builder_field_style_align_class( $field, $field_info );
@@ -475,6 +476,36 @@ class FrmFieldsController {
 		}
 
 		return $li_classes;
+	}
+
+	/**
+	 * Show the field's label position in its form builder preview on load, so the layout
+	 * does not shift when the builder scripts run.
+	 *
+	 * The classes sit before frmstart so changing the field's CSS classes in the builder
+	 * leaves them alone.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $field   The field settings, as prepared by FrmFieldsHelper::setup_edit_vars().
+	 * @param array $display The field display settings.
+	 *
+	 * @return string
+	 */
+	private static function get_builder_label_position_classes( $field, $display ) {
+		if ( ! $field || ! is_array( $field ) || empty( $display['label_position'] ) || in_array( $field['type'], array( 'divider', 'end_divider' ), true ) ) {
+			return '';
+		}
+
+		$position = FrmFieldsHelper::get_builder_label_position( $field, $field['label'] );
+		$classes  = ' frm-label-position-' . sanitize_html_class( $position );
+
+		// A field with a value shows its inside label above the value, like on the form.
+		if ( 'inside' === $position && ! empty( $field['default_value'] ) ) {
+			$classes .= ' frm-label-float-top';
+		}
+
+		return $classes;
 	}
 
 	/**

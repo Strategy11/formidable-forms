@@ -755,6 +755,22 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * Get the label position a field shows on the form, for its preview in the form builder.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $field    The field settings, as prepared by FrmFieldsHelper::setup_edit_vars().
+	 * @param string $position The field's own Label Position setting. Empty uses the form's style.
+	 *
+	 * @return string
+	 */
+	public static function get_builder_label_position( $field, $position ) {
+		// Fields in a repeater use the style of the form they are shown in.
+		$form_id = ! empty( $field['parent_form_id'] ) ? $field['parent_form_id'] : $field['form_id'];
+		return self::label_position( $position, $field, (int) $form_id );
+	}
+
+	/**
 	 * Check if this field type allows placeholders
 	 *
 	 * @since 2.05

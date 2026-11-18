@@ -1073,6 +1073,27 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * Get the attributes for the form builder container, including the style's label width
+	 * so left and right label previews match the form.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $form The form being edited.
+	 *
+	 * @return array
+	 */
+	public static function get_form_builder_attributes( $form ) {
+		$attributes  = array( 'class' => 'frm_form_builder with_frm_style' );
+		$label_width = (string) FrmStylesController::get_style_val( 'width', $form );
+
+		if ( preg_match( '/^\d+(\.\d+)?(px|%|em|rem)$/', $label_width ) ) {
+			$attributes['style'] = '--frm-builder-label-width:' . $label_width;
+		}
+
+		return $attributes;
+	}
+
+	/**
 	 * @since 2.3
 	 *
 	 * @return bool

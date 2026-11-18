@@ -4591,6 +4591,9 @@ window.frmAdminBuildJS = function() {
 				updateSliderFieldPreview( changes, att, newValue );
 			} else if ( att === 'value' || att === 'textContent' ) {
 				changes[ att ] = newValue;
+				if ( att === 'value' ) {
+					maybeFloatInsideLabel( changes.closest( '.frm_field_box' ) );
+				}
 			} else if ( att === 'rows' && newValue === '' ) {
 				changes.removeAttribute( att );
 			} else {
@@ -10502,6 +10505,57 @@ window.frmAdminBuildJS = function() {
 		const { target } = event;
 		maybeShowSaveAndReloadModal( target );
 		validateRangeSettings( target );
+		maybeChangeLabelPosition( target );
+	}
+
+	/**
+	 * Shows a field's new Label Position in its builder preview.
+	 *
+	 * The preview starts with the position from PHP, so this only runs when the setting changes.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} target The changed setting.
+	 * @return {void}
+	 */
+	function maybeChangeLabelPosition( target ) {
+		const match = 'SELECT' === target.tagName && target.name.match( /^field_options\[label_(\d+)\]$/ );
+		if ( ! match ) {
+			return;
+		}
+
+		const field = document.getElementById( `frm_field_id_${ match[ 1 ] }` );
+		if ( ! field ) {
+			return;
+		}
+
+		// Default follows the form's style, which PHP saves on the Default option.
+		const position = target.value || target.querySelector( 'option[value=""]' )?.dataset.labelPosition || 'top';
+
+		field.classList.forEach( className => {
+			if ( className.startsWith( 'frm-label-position-' ) ) {
+				field.classList.remove( className );
+			}
+		} );
+		field.classList.add( `frm-label-position-${ position }` );
+		maybeFloatInsideLabel( field );
+	}
+
+	/**
+	 * Moves an inside label above the field when the field has a value, like on the form.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement|null} field The field's builder list item.
+	 * @return {void}
+	 */
+	function maybeFloatInsideLabel( field ) {
+		if ( ! field ) {
+			return;
+		}
+
+		const input = field.querySelector( '.frm_opt_container input:not([type="hidden"]), .frm_opt_container textarea' );
+		field.classList.toggle( 'frm-label-float-top', field.classList.contains( 'frm-label-position-inside' ) && !! input?.value );
 	}
 
 	/**
