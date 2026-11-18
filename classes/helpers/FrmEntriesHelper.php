@@ -207,7 +207,7 @@ class FrmEntriesHelper {
 
 		foreach ( $shortcodes[0] as $short_key => $tag ) {
 			$add_atts  = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
-			$this_atts = $add_atts ? array_merge( $atts, $add_atts ) : $atts;
+			$this_atts = array_merge( $atts, $add_atts, array( 'esc_shortcodes' => $atts['esc_shortcodes'] ?? empty( $atts['plain_text'] ) ) );
 			$default   = FrmEntriesController::show_entry_shortcode( $this_atts );
 
 			// Add the default message.

@@ -100,7 +100,7 @@ DEFAULT_HTML;
 
 		$submit      = $this->field['name'];
 		$form_action = FrmSubmitHelper::get_current_action_from_global_var( $form->id );
-		$values      = FrmAppHelper::setup_edit_vars( $form, 'forms' );
+		$values      = FrmAppHelper::setup_edit_vars( $form, 'forms', '', false, self::get_stored_form_values( $form ) );
 
 		ob_start();
 
@@ -117,5 +117,22 @@ DEFAULT_HTML;
 		do_action( 'frm_after_submit_btn', compact( 'form' ) );
 
 		return ob_get_clean();
+	}
+
+	/**
+	 * Builds the values used to render the submit button from the saved form.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $form The form being rendered.
+	 *
+	 * @return array
+	 */
+	private static function get_stored_form_values( $form ) {
+		return array(
+			'form_key'    => $form->form_key,
+			'is_template' => $form->is_template,
+			'options'     => is_array( $form->options ) ? $form->options : array(),
+		);
 	}
 }

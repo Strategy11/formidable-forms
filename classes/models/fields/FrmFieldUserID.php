@@ -80,6 +80,16 @@ class FrmFieldUserID extends FrmFieldType {
 	 * @return array
 	 */
 	public function validate( $args ) {
+		// A blank value can't point at another user. Registration posts one when a logged-in user creates a new user.
+		if ( ! empty( $args['value'] ) && ! self::can_set_other_user_id() ) {
+			$value = $this->get_value_for_current_submitter( (int) ( $args['entry_id'] ?? 0 ) );
+
+			if ( (string) $value !== (string) $args['value'] ) {
+				$args['value'] = $value;
+				FrmEntriesHelper::set_posted_value( $this->field, $args['value'], $args );
+			}
+		}
+
 		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( '' == $args['value'] ) {
 			return array();
@@ -95,6 +105,47 @@ class FrmFieldUserID extends FrmFieldType {
 		$_POST['frm_user_id'] = $args['value'];
 
 		return array();
+	}
+
+	/**
+	 * Whether the current user may save another user's ID in this field.
+	 *
+	 * Matches the check FrmEntry uses before it accepts a submitted entry owner.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function can_set_other_user_id() {
+		return current_user_can( 'frm_edit_entries' ) || current_user_can( 'administrator' );
+	}
+
+	/**
+	 * Gets the value to save for a user without entry management access.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $entry_id The entry being edited, or 0 for a new entry.
+	 *
+	 * @return int|string
+	 */
+	private function get_value_for_current_submitter( $entry_id ) {
+		if ( $entry_id ) {
+			$saved_value = FrmEntryMeta::get_entry_meta_by_field( $entry_id, $this->get_field_column( 'id' ) );
+
+			if ( is_numeric( $saved_value ) ) {
+				return (int) $saved_value;
+			}
+
+			$entry = FrmEntry::getOne( $entry_id );
+
+			if ( $entry && $entry->user_id ) {
+				return (int) $entry->user_id;
+			}
+		}
+
+		$user_id = get_current_user_id();
+		return $user_id ? $user_id : '';
 	}
 
 	/**
