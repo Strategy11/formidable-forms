@@ -29,15 +29,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 
 		<div class="<?php echo esc_attr( $classes ); ?>" data-category="<?php echo esc_attr( $category_slug ); ?>" tabindex="0" role="button"<?php FrmAppHelper::array_to_html_params( $control_attrs, true ); ?>>
-			<span class="frm-page-skeleton-cat-text">
-				<?php
+			<span class="frm-page-skeleton-cat-text"><?php
 				echo esc_html( $category_data['name'] );
 
 				if ( 'boosts' === $category_slug ) {
 					FrmAppHelper::show_pill_text();
 				}
-				?>
-			</span>
+				?></span>
 			<span class="frm-page-skeleton-cat-count"><?php echo esc_html( $category_data['count'] ); ?></span>
 		</div>
 		<?php

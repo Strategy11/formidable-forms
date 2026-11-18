@@ -4,7 +4,7 @@
  * Settings load in the background in page order. A field the builder needs right away, because
  * it was selected or edited, jumps the queue in its own request.
  *
- * @since x.x
+ * @since 7.1
  */
 
 import { cacheFieldSettings } from './deferredFieldSettings';
@@ -40,7 +40,7 @@ let backgroundStarted = false;
  * Nothing loads in the background until startFieldSettingsQueue() is called, but a field the
  * builder needs right away can be requested as soon as it is queued.
  *
- * @since x.x
+ * @since 7.1
  * @param {Object}   options
  * @param {string}   options.formId   The form being edited.
  * @param {string[]} options.fieldIds The fields that still need their settings, in page order.
@@ -55,7 +55,7 @@ export function queueFieldSettings( options ) {
 /**
  * Load the queued settings in the background, in page order.
  *
- * @since x.x
+ * @since 7.1
  * @return {void}
  */
 export function startFieldSettingsQueue() {
@@ -64,7 +64,7 @@ export function startFieldSettingsQueue() {
 }
 
 /**
- * @since x.x
+ * @since 7.1
  * @param {string} fieldId Numeric field ID.
  * @return {boolean} True until the field's settings have been requested and received.
  */
@@ -78,7 +78,7 @@ export function isFieldSettingsPending( fieldId ) {
  *
  * Fields requested in the same task share one request.
  *
- * @since x.x
+ * @since 7.1
  * @param {string} fieldId Numeric field ID.
  * @return {void}
  */
@@ -95,7 +95,7 @@ export function requestFieldSettingsNow( fieldId ) {
 }
 
 /**
- * @since x.x
+ * @since 7.1
  * @param {string[]} fieldIds Numeric field IDs.
  * @return {Promise<void>} Resolves once none of the fields has a request in progress.
  */
@@ -106,9 +106,28 @@ export function waitForFieldSettings( fieldIds ) {
 }
 
 /**
+ * Ask once more for settings whose last request failed.
+ *
+ * @since 7.1
+ * @param {string[]} fieldIds Numeric field IDs.
+ * @return {Promise<string[]>} Resolves with the fields whose settings still failed to load.
+ */
+export function retryFailedFieldSettings( fieldIds ) {
+	const failed = fieldIds.map( String ).filter( fieldId => failedFieldIds.has( fieldId ) );
+	if ( ! failed.length ) {
+		return Promise.resolve( [] );
+	}
+
+	// Send now instead of in a microtask, so the requests exist before waiting on them.
+	failed.forEach( fieldId => urgentFieldIds.add( fieldId ) );
+	sendUrgentRequests();
+	return waitForFieldSettings( failed ).then( () => failed.filter( fieldId => failedFieldIds.has( fieldId ) ) );
+}
+
+/**
  * Forget a deleted field so its settings are not requested.
  *
- * @since x.x
+ * @since 7.1
  * @param {string} fieldId Numeric field ID.
  * @return {void}
  */

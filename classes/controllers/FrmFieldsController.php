@@ -92,7 +92,7 @@ class FrmFieldsController {
 	 *
 	 * The previews are already on the page, so only the settings are sent back, keyed by field id.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return void
 	 */
@@ -324,7 +324,7 @@ class FrmFieldsController {
 		/**
 		 * Filters deferred loading for a builder field.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param bool $ajax_this_field Whether to defer rendering the field.
 		 * @param object $field_object The builder field.
@@ -384,7 +384,7 @@ class FrmFieldsController {
 	 *
 	 * The classes and attributes still come from the same filters as a preview rendered here.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param object       $field_object The field being added to the form builder.
 	 * @param FrmFieldType $field_obj    The field type object.
