@@ -376,6 +376,7 @@ class FrmEmail {
 		);
 		$this->subject = apply_filters( 'frm_email_subject', $this->subject, $args );
 		$this->subject = wp_specialchars_decode( strip_tags( stripslashes( $this->subject ) ), ENT_QUOTES );
+		$this->subject = self::decode_brackets( $this->subject );
 	}
 
 	/**
@@ -401,11 +402,13 @@ class FrmEmail {
 		$mail_body  = FrmEntriesHelper::replace_default_message(
 			$prev_mail_body,
 			array(
-				'id'          => $this->entry->id,
-				'entry'       => $pass_entry,
-				'plain_text'  => $this->is_plain_text,
-				'user_info'   => $this->include_user_info,
-				'table_style' => $this->settings['email_style'],
+				'id'             => $this->entry->id,
+				'entry'          => $pass_entry,
+				'plain_text'     => $this->is_plain_text,
+				'user_info'      => $this->include_user_info,
+				'table_style'    => $this->settings['email_style'],
+				// Keep submitted shortcodes inert for frm_email_message filters. Plain text is decoded after them.
+				'esc_shortcodes' => true,
 			)
 		);
 
@@ -415,7 +418,7 @@ class FrmEmail {
 			$mail_body .= "\r\n\r\n" . __( 'User Information', 'formidable' ) . "\r\n";
 			$this->maybe_add_ip( $mail_body );
 			$mail_body .= __( 'User-Agent (Browser/OS)', 'formidable' ) . ': ' . FrmEntriesHelper::get_browser( $data['browser'] ) . "\r\n";
-			$mail_body .= __( 'Referrer', 'formidable' ) . ': ' . $data['referrer'] . "\r\n";
+			$mail_body .= __( 'Referrer', 'formidable' ) . ': ' . $this->prepare_user_info_value( $data['referrer'] ) . "\r\n";
 		}
 
 		$this->message = $mail_body;
@@ -428,6 +431,25 @@ class FrmEmail {
 		}
 
 		$this->message = apply_filters( 'frm_email_message', $this->message, $this->package_atts() );
+
+		if ( $this->is_plain_text ) {
+			$this->message = self::decode_brackets( $this->message );
+		}
+	}
+
+	/**
+	 * Show square brackets that were encoded in field values as plain characters in plain text.
+	 * This must run after every filter that could process shortcodes.
+	 * wp_kses_post() pads the entity, so &#091; is decoded too.
+	 *
+	 * @since 7.1
+	 *
+	 * @param string $text The plain text subject or message.
+	 *
+	 * @return string
+	 */
+	private static function decode_brackets( $text ) {
+		return (string) preg_replace( '/&#0*91;/', '[', $text );
 	}
 
 	/**
@@ -453,8 +475,26 @@ class FrmEmail {
 	 */
 	private function maybe_add_ip( &$mail_body ) {
 		if ( ! empty( $this->entry->ip ) ) {
-			$mail_body .= __( 'IP Address', 'formidable' ) . ': ' . $this->entry->ip . "\r\n";
+			$mail_body .= __( 'IP Address', 'formidable' ) . ': ' . $this->prepare_user_info_value( $this->entry->ip ) . "\r\n";
 		}
+	}
+
+	/**
+	 * Prepare a user information value for the email message.
+	 *
+	 * @since 7.1
+	 *
+	 * @param mixed $value The user information value from the entry.
+	 *
+	 * @return string
+	 */
+	private function prepare_user_info_value( $value ) {
+		$value = (string) $value;
+
+		// Plain text brackets are decoded after the frm_email_message filter.
+		FrmFieldsHelper::sanitize_embedded_shortcodes( array( 'entry' => $this->entry ), $value );
+
+		return (string) $value;
 	}
 
 	/**

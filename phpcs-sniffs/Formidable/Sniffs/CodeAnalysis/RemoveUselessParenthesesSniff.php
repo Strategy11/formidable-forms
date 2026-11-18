@@ -57,7 +57,7 @@ class RemoveUselessParenthesesSniff implements Sniff {
 	/**
 	 * The Slevomat sniff instance, false when it is not installed, null until first use.
 	 *
-	 * @var object|false|null
+	 * @var false|object|null
 	 */
 	private $inner;
 
@@ -102,7 +102,7 @@ class RemoveUselessParenthesesSniff implements Sniff {
 	/**
 	 * Load the Slevomat sniff once.
 	 *
-	 * @return object|false
+	 * @return false|object
 	 */
 	private function getInner() {
 		if ( null === $this->inner ) {
