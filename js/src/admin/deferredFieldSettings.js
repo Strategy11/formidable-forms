@@ -21,9 +21,13 @@ export function addFieldSettingsMetadata( field, fieldId, metadata ) {
 	const container = frmDom.div( { className: 'frm-deferred-settings-meta' } );
 	container.hidden = true;
 	const inputs = Object.entries( metadataInputs ).flatMap( ( [ key, [ name, prefix ] ] ) => {
-		const value = metadata[ key ];
+		let value = metadata[ key ];
 		if ( value === null || value === undefined ) {
 			return [];
+		}
+		if ( key === 'type' && value === 'select' ) {
+			// Match the field type setting, which posts "dropdown" because some security tools flag "select" as SQL injection.
+			value = 'dropdown';
 		}
 		const input = frmDom.tag( 'input' );
 		input.type = 'hidden';
@@ -41,6 +45,35 @@ export function addFieldSettingsMetadata( field, fieldId, metadata ) {
 	} );
 	container.append( ...inputs );
 	field.append( container );
+}
+
+/**
+ * Keep a setting change for a panel that has not loaded yet, so it is applied when the panel is inserted.
+ *
+ * @since 7.1
+ * @param {string} fieldId Numeric field ID.
+ * @param {string} name    Setting name, without the field ID suffix.
+ * @param {string} id      ID of the matching input in the settings panel.
+ * @param {string} value   The new setting value.
+ * @return {boolean} True when the value was kept, false when the field has no deferred settings.
+ */
+export function setPendingFieldSetting( fieldId, name, id, value ) {
+	const metadata = document.getElementById( `frm_field_id_${ fieldId }` )?.querySelector( ':scope > .frm-deferred-settings-meta' );
+	if ( ! metadata ) {
+		return false;
+	}
+
+	const inputName = `field_options[${ name }_${ fieldId }]`;
+	let input = Array.from( metadata.querySelectorAll( 'input' ) ).find( candidate => candidate.name === inputName );
+	if ( ! input ) {
+		input = frmDom.tag( 'input' );
+		input.type = 'hidden';
+		input.name = inputName;
+		input.id = id;
+		metadata.append( input );
+	}
+	input.value = value;
+	return true;
 }
 
 /**
@@ -124,7 +157,7 @@ export function materializeFieldSettings( fieldId, initialize ) {
 	/**
 	 * Initialize controls after a deferred settings panel enters the DOM.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 * @param {HTMLElement} settings The inserted field settings panel.
 	 */
 	wp.hooks.doAction( 'frm_field_settings_loaded', settings );

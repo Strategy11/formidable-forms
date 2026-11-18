@@ -82,11 +82,11 @@ class FrmAbilitiesFieldsController {
 							'options'       => array(
 								'type'                 => array( 'array', 'object' ),
 								'description'          => __(
-									'Field choices: strings, numbers (star rating, scale), or {"label", "value"} objects when using separate values, or an object keyed by option key.',
+									'Field choices: strings, numbers (star rating, scale), or {"label", "value"} objects for separate values, or an object keyed by option key.',
 									'formidable'
 								),
-								'items'                => array( 'type' => array( 'string', 'number', 'object' ) ),
-								'additionalProperties' => array( 'type' => array( 'string', 'number', 'object' ) ),
+								'items'                => array( 'type' => array( 'string', 'integer', 'number', 'object' ) ),
+								'additionalProperties' => array( 'type' => array( 'string', 'integer', 'number', 'object' ) ),
 							),
 							'field_order'   => array(
 								'type'        => 'integer',
@@ -177,10 +177,10 @@ class FrmAbilitiesFieldsController {
 								'formidable'
 							),
 							'items'                => array(
-								'type' => array( 'string', 'number', 'object' ),
+								'type' => array( 'string', 'integer', 'number', 'object' ),
 							),
 							'additionalProperties' => array(
-								'type' => array( 'string', 'number', 'object' ),
+								'type' => array( 'string', 'integer', 'number', 'object' ),
 							),
 						),
 						'default_value' => array(
@@ -430,8 +430,7 @@ class FrmAbilitiesFieldsController {
 			return new WP_Error( 'frm_no_update_data', __( 'No data provided to update.', 'formidable' ), array( 'status' => 400 ) );
 		}
 
-		$field_data = self::add_stored_values_for_cleaning( $field, $field_data );
-
+		$field_data    = self::add_stored_values_for_cleaning( $field, $field_data );
 		$new_type      = ! empty( $field_data['type'] ) ? $field_data['type'] : $field->type;
 		$field_options = isset( $field_data['field_options'] ) && is_array( $field_data['field_options'] ) ? $field_data['field_options'] : (array) $field->field_options;
 		$checked       = self::check_form_select( $new_type, $field_options );
@@ -568,7 +567,7 @@ class FrmAbilitiesFieldsController {
 	 * such hook, so without this a new field keeps its options exactly as sent.
 	 * The field ID is 0 because the field does not exist yet.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array $prepared Prepared field data.
 	 *
@@ -579,7 +578,9 @@ class FrmAbilitiesFieldsController {
 		 * @param array $prepared Field data.
 		 * @param int   $id       Field ID, 0 for a field that has not been created yet.
 		 */
-		return (array) apply_filters( 'frm_clean_' . $prepared['type'] . '_field_options_before_update', $prepared, 0 );
+		$cleaned = apply_filters( 'frm_clean_' . $prepared['type'] . '_field_options_before_update', $prepared, 0 );
+
+		return is_array( $cleaned ) ? $cleaned : $prepared;
 	}
 
 	/**
@@ -821,14 +822,18 @@ class FrmAbilitiesFieldsController {
 	}
 
 	/**
-	 * Give an update the type, name and options the builder always sends, so FrmField::update() cleans it.
+	 * Give an update the type and options the builder always sends, so FrmField::update() cleans it.
 	 *
 	 * FrmField::update() only applies frm_clean_{type}_field_options_before_update
 	 * when the values include a type, which a partial ability update does not.
-	 * Cleaners also read name and field_options, like the repeater one that renames
-	 * the child form, so those are filled from the stored field when missing.
+	 * Cleaners also read field_options, so those are filled from the stored field when missing.
 	 *
-	 * @since x.x
+	 * The stored name is only added for the section/repeater cleaner, which renames
+	 * the repeater's child form. FrmField::update() filters the name for users without
+	 * unfiltered_html, so re-saving it everywhere would strip markup an admin authored
+	 * from a label the request did not change.
+	 *
+	 * @since 7.1
 	 *
 	 * @param stdClass $field      The stored field object.
 	 * @param array    $field_data Non-empty field data to update.
@@ -840,11 +845,18 @@ class FrmAbilitiesFieldsController {
 			return $field_data;
 		}
 
-		$field_data['type'] = $field->type;
+		if ( ! isset( $field_data['name'] ) && 'divider' === $field->type ) {
+			$filtered = FrmAppHelper::maybe_filter_array( array( 'name' => $field->name ), array( 'name' ) );
 
-		if ( ! isset( $field_data['name'] ) ) {
+			if ( $filtered['name'] !== $field->name ) {
+				// Saving the name would strip its markup. The cleaner only renames the child form, so skip it.
+				return $field_data;
+			}
+
 			$field_data['name'] = $field->name;
 		}
+
+		$field_data['type'] = $field->type;
 
 		if ( ! isset( $field_data['field_options'] ) ) {
 			$field_data['field_options'] = (array) $field->field_options;

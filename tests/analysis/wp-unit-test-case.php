@@ -5,10 +5,17 @@
  *
  * @package Formidable
  *
- * @since x.x
+ * @since 7.1
  */
 
-if ( ! class_exists( 'WP_UnitTestCase' ) && class_exists( 'PHPUnit\Framework\TestCase' ) ) {
-	abstract class WP_UnitTestCase extends \PHPUnit\Framework\TestCase {
+if ( ! class_exists( 'WP_UnitTestCase' ) ) {
+	/**
+	 * Describe PHPUnit inheritance without requiring its runtime in the analyzer.
+	 *
+	 * @mixin \PHPUnit\Framework\TestCase
+	 *
+	 * @method void tearDown() Restore WordPress state after a test.
+	 */
+	abstract class WP_UnitTestCase {
 	}
 }

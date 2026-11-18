@@ -315,7 +315,8 @@ class FrmAbilitiesPaymentsController {
 			return new WP_Error( 'frm_payments_missing_id', __( 'A payment ID is required.', 'formidable' ), array( 'status' => 400 ) );
 		}
 
-		$payment = ( new FrmTransLitePayment() )->get_one( absint( $input['id'] ) );
+		// Without a gateway the table does not exist yet, so there is nothing to find.
+		$payment = FrmTransLiteAppHelper::payments_table_exists() ? ( new FrmTransLitePayment() )->get_one( absint( $input['id'] ) ) : null;
 
 		if ( ! $payment ) {
 			return new WP_Error( 'frm_payment_not_found', __( 'No payment was found with that ID.', 'formidable' ), array( 'status' => 404 ) );
@@ -340,10 +341,7 @@ class FrmAbilitiesPaymentsController {
 	private static function build_list_query( $table, $input ) {
 		global $wpdb;
 
-		list( $order_clause, $limit_clause ) = FrmAbilitiesHelper::prepare_order_and_limit( $input );
-
-		$table_name = $wpdb->prefix . $table;
-		$status     = ! empty( $input['status'] ) && is_string( $input['status'] ) ? sanitize_text_field( $input['status'] ) : '';
+		$form = null;
 
 		if ( ! empty( $input['form_id'] ) ) {
 			$form = FrmAbilitiesHelper::get_form( $input['form_id'] );
@@ -351,7 +349,19 @@ class FrmAbilitiesPaymentsController {
 			if ( is_wp_error( $form ) ) {
 				return $form;
 			}
+		}
 
+		if ( ! FrmTransLiteAppHelper::payments_table_exists() ) {
+			// No gateway has been set up yet, so the table was never created.
+			return array();
+		}
+
+		list( $order_clause, $limit_clause ) = FrmAbilitiesHelper::prepare_order_and_limit( $input );
+
+		$table_name = $wpdb->prefix . $table;
+		$status     = ! empty( $input['status'] ) && is_string( $input['status'] ) ? sanitize_text_field( $input['status'] ) : '';
+
+		if ( $form ) {
 			$sql    = 'SELECT p.* FROM %i p JOIN %i i ON p.item_id = i.id WHERE i.form_id = %d';
 			$params = array( $table_name, $wpdb->prefix . 'frm_items', $form->id );
 

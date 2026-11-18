@@ -5,7 +5,7 @@
  * shows. The markup matches classes/views/frm-forms/add_field.php, and the settings panels are
  * requested separately by fieldSettingsLoader.js.
  *
- * @since x.x
+ * @since 7.1
  */
 
 import { addFieldSettingsMetadata } from './deferredFieldSettings';
@@ -30,7 +30,7 @@ let strings;
  * builder and add-ons need to find the fields. The previews themselves are drawn later by
  * renderFieldPreviews(), so the page does not lay out every field at once.
  *
- * @since x.x
+ * @since 7.1
  * @return {string[]} The ids of the fields, in page order.
  */
 export function hydrateFieldPreviews() {
@@ -70,7 +70,7 @@ export function hydrateFieldPreviews() {
 /**
  * Queue hydrated previews for rendering as their placeholders approach the viewport.
  *
- * @since x.x
+ * @since 7.1
  * @param {Function} onRendered Called with the old and new list item of each preview drawn.
  * @param {Function} onSlice    Called with what onRendered returned for each preview in a slice.
  * @return {void}
@@ -165,7 +165,7 @@ function createFieldTemplate( strings ) {
 	const label = tag( 'label', {
 		className: 'frm_primary_label',
 		children: [
-			span( { className: 'frm-label-text' } ),
+			span( { className: 'frm_builder_field_name' } ),
 			' ',
 			span( { className: 'frm_required' } ),
 			' ',
@@ -209,11 +209,11 @@ function createField( template, data, strings ) {
 
 	const label = container.querySelector( '.frm_primary_label' );
 	label.id = `field_label_${ id }`;
-	const labelText = label.firstElementChild;
-	labelText.insertAdjacentHTML( 'beforebegin', data.label || '' );
-	labelText.remove();
+	// Keep the name in its own span, like show_label_on_form_builder in PHP, so live label edits leave the rest of the label alone.
+	label.firstElementChild.innerHTML = data.label || '';
 
 	const required = label.querySelector( '.frm_required' );
+	required.id = `frm_required_indicator_${ id }`;
 	required.textContent = data.indicator ?? '*';
 	if ( ! data.required ) {
 		required.classList.add( 'frm_hidden' );

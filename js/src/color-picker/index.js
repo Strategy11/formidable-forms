@@ -1,9 +1,10 @@
 /**
  * Shared adapter for WordPress's block editor color picker.
  */
-import { colorToHex, formatColor } from './format-color';
+import { addColorHash, colorToHex, formatColor, isHexField, isTypedHexValid } from './format-color';
 
 const pickers = new WeakMap();
+const noop = { update() {}, close() {} };
 const { createElement, createRoot } = wp.element;
 const { ColorPicker } = wp.components;
 const { __ } = wp.i18n;
@@ -12,7 +13,7 @@ let activePicker;
 /**
  * Initialize once, preserving the original input for form serialization.
  *
- * @since x.x
+ * @since 7.1
  * @param {HTMLInputElement} input   Color setting input.
  * @param {Object}           options Picker callbacks and default color.
  * @return {Object} The picker adapter.
@@ -20,6 +21,11 @@ let activePicker;
 function init( input, options = {} ) {
 	if ( pickers.has( input ) ) {
 		return pickers.get( input );
+	}
+	if ( input.closest( '.wp-picker-container' ) ) {
+		// Another script already turned this input into a WordPress Iris picker.
+		releaseToIris( input );
+		return noop;
 	}
 	const { div, span, tag } = frmDom;
 	const existing = input.closest( '.frm-block-color-picker' );
@@ -59,7 +65,6 @@ function init( input, options = {} ) {
 	if ( input.id ) {
 		button.id = `${ input.id }_visible`;
 		panel.id = `${ input.id }_picker`;
-		button.setAttribute( 'aria-controls', panel.id );
 		document.querySelectorAll( 'label' ).forEach( label => {
 			if ( label.htmlFor === input.id ) {
 				label.htmlFor = button.id;
@@ -75,15 +80,17 @@ function init( input, options = {} ) {
 		return [ 'hex', 'rgb', 'hsl' ].includes( value ) ? value : selectedFormat;
 	};
 	const update = () => {
-		text.textContent = input.value || __( 'Select Color', 'formidable' );
-		swatch.style.backgroundColor = input.value || 'transparent';
+		// Style settings save hex colors without the hash, so add it back to display them.
+		const color = addColorHash( input.value );
+		text.textContent = color || __( 'Select Color', 'formidable' );
+		swatch.style.backgroundColor = color || 'transparent';
 		button.disabled = input.disabled;
 		if ( ! root || panel.hidden ) {
 			return;
 		}
 		root.render( createElement( ColorPicker, {
 			className: 'frm-block-color-control',
-			color: input.value || options.defaultColor || '#ffffff',
+			color: color || options.defaultColor || '#ffffff',
 			enableAlpha: input.dataset.alphaEnabled === 'true',
 			copyFormat: selectedFormat,
 			onChange: change,
@@ -94,6 +101,12 @@ function init( input, options = {} ) {
 		options.change?.( event, null );
 	};
 	const change = hex => {
+		// WordPress emits black while the hex field holds text it cannot parse. Keep the saved color until the text is valid.
+		// Only the hex format shows this field, so pure black picked in RGB or HSL still applies.
+		const hexField = [ ...mount.querySelectorAll( 'input[maxlength]' ) ].find( isHexField );
+		if ( hex && hexField && ! isTypedHexValid( hexField.value ) && /^#000000(?:ff)?$/i.test( hex ) ) {
+			return;
+		}
 		selectedFormat = getSelectedFormat();
 		input.value = hex ? formatColor( hex, input.value, selectedFormat ) : '';
 		input.dispatchEvent( new Event( 'input', { bubbles: true } ) );
@@ -162,6 +175,8 @@ function init( input, options = {} ) {
 		window.removeEventListener( 'scroll', position, true );
 		window.removeEventListener( 'resize', position );
 		button.setAttribute( 'aria-expanded', 'false' );
+		// The panel leaves the DOM while closed, so only reference it while it is open.
+		button.removeAttribute( 'aria-controls' );
 		if ( activePicker?.contains === contains ) {
 			activePicker = null;
 		}
@@ -175,6 +190,9 @@ function init( input, options = {} ) {
 		document.body.append( panel );
 		panel.hidden = false;
 		button.setAttribute( 'aria-expanded', 'true' );
+		if ( panel.id ) {
+			button.setAttribute( 'aria-controls', panel.id );
+		}
 		selectedFormat = input.value.trim().match( /^(rgb|hsl)a?\(/i )?.[ 1 ].toLowerCase() || 'hex';
 		root ??= createRoot( mount );
 		formatObserver.observe( mount, { childList: true, subtree: true, characterData: true } );
@@ -221,6 +239,20 @@ function init( input, options = {} ) {
 	return picker;
 }
 
+/**
+ * Remove the Lite toggle from an input that another script turned into a WordPress Iris picker.
+ *
+ * Pro 7.0.1 and older call wpColorPicker() on the color inputs in its email style settings.
+ *
+ * @since 7.1
+ * @param {HTMLInputElement} input Color setting input.
+ * @return {void}
+ */
+function releaseToIris( input ) {
+	input.hidden = false;
+	input.closest( '.frm-block-color-picker' )?.querySelector( ':scope > .frm-block-color-toggle' )?.remove();
+}
+
 document.addEventListener( 'pointerdown', event => {
 	if ( activePicker && ! activePicker.contains( event.target ) ) {
 		activePicker.close();
@@ -234,4 +266,4 @@ document.addEventListener( 'focusin', event => {
 } );
 
 // Extend the existing DOM utilities so Lite and Pro share a single adapter.
-frmDom.colorPicker = { init };
+frmDom.colorPicker = { init, releaseToIris };

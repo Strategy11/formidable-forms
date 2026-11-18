@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { colorToHex, formatColor } from '../../js/src/color-picker/format-color.js';
+import { addColorHash, colorToHex, formatColor, isHexField, isTypedHexValid } from '../../js/src/color-picker/format-color.js';
 
 test( 'hex stays hex when the previous value is hex or empty', () => {
 	assert.equal( formatColor( '#802939', '#1d2939' ), '#802939' );
@@ -58,4 +58,35 @@ test( 'saved functional colors convert without losing fractional hues or percent
 	assert.equal( colorToHex( 'HSLA(.5turn, 100%, 50%, 0)' ), '#00ffff00' );
 	assert.equal( colorToHex( '' ), '' );
 	assert.equal( colorToHex( 'var(--brand)' ), '' );
+} );
+
+test( 'bare hex colors saved by style settings are read as hex', () => {
+	assert.equal( colorToHex( '344054' ), '#344054' );
+	assert.equal( colorToHex( 'FFF' ), '#fff' );
+	assert.equal( colorToHex( 'ffff' ), '#ffff' );
+	assert.equal( colorToHex( 'FF000080' ), '#ff000080' );
+	assert.equal( colorToHex( '12345' ), '' );
+	assert.equal( addColorHash( ' 344054 ' ), '#344054' );
+	assert.equal( addColorHash( '#344054' ), '#344054' );
+	assert.equal( addColorHash( 'transparent' ), 'transparent' );
+	assert.equal( addColorHash( '' ), '' );
+} );
+
+test( 'typed hex text is only valid once it is a complete color', () => {
+	for ( const value of [ 'fff', '#FFF', 'ffff', '344054', '#34405480' ] ) {
+		assert.equal( isTypedHexValid( value ), true, value );
+	}
+	for ( const value of [ '', '#', 'transpare', '34', '34405', '3440548', 'ggg' ] ) {
+		assert.equal( isTypedHexValid( value ), false, value );
+	}
+} );
+
+test( 'only the hex text field counts as the hex field', () => {
+	const input = ( type, maxlength ) => ( { type, getAttribute: name => 'maxlength' === name ? maxlength : null } );
+	assert.equal( isHexField( input( 'text', '7' ) ), true );
+	assert.equal( isHexField( input( 'text', '9' ) ), true );
+	assert.equal( isHexField( input( 'number', '7' ) ), false );
+	assert.equal( isHexField( input( 'number', '3' ) ), false );
+	assert.equal( isHexField( input( 'text', null ) ), false );
+	assert.equal( isHexField( input( 'text', '100' ) ), false );
 } );

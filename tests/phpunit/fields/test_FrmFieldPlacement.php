@@ -108,6 +108,51 @@ class test_FrmFieldPlacement extends FrmUnitTest {
 		$this->assertFalse( FrmField::create( $values ), 'An id key alone must not bypass placement rules.' );
 	}
 
+	/** @return void */
+	public function test_serialized_options_keep_the_existing_section() {
+		$form_id = $this->factory->form->create();
+		$section = FrmField::create( FrmFieldsHelper::setup_new_vars( 'divider', $form_id ) );
+		$field   = FrmField::getOne( FrmField::create( FrmFieldsHelper::setup_new_vars( 'break', $form_id ) ) );
+		$options = $field->field_options;
+
+		$options['in_section'] = $section;
+		global $wpdb;
+		$wpdb->update( $wpdb->prefix . 'frm_fields', array( 'field_options' => serialize( $options ) ), array( 'id' => $field->id ) );
+		wp_cache_delete( $field->id, 'frm_field' );
+
+		$values = array( 'field_options' => maybe_serialize( $options ) );
+		$this->assertTrue( FrmFieldPlacementHelper::is_allowed_update( $field->id, $values ), 'Serialized options that keep the section must not count as a move.' );
+
+		$values = array(
+			'type'          => 'text',
+			'field_options' => maybe_serialize( $options ),
+		);
+		$this->assertTrue( FrmFieldPlacementHelper::is_allowed_update( $field->id, $values ), 'Serialized options must be checked against their section.' );
+
+		$values = array(
+			'type'          => 'submit',
+			'field_options' => maybe_serialize( $options ),
+		);
+		$this->assertFalse( FrmFieldPlacementHelper::is_allowed_update( $field->id, $values ), 'A change into a type the section refuses must be rejected.' );
+	}
+
+	/** @return void */
+	public function test_duplicating_a_legacy_placement_keeps_it() {
+		$parent   = $this->factory->form->create();
+		$repeater = $this->factory->form->create( array( 'parent_form_id' => $parent ) );
+
+		foreach ( array( 'gdpr', 'captcha' ) as $type ) {
+			$field_id = FrmField::create( FrmFieldsHelper::setup_new_vars( $type, $parent ) );
+			global $wpdb;
+			$wpdb->update( $wpdb->prefix . 'frm_fields', array( 'form_id' => $repeater ), array( 'id' => $field_id ) );
+			wp_cache_delete( $field_id, 'frm_field' );
+
+			$copy = FrmField::duplicate_single_field( $field_id, $parent );
+			$this->assertNotEmpty( $copy['field_id'], 'A ' . $type . ' field saved in a repeater must still be duplicated.' );
+			$this->assertSame( (int) $repeater, (int) FrmField::getOne( $copy['field_id'] )->form_id, 'The copy must stay beside its source.' );
+		}
+	}
+
 	public function test_section_rejects_incompatible_fields() {
 		$form_id = $this->factory->form->create();
 		$section = FrmField::create( FrmFieldsHelper::setup_new_vars( 'divider', $form_id ) );
