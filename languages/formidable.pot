@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-18T16:39:56+00:00\n"
+"POT-Creation-Date: 2026-11-18T17:38:36+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: formidable\n"
@@ -6995,7 +6995,7 @@ msgstr ""
 #: paypal/controllers/FrmPayPalLiteAppController.php:19
 #: square/controllers/FrmSquareLiteAppController.php:19
 #: stripe/controllers/FrmStrpLiteAppController.php:82
-#: stripe/controllers/FrmTransLiteActionsController.php:722
+#: stripe/controllers/FrmTransLiteActionsController.php:729
 #: stripe/controllers/FrmTransLiteCRUDController.php:34
 #: stripe/views/payments/show.php:27
 msgid "Payment"
@@ -10296,7 +10296,7 @@ msgid "Field value"
 msgstr ""
 
 #: classes/views/styles/components/FrmSliderStyleComponent.php:329
-#: js/src/settings-components/components/slider-component.js:296
+#: js/src/settings-components/components/slider-component.js:330
 #: js/src/web-components/frm-range-slider-component/frm-range-slider-component.js:438
 #: js/formidable-settings-components.js:3040
 #: js/formidable-web-components.js:3276
@@ -11503,11 +11503,11 @@ msgstr ""
 msgid "Subscription Canceled and Expired"
 msgstr ""
 
-#: stripe/controllers/FrmTransLiteActionsController.php:247
+#: stripe/controllers/FrmTransLiteActionsController.php:254
 msgid "There was an error processing your payment."
 msgstr ""
 
-#: stripe/controllers/FrmTransLiteActionsController.php:734
+#: stripe/controllers/FrmTransLiteActionsController.php:741
 msgid "Payment Method"
 msgstr ""
 
