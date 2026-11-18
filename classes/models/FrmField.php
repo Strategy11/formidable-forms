@@ -8,8 +8,9 @@ class FrmField {
 	/**
 	 * Version of the persistent field write hooks available to derived indexes.
 	 *
-	 * Version 1 covers frm_field_created and frm_field_updated, plus frm_field_order_updated for
+	 * Covers frm_field_created and frm_field_updated, plus frm_field_order_updated for
 	 * builder saves that write the field order of many fields in one query without frm_field_updated.
+	 * Includes the previous form ID when frm_field_updated moves a field between forms.
 	 *
 	 * @since x.x
 	 */
@@ -852,6 +853,12 @@ class FrmField {
 			$values['default_value'] = json_encode( $values['default_value'] );
 		}
 
+		$previous_form_id = 0;
+
+		if ( isset( $values['form_id'] ) ) {
+			$previous_form_id = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT form_id FROM %i WHERE id = %d', $wpdb->prefix . 'frm_fields', $id ) );
+		}
+
 		$query_results = $wpdb->update( $wpdb->prefix . 'frm_fields', $values, array( 'id' => $id ) );
 		$form_id       = 0;
 
@@ -882,8 +889,9 @@ class FrmField {
 			 * @since x.x
 			 *
 			 * @param int $id Updated field ID.
+			 * @param int $previous_form_id Previous form ID when the update includes form_id, otherwise zero.
 			 */
-			do_action( 'frm_field_updated', $id );
+			do_action( 'frm_field_updated', $id, $previous_form_id );
 		}
 
 		return $query_results;
