@@ -77,7 +77,12 @@ class test_FrmPayPalLiteActionsController extends FrmUnitTest {
 			'id'             => 'order_fixture',
 			'status'         => 'get_order' === $action ? 'APPROVED' : 'COMPLETED',
 			'purchase_units' => array(
-				(object) array( 'amount' => (object) array( 'value' => '10.00' ) ),
+				(object) array(
+					'amount' => (object) array(
+						'value'         => '10.00',
+						'currency_code' => 'USD',
+					),
+				),
 			),
 		);
 

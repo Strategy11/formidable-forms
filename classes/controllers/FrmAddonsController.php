@@ -1201,7 +1201,7 @@ class FrmAddonsController {
 	 * it is installed in. When it does not, match the installed copy by its
 	 * updater download id (active Boosts), then by its plugin name (inactive Boosts).
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array  $addon     The Boost data from the API.
 	 * @param string $file_name The plugin file the API sends for the Boost.

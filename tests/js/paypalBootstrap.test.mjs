@@ -57,6 +57,18 @@ test( 'PayPal initializes once on DOMContentLoaded when the script runs while lo
 } );
 
 /**
+ * Let pending microtasks run until a condition holds, giving up after a few ticks.
+ *
+ * @param {Function} isDone Returns true once the awaited state is reached.
+ * @return {Promise<void>} Resolves when the condition holds or the tick limit is reached.
+ */
+async function flushMicrotasksUntil( isDone ) {
+	for ( let tick = 0; tick < 10 && ! isDone(); tick++ ) {
+		await Promise.resolve();
+	}
+}
+
+/**
  * Exercise the real initializer while wallet discovery is still waiting.
  *
  * @return {Promise<void>} Resolves after both competing initialization runs finish.
@@ -101,14 +113,10 @@ async function checkOverlappingInitialization() {
 	};
 	runInNewContext( `let thisForm, cardElementContainer, isRecurring, selectedMethod; let initRunId = 0;${ source.slice( start, end ) }`, context );
 	const first = context.paypalInit();
-	for ( let tick = 0; tick < 10 && waiting < 1; tick++ ) {
-		await Promise.resolve();
-	}
+	await flushMicrotasksUntil( () => waiting >= 1 );
 	assert.equal( waiting, 1 );
 	const second = context.paypalInit();
-	for ( let tick = 0; tick < 10 && waiting < 2; tick++ ) {
-		await Promise.resolve();
-	}
+	await flushMicrotasksUntil( () => waiting >= 2 );
 	assert.equal( waiting, 2 );
 	resume();
 	await Promise.all( [ first, second ] );

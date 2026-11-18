@@ -1346,7 +1346,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Initialize dragging on the first hover, press, or touch.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 * @param {HTMLElement}      draggable The field or field group to drag.
 	 * @param {string|undefined} handle    The selector for the drag handle.
 	 * @return {void}
@@ -1371,7 +1371,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Attach the draggable widget after interaction.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 * @param {HTMLElement}      draggable The field or field group to drag.
 	 * @param {string|undefined} handle    The selector for the drag handle.
 	 * @return {void}
@@ -2977,7 +2977,7 @@ window.frmAdminBuildJS = function() {
 	 *
 	 * Specialized fields keep their existing initialization contract.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 * @param {Array} entry The field ID and its rendered HTML and settings metadata.
 	 * @return {Object|null} A field to insert immediately, or null when queued or deleted.
 	 */
@@ -3053,7 +3053,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Insert adjacent fields together when their placeholders share a parent.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 * @param {Array} fields The detached fields and their placeholders.
 	 * @return {void}
 	 */
@@ -3114,7 +3114,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Prepare the previews drawn from page data, and start loading their settings.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 * @return {void}
 	 */
 	function initBrowserPreviewFields() {
@@ -3139,7 +3139,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Prepare a preview drawn from page data as it takes its placeholder's place.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 * @param {HTMLElement} placeholder The empty list item being replaced.
 	 * @param {HTMLElement} field       The drawn preview.
 	 * @return {Object} The field, in the shape initializeLoadedFieldSlice expects.
@@ -3158,7 +3158,7 @@ window.frmAdminBuildJS = function() {
 	 * A selected field shows its settings. Any other field moves its settings into the save form,
 	 * so an edit made in the meantime, like a new field order or layout class, is saved.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 * @param {string[]} fieldIds The fields whose settings were just cached.
 	 * @return {void}
 	 */
@@ -3181,7 +3181,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Hold a save until the settings that edits are waiting on have arrived.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 * @param {Function}    save   The save handler to call again.
 	 * @param {HTMLElement} button The save button that was clicked.
 	 * @return {boolean} True if the save will run later.
@@ -3217,7 +3217,7 @@ window.frmAdminBuildJS = function() {
 	 * The first failed attempt keeps them and asks to try again. When the same fields fail again,
 	 * the settings may never load, so ask before saving without them instead of blocking every save.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 * @param {string[]}    failedFieldIds The fields whose settings failed to load.
 	 * @param {HTMLElement} button         The save button that was clicked.
 	 * @return {boolean} True to save without the failed fields.
@@ -3660,7 +3660,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Overlay unsaved controls and refresh their UI after PHP creates the saved-value copy.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 * @param {Object|null} snapshot   Source settings captured before the duplication request.
 	 * @param {number}      newFieldId The field ID returned by PHP.
 	 * @return {void}
@@ -3736,7 +3736,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.1
 	 * @return {HTMLElement|null} The hovered row, while it remains in the builder.
 	 */
 	function getActiveHoverRow() {
@@ -9525,7 +9525,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Hide the previous selection without searching every field's settings.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 * @return {void}
 	 */
 	function hideActiveFieldSettings() {
