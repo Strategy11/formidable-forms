@@ -281,7 +281,7 @@ class FrmFormApi {
 	 * @return bool
 	 */
 	protected function include_boosts() {
-		return str_starts_with( (string) $this->cache_key, 'frm_addons_l' );
+		return str_starts_with( $this->cache_key, 'frm_addons_l' );
 	}
 
 	/**

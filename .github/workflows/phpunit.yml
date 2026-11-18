@@ -19,6 +19,20 @@ jobs:
     env:
       WP_DEVELOP_DIR: /tmp/wordpress/
       WP_MULTISITE: ${{ matrix.multisite }}
+    # The ubuntu-26.04 runner image no longer ships MySQL, so run it as a service.
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress_tests
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
     strategy:
       matrix:
         include:
@@ -72,6 +86,7 @@ jobs:
           sed -i "s/youremptytestdbnamehere/wordpress_tests/" wp-tests-config.php
           sed -i "s/yourusernamehere/root/" wp-tests-config.php
           sed -i "s/yourpasswordhere/root/" wp-tests-config.php
+          sed -i "s/'localhost'/'127.0.0.1'/" wp-tests-config.php
 
       - name: Read WP core's required Node version
         id: wp-node
@@ -89,10 +104,6 @@ jobs:
           cd /tmp/wordpress
           npm ci
           npm run build:dev
-      - name: Creating database
-        run: |
-          sudo /etc/init.d/mysql start
-          mysql -u root -proot -e "CREATE DATABASE wordpress_tests;"
       - name: PhpUnit tests
         run: |
           cd "/tmp/wordpress/src/wp-content/plugins/formidable"
