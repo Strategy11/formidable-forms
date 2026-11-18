@@ -15,7 +15,7 @@ class FrmFieldsHelper {
 	/**
 	 * Prepared field arrays shared only while their builder markup is being rendered.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @var array<string,array>
 	 */
@@ -73,7 +73,7 @@ class FrmFieldsHelper {
 	/**
 	 * Check if a form is the child form of a repeater.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param int|string $form_id The ID of the form the field is added to.
 	 *
@@ -115,7 +115,7 @@ class FrmFieldsHelper {
 	/**
 	 * Share prepared values during a builder render, returning the previous values to restore.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param object     $field  The field object used by the builder and its field type handler.
 	 * @param array|null $values Prepared field values, or null to stop sharing them.

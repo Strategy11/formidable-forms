@@ -6,14 +6,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Shared placement rules for the builder and programmatic field writes.
  *
- * @since x.x
+ * @since 7.1
  */
 class FrmFieldPlacementHelper {
 
 	/**
 	 * Check placement using stored values for columns omitted by an update.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param int   $id     Field ID being updated.
 	 * @param array $values New field columns and options.
@@ -49,7 +49,7 @@ class FrmFieldPlacementHelper {
 	/**
 	 * Check the destination before writing a field or running creation hooks.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param string $type       Field type, including palette variants.
 	 * @param int    $form_id    Destination form ID.

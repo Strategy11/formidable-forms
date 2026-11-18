@@ -1359,7 +1359,7 @@
 	/**
 	 * Prepend '#' to a hex color saved without it. This matches FrmStylesHelper::add_color_hash_if_needed.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param {string} value The color value.
 	 * @return {string} The color, with a '#' when it is a hex color without one.
@@ -1494,7 +1494,7 @@
 		 * When every changed setting only feeds a CSS variable, the variables are updated right away with JavaScript.
 		 * Anything else requests new CSS from the server.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param {boolean} isRecheck True when called again after a change event that did not change any values yet.
 		 * @param {boolean} isTyping  True when called from an input event, while a value may still be incomplete.
@@ -1556,7 +1556,7 @@
 		/**
 		 * Check for a color setting that holds part of a hex color, like #1 or #1234.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param {string}           key   The setting key.
 		 * @param {string|undefined} value The setting value.
@@ -1573,7 +1573,7 @@
 		}
 
 		/**
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @return {HTMLElement[]} The inputs that are sent to the server when requesting new CSS.
 		 */
@@ -1584,7 +1584,7 @@
 		}
 
 		/**
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @return {Object} Style setting values keyed by setting name, plus the style_name value.
 		 */
@@ -1600,7 +1600,7 @@
 		/**
 		 * Check if a setting can be updated without new CSS from the server.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param {string} key    The setting key.
 		 * @param {Object} values All current setting values.
@@ -1618,7 +1618,7 @@
 		/**
 		 * This matches the check in FrmStylesHelper::update_base_font_size.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param {Object} values All current setting values.
 		 * @return {boolean} True if font sizes are scaled from the base font size.
@@ -1631,7 +1631,7 @@
 		/**
 		 * Values that the server would sanitize or skip are left to the server, so both ways of updating the preview always match.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param {string|undefined} value The setting value. It is undefined when the input is not submitted, like an unchecked checkbox.
 		 * @return {boolean} True if the value can be used as is.
@@ -1652,7 +1652,7 @@
 		/**
 		 * This matches the formatting in FrmStylesHelper::get_color_output.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param {string} key   The setting key.
 		 * @param {string} value The setting value.
@@ -1665,7 +1665,7 @@
 		/**
 		 * This matches the variable names from FrmStylesHelper::output_vars.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param {string} key The setting key.
 		 * @return {string} The CSS variable name.
@@ -1677,7 +1677,7 @@
 		/**
 		 * Write the CSS variables set with JavaScript to a style tag after #this_css, so they take priority over the last server response.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @return {void}
 		 */

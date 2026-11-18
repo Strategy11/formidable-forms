@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						$frm_style->get_field_name( 'submit_bg_color' ),
 						$style->post_content['submit_bg_color'],
 						array(
-							'title'                       => __( 'Background Image', 'formidable' ),
+							'title'                       => __( 'Background', 'formidable' ),
 							'id'                          => 'frm_submit_bg_color',
 							'frm_style'                   => $frm_style,
 							'style'                       => $style,

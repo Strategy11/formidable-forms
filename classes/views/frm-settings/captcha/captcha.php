@@ -159,6 +159,7 @@ $hidden_spam_sources  = $akismet_active ? array() : array( 'akismet', 'akismet_d
 $optional_sources     = FrmSpamEntriesHelper::get_optional_sources();
 $spam_source_tooltips = array(
 	'captcha'             => __( 'Choose whether CAPTCHA failures prevent submission or allow the form to be submitted as a spam entry. Saved spam entries include the CAPTCHA error details.', 'formidable' ),
+	'captcha_unavailable' => __( 'Choose how to handle submissions when the CAPTCHA could not be verified because the CAPTCHA service could not be reached or sent back a response that could not be read.', 'formidable' ),
 	'honeypot'            => __( 'Detect bots that fill out an invisible field meant to stay empty.', 'formidable' ),
 	'antispam'            => __( 'Detect submissions that fail the JavaScript anti-spam check, such as bots that do not run JavaScript.', 'formidable' ),
 	'no_ip'               => __( 'Choose how to handle submissions when the submitter IP address cannot be detected.', 'formidable' ),

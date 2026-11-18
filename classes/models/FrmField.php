@@ -13,7 +13,7 @@ class FrmField {
 	 * Version 2 passes the previous form ID to frm_field_updated, so a field moved
 	 * between forms can refresh both forms.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 */
 	const WRITE_HOOKS_VERSION = 2;
 
@@ -30,7 +30,7 @@ class FrmField {
 	/**
 	 * Set by create_copy() so the next create() keeps the source placement.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @var bool
 	 */
@@ -551,7 +551,7 @@ class FrmField {
 		/**
 		 * Fires after a field is saved to the database.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param int $new_id Created field ID.
 		 */
@@ -575,7 +575,7 @@ class FrmField {
 	 * field there, so forms saved before a rule existed keep their layout. Callers that build a new
 	 * field from user input must use create() so the placement rules apply.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array $values Field values, as passed to create().
 	 * @param bool  $return Whether to return the new field ID.
@@ -887,7 +887,7 @@ class FrmField {
 			/**
 			 * Fires after a field update succeeds, including updates with unchanged values.
 			 *
-			 * @since x.x
+			 * @since 7.1
 			 *
 			 * @param int $id Updated field ID.
 			 * @param int $previous_form_id Previous form ID when the update includes form_id, otherwise zero.
@@ -940,7 +940,7 @@ class FrmField {
 			/**
 			 * Fires after a field is deleted from the database.
 			 *
-			 * @since x.x
+			 * @since 7.1
 			 *
 			 * @param int $id Deleted field ID.
 			 */
@@ -984,7 +984,7 @@ class FrmField {
 	 * The LIKE prefixes are escaped so the underscores are matched literally.
 	 * Unescaped, the leading underscore is a wildcard and MySQL scans the whole options table.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param int $form_id Form ID.
 	 *
@@ -1531,7 +1531,7 @@ class FrmField {
 		/**
 		 * Filters the field types that do not store entry metadata.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param string[] $field_types Display-only field types.
 		 */

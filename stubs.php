@@ -323,6 +323,17 @@ namespace {
 	}
 	class FrmProEntryFormatter extends FrmEntryFormatter {
 	}
+	class FrmProFieldText extends FrmFieldText {
+	}
+	class FrmProCopy {
+		/**
+		 * @param bool $force Whether to run the install even when the database is current.
+		 *
+		 * @return void
+		 */
+		public static function install( $force = false ) {
+		}
+	}
 	/**
 	 * The Registration add-on's entry controller. Constructing it is what lets a
 	 * registration form's entry run its user creation, and the abilities do that
@@ -551,6 +562,15 @@ namespace {
 		 * @return array
 		 */
 		public static function payment_columns( $columns = array() ) {
+		}
+	}
+	class FrmTransActionsController {
+		/**
+		 * @param array $atts
+		 *
+		 * @return void
+		 */
+		public static function trigger_payment_status_change( $atts ) {
 		}
 	}
 	class FrmProSettingsController {
@@ -857,6 +877,28 @@ namespace {
 	 * @return bool
 	 */
 	function wp_unregister_ability( $name ) {
+	}
+	/**
+	 * @param string $slug Category slug.
+	 *
+	 * @return WP_Ability_Category|null
+	 */
+	function wp_unregister_ability_category( $slug ) {
+	}
+	/**
+	 * Added in WordPress 6.1, after the wordpress-stubs release this plugin pins.
+	 *
+	 * @param string $hook_name The name of the filter hook.
+	 *
+	 * @return int The number of times the filter hook has been applied.
+	 */
+	function did_filter( $hook_name ) {
+	}
+	/**
+	 * The exception the WordPress test suite throws from wp_die(). Tests catch it,
+	 * and mago analyzes the tests without loading the WordPress test library.
+	 */
+	class WPDieException extends Exception {
 	}
 }
 

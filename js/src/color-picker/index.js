@@ -13,7 +13,7 @@ let activePicker;
 /**
  * Initialize once, preserving the original input for form serialization.
  *
- * @since x.x
+ * @since 7.1
  * @param {HTMLInputElement} input   Color setting input.
  * @param {Object}           options Picker callbacks and default color.
  * @return {Object} The picker adapter.
@@ -244,7 +244,7 @@ function init( input, options = {} ) {
  *
  * Pro 7.0.1 and older call wpColorPicker() on the color inputs in its email style settings.
  *
- * @since x.x
+ * @since 7.1
  * @param {HTMLInputElement} input Color setting input.
  * @return {void}
  */
