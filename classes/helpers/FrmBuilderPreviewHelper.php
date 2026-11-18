@@ -94,7 +94,7 @@ class FrmBuilderPreviewHelper {
 		 * @param bool   $supported Whether the preview can be drawn in the browser.
 		 * @param object $field     The field being added to the form builder.
 		 */
-		return apply_filters( 'frm_builder_preview_in_browser', true, $field );
+		return (bool) apply_filters( 'frm_builder_preview_in_browser', true, $field );
 	}
 
 	/**
