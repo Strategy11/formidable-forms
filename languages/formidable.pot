@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-18T14:36:01+00:00\n"
+"POT-Creation-Date: 2026-11-18T15:55:37+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: formidable\n"
@@ -1484,7 +1484,7 @@ msgstr ""
 
 #: classes/controllers/FrmAppController.php:385
 #: classes/views/frm-forms/spam-settings.php:130
-#: classes/views/frm-settings/captcha/captcha.php:350
+#: classes/views/frm-settings/captcha/captcha.php:351
 #: js/admin/applications.js:121
 msgid "Upgrade to Pro"
 msgstr ""
@@ -1996,7 +1996,7 @@ msgid "Settings Successfully Updated"
 msgstr ""
 
 #: classes/controllers/FrmFormsController.php:320
-#: classes/models/fields/FrmFieldCaptcha.php:668
+#: classes/models/fields/FrmFieldCaptcha.php:694
 #: classes/views/frm-settings/captcha/captcha.php:6
 msgid "Captcha"
 msgstr ""
@@ -2173,7 +2173,7 @@ msgid "Actions & Notifications"
 msgstr ""
 
 #: classes/controllers/FrmFormsController.php:1665
-#: classes/helpers/FrmSpamEntriesHelper.php:363
+#: classes/helpers/FrmSpamEntriesHelper.php:368
 msgid "Spam"
 msgstr ""
 
@@ -6298,47 +6298,51 @@ msgstr ""
 msgid "Formidable Views"
 msgstr ""
 
-#: classes/helpers/FrmSpamEntriesHelper.php:184
+#: classes/helpers/FrmSpamEntriesHelper.php:188
 msgid "CAPTCHA errors"
 msgstr ""
 
-#: classes/helpers/FrmSpamEntriesHelper.php:185
-msgid "Honeypot"
-msgstr ""
-
-#: classes/helpers/FrmSpamEntriesHelper.php:186
-msgid "JavaScript anti-spam check"
-msgstr ""
-
-#: classes/helpers/FrmSpamEntriesHelper.php:187
-msgid "Missing IP address"
-msgstr ""
-
-#: classes/helpers/FrmSpamEntriesHelper.php:188
-msgid "Akismet spam"
-msgstr ""
-
 #: classes/helpers/FrmSpamEntriesHelper.php:189
-msgid "Akismet blatant spam"
+msgid "CAPTCHA service unavailable"
 msgstr ""
 
 #: classes/helpers/FrmSpamEntriesHelper.php:190
-msgid "Denylist"
+msgid "Honeypot"
 msgstr ""
 
 #: classes/helpers/FrmSpamEntriesHelper.php:191
-msgid "WordPress disallowed words"
+msgid "JavaScript anti-spam check"
 msgstr ""
 
 #: classes/helpers/FrmSpamEntriesHelper.php:192
-msgid "WordPress spam comments"
+msgid "Missing IP address"
 msgstr ""
 
 #: classes/helpers/FrmSpamEntriesHelper.php:193
+msgid "Akismet spam"
+msgstr ""
+
+#: classes/helpers/FrmSpamEntriesHelper.php:194
+msgid "Akismet blatant spam"
+msgstr ""
+
+#: classes/helpers/FrmSpamEntriesHelper.php:195
+msgid "Denylist"
+msgstr ""
+
+#: classes/helpers/FrmSpamEntriesHelper.php:196
+msgid "WordPress disallowed words"
+msgstr ""
+
+#: classes/helpers/FrmSpamEntriesHelper.php:197
+msgid "WordPress spam comments"
+msgstr ""
+
+#: classes/helpers/FrmSpamEntriesHelper.php:198
 msgid "StopForumSpam"
 msgstr ""
 
-#: classes/helpers/FrmSpamEntriesHelper.php:415
+#: classes/helpers/FrmSpamEntriesHelper.php:420
 msgid "Manual review"
 msgstr ""
 
@@ -6637,45 +6641,45 @@ msgstr ""
 msgid "This value is invalid"
 msgstr ""
 
-#: classes/models/fields/FrmFieldCaptcha.php:333
+#: classes/models/fields/FrmFieldCaptcha.php:358
 msgid "There was a problem verifying your captcha"
 msgstr ""
 
-#: classes/models/fields/FrmFieldCaptcha.php:342
+#: classes/models/fields/FrmFieldCaptcha.php:367
 msgid "The CAPTCHA service response could not be read, so the CAPTCHA could not be verified."
 msgstr ""
 
 #. translators: %1$s: the score returned by reCAPTCHA, %2$s: the score threshold from global settings
-#: classes/models/fields/FrmFieldCaptcha.php:364
+#: classes/models/fields/FrmFieldCaptcha.php:390
 msgid "The reCAPTCHA v3 score of %1$s is below the threshold of %2$s."
 msgstr ""
 
-#: classes/models/fields/FrmFieldCaptcha.php:426
+#: classes/models/fields/FrmFieldCaptcha.php:452
 msgid "The CAPTCHA service rejected the response without giving a reason."
 msgstr ""
 
-#: classes/models/fields/FrmFieldCaptcha.php:471
+#: classes/models/fields/FrmFieldCaptcha.php:497
 msgid "The CAPTCHA on this form is not set up correctly. Please contact the site administrator."
 msgstr ""
 
-#: classes/models/fields/FrmFieldCaptcha.php:477
+#: classes/models/fields/FrmFieldCaptcha.php:503
 msgid "The reCAPTCHA was not entered correctly"
 msgstr ""
 
-#: classes/models/fields/FrmFieldCaptcha.php:575
+#: classes/models/fields/FrmFieldCaptcha.php:601
 msgid "The captcha is missing from this form"
 msgstr ""
 
-#: classes/models/fields/FrmFieldCaptcha.php:596
+#: classes/models/fields/FrmFieldCaptcha.php:622
 msgid "No CAPTCHA response was submitted. The form may have been submitted before the CAPTCHA loaded, or it failed to load."
 msgstr ""
 
-#: classes/models/fields/FrmFieldCaptcha.php:667
+#: classes/models/fields/FrmFieldCaptcha.php:693
 #: classes/views/frm-settings/captcha/captcha.php:14
 msgid "reCAPTCHA"
 msgstr ""
 
-#: classes/models/fields/FrmFieldCaptcha.php:667
+#: classes/models/fields/FrmFieldCaptcha.php:693
 #: classes/views/frm-settings/captcha/captcha.php:19
 msgid "hCaptcha"
 msgstr ""
@@ -6991,7 +6995,7 @@ msgstr ""
 #: paypal/controllers/FrmPayPalLiteAppController.php:19
 #: square/controllers/FrmSquareLiteAppController.php:19
 #: stripe/controllers/FrmStrpLiteAppController.php:82
-#: stripe/controllers/FrmTransLiteActionsController.php:629
+#: stripe/controllers/FrmTransLiteActionsController.php:638
 #: stripe/controllers/FrmTransLiteCRUDController.php:34
 #: stripe/views/payments/show.php:27
 msgid "Payment"
@@ -9048,7 +9052,7 @@ msgid "Check denylist data to validate for spam"
 msgstr ""
 
 #: classes/views/frm-forms/spam-settings.php:120
-#: classes/views/frm-settings/captcha/captcha.php:342
+#: classes/views/frm-settings/captcha/captcha.php:343
 msgid "Delete spam entries automatically"
 msgstr ""
 
@@ -9060,7 +9064,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: classes/views/frm-forms/spam-settings.php:129
-#: classes/views/frm-settings/captcha/captcha.php:349
+#: classes/views/frm-settings/captcha/captcha.php:350
 msgid "Automatic spam cleanup"
 msgstr ""
 
@@ -9178,111 +9182,115 @@ msgid "Choose whether CAPTCHA failures prevent submission or allow the form to b
 msgstr ""
 
 #: classes/views/frm-settings/captcha/captcha.php:162
-msgid "Detect bots that fill out an invisible field meant to stay empty."
+msgid "Choose how to handle submissions when the CAPTCHA could not be verified because the CAPTCHA service could not be reached or sent back a response that could not be read."
 msgstr ""
 
 #: classes/views/frm-settings/captcha/captcha.php:163
-msgid "Detect submissions that fail the JavaScript anti-spam check, such as bots that do not run JavaScript."
+msgid "Detect bots that fill out an invisible field meant to stay empty."
 msgstr ""
 
 #: classes/views/frm-settings/captcha/captcha.php:164
-msgid "Choose how to handle submissions when the submitter IP address cannot be detected."
+msgid "Detect submissions that fail the JavaScript anti-spam check, such as bots that do not run JavaScript."
 msgstr ""
 
 #: classes/views/frm-settings/captcha/captcha.php:165
-msgid "Akismet flagged this submission as spam, but it may be a false positive. Save it as a spam entry to review it later, or reject it with an error message."
+msgid "Choose how to handle submissions when the submitter IP address cannot be detected."
 msgstr ""
 
 #: classes/views/frm-settings/captcha/captcha.php:166
-msgid "Akismet marked this submission as highly likely to be spam and recommended discarding it. Reject it with an error message without saving an entry, or save it as a spam entry if you prefer to review it."
+msgid "Akismet flagged this submission as spam, but it may be a false positive. Save it as a spam entry to review it later, or reject it with an error message."
 msgstr ""
 
 #: classes/views/frm-settings/captcha/captcha.php:167
-msgid "Check submitted text against the built-in list of spam words and your custom disallowed words."
+msgid "Akismet marked this submission as highly likely to be spam and recommended discarding it. Reject it with an error message without saving an entry, or save it as a spam entry if you prefer to review it."
 msgstr ""
 
 #: classes/views/frm-settings/captcha/captcha.php:168
-msgid "Choose how to handle submissions matching the Disallowed Comment Keys in WordPress Settings > Discussion."
+msgid "Check submitted text against the built-in list of spam words and your custom disallowed words."
 msgstr ""
 
 #: classes/views/frm-settings/captcha/captcha.php:169
-msgid "Match the submitter IP address, email, or website against recent WordPress comments marked as spam."
+msgid "Choose how to handle submissions matching the Disallowed Comment Keys in WordPress Settings > Discussion."
 msgstr ""
 
 #: classes/views/frm-settings/captcha/captcha.php:170
+msgid "Match the submitter IP address, email, or website against recent WordPress comments marked as spam."
+msgstr ""
+
+#: classes/views/frm-settings/captcha/captcha.php:171
 msgid "Choose how to handle submissions with an IP address or email flagged by the StopForumSpam service."
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:176
+#: classes/views/frm-settings/captcha/captcha.php:177
 msgid "Customize how spam submissions are handled"
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:179
+#: classes/views/frm-settings/captcha/captcha.php:180
 msgid "Choose which checks run and what happens when one flags a new submission."
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:231
+#: classes/views/frm-settings/captcha/captcha.php:232
 msgid "Save as a spam entry"
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:234
+#: classes/views/frm-settings/captcha/captcha.php:235
 msgid "Reject with an error message"
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:248
+#: classes/views/frm-settings/captcha/captcha.php:249
 msgid "Customize denylist words"
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:251
+#: classes/views/frm-settings/captcha/captcha.php:252
 msgid "Enter one word or phrase per line. Allowed words are never flagged, even when they are on the denylist."
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:255
+#: classes/views/frm-settings/captcha/captcha.php:256
 msgid "Custom disallowed words"
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:262
+#: classes/views/frm-settings/captcha/captcha.php:263
 msgid "Custom allowed words"
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:273
+#: classes/views/frm-settings/captcha/captcha.php:274
 msgid "Spam keywords detected recently:"
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:289
+#: classes/views/frm-settings/captcha/captcha.php:290
 msgid "Akismet"
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:290
+#: classes/views/frm-settings/captcha/captcha.php:291
 msgid "Formidable Forms works with Akismet. Enable it in the Spam settings for each form."
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:293
+#: classes/views/frm-settings/captcha/captcha.php:294
 msgid "View docs"
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:294
+#: classes/views/frm-settings/captcha/captcha.php:295
 msgid "for Akismet (opens in a new tab)"
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:303
+#: classes/views/frm-settings/captcha/captcha.php:304
 msgid "Spam entries"
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:305
+#: classes/views/frm-settings/captcha/captcha.php:306
 msgid "Saved spam entries go to the Spam tab of the entries list. They never trigger form actions, and the submitter sees the normal success message."
 msgstr ""
 
 #. translators: %s: Names of active Formidable add-ons that need an update.
-#: classes/views/frm-settings/captcha/captcha.php:316
+#: classes/views/frm-settings/captcha/captcha.php:317
 msgid "Update %s to save spam entries. Until then, flagged submissions are rejected."
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:343
+#: classes/views/frm-settings/captcha/captcha.php:344
 msgid "Automatically delete saved spam entries after the selected number of days. This requires Formidable Pro."
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:347
+#: classes/views/frm-settings/captcha/captcha.php:348
 msgid "After 30 days"
 msgstr ""
 
@@ -10381,7 +10389,12 @@ msgid "On Click"
 msgstr ""
 
 #: classes/views/styles/_buttons.php:26
-msgid "Background Image"
+#: classes/views/styles/_field-colors.php:25
+#: classes/views/styles/_field-colors.php:142
+#: classes/views/styles/_field-colors.php:200
+#: classes/views/styles/_field-colors.php:258
+#: classes/views/styles/_general.php:20
+msgid "Background"
 msgstr ""
 
 #: classes/views/styles/_buttons.php:39
@@ -10521,14 +10534,6 @@ msgstr ""
 #: classes/views/styles/_form-messages.php:13
 #: paypal/views/settings/connect-settings-container.php:63
 msgid "Error"
-msgstr ""
-
-#: classes/views/styles/_field-colors.php:25
-#: classes/views/styles/_field-colors.php:142
-#: classes/views/styles/_field-colors.php:200
-#: classes/views/styles/_field-colors.php:258
-#: classes/views/styles/_general.php:20
-msgid "Background"
 msgstr ""
 
 #: classes/views/styles/_field-colors.php:43
@@ -11502,7 +11507,7 @@ msgstr ""
 msgid "There was an error processing your payment."
 msgstr ""
 
-#: stripe/controllers/FrmTransLiteActionsController.php:641
+#: stripe/controllers/FrmTransLiteActionsController.php:650
 msgid "Payment Method"
 msgstr ""
 
