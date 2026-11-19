@@ -376,4 +376,29 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 		$error_message = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
 		$this->assertSame( 'Please fix Comment', $error_message );
 	}
+
+	/**
+	 * A reserved order is kept, and the submit row moves directly after it.
+	 */
+	public function test_setup_new_vars_uses_reserved_field_order() {
+		$form_id   = $this->factory->form->create();
+		$submit_id = $this->factory->field->create(
+			array(
+				'form_id'     => $form_id,
+				'type'        => 'submit',
+				'field_order' => 3,
+			)
+		);
+
+		$_POST['last_row_field_ids'] = array( $submit_id );
+		$values                      = FrmFieldsHelper::setup_new_vars( 'text', $form_id, 10 );
+		$this->assertSame( 10, $values['field_order'], 'A reserved order should be used as given.' );
+		$this->assertSame( 11, (int) FrmField::getOne( $submit_id )->field_order, 'The submit row should follow the reserved order.' );
+
+		$values = FrmFieldsHelper::setup_new_vars( 'text', $form_id );
+		$this->assertSame( 12, $values['field_order'], 'Without a reservation the order should follow the highest saved order.' );
+		$this->assertSame( 13, (int) FrmField::getOne( $submit_id )->field_order, 'The submit row should follow the new field.' );
+
+		unset( $_POST['last_row_field_ids'] );
+	}
 }

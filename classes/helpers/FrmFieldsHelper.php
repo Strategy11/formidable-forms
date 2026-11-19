@@ -84,11 +84,13 @@ class FrmFieldsHelper {
 		}
 
 		/*
-		 * Increase the field order of submit field and fields in the same row. The
-		 * highest order wins so that the submit row stays after every field, even
-		 * when this request reserved an order below one that is still in flight.
+		 * Increase the field order of submit field and fields in the same row. They
+		 * go directly after the new field, which is where the builder expects them
+		 * when it reserves the next order. The highest order wins so that the submit
+		 * row stays after every field, even when this request reserved an order below
+		 * one that is still in flight.
 		 */
-		FrmSubmitHelper::update_last_row_fields_order_when_adding_field( max( $field_order, $field_count ) );
+		FrmSubmitHelper::update_last_row_fields_order_when_adding_field( max( $field_order - 1, $field_count ) );
 
 		return $values;
 	}

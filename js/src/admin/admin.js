@@ -2516,6 +2516,10 @@ window.frmAdminBuildJS = function() {
 			return 0;
 		}
 
+		// The builder renumbers every field by its position, and a save stores those
+		// numbers, so stay above them too.
+		nextFieldOrder = Math.max( nextFieldOrder, document.querySelectorAll( '#frm-show-fields li.frm_field_box' ).length );
+
 		const reserved = ++nextFieldOrder;
 
 		// The submit row is moved to the orders directly after the new field, so
@@ -3462,6 +3466,7 @@ window.frmAdminBuildJS = function() {
 			url: ajaxurl,
 			data: getInsertNewFieldArgs( fieldType, 0, formId, hasBreak ),
 			success( msg ) {
+				syncFieldOrderWithResponse( msg );
 				handleAddFieldClickResponse( msg );
 
 				const fieldId = checkMsgForFieldId( msg );
