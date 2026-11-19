@@ -46,6 +46,7 @@ const entries = {
     formidable_styles: './js/src/admin/styles.js',
     'formidable-color-picker': './js/src/color-picker/index.js',
     formidable_admin: './js/src/admin/admin.js',
+    formidable_admin_pro_compat: './js/src/admin/pro-compat/index.js',
     frm_testing_mode: './js/src/frm_testing_mode.js',
     'formidable-settings-components': './js/src/settings-components/index.js',
     'formidable-web-components': './js/src/web-components/index.js',

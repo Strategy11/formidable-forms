@@ -166,7 +166,8 @@
 				onDropdownShown( event ) {
 					const action = jQuery( event.currentTarget.closest( '.frm_form_action_settings, #frm-show-fields' ) );
 					if ( action.length ) {
-						jQuery( '#wpcontent' ).on( 'click', function() {
+						// Replace the previous handler so each open does not add another listener.
+						jQuery( '#wpcontent' ).off( 'click.frmMultiselect' ).on( 'click.frmMultiselect', function() {
 							if ( jQuery( '.multiselect-container.frm-dropdown-menu' ).is( ':visible' ) ) {
 								jQuery( event.currentTarget ).removeClass( 'open' );
 							}
@@ -412,6 +413,74 @@
 					() => func.apply( this, args ),
 					wait
 				);
+			};
+		},
+
+		/**
+		 * Debounce a function separately for each key, like one timer per input.
+		 *
+		 * The function receives the arguments passed after the key. When only a key is
+		 * passed, it receives the key.
+		 *
+		 * @since x.x
+		 *
+		 * @param {Function} func The function to debounce.
+		 * @param {number}   wait Milliseconds to wait after the last call for a key.
+		 * @return {Function} run( key, ...args ), with run.cancel( key ) and run.flush( key ).
+		 */
+		debounceByKey: ( func, wait = 100 ) => {
+			const pending = new Map();
+			const call = args => func( ...args );
+			const run = ( key, ...args ) => {
+				clearTimeout( pending.get( key )?.timeout );
+				const callArgs = args.length ? args : [ key ];
+				pending.set( key, {
+					args: callArgs,
+					timeout: setTimeout( () => {
+						pending.delete( key );
+						call( callArgs );
+					}, wait ),
+				} );
+			};
+			run.cancel = key => {
+				clearTimeout( pending.get( key )?.timeout );
+				pending.delete( key );
+			};
+			run.flush = key => {
+				const entry = pending.get( key );
+				if ( ! entry ) {
+					return;
+				}
+				run.cancel( key );
+				call( entry.args );
+			};
+			return run;
+		},
+
+		/**
+		 * Run a function at most once per animation frame, with the latest arguments.
+		 *
+		 * @since x.x
+		 *
+		 * @param {Function} func The function to throttle.
+		 * @return {Function} The throttled function.
+		 */
+		oncePerFrame: func => {
+			let scheduled = false;
+			let latestArgs = [];
+			const schedule = 'function' === typeof window.requestAnimationFrame
+				? callback => window.requestAnimationFrame( callback )
+				: callback => setTimeout( callback, 16 );
+			return ( ...args ) => {
+				latestArgs = args;
+				if ( scheduled ) {
+					return;
+				}
+				scheduled = true;
+				schedule( () => {
+					scheduled = false;
+					func( ...latestArgs );
+				} );
 			};
 		},
 		onClickPreventDefault: ( element, callback ) => {
