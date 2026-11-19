@@ -42,7 +42,7 @@ class FrmEntriesAJAXSubmitController {
 
 		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 
-		if ( ! $form_id ) {
+		if ( ! $form_id || is_array( $form_id ) ) {
 			echo json_encode( $response );
 			wp_die();
 		}

@@ -632,4 +632,22 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		$this->assertSame( 2, FrmFormsHelper::count_fields_without_submit( $fields ) );
 		$this->assertSame( 0, FrmFormsHelper::count_fields_without_submit( array() ) );
 	}
+
+	/**
+	 * @covers FrmFormsHelper::replace_shortcodes
+	 */
+	public function test_replace_shortcodes_ignores_array_entry_param() {
+		$form           = new stdClass();
+		$form->name     = 'Test';
+		$form->form_key = 'test';
+		$_GET['entry']  = array( 'x' );
+
+		try {
+			$html = FrmFormsHelper::replace_shortcodes( '<legend>[entry_key]</legend>', $form );
+		} finally {
+			unset( $_GET['entry'] );
+		}
+
+		$this->assertSame( '<legend></legend>', $html );
+	}
 }
