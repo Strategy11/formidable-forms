@@ -315,6 +315,7 @@ export function initFormOutline() {
 	const updateOutline = () => {
 		clearTimeout( renderTimeout );
 		clearTimeout( searchTimeout );
+		searchTimeout = null;
 		clearTimeout( jumpTimeout );
 		window.cancelAnimationFrame( scrollFrame );
 		scrollFrame = null;
@@ -453,7 +454,8 @@ export function initFormOutline() {
 		clearTimeout( jumpTimeout );
 		jumpTimeout = window.setTimeout( () => {
 			window.requestAnimationFrame( () => {
-				field.scrollIntoView( { behavior: 'smooth', block: 'start' } );
+				const reduceMotion = window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches;
+				field.scrollIntoView( { behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' } );
 			} );
 		}, expandedPage ? PAGE_EXPAND_DELAY : 0 );
 		highlightTimeout = window.setTimeout( () => {
