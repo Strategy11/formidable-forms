@@ -182,7 +182,7 @@ function createButtonConfig( fundingSource, color ) {
 		createOrder() {},
 		createSubscription() {},
 	};
-	runInNewContext( source.slice( start, end ) + '\ncreatePayPalButton( fundingSource, false );', { ...context, fundingSource } );
+	runInNewContext( `${ source.slice( start, end ) }\ncreatePayPalButton( fundingSource, false );`, { ...context, fundingSource } );
 	return config;
 }
 
