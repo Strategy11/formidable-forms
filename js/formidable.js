@@ -3168,7 +3168,7 @@ function frmFrontFormJS() {
 
 		roots.forEach( function( root ) {
 			const elements = Array.from( root.querySelectorAll( selector ) );
-			if ( root.matches && root.matches( selector ) ) {
+			if ( root.matches?.( selector ) ) {
 				elements.unshift( root );
 			}
 
@@ -3307,7 +3307,8 @@ function frmFrontFormJS() {
 
 			setSelectPlaceholderColor();
 			document.addEventListener( 'frmFieldsInserted', function( event ) {
-				applySelectPlaceholderColor( event.detail.container );
+				// Other plugins fire this event too, so fall back to the whole page without a container.
+				applySelectPlaceholderColor( event.detail?.container || document );
 			} );
 
 			// Elementor popup show event. Fix Elementor Popup && FF Captcha field conflicts

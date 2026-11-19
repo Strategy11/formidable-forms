@@ -89,8 +89,10 @@ function appendExtraData( data, extra ) {
 async function postPreviewRequest( action, data, signal ) {
 	// Actions are used as given when they already start with frm, like frm_refresh_field_preview or frmsurveys_preview.
 	const fullAction = action.startsWith( 'frm' ) ? action : `frm_${ action }`;
+	data.append( 'action', fullAction );
 	data.append( 'nonce', frmGlobal.nonce );
-	const response = await fetch( `${ ajaxurl }?action=${ encodeURIComponent( fullAction ) }`, {
+	// The action goes in the body, since ajaxurl can already have a query string, like a language parameter.
+	const response = await fetch( ajaxurl, {
 		method: 'POST',
 		body: data,
 		signal,
