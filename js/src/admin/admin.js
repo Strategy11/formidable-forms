@@ -9554,7 +9554,7 @@ window.frmAdminBuildJS = function() {
 	function showFieldOptions( obj ) {
 		const fieldId = obj.getAttribute( 'data-fid' );
 		renderFieldPreviewNow( fieldId );
-		obj = document.getElementById( `frm_field_id_${ fieldId }` );
+		obj = document.getElementById( `frm_field_id_${ fieldId }` ) || obj;
 		const fieldType = obj.getAttribute( 'data-type' );
 		hideActiveFieldSettings();
 
