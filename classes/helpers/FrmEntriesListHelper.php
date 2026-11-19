@@ -119,6 +119,10 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$order   = FrmAppHelper::get_param( 'order', 'DESC', 'request', 'sanitize_title' );
 		FrmAppController::apply_saved_sort_preference( $orderby, $order );
 
+		// A saved preference is stored as it was requested, so clean it before it is used in a URL or a query.
+		$orderby = sanitize_title( $orderby );
+		$order   = sanitize_title( $order );
+
 		return compact( 'orderby', 'order' );
 	}
 

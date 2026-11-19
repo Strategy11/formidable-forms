@@ -75,12 +75,40 @@ class test_FrmCSVExportSort extends FrmUnitTest {
 	}
 
 	/**
+	 * @covers FrmEntriesListHelper::get_sort_parameters
+	 */
+	public function test_saved_sort_preference_is_sanitized() {
+		set_current_screen( 'formidable_page_formidable-entries' );
+		$user_id = $this->factory->user->create( array( 'role' => 'administrator' ) );
+		wp_set_current_user( $user_id );
+		update_user_meta(
+			$user_id,
+			'frm_preferred_list_sort_' . get_current_screen()->id,
+			array(
+				'orderby' => 'id&form=2',
+				'order'   => 'DESC&item_id=1',
+			)
+		);
+
+		try {
+			$sort = FrmEntriesListHelper::get_sort_parameters();
+		} finally {
+			set_current_screen( 'front' );
+		}
+
+		$this->assertSame( 'idform2', $sort['orderby'], 'A saved column should not be able to add URL parameters.' );
+		$this->assertSame( 'descitem_id1', $sort['order'], 'A saved direction should not be able to add URL parameters.' );
+	}
+
+	/**
 	 * @covers FrmXMLController::csv
 	 *
 	 * @runInSeparateProcess
 	 *
 	 * @preserveGlobalState disabled
 	 */
+	#[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
+	#[\PHPUnit\Framework\Attributes\PreserveGlobalState( false )]
 	public function test_controller_reads_the_requested_sort() {
 		$this->set_current_user_to_1();
 		$form     = $this->factory->form->create_and_get();
@@ -119,6 +147,8 @@ class test_FrmCSVExportSort extends FrmUnitTest {
 	 *
 	 * @preserveGlobalState disabled
 	 */
+	#[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
+	#[\PHPUnit\Framework\Attributes\PreserveGlobalState( false )]
 	public function test_controller_applies_items_table_conditions_with_the_sort() {
 		$this->set_current_user_to_1();
 		$form     = $this->factory->form->create_and_get();
