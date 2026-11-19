@@ -726,7 +726,14 @@ class FrmEntry {
 		$order_by = FrmDb::esc_order( $order_by );
 
 		if ( preg_match( '/ meta_([0-9]+)/', $order_by, $order_matches ) ) {
-			$fields .= self::sort_by_field( $order_matches[1] );
+			$field_sort = self::sort_by_field( $order_matches[1] );
+
+			if ( $field_sort ) {
+				$fields .= $field_sort;
+			} else {
+				// Without a column to select, ORDER BY meta_{id} would break the query.
+				$order_by = preg_replace( '/ meta_[0-9]+(\+0)?/', ' id', $order_by );
+			}
 		}
 
 		return FrmDb::get_col( $wpdb->prefix . 'frm_items it', $where, $fields, array( 'order_by' => $order_by ) );

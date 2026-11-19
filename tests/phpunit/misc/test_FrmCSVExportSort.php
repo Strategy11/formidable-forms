@@ -101,6 +101,79 @@ class test_FrmCSVExportSort extends FrmUnitTest {
 	}
 
 	/**
+	 * @covers FrmEntriesListHelper::get_sort_query
+	 */
+	public function test_unknown_sort_column_falls_back_to_id() {
+		$form = $this->factory->form->create_and_get();
+		$ids  = $this->factory->entry->create_many( 3, $this->factory->field->generate_entry_array( $form ) );
+
+		foreach ( array( 'bogus', 'id;select', 'idselect', 'meta', 'meta_5;drop', 'it.id' ) as $orderby ) {
+			$sort = FrmEntriesListHelper::get_sort_query( $orderby, 'desc' );
+			$this->assertSame( ' ORDER BY id desc', $sort, 'Unknown sort column "' . $orderby . '" should fall back to the entry ID.' );
+		}
+
+		$this->assertSame( ' ORDER BY created_at asc', FrmEntriesListHelper::get_sort_query( 'created_at', 'asc' ), 'A known entry column should be kept.' );
+		$this->assertSame( ' ORDER BY meta_999999 asc', FrmEntriesListHelper::get_sort_query( 'meta_999999', 'asc' ), 'A field alias should be kept.' );
+
+		global $wpdb;
+		$sorted_ids = FrmEntry::get_sorted_ids( array( 'form_id' => $form->id ), FrmEntriesListHelper::get_sort_query( 'bogus', 'desc' ) );
+		$this->assertSame( '', $wpdb->last_error, 'An unknown sort column should not cause a database error.' );
+		$this->assertSame( array_reverse( $ids ), array_map( 'intval', $sorted_ids ), 'An unknown sort column should export newest first.' );
+	}
+
+	/**
+	 * @covers FrmEntry::get_sorted_ids
+	 */
+	public function test_post_field_sort_without_a_column_falls_back_to_id() {
+		$form     = $this->factory->form->create_and_get();
+		$field_id = $this->factory->field->create(
+			array(
+				'form_id'       => $form->id,
+				'type'          => 'text',
+				'field_options' => array( 'post_field' => 'post_title' ),
+			)
+		);
+		$ids      = $this->factory->entry->create_many( 3, array( 'form_id' => $form->id ) );
+		$filter   = '__return_empty_string';
+		add_filter( 'frm_handle_field_column_sort', $filter );
+
+		try {
+			global $wpdb;
+			$sorted_ids = FrmEntry::get_sorted_ids( array( 'form_id' => $form->id ), FrmEntriesListHelper::get_sort_query( 'meta_' . $field_id, 'desc' ) );
+			$this->assertSame( '', $wpdb->last_error, 'A field without a sortable column should not cause a database error.' );
+		} finally {
+			remove_filter( 'frm_handle_field_column_sort', $filter );
+		}
+
+		$this->assertSame( array_reverse( $ids ), array_map( 'intval', $sorted_ids ), 'A field without a sortable column should sort by entry ID.' );
+	}
+
+	/**
+	 * @covers FrmXMLController::csv
+	 *
+	 * @runInSeparateProcess
+	 *
+	 * @preserveGlobalState disabled
+	 */
+	#[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
+	#[\PHPUnit\Framework\Attributes\PreserveGlobalState( false )]
+	public function test_controller_ignores_an_unknown_sort_column() {
+		$this->set_current_user_to_1();
+		$form = $this->factory->form->create_and_get();
+		$ids  = $this->factory->entry->create_many( 3, $this->factory->field->generate_entry_array( $form ) );
+
+		$exported = $this->exported_ids_from_controller(
+			array(
+				'form'    => $form->id,
+				'orderby' => 'id;select',
+				'order'   => 'desc',
+			)
+		);
+
+		$this->assertSame( array_reverse( $ids ), $exported, 'An unknown sort column should export newest first instead of failing.' );
+	}
+
+	/**
 	 * @covers FrmXMLController::csv
 	 *
 	 * @runInSeparateProcess
