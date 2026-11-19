@@ -11404,7 +11404,7 @@ window.frmAdminBuildJS = function() {
 		installNewForm( this, action, button );
 	}
 
-	function installNewForm( form, action, button ) {
+	function installNewForm( form, action, button, skipAddonCheck = false ) {
 		const formData = formToData( form );
 		const formName = formData.template_name;
 		const formDesc = formData.template_desc;
@@ -11419,12 +11419,22 @@ window.frmAdminBuildJS = function() {
 			nonce: frmGlobal.nonce
 		};
 
+		if ( skipAddonCheck ) {
+			data.skip_addon_check = 1;
+		}
+
 		const hookName = 'frm_before_install_new_form';
 		const filterArgs = { formData };
 		data = wp.hooks.applyFilters( hookName, data, filterArgs );
 
 		postAjax( data, function( response ) {
-			if ( response.redirect !== undefined ) {
+			if ( response.missing_addons?.length ) {
+				const { showTemplateDependencies } = require( './template-dependencies' );
+				showTemplateDependencies( response.missing_addons, skip => {
+					button.classList.add( 'frm_loading_button' );
+					installNewForm( form, action, button, skip );
+				} );
+			} else if ( response.redirect !== undefined ) {
 				const { redirect } = response;
 				if ( form.elements.redirect === undefined ) {
 					window.location = redirect;
