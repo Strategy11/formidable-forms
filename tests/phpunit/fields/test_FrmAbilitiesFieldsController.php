@@ -251,6 +251,26 @@ class test_FrmAbilitiesFieldsController extends FrmUnitTest {
 	}
 
 	/**
+	 * A delete denied by frm_can_destroy_field is reported as denied, not as a missing field.
+	 *
+	 * @return void
+	 */
+	public function test_delete_field_reports_a_denied_delete() {
+		$field = $this->factory->field->create_and_get( array( 'form_id' => $this->form->id ) );
+		add_filter( 'frm_can_destroy_field', '__return_false' );
+
+		try {
+			$result = $this->execute( 'delete-field', array( 'id' => $field->id ) );
+		} finally {
+			remove_filter( 'frm_can_destroy_field', '__return_false' );
+		}
+
+		$this->assertWPError( $result );
+		$this->assertSame( 'frm_field_delete_denied', $result->get_error_code() );
+		$this->assertNotNull( FrmField::getOne( $field->id ), 'The field should not have been deleted.' );
+	}
+
+	/**
 	 * Form_id on delete-field is a guard, not a requirement: it only checks
 	 * that the field named actually belongs to the form named, so a field
 	 * that belongs to a different form should be refused rather than deleted.

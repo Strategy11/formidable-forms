@@ -6521,6 +6521,12 @@ window.frmAdminBuildJS = function() {
 				field_id: fieldId,
 				nonce: frmGlobal.nonce
 			},
+			error( xhr ) {
+				const message = xhr.responseJSON?.data?.message;
+				if ( message ) {
+					infoModal( message );
+				}
+			},
 			success() {
 				forgetFieldSettings( fieldId );
 				forgetFieldPreview( fieldId );
