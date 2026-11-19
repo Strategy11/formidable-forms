@@ -710,6 +710,36 @@ class FrmEntry {
 	}
 
 	/**
+	 * Fetch entry IDs in list order without loading every entry and its values.
+	 *
+	 * @since x.x
+	 *
+	 * @param array|string $where    Entry query conditions.
+	 * @param string       $order_by Sort clause for an entry column or field meta alias.
+	 *
+	 * @return array
+	 */
+	public static function get_sorted_ids( $where, $order_by ) {
+		global $wpdb;
+
+		$fields   = 'it.id';
+		$order_by = FrmDb::esc_order( $order_by );
+
+		if ( preg_match( '/ meta_([0-9]+)/', $order_by, $order_matches ) ) {
+			$field_sort = self::sort_by_field( $order_matches[1] );
+
+			if ( $field_sort ) {
+				$fields .= $field_sort;
+			} else {
+				// Without a column to select, ORDER BY meta_{id} would break the query.
+				$order_by = preg_replace( '/ meta_[0-9]+(\+0)?/', ' id', $order_by );
+			}
+		}
+
+		return FrmDb::get_col( $wpdb->prefix . 'frm_items it', $where, $fields, array( 'order_by' => $order_by ) );
+	}
+
+	/**
 	 * @param int|string $field_id
 	 *
 	 * @return string

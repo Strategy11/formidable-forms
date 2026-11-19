@@ -706,8 +706,6 @@ class FrmXMLController {
 			wp_raise_memory_limit();
 		}
 
-		global $wpdb;
-
 		$form = FrmForm::getOne( $form_id );
 
 		if ( ! $form ) {
@@ -742,7 +740,10 @@ class FrmXMLController {
 		 */
 		$query = apply_filters( 'frm_csv_where', $query, compact( 'form_id', 'search', 'fid', 'item_id' ) );
 
-		$entry_ids = FrmDb::get_col( $wpdb->prefix . 'frm_items it', $query );
+		$orderby   = FrmAppHelper::get_param( 'orderby', 'id', 'get', 'sanitize_title' );
+		$order     = FrmAppHelper::get_param( 'order', 'ASC', 'get', 'sanitize_title' );
+		$order_by  = FrmEntriesListHelper::get_sort_query( $orderby, $order );
+		$entry_ids = FrmEntry::get_sorted_ids( $query, $order_by );
 		unset( $query );
 
 		if ( $entry_ids ) {
