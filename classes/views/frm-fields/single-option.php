@@ -66,5 +66,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	</span>
 
-	<?php do_action( 'frm_admin_single_opt', compact( 'field', 'opt', 'opt_key' ) ); ?>
+	<?php
+	FrmOptionGroupsController::admin_single_opt( compact( 'field', 'opt_key' ) );
+	do_action( 'frm_admin_single_opt', compact( 'field', 'opt', 'opt_key' ) );
+	?>
 </li>

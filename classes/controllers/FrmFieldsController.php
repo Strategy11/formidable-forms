@@ -558,7 +558,7 @@ class FrmFieldsController {
 
 		if ( $field['separate_value'] ) {
 			foreach ( $opts as $opt_key => $opt ) {
-				if ( str_contains( $opt, '|' ) ) {
+				if ( str_contains( $opt, '|' ) && ! FrmOptionGroupsController::is_bulk_edit_group_line( $opt, $field ) ) {
 					$vals             = explode( '|', $opt );
 					$opts[ $opt_key ] = array(
 						'label' => trim( $vals[0] ),
@@ -569,6 +569,8 @@ class FrmFieldsController {
 				unset( $opt_key, $opt );
 			}
 		}
+
+		$opts = FrmOptionGroupsController::bulk_edit_options( $opts, $field );
 
 		// Keep other options after bulk update.
 		if ( ! empty( $field['field_options']['other'] ) ) {
