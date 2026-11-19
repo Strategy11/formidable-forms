@@ -155,3 +155,44 @@ test( 'a page change before the PayPal SDK loads leaves initialization to the bo
 	runInNewContext( `let thisForm, cardElementContainer, isRecurring;${ source.slice( start, end ) }`, context );
 	await context.paypalInit();
 } );
+
+/**
+ * Run the real createPayPalButton() and return the config passed to paypal.Buttons().
+ *
+ * @param {string} fundingSource The PayPal FUNDING constant.
+ * @param {string} color         The saved button color.
+ *
+ * @return {Object} The button config.
+ */
+function createButtonConfig( fundingSource, color ) {
+	const start = source.indexOf( '\tfunction createPayPalButton(' );
+	const end = source.indexOf( '\n\t// ---- Google Pay ----', start );
+	assert.ok( start >= 0 && end > start, 'Button creation boundaries must exist.' );
+	let config;
+	const context = {
+		frmPayPalVars: { buttonStyle: { color, label: 'paypal' } },
+		paypal: {
+			Buttons: buttonConfig => {
+				config = buttonConfig;
+			}
+		},
+		onApprove() {},
+		onError() {},
+		onCancel() {},
+		createOrder() {},
+		createSubscription() {},
+	};
+	runInNewContext( source.slice( start, end ) + '\ncreatePayPalButton( fundingSource, false );', { ...context, fundingSource } );
+	return config;
+}
+
+test( 'the PayPal button keeps every color PayPal supports for it', () => {
+	[ 'gold', 'blue', 'silver', 'white', 'black' ].forEach( color => {
+		assert.equal( createButtonConfig( 'paypal', color ).style.color, color );
+	} );
+} );
+
+test( 'a funding source drops a color it does not support', () => {
+	assert.equal( 'color' in createButtonConfig( 'venmo', 'gold' ).style, false );
+	assert.equal( 'color' in createButtonConfig( 'paypal', 'purple' ).style, false );
+} );
