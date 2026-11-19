@@ -384,7 +384,8 @@ function removeGroup( list, row ) {
 	ignoreOwnMoves( list );
 	render( list );
 	optionsChanged( list );
-	target.rows[ 0 ].querySelector( '.frm-option-group-name' )?.focus();
+	// The heading sits on the first row of the merged group, which is a moved row when the first group was removed.
+	getRunOf( list, target.rows[ 0 ] )?.rows[ 0 ].querySelector( '.frm-option-group-name' )?.focus();
 }
 
 /**
@@ -513,8 +514,8 @@ function initList( list ) {
 	// Mutation callbacks already arrive batched, once per task, so the list can be redrawn right away.
 	// Rendering only changes the rows' contents, which this observer does not watch.
 	const observer = new MutationObserver( records => {
-		// Wait until jQuery UI finishes a drag, and ignore the drop line of a group drag.
-		if ( list.querySelector( ':scope > .ui-sortable-placeholder, :scope > .frm-option-group-drop' ) ) {
+		// Wait until jQuery UI finishes a drag.
+		if ( list.querySelector( ':scope > .ui-sortable-placeholder' ) ) {
 			return;
 		}
 

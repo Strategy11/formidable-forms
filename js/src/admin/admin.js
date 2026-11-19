@@ -8227,7 +8227,8 @@ window.frmAdminBuildJS = function() {
 		}
 
 		const container = document.getElementById( `frm_field_${ fieldId }_opts` );
-		const conflicts = Array.from( container.querySelectorAll( 'input[type="text"]' ) ).filter(
+		// A group heading holds a name, not an option, so an option may share its text.
+		const conflicts = Array.from( container.querySelectorAll( 'input[type="text"]:not(.frm-option-group-name)' ) ).filter(
 			input => input.id !== targetInput.id &&
 				areValuesSeparate === input.name.endsWith( '[value]' ) &&
 				input.value === targetInput.value

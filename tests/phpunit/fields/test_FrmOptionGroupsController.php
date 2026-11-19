@@ -124,6 +124,45 @@ class test_FrmOptionGroupsController extends FrmUnitTest {
 		$this->assertSame( '', ob_get_clean(), 'Rendering should close the last group and reset its state.' );
 	}
 
+	public function test_bulk_edit_group_lines_are_not_split_into_values() {
+		$select = array( 'type' => 'select' );
+
+		$this->assertTrue( FrmOptionGroupsController::is_bulk_edit_group_line( '## Fruit|Veg', $select ), 'A group name may contain the separate value divider.' );
+		$this->assertTrue( FrmOptionGroupsController::is_bulk_edit_group_line( '##', $select ), 'The marker alone ends a group.' );
+		$this->assertFalse( FrmOptionGroupsController::is_bulk_edit_group_line( 'Apple|a', $select ), 'An option line should still be split.' );
+		$this->assertFalse( FrmOptionGroupsController::is_bulk_edit_group_line( '## Fruit|Veg', array( 'type' => 'radio' ) ), 'Radio options should keep literal group markers.' );
+	}
+
+	public function test_group_name_is_not_a_valid_value() {
+		$form_id = $this->factory->form->create();
+		$field   = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $form_id,
+				'type'    => 'select',
+				'options' => array(
+					array(
+						'label' => 'Apple',
+						'value' => 'Apple',
+						'group' => 'Fruit',
+					),
+				),
+			)
+		);
+
+		foreach ( array(
+			'Apple' => true,
+			'Fruit' => false,
+		) as $value => $valid ) {
+			$errors = array();
+			$values = array(
+				'form_id'   => $form_id,
+				'item_meta' => array( $field->id => $value ),
+			);
+			FrmEntryValidate::validate_field( $field, $errors, $values );
+			$this->assertSame( $valid, ! isset( $errors[ 'field' . $field->id ] ), 'Only option values should be accepted, never a group name.' );
+		}
+	}
+
 	public function test_builder_includes_group_inputs_only_for_supported_options() {
 		$field = array(
 			'id'      => 123,

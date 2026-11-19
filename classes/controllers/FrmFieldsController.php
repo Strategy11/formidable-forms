@@ -558,7 +558,7 @@ class FrmFieldsController {
 
 		if ( $field['separate_value'] ) {
 			foreach ( $opts as $opt_key => $opt ) {
-				if ( str_contains( $opt, '|' ) ) {
+				if ( str_contains( $opt, '|' ) && ! FrmOptionGroupsController::is_bulk_edit_group_line( $opt, $field ) ) {
 					$vals             = explode( '|', $opt );
 					$opts[ $opt_key ] = array(
 						'label' => trim( $vals[0] ),

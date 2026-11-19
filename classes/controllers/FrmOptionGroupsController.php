@@ -147,6 +147,20 @@ class FrmOptionGroupsController {
 	}
 
 	/**
+	 * A group line holds a group name, so it is never split into a label and a saved value.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $line  One line of the Bulk Edit Options text.
+	 * @param array  $field The field the options belong to.
+	 *
+	 * @return bool
+	 */
+	public static function is_bulk_edit_group_line( $line, $field ) {
+		return is_string( $line ) && str_starts_with( $line, self::BULK_EDIT_MARKER ) && self::field_supports_groups( $field );
+	}
+
+	/**
 	 * Turns "## Group name" lines from the Bulk Edit Options text into groups
 	 * for the options that follow them.
 	 *
