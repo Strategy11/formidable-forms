@@ -66,7 +66,7 @@ class FrmHooksController {
 		add_filter( 'widget_text', 'do_shortcode' );
 
 		add_action( 'frm_enqueue_form_scripts', 'FrmAltchaController::maybe_enqueue_for_form' );
-		add_filter( 'frm_validate_entry', 'FrmAltchaController::claim_solution', 999, 2 );
+		add_filter( 'frm_validate_entry', 'FrmAltchaController::claim_solution', 999 );
 		add_filter( 'frm_usage_snapshot', 'FrmAltchaUsageHelper::add_snapshot_data' );
 		add_action( FrmAltchaReplayHelper::PURGE_HOOK, 'FrmAltchaReplayHelper::purge' );
 		add_action( 'frm_after_uninstall', 'FrmAltchaReplayHelper::uninstall' );

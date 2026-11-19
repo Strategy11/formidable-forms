@@ -165,6 +165,63 @@ class test_FrmAltchaSubmit extends FrmUnitTest {
 	}
 
 	/**
+	 * A captcha in an embedded form belongs to another form than the entry being validated.
+	 * Its solution must still be spent when the entry passes.
+	 *
+	 * @covers FrmAltchaController::verify_response
+	 * @covers FrmAltchaController::claim_solution
+	 */
+	public function test_captcha_from_another_form_is_spent() {
+		$embedded_form_id             = (int) $this->factory->form->create();
+		$embedded_captcha             = FrmField::getOne(
+			$this->factory->field->create(
+				array(
+					'type'    => 'captcha',
+					'form_id' => $embedded_form_id,
+				)
+			)
+		);
+		$payload                      = FrmAltchaTestHelper::solve( FrmAltchaTestHelper::challenge() );
+		$challenge_id                 = FrmAltchaChallengeHelper::verify( $payload )['id'];
+		$_POST['frm-altcha-response'] = $payload;
+		$response                     = FrmAltchaController::verify_response( FrmCaptchaFactory::get_settings_object(), $embedded_captcha );
+
+		$this->assertTrue( $response['success'] );
+		$this->assertFalse( FrmAltchaReplayHelper::is_used( $challenge_id ) );
+
+		// Runs on frm_validate_entry, once the parent form's entry has no errors.
+		$errors = FrmAltchaController::claim_solution( array() );
+
+		$this->assertSame( array(), $errors );
+		$this->assertTrue( FrmAltchaReplayHelper::is_used( $challenge_id ) );
+	}
+
+	/**
+	 * The widget only loads for forms that have a captcha field.
+	 *
+	 * @covers FrmAltchaController::maybe_enqueue_for_form
+	 */
+	public function test_widget_is_only_enqueued_for_forms_with_a_captcha() {
+		$plain_form_id = (int) $this->factory->form->create();
+		$this->factory->field->create(
+			array(
+				'type'    => 'text',
+				'form_id' => $plain_form_id,
+			)
+		);
+		wp_dequeue_script( 'captcha-api' );
+
+		FrmAltchaController::maybe_enqueue_for_form( array( 'form_id' => $plain_form_id ) );
+		$this->assertFalse( wp_script_is( 'captcha-api', 'enqueued' ) );
+
+		FrmAltchaController::maybe_enqueue_for_form( array( 'form_id' => $this->form_id ) );
+		$this->assertTrue( wp_script_is( 'captcha-api', 'enqueued' ) );
+
+		wp_dequeue_script( 'captcha-api' );
+		wp_dequeue_style( 'frm-altcha' );
+	}
+
+	/**
 	 * Simulate a database user that cannot write to the replay table.
 	 *
 	 * @param string $query The query about to execute.

@@ -17,12 +17,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmAltchaController {
 
 	/**
-	 * Verified solutions waiting to be spent, keyed by form ID.
+	 * Verified solutions waiting to be spent, keyed by challenge ID.
 	 *
 	 * A solution is only spent once the whole entry passes validation, see claim_solution().
 	 * That way a visitor who fixes another field and submits again keeps their solution.
 	 *
-	 * @var array<int, array{id: string, expires: int, field_id: int, message: string}>
+	 * This is not keyed by form. A captcha in an embedded form belongs to the embedded form,
+	 * but it is validated with the parent form's entry.
+	 *
+	 * @var array<string, array{id: string, expires: int, field_id: int, message: string}>
 	 */
 	private static $pending = array();
 
@@ -83,13 +86,10 @@ class FrmAltchaController {
 			);
 		}
 
-		$field_id = (int) ( is_object( $field ) ? $field->id : $field['id'] );
-		$form_id  = (int) ( is_object( $field ) ? $field->form_id : $field['form_id'] );
-
-		self::$pending[ $form_id ] = array(
+		self::$pending[ $result['id'] ] = array(
 			'id'       => $result['id'],
 			'expires'  => $result['expires'],
-			'field_id' => $field_id,
+			'field_id' => (int) ( is_object( $field ) ? $field->id : $field['id'] ),
 			'message'  => self::invalid_message( $field ),
 		);
 
@@ -104,20 +104,35 @@ class FrmAltchaController {
 	 * @since x.x
 	 *
 	 * @param array $errors Validation errors so far.
-	 * @param array $values Submitted values, including the form ID.
 	 *
 	 * @return array
 	 */
-	public static function claim_solution( $errors, $values ) {
-		$form_id = isset( $values['form_id'] ) ? (int) $values['form_id'] : 0;
-		$pending = self::$pending[ $form_id ] ?? null;
+	public static function claim_solution( $errors ) {
+		$solutions     = self::$pending;
+		self::$pending = array();
 
-		unset( self::$pending[ $form_id ] );
-
-		if ( null === $pending || ! is_array( $errors ) || array() !== $errors ) {
+		if ( ! is_array( $errors ) || array() !== $errors ) {
 			return $errors;
 		}
 
+		foreach ( $solutions as $solution ) {
+			$errors = self::claim_pending_solution( $errors, $solution );
+		}
+
+		return $errors;
+	}
+
+	/**
+	 * Spend one verified solution, and add the captcha field's error when it cannot be spent.
+	 *
+	 * @since x.x
+	 *
+	 * @param array                                                           $errors  Validation errors so far.
+	 * @param array{id: string, expires: int, field_id: int, message: string} $pending The verified solution.
+	 *
+	 * @return array
+	 */
+	private static function claim_pending_solution( $errors, $pending ) {
 		if ( FrmAltchaReplayHelper::claim( $pending['id'], $pending['expires'] ) ) {
 			return $errors;
 		}
@@ -178,9 +193,8 @@ class FrmAltchaController {
 			return;
 		}
 
-		$field = FrmField::get_all_types_in_form( $form_id, 'captcha', 1, 'include' );
-
-		if ( ! is_object( $field ) && array() === $field ) {
+		// No limit here. With a limit of one, a form without a captcha field can return null instead of an empty array.
+		if ( ! FrmField::get_all_types_in_form( $form_id, 'captcha', '', 'include' ) ) {
 			return;
 		}
 
