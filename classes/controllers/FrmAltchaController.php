@@ -186,7 +186,7 @@ class FrmAltchaController {
 
 		self::styles();
 		// The same handle and dependency Lite uses, so the script is never loaded twice.
-		wp_enqueue_script( 'captcha-api', self::script_url(), array( 'formidable' ), null, true );
+		wp_enqueue_script( 'captcha-api', self::script_url(), array( 'formidable' ), FrmAppHelper::plugin_version(), true );
 	}
 
 	/**
@@ -208,7 +208,7 @@ class FrmAltchaController {
 		}
 
 		// Register before Lite does, so both loading paths retain the translation dependency.
-		wp_register_script( 'captcha-api', $url, $dependencies, null, true );
+		wp_register_script( 'captcha-api', $url, $dependencies, FrmAppHelper::plugin_version(), true );
 
 		return $url;
 	}
