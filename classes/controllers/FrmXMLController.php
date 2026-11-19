@@ -67,7 +67,9 @@ class FrmXMLController {
 			wp_die();
 		}
 
-		$missing_addons = FrmTemplateDependenciesHelper::get_missing_addons( $url );
+		// The user can choose to import anyway when an add-on is not available to them.
+		$skip_addon_check = FrmAppHelper::get_param( 'skip_addon_check', '', 'post', 'absint' );
+		$missing_addons   = $skip_addon_check ? array() : FrmTemplateDependenciesHelper::get_missing_addons( $url );
 
 		if ( $missing_addons ) {
 			wp_send_json( array( 'missing_addons' => $missing_addons ) );

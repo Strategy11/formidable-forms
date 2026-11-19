@@ -17,7 +17,7 @@ const MODAL_ID = 'frmTemplateDependenciesModal';
  * @since x.x
  *
  * @param {Array}    addons   Missing dependencies returned by the server.
- * @param {Function} onImport Retry the import with a fresh dependency check.
+ * @param {Function} onImport Retry the import. Pass true to import without the add-ons.
  * @return {void}
  */
 export function showTemplateDependencies( addons, onImport ) {
@@ -70,7 +70,21 @@ export function showTemplateDependencies( addons, onImport ) {
 		} );
 		primaryButton.type = 'button';
 		footerButtons.push( primaryButton );
-	} else if ( manual.some( row => row.addon.url ) ) {
+	} else {
+		// Nothing can be installed from here, so the template can still be used without its add-ons.
+		const skipButton = tag( 'button', {
+			className: 'button button-secondary frm-button-secondary',
+			text: __( 'Use template anyway', 'formidable' )
+		} );
+		skipButton.type = 'button';
+		skipButton.addEventListener( 'click', () => {
+			closeButton.click();
+			onImport( true );
+		} );
+		footerButtons.push( skipButton );
+	}
+
+	if ( ! pending.length && manual.some( row => row.addon.url ) ) {
 		const manageLink = tag( 'a', {
 			className: 'button button-primary frm-button-primary',
 			text: __( 'Go to add-ons', 'formidable' )
@@ -100,11 +114,21 @@ export function showTemplateDependencies( addons, onImport ) {
 		primaryButton.classList.add( 'frm_loading_button' );
 		cancelButton.setAttribute( 'aria-disabled', 'true' );
 
+		let closed = false;
+		jQuery( modal ).one( 'dialogclose', () => {
+			closed = true;
+		} );
+
 		let failed = false;
 		// One at a time, since each request installs or activates a plugin.
 		for ( const row of pending.filter( item => ! item.done ) ) {
 			if ( ! await row.activate() ) {
 				failed = true;
+			}
+
+			if ( closed ) {
+				// The modal was closed while an add-on was installing, so do not import the template.
+				return;
 			}
 		}
 
@@ -116,7 +140,6 @@ export function showTemplateDependencies( addons, onImport ) {
 			return;
 		}
 
-		primaryButton.textContent = __( 'Creating form…', 'formidable' );
 		closeButton.click();
 		onImport();
 	} );

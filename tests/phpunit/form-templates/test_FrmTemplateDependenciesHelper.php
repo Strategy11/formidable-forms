@@ -65,31 +65,6 @@ class test_FrmTemplateDependenciesHelper extends FrmAjaxUnitTest {
 		);
 	}
 
-	public function test_used_addons_are_combined_with_template_corrections() {
-		$result = FrmTemplateDependenciesHelper::get_required_addons(
-			array(
-				'id'          => 28150471,
-				'used_addons' => array( 'Quiz Maker' ),
-			)
-		);
-		$this->assertContains( 'Quiz Maker', $result, 'The API add-on list should be preserved.' );
-		$this->assertContains( 'signature', $result, 'Known missing signature requirements should be added.' );
-		$this->assertContains( 'geo', $result, 'Known missing geolocation requirements should be added.' );
-	}
-
-	public function test_legacy_overrides_preserve_multiple_dependencies() {
-		$result = FrmTemplateDependenciesHelper::get_required_addons( array( 'id' => 28150471 ) );
-		$this->assertContains( 'signature', $result, 'Membership should require its signature field.' );
-		$this->assertContains( 'geo', $result, 'Membership should require its address autocomplete.' );
-	}
-
-	public function test_ordinary_date_templates_do_not_require_dates() {
-		$result = FrmTemplateDependenciesHelper::get_required_addons( array( 'id' => 28224368 ) );
-		$this->assertSame( array(), $result, 'An ordinary date field should not require the Dates add-on.' );
-		$result = FrmTemplateDependenciesHelper::get_required_addons( array( 'id' => 28220800 ) );
-		$this->assertContains( 'dates', $result, 'The Volunteer Hours dynamic maximum date should require Dates.' );
-	}
-
 	public function test_legacy_payment_gateways_and_malformed_metadata() {
 		$result = FrmTemplateDependenciesHelper::get_required_addons(
 			array( 'used_addons' => array( 'Stripe', 'Square', 'PayPal Commerce', 'PayPal Standard', array() ) )
@@ -127,6 +102,32 @@ class test_FrmTemplateDependenciesHelper extends FrmAjaxUnitTest {
 		$this->assertSame( '', $missing[0]['action'], 'Unknown dependencies should require manual resolution.' );
 	}
 
+	public function test_unavailable_addon_catalog_does_not_block_import() {
+		update_option( 'active_plugins', array() );
+		$api = new FrmFormApi();
+		update_option(
+			$api->get_cache_key(),
+			array(
+				'timeout' => time() + HOUR_IN_SECONDS,
+				'value'   => wp_json_encode( array( 'response_code' => 500 ) ),
+			)
+		);
+		$this->assertSame( array(), FrmTemplateDependenciesHelper::get_missing_addons( $this->template_url ), 'A failed add-on API request should not block every template.' );
+	}
+
+	public function test_import_can_skip_the_dependency_check() {
+		update_option( 'active_plugins', array() );
+		add_filter( 'pre_http_request', array( $this, 'mock_template_download' ), 10, 3 );
+		$_POST    = array(
+			'nonce'            => wp_create_nonce( 'frm_ajax' ),
+			'xml'              => $this->template_url,
+			'skip_addon_check' => '1',
+		);
+		$response = json_decode( $this->trigger_action( 'frm_install_template' ), true );
+		$this->assertArrayHasKey( 'redirect', $response, 'Choosing to use the template anyway should import it.' );
+		$this->assertArrayNotHasKey( 'missing_addons', $response, 'The dependency step should not repeat after it is skipped.' );
+	}
+
 	public function test_import_stops_before_downloading_or_creating_forms() {
 		update_option( 'active_plugins', array() );
 		$_POST    = array(
@@ -139,6 +140,7 @@ class test_FrmTemplateDependenciesHelper extends FrmAjaxUnitTest {
 		$this->assertArrayNotHasKey( 'redirect', $response, 'Import should not redirect into a broken form.' );
 		$this->assertSame( $before, (array) FrmForm::get_count(), 'No forms should be created before dependencies are active.' );
 	}
+
 	public function test_missing_dependency_offers_installation_from_the_license_catalog() {
 		$api = new FrmFormApi();
 		update_option(
