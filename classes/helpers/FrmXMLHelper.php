@@ -2049,8 +2049,8 @@ class FrmXMLHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param string $value Stored field value.
-	 * @param object $field Field being exported.
+	 * @param string|null $value Stored field value. Empty database columns are null.
+	 * @param object      $field Field being exported.
 	 *
 	 * @return string XML character data.
 	 */
@@ -2060,7 +2060,7 @@ class FrmXMLHelper {
 		}
 
 		// XML normalizes carriage returns and rejects some otherwise valid source characters.
-		return '<![CDATA[' . base64_encode( $value ) . ']]>';
+		return '<![CDATA[' . base64_encode( (string) $value ) . ']]>';
 	}
 
 	/**

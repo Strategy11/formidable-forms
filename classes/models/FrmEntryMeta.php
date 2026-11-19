@@ -382,7 +382,7 @@ class FrmEntryMeta {
 		$field_type = FrmField::get_type( $field_id );
 		FrmFieldsHelper::prepare_field_value( $result, $field_type );
 
-		return self::maybe_unslash_field_value( $result, $field_id, $field_type );
+		return self::maybe_unslash_field_value( $result, $field_id, (string) $field_type );
 	}
 
 	/**
@@ -527,7 +527,7 @@ class FrmEntryMeta {
 
 		foreach ( $results as $k => $result ) {
 			FrmAppHelper::unserialize_or_decode( $result->meta_value );
-			$results[ $k ]->meta_value = self::maybe_unslash_field_value( $result->meta_value, $result->field_id, $result->field_type );
+			$results[ $k ]->meta_value = self::maybe_unslash_field_value( $result->meta_value, $result->field_id, (string) $result->field_type );
 			unset( $k, $result );
 		}
 

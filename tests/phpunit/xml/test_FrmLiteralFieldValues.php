@@ -17,6 +17,20 @@ class test_FrmLiteralFieldValues extends FrmUnitTest {
 		}
 	}
 
+	public function test_literal_xml_accepts_empty_columns() {
+		$field = (object) array( 'type' => 'code' );
+		add_filter( 'frm_xml_field_value_is_literal', '__return_true' );
+
+		try {
+			// A field saved without a description stores null in that column.
+			$this->assertSame( '<![CDATA[]]>', FrmXMLHelper::field_value_to_xml( null, $field ), 'An empty column exports as an empty value.' );
+			$xml = simplexml_load_string( '<description encoding="base64">' . FrmXMLHelper::field_value_to_xml( null, $field ) . '</description>' );
+			$this->assertSame( '', FrmXMLHelper::field_value_from_xml( $xml, $field ), 'An empty value imports as an empty string.' );
+		} finally {
+			remove_filter( 'frm_xml_field_value_is_literal', '__return_true' );
+		}
+	}
+
 	public function test_compound_values_keep_legacy_decoding() {
 		$field = (object) array( 'type' => 'checkbox' );
 		$this->assertSame( array(), FrmXMLHelper::field_value_xml_attributes( $field ), 'Existing fields have no encoding marker.' );
