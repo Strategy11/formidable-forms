@@ -25,6 +25,10 @@ use PHP_CodeSniffer\Files\File;
  * $wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $this->table ) );
  *
  * CREATE TABLE statements are exempt because they are built for dbDelta(), which cannot use prepare().
+ *
+ * Only queries that can be rewritten from what is already in the source are reported.
+ * A query with another dynamic SQL fragment, numbered placeholders, an array of
+ * prepare() arguments, or a percent sign outside prepare() is left alone.
  */
 class PreferIdentifierPlaceholderSniff implements Sniff {
 
@@ -132,12 +136,7 @@ class PreferIdentifierPlaceholderSniff implements Sniff {
 		}
 
 		if ( ! $isPrepare ) {
-			$phpcsFile->addError(
-				'Table name built into SQL passed to $wpdb->%s() without prepare(). Wrap the query in $wpdb->prepare() and use the %%i placeholder for the identifier.',
-				$refs[0]['ptr'],
-				'TableNotPrepared',
-				array( $methodName )
-			);
+			$this->handle_unprepared_refs( $phpcsFile, $parts, $refs, $methodName );
 
 			return;
 		}
@@ -514,7 +513,7 @@ class PreferIdentifierPlaceholderSniff implements Sniff {
 	}
 
 	/**
-	 * Reports and, when safe, fixes table references inside a $wpdb->prepare() call.
+	 * Reports and fixes table references inside a $wpdb->prepare() call when the rewrite is safe.
 	 *
 	 * @param File  $phpcsFile  The file being scanned.
 	 * @param array $parts      The concatenation parts of the first argument.
@@ -531,18 +530,11 @@ class PreferIdentifierPlaceholderSniff implements Sniff {
 
 		if ( $fixable && false !== $args ) {
 			$placeholderTotal = $this->count_placeholders_in_literals( $parts );
-			$fixable          = count( $args ) === $placeholderTotal;
+			$fixable          = count( $args ) === $placeholderTotal && ! $this->has_array_arg( $phpcsFile, $args );
 		}
 
 		if ( ! $fixable || false === $args ) {
-			foreach ( $refs as $ref ) {
-				$phpcsFile->addError(
-					'Table name built into $wpdb->prepare() SQL. Use the %i placeholder and pass the identifier as a prepare() argument.',
-					$ref['ptr'],
-					'TableInPrepare'
-				);
-			}
-
+			// The rewrite cannot be derived from the source, so the call is left for a manual change.
 			return;
 		}
 
@@ -561,6 +553,92 @@ class PreferIdentifierPlaceholderSniff implements Sniff {
 		}
 
 		$this->apply_fix( $phpcsFile, $parts, $refs, $openParen, $argEnd, $closeParen, $args );
+	}
+
+	/**
+	 * Checks whether a prepare() argument is an array literal.
+	 *
+	 * prepare() only unpacks an array when it is the sole argument, so an identifier
+	 * cannot be inserted next to it.
+	 *
+	 * @param File  $phpcsFile The file being scanned.
+	 * @param array $args      The existing argument token ranges.
+	 *
+	 * @return bool
+	 */
+	private function has_array_arg( File $phpcsFile, $args ) {
+		$tokens = $phpcsFile->getTokens();
+
+		foreach ( $args as $arg ) {
+			if ( in_array( $tokens[ $arg['start'] ]['code'], array( T_ARRAY, T_OPEN_SHORT_ARRAY ), true ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Reports and fixes table references in SQL passed to a $wpdb query method without prepare().
+	 *
+	 * The query is only reported when it can be wrapped in prepare() without changing
+	 * its meaning. A percent sign or a leftover interpolated value would be read as a
+	 * placeholder by prepare(), so those queries are left alone.
+	 *
+	 * @param File   $phpcsFile  The file being scanned.
+	 * @param array  $parts      The concatenation parts of the first argument.
+	 * @param array  $refs       The detected table references.
+	 * @param string $methodName The $wpdb method that receives the SQL.
+	 *
+	 * @return void
+	 */
+	private function handle_unprepared_refs( File $phpcsFile, $parts, $refs, $methodName ) {
+		if ( ! $this->refs_are_fixable( $parts, $refs ) ) {
+			return;
+		}
+
+		foreach ( $parts as $part ) {
+			if ( 'expr' !== $part['type'] && false !== strpos( $part['content'], '%' ) ) {
+				return;
+			}
+		}
+
+		$newParts = $this->build_new_parts( $parts, $refs );
+
+		foreach ( $newParts as $newPart ) {
+			if ( 'dq' === $newPart['type'] && preg_match( '/' . self::INTERP_SEGMENT . '/', $newPart['content'] ) ) {
+				return;
+			}
+		}
+
+		$fix = $phpcsFile->addFixableError(
+			'Table name built into SQL passed to $wpdb->%s() without prepare(). Wrap the query in $wpdb->prepare() and use the %%i placeholder for the identifier.',
+			$refs[0]['ptr'],
+			'TableNotPrepared',
+			array( $methodName )
+		);
+
+		if ( true !== $fix ) {
+			return;
+		}
+
+		$exprs = array();
+
+		foreach ( $refs as $ref ) {
+			$exprs[] = $ref['expr'];
+		}
+
+		$sqlStart = $parts[0]['start'];
+		$sqlEnd   = $parts[ count( $parts ) - 1 ]['end'];
+
+		$phpcsFile->fixer->beginChangeset();
+		$phpcsFile->fixer->replaceToken( $sqlStart, '$wpdb->prepare( ' . $this->render_parts( $newParts ) . ', ' . implode( ', ', $exprs ) . ' )' );
+
+		for ( $i = $sqlStart + 1; $i <= $sqlEnd; $i++ ) {
+			$phpcsFile->fixer->replaceToken( $i, '' );
+		}
+
+		$phpcsFile->fixer->endChangeset();
 	}
 
 	/**
@@ -797,19 +875,48 @@ class PreferIdentifierPlaceholderSniff implements Sniff {
 		}
 
 		foreach ( $bySlot as $slot => $exprs ) {
-			$code = implode( ', ', $exprs );
-
 			if ( isset( $args[ $slot ] ) ) {
-				$phpcsFile->fixer->addContentBefore( $args[ $slot ]['start'], $code . ', ' );
+				$separator = $this->get_arg_separator( $phpcsFile, $args[ $slot ]['start'] );
+				$phpcsFile->fixer->addContentBefore( $args[ $slot ]['start'], implode( $separator, $exprs ) . $separator );
 			} elseif ( $args ) {
-				$lastArg = $args[ count( $args ) - 1 ];
-				$phpcsFile->fixer->addContent( $lastArg['end'], ', ' . $code );
+				$lastArg   = $args[ count( $args ) - 1 ];
+				$separator = $this->get_arg_separator( $phpcsFile, $lastArg['start'] );
+				$phpcsFile->fixer->addContent( $lastArg['end'], $separator . implode( $separator, $exprs ) );
 			} else {
-				$phpcsFile->fixer->addContent( $sqlEnd, ', ' . $code );
+				$separator = $this->get_arg_separator( $phpcsFile, $sqlStart );
+				$phpcsFile->fixer->addContent( $sqlEnd, $separator . implode( $separator, $exprs ) );
 			}
 		}
 
 		$phpcsFile->fixer->endChangeset();
+	}
+
+	/**
+	 * Gets the separator to put between an inserted argument and its neighbor.
+	 *
+	 * An argument that starts its own line gets inserted arguments on their own lines
+	 * with the same indentation, so a multiline call stays one argument per line.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $argStart  The first token of the neighboring argument.
+	 *
+	 * @return string
+	 */
+	private function get_arg_separator( File $phpcsFile, $argStart ) {
+		$tokens = $phpcsFile->getTokens();
+		$prev   = $phpcsFile->findPrevious( T_WHITESPACE, $argStart - 1, null, true );
+
+		if ( false === $prev || $tokens[ $prev ]['line'] === $tokens[ $argStart ]['line'] ) {
+			return ', ';
+		}
+
+		$indent = '';
+
+		if ( T_WHITESPACE === $tokens[ $argStart - 1 ]['code'] && $tokens[ $argStart - 1 ]['line'] === $tokens[ $argStart ]['line'] ) {
+			$indent = $tokens[ $argStart - 1 ]['content'];
+		}
+
+		return ',' . $phpcsFile->eolChar . $indent;
 	}
 
 	/**

@@ -340,7 +340,7 @@ class FrmMigrate {
 		$index_name = 'idx_form_id_created_at';
 
 		if ( ! self::index_exists( $table_name, $index_name ) ) {
-			$wpdb->query( "CREATE INDEX idx_form_id_created_at ON `{$wpdb->prefix}frm_items` (form_id, created_at)" );
+			$wpdb->query( $wpdb->prepare( 'CREATE INDEX idx_form_id_created_at ON %i (form_id, created_at)', $table_name ) );
 		}
 
 		/**
@@ -351,14 +351,14 @@ class FrmMigrate {
 		$index_name = 'idx_parent_form_id';
 
 		if ( ! self::index_exists( $table_name, $index_name ) ) {
-			$wpdb->query( "CREATE INDEX idx_parent_form_id ON `{$wpdb->prefix}frm_forms` (parent_form_id)" );
+			$wpdb->query( $wpdb->prepare( 'CREATE INDEX idx_parent_form_id ON %i (parent_form_id)', $table_name ) );
 		}
 
 		$table_name = "{$wpdb->prefix}frm_forms";
 		$index_name = 'frm_forms_template_status';
 
 		if ( ! self::index_exists( $table_name, $index_name ) ) {
-			$wpdb->query( "CREATE INDEX frm_forms_template_status ON `{$wpdb->prefix}frm_forms` (is_template, status, parent_form_id)" );
+			$wpdb->query( $wpdb->prepare( 'CREATE INDEX frm_forms_template_status ON %i (is_template, status, parent_form_id)', $table_name ) );
 		}
 	}
 
