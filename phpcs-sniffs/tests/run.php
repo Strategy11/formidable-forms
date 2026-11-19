@@ -40,6 +40,23 @@ function run_sniff_command( $command ) {
 }
 
 /**
+ * Find the sniff file for a fixture in any category of the custom sniff library.
+ *
+ * @param string $root Lite checkout path.
+ * @param string $name Sniff name without the Sniff suffix.
+ *
+ * @return string Sniff file path.
+ */
+function find_sniff_path( $root, $name ) {
+	$paths = glob( $root . '/phpcs-sniffs/Formidable/Sniffs/*/' . $name . 'Sniff.php' );
+
+	if ( ! $paths || 1 !== count( $paths ) ) {
+		throw new RuntimeException( $name . ': cannot find exactly one sniff file.' );
+	}
+	return $paths[0];
+}
+
+/**
  * Count the violations the full Lite standard reports for a file, grouped by sniff source.
  *
  * @param string $root Lite checkout path.
@@ -68,8 +85,7 @@ try {
 	$rules = '<ruleset name="FormidableFixtures">';
 
 	foreach ( $expected as $name => $lines ) {
-		$fixturePath = $root . '/phpcs-sniffs/Formidable/Sniffs/CodeAnalysis/' . $name . 'Sniff.php';
-		$rules      .= '<rule ref="' . htmlspecialchars( $fixturePath, ENT_QUOTES, 'UTF-8' ) . '" />';
+		$rules .= '<rule ref="' . htmlspecialchars( find_sniff_path( $root, $name ), ENT_QUOTES, 'UTF-8' ) . '" />';
 	}
 	$rules .= '</ruleset>';
 	file_put_contents( $scratch . '/ruleset.xml', $rules );
@@ -177,7 +193,7 @@ try {
 			foreach ( $report['files'][ $fixturePath ]['messages'] as $message ) {
 				$sourceParts = explode( '.', $message['source'] );
 
-				if ( array_slice( $sourceParts, 0, 3 ) !== array( 'Formidable', 'CodeAnalysis', (string) $name ) ) {
+				if ( array_slice( $sourceParts, 0, 3 ) !== array( 'Formidable', basename( dirname( find_sniff_path( $root, $name ) ) ), (string) $name ) ) {
 					continue;
 				}
 

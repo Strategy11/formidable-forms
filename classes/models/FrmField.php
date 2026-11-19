@@ -923,9 +923,9 @@ class FrmField {
 
 		self::delete_form_transient( $field->form_id );
 
-		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_item_metas WHERE field_id=%d', $id ) );
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE field_id=%d', $wpdb->prefix . 'frm_item_metas', $id ) );
 
-		$result = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_fields WHERE id=%d', $id ) );
+		$result = $wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id=%d', $wpdb->prefix . 'frm_fields', $id ) );
 
 		if ( $result ) {
 			/**
@@ -1046,7 +1046,7 @@ class FrmField {
 		global $wpdb;
 
 		$where = is_numeric( $id ) ? 'id=%d' : 'field_key=%s';
-		$query = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'frm_fields WHERE ' . $where, $id ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$query = $wpdb->prepare( 'SELECT * FROM %i WHERE ' . $where, $wpdb->prefix . 'frm_fields', $id ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		$results = FrmDb::check_cache( $id, 'frm_field', $query, 'get_row', 0 );
 

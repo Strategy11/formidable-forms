@@ -330,10 +330,12 @@ class FrmEmailSummaryHelper {
 
 		$result = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT fr.id AS form_id, fr.name AS form_name, COUNT(*) as items_count
-						FROM {$wpdb->prefix}frm_items AS it INNER JOIN {$wpdb->prefix}frm_forms AS fr ON it.form_id = fr.id
+				'SELECT fr.id AS form_id, fr.name AS form_name, COUNT(*) as items_count
+						FROM %i AS it INNER JOIN %i AS fr ON it.form_id = fr.id
 						WHERE it.created_at BETWEEN %s AND %s AND it.is_draft = 0 AND parent_form_id = 0
-						GROUP BY form_id ORDER BY items_count DESC LIMIT %d",
+						GROUP BY form_id ORDER BY items_count DESC LIMIT %d',
+				$wpdb->prefix . 'frm_items',
+				$wpdb->prefix . 'frm_forms',
 				$from_date,
 				$to_date . ' 23:59:59',
 				intval( $limit )
