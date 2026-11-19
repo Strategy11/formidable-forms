@@ -60,7 +60,7 @@ class FrmEntry {
 		 * @param array      $values   Entry values, including the form ID.
 		 * @param int|string $entry_id The entry being updated, or 0 when a new entry is created.
 		 */
-		return apply_filters( 'frm_allow_entry_save', true, $values, (int) $entry_id );
+		return (bool) apply_filters( 'frm_allow_entry_save', true, $values, (int) $entry_id );
 	}
 
 	/**
@@ -360,7 +360,12 @@ class FrmEntry {
 	public static function duplicate( $id ) {
 		global $wpdb;
 
-		$values                   = self::getOne( $id );
+		$values = self::getOne( $id );
+
+		if ( ! $values || ! self::allows_save( array( 'form_id' => $values->form_id ) ) ) {
+			return false;
+		}
+
 		$new_values               = array();
 		$new_values['item_key']   = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_items', 'item_key' );
 		$new_values['name']       = $values->name;

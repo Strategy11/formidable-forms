@@ -477,12 +477,13 @@ class FrmAbilitiesFieldsController {
 			}
 
 			if ( ! self::field_belongs_to_form( $field, $form->id ) ) {
-				return new WP_Error(
-					'frm_field_wrong_form',
-					__( 'That field does not belong to that form.', 'formidable' ),
-					array( 'status' => 404 )
-				);
+				return new WP_Error( 'frm_field_wrong_form', __( 'That field does not belong to that form.', 'formidable' ), array( 'status' => 404 ) );
 			}
+		}
+
+		// Check before a repeater's own fields are deleted, so a denied delete changes nothing.
+		if ( ! FrmField::can_destroy( $field->id ) ) {
+			return new WP_Error( 'frm_field_delete_denied', __( 'This field cannot be deleted.', 'formidable' ), array( 'status' => 403 ) );
 		}
 
 		// Read the field before it is gone, so the caller gets back what it deleted.

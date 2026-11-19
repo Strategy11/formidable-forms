@@ -194,6 +194,30 @@ class test_FrmIntegrationGuards extends FrmUnitTest {
 	/**
 	 * @return void
 	 */
+	public function test_storage_policy_blocks_duplicating_an_entry() {
+		$form_id  = $this->factory->form->create();
+		$entry_id = FrmEntry::create(
+			array(
+				'form_id' => $form_id,
+				'name'    => 'Original',
+			)
+		);
+		$this->assertFalse( FrmEntry::duplicate( 0 ), 'Duplicating a missing entry should fail quietly.' );
+		add_filter( 'frm_allow_entry_save', '__return_false' );
+
+		try {
+			$this->assertFalse( FrmEntry::duplicate( $entry_id ), 'A copy is a new entry, so the filter should block it.' );
+		} finally {
+			remove_filter( 'frm_allow_entry_save', '__return_false' );
+		}
+
+		$this->assertSame( 1, (int) FrmDb::get_count( 'frm_items', array( 'form_id' => $form_id ) ), 'No copy should be stored.' );
+		$this->assertNotFalse( FrmEntry::duplicate( $entry_id ), 'Removing the filter should allow the copy.' );
+	}
+
+	/**
+	 * @return void
+	 */
 	public function test_field_deletion_filter_preserves_the_field() {
 		$form_id  = $this->factory->form->create();
 		$field_id = $this->factory->field->create( array( 'form_id' => $form_id ) );
