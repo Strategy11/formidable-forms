@@ -46,7 +46,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '7.1';
+	public static $plug_version = '7.1.1';
 
 	/**
 	 * @var bool
