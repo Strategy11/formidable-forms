@@ -31,5 +31,13 @@
   ],
   "CheckFunctionCallable": [
     2
+  ],
+  "PreferInputHelper": [
+    2,
+    3,
+    4,
+    6,
+    7,
+    8
   ]
 }

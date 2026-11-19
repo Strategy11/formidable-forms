@@ -9,16 +9,29 @@
  * $title = sanitize_text_field( wp_unslash( $_POST['title'] ) );
  * $page  = $_GET['page'];
  *
+ * $page  = absint( $_GET['page'] );
+ *
  * These become:
- * $title = FrmAppHelper::get_post_param( 'title', '', 'sanitize_text_field' );
- * $page  = FrmAppHelper::simple_get( 'page', 'sanitize_text_field' );
+ * $title = sanitize_text_field( FrmAppHelper::get_post_param( 'title' ) );
+ * $page  = absint( FrmAppHelper::simple_get( 'page', '' ) );
+ *
+ * The sanitizer stays outside the helper call on purpose. The helpers sanitize array values one
+ * element at a time, while sanitize_text_field(), absint() and the rest treat an array as a whole
+ * (sanitize_text_field( array() ) is ''), so passing the sanitizer to the helper would let a
+ * posted array through where the original code returned a scalar.
  *
  * By default the sniff only reports reads it can rewrite faithfully, so phpcbf output is always
  * behaviour preserving. That means the read has to be wrapped in a sanitizer already, which the
- * fix then reuses. Three shapes are skipped:
+ * fix then reuses. These shapes are skipped:
  *
  * - a read with no sanitizer to copy, because the fix would have to invent one. Enable
  *   $includeUnsanitizedReads to report and fix these under the separate Unsanitized* codes.
+ * - a read that is not unslashed before a sanitizer that can see backslashes, because the
+ *   helpers always unslash. Numeric sanitizers are exempt since a slashed request value has
+ *   the same numeric prefix before and after unslashing.
+ * - a read that is unslashed after it is sanitized, because the helper would swap the order.
+ * - a $_REQUEST read whose key is not a plain string literal, or contains "[", because
+ *   FrmAppHelper::get_param() treats "[" in a key as a nested lookup.
  * - a read whose line carries a phpcs:ignore for InputNotSanitized or MissingUnslash, where not
  *   sanitizing was a deliberate decision.
  * - a read passed straight to is_array() or similar, where the helper cannot change the answer
@@ -42,23 +55,39 @@ class PreferInputHelperSniff implements Sniff {
 	 * Superglobals that have a Formidable helper.
 	 *
 	 * 'code' is the error code to report under. 'call' is a sprintf template for the
-	 * replacement, taking the key expression and then the sanitizer.
+	 * replacement, taking the sanitizer and then the key expression. Each helper is called
+	 * without a sanitizer of its own, so it only unslashes, and the original sanitizer wraps it.
 	 *
 	 * @var array<string, array<string, string>>
 	 */
 	private $superglobals = array(
 		'$_POST'    => array(
 			'code' => 'PostSuperglobal',
-			'call' => 'FrmAppHelper::get_post_param( %1$s, \'\', \'%2$s\' )',
+			'call' => '%1$s( FrmAppHelper::get_post_param( %2$s ) )',
 		),
 		'$_GET'     => array(
 			'code' => 'GetSuperglobal',
-			'call' => 'FrmAppHelper::simple_get( %1$s, \'%2$s\' )',
+			'call' => '%1$s( FrmAppHelper::simple_get( %2$s, \'\' ) )',
 		),
 		'$_REQUEST' => array(
 			'code' => 'RequestSuperglobal',
-			'call' => 'FrmAppHelper::get_param( %1$s, \'\', \'request\', \'%2$s\' )',
+			'call' => '%1$s( FrmAppHelper::get_param( %2$s, \'\', \'request\' ) )',
 		),
+	);
+
+	/**
+	 * Sanitizers whose result does not depend on whether the value was unslashed first.
+	 *
+	 * WordPress slashes request values, so a backslash in the raw value is always followed by
+	 * a quote, a backslash or 0. Unslashing therefore never turns a non-numeric character into a
+	 * numeric one, and these return the same number either way.
+	 *
+	 * @var string[]
+	 */
+	private $slashInsensitiveSanitizers = array(
+		'absint',
+		'floatval',
+		'intval',
 	);
 
 	/**
@@ -250,8 +279,18 @@ class PreferInputHelperSniff implements Sniff {
 			return;
 		}
 
+		if ( '$_REQUEST' === $superglobal && ! $this->isPlainStringKey( $phpcsFile, $subscript['open'] ) ) {
+			return;
+		}
+
 		$wrapper  = $this->getWrappingCalls( $phpcsFile, $stackPtr, $subscript['end'] );
 		$guessing = null === $wrapper['sanitizer'];
+
+		// The helpers always unslash. Where the original did not, only a numeric sanitizer
+		// gives the same result, so anything else is left for a human.
+		if ( ! $guessing && ! $wrapper['unslashed'] && ! in_array( $wrapper['sanitizer'], $this->slashInsensitiveSanitizers, true ) ) {
+			return;
+		}
 
 		// Nothing to copy means the fix would have to invent a sanitizer, so stay quiet unless
 		// that was asked for. Everything this sniff reports, it can fix faithfully.
@@ -262,7 +301,7 @@ class PreferInputHelperSniff implements Sniff {
 		$sanitize = $guessing ? $this->defaultSanitize : $wrapper['sanitizer'];
 		$keyExpr  = $this->getKeyExpression( $phpcsFile, $subscript['open'] );
 
-		$replacement = sprintf( $this->superglobals[ $superglobal ]['call'], $keyExpr, $sanitize );
+		$replacement = sprintf( $this->superglobals[ $superglobal ]['call'], $sanitize, $keyExpr );
 
 		// A read with no sanitizer to copy gets its own code, because the fix picks the
 		// sanitizer rather than preserving one. Those hunks need a human to confirm the
@@ -378,16 +417,18 @@ class PreferInputHelperSniff implements Sniff {
 	 * @param int  $stackPtr     The superglobal token.
 	 * @param int  $subscriptEnd The last token of the subscript chain.
 	 *
-	 * @return array Array with 'start', 'end' and 'sanitizer' keys.
+	 * @return array Array with 'start', 'end', 'sanitizer' and 'unslashed' keys.
 	 */
 	private function getWrappingCalls( File $phpcsFile, $stackPtr, $subscriptEnd ) {
 		$result = array(
 			'start'     => $stackPtr,
 			'end'       => $subscriptEnd,
 			'sanitizer' => null,
+			'unslashed' => false,
 		);
 
-		// One pass for an unslasher, one for a sanitizer, in either order.
+		// One pass for an unslasher, then one for a sanitizer. The helper unslashes before it
+		// returns, so an unslasher outside the sanitizer is not absorbed.
 		for ( $pass = 0; $pass < 2; $pass++ ) {
 			$call = $this->getEnclosingSingleArgumentCall( $phpcsFile, $result['start'], $result['end'] );
 
@@ -400,6 +441,14 @@ class PreferInputHelperSniff implements Sniff {
 
 			if ( ! $isUnslasher && ! $isSanitizer ) {
 				break;
+			}
+
+			if ( $isUnslasher ) {
+				if ( $result['unslashed'] || null !== $result['sanitizer'] ) {
+					break;
+				}
+
+				$result['unslashed'] = true;
 			}
 
 			if ( $isSanitizer ) {
@@ -415,6 +464,30 @@ class PreferInputHelperSniff implements Sniff {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Determine if the first subscript is a single quoted string without a bracket.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $openPtr   The first opening square bracket.
+	 *
+	 * @return bool
+	 */
+	private function isPlainStringKey( File $phpcsFile, $openPtr ) {
+		$tokens = $phpcsFile->getTokens();
+		$closer = $tokens[ $openPtr ]['bracket_closer'];
+		$key    = $phpcsFile->findNext( Tokens::$emptyTokens, $openPtr + 1, $closer, true );
+
+		if ( false === $key || T_CONSTANT_ENCAPSED_STRING !== $tokens[ $key ]['code'] ) {
+			return false;
+		}
+
+		if ( false !== $phpcsFile->findNext( Tokens::$emptyTokens, $key + 1, $closer, true ) ) {
+			return false;
+		}
+
+		return false === strpos( $tokens[ $key ]['content'], '[' );
 	}
 
 	/**

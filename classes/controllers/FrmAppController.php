@@ -804,9 +804,9 @@ class FrmAppController {
 			self::include_info_overlay();
 		} elseif ( FrmAppHelper::is_view_builder_page() ) {
 			if ( isset( $_REQUEST['post_type'] ) ) {
-				$post_type = FrmAppHelper::get_param( 'post_type', '', 'request', 'sanitize_title' );
+				$post_type = sanitize_title( FrmAppHelper::get_param( 'post_type', '', 'request' ) );
 			} else {
-				$post_id = FrmAppHelper::get_param( 'post', '', 'request', 'absint' );
+				$post_id = absint( FrmAppHelper::get_param( 'post', '', 'request' ) );
 				$post    = $post_id ? get_post( $post_id ) : null;
 
 				if ( ! $post ) {

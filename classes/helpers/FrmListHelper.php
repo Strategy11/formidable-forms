@@ -309,7 +309,7 @@ class FrmListHelper {
 			return;
 		}
 
-		$value = FrmAppHelper::get_param( $param_name, '', 'request', 'sanitize_text_field' );
+		$value = sanitize_text_field( wp_unslash( $_REQUEST[ $param_name ] ) );
 		echo '<input type="hidden" name="' . esc_attr( $param_name ) . '" value="' . esc_attr( $value ) . '" />';
 	}
 
@@ -569,7 +569,7 @@ class FrmListHelper {
 	 * @return int
 	 */
 	public function get_pagenum() {
-		$pagenum = FrmAppHelper::get_param( 'paged', 0, 'request', 'absint' );
+		$pagenum = absint( FrmAppHelper::get_param( 'paged', 0, 'request' ) );
 
 		if ( isset( $this->_pagination_args['total_pages'] ) && $pagenum > $this->_pagination_args['total_pages'] ) {
 			$pagenum = $this->_pagination_args['total_pages'];
@@ -963,7 +963,7 @@ class FrmListHelper {
 
 		$current_url     = set_url_scheme( 'http://' . FrmAppHelper::get_server_value( 'HTTP_HOST' ) . FrmAppHelper::get_server_value( 'REQUEST_URI' ) );
 		$current_url     = remove_query_arg( 'paged', $current_url );
-		$current_orderby = FrmAppHelper::simple_get( 'orderby', 'sanitize_text_field' );
+		$current_orderby = sanitize_text_field( FrmAppHelper::simple_get( 'orderby', '' ) );
 		$current_order   = isset( $_GET['order'] ) && 'desc' === $_GET['order'] ? 'desc' : 'asc';
 
 		FrmAppController::apply_saved_sort_preference( $current_orderby, $current_order );
