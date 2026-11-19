@@ -532,7 +532,7 @@ class FrmEntriesHelper {
 	 * @return void
 	 */
 	public static function set_other_repeating_vals( $field, &$value, &$args ) {
-		if ( ! $args['parent_field_id'] ) {
+		if ( empty( $args['parent_field_id'] ) && empty( $args['item_meta_path'] ) ) {
 			return;
 		}
 

@@ -44,4 +44,28 @@ class test_FrmEntryMetaPathHelper extends FrmUnitTest {
 		FrmEntriesHelper::set_posted_value( (object) array( 'id' => 30 ), 'Legacy row', $args );
 		$this->assertSame( 'Legacy row', $_POST['item_meta'][10][0][30], 'An empty path should preserve existing repeater arguments.' );
 	}
+
+	public function test_other_values_are_read_from_nested_path_without_parent_arguments() {
+		$_POST['item_meta'] = array(
+			10 => array(
+				0 => array(
+					20 => array(
+						0 => array(
+							'other' => array( 30 => array( 'other_1' => 'Custom' ) ),
+						),
+					),
+				),
+			),
+		);
+		$field              = (object) array(
+			'id'            => 30,
+			'type'          => 'checkbox',
+			'field_options' => array( 'other' => 1 ),
+		);
+		$value              = array( 'other_1' => 'Other' );
+		$args               = array( 'item_meta_path' => array( 10, 0, 20, 0 ) );
+		FrmEntriesHelper::set_other_repeating_vals( $field, $value, $args );
+		$this->assertTrue( $args['other'], 'An Other value at the nested path should be detected.' );
+		$this->assertSame( array( 'other_1' => 'Custom' ), $value, 'The nested Other text should replace the Other choice.' );
+	}
 }

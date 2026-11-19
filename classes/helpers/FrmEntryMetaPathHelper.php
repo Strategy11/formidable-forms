@@ -24,11 +24,19 @@ class FrmEntryMetaPathHelper {
 			array(
 				'type'     => 'post',
 				'param'    => 'item_meta',
-				'path'     => $path,
 				'default'  => array(),
 				'sanitize' => '',
 			)
 		);
+
+		foreach ( $path as $key ) {
+			if ( ! is_array( $row ) || ! isset( $row[ $key ] ) ) {
+				return array();
+			}
+
+			$row = $row[ $key ];
+		}
+
 		return is_array( $row ) ? $row : array();
 	}
 

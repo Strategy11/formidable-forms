@@ -856,18 +856,7 @@ class FrmAppHelper {
 		} elseif ( $args['type'] === 'post' ) {
 			if ( isset( $_POST[ $args['param'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
-				$value = $_POST[ $args['param'] ];
-
-				foreach ( $args['path'] ?? array() as $key ) {
-					if ( ! is_array( $value ) || ! isset( $value[ $key ] ) ) {
-						$value = $args['default'];
-						break;
-					}
-
-					$value = $value[ $key ];
-				}
-
-				$value = wp_unslash( $value );
+				$value = wp_unslash( $_POST[ $args['param'] ] );
 
 				if ( $args['serialized'] === true && is_serialized_string( $value ) && is_serialized( $value ) ) {
 					self::unserialize_or_decode( $value );
@@ -876,7 +865,7 @@ class FrmAppHelper {
 		} elseif ( isset( $_REQUEST[ $args['param'] ] ) ) {
 			// phpcs:ignore phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$value = wp_unslash( $_REQUEST[ $args['param'] ] );
-		}//end if
+		}
 
 		self::sanitize_value( $args['sanitize'], $value );
 
