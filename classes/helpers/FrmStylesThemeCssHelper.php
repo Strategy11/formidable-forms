@@ -77,8 +77,11 @@ class FrmStylesThemeCssHelper {
 	}
 
 	/**
-	 * Identify the current theme CSS, so a theme update or a Customizer or Global Styles edit
-	 * changes both a cached copy and a stylesheet URL's version.
+	 * Identify the current theme CSS, so a theme switch or update, a Global Styles edit, or an
+	 * edit to the theme's style.css changes both a cached copy and a stylesheet URL's version.
+	 *
+	 * Other theme stylesheets are only covered by the theme version, since finding them means
+	 * running the theme's front end enqueue, which is too slow to do on every styler page load.
 	 *
 	 * @since x.x
 	 *
@@ -87,8 +90,16 @@ class FrmStylesThemeCssHelper {
 	public static function get_version() {
 		$theme         = wp_get_theme();
 		$global_styles = self::get_global_stylesheet();
+		$modified      = '';
 
-		return FrmAppHelper::plugin_version() . '-' . $theme->get_stylesheet() . '-' . $theme->get( 'Version' ) . '-' . substr( md5( $global_styles ), 0, 8 );
+		foreach ( array_unique( array( get_template_directory(), get_stylesheet_directory() ) ) as $directory ) {
+			$path = $directory . '/style.css';
+
+			// A child theme's style.css is often edited without a version bump.
+			$modified .= is_readable( $path ) ? filemtime( $path ) : 0;
+		}
+
+		return FrmAppHelper::plugin_version() . '-' . $theme->get_stylesheet() . '-' . $theme->get( 'Version' ) . '-' . substr( md5( $global_styles . $modified ), 0, 8 );
 	}
 
 	/**
@@ -103,7 +114,7 @@ class FrmStylesThemeCssHelper {
 			return '';
 		}
 
-		return (string) wp_get_global_stylesheet();
+		return wp_get_global_stylesheet();
 	}
 
 	/**
@@ -131,7 +142,9 @@ class FrmStylesThemeCssHelper {
 		 *
 		 * @param array $stylesheets List of arrays with 'path' and 'base_url' keys.
 		 */
-		return apply_filters( 'frm_preview_theme_stylesheets', $stylesheets );
+		$stylesheets = apply_filters( 'frm_preview_theme_stylesheets', $stylesheets );
+
+		return is_array( $stylesheets ) ? $stylesheets : array();
 	}
 
 	/**
@@ -225,11 +238,17 @@ class FrmStylesThemeCssHelper {
 			$media = self::is_non_empty_string( $style->args ) ? $style->args : 'all';
 
 			foreach ( $roots as $root ) {
-				if ( ! str_starts_with( $src, $root['url'] ) ) {
+				// The trailing slash keeps themes/twentytwenty from matching themes/twentytwentyone.
+				if ( ! str_starts_with( $src, $root['url'] . '/' ) ) {
 					continue;
 				}
 
 				$relative = substr( $src, strlen( $root['url'] ) );
+
+				// Only ever read a stylesheet, and never follow a path out of the theme directory.
+				if ( ! str_ends_with( strtolower( $relative ), '.css' ) || 0 !== validate_file( $relative ) ) {
+					break;
+				}
 
 				$found[] = array(
 					'path'     => $root['path'] . $relative,
@@ -306,7 +325,7 @@ class FrmStylesThemeCssHelper {
 	 */
 	private static function normalize_src( $src ) {
 		$src = strtok( $src, '?' );
-		return preg_replace( '#^https?://#', '//', $src );
+		return (string) preg_replace( '#^https?://#', '//', (string) $src );
 	}
 
 	/**
@@ -350,21 +369,12 @@ class FrmStylesThemeCssHelper {
 	 * @return string Empty when the file is missing or unreadable.
 	 */
 	private static function read_file( $path ) {
-		if ( ! $path || ! is_readable( $path ) ) {
+		if ( ! $path || ! is_file( $path ) || ! is_readable( $path ) ) {
 			return '';
 		}
 
-		global $wp_filesystem;
-
-		if ( ! $wp_filesystem instanceof WP_Filesystem_Base ) {
-			require_once ABSPATH . 'wp-admin/includes/file.php';
-
-			if ( ! WP_Filesystem() ) {
-				return '';
-			}
-		}
-
-		$contents = $wp_filesystem->get_contents( $path );
+		// Not WP_Filesystem. On a site that uses FTP or SSH for file access it cannot read a local path.
+		$contents = file_get_contents( $path );
 
 		return is_string( $contents ) ? $contents : '';
 	}
@@ -385,7 +395,11 @@ class FrmStylesThemeCssHelper {
 			return 'url(' . FrmStylesThemeCssHelper::absolutize_url( $matches[1], $base_url ) . ')';
 		};
 
-		return preg_replace_callback( '/url\(\s*([^)]+?)\s*\)/i', $callback, $css );
+		// A quoted value is matched as a whole, since it can hold parentheses. An inline SVG often does.
+		// The possessive quantifiers keep a long data URI from running into the PCRE limits.
+		$rewritten = preg_replace_callback( '/url\(\s*("[^"\\\\]*+(?:\\\\.[^"\\\\]*+)*+"|\'[^\'\\\\]*+(?:\\\\.[^\'\\\\]*+)*+\'|[^)"\'\s]++)\s*\)/i', $callback, $css );
+
+		return is_string( $rewritten ) ? $rewritten : $css;
 	}
 
 	/**
@@ -404,14 +418,11 @@ class FrmStylesThemeCssHelper {
 
 		if ( '' !== $value && ( '"' === $value[0] || "'" === $value[0] ) ) {
 			$quote = $value[0];
-			$value = trim( $value, $quote );
+			$value = trim( substr( $value, 1, -1 ) );
 		}
 
-		if ( '' === $value || 'data:' === substr( $value, 0, 5 ) || '#' === $value[0] || '/' === $value[0] ) {
-			return $quote . $value . $quote;
-		}
-
-		if ( preg_match( '#^https?://#i', $value ) ) {
+		// Leave fragments, root relative URLs and anything with a scheme, such as data: or https:, as they are.
+		if ( '' === $value || '#' === $value[0] || '/' === $value[0] || preg_match( '#^[a-z][a-z0-9+.-]*:#i', $value ) ) {
 			return $quote . $value . $quote;
 		}
 
@@ -481,11 +492,13 @@ class FrmStylesThemeCssHelper {
 			return $declarations;
 		}
 
-		return preg_replace(
+		$converted = preg_replace(
 			'/(?<![\w.#-])(-?(?:\d*\.)?\d+)rem\b/i',
 			'calc($1 * var(' . self::REM_PROPERTY . '))',
 			$declarations
 		);
+
+		return is_string( $converted ) ? $converted : $declarations;
 	}
 
 	/**
@@ -500,7 +513,7 @@ class FrmStylesThemeCssHelper {
 	 * @return string
 	 */
 	private static function normalize_root_font_size( $declarations ) {
-		return preg_replace_callback(
+		$normalized = preg_replace_callback(
 			'/(^|;)\s*font-size\s*:\s*((?:\d*\.)?\d+)(%|px|em|rem)\s*(!important\s*)?(?=;|$)/i',
 			function ( $matches ) {
 				$size = (float) $matches[2];
@@ -517,6 +530,8 @@ class FrmStylesThemeCssHelper {
 			},
 			$declarations
 		);
+
+		return is_string( $normalized ) ? $normalized : $declarations;
 	}
 
 	/**
@@ -559,7 +574,13 @@ class FrmStylesThemeCssHelper {
 				$chunk['block'] = self::normalize_root_font_size( $chunk['block'] );
 			}
 
-			$selectors    = self::rewrite_selector_list( $chunk['prelude'] );
+			$selectors = self::rewrite_selector_list( $chunk['prelude'] );
+
+			if ( '' === $selectors ) {
+				// Every selector depended on a class or state of the front end page.
+				continue;
+			}
+
 			$declarations = self::convert_rems( $chunk['block'] );
 
 			// The theme's page background belongs to the page, not to a preview panel sitting in
@@ -686,7 +707,8 @@ class FrmStylesThemeCssHelper {
 		}
 
 		// Collapsing root prefixes can leave duplicates behind, for example from `html, body`.
-		return implode( ', ', array_unique( $selectors ) );
+		// An empty string is a selector that cannot apply to the preview.
+		return implode( ', ', array_unique( array_filter( $selectors ) ) );
 	}
 
 	/**
@@ -748,24 +770,35 @@ class FrmStylesThemeCssHelper {
 	 * working. Stripping the root prefix keeps the rule, and a selector that was nothing but a
 	 * root prefix becomes :scope so the theme's base typography still gets inherited.
 	 *
+	 * A root that carries a condition, like `body.dark-mode` or `html:not(.no-js)`, only applies
+	 * on a front end page in that state. The preview has no such state, so the selector is dropped
+	 * rather than applied to every preview.
+	 *
 	 * @since x.x
 	 *
 	 * @param string $selector A single selector.
 	 *
-	 * @return string
+	 * @return string Empty when the selector cannot apply to the preview.
 	 */
 	private static function rewrite_selector( $selector ) {
 		$selector = trim( $selector );
+		$stripped = $selector;
 
-		if ( '' === $selector ) {
-			return $selector;
+		// The document root comes first, optionally followed by the body, as in `html > body p`.
+		foreach ( array( 'html|:root', 'body' ) as $root ) {
+			if ( ! preg_match( '/^(?:' . $root . ')(?![\w-])/i', $stripped, $matches ) ) {
+				continue;
+			}
+
+			$stripped = substr( $stripped, strlen( $matches[0] ) );
+
+			// A class, id, attribute or pseudo class. A pseudo element like ::before is not a condition.
+			if ( preg_match( '/^(?:[.#\[]|:(?!:))/', $stripped ) ) {
+				return '';
+			}
+
+			$stripped = preg_replace( '/^\s*(?:>\s*)?/', '', $stripped );
 		}
-
-		$stripped = preg_replace( '/^(?:html|:root)\b(?::[a-z-]+(?:\([^)]*\))?|\.[^\s>+~.:\[]+|\[[^\]]*\]|#[^\s>+~.:\[]+)*\s*/i', '', $selector );
-		$stripped = preg_replace( '/^>\s*/', '', $stripped );
-		$stripped = preg_replace( '/^body\b(?::[a-z-]+(?:\([^)]*\))?|\.[^\s>+~.:\[]+|\[[^\]]*\]|#[^\s>+~.:\[]+)*\s*/i', '', $stripped );
-		$stripped = preg_replace( '/^>\s*/', '', $stripped );
-		$stripped = trim( $stripped );
 
 		if ( $stripped === $selector ) {
 			return $selector;

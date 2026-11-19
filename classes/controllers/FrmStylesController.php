@@ -221,7 +221,11 @@ class FrmStylesController {
 
 		if ( ! is_string( $css ) ) {
 			$css = FrmStylesThemeCssHelper::get_scoped_theme_css( '#frm_active_style_form, #frm_sample_form' );
-			set_transient( $cache_key, $css, DAY_IN_SECONDS );
+
+			if ( '' !== $css ) {
+				// An empty result can come from a failed read, so it is not kept for a day.
+				set_transient( $cache_key, $css, DAY_IN_SECONDS );
+			}
 		}
 
 		header( 'Content-type: text/css' );
