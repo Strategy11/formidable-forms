@@ -947,6 +947,7 @@
 
 		const supportedColors = [ 'silver', 'black', 'white' ];
 		const supportedColorsMap = {
+			paypal: [ 'gold', 'blue' ],
 			venmo: [ 'blue' ],
 			paylater: [ 'gold', 'blue' ]
 		};
