@@ -128,4 +128,66 @@ class test_FrmPostDropdownLabels extends FrmUnitTest {
 			$source
 		);
 	}
+
+	/** @return void */
+	public function test_gated_content_select_shows_ids() {
+		$id   = $this->create_private_page( 'Members Only' );
+		$html = $this->render_gated_content_settings( $id );
+		$this->assertStringContainsString( 'Members Only (ID: ' . $id . ')', $html );
+		$this->assertStringContainsString( 'value="' . $id . '"', $html );
+	}
+
+	/** @return void */
+	public function test_gated_content_autocomplete_selected_value_shows_id() {
+		$id = $this->create_private_page( 'Members Only' );
+		self::factory()->post->create_many(
+			51,
+			array(
+				'post_type'   => 'page',
+				'post_status' => 'private',
+			)
+		);
+		$html = $this->render_gated_content_settings( $id );
+		$this->assertStringContainsString( 'frm-custom-search', $html );
+		$this->assertStringContainsString( 'value="Members Only (ID: ' . $id . ')"', $html );
+	}
+
+	/**
+	 * @param string $title Page title.
+	 *
+	 * @return int
+	 */
+	private function create_private_page( $title ) {
+		return self::factory()->post->create(
+			array(
+				'post_type'   => 'page',
+				'post_status' => 'private',
+				'post_title'  => $title,
+			)
+		);
+	}
+
+	/**
+	 * @param int $page_id ID of the page saved as the gated item.
+	 *
+	 * @return string
+	 */
+	private function render_gated_content_settings( $page_id ) {
+		$action = new FrmGatedContentAction();
+		$action->_set( 1 );
+		$instance = (object) array(
+			'ID'           => 0,
+			'post_content' => array(
+				'items' => array(
+					array(
+						'type' => 'page',
+						'id'   => $page_id,
+					),
+				),
+			),
+		);
+		ob_start();
+		$action->form( $instance );
+		return (string) ob_get_clean();
+	}
 }
