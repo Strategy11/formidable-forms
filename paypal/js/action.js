@@ -80,12 +80,27 @@
 				reload.addEventListener( 'click', () => window.location.reload() );
 				children.push( reload );
 
+				// Saving the page as it is would delete the new action and turn the legacy action back on.
+				notice.closest( 'form' )?.addEventListener( 'submit', reloadInsteadOfSaving, true );
+
 				notice.querySelector( '.frm-paypal-migration-intro' ).classList.add( 'frm_hidden' );
 				notice.classList.replace( 'frm_note_style', 'frm_updated_message' );
 				result.replaceChildren( ...children );
 				reload.focus();
 			} )
 			.catch( () => showError() );
+	}
+
+	/**
+	 * Reload the page instead of saving form settings that no longer match the saved actions.
+	 *
+	 * @param {Event} event
+	 * @return {void}
+	 */
+	function reloadInsteadOfSaving( event ) {
+		event.preventDefault();
+		event.stopImmediatePropagation();
+		window.location.reload();
 	}
 
 	function onLayoutChange() {

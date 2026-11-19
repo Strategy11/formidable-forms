@@ -48,7 +48,7 @@ class test_FrmPayPalLiteLegacyMigration extends FrmUnitTest {
 		$this->assertSame( 2, $value['interval_count'], 'The billing interval count is preserved.' );
 		$this->assertSame( '12.50', $value['amount'], 'Fixed amounts are preserved.' );
 		$this->assertSame( 90, $value['trial_interval_count'], 'Month trials convert to days.' );
-		$this->assertCount( 2, $notes, 'Trial approximation and paid trial changes are disclosed.' );
+		$this->assertCount( 3, $notes, 'Trial approximation, paid trial changes and existing subscriptions are disclosed.' );
 	}
 
 	public function test_donations_report_the_conversion() {
@@ -169,6 +169,57 @@ class test_FrmPayPalLiteLegacyMigration extends FrmUnitTest {
 		$this->assertSame( 'frm_paypal_invalid_action', $result->get_error_code(), 'The rejection identifies the invalid action.' );
 	}
 
+	public function test_missing_currency_uses_the_legacy_global_currency() {
+		$notes = array();
+		update_option( 'frm_paypal_options', (object) array( 'currency' => 'EUR' ), false );
+		$value = FrmPayPalLiteLegacyMigrationHelper::convert_settings( array( 'paypal_type' => '_xclick' ), 1, $notes );
+		$this->assertSame( 'eur', $value['currency'], 'Actions without a currency use the PayPal add-on currency.' );
+
+		delete_option( 'frm_paypal_options' );
+		$value = FrmPayPalLiteLegacyMigrationHelper::convert_settings( array( 'paypal_type' => '_xclick' ), 1, $notes );
+		$this->assertSame( 'usd', $value['currency'], 'Without any legacy currency, USD is used like in the PayPal add-on.' );
+	}
+
+	/**
+	 * A second active legacy action would keep charging through PayPal Standard next to the new action.
+	 */
+	public function test_migrate_is_blocked_while_another_legacy_action_is_active() {
+		update_option( 'frm_paypal_connect_merchant_id_test', 'migration_fixture', false );
+		update_option( 'frm_paypal_connect_merchant_id_live', 'migration_fixture', false );
+		$form_id   = $this->factory->form->create();
+		$legacy    = array(
+			'post_type'    => FrmFormActionsController::$action_post_type,
+			'post_excerpt' => 'paypal',
+			'post_status'  => 'publish',
+			'menu_order'   => $form_id,
+			'post_content' => wp_json_encode(
+				array(
+					'paypal_type'   => '_xclick',
+					'paypal_amount' => '5',
+					'currency'      => 'USD',
+				)
+			),
+		);
+		$legacy_id = wp_insert_post( $legacy );
+		$other_id  = wp_insert_post( $legacy );
+		FrmFormAction::clear_cache();
+
+		$result = FrmPayPalLiteLegacyMigrationHelper::migrate( $legacy_id );
+		$this->assertWPError( $result, 'Another active legacy action should block the conversion.' );
+		$this->assertSame( 'frm_paypal_migration_blocked', $result->get_error_code(), 'The conversion is blocked, not failed.' );
+		$this->assertSame( 'publish', get_post_status( $legacy_id ), 'The legacy action should stay on when blocked.' );
+		$this->assertFalse( FrmFormAction::form_has_action_type( $form_id, 'payment' ), 'No payment action should be created when blocked.' );
+
+		wp_update_post(
+			array(
+				'ID'          => $other_id,
+				'post_status' => 'draft',
+			)
+		);
+		FrmFormAction::clear_cache();
+		$this->assertIsArray( FrmPayPalLiteLegacyMigrationHelper::migrate( $legacy_id ), 'A turned off legacy action should not block the conversion.' );
+	}
+
 	/**
 	 * Converts the saved action, moves only create emails and prevents a duplicate conversion.
 	 */
@@ -202,6 +253,9 @@ class test_FrmPayPalLiteLegacyMigration extends FrmUnitTest {
 		$other                        = $email_control->prepare_new( $form_id );
 		$other->post_content['event'] = array( 'update' );
 		$other_id                     = $email_control->save_settings( $other );
+		$paid                         = $email_control->prepare_new( $form_id );
+		$paid->post_content['event']  = array( 'paypal', 'paypal-failed' );
+		$paid_id                      = $email_control->save_settings( $paid );
 		FrmFormAction::clear_cache();
 
 		$result = FrmPayPalLiteLegacyMigrationHelper::migrate( $legacy_id );
@@ -218,8 +272,61 @@ class test_FrmPayPalLiteLegacyMigration extends FrmUnitTest {
 		$this->assertSame( array( 'update', 'payment-success' ), $moved['event'], 'Only create should move, without duplicating payment-success.' );
 		$unchanged = json_decode( get_post( $other_id )->post_content, true );
 		$this->assertSame( array( 'update' ), $unchanged['event'], 'Emails without a create event should remain unchanged.' );
+		$retriggered = json_decode( get_post( $paid_id )->post_content, true );
+		$this->assertSame(
+			array( 'paypal', 'paypal-failed', 'payment-success', 'payment-failed' ),
+			$retriggered['event'],
+			'Legacy payment events should gain the matching payment events.'
+		);
 		$again = FrmPayPalLiteLegacyMigrationHelper::migrate( $legacy_id );
 		$this->assertWPError( $again, 'A second conversion should be blocked.' );
 		$this->assertSame( 'frm_paypal_migration_blocked', $again->get_error_code(), 'The existing Commerce action should prevent duplicates.' );
+	}
+
+	/**
+	 * The Successful Payment trigger never runs when conditional logic skips the payment,
+	 * so moving the emails would stop them for entries that do not pay.
+	 */
+	public function test_migrate_leaves_emails_alone_when_payment_is_conditional() {
+		update_option( 'frm_paypal_connect_merchant_id_test', 'migration_fixture', false );
+		update_option( 'frm_paypal_connect_merchant_id_live', 'migration_fixture', false );
+		$form_id                      = $this->factory->form->create();
+		$legacy_id                    = wp_insert_post(
+			array(
+				'post_type'    => FrmFormActionsController::$action_post_type,
+				'post_excerpt' => 'paypal',
+				'post_status'  => 'publish',
+				'post_title'   => 'Optional donation',
+				'menu_order'   => $form_id,
+				'post_content' => wp_json_encode(
+					array(
+						'paypal_type'       => '_xclick',
+						'paypal_amount'     => '5',
+						'currency'          => 'USD',
+						'paypal_stop_email' => 1,
+						'conditions'        => array(
+							'send_stop' => 'send',
+							'any_all'   => 'any',
+							array(
+								'hide_field'      => 45,
+								'hide_field_cond' => '==',
+								'hide_opt'        => 'yes',
+							),
+						),
+					)
+				),
+			)
+		);
+		$email_control                = FrmFormActionsController::get_form_actions( 'email' );
+		$email                        = $email_control->prepare_new( $form_id );
+		$email->post_content['event'] = array( 'create' );
+		$email_id                     = $email_control->save_settings( $email );
+		FrmFormAction::clear_cache();
+
+		$result = FrmPayPalLiteLegacyMigrationHelper::migrate( $legacy_id );
+		$this->assertIsArray( $result, 'A conditional legacy action should convert.' );
+		$unchanged = json_decode( get_post( $email_id )->post_content, true );
+		$this->assertSame( array( 'create' ), $unchanged['event'], 'Emails should keep sending for entries that skip the payment.' );
+		$this->assertStringContainsString( 'conditional logic', implode( ' ', $result['notes'] ), 'The unchanged emails should be disclosed.' );
 	}
 }

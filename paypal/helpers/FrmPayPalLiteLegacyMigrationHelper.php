@@ -50,10 +50,11 @@ class FrmPayPalLiteLegacyMigrationHelper {
 	 *
 	 * @param int          $form_id         The ID of the form the legacy action belongs to.
 	 * @param array|string $legacy_settings The legacy action settings, as an array or the saved JSON.
+	 * @param int          $action_id       The ID of the legacy action being converted.
 	 *
 	 * @return string An empty string when the action can be migrated.
 	 */
-	public static function get_migration_blocker( $form_id, $legacy_settings = array() ) {
+	public static function get_migration_blocker( $form_id, $legacy_settings = array(), $action_id = 0 ) {
 		$connection_error = FrmTransLiteAppHelper::get_gateway_connection_error( 'paypal' );
 
 		if ( $connection_error ) {
@@ -64,7 +65,32 @@ class FrmPayPalLiteLegacyMigrationHelper {
 			return __( 'This form already has a payment action, and only one is allowed per form. Delete the existing payment action to convert this one.', 'formidable' );
 		}
 
+		if ( self::has_other_active_legacy_actions( $form_id, $action_id ) ) {
+			return __( 'This form has other active legacy PayPal actions. Only one payment action is allowed per form, so turn the others off to convert this one.', 'formidable' );
+		}
+
 		return self::get_after_payment_blocker( self::get_settings_array( $legacy_settings ) );
+	}
+
+	/**
+	 * Another active legacy action would keep sending entries to PayPal Standard next to the new
+	 * payment action, so a single entry could be charged twice.
+	 *
+	 * @param int $form_id   The form ID.
+	 * @param int $action_id The ID of the legacy action being converted.
+	 *
+	 * @return bool
+	 */
+	private static function has_other_active_legacy_actions( $form_id, $action_id ) {
+		$legacy_actions = FrmFormAction::get_action_for_form( $form_id, 'paypal', array( 'post_status' => 'publish' ) );
+
+		if ( ! is_array( $legacy_actions ) ) {
+			return false;
+		}
+
+		unset( $legacy_actions[ $action_id ] );
+
+		return (bool) $legacy_actions;
 	}
 
 	/**
@@ -103,9 +129,9 @@ class FrmPayPalLiteLegacyMigrationHelper {
 			return new WP_Error( 'frm_paypal_invalid_action', __( 'That legacy PayPal action could not be found.', 'formidable' ) );
 		}
 
-		$form_id         = (int) $legacy_action->menu_order;
+		$form_id         = $legacy_action->menu_order;
 		$legacy_settings = self::get_settings_array( $legacy_action->post_content );
-		$blocker         = self::get_migration_blocker( $form_id, $legacy_settings );
+		$blocker         = self::get_migration_blocker( $form_id, $legacy_settings, $legacy_action->ID );
 
 		if ( $blocker ) {
 			return new WP_Error( 'frm_paypal_migration_blocked', $blocker );
@@ -134,34 +160,48 @@ class FrmPayPalLiteLegacyMigrationHelper {
 		}
 
 		FrmFormAction::clear_cache();
-		wp_update_post(
+		$disabled = wp_update_post(
 			array(
 				'ID'          => $legacy_action->ID,
 				'post_status' => 'draft',
 			)
 		);
 
-		if ( ! empty( $legacy_settings['paypal_stop_email'] ) ) {
-			$moved = self::move_emails_to_payment_success( $form_id );
+		if ( ! $disabled || is_wp_error( $disabled ) ) {
+			// Never leave both actions on. Each would try to collect the payment.
+			wp_delete_post( $new_action_id, true );
+			FrmFormAction::clear_cache();
 
-			if ( $moved ) {
-				$notes[] = sprintf(
-					/* translators: %d: The number of email actions that were changed. */
-					_n(
-						'To hold notifications until payment is received, %d email action now sends on a successful payment instead of when the entry is created.',
-						'To hold notifications until payment is received, %d email actions now send on a successful payment instead of when the entry is created.',
-						$moved,
-						'formidable'
-					),
-					$moved
-				);
+			return new WP_Error( 'frm_paypal_migration_failed', __( 'The legacy action could not be turned off, so the PayPal Commerce action was not created.', 'formidable' ) );
+		}
+
+		if ( ! empty( $legacy_settings['paypal_stop_email'] ) ) {
+			$email_note = self::hold_emails_until_payment( $form_id, $new_action->post_content['conditions'] ?? array() );
+
+			if ( $email_note ) {
+				$notes[] = $email_note;
 			}
+		}
+
+		$retriggered = self::add_payment_triggers( $form_id );
+
+		if ( $retriggered ) {
+			$notes[] = sprintf(
+				/* translators: %d: The number of form actions that were changed. */
+				_n(
+					'%d action that ran after a legacy PayPal payment now also runs after a PayPal Commerce payment.',
+					'%d actions that ran after a legacy PayPal payment now also run after a PayPal Commerce payment.',
+					$retriggered,
+					'formidable'
+				),
+				$retriggered
+			);
 		}
 
 		FrmFormAction::clear_cache();
 
 		return array(
-			'action_id' => (int) $new_action_id,
+			'action_id' => $new_action_id,
 			'notes'     => $notes,
 		);
 	}
@@ -185,13 +225,10 @@ class FrmPayPalLiteLegacyMigrationHelper {
 			'type'        => '_xclick-subscriptions' === $type ? 'recurring' : 'single',
 			'description' => $item_name,
 			'amount'      => self::convert_amount( $legacy ),
+			'currency'    => strtolower( self::get_legacy_currency( $legacy ) ),
 			'event'       => array( 'create' ),
 			'conditions'  => self::convert_conditions( $legacy['conditions'] ?? array() ),
 		);
-
-		if ( ! empty( $legacy['currency'] ) ) {
-			$settings['currency'] = strtolower( $legacy['currency'] );
-		}
 
 		if ( '_donations' === $type ) {
 			$notes[] = __( 'The legacy Donation payment type is now a one-time payment. PayPal Commerce does not have a separate donation checkout.', 'formidable' );
@@ -237,6 +274,29 @@ class FrmPayPalLiteLegacyMigrationHelper {
 		}
 
 		return (string) ( $legacy['paypal_amount'] ?? '' );
+	}
+
+	/**
+	 * Legacy actions without their own currency use the currency from the PayPal add-on settings,
+	 * then USD, like the PayPal add-on. The option is read directly so this also works while the
+	 * PayPal add-on is inactive.
+	 *
+	 * @param array $legacy The legacy action settings.
+	 *
+	 * @return string
+	 */
+	private static function get_legacy_currency( $legacy ) {
+		if ( ! empty( $legacy['currency'] ) && is_string( $legacy['currency'] ) ) {
+			return $legacy['currency'];
+		}
+
+		$global_settings = get_option( 'frm_paypal_options' );
+
+		if ( is_object( $global_settings ) && ! empty( $global_settings->currency ) && is_string( $global_settings->currency ) ) {
+			return $global_settings->currency;
+		}
+
+		return 'USD';
 	}
 
 	/**
@@ -363,6 +423,8 @@ class FrmPayPalLiteLegacyMigrationHelper {
 			}
 		}
 
+		$notes[] = __( 'Existing legacy subscriptions stay on PayPal Standard. Keep the PayPal add-on active so their payments are still recorded.', 'formidable' );
+
 		if ( ! empty( $legacy['retry'] ) ) {
 			$notes[] = __( 'The legacy "Retry a failed payment" setting has no PayPal Commerce equivalent. PayPal applies its own retry rules to subscriptions.', 'formidable' );
 		}
@@ -371,8 +433,95 @@ class FrmPayPalLiteLegacyMigrationHelper {
 	}
 
 	/**
-	 * The legacy "hold email notifications" setting delays emails until the payment completes.
-	 * PayPal Commerce does the same with the Successful Payment trigger.
+	 * The legacy "hold email notifications" setting only held emails when a payment was collected.
+	 * An action with conditional logic can skip the payment, and the Successful Payment trigger never
+	 * runs without one, so the emails are only moved when every entry pays.
+	 *
+	 * @param int   $form_id    The form ID.
+	 * @param array $conditions The conditional logic settings of the new payment action.
+	 *
+	 * @return string A note about what happened to the email actions. Empty when there is nothing to report.
+	 */
+	private static function hold_emails_until_payment( $form_id, $conditions ) {
+		if ( self::has_condition_rows( $conditions ) ) {
+			return __( 'This action uses conditional logic, so emails still send when an entry is created. Successful Payment emails only send for paid entries.', 'formidable' );
+		}
+
+		$moved = self::move_emails_to_payment_success( $form_id );
+
+		if ( ! $moved ) {
+			return '';
+		}
+
+		return sprintf(
+			/* translators: %d: The number of email actions that were changed. */
+			_n(
+				'To hold notifications until payment is received, %d email action now sends on a successful payment instead of when the entry is created.',
+				'To hold notifications until payment is received, %d email actions now send on a successful payment instead of when the entry is created.',
+				$moved,
+				'formidable'
+			),
+			$moved
+		);
+	}
+
+	/**
+	 * @param array $conditions The conditional logic settings, with one array per rule.
+	 *
+	 * @return bool
+	 */
+	private static function has_condition_rows( $conditions ) {
+		foreach ( $conditions as $condition ) {
+			if ( is_array( $condition ) && ! empty( $condition['hide_field'] ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Actions triggered by the legacy "Successful PayPal payment" and "Failed PayPal payment" events
+	 * get the matching payment events too. The legacy events stay, so payments for subscriptions that
+	 * started with the legacy action keep running them while the PayPal add-on is active.
+	 *
+	 * @param int $form_id The form ID.
+	 *
+	 * @return int The number of form actions changed.
+	 */
+	private static function add_payment_triggers( $form_id ) {
+		$event_map = array(
+			'paypal'        => 'payment-success',
+			'paypal-failed' => 'payment-failed',
+		);
+		$changed   = 0;
+
+		foreach ( FrmFormAction::get_action_for_form( $form_id ) as $action ) {
+			$events     = (array) ( $action->post_content['event'] ?? array() );
+			$new_events = $events;
+
+			foreach ( $event_map as $legacy_event => $event ) {
+				if ( in_array( $legacy_event, $events, true ) && ! in_array( $event, $events, true ) ) {
+					$new_events[] = $event;
+				}
+			}
+
+			$action_control = FrmFormActionsController::get_form_actions( $action->post_excerpt );
+
+			if ( $new_events === $events || ! is_object( $action_control ) ) {
+				continue;
+			}
+
+			$action->post_content['event'] = $new_events;
+			$action_control->save_settings( $action );
+			++$changed;
+		}
+
+		return $changed;
+	}
+
+	/**
+	 * Send held emails with the Successful Payment trigger instead of on entry creation.
 	 *
 	 * @param int $form_id The form ID.
 	 *
