@@ -22,6 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<?php esc_html_e( 'Field Options', 'formidable' ); ?>
 						</a>
 					</li>
+					<li class="hide-if-no-js">
+						<a href="#frm-builder-outline" id="frm-builder-outline-toggle">
+							<?php esc_html_e( 'Outline', 'formidable' ); ?>
+						</a>
+					</li>
 					<?php do_action( 'frm_extra_form_instruction_tabs' ); ?>
 				</ul>
 			</div>
@@ -222,6 +227,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 								?>
 							</form>
 						</div>
+					</div>
+					<div>
+						<?php require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_outline_panel.php'; ?>
 					</div>
 					<?php
 					if ( isset( $form ) ) {
