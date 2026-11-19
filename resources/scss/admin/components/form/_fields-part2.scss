@@ -2,14 +2,14 @@
  * Components - Fields Part 2
  */
 
-.frm_wrap .with_frm_style .frm_checkbox input[type="checkbox"],
-.frm_wrap .with_frm_style .frm_radio input[type="radio"],
-.frm_wrap input[type="checkbox"],
-.frm-white-body input[type="checkbox"],
-.field-group input[type="checkbox"],
-.frm_scale input[type="radio"],
-.frm_radio input[type="radio"],
-.frm_checkbox input[type="checkbox"] {
+.frm_wrap .with_frm_style .frm_checkbox input[type="checkbox"]#{$outside-styler-preview},
+.frm_wrap .with_frm_style .frm_radio input[type="radio"]#{$outside-styler-preview},
+.frm_wrap input[type="checkbox"]#{$outside-styler-preview},
+.frm-white-body input[type="checkbox"]#{$outside-styler-preview},
+.field-group input[type="checkbox"]#{$outside-styler-preview},
+.frm_scale input[type="radio"]#{$outside-styler-preview},
+.frm_radio input[type="radio"]#{$outside-styler-preview},
+.frm_checkbox input[type="checkbox"]#{$outside-styler-preview} {
 	width: 16px;
 	min-width: 16px;
 	height: 16px;
@@ -18,7 +18,7 @@
 	-webkit-appearance: none;
 }
 
-.frm_wrap input[type="radio"] {
+.frm_wrap input[type="radio"]#{$outside-styler-preview} {
 	border-color: var(--grey-300);
 	box-shadow: var(--box-shadow-sm);
 
@@ -35,16 +35,16 @@
  */
 :is(.frm_wrap, .frm-white-body, .field-group) {
 
-	:is(input[type="checkbox"], input[type="radio"]) {
+	:is(input[type="checkbox"], input[type="radio"])#{$outside-styler-preview} {
 		transition:
 			0.12s border-color ease,
 			0.12s box-shadow ease,
 			0.12s background-color ease;
 	}
 
-	:is(input[type="checkbox"], input[type="radio"]):hover:not(:disabled):not([readonly]):not(:focus),
-	:is(input[type="checkbox"], input[type="radio"]):has(+ label:hover):not(:disabled):not([readonly]):not(:focus),
-	label:hover > :is(input[type="checkbox"], input[type="radio"]):not(:disabled):not([readonly]):not(:focus) {
+	:is(input[type="checkbox"], input[type="radio"]):hover:not(:disabled):not([readonly]):not(:focus)#{$outside-styler-preview},
+	:is(input[type="checkbox"], input[type="radio"]):has(+ label:hover):not(:disabled):not([readonly]):not(:focus)#{$outside-styler-preview},
+	label:hover > :is(input[type="checkbox"], input[type="radio"]):not(:disabled):not([readonly]):not(:focus)#{$outside-styler-preview} {
 		border-color: var(--grey-300);
 		border-color: color-mix(in oklab, var(--grey-400) 45%, var(--grey-300));
 		box-shadow: var(--box-shadow-md);
@@ -52,9 +52,9 @@
 
 	/* A checked box is a filled swatch with no grey stroke left to warm, so deepen the fill.
 	   !important beats the checked rule, which uses it. */
-	input[type="checkbox"]:checked:hover:not(:disabled):not([readonly]):not(:focus),
-	input[type="checkbox"]:checked:has(+ label:hover):not(:disabled):not([readonly]):not(:focus),
-	label:hover > input[type="checkbox"]:checked:not(:disabled):not([readonly]):not(:focus) {
+	input[type="checkbox"]:checked:hover:not(:disabled):not([readonly]):not(:focus)#{$outside-styler-preview},
+	input[type="checkbox"]:checked:has(+ label:hover):not(:disabled):not([readonly]):not(:focus)#{$outside-styler-preview},
+	label:hover > input[type="checkbox"]:checked:not(:disabled):not([readonly]):not(:focus)#{$outside-styler-preview} {
 		background-color: var(--primary-700) !important;
 		border-color: var(--primary-700) !important;
 	}
@@ -62,7 +62,7 @@
 
 @media (prefers-reduced-motion: reduce) {
 
-	:is(.frm_wrap, .frm-white-body, .field-group) :is(input[type="checkbox"], input[type="radio"]) {
+	:is(.frm_wrap, .frm-white-body, .field-group) :is(input[type="checkbox"], input[type="radio"])#{$outside-styler-preview} {
 		transition: none;
 	}
 }
@@ -76,7 +76,7 @@
 :is(.frm_wrap, .frm-white-body, .field-group) {
 
 	/* Padding the wrapping label was tried and reverted: stacked lists pay it on every row. */
-	:is(input[type="checkbox"], input[type="radio"]) {
+	:is(input[type="checkbox"], input[type="radio"])#{$outside-styler-preview} {
 		position: relative;
 
 		&::after {
@@ -92,32 +92,32 @@
 
 	/* Option rows are barely taller than the target, so an extended box would reach into the
 	   rows above and below. */
-	.frm_single_option :is(input[type="checkbox"], input[type="radio"])::after {
+	.frm_single_option :is(input[type="checkbox"], input[type="radio"])#{$outside-styler-preview}::after {
 		content: none;
 	}
 }
 
-.frm_wrap .with_frm_style .frm_checkbox input[type="checkbox"],
-.frm_wrap input[type="checkbox"],
-.frm-white-body input[type="checkbox"],
-.field-group input[type="checkbox"],
-.frm_checkbox input[type="checkbox"] {
+.frm_wrap .with_frm_style .frm_checkbox input[type="checkbox"]#{$outside-styler-preview},
+.frm_wrap input[type="checkbox"]#{$outside-styler-preview},
+.frm-white-body input[type="checkbox"]#{$outside-styler-preview},
+.field-group input[type="checkbox"]#{$outside-styler-preview},
+.frm_checkbox input[type="checkbox"]#{$outside-styler-preview} {
 	border-radius: 4px;
 }
 
-.frm-white-body input[type="checkbox"]:checked,
-.frm_wrap input[type="checkbox"]:checked {
+.frm-white-body input[type="checkbox"]:checked#{$outside-styler-preview},
+.frm_wrap input[type="checkbox"]:checked#{$outside-styler-preview} {
 	background-color: var(--border-color-active, var(--primary-500)) !important;
 	border-color: var(--border-color-active, var(--primary-500)) !important;
 }
 
-.frm-white-body input[type="checkbox"]:checked:focus,
-.frm_wrap input[type="checkbox"]:checked:focus {
+.frm-white-body input[type="checkbox"]:checked:focus#{$outside-styler-preview},
+.frm_wrap input[type="checkbox"]:checked:focus#{$outside-styler-preview} {
 	border-color: var(--border-color-active, var(--primary-500));
 }
 
-.frm-white-body input[type="checkbox"]:checked::before,
-.frm_wrap input[type="checkbox"]:checked::before {
+.frm-white-body input[type="checkbox"]:checked#{$outside-styler-preview}::before,
+.frm_wrap input[type="checkbox"]:checked#{$outside-styler-preview}::before {
 	content: "";
 	display: block;
 	width: 100% !important;
@@ -129,8 +129,8 @@
 	margin: 0;
 }
 
-.frm_radio input[type="radio"],
-.frm_checkbox input[type="checkbox"] {
+.frm_radio input[type="radio"]#{$outside-styler-preview},
+.frm_checkbox input[type="checkbox"]#{$outside-styler-preview} {
 	margin-right: 5px;
 }
 

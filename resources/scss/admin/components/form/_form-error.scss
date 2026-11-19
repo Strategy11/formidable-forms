@@ -2,13 +2,13 @@
  * Components - Form Error
  */
 
-.frm_description,
-.with_frm_style form div.description,
-.frm_error {
+.frm_description#{$outside-styler-preview},
+.with_frm_style form div.description#{$outside-styler-preview},
+.frm_error#{$outside-styler-preview} {
 	margin: 0;
 }
 
-.frm_error {
+.frm_error#{$outside-styler-preview} {
 	color: #f04438;
 }
 
@@ -24,6 +24,6 @@ form .frm_blank_field label {
 	color: #f04438;
 }
 
-.frm_required {
+.frm_required#{$outside-styler-preview} {
 	color: #f04438;
 }
