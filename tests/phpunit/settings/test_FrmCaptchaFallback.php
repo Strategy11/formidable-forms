@@ -38,6 +38,7 @@ class test_FrmCaptchaFallback extends FrmUnitTest {
 			'recaptcha' => '',
 			'hcaptcha'  => 'hcaptcha_',
 			'turnstile' => 'turnstile_',
+			'infopeak'  => 'infopeak_',
 		);
 
 		foreach ( $prefixes as $type => $prefix ) {
@@ -52,7 +53,7 @@ class test_FrmCaptchaFallback extends FrmUnitTest {
 	}
 
 	public function test_unsupported_selection_uses_first_configured_provider() {
-		$providers = array( 'recaptcha', 'hcaptcha', 'turnstile' );
+		$providers = array( 'recaptcha', 'hcaptcha', 'turnstile', 'infopeak' );
 
 		foreach ( $providers as $expected ) {
 			$settings = $this->load_settings( 'altcha', $providers );
@@ -64,8 +65,8 @@ class test_FrmCaptchaFallback extends FrmUnitTest {
 	}
 
 	public function test_supported_selection_is_preserved() {
-		foreach ( array( 'recaptcha', 'hcaptcha', 'turnstile' ) as $type ) {
-			$settings = $this->load_settings( $type, array( 'recaptcha', 'hcaptcha', 'turnstile' ) );
+		foreach ( array( 'recaptcha', 'hcaptcha', 'turnstile', 'infopeak' ) as $type ) {
+			$settings = $this->load_settings( $type, array( 'recaptcha', 'hcaptcha', 'turnstile', 'infopeak' ) );
 			$this->assertSame( $type, $settings->active_captcha );
 		}
 	}
@@ -94,6 +95,7 @@ class test_FrmCaptchaFallback extends FrmUnitTest {
 			'recaptcha' => array( 'g-recaptcha', 'https://www.google.com/recaptcha/api.js' ),
 			'hcaptcha'  => array( 'h-captcha', 'https://js.hcaptcha.com/1/api.js' ),
 			'turnstile' => array( 'cf-turnstile', 'https://challenges.cloudflare.com/turnstile/v0/api.js' ),
+			'infopeak'  => array( 'infopeak-captcha', 'https://captcha.infopeak.io/infopeak-captcha.js' ),
 		);
 
 		foreach ( $providers as $type => $expected ) {

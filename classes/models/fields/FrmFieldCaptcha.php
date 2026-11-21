@@ -221,6 +221,10 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return $this->hcaptcha_api_url();
 		}
 
+		if ( 'infopeak' === $active_mode ) {
+			return $this->infopeak_api_url();
+		}
+
 		return $this->turnstile_api_url();
 	}
 
@@ -303,6 +307,25 @@ class FrmFieldCaptcha extends FrmFieldType {
 			'&render=explicit',
 			$api_js_url
 		);
+	}
+
+	/**
+	 * The InfoPeak Captcha script renders every .infopeak-captcha element on the page.
+	 * It also renders new elements when it runs again, which happens when a form page is loaded with AJAX.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	protected function infopeak_api_url() {
+		/**
+		 * Allows updating the InfoPeak Captcha js api url.
+		 *
+		 * @since x.x
+		 *
+		 * @param string $api_js_url
+		 */
+		return apply_filters( 'frm_infopeak_js_url', 'https://captcha.infopeak.io/infopeak-captcha.js' );
 	}
 
 	/**

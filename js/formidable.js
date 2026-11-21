@@ -1389,6 +1389,11 @@ function frmFrontFormJS() {
 					);
 				}
 
+				// InfoPeak Captcha tokens can only be used once, so get a new one for the next submit.
+				if ( window.infopeakCaptcha ) {
+					object.querySelectorAll( '.infopeak-captcha' ).forEach( captchaEl => window.infopeakCaptcha.reset( captchaEl ) );
+				}
+
 				jQuery( document ).trigger( 'frmFormErrors', [ object, response ] );
 
 				fieldsets.forEach( field => field.classList.remove( 'frm_doing_ajax' ) );

@@ -159,6 +159,24 @@ class FrmSettings {
 	public $turnstile_privkey;
 
 	/**
+	 * Settings for InfoPeak Captcha.
+	 */
+
+	/**
+	 * @since x.x
+	 *
+	 * @var string
+	 */
+	public $infopeak_pubkey;
+
+	/**
+	 * @since x.x
+	 *
+	 * @var string|null
+	 */
+	public $infopeak_privkey;
+
+	/**
 	 * @var bool
 	 */
 	public $no_ips;
@@ -476,6 +494,10 @@ class FrmSettings {
 			$this->turnstile_privkey = '';
 		}
 
+		if ( ! isset( $this->infopeak_privkey ) ) {
+			$this->infopeak_privkey = '';
+		}
+
 		if ( ! isset( $this->pubkey ) ) {
 			// Get the options from the database.
 			$recaptcha_opt = is_multisite() ? get_site_option( 'recaptcha' ) : get_option( 'recaptcha' );
@@ -519,6 +541,7 @@ class FrmSettings {
 			'recaptcha' => '',
 			'hcaptcha'  => 'hcaptcha_',
 			'turnstile' => 'turnstile_',
+			'infopeak'  => 'infopeak_',
 		);
 
 		if ( array_key_exists( $this->active_captcha, $prefixes ) ) {
@@ -648,6 +671,8 @@ class FrmSettings {
 		$this->hcaptcha_privkey  = trim( $params['frm_hcaptcha_privkey'] );
 		$this->turnstile_pubkey  = trim( $params['frm_turnstile_pubkey'] );
 		$this->turnstile_privkey = trim( $params['frm_turnstile_privkey'] );
+		$this->infopeak_pubkey   = trim( $params['frm_infopeak_pubkey'] );
+		$this->infopeak_privkey  = trim( $params['frm_infopeak_privkey'] );
 		$this->load_style        = $params['frm_load_style'];
 		$this->custom_css        = $params['frm_custom_css'];
 		$this->default_email     = $params['frm_default_email'];
