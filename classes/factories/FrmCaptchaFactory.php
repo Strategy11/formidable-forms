@@ -13,7 +13,7 @@ class FrmCaptchaFactory {
 	 *
 	 * @since 6.8.4
 	 *
-	 * @param string $captcha_type Either 'active', 'recaptcha', 'hcaptcha' or 'turnstile'. If active, the global setting will be used.
+	 * @param string $captcha_type Either 'active', 'recaptcha', 'hcaptcha', 'turnstile' or 'infopeak'. If active, the global setting will be used.
 	 *
 	 * @return FrmFieldCaptchaSettings
 	 */
@@ -41,6 +41,7 @@ class FrmCaptchaFactory {
 			'recaptcha' => 'FrmRecaptchaSettings',
 			'hcaptcha'  => 'FrmHcaptchaSettings',
 			'turnstile' => 'FrmTurnstileSettings',
+			'infopeak'  => 'FrmInfopeakSettings',
 		);
 
 		if ( ! isset( $settings_classes[ $active_captcha ] ) ) {

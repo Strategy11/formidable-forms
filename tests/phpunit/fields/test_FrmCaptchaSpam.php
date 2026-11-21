@@ -413,4 +413,44 @@ class test_FrmCaptchaSpam extends FrmUnitTest {
 
 		$this->assertStringContainsString( 'data-save-as-spam="1"', $html, 'Saving spam should allow CAPTCHA errors to reach server validation.' );
 	}
+
+	public function test_infopeak_sends_token_to_siteverify_and_explains_used_up_quota() {
+		$settings                   = FrmAppHelper::get_settings();
+		$settings->active_captcha   = 'infopeak';
+		$settings->infopeak_pubkey  = 'test-site-key';
+		$settings->infopeak_privkey = 'test-secret-key';
+		$_POST                      = array( 'infopeak-captcha-response' => 'test-token' );
+		$requests                   = array();
+		$record_request             = function ( $preempt, $args, $url ) use ( &$requests ) {
+			$requests[] = array( $url, $args['body'] );
+			return $preempt;
+		};
+		add_filter( 'pre_http_request', $record_request, 9, 3 );
+		$failed_codes = array();
+		$record_codes = function ( $reason, $error_codes ) use ( &$failed_codes ) {
+			$failed_codes = $error_codes;
+		};
+		add_action( 'frm_captcha_validation_failed', $record_codes, 10, 2 );
+
+		$this->response = array( 'body' => wp_json_encode( array( 'success' => true ) ) );
+		$this->assertSame( array(), $this->validate_captcha(), 'A verified InfoPeak Captcha token should pass.' );
+
+		$this->response = array(
+			'body' => wp_json_encode(
+				array(
+					'success'     => false,
+					'error-codes' => array( 'quota-exceeded' ),
+				)
+			),
+		);
+		$errors         = $this->validate_captcha();
+		remove_filter( 'pre_http_request', $record_request, 9 );
+		remove_action( 'frm_captcha_validation_failed', $record_codes );
+
+		$this->assertSame( 'https://captcha.infopeak.io/siteverify', $requests[0][0], 'The token should be verified by InfoPeak Captcha.' );
+		$this->assertSame( 'test-secret-key', $requests[0][1]['secret'], 'The InfoPeak Captcha secret key should be sent.' );
+		$this->assertSame( 'test-token', $requests[0][1]['response'], 'The InfoPeak Captcha token should be sent.' );
+		$this->assertStringContainsString( 'not set up correctly', $errors[ 'field' . $this->captcha->id ], 'A used up quota cannot be fixed by trying again.' );
+		$this->assertSame( array( 'quota-exceeded' ), $failed_codes, 'The quota error code should be recorded.' );
+	}
 }
