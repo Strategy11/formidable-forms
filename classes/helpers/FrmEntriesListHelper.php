@@ -183,7 +183,26 @@ class FrmEntriesListHelper extends FrmListHelper {
 			$s_query = FrmProEntriesHelper::get_search_str( $s_query, $s, $form_id, $fid );
 		}
 
+		$this->add_status_to_query( $s_query );
+
 		return apply_filters( 'frm_entries_list_query', $s_query, compact( 'form_id' ) );
+	}
+
+	/**
+	 * Spam entries are only listed in the Spam tab.
+	 *
+	 * @since 7.0
+	 *
+	 * @param array $s_query
+	 *
+	 * @return void
+	 */
+	protected function add_status_to_query( &$s_query ) {
+		if ( FrmSpamEntriesController::is_spam_tab() ) {
+			$s_query['it.is_draft'] = FrmSpamEntriesHelper::SPAM_ENTRY_STATUS;
+		} else {
+			$s_query[] = FrmSpamEntriesHelper::get_exclude_spam_where();
+		}
 	}
 
 	/**
@@ -201,6 +220,11 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	public function no_items() {
+		if ( FrmSpamEntriesController::is_spam_tab() ) {
+			echo '<p>' . esc_html__( 'No spam entries found.', 'formidable' ) . '</p>';
+			return;
+		}
+
 		$s = self::get_param(
 			array(
 				'param'    => 's',
@@ -208,8 +232,20 @@ class FrmEntriesListHelper extends FrmListHelper {
 			)
 		);
 
-		if ( $s ) {
-			esc_html_e( 'No Entries Found', 'formidable' );
+		if ( $s !== '' ) {
+			$current_url = set_url_scheme(
+				'http://' . FrmAppHelper::get_server_value( 'HTTP_HOST' ) . FrmAppHelper::get_server_value( 'REQUEST_URI' )
+			);
+			$clear_url   = remove_query_arg( 's', $current_url );
+
+			echo '<p>';
+			printf(
+				/* translators: %1$s: Start link HTML, %2$s: End link HTML */
+				esc_html__( 'No entries match your search. %1$sClear search%2$s', 'formidable' ),
+				'<a href="' . esc_url( $clear_url ) . '">',
+				'</a>'
+			);
+			echo '</p>';
 			return;
 		}
 
@@ -422,11 +458,19 @@ class FrmEntriesListHelper extends FrmListHelper {
 				break;
 			case 'name':
 				$val = FrmAppHelper::truncate( strip_tags( $item->{$col_name} ), 100 );
+
+				if ( FrmSpamEntriesHelper::is_spam( $item ) ) {
+					$val = esc_html( $val );
+				}
 				break;
 			case 'created_at':
 			case 'updated_at':
 				$date = FrmAppHelper::get_formatted_time( $item->{$col_name} );
 				$val  = '<abbr title="' . esc_attr( FrmAppHelper::get_formatted_time( $item->{$col_name}, '', 'g:i:s A' ) ) . '">' . $date . '</abbr>';
+				break;
+			case 'spam_reason':
+				$source_label = FrmSpamEntriesHelper::get_source_label( $item );
+				$val          = esc_html( '' !== $source_label ? $source_label : __( 'Not recorded', 'formidable' ) );
 				break;
 			case 'is_draft':
 				$entry_status = FrmEntriesHelper::get_entry_status_label( $item->is_draft );
@@ -554,7 +598,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			unset( $embedded_field_id );
 		}
 
-		$val = FrmEntriesHelper::prepare_display_value( $item, $field, $atts );
+		$val = FrmEntriesHelper::prepare_display_value( FrmSpamEntriesHelper::get_escaped_entry( $item ), $field, $atts );
 	}
 
 	/**

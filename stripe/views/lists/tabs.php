@@ -35,6 +35,21 @@ $tabs = array(
 				</a>
 			<?php endif; ?>
 		</div>
-		<div class="frm-payments-tab-filler"></div>	
+		<?php
+		$filler_params = array(
+			'class' => 'frm-payments-tab-filler',
+		);
+
+		if ( 'coupons' === $tab_key ) {
+			$filler_params['style'] = 'flex: 1;';
+		}
+		?>
+		<div <?php FrmAppHelper::array_to_html_params( $filler_params, true ); ?>></div>
 	<?php endforeach; ?>
+	<div class="frm-payments-settings-button">
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-settings&t=stripe_settings' ) ); ?>" class="button button-secondary frm-button">
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_small_settings_icon' ); ?>
+			<?php esc_html_e( 'Payment settings', 'formidable' ); ?>
+		</a>
+	</div>
 </div>

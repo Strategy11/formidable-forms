@@ -2,6 +2,7 @@ version = 1
 
 # 1. Global Exclude Patterns
 exclude_patterns = [
+  "stubs.php",
   "**/node_modules/**",
   "**/vendor/**",
   "**/venv/**",
@@ -37,6 +38,9 @@ test_patterns = [
 [[analyzers]]
 name = "php"
 enabled = true
+
+  [analyzers.meta]
+  bootstrap_files = ["vendor/autoload.php", "stubs.php", "tests/analysis/wp-unit-test-case.php", "tests/analysis/requests-response.php"]
 
 [[analyzers]]
 name = "javascript"

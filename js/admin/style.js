@@ -29,7 +29,53 @@
 		initListPage();
 	}
 
+	/**
+	 * Focus the visible control when a styler heading labels a hidden toggle or radio input.
+	 * Radio headings focus the selected option without changing the setting.
+	 *
+	 * @since 7.0
+	 *
+	 * @return {void}
+	 */
+	function initLabelFocus() {
+		document.getElementById( 'frm_style_sidebar' ).addEventListener( 'click', event => {
+			const label = event.target.closest( 'label.frm-style-item-heading' );
+			const input = label?.control;
+			if ( ! input || input.disabled || ! [ 'radio', 'checkbox' ].includes( input.type ) ) {
+				return;
+			}
+
+			let target;
+			if ( 'checkbox' === input.type ) {
+				target = input.parentElement.querySelector( '[role="switch"]' );
+			} else {
+				const component = input.closest( '.frm-radio-component' );
+				const radio = component?.querySelector( 'input:checked' ) || input;
+				const option = radio.nextElementSibling;
+				target = option.querySelector( '[role="radio"]' ) || option;
+				event.preventDefault();
+			}
+
+			target?.focus();
+		} );
+	}
+
+	/**
+	 * The "Quick Settings" swatches (Primary, Field Text, Field Border, Button Text) each summarize a single
+	 * underlying setting, but have no name attribute of their own, so they can't be found and updated by the
+	 * main reset loop in syncEditPageAfterResetAction(). This maps the setting key to that swatch's fixed id.
+	 *
+	 * @type {Object<string, string>}
+	 */
+	const QUICK_SETTINGS_SWATCH_IDS = {
+		submit_bg_color: 'frm_style_qsettings_submit_bg_color',
+		text_color: 'frm_style_qsettings_text_color',
+		border_color: 'frm_style_qsettings_border_color',
+		submit_text_color: 'frm_style_qsettings_submit_text_color'
+	};
+
 	initCommonEventListeners();
+	initLabelFocus();
 	initPreview();
 	fixWpAuthModal();
 
@@ -184,9 +230,8 @@
 	 */
 	function initListPage() {
 		document.addEventListener( 'click', handleClickEventsForListPage );
-		// Add a timeout so Pro has a chance to add a filter first.
-		// 0 does not always work in Google Chrome, so use 1.
-		setTimeout( addHamburgerMenusToCards, 1 );
+		// The dropdown options are added on the first open, so there is no longer a filter from Pro to wait for here.
+		addHamburgerMenusToCards();
 		initDatepickerSample();
 
 		const enableToggle = document.getElementById( 'frm_enable_styling' );
@@ -672,7 +717,8 @@
 			return;
 		}
 
-		card.append( getHamburgerMenu( card.dataset ) );
+		const styleName = card.querySelector( '.frm-style-card-title' )?.textContent;
+		card.append( getHamburgerMenu( card.dataset, styleName ) );
 	}
 
 	/**
@@ -702,27 +748,129 @@
 	}
 
 	/**
+	 * @param {string} [styleName] The style's own name, when known.
+	 * @return {string} The dropdown toggle's accessible name for a style card.
+	 */
+	function getStyleOptionsLabel( styleName ) {
+		if ( ! styleName ) {
+			return __( 'Style Options', 'formidable' );
+		}
+
+		/* translators: %s: The style's name. */
+		return sprintf( __( 'Style options for %s', 'formidable' ), styleName );
+	}
+
+	/**
 	 * Get a dropdown and the "hamburger" stacked dot menu trigger for a single style card.
 	 *
-	 * @param {DOMStringMap} data {
+	 * @param {DOMStringMap} data        {
 	 *     @type {string} editUrl
 	 *     @type {string} styleId
 	 *     @type {string} labelPosition
 	 *     @type {string} classname
 	 * }
+	 * @param {string}       [styleName] The style's own name, when known, so the trigger's
+	 *                                   accessible name distinguishes it from other cards' triggers.
 	 * @return {HTMLElement} The hamburger menu element.
 	 */
-	function getHamburgerMenu( data ) {
+	function getHamburgerMenu( data, styleName ) {
+		const label = getStyleOptionsLabel( styleName );
 		const hamburgerMenu = a( {
 			className: 'frm-dropdown-toggle dropdown-toggle',
-			child: svg( { href: '#frm_thick_more_vert_icon' } )
+			children: [
+				svg( { href: '#frm_thick_more_vert_icon' } ),
+				span( { className: 'screen-reader-text', text: label } )
+			]
 		} );
 		hamburgerMenu.setAttribute( 'data-bs-toggle', 'dropdown' );
-		hamburgerMenu.setAttribute( 'data-bs-container', 'body' );
 		hamburgerMenu.setAttribute( 'role', 'button' );
+
+		// Style cards sit inside several overflow: hidden ancestors, which Popper treats
+		// as clipping parents and then positions from a broken rectangle. Static display
+		// opts out of Popper so the menu is placed by CSS, matching the More Options
+		// dropdown in admin.js.
+		hamburgerMenu.setAttribute( 'data-bs-display', 'static' );
 		hamburgerMenu.setAttribute( 'tabindex', 0 );
 
 		const isTemplate = data.templateKey !== undefined;
+
+		const dropdownMenu = div( {
+			// Use dropdown-menu-right to avoid an overlapping issue with the card to the right (where the # of forms would appear above the menu).
+			className: 'frm-dropdown-menu frm-style-options-menu frm-p-1'
+		} );
+
+		const isRtl = document.body.classList.contains( 'rtl' );
+		dropdownMenu.classList.add( `dropdown-menu-${ isRtl ? 'left' : 'right' }` );
+
+		dropdownMenu.setAttribute( 'role', 'menu' );
+
+		// Static display has no flip of its own, so open upwards when the menu would
+		// otherwise run past the bottom of the panel it scrolls in.
+		hamburgerMenu.addEventListener( 'shown.bs.dropdown', () => {
+			const scroller = hamburgerMenu.closest( '#frm_style_sidebar' ) || document.documentElement;
+
+			// Measure from the default downward position. The class survives the close,
+			// so leaving it on would measure the already-corrected menu, conclude it
+			// fits, and drop it back below — every second open would be wrong.
+			dropdownMenu.classList.remove( 'frm-dropdown-menu-above' );
+
+			const overflowsBelow = dropdownMenu.getBoundingClientRect().bottom > scroller.getBoundingClientRect().bottom;
+			dropdownMenu.classList.toggle( 'frm-dropdown-menu-above', overflowsBelow );
+		} );
+
+		fillDropdownMenuOnFirstOpen( hamburgerMenu, dropdownMenu, data, isTemplate );
+
+		return div( {
+			className: 'dropdown frm_wrap', // The .frm_wrap class prevents a blue outline on the active dropdown trigger.
+			children: [ hamburgerMenu, dropdownMenu ]
+		} );
+	}
+
+	/**
+	 * Add the options to a style card dropdown the first time that dropdown is opened.
+	 *
+	 * The options are built through the frm_style_card_dropdown_options filter, and Pro registers its
+	 * callback while its own script file runs. Adding the options while the page loads raced that file,
+	 * so a request for it that was slow to come back left every card holding the Lite only options.
+	 * Waiting for the first open takes the script order out of it, since Pro has always registered the
+	 * filter by the time a card can be clicked.
+	 *
+	 * @since 6.35
+	 *
+	 * @param {HTMLElement}  hamburgerMenu The dropdown trigger.
+	 * @param {HTMLElement}  dropdownMenu  The dropdown to add the options to.
+	 * @param {DOMStringMap} data          The dataset of the style card, or an object with the style ID on the edit page.
+	 * @param {boolean}      isTemplate    Whether the card is for a style template.
+	 * @return {void}
+	 */
+	function fillDropdownMenuOnFirstOpen( hamburgerMenu, dropdownMenu, data, isTemplate ) {
+		const fillDropdownMenu = () => {
+			if ( dropdownMenu.children.length ) {
+				return;
+			}
+
+			const options = getDropdownMenuOptions( data, isTemplate );
+			dropdownMenu.append( ...options.map( wrapDropdownItem ) );
+		};
+
+		// Bootstrap fires this on the trigger before it measures and positions the dropdown.
+		hamburgerMenu.addEventListener( 'show.bs.dropdown', fillDropdownMenu );
+
+		// Fall back to the click in case the dropdown is ever opened without Bootstrap. Listen in the
+		// capture phase so the options are in place before Bootstrap's own delegated handler runs.
+		hamburgerMenu.addEventListener( 'click', fillDropdownMenu, true );
+	}
+
+	/**
+	 * Get the options for a single style card dropdown.
+	 *
+	 * @since 6.35
+	 *
+	 * @param {DOMStringMap} data       The dataset of the style card, or an object with the style ID on the edit page.
+	 * @param {boolean}      isTemplate Whether the card is for a style template.
+	 * @return {Array} The dropdown options, each an object with an anchor and a type.
+	 */
+	function getDropdownMenuOptions( data, isTemplate ) {
 		let dropdownMenuOptions = [];
 
 		if ( isListPage ) {
@@ -765,21 +913,7 @@
 			maybeAddDuplicateUpsell( dropdownMenuOptions );
 		}
 
-		const dropdownMenu = div( {
-			// Use dropdown-menu-right to avoid an overlapping issue with the card to the right (where the # of forms would appear above the menu).
-			className: 'frm-dropdown-menu frm-style-options-menu frm-p-1',
-			children: dropdownMenuOptions.map( wrapDropdownItem )
-		} );
-
-		const isRtl = document.body.classList.contains( 'rtl' );
-		dropdownMenu.classList.add( `dropdown-menu-${ isRtl ? 'left' : 'right' }` );
-
-		dropdownMenu.setAttribute( 'role', 'menu' );
-
-		return div( {
-			className: 'dropdown frm_wrap', // The .frm_wrap class prevents a blue outline on the active dropdown trigger.
-			children: [ hamburgerMenu, dropdownMenu ]
-		} );
+		return dropdownMenuOptions;
 	}
 
 	/**
@@ -1016,6 +1150,11 @@
 		const card = getCardByStyleId( styleId );
 		const titleElement = card.querySelector( '.frm-style-card-title' );
 		titleElement.textContent = newStyleName;
+
+		const toggleLabel = card.querySelector( '.frm-dropdown-toggle .screen-reader-text' );
+		if ( toggleLabel ) {
+			toggleLabel.textContent = getStyleOptionsLabel( newStyleName );
+		}
 	}
 
 	/**
@@ -1094,7 +1233,7 @@
 			resetStyleOnListPage( styleId );
 			return;
 		}
-		resetStyleOnEditPage();
+		resetStyleOnEditPage( styleId );
 	}
 
 	/**
@@ -1106,6 +1245,7 @@
 	function resetStyleOnListPage( styleId ) {
 		const formData = new FormData();
 		formData.append( 'style_id', styleId );
+		formData.append( 'persist', '1' );
 		doJsonPost( 'settings_reset', formData ).then(
 			response => {
 				const card = getCardByStyleId( styleId );
@@ -1126,15 +1266,17 @@
 	/**
 	 * Reset the style in-page (without actually updating it).
 	 *
+	 * @param {string} styleId
 	 * @return {void}
 	 */
-	function resetStyleOnEditPage() {
+	function resetStyleOnEditPage( styleId ) {
 		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
 			data: {
 				action: 'frm_settings_reset',
-				nonce: frmGlobal.nonce
+				nonce: frmGlobal.nonce,
+				style_id: styleId
 			},
 			success: syncEditPageAfterResetAction
 		} );
@@ -1150,6 +1292,7 @@
 	 * @return {void}
 	 */
 	function syncEditPageAfterResetAction( response ) {
+		// eslint-disable-next-line sonarjs/super-linear-regex -- regex kept as-is, not refactored
 		let defaultValues = response.replace( /^\s+|\s+$/g, '' );
 		if ( defaultValues.indexOf( '{' ) === 0 ) {
 			defaultValues = JSON.parse( defaultValues );
@@ -1171,18 +1314,59 @@
 				continue;
 			}
 
-			targetInput.value = defaultValues[ key ];
+			const isColor = targetInput.classList.contains( 'hex' );
+			// Default hex colors have no leading '#'. Add it like syncQuickSettingsSwatch so the color picker can read the value.
+			targetInput.value = isColor ? addColorHash( defaultValues[ key ] ) : defaultValues[ key ];
 
-			if ( targetInput.classList.contains( 'wp-color-picker' ) ) {
+			if ( isColor ) {
 				// Trigger a change event so the color pickers sync. Otherwise they stay the same color after reset.
-				jQuery( targetInput ).trigger( 'change' );
+				targetInput.dispatchEvent( new Event( 'frm:color-sync' ) );
 			}
+
+			syncQuickSettingsSwatch( key, defaultValues[ key ] );
 		}
 
 		resetCustomCSSEditor();
 		jQuery( '#frm_submit_style, #frm_auto_width' ).prop( 'checked', false );
 		jQuery( document.getElementById( 'frm_fieldset' ) ).trigger( 'change' );
 		showStyleResetSuccessMessage();
+	}
+
+	/**
+	 * Sync a "Quick Settings" summary swatch (see QUICK_SETTINGS_SWATCH_IDS) to a reset setting's new value.
+	 * Without this, a swatch keeps showing its pre-reset color even though the underlying setting did reset.
+	 *
+	 * @param {string} key
+	 * @param {string} value
+	 * @return {void}
+	 */
+	function syncQuickSettingsSwatch( key, value ) {
+		const swatchId = QUICK_SETTINGS_SWATCH_IDS[ key ];
+		if ( ! swatchId ) {
+			return;
+		}
+
+		const swatch = document.getElementById( swatchId );
+		if ( ! swatch ) {
+			return;
+		}
+
+		// Stored hex colors have no leading '#'. PHP adds it at render time (FrmStylesHelper::get_color_output()); match that here.
+		swatch.value = addColorHash( value );
+		swatch.dispatchEvent( new Event( 'frm:color-sync' ) );
+	}
+
+	/**
+	 * Prepend '#' to a hex color saved without it. This matches FrmStylesHelper::add_color_hash_if_needed.
+	 *
+	 * @since 7.1
+	 *
+	 * @param {string} value The color value.
+	 * @return {string} The color, with a '#' when it is a hex color without one.
+	 */
+	function addColorHash( value ) {
+		const trimmed = String( value ).trim();
+		return /^(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test( trimmed ) ? `#${ trimmed }` : trimmed;
 	}
 
 	/**
@@ -1256,8 +1440,8 @@
 	 */
 	function initEditPage() {
 		const { debounce } = frmDom.util;
-		const debouncedPreviewUpdate = debounce( () => changeStyling(), 100 );
-		const debouncedColorChange	 = debounce( ( event, value ) => {
+		const debouncedChangeStyling = debounce( () => changeStyling(), 100 );
+		const colorChange = ( event, value ) => {
 			/**
 			 * Fires on style colorpicker change.
 			 *
@@ -1265,98 +1449,36 @@
 			 * @param {string} data.value New color value.
 			 */
 			wp.hooks.doAction( 'frm_style_options_color_change', { event, value } );
-		}, 200 );
+		};
 
 		const debouncedTextSquishCheck = debounce( textSquishCheck, 300 );
+		// Counts preview requests so a slow, outdated response cannot overwrite a newer preview.
+		let stylingRequest = 0;
 		initPosClass(); // It's important that this gets called before we add event listeners because it triggers change events.
+
+		const livePreview = {
+			settings: new Set( window.frmStyleLivePreview?.settings ),
+			colorSettings: new Set( window.frmStyleLivePreview?.colorSettings ),
+			baseFontSizeSettings: new Set( window.frmStyleLivePreview?.baseFontSizeSettings ),
+			values: getStyleSettingValues(), // The setting values the preview currently reflects.
+			vars: new Map(), // CSS variable name => { value, updateCount }.
+			updateCount: 0
+		};
 
 		[ 'frm_field_height', 'frm_field_font_size', 'frm_field_pad' ].forEach( selector => {
 			document.getElementById( selector ).addEventListener( 'change', debouncedTextSquishCheck );
 		} );
 
-		function detectColorFormat( value ) {
-			if ( value.startsWith( 'rgba' ) ) {
-				return 'rgba';
-			}
-			if ( value.startsWith( 'rgb' ) ) {
-				return 'rgb';
-			}
-			if ( value.startsWith( 'hsla' ) ) {
-				return 'hsla';
-			}
-			if ( value.startsWith( 'hsl' ) ) {
-				return 'hsl';
-			}
-			return 'hex';
-		}
-
-		const nativeInputValueDescriptor = Object.getOwnPropertyDescriptor( HTMLInputElement.prototype, 'value' );
-
-		jQuery( 'input.hex' ).each( function() {
-			this.dataset.colorFormat = detectColorFormat( this.value );
-
-			// Prevent iris from overwriting non-hex formats with hex during color picking.
-			const input = this;
-			Object.defineProperty( input, 'value', {
-				get() {
-					return nativeInputValueDescriptor.get.call( this );
-				},
-				set( val ) {
-					const format = input.dataset.colorFormat;
-					if ( format && 'hex' !== format && /^#[0-9a-f]{3,8}$/i.test( val ) ) {
-						return;
-					}
-					nativeInputValueDescriptor.set.call( this, val );
-				},
-				configurable: true
+		document.querySelectorAll( 'input.hex' ).forEach( input => {
+			frmDom.colorPicker.init( input, {
+				change( event ) {
+					trackUnsavedChange();
+					colorChange( event, input.value );
+					updatePreview();
+				}
 			} );
-		} ).on( 'keyup', function() {
-			const newFormat = detectColorFormat( this.value );
-			if ( this.dataset.colorFormat !== newFormat ) {
-				this.dataset.colorFormat = newFormat;
-				const container = this.closest( '.wp-picker-container' );
-				if ( container ) {
-					container.querySelector( '.wp-color-result-text' ).textContent = this.value;
-				}
-				debouncedColorChange( { target: this }, this.value );
-			}
-		} ).wpColorPicker( {
-			change( event, ui ) {
-				const input = event.target;
-				const format = input.dataset.colorFormat || 'hex';
-				let color;
-
-				trackUnsavedChange();
-
-				if ( ui.color._alpha < 1 ) {
-					input.dataset.colorFormat = 'rgba';
-					color = ui.color.toCSS( 'rgba' );
-				} else if ( 'hex' === format ) {
-					color = ui.color.toString();
-				} else {
-					color = ui.color.toCSS( format );
-				}
-
-				debouncedColorChange( event, color );
-
-				input.value = color;
-
-				if ( null !== input.getAttribute( 'data-alpha-color-type' ) ) {
-					debouncedPreviewUpdate();
-					return;
-				}
-
-				debouncedPreviewUpdate();
-			}
 		} );
-		jQuery( '.wp-color-result-text' ).text( function( _, oldText ) {
-			const container = jQuery( this ).closest( '.wp-picker-container' );
-			if ( container !== undefined && container[ 0 ].parentElement.classList.contains( 'frm-colorpicker' ) ) {
-				return container[ 0 ].querySelector( '.wp-color-picker' ).value;
-			}
-			return oldText === 'Select Color' ? 'Select' : oldText;
-		} );
-		jQuery( '#frm_styling_form .styling_settings, #frm_styling_form .frm-field-shape, #frm_styling_form input[name="frm_style_setting[post_content][base_font_size]"]' ).on( 'change', debouncedPreviewUpdate );
+		jQuery( '#frm_styling_form .styling_settings, #frm_styling_form .frm-field-shape, #frm_styling_form input[name="frm_style_setting[post_content][base_font_size]"]' ).on( 'input change', event => updatePreview( false, 'input' === event.type ) );
 
 		// This is really only necessary for Pro. But if Pro is not up to date to initialize the datepicker in the sample form, it should still work because it's initialized here.
 		initDatepickerSample();
@@ -1368,16 +1490,226 @@
 		);
 
 		/**
+		 * Update the preview after a style setting changes.
+		 * When every changed setting only feeds a CSS variable, the variables are updated right away with JavaScript.
+		 * Anything else requests new CSS from the server.
+		 *
+		 * @since 7.1
+		 *
+		 * @param {boolean} isRecheck True when called again after a change event that did not change any values yet.
+		 * @param {boolean} isTyping  True when called from an input event, while a value may still be incomplete.
+		 * @return {void}
+		 */
+		function updatePreview( isRecheck = false, isTyping = false ) {
+			const values = getStyleSettingValues();
+			let changedKeys = Object.keys( { ...livePreview.values, ...values } ).filter(
+				key => livePreview.values[ key ] !== values[ key ]
+			);
+
+			if ( isTyping ) {
+				// Keep showing the previous color until a hex color typed by hand is complete.
+				const incompleteKeys = changedKeys.filter( key => isIncompleteHexColor( key, values[ key ] ) );
+				if ( incompleteKeys.length ) {
+					incompleteKeys.forEach( key => {
+						values[ key ] = livePreview.values[ key ];
+					} );
+					changedKeys = changedKeys.filter( key => ! incompleteKeys.includes( key ) );
+					if ( ! changedKeys.length ) {
+						return;
+					}
+				}
+			}
+
+			if ( ! changedKeys.length ) {
+				// Some components update their setting input after the change event, so check after it finishes.
+				if ( true !== isRecheck ) {
+					queueMicrotask( () => updatePreview( true ) );
+				}
+				return;
+			}
+
+			livePreview.values = values;
+
+			const liveKeys = changedKeys.filter( key => canUpdateLive( key, values ) );
+			if ( liveKeys.length !== changedKeys.length ) {
+				debouncedChangeStyling();
+			}
+
+			if ( ! liveKeys.length ) {
+				return;
+			}
+
+			livePreview.updateCount++;
+			liveKeys.forEach( key => {
+				livePreview.vars.set( getCssVarName( key ), {
+					value: prepareLiveValue( key, values[ key ] ),
+					updateCount: livePreview.updateCount
+				} );
+			} );
+			renderLiveVars();
+
+			if ( liveKeys.includes( 'text_color_disabled' ) ) {
+				setSelectPlaceholderColor();
+			}
+		}
+
+		/**
+		 * Check for a color setting that holds part of a hex color, like #1 or #1234.
+		 *
+		 * @since 7.1
+		 *
+		 * @param {string}           key   The setting key.
+		 * @param {string|undefined} value The setting value.
+		 * @return {boolean} True if the value looks like a hex color that is still being typed.
+		 */
+		function isIncompleteHexColor( key, value ) {
+			if ( ! livePreview.colorSettings.has( key ) || 'string' !== typeof value ) {
+				return false;
+			}
+
+			const trimmed = value.trim();
+			const digits = trimmed.replace( /^#/, '' );
+			return '' !== trimmed && /^[0-9a-f]*$/i.test( digits ) && ! [ 3, 6, 8 ].includes( digits.length );
+		}
+
+		/**
+		 * @since 7.1
+		 *
+		 * @return {HTMLElement[]} The inputs that are sent to the server when requesting new CSS.
+		 */
+		function getStyleInputs() {
+			return Array.from( document.getElementById( 'frm_style_sidebar' ).querySelectorAll( 'input, select, textarea' ) ).filter(
+				input => 'style_name' === input.name || 0 === input.name.indexOf( 'frm_style_setting[post_content]' )
+			);
+		}
+
+		/**
+		 * @since 7.1
+		 *
+		 * @return {Object} Style setting values keyed by setting name, plus the style_name value.
+		 */
+		function getStyleSettingValues() {
+			const values = {};
+			jQuery( getStyleInputs() ).serializeArray().forEach( ( { name, value } ) => {
+				const key = name.replace( /^frm_style_setting\[post_content\]\[(.*)\]$/, '$1' );
+				values[ key ] = value;
+			} );
+			return values;
+		}
+
+		/**
+		 * Check if a setting can be updated without new CSS from the server.
+		 *
+		 * @since 7.1
+		 *
+		 * @param {string} key    The setting key.
+		 * @param {Object} values All current setting values.
+		 * @return {boolean} True if the CSS variable can be set with JavaScript.
+		 */
+		function canUpdateLive( key, values ) {
+			if ( ! livePreview.settings.has( key ) || ! isSafeLiveValue( values[ key ] ) ) {
+				return false;
+			}
+
+			// The server scales these font sizes from the base font size when it is in use.
+			return ! livePreview.baseFontSizeSettings.has( key ) || ! usesBaseFontSize( values );
+		}
+
+		/**
+		 * This matches the check in FrmStylesHelper::update_base_font_size.
+		 *
+		 * @since 7.1
+		 *
+		 * @param {Object} values All current setting values.
+		 * @return {boolean} True if font sizes are scaled from the base font size.
+		 */
+		function usesBaseFontSize( values ) {
+			const isEmpty = value => ! value || '0' === value;
+			return ! isEmpty( values.base_font_size ) && ! isEmpty( values.use_base_font_size ) && 'false' !== values.use_base_font_size;
+		}
+
+		/**
+		 * Values that the server would sanitize or skip are left to the server, so both ways of updating the preview always match.
+		 *
+		 * @since 7.1
+		 *
+		 * @param {string|undefined} value The setting value. It is undefined when the input is not submitted, like an unchecked checkbox.
+		 * @return {boolean} True if the value can be used as is.
+		 */
+		function isSafeLiveValue( value ) {
+			if ( 'string' !== typeof value ) {
+				return false;
+			}
+
+			const trimmed = value.trim();
+			if ( '' === trimmed || /[{}[\];<>&"'\\]|%[a-f0-9]{2}|function\(/i.test( trimmed ) ) {
+				return false;
+			}
+
+			return trimmed.split( '(' ).length === trimmed.split( ')' ).length;
+		}
+
+		/**
+		 * This matches the formatting in FrmStylesHelper::get_color_output.
+		 *
+		 * @since 7.1
+		 *
+		 * @param {string} key   The setting key.
+		 * @param {string} value The setting value.
+		 * @return {string} The value to use for the CSS variable.
+		 */
+		function prepareLiveValue( key, value ) {
+			return livePreview.colorSettings.has( key ) ? addColorHash( value ) : value.trim();
+		}
+
+		/**
+		 * This matches the variable names from FrmStylesHelper::output_vars.
+		 *
+		 * @since 7.1
+		 *
+		 * @param {string} key The setting key.
+		 * @return {string} The CSS variable name.
+		 */
+		function getCssVarName( key ) {
+			return `--${ key.replace( /_/g, '-' ).replace( /[^a-zA-Z0-9_-]/g, '' ) }`;
+		}
+
+		/**
+		 * Write the CSS variables set with JavaScript to a style tag after #this_css, so they take priority over the last server response.
+		 *
+		 * @since 7.1
+		 *
+		 * @return {void}
+		 */
+		function renderLiveVars() {
+			let styleTag = document.getElementById( 'frm_style_live_vars' );
+			if ( ! styleTag ) {
+				styleTag = tag( 'style', { id: 'frm_style_live_vars' } );
+				document.getElementById( 'this_css' ).after( styleTag );
+			}
+
+			const styleName = livePreview.values.style_name;
+			if ( ! livePreview.vars.size || ! styleName ) {
+				styleTag.textContent = '';
+				return;
+			}
+
+			styleTag.textContent = `.${ CSS.escape( styleName ) }.with_frm_style{}`;
+			const [ rule ] = styleTag.sheet.cssRules;
+			livePreview.vars.forEach( ( { value }, name ) => rule.style.setProperty( name, value ) );
+		}
+
+		/**
 		 * Sends an AJAX POST request for new CSS to use for the preview.
-		 * This is called whenever a style setting is changed, generally using debouncedPreviewUpdate to avoid simultaneous requests.
+		 * This is called through updatePreview when a changed style setting needs the server, using debouncedChangeStyling to avoid simultaneous requests.
 		 *
 		 * @return {void}
 		 */
 		function changeStyling() {
-			const styleInputs = Array.from( document.getElementById( 'frm_style_sidebar' ).querySelectorAll( 'input, select, textarea' ) ).filter(
-				input => 'style_name' === input.name || 0 === input.name.indexOf( 'frm_style_setting[post_content]' )
-			);
-			const locStr = JSON.stringify( jQuery( styleInputs ).serializeArray() );
+			const locStr = JSON.stringify( jQuery( getStyleInputs() ).serializeArray() );
+			const request = ++stylingRequest;
+			// The response includes every value sent, so it replaces the CSS variables set with JavaScript up to this point.
+			const requestUpdateCount = livePreview.updateCount;
 
 			jQuery.ajax( {
 				type: 'POST',
@@ -1388,8 +1720,15 @@
 					frm_style_setting: locStr
 				},
 				success: css => {
-					handleChangeStylingSuccess( css );
+					if ( request !== stylingRequest ) {
+						return;
+					}
+					handleChangeStylingSuccess( css, requestUpdateCount );
 					setSelectPlaceholderColor();
+				},
+				error: () => {
+					// These values were not applied, so the next change must send them to the server.
+					livePreview.values = {};
 				}
 			} );
 		}
@@ -1397,10 +1736,11 @@
 		/**
 		 * Update the CSS used for the preview on the edit page when a styling input has been updated.
 		 *
-		 * @param {string} css The response from the frm_change_styling request.
+		 * @param {string} css                The response from the frm_change_styling request.
+		 * @param {number} requestUpdateCount The live preview update count when the request was sent.
 		 * @return {void}
 		 */
-		function handleChangeStylingSuccess( css ) {
+		function handleChangeStylingSuccess( css, requestUpdateCount ) {
 			// Validate the string response. A valid output will include rules with .with_frm_style
 			if ( ! css.includes( '.with_frm_style' ) ) {
 				// Handle error (possibly a permission error, or an outdated nonce).
@@ -1408,6 +1748,13 @@
 				return;
 			}
 			document.getElementById( 'this_css' ).innerHTML = css;
+
+			livePreview.vars.forEach( ( { updateCount }, name ) => {
+				if ( updateCount <= requestUpdateCount ) {
+					livePreview.vars.delete( name );
+				}
+			} );
+			renderLiveVars();
 		}
 
 		/**

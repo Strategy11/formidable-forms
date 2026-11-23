@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="frm-inbox-wrapper">
 	<div class="frm-tabs-navs">
-		<ul class="frm-flex-box">
+		<ul class="frm-flex-box" aria-label="<?php esc_attr_e( 'Inbox messages', 'formidable' ); ?>">
 			<li class="frm-active">
 				<?php
 				esc_html_e( 'Inbox', 'formidable' );
@@ -59,7 +59,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 										<?php endif; ?>
 									</div>
 									<p><?php echo wp_kses_post( $message['message'] ); ?></p>
-									<?php echo wp_kses( $message['cta'], array( 'a' => array( 'href' => true ) ) ); ?>
+									<?php
+									$cta_allowed_html = array(
+										'a' => array(
+											'href'   => true,
+											'target' => true,
+											'rel'    => true,
+										),
+									);
+									echo wp_kses( $message['cta'], $cta_allowed_html );
+									?>
 								</div>
 							<?php endforeach; ?>
 

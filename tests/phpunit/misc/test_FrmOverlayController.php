@@ -23,7 +23,7 @@ class test_FrmOverlayController extends FrmUnitTest {
 		$recurring_execution_interval                = '1 week';
 		$overlay_controller                          = new FrmOverlayController();
 		$overlay_recurring_execution_controller_mock = $this->getMockBuilder( 'FrmOverlayController' )
-			->setMethods( array( 'get_time' ) )
+			->onlyMethods( array( 'get_time' ) )
 			->setConstructorArgs(
 				array(
 					array(

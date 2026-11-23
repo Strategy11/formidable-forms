@@ -3,6 +3,7 @@
 /**
  * @group forms
  */
+#[\PHPUnit\Framework\Attributes\Group( 'forms' )]
 class test_FrmOnSubmitAction extends FrmUnitTest {
 
 	public function test_adding_sanitize_url_after_updating() {

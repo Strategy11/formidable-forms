@@ -135,7 +135,7 @@ DEFAULT_HTML;
 		}
 
 		$error_key            = 'field' . $this->get_field_column( 'id' );
-		$errors[ $error_key ] = FrmFieldsHelper::get_error_msg( $this->posted_value, 'invalid' );
+		$errors[ $error_key ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
 
 		return $errors;
 	}

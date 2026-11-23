@@ -21,6 +21,47 @@ namespace {
 	define( 'WP_IMPORTING', false );
 	define( 'ICL_PLUGIN_INACTIVE', false );
 
+	class WP_HTML_Decoder {
+		/**
+		 * @param string $text Raw attribute text.
+		 *
+		 * @return string
+		 */
+		public static function decode_attribute( $text ) {
+			return '';
+		}
+	}
+
+	class WP_HTML_Tag_Processor {
+		/** @var string */
+		public $html;
+
+		/**
+		 * @param string $html HTML to process.
+		 */
+		public function __construct( $html ) {
+			$this->html = $html;
+		}
+
+		/**
+		 * @param array|string|null $query Tag query.
+		 *
+		 * @return bool
+		 */
+		public function next_tag( $query = null ) {
+			return false;
+		}
+
+		/**
+		 * @param string $name Attribute name.
+		 *
+		 * @return bool|string|null
+		 */
+		public function get_attribute( $name ) {
+			return null;
+		}
+	}
+
 	class FrmProFormState {
 		public static function get_from_request( $key, $default ) {}
 		/**
@@ -175,6 +216,11 @@ namespace {
 		 */
 		public static function get_readable_license_type() {
 		}
+		/**
+		 * @return string Either grace, expired, expiring, or active.
+		 */
+		public static function get_license_status() {
+		}
 	}
 	class FrmProCurrencyHelper {
 		public static function normalize_formatted_numbers( $field, $formatted_value ) {}
@@ -277,8 +323,45 @@ namespace {
 	}
 	class FrmProEntryFormatter extends FrmEntryFormatter {
 	}
+	class FrmProFieldText extends FrmFieldText {
+	}
+	class FrmProCopy {
+		/**
+		 * @param bool $force Whether to run the install even when the database is current.
+		 *
+		 * @return void
+		 */
+		public static function install( $force = false ) {
+		}
+	}
+	/**
+	 * The Registration add-on's entry controller. Constructing it is what lets a
+	 * registration form's entry run its user creation, and the abilities do that
+	 * behind a class_exists() guard.
+	 */
+	class FrmRegEntryController {
+	}
+	class FrmProField {
+		/**
+		 * @param int   $field_id ID of the repeater field, or 0 while it is being created.
+		 * @param array $args     Accepts parent_form_id and field_name.
+		 *
+		 * @return int ID of the child form that holds the repeater's fields.
+		 */
+		public static function create_repeat_form( $field_id, $args = array() ) {
+		}
+	}
 	class FrmProEntriesHelper {
 		public static function get_search_str( $where_clause, $search_str, $form_id = 0, $fid = '' ) {
+		}
+		/**
+		 * @param string     $search  The search term.
+		 * @param int|string $form_id The form to search in.
+		 * @param array      $args    Extra query args, such as is_draft.
+		 *
+		 * @return array Entry IDs matching the search.
+		 */
+		public static function get_search_ids( $search, $form_id, $args = array() ) {
 		}
 		/**
 		 * @param object           $field
@@ -315,6 +398,13 @@ namespace {
 		 * @return bool
 		 */
 		public static function is_field_visible_to_user( $field ) {
+		}
+		/**
+		 * @param array|int|object $field
+		 *
+		 * @return bool
+		 */
+		public static function field_on_current_page( $field ) {
 		}
 	}
 	class FrmViewsAppHelper {
@@ -474,6 +564,15 @@ namespace {
 		public static function payment_columns( $columns = array() ) {
 		}
 	}
+	class FrmTransActionsController {
+		/**
+		 * @param array $atts
+		 *
+		 * @return void
+		 */
+		public static function trigger_payment_status_change( $atts ) {
+		}
+	}
 	class FrmProSettingsController {
 		/**
 		 * @param string $count
@@ -534,10 +633,317 @@ namespace {
 		}
 	}
 
-	class WP_UnitTestCase_Base extends PHPUnit\Framework\TestCase {
+	class WP_UnitTest_Factory {
+		/**
+		 * @var WP_UnitTest_Factory_For_Post
+		 */
+		public $post;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Attachment
+		 */
+		public $attachment;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Comment
+		 */
+		public $comment;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_User
+		 */
+		public $user;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Term
+		 */
+		public $term;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Term
+		 */
+		public $category;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Term
+		 */
+		public $tag;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Bookmark
+		 */
+		public $bookmark;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Blog
+		 */
+		public $blog;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Network
+		 */
+		public $network;
 	}
 
-	class WP_UnitTestCase extends WP_UnitTestCase_Base {
+	/**
+	 * The leaf *_For_* classes below are deliberately left abstract with no override of
+	 * create_object()/update_object()/get_object_by_id(): they exist only so property access
+	 * like $factory->post resolves to a type that inherits create()/create_and_get(), and an
+	 * abstract class is never instantiated from this file, so leaving them unimplemented is
+	 * fine for static analysis and avoids stubbing empty method bodies DeepSource flags as
+	 * PHP-W1080 (no body) with unused-parameter findings on top.
+	 */
+	abstract class WP_UnitTest_Factory_For_Thing {
+		public $default_generation_definitions;
+		public $factory;
+
+		public function __construct( $factory, $default_generation_definitions = array() ) {
+			$this->factory                        = $factory;
+			$this->default_generation_definitions = $default_generation_definitions;
+		}
+
+		abstract public function create_object( $args );
+		abstract public function update_object( $object_id, $fields );
+		abstract public function get_object_by_id( $object_id );
+
+		public function create( $args = array(), $generation_definitions = null ) {
+			if ( $generation_definitions === null ) {
+				$generation_definitions = $this->default_generation_definitions;
+			}
+
+			return $this->create_object( array_merge( (array) $generation_definitions, $args ) );
+		}
+
+		public function create_and_get( $args = array(), $generation_definitions = null ) {
+			return $this->get_object_by_id( $this->create( $args, $generation_definitions ) );
+		}
+
+		public function create_many( $count, $args = array(), $generation_definitions = null ) {
+			return array_fill( 0, $count, $this->create( $args, $generation_definitions ) );
+		}
+	}
+
+	abstract class WP_UnitTest_Factory_For_Post extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Attachment extends WP_UnitTest_Factory_For_Post {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Comment extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_User extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Term extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Bookmark extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Blog extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Network extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	/**
+	 * frm_factory.php uses this to generate unique default values (field names, entry names).
+	 * mago.toml's [source] paths includes "tests" directly - unlike PHPStan, mago analyzes that
+	 * file itself and needs this class to exist, not just its name.
+	 */
+	class WP_UnitTest_Generator_Sequence {
+		public static $incr = -1;
+		public $next;
+		public $template_string;
+
+		public function __construct( $template_string = '%s', $start = null ) {
+		}
+
+		public function next() {
+		}
+
+		public function get_incr() {
+		}
+
+		public function get_template_string() {
+		}
+	}
+
+	/**
+	 * frm_factory.php uses this to generate a random entry value, for the same reason as
+	 * WP_UnitTest_Generator_Sequence above.
+	 */
+	function rand_str( $length = 32 ) {
+	}
+	/**
+	 * The WordPress Abilities API, added in WordPress 7.0 and so absent from the
+	 * wordpress-stubs release this plugin pins.
+	 */
+	class WP_Ability {
+		/**
+		 * @return string
+		 */
+		public function get_name() {
+		}
+		/**
+		 * @return array
+		 */
+		public function get_input_schema() {
+		}
+		/**
+		 * @param array $input Ability input parameters.
+		 *
+		 * @return mixed
+		 */
+		public function execute( $input = array() ) {
+		}
+	}
+	class WP_Ability_Category {
+	}
+	class WP_Abilities_Registry {
+		/**
+		 * @return WP_Abilities_Registry|null
+		 */
+		public static function get_instance() {
+		}
+		/**
+		 * @param string $name Ability name.
+		 *
+		 * @return bool
+		 */
+		public function is_registered( $name ) {
+		}
+	}
+	class WP_Ability_Categories_Registry {
+		/**
+		 * @return WP_Ability_Categories_Registry|null
+		 */
+		public static function get_instance() {
+		}
+		/**
+		 * @param string $slug Category slug.
+		 *
+		 * @return bool
+		 */
+		public function is_registered( $slug ) {
+		}
+	}
+	/**
+	 * @param string $name Ability name, including its namespace prefix.
+	 * @param array  $args Ability definition.
+	 *
+	 * @return WP_Ability|null
+	 */
+	function wp_register_ability( $name, $args ) {
+	}
+	/**
+	 * @param string $slug Category slug.
+	 * @param array  $args Category definition.
+	 *
+	 * @return WP_Ability_Category|null
+	 */
+	function wp_register_ability_category( $slug, $args ) {
+	}
+	/**
+	 * @param string $name Ability name.
+	 *
+	 * @return bool
+	 */
+	function wp_has_ability( $name ) {
+	}
+	/**
+	 * @param string $name Ability name.
+	 *
+	 * @return WP_Ability|null
+	 */
+	function wp_get_ability( $name ) {
+	}
+	/**
+	 * @return array<string, WP_Ability>
+	 */
+	function wp_get_abilities() {
+	}
+	/**
+	 * @param string $slug Category slug.
+	 *
+	 * @return WP_Ability_Category|null
+	 */
+	function wp_get_ability_category( $slug ) {
+	}
+	/**
+	 * @param string $name Ability name.
+	 *
+	 * @return bool
+	 */
+	function wp_unregister_ability( $name ) {
+	}
+	/**
+	 * @param string $slug Category slug.
+	 *
+	 * @return WP_Ability_Category|null
+	 */
+	function wp_unregister_ability_category( $slug ) {
+	}
+	/**
+	 * Added in WordPress 6.1, after the wordpress-stubs release this plugin pins.
+	 *
+	 * @param string $hook_name The name of the filter hook.
+	 *
+	 * @return int The number of times the filter hook has been applied.
+	 */
+	function did_filter( $hook_name ) {
+	}
+	/**
+	 * The exception the WordPress test suite throws from wp_die(). Tests catch it,
+	 * and mago analyzes the tests without loading the WordPress test library.
+	 */
+	class WPDieException extends Exception {
+	}
+}
+
+/**
+ * The MCP adapter vendored in lib/vendor. Only what FrmMcpController and FrmMcpConnection call is
+ * stubbed: the adapter is loaded conditionally at runtime, so analysis cannot
+ * see it, and FrmMcpCompat checks for the real thing before any of this is used.
+ */
+namespace WP\MCP\Core {
+	class McpAdapter {
+		const VERSION = '';
+		/**
+		 * @return McpAdapter
+		 */
+		public static function instance() {
+		}
+		/**
+		 * @param string      $server_id             Unique server ID.
+		 * @param string      $server_route_namespace REST namespace to serve on.
+		 * @param string      $server_route          Route within the namespace.
+		 * @param string      $server_name           Human readable server name.
+		 * @param string      $server_description    Human readable server description.
+		 * @param string      $server_version        Server version string.
+		 * @param array       $mcp_transports        Transport class names.
+		 * @param string|null $error_handler         Error handler class name.
+		 * @param string|null $observability_handler Observability handler class name.
+		 * @param array       $tools                 Ability names exposed as tools.
+		 *
+		 * @return mixed True on success, or WP_Error on failure.
+		 */
+		public function create_server( $server_id, $server_route_namespace, $server_route, $server_name, $server_description, $server_version, $mcp_transports, $error_handler, $observability_handler = null, $tools = array() ) {
+		}
+	}
+}
+
+namespace WP\MCP\Transport\Infrastructure {
+	class SessionManager {
+		/**
+		 * @param int    $user_id    The user ID.
+		 * @param string $session_id The session ID.
+		 *
+		 * @return array|false|\WP_Error Session data on success, WP_Error on invalid input, false if not found or inactive.
+		 */
+		public static function get_session( int $user_id, string $session_id ) {
+		}
 	}
 }
 

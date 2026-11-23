@@ -58,7 +58,9 @@ if ( class_exists( 'FrmPaymentAction' ) ) {
 			// both action controls save the same submission and create a duplicate action.
 			$this->option_name = 'frm_' . $this->id_base . '_action';
 
-			$this->action_options['is_beta'] = false;
+			// Undo the single action cap that PayPal Commerce sets on 'frm_paypal_action_options',
+			// which this action picks up because it is constructed with the 'paypal' id_base.
+			$this->action_options['limit'] = 99;
 		}
 	}
 }

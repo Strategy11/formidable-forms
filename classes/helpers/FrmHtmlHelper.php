@@ -36,6 +36,28 @@ class FrmHtmlHelper {
 	}
 
 	/**
+	 * Show readonly setting icon
+	 *
+	 * @since 6.33
+	 *
+	 * @param bool $is_enabled Whether the setting is enabled.
+	 *
+	 * @return void
+	 */
+	public static function show_readonly_setting_icon( $is_enabled ) {
+		if ( $is_enabled ) {
+			echo '<span class="frm-success-icon">';
+			FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon', array( 'aria-hidden' => 'true' ) );
+			echo '</span>';
+			return;
+		}
+
+		echo '<span class="frm-x-icon">';
+		FrmAppHelper::icon_by_class( 'frmfont frm_x_icon', array( 'aria-hidden' => 'true' ) );
+		echo '</span>';
+	}
+
+	/**
 	 * Echo a dropdown option.
 	 * This is useful to avoid closing and opening PHP to echo <option> tags which leads to extra whitespace.
 	 * Avoiding whitespace saves 5KB of HTML for an international address field with a country dropdown with 252 options.

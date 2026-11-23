@@ -1,5 +1,6 @@
 # Items to ignore when downloading a zip
 
+.achecker.yml export-ignore
 .babelrc export-ignore
 .editorconfig export-ignore
 .eslintignore export-ignore
@@ -34,7 +35,7 @@ node_modules export-ignore
 package-lock.json export-ignore
 package.json export-ignore
 phpcs.xml export-ignore
-phpunit.xml export-ignore
+phpunit*.xml export-ignore
 psalm.xml export-ignore
 stubs.php export-ignore
 phpstan.neon export-ignore

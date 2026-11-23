@@ -96,6 +96,8 @@ class FrmTestModeController {
 		}
 
 		if ( ! empty( $form->options['chat'] ) ) {
+			// Track view test mode with chat form.
+			FrmUsageController::update_flows_data( 'view_test_mode', 'chat_form' );
 			echo '<div class="frm_note_style">' . esc_html__( 'Test Mode is currently not supported for conversational forms.', 'formidable' ) . '</div>';
 			return;
 		}
@@ -142,6 +144,10 @@ class FrmTestModeController {
 		}
 
 		self::include_svg();
+
+		if ( ! $enabled ) {
+			FrmUsageController::update_flows_data( 'view_test_mode', 'no_addon' );
+		}
 
 		include FrmAppHelper::plugin_path() . '/classes/views/test-mode/container.php';
 	}

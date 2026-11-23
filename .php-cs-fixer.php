@@ -1,6 +1,6 @@
 <?php
 
-$finder = ( new PhpCsFixer\Finder() )->in( __DIR__ );
+$finder = ( new PhpCsFixer\Finder() )->in( __DIR__ )->exclude( 'node_modules' );
 $rules  = array(
 	// Keep these rules for sure.
 	'phpdoc_order'                         => array(

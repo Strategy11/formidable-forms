@@ -122,13 +122,7 @@ class FrmStyle {
 			$new_instance['post_type']   = FrmStylesController::$post_type;
 			$new_instance['post_status'] = 'publish';
 
-			if ( ! $id ) {
-				// For a new style (including a duplicate), the post_name is derived from the title.
-				// Resolve slug uniqueness up front (WordPress appends -2, -3, etc. to duplicate slugs)
-				// so the CSS scope below matches the slug WordPress will actually store.
-				$slug                      = sanitize_title( $new_instance['post_title'] );
-				$new_instance['post_name'] = wp_unique_post_slug( $slug, 0, $new_instance['post_status'], $new_instance['post_type'], 0 );
-			}
+			$new_instance['post_name'] = $this->get_post_name_to_save( $new_instance, (bool) $id );
 
 			if ( ! empty( $new_instance['post_content']['single_style_custom_css'] ) ) {
 				$css_scope = 'frm_style_' . $new_instance['post_name'];
@@ -167,6 +161,44 @@ class FrmStyle {
 	}
 
 	/**
+	 * Get the slug to save, which doubles as the CSS class for the style.
+	 *
+	 * A new style takes its slug from the title. An existing style keeps the slug it has unless
+	 * the CSS class was renamed in the visual styler. Either way uniqueness is resolved up front,
+	 * because WordPress appends -2, -3, and so on to a duplicate slug, and the CSS scope that gets
+	 * nested into the custom CSS has to match the slug that actually gets stored.
+	 *
+	 * @since 7.0
+	 *
+	 * @param array $new_instance The style being saved.
+	 * @param bool  $is_existing  False for a new style, including a duplicate.
+	 *
+	 * @return string
+	 */
+	private function get_post_name_to_save( $new_instance, $is_existing ) {
+		if ( $is_existing ) {
+			// The nonce check happens in FrmStylesController::save_style before this is called.
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			if ( ! isset( $_POST['frm_style_setting']['post_name'] ) ) {
+				return $new_instance['post_name'];
+			}
+
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$renamed = sanitize_title( wp_unslash( $_POST['frm_style_setting']['post_name'] ) );
+
+			if ( ! $renamed || $renamed === $new_instance['post_name'] ) {
+				return $new_instance['post_name'];
+			}
+
+			return wp_unique_post_slug( $renamed, $this->id, $new_instance['post_status'], $new_instance['post_type'], 0 );
+		}
+
+		$slug = sanitize_title( $new_instance['post_title'] );
+
+		return wp_unique_post_slug( $slug, 0, $new_instance['post_status'], $new_instance['post_type'], 0 );
+	}
+
+	/**
 	 * Sanitize custom color values and convert it to valid one filling missing values.
 	 *
 	 * @since 5.3.2
@@ -177,6 +209,14 @@ class FrmStyle {
 	 */
 	private function maybe_sanitize_rgba_value( &$color_val ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		if ( preg_match( '/(rgb|rgba)\(/', $color_val ) !== 1 ) {
+			return;
+		}
+
+		// Preserve valid percentage, fractional and space-separated RGB syntax.
+		// The parser accepts out-of-range channels, so legacy comma syntax still needs the repair below.
+		$modern_syntax = str_contains( $color_val, '%' ) || str_contains( $color_val, '/' ) || ! str_contains( $color_val, ',' ) || preg_match( '/\.\d+\s*,/', $color_val );
+
+		if ( $modern_syntax && FrmStylesHelper::is_valid_color( $color_val ) ) {
 			return;
 		}
 
@@ -407,7 +447,7 @@ class FrmStyle {
 	 */
 	public function save_settings() {
 		$filename = FrmAppHelper::plugin_path() . '/css/custom_theme.css.php';
-		update_option( 'frm_last_style_update', gmdate( 'njGi' ) );
+		update_option( 'frm_last_style_update', gmdate( 'YmdHis' ) );
 
 		if ( ! is_file( $filename ) ) {
 			return;
@@ -527,19 +567,24 @@ class FrmStyle {
 	/**
 	 * Delete a style by its post ID.
 	 *
-	 * @param int $id
+	 * @param int|string $id The id of the style to delete. REST and MCP callers pass it as a string.
 	 *
 	 * @return false|WP_Post|null
 	 */
 	public function destroy( $id ) {
-		if ( $id === $this->get_default_style()->ID ) {
+		$default_style = $this->get_default_style();
+
+		// The ID arrives as a string from REST and MCP callers, so it is compared
+		// as an int. A site with no default style set has nothing to protect.
+		if ( $default_style && (int) $id === $default_style->ID ) {
 			return false;
 		}
+
 		return wp_delete_post( $id );
 	}
 
 	/**
-	 * @return stdClass|WP_Post
+	 * @return stdClass|WP_Post|null Null when the style does not exist, or when no default style is set.
 	 */
 	public function get_one() {
 		if ( 'default' === $this->id ) {
@@ -682,12 +727,26 @@ class FrmStyle {
 		}
 
 		if ( ! isset( $settings['submit_hover_bg_color'] ) && isset( $settings['submit_bg_color'] ) ) {
-			$settings['submit_hover_bg_color']     = $settings['submit_bg_color'];
-			$settings['submit_hover_color']        = $settings['submit_text_color'];
-			$settings['submit_hover_border_color'] = $settings['submit_border_color'];
+			$settings['submit_hover_bg_color'] = $settings['submit_bg_color'];
+		}
 
-			$settings['submit_active_bg_color']     = $settings['submit_bg_color'];
-			$settings['submit_active_color']        = $settings['submit_text_color'];
+		if ( ! isset( $settings['submit_hover_color'] ) && isset( $settings['submit_text_color'] ) ) {
+			$settings['submit_hover_color'] = $settings['submit_text_color'];
+		}
+
+		if ( ! isset( $settings['submit_hover_border_color'] ) && isset( $settings['submit_border_color'] ) ) {
+			$settings['submit_hover_border_color'] = $settings['submit_border_color'];
+		}
+
+		if ( ! isset( $settings['submit_active_bg_color'] ) && isset( $settings['submit_bg_color'] ) ) {
+			$settings['submit_active_bg_color'] = $settings['submit_bg_color'];
+		}
+
+		if ( ! isset( $settings['submit_active_color'] ) && isset( $settings['submit_text_color'] ) ) {
+			$settings['submit_active_color'] = $settings['submit_text_color'];
+		}
+
+		if ( ! isset( $settings['submit_active_border_color'] ) && isset( $settings['submit_border_color'] ) ) {
 			$settings['submit_active_border_color'] = $settings['submit_border_color'];
 		}
 

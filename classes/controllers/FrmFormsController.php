@@ -120,12 +120,13 @@ class FrmFormsController {
 	 * Create the default email action
 	 *
 	 * @since 2.02.11
+	 * @since 7.1 Changed from private to public.
 	 *
 	 * @param int|object $form
 	 *
 	 * @return void
 	 */
-	private static function create_default_email_action( $form ) {
+	public static function create_default_email_action( $form ) {
 		FrmForm::maybe_get_form( $form );
 
 		if ( ! is_object( $form ) ) {
@@ -284,6 +285,12 @@ class FrmFormsController {
 			FrmAntiSpam::clear_caches();
 		}
 
+		// Handle captcha field inclusion
+		$include_captcha = isset( $_POST['frm_include_captcha'] ) && '1' === $_POST['frm_include_captcha']; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		self::handle_captcha_field( $id, $include_captcha );
+
+		self::maybe_handle_gdpr_field( $id );
+
 		$message = __( 'Settings Successfully Updated', 'formidable' );
 
 		self::get_settings_vars( $id, array(), compact( 'message', 'warnings' ) );
@@ -297,6 +304,82 @@ class FrmFormsController {
 	private static function antispam_was_on( $form_id ) {
 		$form = FrmForm::getOne( $form_id );
 		return ! empty( $form->options['antispam'] );
+	}
+
+	/**
+	 * Handle captcha field inclusion in form
+	 *
+	 * @since 6.33
+	 *
+	 * @param int  $form_id         Form ID.
+	 * @param bool $include_captcha Whether to include captcha field.
+	 *
+	 * @return void
+	 */
+	private static function handle_captcha_field( $form_id, $include_captcha ) {
+		self::toggle_field_in_form( $form_id, 'captcha', $include_captcha, __( 'Captcha', 'formidable' ) );
+	}
+
+	/**
+	 * Add or remove the GDPR field based on the "Include a GDPR agreement field" setting.
+	 * The field only works while GDPR is enabled globally, so it is left alone otherwise.
+	 *
+	 * @since 7.0
+	 *
+	 * @param int $form_id Form ID.
+	 *
+	 * @return void
+	 */
+	private static function maybe_handle_gdpr_field( $form_id ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( ! isset( $_POST['frm_include_gdpr'] ) || FrmFieldGdprHelper::hide_gdpr_field() ) {
+			return;
+		}
+
+		$include_gdpr = '1' === $_POST['frm_include_gdpr']; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		self::toggle_field_in_form( $form_id, FrmFieldGdprHelper::FIELD_TYPE, $include_gdpr, __( 'GDPR', 'formidable' ) );
+	}
+
+	/**
+	 * Create a field of the given type just before the submit button, or delete it.
+	 *
+	 * @since 7.0
+	 *
+	 * @param int    $form_id    Form ID.
+	 * @param string $field_type The field type to add or remove.
+	 * @param bool   $include    Whether the form should include the field.
+	 * @param string $field_name The name to give a newly created field.
+	 *
+	 * @return void
+	 */
+	private static function toggle_field_in_form( $form_id, $field_type, $include, $field_name ) {
+		$form_fields        = FrmField::get_all_for_form( $form_id, '', 'exclude' );
+		$existing_field_id  = 0;
+		$submit_field_order = 0;
+		$last_field_order   = 0;
+
+		foreach ( $form_fields as $field ) {
+			if ( $field_type === $field->type ) {
+				$existing_field_id = $field->id;
+				break;
+			}
+
+			if ( 'submit' === $field->type ) {
+				$submit_field_order = $field->field_order;
+			}
+
+			$last_field_order = max( $last_field_order, (int) $field->field_order );
+		}
+
+		if ( $include && ! $existing_field_id ) {
+			// Create the field just before submit button, or after the last field when there is no submit button.
+			$field_values                = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
+			$field_values['name']        = $field_name;
+			$field_values['field_order'] = $submit_field_order > 0 ? $submit_field_order - 1 : $last_field_order + 1;
+			FrmField::create( $field_values );
+		} elseif ( ! $include && $existing_field_id ) {
+			FrmField::destroy( $existing_field_id );
+		}
 	}
 
 	/**
@@ -330,7 +413,13 @@ class FrmFormsController {
 
 		self::maybe_remove_draft_option_from_fields( $id );
 
-		FrmForm::update( $id, $values );
+		$updated = FrmForm::update( $id, $values );
+
+		if ( false === $updated ) {
+			self::show_update_failed( $id );
+			return;
+		}
+
 		$message = __( 'Form was successfully updated.', 'formidable' );
 
 		if ( self::is_too_long( $values ) ) {
@@ -343,10 +432,33 @@ class FrmFormsController {
 		}
 
 		if ( defined( 'DOING_AJAX' ) ) {
+			header( 'X-Frm-Form-Saved: 1' );
 			wp_die( FrmAppHelper::kses( $message, array( 'a' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		self::get_edit_vars( $id, array(), $message );
+	}
+
+	/**
+	 * Report a form save that did not complete, so the builder does not show a success message.
+	 * An AJAX save gets a 500 response with the X-Frm-Form-Saved: 0 header, and the builder keeps
+	 * the unsaved field order to send again.
+	 *
+	 * @since 7.1
+	 *
+	 * @param int $id Form ID.
+	 *
+	 * @return void
+	 */
+	private static function show_update_failed( $id ) {
+		$error = __( 'Some form changes could not be saved. Please try again.', 'formidable' );
+
+		if ( defined( 'DOING_AJAX' ) ) {
+			header( 'X-Frm-Form-Saved: 0' );
+			wp_die( esc_html( $error ), '', array( 'response' => 500 ) );
+		}
+
+		self::get_edit_vars( $id, array( 'form' => $error ) );
 	}
 
 	/**
@@ -1400,6 +1512,9 @@ class FrmFormsController {
 		 */
 		$values['fields'] = apply_filters( 'frm_fields_in_form_builder', $fields, compact( 'form' ) );
 
+		// This replaces the old ajax_load form setting, so the saved option is ignored.
+		$values['ajax_load'] = FrmFormsHelper::should_ajax_load_builder( FrmFormsHelper::count_fields_without_submit( $values['fields'] ), (int) $form->id );
+
 		$edit_message = __( 'Form was successfully updated.', 'formidable' );
 
 		if ( $form->is_template && $message === $edit_message ) {
@@ -1546,6 +1661,16 @@ class FrmFormsController {
 				'id'       => 'frm_notification_settings',
 				'icon'     => 'frmfont frm_notification_check_icon',
 			),
+			'spam'        => array(
+				'name'     => __( 'Spam', 'formidable' ),
+				'function' => array( self::class, 'spam_settings' ),
+				'icon'     => 'frmfont frm_shield_check2_icon',
+			),
+			'gdpr'        => array(
+				'name'     => __( 'GDPR', 'formidable' ),
+				'function' => array( self::class, 'gdpr_settings' ),
+				'icon'     => 'frmfont frm-gdpr-icon',
+			),
 			'permissions' => array(
 				'name'       => __( 'Form Permissions', 'formidable' ),
 				'icon'       => 'frmfont frm_lock_closed2_icon',
@@ -1665,16 +1790,25 @@ class FrmFormsController {
 	}
 
 	/**
+	 * @since 6.33
+	 *
 	 * @param array $values
 	 *
 	 * @return void
 	 */
-	public static function render_spam_settings( $values ) {
-		if ( function_exists( 'akismet_http_post' ) ) {
-			include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/akismet.php';
-		}
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/stopforumspam.php';
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/antispam.php';
+	public static function spam_settings( $values ) {
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings.php';
+	}
+
+	/**
+	 * @since 7.0
+	 *
+	 * @param array $values
+	 *
+	 * @return void
+	 */
+	public static function gdpr_settings( $values ) {
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/gdpr-settings.php';
 	}
 
 	/**
@@ -1731,14 +1865,16 @@ class FrmFormsController {
 
 	/**
 	 * @since 6.27 Added $template_path parameter.
+	 * @since 7.0 Added $defer_icon parameter.
 	 *
 	 * @param int|string $form_id
 	 * @param string     $class
 	 * @param string     $template_path The path to a template file to use instead of the default.
+	 * @param bool       $defer_icon    True to leave the field icons out until JS adds them, for a list that is hidden until opened.
 	 *
 	 * @return void
 	 */
-	public static function mb_tags_box( $form_id, $class = '', $template_path = 'default' ) {
+	public static function mb_tags_box( $form_id, $class = '', $template_path = 'default', $defer_icon = false ) {
 		$fields = FrmField::get_all_for_form( $form_id, '', 'include' );
 
 		/**
@@ -1754,7 +1890,7 @@ class FrmFormsController {
 		$col              = 'one';
 		$settings_tab     = FrmAppHelper::is_admin_page( 'formidable' );
 		$cond_shortcodes  = apply_filters( 'frm_conditional_shortcodes', array() );
-		$entry_shortcodes = self::get_shortcode_helpers( $settings_tab );
+		$entry_shortcodes = self::get_shortcode_helpers( $settings_tab, $form_id );
 		$advanced_helpers = self::advanced_helpers( compact( 'fields', 'form_id' ) );
 
 		if ( 'default' === $template_path || ! file_exists( $template_path ) ) {
@@ -1804,6 +1940,125 @@ class FrmFormsController {
 		 * @param array $atts - Includes fields and form_id
 		 */
 		return apply_filters( 'frm_advanced_helpers', $advanced_helpers, $atts );
+	}
+
+	/**
+	 * Adds a shortcode for each part of a multi-part field to the field shortcode list,
+	 * so a single part can be used on its own, like [25 show=first] for a Name field.
+	 *
+	 * @since 6.35
+	 *
+	 * @param array $atts Includes 'field'.
+	 *
+	 * @return void
+	 */
+	public static function field_part_shortcodes( $atts ) {
+		$field = $atts['field'];
+
+		foreach ( self::get_field_parts( $field ) as $part => $label ) {
+			FrmFormsHelper::insert_opt_html(
+				array(
+					'id'          => $field->id . ' show=' . $part,
+					'key'         => $field->field_key . ' show=' . $part,
+					// Keep the part label and the option out of the truncated text so they stay readable.
+					'key_label'   => $field->field_key,
+					'key_suffix'  => ' show=' . $part,
+					'name'        => $field->name,
+					'name_suffix' => ' (' . $label . ')',
+					'type'        => $field->type,
+					'class'       => 'frm-customize-list dropdown-item',
+					'defer_icon'  => ! empty( $atts['defer_icon'] ),
+				)
+			);
+			unset( $part, $label );
+		}
+	}
+
+	/**
+	 * Gets the parts of a multi-part field that can be shown on their own with a show= shortcode option.
+	 *
+	 * @since 6.35
+	 *
+	 * @param stdClass $field
+	 *
+	 * @return array Part labels keyed by the show= option value.
+	 */
+	private static function get_field_parts( $field ) {
+		$parts = array();
+
+		if ( 'name' === $field->type ) {
+			$parts = self::get_name_field_parts( $field );
+		} elseif ( 'address' === $field->type ) {
+			$parts = self::get_address_field_parts( $field );
+		}
+
+		/**
+		 * Allows add-ons to add the parts of their own multi-part fields.
+		 *
+		 * @since 6.35
+		 *
+		 * @param array    $parts Part labels keyed by the show= option value.
+		 * @param stdClass $field The field the parts belong to.
+		 */
+		return apply_filters( 'frm_field_parts_for_shortcodes', $parts, $field );
+	}
+
+	/**
+	 * Gets the parts of a Name field that are in use. Only the parts included in the
+	 * selected name layout hold a value, so the rest would always show as blank.
+	 *
+	 * @since 6.35
+	 *
+	 * @param stdClass $field
+	 *
+	 * @return array Part labels keyed by the show= option value, in layout order.
+	 */
+	private static function get_name_field_parts( $field ) {
+		$labels = array(
+			'first'  => __( 'First', 'formidable' ),
+			'middle' => __( 'Middle', 'formidable' ),
+			'last'   => __( 'Last', 'formidable' ),
+		);
+		$layout = FrmField::get_option( $field, 'name_layout' );
+
+		if ( ! $layout ) {
+			$layout = 'first_last';
+		}
+
+		// The layout option names the parts in use, in display order, like first_middle_last.
+		$parts = array();
+
+		foreach ( explode( '_', $layout ) as $part ) {
+			if ( isset( $labels[ $part ] ) ) {
+				$parts[ $part ] = $labels[ $part ];
+			}
+			unset( $part );
+		}
+
+		return $parts;
+	}
+
+	/**
+	 * Gets the parts of an Address field that are in use. The address type decides which
+	 * parts are on the form, so the rest would always show as blank.
+	 *
+	 * @since 6.35
+	 *
+	 * @param stdClass $field
+	 *
+	 * @return array Part labels keyed by the show= option value.
+	 */
+	private static function get_address_field_parts( $field ) {
+		$parts        = FrmFieldAddress::get_part_labels();
+		$address_type = FrmField::get_option( $field, 'address_type' );
+
+		if ( in_array( $address_type, array( 'us', 'generic' ), true ) ) {
+			unset( $parts['country'] );
+		} elseif ( 'europe' === $address_type ) {
+			unset( $parts['state'] );
+		}
+
+		return $parts;
 	}
 
 	/**
@@ -1863,10 +2118,11 @@ class FrmFormsController {
 	 * @since 2.0.6
 	 *
 	 * @param bool $settings_tab
+	 * @param int  $form_id
 	 *
 	 * @return array
 	 */
-	private static function get_shortcode_helpers( $settings_tab ) {
+	private static function get_shortcode_helpers( $settings_tab, $form_id = 0 ) {
 		$entry_shortcodes = array(
 			'id'         => __( 'Entry ID', 'formidable' ),
 			'key'        => __( 'Entry Key', 'formidable' ),
@@ -1894,8 +2150,9 @@ class FrmFormsController {
 		 *
 		 * @param array $entry_shortcodes
 		 * @param bool  $settings_tab
+		 * @param int   $form_id
 		 */
-		return apply_filters( 'frm_helper_shortcodes', $entry_shortcodes, $settings_tab );
+		return apply_filters( 'frm_helper_shortcodes', $entry_shortcodes, $settings_tab, $form_id );
 	}
 
 	/**
@@ -2112,7 +2369,11 @@ class FrmFormsController {
 	public static function route() { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.MaxExceeded
 		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
 		$vars   = array();
-		FrmAppHelper::include_svg();
+
+		// The AJAX form save only returns a message, so skip the icon sprite there.
+		if ( ! wp_doing_ajax() ) {
+			FrmAppHelper::include_svg();
+		}
 
 		if ( isset( $_POST['frm_compact_fields'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			FrmAppHelper::permission_check( 'frm_edit_forms' );
@@ -2468,7 +2729,7 @@ class FrmFormsController {
 		$form         = apply_filters( 'frm_pre_display_form', $form );
 		$frm_settings = FrmAppHelper::get_settings( array( 'current_form' => $form->id ) );
 
-		if ( self::is_viewable_draft_form( $form ) ) {
+		if ( self::is_hidden_draft_form( $form ) ) {
 			// Don't show a draft form on a page
 			$form = __( 'Please select a valid form', 'formidable' );
 		} elseif ( ! FrmForm::is_visible_to_user( $form ) ) {
@@ -2510,12 +2771,72 @@ class FrmFormsController {
 	}
 
 	/**
+	 * Check if a draft form should be hidden from a visitor without permission to edit forms.
+	 * Shared previews and their AJAX submissions can still display the form.
+	 *
 	 * @param object $form
 	 *
 	 * @return bool
 	 */
-	private static function is_viewable_draft_form( $form ) {
-		return $form->status === 'draft' && current_user_can( 'frm_edit_forms' ) && ! FrmAppHelper::is_preview_page();
+	private static function is_hidden_draft_form( $form ) {
+		return $form->status === 'draft'
+		&& ! FrmAppHelper::current_user_can( 'frm_edit_forms' )
+		&& ! FrmAppHelper::is_preview_page()
+		&& ! self::is_ajax_submit_from_preview_page( $form );
+	}
+
+	/**
+	 * Check if the current request is an AJAX form submission sent from the preview page.
+	 * The AJAX submit response renders the form again, so it needs the same draft exemption as the preview page.
+	 * The preview page adds a nonce to the draft form, so this does not depend on the Referer header,
+	 * which a Referrer-Policy can strip. Only a visitor who could already open the preview has the nonce.
+	 *
+	 * @since 7.1
+	 *
+	 * @param object $form The form being shown.
+	 *
+	 * @return bool
+	 */
+	public static function is_ajax_submit_from_preview_page( $form ) {
+		if ( ! wp_doing_ajax() || FrmAppHelper::get_post_param( 'action', '', 'sanitize_title' ) !== 'frm_entries_create' ) {
+			return false;
+		}
+
+		$nonce = FrmAppHelper::get_post_param( self::get_draft_preview_nonce_name( $form ), '', 'sanitize_text_field' );
+
+		return $nonce && wp_verify_nonce( $nonce, self::get_draft_preview_nonce_name( $form ) );
+	}
+
+	/**
+	 * Add a preview nonce so AJAX responses can display draft forms, including embedded drafts.
+	 * Published preview forms need it too when they contain an embedded draft.
+	 *
+	 * @since 7.1
+	 *
+	 * @param object $form The form being rendered.
+	 *
+	 * @return void
+	 */
+	public static function maybe_add_draft_preview_nonce( $form ) {
+		if ( $form->status !== 'draft' && ! FrmAppHelper::is_preview_page() && ! self::is_ajax_submit_from_preview_page( $form ) ) {
+			return;
+		}
+
+		$name = self::get_draft_preview_nonce_name( $form );
+		wp_nonce_field( $name, $name, false );
+	}
+
+	/**
+	 * Get the nonce action and field name used to show a draft form again after an AJAX submit from the preview page.
+	 *
+	 * @since 7.1
+	 *
+	 * @param object $form The draft form.
+	 *
+	 * @return string
+	 */
+	private static function get_draft_preview_nonce_name( $form ) {
+		return 'frm_preview_draft_' . $form->id;
 	}
 
 	/**
@@ -3435,7 +3756,8 @@ class FrmFormsController {
 			$class   = FrmFormsHelper::form_error_class();
 		}
 
-		$message = FrmFormsHelper::get_success_message( compact( 'message', 'form', 'entry_id', 'class' ) );
+		$focusable = ! empty( $args['ajax'] );
+		$message   = FrmFormsHelper::get_success_message( compact( 'message', 'form', 'entry_id', 'class', 'focusable' ) );
 
 		return apply_filters( 'frm_main_feedback', $message, $form, $entry_id );
 	}
@@ -3754,5 +4076,16 @@ class FrmFormsController {
 	public static function create( $values = array() ) {
 		_deprecated_function( __METHOD__, '4.0', 'FrmFormsController::update' );
 		self::update( $values );
+	}
+
+	/**
+	 * @deprecated 6.33
+	 *
+	 * @param array $values
+	 *
+	 * @return void
+	 */
+	public static function render_spam_settings( $values ) {
+		_deprecated_function( __METHOD__, '6.33' );
 	}
 }

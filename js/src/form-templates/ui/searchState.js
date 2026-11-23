@@ -28,6 +28,7 @@ export function showSearchState( notEmptySearchText ) {
 
 	// Remove highlighting from the currently selected category if the search text is not empty
 	if ( notEmptySearchText ) {
+		getSingleState( 'selectedCategoryEl' ).setAttribute( 'aria-pressed', 'false' );
 		getSingleState( 'selectedCategoryEl' ).classList.remove( CURRENT_CLASS );
 	}
 

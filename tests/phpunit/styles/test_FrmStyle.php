@@ -2,33 +2,36 @@
 
 /**
  * @group styles
+ *
+ * @covers FrmStyle
  */
+#[\PHPUnit\Framework\Attributes\Group( 'styles' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmStyle::class )]
 class test_FrmStyle extends FrmUnitTest {
 
-	/**
-	 * @covers FrmStyle::maybe_sanitize_rgba_value
-	 */
 	public function test_maybe_sanitize_rgba_value() {
 		$frm_style            = new FrmStyle();
 		$invalid_color_values = array(
-			'rgba(45, 45, 45,' => 'rgba(45,45,45,1)',
-			'rgba(, , ,1)'     => 'rgba(0,0,0,1)',
-			'rgba(45,45'       => 'rgba(45,45,0,1)',
-			'rgba(355,,,0.5)'  => 'rgba(255,0,0,0.5)',
-			'rgba(255,0,0,11)' => 'rgba(255,0,0,1)',
-			'rgba(99,99,99,1)' => 'rgba(99,99,99,1)',
-			'rgb(45, ,45)'     => 'rgb(45,0,45)',
-			'rgb( , , )'       => 'rgb(0,0,0)',
-			'rgb(300,0,-1)'    => 'rgb(255,0,0)',
-			'rgb('             => 'rgb(0,0,0)',
-			'rgb(255,255,255)' => 'rgb(255,255,255)',
-			'(rgba(0,0,0,1)'   => 'rgba(0,0,0,1)',
-			'((rgba(0,0,0,1)'  => 'rgba(0,0,0,1)',
-			'(rgb(0,0,0)'      => 'rgb(0,0,0)',
-			'rgba(0,0,0,1))'   => 'rgba(0,0,0,1)',
-			' rgba(0,0,0,1)'   => 'rgba(0,0,0,1)',
-			' (rgb(0,0,0)'     => 'rgb(0,0,0)',
-			'rgba((0,0,0,1)'   => 'rgba(0,0,0,1)',
+			'rgba(45, 45, 45,'       => 'rgba(45,45,45,1)',
+			'rgba(, , ,1)'           => 'rgba(0,0,0,1)',
+			'rgba(45,45'             => 'rgba(45,45,0,1)',
+			'rgba(355,,,0.5)'        => 'rgba(255,0,0,0.5)',
+			'rgba(255,0,0,11)'       => 'rgba(255,0,0,1)',
+			'rgba(99,99,99,1)'       => 'rgba(99,99,99,1)',
+			'rgb(45, ,45)'           => 'rgb(45,0,45)',
+			'rgb( , , )'             => 'rgb(0,0,0)',
+			'rgb(300,0,-1)'          => 'rgb(255,0,0)',
+			'rgb('                   => 'rgb(0,0,0)',
+			'rgb(255,255,255)'       => 'rgb(255,255,255)',
+			'(rgba(0,0,0,1)'         => 'rgba(0,0,0,1)',
+			'((rgba(0,0,0,1)'        => 'rgba(0,0,0,1)',
+			'(rgb(0,0,0)'            => 'rgb(0,0,0)',
+			'rgba(0,0,0,1))'         => 'rgba(0,0,0,1)',
+			' rgba(0,0,0,1)'         => 'rgba(0,0,0,1)',
+			' (rgb(0,0,0)'           => 'rgb(0,0,0)',
+			'rgba((0,0,0,1)'         => 'rgba(0,0,0,1)',
+			'rgb(100% 50% 0% / 50%)' => 'rgb(100% 50% 0% / 50%)',
+			'rgb(1.5, 2.5, 3.5)'     => 'rgb(1.5, 2.5, 3.5)',
 		);
 
 		foreach ( $invalid_color_values as $color_val => $expected_color_val ) {
@@ -37,10 +40,33 @@ class test_FrmStyle extends FrmUnitTest {
 		}
 	}
 
-	/**
-	 * @covers FrmStyle::sanitize_post_content
-	 * @covers FrmStyle::strip_invalid_characters
-	 */
+	public function test_save_color_formats() {
+		$frm_style                  = new FrmStyle();
+		$values                     = array(
+			'fieldset_bg_color'   => 'hsla(30, 100%, 50%, 0.25)',
+			'border_color_active' => 'hsl(210.5, 75.25%, 40.5%)',
+			'submit_bg_color'     => 'rgb(65, 153, 253)',
+			'label_color'         => 'rgba(65,153,253,0.502)',
+			'text_color'          => 'rgb(100% 50% 0% / 50%)',
+		);
+		$style_id                   = $frm_style->save( (array) $frm_style->get_new() );
+		$_POST['frm_style_setting'] = array(
+			'post_title'   => 'Color formats regression',
+			'post_content' => $values,
+		);
+		$ids                        = $frm_style->update( $style_id );
+		unset( $_POST['frm_style_setting'] );
+		$this->assertCount( 1, $ids );
+		$this->assertIsInt( $ids[0] );
+		$saved  = ( new FrmStyle( $ids[0] ) )->get_one();
+		$output = FrmStylesHelper::get_settings_for_output( $saved );
+
+		foreach ( $values as $key => $color ) {
+			$this->assertSame( $color, $saved->post_content[ $key ], $key );
+			$this->assertSame( $color, $output[ $key ], $key );
+		}
+	}
+
 	public function test_sanitize_post_content() {
 		$post_content           = array(
 			'bg_color'             => '000',
@@ -80,9 +106,6 @@ class test_FrmStyle extends FrmUnitTest {
 		$this->assertArrayNotHasKey( 'unsupported_key', $sanitized_post_content );
 	}
 
-	/**
-	 * @covers FrmStyle::strip_invalid_characters
-	 */
 	public function test_strip_invalid_characters() {
 		// Make sure that braces don't get added to sizes but removed instead.
 		$this->assertSame( '12px', $this->strip_invalid_characters( '12px(' ) );
@@ -115,9 +138,6 @@ class test_FrmStyle extends FrmUnitTest {
 		return $this->run_private_method( array( $frm_style, 'strip_invalid_characters' ), array( $input ) );
 	}
 
-	/**
-	 * @covers FrmStyle::force_balanced_quotation
-	 */
 	public function test_force_balanced_quotation() {
 		$frm_style = new FrmStyle();
 
@@ -155,5 +175,176 @@ class test_FrmStyle extends FrmUnitTest {
 	private function trim_braces( $value ) {
 		$frm_style = new FrmStyle();
 		return $this->run_private_method( array( $frm_style, 'trim_braces' ), array( $value ) );
+	}
+
+	public function test_get_post_name_to_save_no_rename() {
+		$frm_style    = new FrmStyle( 123 );
+		$new_instance = array(
+			'post_name'   => 'existing-slug',
+			'post_status' => 'publish',
+			'post_type'   => FrmStylesController::$post_type,
+		);
+
+		unset( $_POST['frm_style_setting'] );
+		$post_name = $this->get_post_name_to_save( $frm_style, $new_instance, true );
+
+		$this->assertSame( 'existing-slug', $post_name );
+	}
+
+	public function test_get_post_name_to_save_rename() {
+		$frm_style    = new FrmStyle( 123 );
+		$new_instance = array(
+			'post_name'   => 'existing-slug',
+			'post_status' => 'publish',
+			'post_type'   => FrmStylesController::$post_type,
+		);
+
+		$_POST['frm_style_setting']['post_name'] = 'My Renamed Class';
+		$post_name                               = $this->get_post_name_to_save( $frm_style, $new_instance, true );
+		unset( $_POST['frm_style_setting'] );
+
+		$this->assertSame( 'my-renamed-class', $post_name );
+	}
+
+	public function test_get_post_name_to_save_rename_resolves_slug_collision() {
+		$other_style_id = wp_insert_post(
+			array(
+				'post_type'   => FrmStylesController::$post_type,
+				'post_status' => 'publish',
+				'post_title'  => 'Another style',
+				'post_name'   => 'taken-slug',
+			)
+		);
+
+		$frm_style    = new FrmStyle( 123 );
+		$new_instance = array(
+			'post_name'   => 'existing-slug',
+			'post_status' => 'publish',
+			'post_type'   => FrmStylesController::$post_type,
+		);
+
+		$_POST['frm_style_setting']['post_name'] = 'taken-slug';
+		$post_name                               = $this->get_post_name_to_save( $frm_style, $new_instance, true );
+		unset( $_POST['frm_style_setting'] );
+
+		$this->assertNotSame( 'taken-slug', $post_name, 'A renamed slug that collides with another style must be resolved to a unique one.' );
+
+		wp_delete_post( $other_style_id, true );
+	}
+
+	public function test_get_post_name_to_save_new_style_uses_title() {
+		$frm_style    = new FrmStyle( 0 );
+		$new_instance = array(
+			'post_title'  => 'Brand New Style!',
+			'post_status' => 'publish',
+			'post_type'   => FrmStylesController::$post_type,
+		);
+
+		$post_name = $this->get_post_name_to_save( $frm_style, $new_instance, false );
+
+		$this->assertSame( 'brand-new-style', $post_name );
+	}
+
+	/**
+	 * A duplicated style shares its source style's title, so its title-derived slug collides too.
+	 *
+	 * @see FrmStyle::get_post_name_to_save
+	 */
+	public function test_get_post_name_to_save_new_style_resolves_slug_collision() {
+		$other_style_id = wp_insert_post(
+			array(
+				'post_type'   => FrmStylesController::$post_type,
+				'post_status' => 'publish',
+				'post_title'  => 'Brand New Style!',
+				'post_name'   => 'brand-new-style',
+			)
+		);
+
+		$frm_style    = new FrmStyle( 0 );
+		$new_instance = array(
+			'post_title'  => 'Brand New Style!',
+			'post_status' => 'publish',
+			'post_type'   => FrmStylesController::$post_type,
+		);
+
+		$post_name = $this->get_post_name_to_save( $frm_style, $new_instance, false );
+
+		$this->assertNotSame( 'brand-new-style', $post_name, 'A title-derived slug that collides with another style must be resolved to a unique one.' );
+
+		wp_delete_post( $other_style_id, true );
+	}
+
+	/**
+	 * @param FrmStyle $frm_style
+	 * @param array    $new_instance
+	 * @param bool     $is_existing
+	 *
+	 * @return string
+	 */
+	private function get_post_name_to_save( $frm_style, $new_instance, $is_existing ) {
+		return $this->run_private_method( array( $frm_style, 'get_post_name_to_save' ), array( $new_instance, $is_existing ) );
+	}
+
+	public function test_get_all() {
+		$frm_style = new FrmStyle();
+		$styles    = $frm_style->get_all();
+
+		$this->assertNotEmpty( $styles );
+
+		foreach ( $styles as $style ) {
+			$this->assertSame( FrmStylesController::$post_type, $style->post_type );
+		}
+
+		// With every style removed, a new default style is created on the fly.
+		$style_posts = get_posts(
+			array(
+				'post_type'   => FrmStylesController::$post_type,
+				'post_status' => 'any',
+				'numberposts' => 999,
+			)
+		);
+
+		foreach ( $style_posts as $style_post ) {
+			wp_delete_post( $style_post->ID, true );
+		}
+
+		wp_cache_flush();
+
+		$styles = $frm_style->get_all();
+
+		$this->assertNotEmpty( $styles );
+		$this->assertSame( FrmStylesController::$post_type, reset( $styles )->post_type );
+	}
+
+	/**
+	 * Inline buttons reserve a label row without aligning to descriptions or errors below inputs.
+	 *
+	 * @see https://github.com/Strategy11/formidable-pro/issues/6894
+	 */
+	public function test_generated_css_aligns_inline_submit_with_inputs() {
+		$css             = $this->run_private_method(
+			array( new FrmStyle(), 'get_css_content' ),
+			array( FrmAppHelper::plugin_path() . '/css/custom_theme.css.php' )
+		);
+		$submit_selector = '.with_frm_style.frm_inline_top .frm_submit.frm_flex,.with_frm_style .frm_submit.frm_flex.frm_inline_submit';
+
+		\PHPUnit\Framework\Assert::assertStringContainsString( $submit_selector . ' {align-items: flex-start;align-content: flex-start;row-gap: 0;}', $css );
+		\PHPUnit\Framework\Assert::assertStringContainsString( 'flex-basis: 100%;order: -2;', $css );
+		\PHPUnit\Framework\Assert::assertStringContainsString( 'margin-bottom: var(--frm-inline-submit-offset, 0);', $css );
+	}
+
+	/**
+	 * The CSS version must be a zero-padded timestamp so distinct save times
+	 * never collide (e.g. 1 Jan 10:59 and 11 Jan 00:59 both produced "111059").
+	 */
+	public function test_save_settings_stores_padded_timestamp_version() {
+		$before = gmdate( 'YmdHis' );
+		( new FrmStyle() )->save_settings();
+		$after   = gmdate( 'YmdHis' );
+		$version = get_option( 'frm_last_style_update' );
+
+		$this->assertMatchesRegularExpression( '/^\d{14}$/', $version );
+		$this->assertGreaterThanOrEqual( (int) $before, (int) $version );
+		$this->assertLessThanOrEqual( (int) $after, (int) $version );
 	}
 }

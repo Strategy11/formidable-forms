@@ -23,19 +23,19 @@
 	height: 22px;
 }
 
-.frm_payment_settings_tab[for="frm_toggle_paypal_settings"] .frmsvg {
+.frm_payment_settings_tab[for^="frm_toggle_paypal_settings"] .frmsvg {
 	width: 83px;
 }
 
-.frm_payment_settings_tab[for="frm_toggle_authorize_net_settings"] .frmsvg {
+.frm_payment_settings_tab[for^="frm_toggle_authorize_net_settings"] .frmsvg {
 	width: 99px;
 }
 
-.frm_payment_settings_tab[for="frm_toggle_square_settings"] .frmsvg {
+.frm_payment_settings_tab[for^="frm_toggle_square_settings"] .frmsvg {
 	width: 89px;
 }
 
-.frm_payment_settings_tab[for="frm_toggle_stripe_settings"] .frmsvg {
+.frm_payment_settings_tab[for^="frm_toggle_stripe_settings"] .frmsvg {
 	width: 53px;
 }
 

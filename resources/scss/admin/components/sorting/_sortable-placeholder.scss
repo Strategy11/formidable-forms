@@ -10,6 +10,13 @@ li.sortable-placeholder {
 	box-shadow: 2px -10px 0 2px var(--primary-500);
 }
 
+// WordPress common.css gives .sortable-placeholder a border and a 20px bottom margin with a more specific selector.
+// The builder caches drop target positions during a drag, so a placeholder that takes up space shifts every row below it.
+#frm_form_editor_container li.sortable-placeholder {
+	border: none;
+	margin: 0;
+}
+
 #frm_form_editor_container > ul > .frm_single_option.ui-sortable-placeholder,
 #frm_form_editor_container > ul > li.sortable-placeholder {
 	width: calc(100% - 5px) !important;

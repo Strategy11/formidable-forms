@@ -6,6 +6,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmSettingsController {
 
 	/**
+	 * Icon for the API section, used whether the add-on is active or only a placeholder.
+	 *
+	 * @since 6.35
+	 *
+	 * @var string
+	 */
+	private static $api_section_icon = 'frmfont frm_cloud_icon';
+
+	/**
 	 * Payments sections are removed from the top level and added to a payments section.
 	 *
 	 * @since 6.22.1
@@ -164,6 +173,7 @@ class FrmSettingsController {
 		 * @param array<array> $sections
 		 */
 		$sections = apply_filters( 'frm_add_settings_section', $sections );
+		self::add_inactive_addon_sections( $sections );
 		self::remove_payments_sections( $sections );
 
 		$sections['misc'] = array(
@@ -198,6 +208,105 @@ class FrmSettingsController {
 		}//end foreach
 
 		return $sections;
+	}
+
+	/**
+	 * Add a placeholder section for each add-on that owns a Global Settings
+	 * section but is not active.
+	 *
+	 * A placeholder reads as disabled and opens a page offering to activate the
+	 * add-on or to upgrade, depending on what the license allows. It goes at the
+	 * head of the add-on sections, right after Inbox, so it sits with the rest of
+	 * the add-on settings instead of trailing them. A section already claimed by
+	 * an active plugin is left alone, so nothing stands in for a section that is
+	 * really there.
+	 *
+	 * @since 6.35
+	 *
+	 * @param array<array> $sections Sections registered for the Global Settings page so far.
+	 *
+	 * @return void
+	 */
+	private static function add_inactive_addon_sections( &$sections ) {
+		if ( isset( $sections['api'] ) ) {
+			// The add-on is active, so it owns the section. Only the icon is taken over,
+			// so the tab looks the same whether or not the add-on is installed.
+			$sections['api']['icon'] = self::$api_section_icon;
+			return;
+		}
+
+		self::insert_section_after( $sections, 'inbox', 'api', self::get_api_placeholder_section() );
+	}
+
+	/**
+	 * Insert a section directly after another one, leaving the rest of the order alone.
+	 *
+	 * Assigning a new key lands the section at the end of the array, so the array
+	 * is rebuilt to put it where it belongs.
+	 *
+	 * @since 6.35
+	 *
+	 * @param array<array> $sections Sections registered for the Global Settings page so far.
+	 * @param string       $after    Key of the section the new one follows. The new section goes last when this key is not there.
+	 * @param string       $key      Key for the new section.
+	 * @param array        $section  The section to insert.
+	 *
+	 * @return void
+	 */
+	private static function insert_section_after( &$sections, $after, $key, $section ) {
+		if ( ! isset( $sections[ $after ] ) ) {
+			$sections[ $key ] = $section;
+			return;
+		}
+
+		$ordered = array();
+
+		foreach ( $sections as $section_key => $existing_section ) {
+			$ordered[ $section_key ] = $existing_section;
+
+			if ( $section_key === $after ) {
+				$ordered[ $key ] = $section;
+			}
+		}
+
+		$sections = $ordered;
+	}
+
+	/**
+	 * Get the placeholder that stands in for the API add-on's section.
+	 *
+	 * The upgrade data decides which call to action the page shows. When the
+	 * license covers the add-on, it carries the one click install or activate
+	 * link. Otherwise it carries the plan the add-on needs, and the page asks
+	 * the user to upgrade to it, on a gradient button that sets the upgrade
+	 * apart from a one click install.
+	 *
+	 * @since 6.35
+	 *
+	 * @return array
+	 */
+	private static function get_api_placeholder_section() {
+		$data = FrmAppHelper::get_upgrade_data_params(
+			'api',
+			array(
+				'medium'        => 'api-settings',
+				'upgrade'       => __( 'API settings', 'formidable' ),
+				'message'       => __( 'Send entries to other sites, connect external services, and embed your forms with the API add-on.', 'formidable' ),
+				'learn-more'    => FrmAppHelper::get_doc_url( 'formidable-api', 'api-global-settings' ),
+				'upsell-images' => 'api-settings-2.png,api-settings-3.png',
+			)
+		);
+
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			$data['gradient-upgrade'] = 1;
+		}
+
+		return array(
+			'name'       => __( 'API', 'formidable' ),
+			'icon'       => self::$api_section_icon,
+			'html_class' => 'frm_show_upgrade_tab frm_noallow',
+			'data'       => $data,
+		);
 	}
 
 	/**
@@ -487,16 +596,43 @@ class FrmSettingsController {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		global $wpdb;
-
 		$term      = FrmAppHelper::get_param( 'term', '', 'get', 'sanitize_text_field' );
 		$post_type = FrmAppHelper::get_param( 'post_type', 'page', 'get', 'sanitize_text_field' );
 
+		wp_send_json( self::get_page_search_results( $term, $post_type ) );
+	}
+
+	/**
+	 * Find published posts for the page autocomplete by title or ID.
+	 *
+	 * A trailing " (ID: n)" is removed from the term so a prefilled label can be
+	 * edited, and an all-digit term also matches the post ID.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $term      Search term typed in the autocomplete input.
+	 * @param string $post_type Post type to search.
+	 *
+	 * @return array[] Autocomplete results with value and label keys.
+	 */
+	public static function get_page_search_results( $term, $post_type ) {
+		global $wpdb;
+
+		$term  = trim( (string) preg_replace( '/\s+\((?:I(?:D(?::\s*\d*)?)?)?\)?\s*$/', '', $term ) );
 		$where = array(
-			'post_status'     => 'publish',
-			'post_type'       => $post_type,
-			'post_title LIKE' => $term,
+			'post_status' => 'publish',
+			'post_type'   => $post_type,
 		);
+
+		if ( preg_match( '/^\d+$/', $term ) ) {
+			$where[] = array(
+				'or'              => 1,
+				'post_title LIKE' => $term,
+				'ID'              => (int) $term,
+			);
+		} else {
+			$where['post_title LIKE'] = $term;
+		}
 
 		$atts = array(
 			'limit'    => 25,
@@ -509,11 +645,11 @@ class FrmSettingsController {
 		foreach ( $pages as $page ) {
 			$results[] = array(
 				'value' => $page->ID,
-				'label' => $page->post_title,
+				'label' => FrmAppHelper::get_post_dropdown_label( $page ),
 			);
 		}
 
-		wp_send_json( $results );
+		return $results;
 	}
 
 	/**

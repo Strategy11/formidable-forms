@@ -51,6 +51,27 @@ class FrmPayPalLiteAppHelper {
 	}
 
 	/**
+	 * Get the merchant name to show in the Apple Pay sheet.
+	 *
+	 * Apple rejects the merchant session when the name has characters outside ASCII (like the
+	 * en dash in "Page – Site" page titles), so the brand name is reduced to plain ASCII, max 64 characters.
+	 *
+	 * @since 7.1
+	 *
+	 * @return string
+	 */
+	public static function get_wallet_display_name() {
+		$name = wp_specialchars_decode( wp_strip_all_tags( FrmPayPalLiteConnectHelper::get_brand_name() ), ENT_QUOTES );
+		$name = str_replace( array( '–', '—' ), '-', $name );
+		$name = remove_accents( $name );
+		$name = preg_replace( '/[^\x20-\x7E]/', '', $name );
+		$name = trim( substr( $name, 0, 64 ) );
+
+		// Not translated on purpose: a translation could bring back non-ASCII characters.
+		return '' === $name ? 'Payment' : $name;
+	}
+
+	/**
 	 * Get PayPal button style configuration from form action settings
 	 *
 	 * @param object $form_action The form action object containing post_content.
@@ -80,15 +101,16 @@ class FrmPayPalLiteAppHelper {
 	/**
 	 * Add education about PayPal fees.
 	 *
-	 * @param string             $medium  Medium identifier for the tip (for example 'tip').
+	 * PayPal Commerce is not included in a grandfathered license, so its fees
+	 * always apply there even though Stripe fees do not.
+	 *
+	 * @param string             $content UTM Content for the admin upgrade link.
 	 * @param array|false|string $gateway Gateway or list of gateways this applies to.
 	 *
 	 * @return void
 	 */
-	public static function fee_education( $medium = 'tip', $gateway = false ) {
-		$license_type = FrmAddonsController::license_type();
-
-		if ( in_array( $license_type, array( 'elite', 'business' ), true ) ) {
+	public static function fee_education( $content = 'tip', $gateway = false ) {
+		if ( ! FrmAddonsController::payment_fees_apply( 'paypal' ) ) {
 			return;
 		}
 
@@ -101,8 +123,8 @@ class FrmPayPalLiteAppHelper {
 		FrmTipsHelper::show_tip(
 			array(
 				'link'  => array(
-					'content' => 'paypal-fee',
-					'medium'  => $medium,
+					'campaign' => 'paypal-fee',
+					'content'  => $content,
 				),
 				'tip'   => 'Pay as you go pricing: 3% fee per-transaction + PayPal fees.',
 				'call'  => __( 'Upgrade to save on fees.', 'formidable' ),

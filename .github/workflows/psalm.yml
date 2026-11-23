@@ -9,15 +9,33 @@ on:
       - master
 
 name: Psalm Code Analysis
+# Cancel superseded runs for the same branch. The group is named explicitly
+# rather than derived from github.workflow: several files share the workflow
+# name `Inspections` and would otherwise cancel each other.
+concurrency:
+  group: formidable-psalm-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   psalm:
     name: Psalm
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v6
+
+      # Keep Psalm separate from the project dev autoloader and its PHPUnit dependencies.
+      - name: Set up PHP and Psalm
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer:v2, psalm:6.16.1
+          coverage: none
+
+      - name: Install analysis dependencies
+        run: |
+          jq '{require, autoload, config, "require-dev": (."require-dev" | with_entries(select(.key == "php-stubs/wordpress-stubs")))} | with_entries(select(.value != null))' composer.json > composer.psalm.json
+          COMPOSER=composer.psalm.json composer install --no-interaction --no-scripts --prefer-dist
 
       - name: Psalm
-        uses: docker://vimeo/psalm-github-actions
-        with:
-          composer_require_dev: true
+        run: psalm --no-cache --no-progress --output-format=github

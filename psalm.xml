@@ -130,6 +130,7 @@
 		<PossiblyUndefinedVariable>
 			<errorLevel type="suppress">
 				<file name="stripe/views/action-settings/payments-options.php" />
+				<file name="stripe/views/action-settings/paypal-shipping.php" />
 				<file name="classes/controllers/FrmApplicationsController.php" />
 				<file name="classes/controllers/FrmFieldsController.php" />
 				<file name="classes/controllers/FrmStylesController.php" />
@@ -535,6 +536,7 @@
 		<MissingClassConstType>
 			<errorLevel type="suppress">
 				<directory name="classes" />
+				<directory name="stripe" />
 			</errorLevel>
 		</MissingClassConstType>
 		<ClassMustBeFinal>

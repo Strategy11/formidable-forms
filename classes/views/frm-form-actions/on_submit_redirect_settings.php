@@ -41,7 +41,7 @@ $name_attr = $args['action_control']->get_field_name( 'open_in_new_tab' );
 		)
 	);
 	?>
-	<label for="<?php echo esc_attr( $id_attr ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'new_tab' ); ?>>
+	<label for="<?php echo esc_attr( $id_attr ); ?>" id="<?php echo esc_attr( $id_attr ); ?>_label" <?php FrmAppHelper::maybe_add_tooltip( 'new_tab' ); ?>>
 		<?php esc_html_e( 'Open in new tab', 'formidable' ); ?>
 	</label>
 </div>
@@ -65,7 +65,7 @@ $redirect_delay = ! empty( $args['form_action']->post_content['redirect_delay'] 
 		)
 	);
 	?>
-	<label for="<?php echo esc_attr( $id_attr ); ?>">
+	<label for="<?php echo esc_attr( $id_attr ); ?>" id="<?php echo esc_attr( $id_attr ); ?>_label">
 		<?php esc_html_e( 'Delay redirect and show message', 'formidable' ); ?>
 	</label>
 </div>

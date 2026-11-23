@@ -13,6 +13,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmAntiSpam extends FrmValidate {
 
 	/**
+	 * Track when the token filters have been added so they are only added once.
+	 * The callback checks the Anti-Spam setting of the form being rendered, so
+	 * a single callback covers every form on the page. Adding one callback for
+	 * each form would print duplicate data-token attributes.
+	 *
+	 * @since 6.34
+	 *
+	 * @var bool
+	 */
+	private static $filters_added = false;
+
+	/**
 	 * @return string
 	 */
 	protected function get_option_key() {
@@ -40,8 +52,14 @@ class FrmAntiSpam extends FrmValidate {
 	 * @return void
 	 */
 	public function init() {
-		add_filter( 'frm_form_attributes', array( $this, 'add_token_to_form' ), 10, 1 );
-		add_filter( 'frm_form_div_attributes', array( $this, 'add_token_to_form' ), 10, 1 );
+		if ( self::$filters_added ) {
+			return;
+		}
+
+		self::$filters_added = true;
+
+		add_filter( 'frm_form_attributes', array( $this, 'add_token_to_form' ), 10, 2 );
+		add_filter( 'frm_form_div_attributes', array( $this, 'add_token_to_form' ), 10, 2 );
 	}
 
 	/**
@@ -160,16 +178,29 @@ class FrmAntiSpam extends FrmValidate {
 	}
 
 	/**
-	 * Add the token field to the form.
+	 * Add the token field to the form if the form has Anti-Spam enabled.
 	 *
 	 * @since 4.11
+	 * @since 6.34 The $form param was added, and forms without Anti-Spam enabled are now skipped.
 	 *
-	 * @param string $attributes
+	 * @param string      $attributes
+	 * @param object|null $form The form being rendered.
 	 *
 	 * @return string
 	 */
-	public function add_token_to_form( $attributes ) {
-		return $attributes . ( ' data-token="' . esc_attr( $this->get() ) . '"' );
+	public function add_token_to_form( $attributes, $form = null ) {
+		$antispam = $this;
+
+		if ( $form ) {
+			$antispam       = new self( (int) $form->id );
+			$antispam->form = $form;
+		}
+
+		if ( ! $antispam->run_antispam() ) {
+			return $attributes;
+		}
+
+		return $attributes . ( ' data-token="' . esc_attr( $antispam->get() ) . '"' );
 	}
 
 	/**
@@ -208,7 +239,7 @@ class FrmAntiSpam extends FrmValidate {
 
 		// If the antispam setting is enabled and we don't have a token, bail.
 		if ( ! $token ) {
-			if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
+			if ( $this->is_admin_entry_submission() ) {
 				// Add an exception for the entries page.
 				return true;
 			}
@@ -222,6 +253,21 @@ class FrmAntiSpam extends FrmValidate {
 		}
 
 		return $this->process_antispam_filter( true );
+	}
+
+	/**
+	 * Check if a user who may manage entries is submitting from the admin entries page.
+	 *
+	 * @since 7.1
+	 *
+	 * @return bool
+	 */
+	private function is_admin_entry_submission() {
+		if ( ! FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
+			return false;
+		}
+
+		return current_user_can( 'frm_create_entries' ) || current_user_can( 'frm_edit_entries' );
 	}
 
 	/**
@@ -278,7 +324,7 @@ class FrmAntiSpam extends FrmValidate {
 		return ' ' . sprintf(
 			// translators: %1$s start link, %2$s end link.
 			esc_html__( 'Please check out our %1$stroubleshooting guide%2$s for details on resolving this issue.', 'formidable' ),
-			'<a href="https://formidableforms.com/knowledgebase/add-spam-protection/">',
+			'<a href="' . esc_url( FrmAppHelper::get_doc_url( 'add-spam-protection', 'antispam-troubleshooting' ) ) . '" target="_blank" rel="noopener">',
 			'</a>'
 		);
 	}

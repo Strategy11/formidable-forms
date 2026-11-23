@@ -240,9 +240,27 @@ if ( ! empty( $form_action->ID ) && empty( $form_action->post_content['amount'] 
 		<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'email' ) ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'email' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['email'] ); ?>" class="frm_not_email_to large-text" />
 	</p>
 
+	<?php if ( ! has_action( 'frm_stripe_lite_customer_info_after_email' ) ) : ?>
+		<p class="frm6">
+			<label for="<?php echo esc_attr( $action_control->get_field_id( 'billing_address' ) ); ?>">
+				<?php esc_html_e( 'Address', 'formidable' ); ?>
+			</label>
+			<?php
+			$action_control->show_fields_dropdown(
+				$field_dropdown_atts,
+				array(
+					'name'           => 'billing_address',
+					'allowed_fields' => 'address',
+				)
+			);
+			?>
+		</p>
+	<?php endif; ?>
+
 	<?php
 	/**
 	 * Trigger an action so Pro can include an Address dropdown.
+	 * When a plugin hooks in here, the default Address dropdown above is not rendered.
 	 *
 	 * @since 6.5
 	 *
@@ -274,9 +292,14 @@ if ( ! empty( $form_action->ID ) && empty( $form_action->post_content['amount'] 
 </div>
 
 <?php
+if ( ! has_action( 'frm_payment_settings_after_customer_info' ) ) {
+	include FrmTransLiteAppHelper::plugin_path() . '/views/action-settings/paypal-shipping.php';
+}
+
 /**
  * Fires after the Customer Information section in payment action settings.
  * Used by Pro to add gateway-specific Shipping and Billing sections.
+ * When a plugin hooks in here, the default Shipping Information section above is not rendered.
  *
  * @since 6.31
  *

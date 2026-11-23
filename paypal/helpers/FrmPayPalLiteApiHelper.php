@@ -30,6 +30,10 @@ class FrmPayPalLiteApiHelper {
 	 * @return bool
 	 */
 	public static function cancel_subscription( $sub_id ) {
+		if ( ! FrmTransLiteSubscription::current_user_can_cancel( $sub_id, 'paypal' ) ) {
+			return false;
+		}
+
 		return FrmPayPalLiteConnectHelper::cancel_subscription( $sub_id );
 	}
 }

@@ -210,17 +210,20 @@ class S11FloatingLinks {
 		// Create the icon button element
 		this.iconButtonElement = document.createElement( 'div' );
 		this.iconButtonElement.classList.add( 's11-floating-links-logo-icon' );
+		this.iconButtonElement.setAttribute( 'role', 'button' );
+		this.iconButtonElement.setAttribute( 'tabindex', '0' );
+		this.iconButtonElement.setAttribute( 'aria-label', wp.i18n.__( 'Formidable support and links', 'formidable' ) );
+		this.iconButtonElement.setAttribute( 'aria-expanded', 'false' );
 		this.iconButtonElement.innerHTML = this.options.logoIcon.trim();
 
 		// Define close icon
 		const closeIcon = `
-			<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 32 32">
+			<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 32 32" aria-hidden="true">
 				<path fill="#1D2939" d="M23.625 21.957c.47.467.47 1.225 0 1.693a1.205 1.205 0 0 1-1.699 0l-5.915-5.937-5.958 5.935c-.47.467-1.23.467-1.7 0a1.194 1.194 0 0 1 0-1.693l5.96-5.933-5.961-5.979a1.194 1.194 0 0 1 0-1.693 1.205 1.205 0 0 1 1.699 0l5.96 5.982 5.957-5.935a1.205 1.205 0 0 1 1.7 0 1.194 1.194 0 0 1 0 1.693l-5.96 5.932 5.917 5.935Z"/>
 			</svg>
 		`;
 
-		// Add a click event listener
-		this.iconButtonElement.addEventListener( 'click', () => {
+		const toggleIconButton = () => {
 			// Toggle the navigation menu element
 			this.toggleFade( this.navMenuElement );
 
@@ -230,6 +233,17 @@ class S11FloatingLinks {
 
 			// Switch the icon of the icon button element
 			this.switchIconButton( closeIcon );
+		};
+
+		// Add a click event listener
+		this.iconButtonElement.addEventListener( 'click', toggleIconButton );
+
+		// Support activating the button with the keyboard, since it's a <div> with role="button".
+		this.iconButtonElement.addEventListener( 'keydown', event => {
+			if ( event.key === 'Enter' || event.key === ' ' ) {
+				event.preventDefault();
+				toggleIconButton();
+			}
 		} );
 
 		// Append the icon button to the wrapper element
@@ -247,7 +261,10 @@ class S11FloatingLinks {
 	switchIconButton( closeIcon ) {
 		this.iconButtonElement.classList.toggle( 's11-show-close-icon' );
 
-		if ( this.iconButtonElement.classList.contains( 's11-show-close-icon' ) ) {
+		const isOpen = this.iconButtonElement.classList.contains( 's11-show-close-icon' );
+		this.iconButtonElement.setAttribute( 'aria-expanded', isOpen ? 'true' : 'false' );
+
+		if ( isOpen ) {
 			this.iconButtonElement.innerHTML = closeIcon.trim();
 			return;
 		}
@@ -341,8 +358,8 @@ class S11FloatingLinks {
 	 * @memberof S11FloatingLinks
 	 */
 	setCSSVariables() {
-		const hoverColor = this.options?.hoverColor ? this.options.hoverColor : '#4199FD';
-		const bgHoverColor = this.options?.bgHoverColor ? this.options.bgHoverColor : '#F5FAFF';
+		const hoverColor = this.options?.hoverColor ? this.options.hoverColor : '#026EE8';
+		const bgHoverColor = this.options?.bgHoverColor ? this.options.bgHoverColor : '#F6FAFF';
 
 		// Set the CSS variables on the wrapper element
 		this.wrapperElement.style.setProperty( '--floating-links-hover-color', hoverColor );

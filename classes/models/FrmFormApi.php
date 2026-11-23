@@ -36,6 +36,16 @@ class FrmFormApi {
 	protected $force = false;
 
 	/**
+	 * The most recent decode of each cache key's payload.
+	 *
+	 * Each entry is array( 'raw' => string, 'decoded' => mixed ). The raw JSON is kept so a reuse
+	 * can be checked against what is stored right now, rather than assumed to still be current.
+	 *
+	 * @var array<string,array>
+	 */
+	private static $decoded_cache = array();
+
+	/**
 	 * @since 3.06
 	 *
 	 * @param string|null $license The license key.
@@ -114,6 +124,10 @@ class FrmFormApi {
 
 		if ( $this->license ) {
 			$url .= '?l=' . urlencode( base64_encode( $this->license ) );
+		}
+
+		if ( $this->include_boosts() ) {
+			$url = add_query_arg( 'include_boosts', 1, $url );
 		}
 
 		if ( $this->force ) {
@@ -244,7 +258,7 @@ class FrmFormApi {
 	 * @return string
 	 */
 	protected function transient_key() {
-		return strtolower( self::class ) . '_request_lock';
+		return strtolower( static::class ) . '_request_lock';
 	}
 
 	/**
@@ -253,11 +267,21 @@ class FrmFormApi {
 	 * @return string
 	 */
 	protected function api_url() {
-		if ( ! $this->license ) {
-			// Direct traffic to Cloudflare worker when there is no license.
-			return 'https://plapi.formidableforms.com/list/';
-		}
 		return 'https://formidableforms.com/wp-json/s11edd/v1/updates/';
+	}
+
+	/**
+	 * Only the add-ons feed lists Boosts. Subclasses that request other feeds leave them out.
+	 *
+	 * This checks the cache rather than the class, so a subclass that reads the add-ons feed,
+	 * like FrmAILicense in Formidable AI, caches the same Boosts as this class.
+	 *
+	 * @since 7.1
+	 *
+	 * @return bool
+	 */
+	protected function include_boosts() {
+		return str_starts_with( $this->cache_key, 'frm_addons_l' );
 	}
 
 	/**
@@ -339,7 +363,39 @@ class FrmFormApi {
 			return false;
 		}
 
-		return json_decode( $cache['value'], true );
+		return $this->decode_cached( $cache['value'] );
+	}
+
+	/**
+	 * Decode a cached API payload, reusing the previous decode of an unchanged payload.
+	 *
+	 * The payload runs to tens of kilobytes of JSON, and decoding it costs far more than reading
+	 * the option it came from. That matters because a single form builder page decodes it once per
+	 * upsell it renders. The reuse is keyed on the raw JSON rather than on the cache key, so
+	 * anything that changes what is stored -- a new license, a cleared cache, a fresh API response,
+	 * a test replacing the option -- is picked up on the very next read instead of being masked.
+	 *
+	 * @since 6.35
+	 *
+	 * @param string $value The cached JSON.
+	 *
+	 * @return mixed
+	 */
+	private function decode_cached( $value ) {
+		$previous = self::$decoded_cache[ $this->cache_key ] ?? false;
+
+		if ( $previous && $previous['raw'] === $value ) {
+			return $previous['decoded'];
+		}
+
+		$decoded = json_decode( $value, true );
+
+		self::$decoded_cache[ $this->cache_key ] = array(
+			'raw'     => $value,
+			'decoded' => $decoded,
+		);
+
+		return $decoded;
 	}
 
 	/**

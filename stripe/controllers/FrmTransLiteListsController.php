@@ -121,6 +121,12 @@ class FrmTransLiteListsController {
 			return;
 		}
 
+		// Show no-payments placeholder if payments table doesn't exist.
+		if ( ! FrmTransLiteAppHelper::payments_table_exists() ) {
+			include FrmTransLiteAppHelper::plugin_path() . '/views/lists/no-payments.php';
+			return;
+		}
+
 		/**
 		 * @since 6.27
 		 *

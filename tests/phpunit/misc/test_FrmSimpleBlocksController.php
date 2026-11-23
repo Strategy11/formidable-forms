@@ -1,10 +1,11 @@
 <?php
 
+/**
+ * @covers FrmSimpleBlocksController
+ */
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmSimpleBlocksController::class )]
 class test_FrmSimpleBlocksController extends FrmUnitTest {
 
-	/**
-	 * @covers FrmSimpleBlocksController::maybe_remove_fade_on_load_for_block_preview
-	 */
 	public function test_maybe_remove_fade_on_load_for_block_preview() {
 		$form = '<form enctype="multipart/form-data" method="post" class="frm-show-form  frm_pro_form  frm_logic_form  frm-admin-viewing ">';
 

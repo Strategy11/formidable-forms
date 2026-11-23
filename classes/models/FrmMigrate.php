@@ -25,12 +25,18 @@ class FrmMigrate {
 	 */
 	public $entry_metas;
 
+	/**
+	 * @var string
+	 */
+	public $gated_tokens;
+
 	public function __construct() {
 		global $wpdb;
-		$this->fields      = $wpdb->prefix . 'frm_fields';
-		$this->forms       = $wpdb->prefix . 'frm_forms';
-		$this->entries     = $wpdb->prefix . 'frm_items';
-		$this->entry_metas = $wpdb->prefix . 'frm_item_metas';
+		$this->fields       = $wpdb->prefix . 'frm_fields';
+		$this->forms        = $wpdb->prefix . 'frm_forms';
+		$this->entries      = $wpdb->prefix . 'frm_items';
+		$this->entry_metas  = $wpdb->prefix . 'frm_item_metas';
+		$this->gated_tokens = $wpdb->prefix . 'frm_gated_tokens';
 	}
 
 	/**
@@ -154,8 +160,8 @@ class FrmMigrate {
 		$message = array(
 			'key'     => 'failed-to-create-tables',
 			'subject' => 'Something went wrong setting up the database',
-			'message' => 'For steps to continue, see our <a href="https://formidableforms.com/knowledgebase/install-formidable-forms/#kb-missing-database-tables">documentation</a>. If you need assistance, we recommend that you reach out to your hosting provider. Then <a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_add_tables=1' ) ) . '">click here</a> to try again.', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-			'cta'     => '<a href="https://formidableforms.com/knowledgebase/install-formidable-forms/#kb-missing-database-tables">Learn More</a>',
+			'message' => 'For steps to continue, see our <a href="' . esc_url( FrmAppHelper::get_doc_url( 'install-formidable-forms/#kb-missing-database-tables', 'missing-tables-inbox-message' ) ) . '" target="_blank" rel="noopener">documentation</a>. If you need assistance, we recommend that you reach out to your hosting provider. Then <a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_add_tables=1' ) ) . '">click here</a> to try again.', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			'cta'     => '<a href="' . esc_url( FrmAppHelper::get_doc_url( 'install-formidable-forms/#kb-missing-database-tables', 'missing-tables-inbox-cta' ) ) . '" target="_blank" rel="noopener">Learn More</a>', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			'type'    => 'error',
 		);
 
@@ -250,6 +256,23 @@ class FrmMigrate {
                 KEY item_id (item_id)
         )';
 
+		/* Create/Upgrade Gated Tokens Table */
+		$sql[] = 'CREATE TABLE ' . $this->gated_tokens . ' (
+				id BIGINT UNSIGNED NOT NULL auto_increment,
+				token_hash varchar(64) NOT NULL,
+				action_id BIGINT UNSIGNED NOT NULL,
+				entry_id BIGINT UNSIGNED NOT NULL,
+				user_id BIGINT UNSIGNED default NULL,
+				ip_address varchar(255) default NULL,
+				created_at int UNSIGNED NOT NULL,
+				expired_at int UNSIGNED default NULL,
+				PRIMARY KEY  (id),
+				UNIQUE KEY token_hash (token_hash),
+				KEY action_id (action_id),
+				KEY user_id (user_id),
+				KEY expired_at (expired_at)
+        )';
+
 		foreach ( $sql as $q ) {
 			if ( function_exists( 'dbDelta' ) ) {
 				dbDelta( $q . $charset_collate . ';' );
@@ -260,19 +283,20 @@ class FrmMigrate {
 			unset( $q );
 		}
 
-		$this->add_composite_indexes_for_entries();
+		$this->add_composite_indexes();
 	}
 
 	/**
-	 * These indexes help optimize database queries for entries.
+	 * These indexes help optimize database queries.
 	 *
 	 * @since 6.6
 	 * @since 6.16.3 idx_form_id_is_draft was also added to frm_items.
 	 * @since 6.17 idx_form_id_type was also added to frm_fields.
+	 * @since 7.0 idx_form_id_created_at was added to frm_items, and idx_parent_form_id and frm_forms_template_status to frm_forms.
 	 *
 	 * @return void
 	 */
-	private function add_composite_indexes_for_entries() {
+	private function add_composite_indexes() {
 		global $wpdb;
 
 		$table_name = "{$wpdb->prefix}frm_items";
@@ -301,6 +325,40 @@ class FrmMigrate {
 
 		if ( ! self::index_exists( $table_name, $index_name ) ) {
 			$wpdb->query( "CREATE INDEX idx_form_id_type ON `{$wpdb->prefix}frm_fields` (form_id, type(30))" );
+		}
+
+		/**
+		 * The entry list sorts one form's entries by created_at, without filtering on is_draft.
+		 * KEY form_id alone cannot satisfy that ORDER BY, so the database read every matching row
+		 * and sorted it: on a form with 50,000 entries the first page took about 100ms.
+		 *
+		 * The is_draft column is deliberately left out. Putting it between form_id and created_at
+		 * leaves created_at unusable for the sort whenever is_draft is unconstrained, which is
+		 * exactly how the entry list queries. Draft filtering is served by idx_form_id_is_draft.
+		 */
+		$table_name = "{$wpdb->prefix}frm_items";
+		$index_name = 'idx_form_id_created_at';
+
+		if ( ! self::index_exists( $table_name, $index_name ) ) {
+			$wpdb->query( "CREATE INDEX idx_form_id_created_at ON `{$wpdb->prefix}frm_items` (form_id, created_at)" );
+		}
+
+		/**
+		 * Repeaters and embedded forms look their child forms up by parent_form_id, which had
+		 * no index at all, so every lookup was a full scan of frm_forms.
+		 */
+		$table_name = "{$wpdb->prefix}frm_forms";
+		$index_name = 'idx_parent_form_id';
+
+		if ( ! self::index_exists( $table_name, $index_name ) ) {
+			$wpdb->query( "CREATE INDEX idx_parent_form_id ON `{$wpdb->prefix}frm_forms` (parent_form_id)" );
+		}
+
+		$table_name = "{$wpdb->prefix}frm_forms";
+		$index_name = 'frm_forms_template_status';
+
+		if ( ! self::index_exists( $table_name, $index_name ) ) {
+			$wpdb->query( "CREATE INDEX frm_forms_template_status ON `{$wpdb->prefix}frm_forms` (is_template, status, parent_form_id)" );
 		}
 	}
 
@@ -382,7 +440,7 @@ class FrmMigrate {
 			return;
 		}
 
-		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98, 101, 104, 105 );
+		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98, 101, 104, 105, 107 );
 
 		foreach ( $migrations as $migration ) {
 			if ( FrmAppHelper::$db_version < $migration || $old_db_version >= $migration ) {
@@ -409,6 +467,7 @@ class FrmMigrate {
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->forms ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entries ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entry_metas ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->gated_tokens ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		delete_option( 'frm_options' );
 		delete_option( 'frm_db_version' );
@@ -475,6 +534,23 @@ class FrmMigrate {
 
 		if ( FrmSquareLiteConnectHelper::get_merchant_id( 'live' ) ) {
 			FrmSquareLiteConnectHelper::get_location_id( true, 'live' );
+		}
+	}
+
+	/**
+	 * Drop the autoloaded options that tracked the last Connect verify attempt.
+	 *
+	 * The verify endpoints no longer rate limit by timestamp, so these rows are unused.
+	 *
+	 * @since 7.0
+	 *
+	 * @return void
+	 */
+	private function migrate_to_107() {
+		$gateways = array( 'stripe', 'square', 'paypal' );
+
+		foreach ( $gateways as $gateway ) {
+			delete_option( 'frm_' . $gateway . '_lite_last_verify_attempt' );
 		}
 	}
 

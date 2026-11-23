@@ -17,7 +17,7 @@ $single_action_attrs = array(
 		<div class="frm-style-tabs-wrapper" data-filter-target="#frm-actions-filter-content">
 			<div class="frm-tabs-delimiter"><span class="frm-tabs-active-underline"></span></div>
 			<div class="frm-tabs-navs">
-				<ul class="frm-h-stack-xs frm-children-px-sm">
+				<ul class="frm-h-stack-xs frm-children-px-sm" aria-label="<?php esc_attr_e( 'Action categories', 'formidable' ); ?>">
 					<li class="frm-active" data-filter="my_actions"><?php esc_html_e( 'My Actions', 'formidable' ); ?></li>
 					<li data-filter="all"><?php esc_html_e( 'All', 'formidable' ); ?></li>
 					<?php foreach ( $groups as $group_key => $group ) { ?>
@@ -126,7 +126,7 @@ $single_action_attrs = array(
 										}
 									}
 									?>
-										<li class="frm-card-item frm-card-item--outlined frm-action frm-not-installed frm-group-<?php echo esc_attr( $group_key ); ?>" tabindex="0">
+										<li class="frm-card-item frm-card-item--outlined frm-action frm-not-installed frm-action-locked frm-group-<?php echo esc_attr( $group_key ); ?>" tabindex="0">
 											<div class="frm-h-stack-xs frm-w-full">
 												<span class="frm-border-icon">
 													<?php FrmAppHelper::icon_by_class( $action_icon, $icon_atts ); ?>
@@ -145,8 +145,7 @@ $single_action_attrs = array(
 												</div>
 
 												<a <?php FrmAppHelper::array_to_html_params( $single_action_attrs, true ); ?>>
-													<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' ); ?>
-													<span><?php echo esc_html_x( 'Add', 'form action', 'formidable' ); ?></span>
+													<span><?php esc_html_e( 'Upgrade', 'formidable' ); ?></span>
 												</a>
 											</div>
 										</li>
@@ -236,7 +235,7 @@ $single_action_attrs = array(
 							}
 						}
 						?>
-							<li class="frm-card-item frm-card-item--outlined frm-action frm-not-installed frm-group-<?php echo esc_attr( $group_key ); ?>" tabindex="0">
+							<li class="frm-card-item frm-card-item--outlined frm-action frm-not-installed frm-action-locked frm-group-<?php echo esc_attr( $group_key ); ?>" tabindex="0">
 								<div class="frm-h-stack-xs frm-w-full">
 									<span class="frm-border-icon">
 										<?php FrmAppHelper::icon_by_class( $action_icon, $icon_atts ); ?>
@@ -255,8 +254,7 @@ $single_action_attrs = array(
 									</div>
 
 									<a <?php FrmAppHelper::array_to_html_params( $single_action_attrs, true ); ?>>
-										<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' ); ?>
-										<span><?php echo esc_html_x( 'Add', 'form action', 'formidable' ); ?></span>
+										<span><?php esc_html_e( 'Upgrade', 'formidable' ); ?></span>
 									</a>
 								</div>
 							</li>

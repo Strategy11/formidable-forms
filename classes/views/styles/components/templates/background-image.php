@@ -2,7 +2,7 @@
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php echo esc_html( $component['title'] ); ?></label></div>
+<div class="frm5 frm_form_field"><label for="<?php echo esc_attr( $component['id'] ); ?>" class="frm-style-item-heading"><?php echo esc_html( $component['title'] ); ?></label></div>
 <div class="frm7 frm_form_field">
 	<div class="frm-style-component frm-background-image-component">
 		<div class="frm-h-stack-xs frm-flex-wrap" tabindex="0">
