@@ -532,14 +532,14 @@ class FrmEntriesHelper {
 	 * @return void
 	 */
 	public static function set_other_repeating_vals( $field, &$value, &$args ) {
-		if ( empty( $args['parent_field_id'] ) && empty( $args['item_meta_path'] ) ) {
+		if ( ! FrmField::is_option_true( $field, 'other' ) || ( empty( $args['parent_field_id'] ) && empty( $args['item_meta_path'] ) ) ) {
 			return;
 		}
 
 		$path = ! empty( $args['item_meta_path'] ) ? $args['item_meta_path'] : array( $args['parent_field_id'], $args['key_pointer'] );
 		$row  = FrmEntryMetaPathHelper::get_posted_row( $path );
 
-		if ( ! FrmField::is_option_true( $field, 'other' ) || ! isset( $row['other'][ $field->id ] ) ) {
+		if ( ! isset( $row['other'][ $field->id ] ) ) {
 			return;
 		}
 
