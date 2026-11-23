@@ -18,17 +18,28 @@ class test_FrmLiteralFieldValues extends FrmUnitTest {
 	}
 
 	public function test_literal_xml_accepts_empty_columns() {
-		$field = (object) array( 'type' => 'code' );
+		$field        = (object) array( 'type' => 'code' );
+		$deprecations = array();
 		add_filter( 'frm_xml_field_value_is_literal', '__return_true' );
+		set_error_handler(
+			static function ( $level, $message ) use ( &$deprecations ) {
+				$deprecations[] = $message;
+				return true;
+			},
+			E_DEPRECATED
+		);
 
 		try {
-			// A field saved without a description stores null in that column.
-			$this->assertSame( '<![CDATA[]]>', FrmXMLHelper::field_value_to_xml( null, $field ), 'An empty column exports as an empty value.' );
-			$xml = simplexml_load_string( '<description encoding="base64">' . FrmXMLHelper::field_value_to_xml( null, $field ) . '</description>' );
-			$this->assertSame( '', FrmXMLHelper::field_value_from_xml( $xml, $field ), 'An empty value imports as an empty string.' );
+			$exported = FrmXMLHelper::field_value_to_xml( null, $field );
+			$this->assertSame( '<![CDATA[]]>', $exported );
+			$xml = simplexml_load_string( '<description encoding="base64">' . $exported . '</description>' );
+			$this->assertSame( '', FrmXMLHelper::field_value_from_xml( $xml, $field ) );
 		} finally {
+			restore_error_handler();
 			remove_filter( 'frm_xml_field_value_is_literal', '__return_true' );
 		}
+
+		$this->assertSame( array(), $deprecations );
 	}
 
 	public function test_compound_values_keep_legacy_decoding() {
