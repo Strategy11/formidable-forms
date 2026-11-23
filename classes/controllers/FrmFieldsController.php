@@ -367,6 +367,10 @@ class FrmFieldsController {
 		 */
 		$extra_field_attributes = apply_filters( 'frm_field_container_extra_attributes', array(), $field, $display );
 
+		if ( ! empty( $values['duplicated_from_id'] ) ) {
+			$extra_field_attributes['data-duplicated-from-id'] = absint( $values['duplicated_from_id'] );
+		}
+
 		$li_classes  = self::get_classes_for_builder_field( $field, $display, $field_obj );
 		$li_classes .= ' ui-state-default widgets-holder-wrap';
 
