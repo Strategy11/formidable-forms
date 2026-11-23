@@ -248,12 +248,19 @@ function getControls( list ) {
 	let addLink = document.getElementById( `frm-option-groups-add-${ fieldId }` );
 
 	if ( ! checkbox ) {
-		const { tag, span, setAttributes } = frmDom;
+		const { tag, span, svg, setAttributes } = frmDom;
 		checkbox = tag( 'input', { id: `frm-option-groups-enable-${ fieldId }`, className: 'frm-option-groups-enable' } );
 		checkbox.type = 'checkbox';
+		// The same tooltip icon FrmAppHelper::tooltip_icon() prints beside the other option settings.
+		const tooltip = span( { className: 'frm_help', child: svg( { href: '#frm_tooltip_icon', classList: [ 'frm_tooltip_icon' ] } ) } );
+		setAttributes( tooltip, {
+			title: __( 'Sort the options under headings. Each group shows as a labeled section in the dropdown.', 'formidable' ),
+			'data-placement': 'right',
+			'data-container': 'body',
+		} );
 		const label = tag( 'label', {
 			className: 'frm-h-stack-xs',
-			children: [ checkbox, span( __( 'Option groups', 'formidable' ) ) ],
+			children: [ checkbox, span( __( 'Option groups', 'formidable' ) ), tooltip ],
 		} );
 		setAttributes( label, { for: checkbox.id } );
 		// Full width, and no top margin: the options area is a grid, so margins don't merge and the
@@ -584,13 +591,14 @@ function maybeShowBulkEditHint( event ) {
 	if ( ! hint ) {
 		hint = frmDom.tag( 'p', {
 			id: 'frm-option-groups-bulk-hint',
-			className: 'frm-option-groups-bulk-hint',
+			className: 'howto',
 			text: __( 'To group options, add a line like "## Fruits" before them. A line with only "##" ends the group.', 'formidable' ),
 		} );
 		textarea.after( hint );
 	}
 
-	hint.hidden = ! list || ! supportsGroups( list );
+	// WordPress gives .howto display block, which would override the hidden attribute.
+	hint.classList.toggle( 'frm_hidden', ! list || ! supportsGroups( list ) );
 }
 
 /**

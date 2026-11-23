@@ -6,8 +6,8 @@
 .frm_sortable_field_opts {
 
 	.frm-option-in-group {
-		padding-right: 8px;
-		padding-left: 8px;
+		padding-right: var(--gap-xs);
+		padding-left: var(--gap-xs);
 		background-color: #fff;
 		box-shadow: var(--box-shadow-xs);
 
@@ -23,17 +23,17 @@
 
 		/* The 53px heading, then 12px above the first option. */
 		padding-top: 65px;
-		border-top-left-radius: 12px;
-		border-top-right-radius: 12px;
+		border-top-left-radius: var(--small-radius);
+		border-top-right-radius: var(--small-radius);
 	}
 
 	.frm-option-group-last {
 		padding-bottom: 12px;
 
 		/* Lite resets every option row's margin with !important. */
-		margin-bottom: 8px !important;
-		border-bottom-left-radius: 12px;
-		border-bottom-right-radius: 12px;
+		margin-bottom: var(--gap-xs) !important;
+		border-bottom-left-radius: var(--small-radius);
+		border-bottom-right-radius: var(--small-radius);
 	}
 
 	/* With one group there's nothing to merge it into. */
@@ -51,7 +51,7 @@
 	top: 0;
 	right: 0;
 	left: 0;
-	padding: 8px;
+	padding: var(--gap-xs);
 	border-bottom: 1px solid var(--grey-200);
 }
 
@@ -66,7 +66,7 @@
 	color: var(--error-500);
 	background: none;
 	border: 0;
-	border-radius: 6px;
+	border-radius: var(--small-radius);
 	cursor: pointer;
 	opacity: 0;
 	transition: opacity 0.12s ease, background-color 0.12s ease;
@@ -79,7 +79,7 @@
 
 	&:hover,
 	&:focus-visible {
-		background-color: var(--error-25, #fffbfa);
+		background-color: var(--error-25);
 	}
 }
 
@@ -139,7 +139,7 @@
 }
 
 .frm-option-groups-add-row {
-	padding-bottom: var(--gap-md, 16px);
+	padding-bottom: var(--gap-sm);
 	margin-bottom: var(--gap-xs);
 	border-bottom: 1px solid var(--grey-200);
 
@@ -150,15 +150,6 @@
 	.frm-option-groups-add .frmsvg {
 		margin-right: 4px;
 	}
-}
-
-.frm-option-groups-bulk-hint {
-	font-size: var(--text-xs);
-	color: var(--grey-500);
-}
-
-.frm-option-groups-bulk-hint[hidden] {
-	display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
