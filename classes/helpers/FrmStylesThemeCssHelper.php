@@ -41,7 +41,7 @@ class FrmStylesThemeCssHelper {
 	const DEFAULT_ROOT_FONT_SIZE = 16;
 
 	/**
-	 * Build the scoped stylesheet for the current theme.
+	 * Build the scoped stylesheet and cache the discovered paths for version checks.
 	 *
 	 * @since x.x
 	 *
@@ -81,7 +81,6 @@ class FrmStylesThemeCssHelper {
 	/**
 	 * Identify the current theme CSS, so a theme switch or update, a Global Styles edit, or an
 	 * edit to a previously discovered theme stylesheet changes the preview URL and cache key.
-	 * The last stylesheet build supplies the paths so the version check can skip front-end enqueue.
 	 *
 	 * @since x.x
 	 *
@@ -93,7 +92,12 @@ class FrmStylesThemeCssHelper {
 		$modified      = '';
 		$directories   = FrmStylesThemeFilesHelper::get_directories();
 
-		$paths   = (array) get_transient( self::get_stylesheet_paths_cache_key() );
+		$cache_key = self::get_stylesheet_paths_cache_key();
+		$paths     = get_transient( $cache_key );
+		if ( ! is_array( $paths ) ) {
+			$paths = wp_list_pluck( self::get_theme_stylesheets(), 'path' );
+			set_transient( $cache_key, $paths, DAY_IN_SECONDS );
+		}
 		$paths[] = get_template_directory() . '/style.css';
 		$paths[] = get_stylesheet_directory() . '/style.css';
 
