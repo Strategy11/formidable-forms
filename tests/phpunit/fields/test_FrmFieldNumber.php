@@ -31,6 +31,24 @@ class test_FrmFieldNumber extends FrmUnitTest {
 	}
 
 	/**
+	 * @covers FrmFieldNumber::add_extra_html_atts
+	 */
+	public function test_add_extra_html_atts_includes_range_messages() {
+		$number     = new FrmFieldNumber(
+			array(
+				'id'            => 0,
+				'type'          => 'number',
+				'field_options' => array(),
+			)
+		);
+		$input_html = '';
+		$this->run_private_method( array( $number, 'add_extra_html_atts' ), array( array(), &$input_html ) );
+
+		$this->assertStringContainsString( 'data-minmsg="Please select a higher number"', $input_html );
+		$this->assertStringContainsString( 'data-maxmsg="Please select a lower number"', $input_html );
+	}
+
+	/**
 	 * @param array $options
 	 *
 	 * @return string
