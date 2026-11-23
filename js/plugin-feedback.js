@@ -225,44 +225,56 @@ function _onSubmitFeedback() {
       while (1) switch (_context.p = _context.n) {
         case 0:
           event.preventDefault();
-          submitButton.classList.add(LOADING_CLASS);
           step = pluginFeedback.dataset.step;
           formData = new FormData();
-          if ('nps' === step) {
-            npsScore = form.querySelector('input[name="plugin-feedback-nps-score"]:checked');
-            formData.append('nps-score', npsScore === null || npsScore === void 0 ? void 0 : npsScore.value);
-          } else {
-            reasons = form.querySelectorAll('input[name="plugin-feedback-reasons"]:checked');
-            formData.append('reasons', JSON.stringify(Array.from(reasons).map(function (reason) {
-              return reason.value;
-            })));
-            formData.append('details', (_form$querySelector = form.querySelector('textarea[name="plugin-feedback-details"]')) === null || _form$querySelector === void 0 ? void 0 : _form$querySelector.value);
+          if (!('nps' === step)) {
+            _context.n = 2;
+            break;
           }
-          _context.p = 1;
-          _context.n = 2;
-          return doJsonPost(submitAction, formData);
-        case 2:
-          _context.n = 4;
+          npsScore = form.querySelector('input[name="plugin-feedback-nps-score"]:checked');
+          if (npsScore) {
+            _context.n = 1;
+            break;
+          }
+          (0,_utils__WEBPACK_IMPORTED_MODULE_0__.showError)('invalid-nps');
+          return _context.a(2);
+        case 1:
+          formData.append('nps-score', npsScore.value);
+          _context.n = 3;
           break;
+        case 2:
+          reasons = form.querySelectorAll('input[name="plugin-feedback-reasons"]:checked');
+          formData.append('reasons', JSON.stringify(Array.from(reasons).map(function (reason) {
+            return reason.value;
+          })));
+          formData.append('details', (_form$querySelector = form.querySelector('textarea[name="plugin-feedback-details"]')) === null || _form$querySelector === void 0 ? void 0 : _form$querySelector.value);
         case 3:
-          _context.p = 3;
+          submitButton.classList.add(LOADING_CLASS);
+          _context.p = 4;
+          _context.n = 5;
+          return doJsonPost(submitAction, formData);
+        case 5:
+          _context.n = 7;
+          break;
+        case 6:
+          _context.p = 6;
           _t = _context.v;
           (0,_utils__WEBPACK_IMPORTED_MODULE_0__.showError)(_t.type);
           if (_t.message) {
             console.error('Feedback submission error:', _t.message);
           }
           return _context.a(2);
-        case 4:
-          _context.p = 4;
+        case 7:
+          _context.p = 7;
           submitButton.classList.remove(LOADING_CLASS);
-          return _context.f(4);
-        case 5:
+          return _context.f(7);
+        case 8:
           (0,_utils__WEBPACK_IMPORTED_MODULE_0__.hideError)();
           updateFeedbackStep(step);
-        case 6:
+        case 9:
           return _context.a(2);
       }
-    }, _callee, null, [[1, 3, 4, 5]]);
+    }, _callee, null, [[4, 6, 7, 8]]);
   }));
   return _onSubmitFeedback.apply(this, arguments);
 }

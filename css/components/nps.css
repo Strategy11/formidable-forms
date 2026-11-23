@@ -1,6 +1,6 @@
 .frm-nps__buttons {
 	flex-wrap: wrap;
-	gap: 6px;
+	gap: var(--gap-2xs);
 }
 
 .frm-nps__button {
@@ -25,6 +25,11 @@
 	background-color: var(--primary-500);
 	border-color: var(--primary-500);
 	color: #fff;
+}
+
+.frm-nps__buttons input[type="radio"]:focus-visible + .frm-nps__button {
+	outline: 2px solid var(--primary-500);
+	outline-offset: 2px;
 }
 
 .frm-nps__statements {

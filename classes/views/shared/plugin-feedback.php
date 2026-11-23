@@ -9,8 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div id="frm-plugin-feedback" class="frm_wrap frm-dismissible" data-step="<?php echo esc_attr( $step ); ?>" data-submit-action="<?php echo esc_attr( $config['ajax']['submit'] ); ?>" data-dismiss-action="<?php echo esc_attr( $config['ajax']['dismiss'] ); ?>">
-	<a class="dismiss frm-flex" aria-label="<?php esc_attr_e( 'Dismiss feedback notice', 'formidable' ); ?>" role="button">
+<div id="frm-plugin-feedback" class="frm_wrap frm-dismissible frm-card-item frm-compact-card-item frm-box-shadow-xxl" data-step="<?php echo esc_attr( $step ); ?>" data-submit-action="<?php echo esc_attr( $config['ajax']['submit'] ); ?>" data-dismiss-action="<?php echo esc_attr( $config['ajax']['dismiss'] ); ?>">
+	<a href="#" class="dismiss frm-flex" title="<?php esc_attr_e( 'Dismiss feedback notice', 'formidable' ); ?>" aria-label="<?php esc_attr_e( 'Dismiss feedback notice', 'formidable' ); ?>">
 		<?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon' ); ?>
 	</a>
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					'id'    => 'frm-plugin-feedback-nps',
 					'class' => 'frm-mt-xs',
 					'name'  => 'plugin-feedback-nps-score',
-					'value' => '10',
+					'value' => '',
 				)
 			);
 			?>
@@ -53,7 +53,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			array(
 				'id'     => 'frm-plugin-feedback-error',
 				'errors' => array(
-					'invalid-nps'     => __( 'NPS score is invalid.', 'formidable' ),
+					'invalid-nps'     => __( 'Please select a score.', 'formidable' ),
 					'invalid-reasons' => __( 'Please select at least one reason.', 'formidable' ),
 					'server-error'    => __( 'Failed to submit feedback, try again later.', 'formidable' ),
 				),

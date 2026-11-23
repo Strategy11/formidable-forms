@@ -24,7 +24,7 @@ if ( ! empty( $args['class'] ) ) {
 $input_attrs = array(
 	'type'  => 'radio',
 	'name'  => $args['name'],
-	'class' => 'frm_hidden',
+	'class' => 'screen-reader-text',
 );
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $nps_attrs, true ); ?>>

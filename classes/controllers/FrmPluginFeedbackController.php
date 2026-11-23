@@ -251,7 +251,14 @@ class FrmPluginFeedbackController {
 			return;
 		}
 
-		$nps_score = (int) FrmAppHelper::get_post_param( 'nps-score', 10, 'absint' );
+		$nps_score = FrmAppHelper::get_post_param( 'nps-score', '', 'sanitize_text_field' );
+
+		// No score is preselected, so an empty or non-numeric value means the visitor did not pick one.
+		if ( ! is_numeric( $nps_score ) ) {
+			wp_send_json_error( array( 'type' => 'invalid-nps' ) );
+		}
+
+		$nps_score = (int) $nps_score;
 
 		if ( $nps_score < 0 || $nps_score > 10 ) {
 			wp_send_json_error( array( 'type' => 'invalid-nps' ) );

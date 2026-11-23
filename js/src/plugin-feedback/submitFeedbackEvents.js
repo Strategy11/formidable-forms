@@ -44,19 +44,23 @@ function addSubmitFeedbackEventListeners() {
 async function onSubmitFeedback( event ) {
 	event.preventDefault();
 
-	submitButton.classList.add( LOADING_CLASS );
-
 	const step = pluginFeedback.dataset.step;
 	const formData = new FormData();
 
 	if ( 'nps' === step ) {
 		const npsScore = form.querySelector( 'input[name="plugin-feedback-nps-score"]:checked' );
-		formData.append( 'nps-score', npsScore?.value );
+		if ( ! npsScore ) {
+			showError( 'invalid-nps' );
+			return;
+		}
+		formData.append( 'nps-score', npsScore.value );
 	} else {
 		const reasons = form.querySelectorAll( 'input[name="plugin-feedback-reasons"]:checked' );
 		formData.append( 'reasons', JSON.stringify( Array.from( reasons ).map( ( reason ) => reason.value ) ) );
 		formData.append( 'details', form.querySelector( 'textarea[name="plugin-feedback-details"]' )?.value );
 	}
+
+	submitButton.classList.add( LOADING_CLASS );
 
 	try {
 		await doJsonPost( submitAction, formData );
