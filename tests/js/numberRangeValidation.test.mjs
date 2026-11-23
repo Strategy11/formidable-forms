@@ -35,7 +35,7 @@ function getNumberErrors( value, validity, attrs ) {
 		window: {},
 		document: { body: { classList: { contains: () => false } }, dispatchEvent() {} },
 		jQuery,
-		CustomEvent: function() {}
+		CustomEvent() {}
 	};
 
 	runInNewContext( source, context );
