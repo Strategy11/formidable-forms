@@ -1079,7 +1079,8 @@ function frmFrontFormJS() {
 		const recaptcha = form.querySelector( '.frm-g-recaptcha[data-size="invisible"], .g-recaptcha[data-size="invisible"]' );
 		if ( recaptcha ) {
 			const recaptchaID = recaptcha.dataset.rid;
-			if ( typeof grecaptcha === 'undefined' || recaptchaID === undefined ) {
+			// Google renders the default widget without assigning a data-rid.
+			if ( typeof grecaptcha === 'undefined' || ( recaptchaID === undefined && ! recaptcha.classList.contains( 'g-recaptcha' ) ) ) {
 				return false;
 			}
 
