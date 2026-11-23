@@ -9,6 +9,25 @@
 #[\PHPUnit\Framework\Attributes\CoversClass( FrmTransLiteAppHelper::class )]
 class test_FrmTransLiteAppHelper extends FrmUnitTest {
 
+	/**
+	 * Pro hooks other payment settings into the same action, so only Pro's address callback
+	 * should stop Lite from rendering its own address settings.
+	 */
+	public function test_pro_renders_address_setting() {
+		$hook     = 'frm_test_payment_settings_after_customer_info';
+		$callback = 'FrmProStrpLiteController::render_paypal_shipping_billing';
+
+		$this->assertFalse( FrmTransLiteAppHelper::pro_renders_address_setting( $hook, $callback ) );
+
+		add_action( $hook, 'FrmProTransLiteController::render_after_payment_settings', 20 );
+		$this->assertFalse( FrmTransLiteAppHelper::pro_renders_address_setting( $hook, $callback ) );
+
+		add_action( $hook, $callback );
+		$this->assertTrue( FrmTransLiteAppHelper::pro_renders_address_setting( $hook, $callback ) );
+
+		remove_all_actions( $hook );
+	}
+
 	public function test_get_user_id_for_current_payment_uses_the_logged_in_user() {
 		$this->set_current_user_to_1();
 		$this->assertSame( get_current_user_id(), FrmTransLiteAppHelper::get_user_id_for_current_payment() );

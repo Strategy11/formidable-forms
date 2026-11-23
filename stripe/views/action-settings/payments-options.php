@@ -292,14 +292,16 @@ if ( ! empty( $form_action->ID ) && empty( $form_action->post_content['amount'] 
 </div>
 
 <?php
-if ( ! has_action( 'frm_payment_settings_after_customer_info' ) ) {
+// Pro also hooks into frm_payment_settings_after_customer_info for other settings, so only skip
+// the Shipping Information section when Pro's own Shipping Information callback is registered.
+if ( ! FrmTransLiteAppHelper::pro_renders_address_setting( 'frm_payment_settings_after_customer_info', 'FrmProStrpLiteController::render_paypal_shipping_billing' ) ) {
 	include FrmTransLiteAppHelper::plugin_path() . '/views/action-settings/paypal-shipping.php';
 }
 
 /**
  * Fires after the Customer Information section in payment action settings.
  * Used by Pro to add gateway-specific Shipping and Billing sections.
- * When a plugin hooks in here, the default Shipping Information section above is not rendered.
+ * When an older version of Pro renders its own Shipping Information section here, the default section above is not rendered.
  *
  * @since 6.31
  *

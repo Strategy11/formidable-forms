@@ -181,8 +181,8 @@ class FrmSquareLiteAppController {
 	 * @return void
 	 */
 	public static function maybe_show_address_type_warning( $action ) {
-		if ( is_callable( 'FrmProSquareLiteController::maybe_show_address_type_warning' ) ) {
-			// Pro renders this warning with the same hook.
+		if ( FrmTransLiteAppHelper::pro_renders_address_setting( 'frm_action_settings_before_action_name', 'FrmProSquareLiteController::maybe_show_address_type_warning' ) ) {
+			// An older version of Pro renders this warning with the same hook.
 			return;
 		}
 
