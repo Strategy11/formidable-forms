@@ -269,3 +269,31 @@ test( 'refreshFieldPreview debounces, aborts stale requests, and swaps the previ
 	field.remove();
 	assert.equal( await refresh( '9', { delay: 0 } ), null, 'a removed field resolves with null' );
 } );
+
+test( 'the default preview request sends its action and nonce in the POST body', async t => {
+	const document = installFakeDocument();
+	installFakeHooks();
+	addField( document, '9' );
+	const url = '/wp-admin/admin-ajax.php?lang=fr';
+	const fetch = t.mock.method( globalThis, 'fetch', async () => ( {
+		json: async () => ( { success: true, data: { html: '<b>Preview</b>' } } ),
+	} ) );
+	const previousUrl = globalThis.ajaxurl;
+	const previousGlobal = globalThis.frmGlobal;
+	globalThis.ajaxurl = url;
+	globalThis.frmGlobal = { nonce: 'fixture-nonce' };
+
+	try {
+		const refresh = createRefreshFieldPreview( { getFieldPreviewBody } );
+		await refresh( '9', { delay: 0 } );
+		assert.equal( fetch.mock.calls.length, 1 );
+		const [ requestUrl, settings ] = fetch.mock.calls[ 0 ].arguments;
+		assert.equal( requestUrl, url );
+		assert.equal( settings.method, 'POST' );
+		const entries = Array.isArray( settings.body.entries ) ? settings.body.entries : Array.from( settings.body.entries() );
+		assert.deepEqual( entries.slice( -2 ), [ [ 'action', 'frm_refresh_field_preview' ], [ 'nonce', 'fixture-nonce' ] ] );
+	} finally {
+		globalThis.ajaxurl = previousUrl;
+		globalThis.frmGlobal = previousGlobal;
+	}
+} );
