@@ -51,16 +51,21 @@ class FrmTemplateDependenciesHelper {
 		$missing = array();
 
 		foreach ( $required as $requirement ) {
-			$addon     = self::find_addon( $requirement, $addons );
-			$installed = $addon && isset( $plugins[ $addon['plugin'] ] );
-			$variant   = $addon ? self::get_views_variant( $addon ) : '';
+			$addon = self::find_addon( $requirement, $addons );
+
+			if ( ! $addon ) {
+				continue;
+			}
+
+			$installed = isset( $plugins[ $addon['plugin'] ] );
+			$variant   = self::get_views_variant( $addon );
 			$matches   = ! $variant || ! $installed || $variant === self::get_installed_views_variant( $plugins[ $addon['plugin'] ] );
 
 			if ( $installed && $matches && is_plugin_active( $addon['plugin'] ) ) {
 				continue;
 			}
 
-			$key             = $addon ? $addon['plugin'] . $variant : $requirement;
+			$key             = $addon['plugin'] . $variant;
 			$missing[ $key ] = self::get_dependency_action( $requirement, $addon, $installed, $matches );
 		}
 
@@ -102,31 +107,30 @@ class FrmTemplateDependenciesHelper {
 	 * @return array|false The matching add-on record.
 	 */
 	private static function find_addon( $requirement, $addons ) {
-		$aliases = array(
-			'digital-signatures' => 'signature',
-			'ai-forms'           => 'ai',
-			'datepicker-options' => 'dates',
-		);
-		$slug    = sanitize_title( $requirement );
-		$slug    = $aliases[ $slug ] ?? $slug;
+		$slug = sanitize_title( $requirement );
 
 		foreach ( $addons as $id => $addon ) {
 			$directory   = dirname( $addon['plugin'] );
-			$identifiers = array( (string) $id, $addon['plugin'], $directory, preg_replace( '/^formidable-/', '', $directory ), $addon['slug'] ?? '', $addon['title'] ?? '' );
+			$identifiers = array(
+				(string) $id,
+				$addon['plugin'],
+				$directory,
+				preg_replace( '/^formidable-/', '', $directory ),
+				$addon['slug'] ?? '',
+				$addon['title'] ?? '',
+				$addon['display_name'] ?? '',
+			);
 
 			foreach ( $identifiers as $identifier ) {
 				if ( ! is_string( $identifier ) || '' === $identifier ) {
 					continue;
 				}
 
-				$identifier_slug = sanitize_title( $identifier );
-				$identifier_slug = $aliases[ $identifier_slug ] ?? $identifier_slug;
-
-				if ( $slug === $identifier_slug ) {
+				if ( $slug === sanitize_title( $identifier ) ) {
 					return $addon;
 				}
 			}
-		}
+		}//end foreach
 
 		return false;
 	}
@@ -163,10 +167,10 @@ class FrmTemplateDependenciesHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param string      $requirement The required add-on identifier.
-	 * @param array|false $addon The matching catalog record.
-	 * @param bool        $installed Whether the catalog plugin is installed.
-	 * @param bool        $matches Whether the installed plugin is the required variant.
+	 * @param string $requirement The required add-on identifier.
+	 * @param array  $addon The matching catalog record.
+	 * @param bool   $installed Whether the catalog plugin is installed.
+	 * @param bool   $matches Whether the installed plugin is the required variant.
 	 *
 	 * @return array The dependency label and action.
 	 */
@@ -183,10 +187,6 @@ class FrmTemplateDependenciesHelper {
 		if ( ! current_user_can( 'activate_plugins' ) ) {
 			$result['url']     = '';
 			$result['message'] = __( 'Ask an administrator to activate this add-on before importing the template.', 'formidable' );
-			return $result;
-		}
-
-		if ( ! $addon ) {
 			return $result;
 		}
 

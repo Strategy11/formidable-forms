@@ -94,15 +94,19 @@ class test_FrmTemplateDependenciesHelper extends FrmAjaxUnitTest {
 		$this->assertSame( '', $missing[0]['action'], 'An editor must not receive an activation action.' );
 	}
 
-	public function test_unknown_dependencies_block_import_with_manual_instructions() {
+	public function test_unknown_dependencies_do_not_interrupt_import() {
 		$this->cache_templates( array( 'used_addons' => array( 'Unknown add-on' ) ) );
-		$missing = FrmTemplateDependenciesHelper::get_missing_addons( $this->template_url );
-		$this->assertCount( 1, $missing, 'Unknown dependencies should not be silently ignored.' );
-		$this->assertSame( 'Unknown add-on', $missing[0]['name'], 'The unknown add-on label should be preserved.' );
-		$this->assertSame( '', $missing[0]['action'], 'Unknown dependencies should require manual resolution.' );
+		add_filter( 'pre_http_request', array( $this, 'mock_template_download' ), 10, 3 );
+		$_POST    = array(
+			'nonce' => wp_create_nonce( 'frm_ajax' ),
+			'xml'   => $this->template_url,
+		);
+		$response = json_decode( $this->trigger_action( 'frm_install_template' ), true );
+		$this->assertArrayHasKey( 'redirect', $response, 'An unknown dependency should allow the template to import.' );
+		$this->assertArrayNotHasKey( 'missing_addons', $response, 'Unknown dependencies should not prompt for setup.' );
 	}
 
-	public function test_unavailable_addon_catalog_offers_manual_setup() {
+	public function test_unavailable_addon_catalog_does_not_prompt_for_setup() {
 		update_option( 'active_plugins', array() );
 		$api = new FrmFormApi();
 		update_option(
@@ -113,8 +117,7 @@ class test_FrmTemplateDependenciesHelper extends FrmAjaxUnitTest {
 			)
 		);
 		$missing = FrmTemplateDependenciesHelper::get_missing_addons( $this->template_url );
-		$this->assertSame( 'Quiz Maker', $missing[0]['name'], 'Known requirements should remain visible when the catalog is unavailable.' );
-		$this->assertSame( '', $missing[0]['action'], 'A failed catalog request should leave setup to the user.' );
+		$this->assertSame( array(), $missing, 'Requirements cannot be verified while the catalog is unavailable.' );
 	}
 
 	public function test_legacy_views_does_not_satisfy_visual_views_dependency() {
@@ -169,6 +172,7 @@ class test_FrmTemplateDependenciesHelper extends FrmAjaxUnitTest {
 
 	public function test_import_stops_before_downloading_or_creating_forms() {
 		update_option( 'active_plugins', array() );
+		$this->cache_templates( array( 'used_addons' => array( 'Unknown add-on', 'Quiz Maker' ) ) );
 		$_POST    = array(
 			'nonce' => wp_create_nonce( 'frm_ajax' ),
 			'xml'   => $this->template_url,
@@ -176,6 +180,7 @@ class test_FrmTemplateDependenciesHelper extends FrmAjaxUnitTest {
 		$before   = (array) FrmForm::get_count();
 		$response = json_decode( $this->trigger_action( 'frm_install_template' ), true );
 		$this->assertArrayHasKey( 'missing_addons', $response, 'Import should return the dependency step.' );
+		$this->assertSame( array( 'Quiz Maker' ), array_column( $response['missing_addons'], 'name' ), 'Only recognized dependencies should need setup.' );
 		$this->assertArrayNotHasKey( 'redirect', $response, 'Import should not redirect into a broken form.' );
 		$this->assertSame( $before, (array) FrmForm::get_count(), 'No forms should be created before dependencies are active.' );
 	}
@@ -203,9 +208,9 @@ class test_FrmTemplateDependenciesHelper extends FrmAjaxUnitTest {
 		$this->assertSame( 'https://example.org/quiz.zip', $missing[0]['plugin'], 'Installation should use the licensed catalog URL.' );
 	}
 
-	public function test_dates_override_resolves_the_datepicker_options_catalog_name() {
+	public function test_dependencies_match_catalog_display_names_and_plugin_directories() {
 		update_option( 'active_plugins', array() );
-		$this->cache_templates( array( 'used_addons' => array( 'dates' ) ) );
+		$this->cache_templates( array( 'used_addons' => array( 'AI Forms', 'Digital Signatures', 'dates', 'Datepicker Options' ) ) );
 		$api = new FrmFormApi();
 		update_option(
 			$api->get_cache_key(),
@@ -213,18 +218,33 @@ class test_FrmTemplateDependenciesHelper extends FrmAjaxUnitTest {
 				'timeout' => time() + HOUR_IN_SECONDS,
 				'value'   => wp_json_encode(
 					array(
+						28189169 => array(
+							'title'        => 'AI',
+							'display_name' => 'AI Forms',
+							'slug'         => 'ai',
+							'plugin'       => 'formidable-ai/formidable-ai.php',
+						),
+						163248   => array(
+							'title'        => 'Signature',
+							'display_name' => 'Digital Signatures',
+							'slug'         => 'signature',
+							'plugin'       => 'formidable-signature/signature.php',
+						),
 						20247260 => array(
 							'title'  => 'Datepicker Options',
 							'slug'   => 'datepicker-options',
-							'plugin' => 'formidable/formidable.php',
+							'plugin' => 'formidable-dates/formidable-dates.php',
 						),
 					)
 				),
 			)
 		);
 		$missing = FrmTemplateDependenciesHelper::get_missing_addons( $this->template_url );
-		$this->assertSame( 'Datepicker Options', $missing[0]['name'], 'The Dates slug should resolve to the catalog display name.' );
-		$this->assertSame( 'frm_activate_addon', $missing[0]['action'], 'The resolved Dates add-on should offer activation.' );
+		$this->assertSame(
+			array( 'AI', 'Signature', 'Datepicker Options' ),
+			array_column( $missing, 'name' ),
+			'Catalog display names and plugin directories should resolve to the corresponding add-ons.'
+		);
 	}
 
 	public function test_matching_slug_and_name_do_not_duplicate_the_same_dependency() {
