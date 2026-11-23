@@ -201,7 +201,7 @@ class test_FrmPayPalLiteLegacyMigration extends FrmUnitTest {
 			),
 		);
 		$legacy_id = wp_insert_post( $legacy );
-		$other_id  = wp_insert_post( $legacy );
+		$other_id  = wp_insert_post( array( 'post_excerpt' => 'paypal-legacy' ) + $legacy );
 		FrmFormAction::clear_cache();
 
 		$result = FrmPayPalLiteLegacyMigrationHelper::migrate( $legacy_id );
@@ -218,6 +218,45 @@ class test_FrmPayPalLiteLegacyMigration extends FrmUnitTest {
 		);
 		FrmFormAction::clear_cache();
 		$this->assertIsArray( FrmPayPalLiteLegacyMigrationHelper::migrate( $legacy_id ), 'A turned off legacy action should not block the conversion.' );
+	}
+
+	/**
+	 * Commerce is rolled back if WordPress refuses to turn the legacy action off.
+	 */
+	public function test_migrate_rolls_back_when_legacy_action_cannot_be_disabled() {
+		update_option( 'frm_paypal_connect_merchant_id_test', 'migration_fixture', false );
+		update_option( 'frm_paypal_connect_merchant_id_live', 'migration_fixture', false );
+		$form_id   = $this->factory->form->create();
+		$legacy_id = wp_insert_post(
+			array(
+				'post_type'    => FrmFormActionsController::$action_post_type,
+				'post_excerpt' => 'paypal',
+				'post_status'  => 'publish',
+				'menu_order'   => $form_id,
+				'post_content' => wp_json_encode(
+					array(
+						'paypal_type'   => '_xclick',
+						'paypal_amount' => '5',
+						'currency'      => 'USD',
+					)
+				),
+			)
+		);
+		$fail      = static function ( $empty, $post ) use ( $legacy_id ) {
+			return $empty || ( (int) ( $post['ID'] ?? 0 ) === $legacy_id && 'draft' === $post['post_status'] );
+		};
+
+		add_filter( 'wp_insert_post_empty_content', $fail, 10, 2 );
+		try {
+			$result = FrmPayPalLiteLegacyMigrationHelper::migrate( $legacy_id );
+		} finally {
+			remove_filter( 'wp_insert_post_empty_content', $fail, 10 );
+		}
+
+		$this->assertWPError( $result );
+		$this->assertSame( 'frm_paypal_migration_failed', $result->get_error_code() );
+		$this->assertSame( 'publish', get_post_status( $legacy_id ) );
+		$this->assertFalse( FrmFormAction::form_has_action_type( $form_id, 'payment' ) );
 	}
 
 	/**

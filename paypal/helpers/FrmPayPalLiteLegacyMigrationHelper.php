@@ -82,15 +82,23 @@ class FrmPayPalLiteLegacyMigrationHelper {
 	 * @return bool
 	 */
 	private static function has_other_active_legacy_actions( $form_id, $action_id ) {
-		$legacy_actions = FrmFormAction::get_action_for_form( $form_id, 'paypal', array( 'post_status' => 'publish' ) );
+		global $wpdb;
 
-		if ( ! is_array( $legacy_actions ) ) {
-			return false;
-		}
+		// Match stored actions even when a legacy action type is no longer registered.
+		$other_action_id = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->prepare(
+				'SELECT ID FROM %i WHERE post_type = %s AND post_status = %s AND post_excerpt IN (%s, %s) AND menu_order = %d AND ID != %d LIMIT 1',
+				$wpdb->posts,
+				FrmFormActionsController::$action_post_type,
+				'publish',
+				self::$legacy_types[0],
+				self::$legacy_types[1],
+				$form_id,
+				$action_id
+			)
+		);
 
-		unset( $legacy_actions[ $action_id ] );
-
-		return (bool) $legacy_actions;
+		return (bool) $other_action_id;
 	}
 
 	/**
@@ -129,7 +137,7 @@ class FrmPayPalLiteLegacyMigrationHelper {
 			return new WP_Error( 'frm_paypal_invalid_action', __( 'That legacy PayPal action could not be found.', 'formidable' ) );
 		}
 
-		$form_id         = $legacy_action->menu_order;
+		$form_id         = (int) $legacy_action->menu_order;
 		$legacy_settings = self::get_settings_array( $legacy_action->post_content );
 		$blocker         = self::get_migration_blocker( $form_id, $legacy_settings, $legacy_action->ID );
 
