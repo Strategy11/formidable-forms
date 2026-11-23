@@ -1,3 +1,4 @@
+/* oxlint-disable import/no-nodejs-modules -- Tests run with the Node test runner. */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { test } from 'node:test';
@@ -14,7 +15,7 @@ test( 'the builder reserves distinct orders and follows the server response', ()
 	const document = {
 		querySelectorAll( selector ) {
 			assert.equal( selector, '#frm-show-fields li.edit_form_item.frm_field_box' );
-			return Array( 4 );
+			return { length: 4 };
 		},
 	};
 	const div = () => ( {
@@ -27,6 +28,7 @@ test( 'the builder reserves distinct orders and follows the server response', ()
 			return { value: '{"9":7}' };
 		},
 	} );
+	// eslint-disable-next-line sonarjs/code-eval -- Runs only the checked-in builder functions.
 	const api = vm.runInNewContext(
 		`let nextFieldOrder = 0;\n${ functions.join( '\n' ) }\n({ reserveFieldOrder, syncFieldOrderWithResponse });`,
 		{ document, div }
