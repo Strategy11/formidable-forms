@@ -46,6 +46,7 @@ function loadPreview() {
 		requests: 0,
 		rechecks: [],
 		ajax: [],
+		abortedRequests: [],
 		responses: [],
 		vars: new Map()
 	};
@@ -58,8 +59,17 @@ function loadPreview() {
 		updateCount: 0
 	};
 	const jQuery = () => ( { serializeArray: () => [] } );
-	jQuery.ajax = options => preview.ajax.push( options );
-	[ preview.update, preview.changeStyling ] = runInNewContext( `let stylingRequest = 0;\n${ functions }\n[ updatePreview, changeStyling ]`, {
+	jQuery.ajax = options => {
+		preview.ajax.push( options );
+		return {
+			abort: () => {
+				preview.abortedRequests.push( options );
+				options.error( null, 'abort' );
+			}
+		};
+	};
+	const requestState = 'let stylingRequest = 0; let pendingStylingRequest = null;';
+	[ preview.update, preview.changeStyling ] = runInNewContext( `${ requestState }\n${ functions }\n[ updatePreview, changeStyling ]`, {
 		livePreview: preview.livePreview,
 		jQuery,
 		ajaxurl: '',
@@ -229,6 +239,7 @@ test( 'outdated styling responses cannot overwrite a newer preview', () => {
 	preview.changeStyling();
 	preview.livePreview.updateCount = 1;
 	preview.changeStyling();
+	assert.deepEqual( preview.abortedRequests, [ preview.ajax[ 0 ] ] );
 	preview.ajax[ 1 ].success( 'new CSS' );
 	preview.ajax[ 0 ].success( 'old CSS' );
 	assert.equal( preview.responses.length, 1 );
