@@ -12,10 +12,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div id="frm-builder-outline" class="tabs-panel frm-builder-outline-panel">
 	<p class="frm-search">
 		<label class="screen-reader-text" for="frm-builder-outline-search-input">
-			<?php esc_html_e( 'Search pages and fields', 'formidable' ); ?>
+			<?php esc_html_e( 'Search Pages and Fields', 'formidable' ); ?>
 		</label>
 		<?php FrmAppHelper::icon_by_class( 'frmfont frm_search_icon frm_svg20' ); ?>
-		<input type="search" id="frm-builder-outline-search-input" class="frm-search-input" autocomplete="off" placeholder="<?php esc_attr_e( 'Search pages and fields', 'formidable' ); ?>" />
+		<input type="search" id="frm-builder-outline-search-input" class="frm-search-input" autocomplete="off" placeholder="<?php esc_attr_e( 'Search Pages and Fields', 'formidable' ); ?>" />
 	</p>
 	<nav aria-label="<?php esc_attr_e( 'Form Outline', 'formidable' ); ?>">
 		<ul class="frm-builder-outline-list"></ul>
