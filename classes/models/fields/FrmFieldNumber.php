@@ -67,6 +67,27 @@ class FrmFieldNumber extends FrmFieldType {
 	 */
 	protected function add_extra_html_atts( $args, &$input_html ) {
 		$this->add_min_max( $args, $input_html );
+
+		$input_html .= ' data-minmsg="' . esc_attr( $this->get_min_error_message() ) . '"';
+		$input_html .= ' data-maxmsg="' . esc_attr( $this->get_max_error_message() ) . '"';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	private function get_min_error_message() {
+		return __( 'Please select a higher number', 'formidable' );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	private function get_max_error_message() {
+		return __( 'Please select a lower number', 'formidable' );
 	}
 
 	/**
@@ -91,9 +112,9 @@ class FrmFieldNumber extends FrmFieldType {
 		$maxnum = FrmField::get_option( $this->field, 'maxnum' );
 
 		if ( $minnum !== '' && $value < $minnum ) {
-			$errors[ 'field' . $args['id'] ] = __( 'Please select a higher number', 'formidable' );
+			$errors[ 'field' . $args['id'] ] = $this->get_min_error_message();
 		} elseif ( $maxnum !== '' && $value > $maxnum ) {
-			$errors[ 'field' . $args['id'] ] = __( 'Please select a lower number', 'formidable' );
+			$errors[ 'field' . $args['id'] ] = $this->get_max_error_message();
 		}
 
 		$this->validate_step( $errors, $args );
