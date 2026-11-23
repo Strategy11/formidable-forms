@@ -20,7 +20,7 @@ const ADDON_FIELD_WEIGHT = 10;
  * Keep expensive choice and add-on settings from filling a request with heavy fields.
  * Lightweight fields can still share the caller's full batch size.
  *
- * @since x.x
+ * @since 7.1
  * @param {Iterable<string>} fieldIds      Pending field IDs in request order.
  * @param {number}           maxFields     The caller's maximum number of fields per request.
  * @param {number}           minimumWeight The baseline cost of a field in this request.

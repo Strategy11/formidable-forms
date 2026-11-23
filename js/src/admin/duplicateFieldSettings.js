@@ -3,7 +3,7 @@ const controlsSelector = 'input[name], select[name], textarea[name]';
 /**
  * Clone native control state as well as markup without copying widget instances.
  *
- * @since x.x
+ * @since 7.1
  * @param {HTMLElement} element The source markup.
  * @return {HTMLElement} A detached copy with current values and selections.
  */
@@ -29,7 +29,7 @@ function cloneCurrentMarkup( element ) {
 /**
  * Capture unsaved settings at the time Duplicate is clicked.
  *
- * @since x.x
+ * @since 7.1
  * @param {HTMLElement} settings The materialized source settings.
  * @param {HTMLElement} field    The source builder field.
  * @return {Object} A detached snapshot of controls, choices, and static preview markup.
@@ -61,7 +61,7 @@ export function captureFieldSettings( settings, field ) {
 /**
  * Replace only the owner ID in a control name. Nested choice keys and values stay intact.
  *
- * @since x.x
+ * @since 7.1
  * @param {string} name   The source control name.
  * @param {string} fromId The source field ID.
  * @param {string} toId   The duplicate field ID.
@@ -74,7 +74,7 @@ function copyControlName( name, fromId, toId ) {
 /**
  * Remap markup identities without changing saved values or references to other fields.
  *
- * @since x.x
+ * @since 7.1
  * @param {HTMLElement} element    The detached markup to remap.
  * @param {string}      fromId     The source field ID.
  * @param {string}      toId       The duplicate field ID.
@@ -117,7 +117,7 @@ function remapMarkup( element, fromId, toId, references ) {
 /**
  * Restore snapshot values after dependency handlers refresh the duplicate's controls.
  *
- * @since x.x
+ * @since 7.1
  * @param {Object}      snapshot The source settings captured at click time.
  * @param {HTMLElement} settings The duplicate settings panel.
  * @return {Array} Controls whose values have changed.
@@ -134,6 +134,10 @@ export function restoreFieldSettingValues( snapshot, settings ) {
 	const preserved = new Set( [ 'field_key', 'field_order', 'id', 'form_id' ].map(
 		key => `field_options[${ key }_${ toId }]`
 	) );
+	if ( settings.querySelector( '.frm_repeat_field' )?.value === '1' ) {
+		// PHP created a separate child form for this repeater's copied fields.
+		preserved.add( `field_options[form_select_${ toId }]` );
+	}
 	const changed = [];
 	snapshot.controls.forEach( control => {
 		const name = copyControlName( control.name, fromId, toId );
@@ -170,7 +174,7 @@ export function restoreFieldSettingValues( snapshot, settings ) {
 /**
  * Overlay a snapshot on PHP's saved-value duplicate without writing to the database.
  *
- * @since x.x
+ * @since 7.1
  * @param {Object}      snapshot The source settings captured before the request.
  * @param {HTMLElement} settings The duplicate settings panel.
  * @param {HTMLElement} field    The duplicate builder field.
