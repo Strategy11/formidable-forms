@@ -27,7 +27,7 @@ class FrmTemplateDependenciesHelper {
 		$required  = array();
 
 		foreach ( $templates as $template ) {
-			if ( ! is_array( $template ) || empty( $template['url'] ) || $path !== wp_parse_url( $template['url'], PHP_URL_PATH ) ) {
+			if ( ! is_array( $template ) || ! is_string( $template['url'] ?? null ) || $path !== wp_parse_url( $template['url'], PHP_URL_PATH ) ) {
 				continue;
 			}
 
@@ -43,26 +43,25 @@ class FrmTemplateDependenciesHelper {
 		$addons = array_filter(
 			$api->get_api_info(),
 			function ( $addon ) {
-				return is_array( $addon ) && ! empty( $addon['plugin'] );
+				return is_array( $addon ) && is_string( $addon['plugin'] ?? null ) && '' !== $addon['plugin'];
 			}
 		);
 
-		if ( ! $addons ) {
-			// Without the add-on catalog there is no way to tell which plugins are required, so do not block the import.
-			return array();
-		}
-
+		$plugins = FrmAppHelper::get_plugins();
 		$missing = array();
 
 		foreach ( $required as $requirement ) {
-			$addon = self::find_addon( $requirement, $addons );
+			$addon     = self::find_addon( $requirement, $addons );
+			$installed = $addon && isset( $plugins[ $addon['plugin'] ] );
+			$variant   = $addon ? self::get_views_variant( $addon ) : '';
+			$matches   = ! $variant || ! $installed || $variant === self::get_installed_views_variant( $plugins[ $addon['plugin'] ] );
 
-			if ( $addon && is_plugin_active( $addon['plugin'] ) ) {
+			if ( $installed && $matches && is_plugin_active( $addon['plugin'] ) ) {
 				continue;
 			}
 
-			$key             = $addon ? $addon['plugin'] : $requirement;
-			$missing[ $key ] = self::get_dependency_action( $requirement, $addon );
+			$key             = $addon ? $addon['plugin'] . $variant : $requirement;
+			$missing[ $key ] = self::get_dependency_action( $requirement, $addon, $installed, $matches );
 		}
 
 		return array_values( $missing );
@@ -82,7 +81,7 @@ class FrmTemplateDependenciesHelper {
 
 		foreach ( (array) ( $template['used_addons'] ?? array() ) as $name ) {
 			// Basic payment gateways ship in Lite and do not need separate add-ons.
-			if ( ! is_string( $name ) || in_array( $name, array( 'Stripe', 'Square', 'PayPal Commerce' ), true ) ) {
+			if ( ! is_string( $name ) || '' === trim( $name ) || in_array( $name, array( 'Stripe', 'Square', 'PayPal Commerce' ), true ) ) {
 				continue;
 			}
 
@@ -116,6 +115,10 @@ class FrmTemplateDependenciesHelper {
 			$identifiers = array( (string) $id, $addon['plugin'], $directory, preg_replace( '/^formidable-/', '', $directory ), $addon['slug'] ?? '', $addon['title'] ?? '' );
 
 			foreach ( $identifiers as $identifier ) {
+				if ( ! is_string( $identifier ) || '' === $identifier ) {
+					continue;
+				}
+
 				$identifier_slug = sanitize_title( $identifier );
 				$identifier_slug = $aliases[ $identifier_slug ] ?? $identifier_slug;
 
@@ -129,19 +132,48 @@ class FrmTemplateDependenciesHelper {
 	}
 
 	/**
+	 * Identify the catalog product for the basename shared by both Views add-ons.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $addon The catalog record.
+	 *
+	 * @return string The Views product slug or an empty string.
+	 */
+	private static function get_views_variant( $addon ) {
+		$slug = $addon['slug'] ?? '';
+		return in_array( $slug, array( 'views', 'visual-views' ), true ) ? $slug : '';
+	}
+
+	/**
+	 * Identify the Views product by the installed plugin header, even when it is inactive.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $plugin The installed plugin header data.
+	 *
+	 * @return string The Views product slug.
+	 */
+	private static function get_installed_views_variant( $plugin ) {
+		return version_compare( $plugin['Version'], '5.0', '>=' ) ? 'visual-views' : 'views';
+	}
+
+	/**
 	 * Describe an available activation, installation, or manual resolution.
 	 *
 	 * @since x.x
 	 *
 	 * @param string      $requirement The required add-on identifier.
 	 * @param array|false $addon The matching catalog record.
+	 * @param bool        $installed Whether the catalog plugin is installed.
+	 * @param bool        $matches Whether the installed plugin is the required variant.
 	 *
 	 * @return array The dependency label and action.
 	 */
-	private static function get_dependency_action( $requirement, $addon ) {
+	private static function get_dependency_action( $requirement, $addon, $installed, $matches ) {
 		$result = array(
-			'name'        => $addon ? $addon['title'] : $requirement,
-			'description' => $addon && ! empty( $addon['excerpt'] ) ? $addon['excerpt'] : '',
+			'name'        => $addon['title'] ?? $requirement,
+			'description' => $addon['excerpt'] ?? '',
 			'action'      => '',
 			'plugin'      => '',
 			'url'         => admin_url( 'admin.php?page=formidable-addons' ),
@@ -149,6 +181,7 @@ class FrmTemplateDependenciesHelper {
 		);
 
 		if ( ! current_user_can( 'activate_plugins' ) ) {
+			$result['url']     = '';
 			$result['message'] = __( 'Ask an administrator to activate this add-on before importing the template.', 'formidable' );
 			return $result;
 		}
@@ -157,10 +190,12 @@ class FrmTemplateDependenciesHelper {
 			return $result;
 		}
 
-		if ( file_exists( WP_PLUGIN_DIR . '/' . $addon['plugin'] ) ) {
+		if ( ! $matches ) {
+			$result['message'] = __( 'A different version of Views is installed. Manage Views on the Add-Ons page, then try again.', 'formidable' );
+		} elseif ( $installed && current_user_can( 'activate_plugin', $addon['plugin'] ) ) {
 			$result['action'] = 'frm_activate_addon';
 			$result['plugin'] = $addon['plugin'];
-		} elseif ( ! empty( $addon['url'] ) && current_user_can( 'install_plugins' ) ) {
+		} elseif ( ! $installed && ! empty( $addon['url'] ) && current_user_can( 'install_plugins' ) ) {
 			$result['action'] = 'frm_install_addon';
 			$result['plugin'] = $addon['url'];
 		} else {

@@ -16,35 +16,33 @@ const MODAL_ID = 'frmTemplateDependenciesModal';
  *
  * @since x.x
  *
- * @param {Array}    addons   Missing dependencies returned by the server.
- * @param {Function} onImport Retry the import. Pass true to import without the add-ons.
+ * @param {Array}       addons   Missing dependencies returned by the server.
+ * @param {HTMLElement} opener   The template control that opened the dialog.
+ * @param {Function}    onImport Retry the import. Pass true to import without the add-ons.
  * @return {void}
  */
-export function showTemplateDependencies( addons, onImport ) {
-	const rows = addons.map( createDependencyRow );
+export function showTemplateDependencies( addons, opener, onImport ) {
+	const progress = span( { className: 'screen-reader-text' } );
+	progress.setAttribute( 'role', 'status' );
+	const rows = addons.map( addon => createDependencyRow( addon, progress ) );
 	const pending = rows.filter( row => row.addon.action );
 	const manual = rows.filter( row => ! row.addon.action );
 
 	const description = tag( 'p', {
+		id: `${ MODAL_ID }-description`,
 		className: 'frm-template-deps-description',
-		text: pending.length
-			? _n(
-				'It uses fields from an add-on that isn\'t active yet. We\'ll set it up, then create your form.',
-				'It uses fields from add-ons that aren\'t active yet. We\'ll set them up, then create your form.',
-				addons.length,
-				'formidable'
-			)
-			: _n(
-				'It uses fields from an add-on that isn\'t active on this site.',
-				'It uses fields from add-ons that aren\'t active on this site.',
-				addons.length,
-				'formidable'
-			)
+		text: _n(
+			'This template uses an add-on that needs setup.',
+			'This template uses add-ons that need setup.',
+			addons.length,
+			'formidable'
+		)
 	} );
 	const list = tag( 'ul', {
 		className: 'frm-template-deps-list',
 		children: rows.map( row => row.element )
 	} );
+	list.setAttribute( 'role', 'list' );
 	const notes = [ ...new Set( manual.map( row => row.addon.message ) ) ].map( message => tag( 'p', {
 		className: 'frm-template-deps-note',
 		text: message
@@ -58,16 +56,27 @@ export function showTemplateDependencies( addons, onImport ) {
 
 	const content = div( {
 		className: 'inside',
-		children: [ description, list, ...notes ]
+		children: [ description, list, ...notes, progress ]
 	} );
 
-	const cancelButton = frmDom.modal.footerButton( {
-		text: __( 'Cancel', 'formidable' ),
-		buttonType: 'cancel',
-		className: 'dismiss frm-button-secondary'
+	const cancelButton = tag( 'button', {
+		className: 'button button-secondary frm-button-secondary dismiss',
+		text: __( 'Cancel', 'formidable' )
 	} );
-	cancelButton.href = '#';
+	cancelButton.type = 'button';
 	const footerButtons = [ cancelButton ];
+
+	const skipButton = tag( 'button', {
+		className: 'button button-secondary frm-button-secondary',
+		text: __( 'Use template anyway', 'formidable' )
+	} );
+	skipButton.type = 'button';
+	skipButton.hidden = Boolean( pending.length );
+	skipButton.addEventListener( 'click', () => {
+		closeButton.click();
+		onImport( true );
+	} );
+	footerButtons.push( skipButton );
 
 	let primaryButton;
 	if ( pending.length ) {
@@ -77,18 +86,6 @@ export function showTemplateDependencies( addons, onImport ) {
 		} );
 		primaryButton.type = 'button';
 		footerButtons.push( primaryButton );
-	} else {
-		// Nothing can be installed from here, so the template can still be used without its add-ons.
-		const skipButton = tag( 'button', {
-			className: 'button button-secondary frm-button-secondary',
-			text: __( 'Use template anyway', 'formidable' )
-		} );
-		skipButton.type = 'button';
-		skipButton.addEventListener( 'click', () => {
-			closeButton.click();
-			onImport( true );
-		} );
-		footerButtons.push( skipButton );
 	}
 
 	if ( ! pending.length && manual.some( row => row.addon.url ) ) {
@@ -108,23 +105,32 @@ export function showTemplateDependencies( addons, onImport ) {
 			: sprintf( __( 'This template needs %d add-ons', 'formidable' ), addons.length ),
 		content,
 		footer: div( { className: 'frm-template-deps-footer', children: footerButtons } ),
-		width: '500px',
+		width: 500,
+		closeLabel: __( 'Close', 'formidable' ),
+		descriptionId: description.id,
 		dialogClass: 'frm-template-deps-dialog'
 	} );
 	modal.classList.add( 'frm_common_modal', 'frm-white-body', 'wp-core-ui' );
 	const closeButton = modal.querySelector( '.frm_modal_top .dismiss' );
-	closeButton.href = '#';
-	closeButton.setAttribute( 'aria-label', __( 'Close', 'formidable' ) );
+
+	let closed = false;
+	jQuery( modal ).one( 'dialogclose', () => {
+		closed = true;
+		if ( ! opener.getClientRects().length ) {
+			// Template actions are revealed when their card has focus.
+			opener.closest( '.frm-card-item' )?.focus();
+		}
+		opener.focus();
+	} );
 
 	primaryButton?.addEventListener( 'click', async () => {
-		primaryButton.disabled = true;
-		primaryButton.classList.add( 'frm_loading_button' );
-		cancelButton.setAttribute( 'aria-disabled', 'true' );
+		if ( primaryButton.hasAttribute( 'aria-disabled' ) ) {
+			return;
+		}
 
-		let closed = false;
-		jQuery( modal ).one( 'dialogclose', () => {
-			closed = true;
-		} );
+		primaryButton.setAttribute( 'aria-disabled', 'true' );
+		primaryButton.textContent = __( 'Setting up add-ons…', 'formidable' );
+		skipButton.hidden = true;
 
 		let failed = false;
 		// One at a time, since each request installs or activates a plugin.
@@ -139,11 +145,10 @@ export function showTemplateDependencies( addons, onImport ) {
 			}
 		}
 
-		primaryButton.classList.remove( 'frm_loading_button' );
 		if ( failed ) {
-			primaryButton.disabled = false;
+			primaryButton.removeAttribute( 'aria-disabled' );
 			primaryButton.textContent = __( 'Try again', 'formidable' );
-			cancelButton.removeAttribute( 'aria-disabled' );
+			skipButton.hidden = false;
 			return;
 		}
 
@@ -158,9 +163,12 @@ export function showTemplateDependencies( addons, onImport ) {
  */
 function getPrimaryLabel( pending ) {
 	if ( pending.every( row => 'frm_activate_addon' === row.addon.action ) ) {
-		return _n( 'Activate and use template', 'Activate both and use template', pending.length, 'formidable' );
+		return __( 'Activate and use template', 'formidable' );
 	}
-	return _n( 'Install and use template', 'Install both and use template', pending.length, 'formidable' );
+	if ( pending.every( row => 'frm_install_addon' === row.addon.action ) ) {
+		return __( 'Install and use template', 'formidable' );
+	}
+	return __( 'Set up add-ons and use template', 'formidable' );
 }
 
 /**
@@ -168,15 +176,14 @@ function getPrimaryLabel( pending ) {
  *
  * @since x.x
  *
- * @param {Object} addon The add-on name, description and available action.
+ * @param {Object}      addon    The add-on name, description and available action.
+ * @param {HTMLElement} progress The live region for setup updates.
  * @return {Object} The row element, its add-on and an activate function.
  */
-function createDependencyRow( addon ) {
+function createDependencyRow( addon, progress ) {
 	const status = span( { className: 'frm-template-deps-status' } );
-	status.setAttribute( 'role', 'status' );
 	const error = tag( 'p', { className: 'frm-template-deps-error' } );
 	error.setAttribute( 'role', 'alert' );
-	error.hidden = true;
 
 	const text = div( {
 		className: 'frm-template-deps-text',
@@ -193,7 +200,17 @@ function createDependencyRow( addon ) {
 
 	const setStatus = ( state, label ) => {
 		element.dataset.state = state;
-		status.replaceChildren( ... 'done' === state ? [ svg( { href: '#frm_checkmark_icon' } ) ] : [], label );
+		status.textContent = label;
+		if ( 'done' === state ) {
+			const checkmark = svg( { href: '#frm_checkmark_icon' } );
+			checkmark.setAttribute( 'aria-hidden', 'true' );
+			status.prepend( checkmark );
+		}
+
+		if ( 'working' === state || 'done' === state ) {
+			// translators: %1$s: Add-on name. %2$s: Setup status.
+			progress.textContent = sprintf( __( '%1$s: %2$s', 'formidable' ), addon.name, label );
+		}
 	};
 
 	let initialLabel = __( 'Not available', 'formidable' );
@@ -210,7 +227,7 @@ function createDependencyRow( addon ) {
 	 * @return {Promise<boolean>} Whether the add-on is now active.
 	 */
 	row.activate = async () => {
-		error.hidden = true;
+		error.textContent = '';
 		setStatus( 'working', 'frm_activate_addon' === addon.action ? __( 'Activating…', 'formidable' ) : __( 'Installing…', 'formidable' ) );
 
 		let response;
@@ -240,8 +257,12 @@ function createDependencyRow( addon ) {
 	 */
 	function fail( message ) {
 		setStatus( 'failed', __( 'Failed', 'formidable' ) );
-		error.textContent = message;
-		error.hidden = false;
+		const errorSource = span( {
+			className: 'screen-reader-text',
+			// translators: %s: Add-on name.
+			text: `${ sprintf( __( '%s:', 'formidable' ), addon.name ) } `
+		} );
+		error.replaceChildren( errorSource, message );
 		return false;
 	}
 

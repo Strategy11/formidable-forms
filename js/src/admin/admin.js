@@ -11404,11 +11404,10 @@ window.frmAdminBuildJS = function() {
 		installNewForm( this, action, button );
 	}
 
-	function installNewForm( form, action, button, skipAddonCheck = false ) {
-		const formData = formToData( form );
+	function installNewForm( form, action, button, template = {} ) {
+		const { formData = formToData( form ), link = form.elements.link.value, skipAddonCheck } = template;
 		const formName = formData.template_name;
 		const formDesc = formData.template_desc;
-		const link = form.elements.link.value;
 
 		let data = {
 			action,
@@ -11430,9 +11429,9 @@ window.frmAdminBuildJS = function() {
 		postAjax( data, function( response ) {
 			if ( response.missing_addons?.length ) {
 				const { showTemplateDependencies } = require( './template-dependencies' );
-				showTemplateDependencies( response.missing_addons, skip => {
+				showTemplateDependencies( response.missing_addons, button, skip => {
 					button.classList.add( 'frm_loading_button' );
-					installNewForm( form, action, button, skip );
+					installNewForm( form, action, button, { formData, link, skipAddonCheck: skip } );
 				} );
 			} else if ( response.redirect !== undefined ) {
 				const { redirect } = response;

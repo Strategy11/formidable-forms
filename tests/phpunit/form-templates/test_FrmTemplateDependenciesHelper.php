@@ -102,7 +102,7 @@ class test_FrmTemplateDependenciesHelper extends FrmAjaxUnitTest {
 		$this->assertSame( '', $missing[0]['action'], 'Unknown dependencies should require manual resolution.' );
 	}
 
-	public function test_unavailable_addon_catalog_does_not_block_import() {
+	public function test_unavailable_addon_catalog_offers_manual_setup() {
 		update_option( 'active_plugins', array() );
 		$api = new FrmFormApi();
 		update_option(
@@ -112,7 +112,46 @@ class test_FrmTemplateDependenciesHelper extends FrmAjaxUnitTest {
 				'value'   => wp_json_encode( array( 'response_code' => 500 ) ),
 			)
 		);
-		$this->assertSame( array(), FrmTemplateDependenciesHelper::get_missing_addons( $this->template_url ), 'A failed add-on API request should not block every template.' );
+		$missing = FrmTemplateDependenciesHelper::get_missing_addons( $this->template_url );
+		$this->assertSame( 'Quiz Maker', $missing[0]['name'], 'Known requirements should remain visible when the catalog is unavailable.' );
+		$this->assertSame( '', $missing[0]['action'], 'A failed catalog request should leave setup to the user.' );
+	}
+
+	public function test_legacy_views_does_not_satisfy_visual_views_dependency() {
+		$this->cache_templates( array( 'used_addons' => array( 'Visual Views' ) ) );
+
+		$basename = 'formidable-views/formidable-views.php';
+		$api      = new FrmFormApi();
+		update_option(
+			$api->get_cache_key(),
+			array(
+				'timeout' => time() + HOUR_IN_SECONDS,
+				'value'   => wp_json_encode(
+					array(
+						array(
+							'title'  => 'Views',
+							'slug'   => 'views',
+							'plugin' => $basename,
+						),
+						array(
+							'title'  => 'Visual Views',
+							'slug'   => 'visual-views',
+							'plugin' => $basename,
+						),
+					)
+				),
+			)
+		);
+
+		update_option( 'active_plugins', array( $basename ) );
+		wp_cache_set( 'plugins', array( '' => array( $basename => array( 'Version' => '4.0.05' ) ) ), 'plugins' );
+		$missing = FrmTemplateDependenciesHelper::get_missing_addons( $this->template_url );
+		$this->assertSame( 'Visual Views', $missing[0]['name'], 'Legacy Views should leave the Visual Views dependency unresolved.' );
+		$this->assertSame( '', $missing[0]['action'], 'The dialog should leave changing Views versions to the user.' );
+
+		wp_cache_set( 'plugins', array( '' => array( $basename => array( 'Version' => '5.13' ) ) ), 'plugins' );
+		$this->assertSame( array(), FrmTemplateDependenciesHelper::get_missing_addons( $this->template_url ), 'An active copy of Visual Views should satisfy the requirement.' );
+		wp_cache_delete( 'plugins', 'plugins' );
 	}
 
 	public function test_import_can_skip_the_dependency_check() {

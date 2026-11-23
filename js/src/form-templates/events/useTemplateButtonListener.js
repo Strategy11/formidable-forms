@@ -14,10 +14,19 @@ import { isCustomTemplate, isLockedTemplate } from '../utils';
 function addUseTemplateButtonEvents() {
 	const useTemplateButtons = document.querySelectorAll( `.${ PREFIX }-use-template-button` );
 
-	// Attach click event listeners to each use template button
-	useTemplateButtons.forEach( useTemplateButton =>
-		useTemplateButton.addEventListener( 'click', onUseTemplateButtonClick )
-	);
+	useTemplateButtons.forEach( useTemplateButton => {
+		useTemplateButton.addEventListener( 'click', onUseTemplateButtonClick );
+		useTemplateButton.addEventListener( 'keydown', event => {
+			if ( ' ' !== event.key ) {
+				return;
+			}
+
+			event.preventDefault();
+			if ( ! event.repeat ) {
+				useTemplateButton.click();
+			}
+		} );
+	} );
 }
 
 /**

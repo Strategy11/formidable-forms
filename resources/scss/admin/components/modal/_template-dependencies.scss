@@ -1,5 +1,16 @@
 // Add-ons a template needs before it can be imported.
 .frm-template-deps-dialog {
+	max-width: calc(100% - 24px) !important;
+	overflow-wrap: anywhere;
+
+	#frmTemplateDependenciesModal .postbox {
+		max-height: calc(100dvh - 24px);
+		overflow-y: auto;
+	}
+
+	.frm-modal .postbox .frm_modal_top {
+		padding-inline-end: calc(var(--gap-md) + 36px);
+	}
 
 	.frm-modal-title {
 		font-size: var(--text-lg);
@@ -8,24 +19,26 @@
 	}
 
 	// Same hover square as the style and confirm modals.
-	.frm_modal_top a.dismiss {
+	.frm_modal_top button.dismiss {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		width: 32px;
 		height: 32px;
-		margin: -4px -4px 0 0;
+		margin-block-start: -4px;
+		margin-inline-end: -4px;
+		padding: 0;
+		border: 0;
 		border-radius: var(--small-radius);
+		background: transparent;
+		color: var(--grey-700);
+		cursor: pointer;
 		transition: 0.12s background-color ease;
 
 		&:hover {
 			background-color: var(--grey-100);
 		}
 
-		&:focus-visible {
-			outline: 2px solid var(--primary-500);
-			outline-offset: 0;
-		}
 	}
 
 	// Keeps the description right under the title.
@@ -76,10 +89,6 @@
 	}
 
 	.frm-template-deps-excerpt {
-		display: -webkit-box;
-		overflow: hidden;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
 		font-size: var(--text-xs);
 		line-height: 1.45;
 		color: var(--grey-500);
@@ -89,7 +98,11 @@
 		margin: 2px 0 0;
 		font-size: var(--text-xs);
 		line-height: 1.45;
-		color: var(--error-500, #d92d20);
+		color: var(--error-700, #b42318);
+
+		&:empty {
+			margin: 0;
+		}
 	}
 
 	.frm-template-deps-heading {
@@ -111,7 +124,6 @@
 		font-weight: 500;
 		line-height: 18px;
 		color: var(--grey-600);
-		white-space: nowrap;
 
 		svg {
 			width: 12px;
@@ -139,25 +151,38 @@
 		color: var(--grey-600);
 	}
 
+	.frm_modal_top button.dismiss:focus-visible,
+	.frm-template-deps-footer .button:focus-visible {
+		outline: 2px solid var(--primary-700);
+		outline-offset: 2px;
+	}
+
 	.frm-template-deps-footer {
 		display: flex;
+		flex-wrap: wrap;
 		justify-content: flex-end;
 		gap: 8px;
 
 		.button {
+			min-height: 32px;
+			max-width: 100%;
 			margin: 0;
+			white-space: normal;
 		}
 
-		[aria-disabled="true"] {
-			opacity: 0.5;
-			pointer-events: none;
+		.button[aria-disabled="true"] {
+			cursor: wait;
+		}
+
+		.button[hidden] {
+			display: none;
 		}
 	}
 }
 
 @media (prefers-reduced-motion: reduce) {
 
-	.frm-template-deps-dialog .frm_modal_top a.dismiss {
+	.frm-template-deps-dialog .frm_modal_top button.dismiss {
 		transition: none;
 	}
 }
