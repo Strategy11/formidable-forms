@@ -596,16 +596,43 @@ class FrmSettingsController {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		global $wpdb;
-
 		$term      = FrmAppHelper::get_param( 'term', '', 'get', 'sanitize_text_field' );
 		$post_type = FrmAppHelper::get_param( 'post_type', 'page', 'get', 'sanitize_text_field' );
 
+		wp_send_json( self::get_page_search_results( $term, $post_type ) );
+	}
+
+	/**
+	 * Find published posts for the page autocomplete by title or ID.
+	 *
+	 * A trailing " (ID: n)" is removed from the term so a prefilled label can be
+	 * edited, and an all-digit term also matches the post ID.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $term      Search term typed in the autocomplete input.
+	 * @param string $post_type Post type to search.
+	 *
+	 * @return array[] Autocomplete results with value and label keys.
+	 */
+	public static function get_page_search_results( $term, $post_type ) {
+		global $wpdb;
+
+		$term  = trim( (string) preg_replace( '/\s+\((?:I(?:D(?::\s*\d*)?)?)?\)?\s*$/', '', $term ) );
 		$where = array(
-			'post_status'     => 'publish',
-			'post_type'       => $post_type,
-			'post_title LIKE' => $term,
+			'post_status' => 'publish',
+			'post_type'   => $post_type,
 		);
+
+		if ( preg_match( '/^\d+$/', $term ) ) {
+			$where[] = array(
+				'or'              => 1,
+				'post_title LIKE' => $term,
+				'ID'              => (int) $term,
+			);
+		} else {
+			$where['post_title LIKE'] = $term;
+		}
 
 		$atts = array(
 			'limit'    => 25,
@@ -618,11 +645,11 @@ class FrmSettingsController {
 		foreach ( $pages as $page ) {
 			$results[] = array(
 				'value' => $page->ID,
-				'label' => $page->post_title,
+				'label' => FrmAppHelper::get_post_dropdown_label( $page ),
 			);
 		}
 
-		wp_send_json( $results );
+		return $results;
 	}
 
 	/**
