@@ -271,6 +271,41 @@ class test_FrmAbilitiesFieldsController extends FrmUnitTest {
 	}
 
 	/**
+	 * A protected child prevents the whole repeater deletion.
+	 */
+	public function test_delete_repeater_preserves_all_fields_if_a_child_is_protected() {
+		$child_form = $this->factory->form->create();
+		$repeater   = $this->factory->field->create_and_get(
+			array(
+				'form_id'       => $this->form->id,
+				'type'          => 'divider',
+				'field_options' => array(
+					'repeat'      => 1,
+					'form_select' => $child_form,
+				),
+			)
+		);
+		$child_id   = $this->factory->field->create( array( 'form_id' => $child_form ) );
+		$sibling_id = $this->factory->field->create( array( 'form_id' => $child_form ) );
+		$protect    = static function ( $allowed, $field_id ) use ( $child_id ) {
+			return $allowed && (int) $field_id !== (int) $child_id;
+		};
+
+		add_filter( 'frm_can_destroy_field', $protect, 10, 2 );
+		try {
+			$result = $this->execute( 'delete-field', array( 'id' => $repeater->id ) );
+		} finally {
+			remove_filter( 'frm_can_destroy_field', $protect, 10 );
+		}
+
+		$this->assertWPError( $result );
+		$this->assertSame( 'frm_field_delete_denied', $result->get_error_code() );
+		$this->assertNotEmpty( FrmField::getOne( $repeater->id ) );
+		$this->assertNotEmpty( FrmField::getOne( $child_id ) );
+		$this->assertNotEmpty( FrmField::getOne( $sibling_id ) );
+	}
+
+	/**
 	 * Form_id on delete-field is a guard, not a requirement: it only checks
 	 * that the field named actually belongs to the form named, so a field
 	 * that belongs to a different form should be refused rather than deleted.

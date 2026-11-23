@@ -481,24 +481,23 @@ class FrmAbilitiesFieldsController {
 			}
 		}
 
-		// Check before a repeater's own fields are deleted, so a denied delete changes nothing.
-		if ( ! FrmField::can_destroy( $field->id ) ) {
-			return new WP_Error( 'frm_field_delete_denied', __( 'This field cannot be deleted.', 'formidable' ), array( 'status' => 403 ) );
+		$child_ids = self::get_repeater_field_ids( $field );
+		foreach ( array_merge( array( $field->id ), $child_ids ) as $field_id ) {
+			if ( ! FrmField::can_destroy( $field_id ) ) {
+				return new WP_Error( 'frm_field_delete_denied', __( 'This field cannot be deleted.', 'formidable' ), array( 'status' => 403 ) );
+			}
 		}
 
-		// Read the field before it is gone, so the caller gets back what it deleted.
-		$data    = self::prepare_field_for_response( $field );
-		$form_id = $field->form_id;
-
-		if ( FrmField::is_repeating_field( $field ) && ! empty( $field->field_options['form_select'] ) ) {
-			self::destroy_fields_in_repeater( $field );
+		$data = self::prepare_field_for_response( $field );
+		foreach ( $child_ids as $field_id ) {
+			FrmField::destroy( $field_id );
 		}
 
 		if ( ! FrmField::destroy( $field->id ) ) {
 			return self::get_invalid_field_error();
 		}
 
-		FrmField::delete_form_transient( $form_id );
+		FrmField::delete_form_transient( $field->form_id );
 		FrmForm::clear_form_cache();
 
 		return $data;
@@ -887,26 +886,16 @@ class FrmAbilitiesFieldsController {
 	}
 
 	/**
-	 * Delete the fields inside a repeater's child form.
-	 *
-	 * @since 7.0
-	 *
-	 * @param stdClass $field Repeater field.
-	 *
-	 * @return void
+	 * @param stdClass $field Field being deleted.
+	 * @return array
 	 */
-	private static function destroy_fields_in_repeater( $field ) {
-		$repeater_form = FrmForm::getOne( $field->field_options['form_select'] );
-
-		if ( ! $repeater_form ) {
-			return;
+	private static function get_repeater_field_ids( $field ) {
+		if ( ! FrmField::is_repeating_field( $field ) || empty( $field->field_options['form_select'] ) ) {
+			return array();
 		}
 
-		$field_ids = FrmDb::get_col( 'frm_fields', array( 'form_id' => $repeater_form->id ) );
-
-		foreach ( $field_ids as $field_id ) {
-			FrmField::destroy( $field_id );
-		}
+		$form = FrmForm::getOne( $field->field_options['form_select'] );
+		return $form ? FrmDb::get_col( 'frm_fields', array( 'form_id' => $form->id ) ) : array();
 	}
 
 	/**
