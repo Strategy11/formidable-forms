@@ -4,7 +4,7 @@ Tags: form builder, contact form, contact form plugin, ai form builder, forms
 Requires at least: 6.3
 Tested up to: 7.1
 Requires PHP: 7.0
-Stable tag: 7.1
+Stable tag: 7.1.1
 
 The drag and drop AI form builder for contact forms, multi-step forms, payment forms, quizzes, polls, surveys, calculators, and web apps.
 
@@ -366,6 +366,10 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 7.1.1 =
+* Fix: Invisible reCAPTCHA v2 no longer blocks form submission when "Allow multiple reCAPTCHAs" is off.
+* Fix: Clicking "Click here to set up progress indicator" in the form builder no longer causes an error, and the Rootline settings now open.
+
 = 7.1 =
 * Security: Additional protection has been added to prevent unauthenticated shortcode execution.
 * Security: Additional validation has been added to PayPal Commerce orders and subscriptions to help prevent payment tampering.
