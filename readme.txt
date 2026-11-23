@@ -366,6 +366,9 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= Unreleased =
+* New: Existing CAPTCHA fields now use ALTCHA when the site has neither provider keys nor an explicit provider choice.
+
 = 7.1 =
 * Security: Additional protection has been added to prevent unauthenticated shortcode execution.
 * Security: Additional validation has been added to PayPal Commerce orders and subscriptions to help prevent payment tampering.
