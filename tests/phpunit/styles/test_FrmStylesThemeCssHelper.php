@@ -16,6 +16,22 @@ class test_FrmStylesThemeCssHelper extends FrmUnitTest {
 	 */
 	private static $svg_css = '.a{background:url("data:image/svg+xml,%3Csvg fill=\'rgb(0,0,0)\'%3E")}.b{color:red}';
 
+	public function test_strip_html_keeps_css_range_operators() {
+		$css = '@media (width<600px){p{color:blue}} @media (320px < width<=600px){p{color:blue}}';
+		$this->assertSame(
+			$css,
+			$this->run_private_method( array( 'FrmStylesController', 'strip_preview_theme_css_html' ), array( '<span></span>' . $css ) )
+		);
+	}
+
+	public function test_scope_css_normalizes_compact_media_ranges() {
+		$scoped = $this->run_private_method(
+			array( 'FrmStylesThemeCssHelper', 'scope_css' ),
+			array( '@media (320px<width<=600px){p{color:blue}}', '#preview' )
+		);
+		$this->assertStringContainsString( '@media (320px< width<=600px)', $scoped );
+	}
+
 	/**
 	 * @dataProvider selector_list_provider
 	 *
@@ -76,6 +92,10 @@ class test_FrmStylesThemeCssHelper extends FrmUnitTest {
 			'relative with quotes'      => array( '.a{background:url( "img/a.png" )}', '.a{background:url("https://example.com/theme/img/a.png")}' ),
 			'quoted with parentheses'   => array( ".a{background:url('img/a (1).png')}", ".a{background:url('https://example.com/theme/img/a (1).png')}" ),
 			'data URI with parentheses' => array( self::$svg_css, self::$svg_css ),
+			'SVG with raw delimiters'   => array(
+				'.a{background:url("data:image/svg+xml,<svg></svg>")}',
+				'.a{background:url("data:image/svg+xml,%3Csvg%3E%3C/svg%3E")}',
+			),
 			'unquoted data URI'         => array( '.a{background:url(data:image/png;base64,AAAA)}', '.a{background:url(data:image/png;base64,AAAA)}' ),
 			'absolute'                  => array( '.a{background:url(https://cdn.example.com/a.png)}', '.a{background:url(https://cdn.example.com/a.png)}' ),
 			'protocol relative'         => array( '.a{background:url(//cdn.example.com/a.png)}', '.a{background:url(//cdn.example.com/a.png)}' ),
@@ -88,7 +108,7 @@ class test_FrmStylesThemeCssHelper extends FrmUnitTest {
 	 * Removing a discovered stylesheet changes the preview version even if the theme version is unchanged.
 	 */
 	public function test_removing_a_discovered_stylesheet_changes_the_preview_version() {
-		$path   = wp_tempnam( 'frm-theme-preview.css' );
+		$path   = get_stylesheet_directory() . '/frm-theme-preview-' . wp_generate_uuid4() . '.css';
 		$key    = $this->run_private_method( array( 'FrmStylesThemeCssHelper', 'get_stylesheet_paths_cache_key' ) );
 		$filter = static function () use ( $path ) {
 			return array(
@@ -100,7 +120,9 @@ class test_FrmStylesThemeCssHelper extends FrmUnitTest {
 		};
 
 		add_filter( 'frm_preview_theme_stylesheets', $filter );
+
 		try {
+			$this->create_stylesheet_fixture( $path );
 			FrmStylesThemeCssHelper::get_scoped_theme_css( '#preview' );
 			$version = FrmStylesThemeCssHelper::get_version();
 			wp_delete_file( $path );
@@ -112,6 +134,56 @@ class test_FrmStylesThemeCssHelper extends FrmUnitTest {
 			delete_transient( $key );
 			wp_delete_file( $path );
 		}
+	}
+
+	/**
+	 * A filter can supply CSS from the active theme, with the same file restrictions as enqueued styles.
+	 */
+	public function test_filtered_stylesheets_resolve_inside_the_active_theme() {
+		$filename = 'frm-theme-preview-' . wp_generate_uuid4();
+		$allowed  = get_stylesheet_directory() . '/' . $filename . '.css';
+		$outside  = trailingslashit( get_temp_dir() ) . $filename . '.css';
+		$non_css  = get_stylesheet_directory() . '/' . $filename . '.txt';
+		$filter   = static function () use ( $allowed, $outside, $non_css ) {
+			return array_map(
+				static function ( $path ) {
+					return array(
+						'path'     => $path,
+						'base_url' => 'https://example.com/theme/',
+					);
+				},
+				array( $allowed, $outside, $non_css )
+			);
+		};
+
+		add_filter( 'frm_preview_theme_stylesheets', $filter );
+
+		try {
+			$this->create_stylesheet_fixture( $allowed );
+			$this->create_stylesheet_fixture( $outside );
+			$this->create_stylesheet_fixture( $non_css );
+
+			$stylesheets = $this->run_private_method( array( 'FrmStylesThemeCssHelper', 'get_theme_stylesheets' ) );
+			$this->assertSame( array( $allowed ), wp_list_pluck( $stylesheets, 'path' ) );
+		} finally {
+			remove_filter( 'frm_preview_theme_stylesheets', $filter );
+			wp_delete_file( $allowed );
+			wp_delete_file( $outside );
+			wp_delete_file( $non_css );
+		}
+	}
+
+	/**
+	 * Write an inert stylesheet for path validation tests.
+	 *
+	 * @param string $path Fixture path.
+	 */
+	private function create_stylesheet_fixture( $path ) {
+		require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
+		require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
+
+		$filesystem = new WP_Filesystem_Direct( null );
+		$this->assertTrue( $filesystem->put_contents( $path, '.frm-test-preview{color:blue}' ) );
 	}
 
 	public function test_scope_css_drops_conditional_root_rules() {

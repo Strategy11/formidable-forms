@@ -165,8 +165,9 @@ class FrmStylesController {
 	private static function get_scoped_css_version() {
 		$last_update = get_option( 'frm_last_style_update' );
 		$custom_css  = self::get_custom_css();
+		$fingerprint = substr( hash( 'sha256', is_string( $custom_css ) ? $custom_css : '' ), 0, 12 );
 
-		return FrmAppHelper::plugin_version() . '-' . ( $last_update ? $last_update : '0' ) . '-' . substr( md5( is_string( $custom_css ) ? $custom_css : '' ), 0, 8 );
+		return FrmAppHelper::plugin_version() . '-' . ( $last_update ? $last_update : '0' ) . '-' . $fingerprint;
 	}
 
 	/**
@@ -197,7 +198,7 @@ class FrmStylesController {
 		$url = add_query_arg(
 			array(
 				'action' => 'frm_styler_theme_css',
-				'nonce'  => wp_create_nonce( 'frm_ajax' ),
+				'nonce'  => wp_create_nonce( 'frm_styler_theme_css' ),
 			),
 			admin_url( 'admin-ajax.php' )
 		);
@@ -213,16 +214,20 @@ class FrmStylesController {
 	 */
 	public static function load_preview_theme_css() {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
-		check_ajax_referer( 'frm_ajax', 'nonce' );
+		check_ajax_referer( 'frm_styler_theme_css', 'nonce' );
+
+		if ( ! apply_filters( 'frm_styler_load_theme_css', true ) ) {
+			wp_die( '', '', 403 );
+		}
 
 		$version   = FrmStylesThemeCssHelper::get_version();
-		$cache_key = 'frm_styler_theme_css_' . md5( $version );
+		$cache_key = 'frm_styler_theme_css_v2_' . hash( 'sha256', $version );
 		$css       = get_transient( $cache_key );
 
 		if ( ! is_string( $css ) ) {
 			$css       = FrmStylesThemeCssHelper::get_scoped_theme_css( '#frm_active_style_form, #frm_sample_form' );
 			$version   = FrmStylesThemeCssHelper::get_version();
-			$cache_key = 'frm_styler_theme_css_' . md5( $version );
+			$cache_key = 'frm_styler_theme_css_v2_' . hash( 'sha256', $version );
 
 			if ( '' !== $css ) {
 				// An empty result can come from a failed read, so it is not kept for a day.
@@ -230,14 +235,43 @@ class FrmStylesController {
 			}
 		}
 
-		header( 'Content-type: text/css' );
+		if ( headers_sent() ) {
+			die();
+		}
+
+		header( 'Content-Type: text/css; charset=UTF-8' );
 		self::maybe_send_browser_cache_headers( $version );
 
-		echo $css; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Generated CSS, escaping would corrupt it.
+		echo self::strip_preview_theme_css_html( $css ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML is stripped from the CSS.
 
 		// Not wp_die(). Its AJAX handler sends no-cache headers again, which would undo the cache headers above.
 		// css/custom_theme.css.php ends the saved stylesheet request the same way.
 		die();
+	}
+
+	/**
+	 * Strip tags while preserving compact CSS comparisons such as width<=600px.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $css Generated theme stylesheet.
+	 *
+	 * @return string
+	 */
+	private static function strip_preview_theme_css_html( $css ) {
+		$parts = preg_split( '/(<[=0-9.+-])/', $css, -1, PREG_SPLIT_DELIM_CAPTURE );
+
+		if ( false === $parts ) {
+			return strip_tags( $css );
+		}
+
+		foreach ( $parts as $index => $part ) {
+			if ( 0 === $index % 2 ) {
+				$parts[ $index ] = strip_tags( $part );
+			}
+		}
+
+		return implode( '', $parts );
 	}
 
 	/**

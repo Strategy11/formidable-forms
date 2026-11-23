@@ -56,14 +56,14 @@ class FrmStylesThemeCssHelper {
 		set_transient( self::get_stylesheet_paths_cache_key(), wp_list_pluck( $stylesheets, 'path' ), DAY_IN_SECONDS );
 
 		foreach ( $stylesheets as $stylesheet ) {
-			$contents = self::read_file( $stylesheet['path'] );
+			$contents = self::read_file( $stylesheet['resolved_path'] );
 
 			if ( '' === $contents ) {
 				continue;
 			}
 
 			$contents = self::absolutize_urls( $contents, $stylesheet['base_url'] );
-			$media    = isset( $stylesheet['media'] ) ? trim( $stylesheet['media'] ) : 'all';
+			$media    = self::is_non_empty_string( $stylesheet['media'] ?? null ) ? trim( $stylesheet['media'] ) : 'all';
 
 			// A stylesheet registered for print must not start applying on screen.
 			if ( '' !== $media && 'all' !== $media ) {
@@ -91,23 +91,29 @@ class FrmStylesThemeCssHelper {
 		$theme         = wp_get_theme();
 		$global_styles = self::get_global_stylesheet();
 		$modified      = '';
+		$directories   = FrmStylesThemeFilesHelper::get_directories();
 
 		$paths   = (array) get_transient( self::get_stylesheet_paths_cache_key() );
 		$paths[] = get_template_directory() . '/style.css';
 		$paths[] = get_stylesheet_directory() . '/style.css';
 
-		foreach ( array_unique( array_filter( $paths ) ) as $path ) {
-			$modified .= $path . ':' . ( is_readable( $path ) ? filemtime( $path ) : 0 ) . '|';
+		foreach ( array_unique( array_filter( $paths, 'is_string' ) ) as $path ) {
+			$path = FrmStylesThemeFilesHelper::resolve_path( $path, $directories );
+
+			if ( '' !== $path ) {
+				$modified .= $path . ':' . filemtime( $path ) . '|';
+			}
 		}
 
-		return FrmAppHelper::plugin_version() . '-' . $theme->get_stylesheet() . '-' . $theme->get( 'Version' ) . '-' . substr( md5( $global_styles . $modified ), 0, 8 );
+		$fingerprint = substr( hash( 'sha256', $global_styles . $modified ), 0, 12 );
+		return FrmAppHelper::plugin_version() . '-' . $theme->get_stylesheet() . '-' . $theme->get( 'Version' ) . '-' . $fingerprint;
 	}
 
 	/**
 	 * @return string Transient key for discovered paths for the active theme.
 	 */
 	private static function get_stylesheet_paths_cache_key() {
-		return 'frm_styler_theme_paths_' . md5( get_template_directory() . '|' . get_stylesheet_directory() . '|' . wp_get_theme()->get( 'Version' ) );
+		return 'frm_styler_theme_paths_v2_' . hash( 'sha256', get_template_directory() . '|' . get_stylesheet_directory() . '|' . wp_get_theme()->get( 'Version' ) );
 	}
 
 	/**
@@ -148,11 +154,9 @@ class FrmStylesThemeCssHelper {
 		 *
 		 * @since x.x
 		 *
-		 * @param array $stylesheets List of arrays with 'path' and 'base_url' keys.
+		 * @param array $stylesheets List of arrays with 'path' and 'base_url' keys. Paths must resolve to CSS files in the active theme or its parent.
 		 */
-		$stylesheets = apply_filters( 'frm_preview_theme_stylesheets', $stylesheets );
-
-		return is_array( $stylesheets ) ? $stylesheets : array();
+		return FrmStylesThemeFilesHelper::validate( apply_filters( 'frm_preview_theme_stylesheets', $stylesheets ) );
 	}
 
 	/**
@@ -168,15 +172,14 @@ class FrmStylesThemeCssHelper {
 		$previous_styles  = $wp_styles;
 		$previous_scripts = $wp_scripts;
 
-		// Swapped so the theme registers into a throwaway queue instead of the real one, and put
-		// back below. Without this the front end handles would follow the request into wp-admin.
-		$wp_styles  = new WP_Styles(); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-		$wp_scripts = new WP_Scripts(); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-
 		// Buffered so a callback that echoes cannot land ahead of the CSS response headers.
 		ob_start();
 
 		try {
+			// Keep front end handles in temporary queues for this request.
+			$wp_styles  = new WP_Styles(); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+			$wp_scripts = new WP_Scripts(); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+
 			do_action( 'wp_enqueue_scripts' );
 			$handles = self::resolve_style_dependencies( $wp_styles );
 			$found   = self::filter_theme_styles( $wp_styles, $handles );
@@ -186,12 +189,11 @@ class FrmStylesThemeCssHelper {
 			$found = array();
 		} catch ( Error $e ) {
 			$found = array();
+		} finally {
+			ob_end_clean();
+			$wp_styles  = $previous_styles; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+			$wp_scripts = $previous_scripts; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		}
-
-		ob_end_clean();
-
-		$wp_styles  = $previous_styles; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-		$wp_scripts = $previous_scripts; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 
 		return $found;
 	}
@@ -429,6 +431,17 @@ class FrmStylesThemeCssHelper {
 			$value = trim( substr( $value, 1, -1 ) );
 		}
 
+		if ( 0 === stripos( $value, 'data:image/svg+xml' ) ) {
+			// Keep raw SVG data URLs valid when HTML tags are stripped from the CSS response.
+			$value = strtr(
+				$value,
+				array(
+					'<' => '%3C',
+					'>' => '%3E',
+				)
+			);
+		}
+
 		// Leave fragments, root relative URLs and anything with a scheme, such as data: or https:, as they are.
 		if ( '' === $value || '#' === $value[0] || '/' === $value[0] || preg_match( '#^[a-z][a-z0-9+.-]*:#i', $value ) ) {
 			return $quote . $value . $quote;
@@ -570,13 +583,20 @@ class FrmStylesThemeCssHelper {
 				}
 
 				if ( in_array( $name, self::$group_at_rules, true ) ) {
-					$output .= $chunk['prelude'] . '{' . "\n" . self::rewrite_rules( $chunk['block'], $hoisted ) . "\n" . '}' . "\n";
+					$prelude = $chunk['prelude'];
+
+					if ( 'media' === $name || 'container' === $name ) {
+						// Separate compact comparisons before the stylesheet is stripped of HTML tags.
+						$prelude = preg_replace( '/<(?=[a-z(])/i', '< ', $prelude );
+					}
+
+					$output .= $prelude . '{' . "\n" . self::rewrite_rules( $chunk['block'], $hoisted ) . "\n" . '}' . "\n";
 					continue;
 				}
 
 				$output .= $chunk['prelude'] . '{' . self::convert_rems( $chunk['block'] ) . '}' . "\n";
 				continue;
-			}
+			}//end if
 
 			if ( self::targets_document_root( $chunk['prelude'] ) ) {
 				$chunk['block'] = self::normalize_root_font_size( $chunk['block'] );
