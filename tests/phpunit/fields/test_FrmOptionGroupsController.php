@@ -133,6 +133,51 @@ class test_FrmOptionGroupsController extends FrmUnitTest {
 		$this->assertFalse( FrmOptionGroupsController::is_bulk_edit_group_line( '## Fruit|Veg', array( 'type' => 'radio' ) ), 'Radio options should keep literal group markers.' );
 	}
 
+	public function test_import_options_keeps_divider_in_group_name() {
+		$this->set_user_by_role( 'administrator' );
+		wp_get_current_user()->add_cap( 'frm_edit_forms' );
+		set_current_screen( 'dashboard' );
+
+		$field = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $this->factory->form->create(),
+				'type'    => 'select',
+			)
+		);
+
+		$_POST    = array(
+			'field_id' => $field->id,
+			'opts'     => "## Fruit|Veg\nApple|a",
+			'separate' => 'true',
+			'nonce'    => wp_create_nonce( 'frm_ajax' ),
+		);
+		$_REQUEST = $_POST;
+
+		$die = function () {
+			return function () {
+				throw new Exception( 'wp_die' );
+			};
+		};
+		add_filter( 'wp_die_ajax_handler', $die );
+		add_filter( 'wp_die_handler', $die );
+
+		ob_start();
+		try {
+			FrmFieldsController::import_options();
+		} catch ( Exception $e ) {
+			$this->assertSame( 'wp_die', $e->getMessage() );
+		} finally {
+			$html = ob_get_clean();
+			remove_filter( 'wp_die_ajax_handler', $die );
+			remove_filter( 'wp_die_handler', $die );
+			$_POST    = array();
+			$_REQUEST = array();
+			set_current_screen( 'front' );
+		}
+
+		$this->assertStringContainsString( 'name="field_options[options_' . $field->id . '][0][group]" value="Fruit|Veg"', $html );
+	}
+
 	public function test_group_name_is_not_a_valid_value() {
 		$form_id = $this->factory->form->create();
 		$field   = $this->factory->field->create_and_get(
