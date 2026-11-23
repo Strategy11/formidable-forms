@@ -2518,7 +2518,7 @@ window.frmAdminBuildJS = function() {
 
 		// The builder renumbers every field by its position, and a save stores those
 		// numbers, so stay above them too.
-		nextFieldOrder = Math.max( nextFieldOrder, document.querySelectorAll( '#frm-show-fields li.frm_field_box' ).length );
+		nextFieldOrder = Math.max( nextFieldOrder, document.querySelectorAll( '#frm-show-fields li.edit_form_item.frm_field_box' ).length );
 
 		const reserved = ++nextFieldOrder;
 
