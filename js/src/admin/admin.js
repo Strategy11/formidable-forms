@@ -3601,6 +3601,7 @@ window.frmAdminBuildJS = function() {
 						}
 						afterAddField( msg, false );
 						maybeDuplicateUnsavedSettings( settingsSnapshot, duplicatedFieldId );
+						restoreDuplicatedSectionLayout( duplicatedFieldId, childLayouts );
 						setLayoutClassesForDuplicatedFieldInGroup( $field[ 0 ], document.getElementById( `frm_field_id_${ duplicatedFieldId }` ) );
 						jQuery( newRow ).trigger(
 							'frm_added_duplicated_field_to_row',
@@ -3627,9 +3628,7 @@ window.frmAdminBuildJS = function() {
 
 				afterAddField( msg, false );
 				maybeDuplicateUnsavedSettings( settingsSnapshot, duplicatedFieldId );
-				if ( childLayouts.size ) {
-					restoreDuplicatedSectionLayout( duplicatedFieldId, childLayouts );
-				}
+				restoreDuplicatedSectionLayout( duplicatedFieldId, childLayouts );
 				toggleOneSectionHolder( replaceWith.find( '.start_divider' ) );
 				$field[ 0 ].querySelector( '.frm-dropdown-menu.dropdown-menu-right' )?.classList.remove( 'show' );
 				setLayoutClassesForDuplicatedFieldInGroup( $field[ 0 ], document.getElementById( `frm_field_id_${ duplicatedFieldId }` ) );
@@ -3647,9 +3646,17 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function restoreDuplicatedSectionLayout( sectionId, layouts ) {
+		if ( ! layouts.size ) {
+			return;
+		}
+
 		const section = document.getElementById( `frm_field_id_${ sectionId }` );
+		if ( ! section ) {
+			return;
+		}
+
 		const copies = new Map();
-		section?.querySelectorAll( 'li.form-field[data-duplicated-from-id]' ).forEach( field => {
+		section.querySelectorAll( 'li.form-field[data-duplicated-from-id]' ).forEach( field => {
 			copies.set( field.dataset.duplicatedFromId, field );
 		} );
 
