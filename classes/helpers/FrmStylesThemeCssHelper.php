@@ -51,9 +51,11 @@ class FrmStylesThemeCssHelper {
 	 * @return string Empty when the theme exposes no readable CSS.
 	 */
 	public static function get_scoped_theme_css( $scope_root, $scope_limit = '' ) {
-		$css = '';
+		$css         = '';
+		$stylesheets = self::get_theme_stylesheets();
+		set_transient( self::get_stylesheet_paths_cache_key(), wp_list_pluck( $stylesheets, 'path' ), DAY_IN_SECONDS );
 
-		foreach ( self::get_theme_stylesheets() as $stylesheet ) {
+		foreach ( $stylesheets as $stylesheet ) {
 			$contents = self::read_file( $stylesheet['path'] );
 
 			if ( '' === $contents ) {
@@ -78,10 +80,8 @@ class FrmStylesThemeCssHelper {
 
 	/**
 	 * Identify the current theme CSS, so a theme switch or update, a Global Styles edit, or an
-	 * edit to the theme's style.css changes both a cached copy and a stylesheet URL's version.
-	 *
-	 * Other theme stylesheets are only covered by the theme version, since finding them means
-	 * running the theme's front end enqueue, which is too slow to do on every styler page load.
+	 * edit to a previously discovered theme stylesheet changes the preview URL and cache key.
+	 * The last stylesheet build supplies the paths so the version check can skip front-end enqueue.
 	 *
 	 * @since x.x
 	 *
@@ -92,14 +92,22 @@ class FrmStylesThemeCssHelper {
 		$global_styles = self::get_global_stylesheet();
 		$modified      = '';
 
-		foreach ( array_unique( array( get_template_directory(), get_stylesheet_directory() ) ) as $directory ) {
-			$path = $directory . '/style.css';
+		$paths   = (array) get_transient( self::get_stylesheet_paths_cache_key() );
+		$paths[] = get_template_directory() . '/style.css';
+		$paths[] = get_stylesheet_directory() . '/style.css';
 
-			// A child theme's style.css is often edited without a version bump.
-			$modified .= is_readable( $path ) ? filemtime( $path ) : 0;
+		foreach ( array_unique( array_filter( $paths ) ) as $path ) {
+			$modified .= $path . ':' . ( is_readable( $path ) ? filemtime( $path ) : 0 ) . '|';
 		}
 
 		return FrmAppHelper::plugin_version() . '-' . $theme->get_stylesheet() . '-' . $theme->get( 'Version' ) . '-' . substr( md5( $global_styles . $modified ), 0, 8 );
+	}
+
+	/**
+	 * @return string Transient key for discovered paths for the active theme.
+	 */
+	private static function get_stylesheet_paths_cache_key() {
+		return 'frm_styler_theme_paths_' . md5( get_template_directory() . '|' . get_stylesheet_directory() . '|' . wp_get_theme()->get( 'Version' ) );
 	}
 
 	/**

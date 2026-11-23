@@ -84,6 +84,36 @@ class test_FrmStylesThemeCssHelper extends FrmUnitTest {
 		);
 	}
 
+	/**
+	 * Removing a discovered stylesheet changes the preview version even if the theme version is unchanged.
+	 */
+	public function test_removing_a_discovered_stylesheet_changes_the_preview_version() {
+		$path   = wp_tempnam( 'frm-theme-preview.css' );
+		$key    = $this->run_private_method( array( 'FrmStylesThemeCssHelper', 'get_stylesheet_paths_cache_key' ) );
+		$filter = static function () use ( $path ) {
+			return array(
+				array(
+					'path'     => $path,
+					'base_url' => 'https://example.com/theme/',
+				),
+			);
+		};
+
+		add_filter( 'frm_preview_theme_stylesheets', $filter );
+		try {
+			FrmStylesThemeCssHelper::get_scoped_theme_css( '#preview' );
+			$version = FrmStylesThemeCssHelper::get_version();
+			wp_delete_file( $path );
+			clearstatcache( true, $path );
+
+			$this->assertNotSame( $version, FrmStylesThemeCssHelper::get_version() );
+		} finally {
+			remove_filter( 'frm_preview_theme_stylesheets', $filter );
+			delete_transient( $key );
+			wp_delete_file( $path );
+		}
+	}
+
 	public function test_scope_css_drops_conditional_root_rules() {
 		$css    = 'body{color:#111}body.dark-mode{background:#000;color:#fff}@media (min-width:600px){html.js .x{color:red}.y{color:blue}}';
 		$scoped = $this->run_private_method( array( 'FrmStylesThemeCssHelper', 'scope_css' ), array( $css, '#preview' ) );

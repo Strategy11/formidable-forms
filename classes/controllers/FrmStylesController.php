@@ -220,7 +220,9 @@ class FrmStylesController {
 		$css       = get_transient( $cache_key );
 
 		if ( ! is_string( $css ) ) {
-			$css = FrmStylesThemeCssHelper::get_scoped_theme_css( '#frm_active_style_form, #frm_sample_form' );
+			$css       = FrmStylesThemeCssHelper::get_scoped_theme_css( '#frm_active_style_form, #frm_sample_form' );
+			$version   = FrmStylesThemeCssHelper::get_version();
+			$cache_key = 'frm_styler_theme_css_' . md5( $version );
 
 			if ( '' !== $css ) {
 				// An empty result can come from a failed read, so it is not kept for a day.
