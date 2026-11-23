@@ -11,7 +11,9 @@ describe( 'Entries submitted from a form', () => {
 		cy.get( '.frm-list-grid-layout #frm-form-templates-create-form' ).should( 'contain', 'Create a blank form' ).click();
 		cy.get( '#frm_submit_side_top', { timeout: 5000 } ).should( 'contain', 'Save' ).click();
 		cy.get( '#frm_new_form_name_input' ).type( 'Test Form' );
+		cy.intercept( 'POST', '**/wp-admin/admin.php*' ).as( 'saveNewForm' );
 		cy.get( '#frm-save-form-name-button' ).should( 'contain', 'Save' ).click();
+		cy.wait( '@saveNewForm' );
 
 		cy.log( `Add some fields` );
 		// Plain, always-visible sidebar links - no hover gating involved. Adding a field can leave

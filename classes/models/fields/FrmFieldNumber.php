@@ -38,7 +38,7 @@ class FrmFieldNumber extends FrmFieldType {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array<string>
 	 */

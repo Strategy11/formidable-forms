@@ -13,6 +13,15 @@ class FrmFieldsHelper {
 	private static $context_is_safe_to_load_field_options_from_request_data;
 
 	/**
+	 * Prepared field arrays shared only while their builder markup is being rendered.
+	 *
+	 * @since 7.1
+	 *
+	 * @var array<string,array>
+	 */
+	private static $builder_field_vars = array();
+
+	/**
 	 * @param string     $type
 	 * @param int|string $form_id
 	 *
@@ -29,8 +38,7 @@ class FrmFieldsHelper {
 		$field_count = FrmDb::get_var(
 			'frm_fields',
 			array( 'form_id' => $form_id ),
-			'field_order',
-			array( 'order_by' => 'field_order DESC' )
+			'MAX(field_order)'
 		);
 
 		$values['field_key']   = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_fields', 'field_key' );
@@ -42,6 +50,11 @@ class FrmFieldsHelper {
 		}
 
 		$values['field_options']['custom_html'] = self::get_default_html( $type );
+
+		if ( 'phone' === $type && 'tel' === ( $values['field_options']['autocomplete'] ?? '' ) && self::is_repeater_form( $form_id ) ) {
+			// Browser autofill would put the same phone number in every repeater row.
+			$values['field_options']['autocomplete'] = '';
+		}
 
 		if ( ! empty( $setting ) ) {
 			if ( in_array( $type, array( 'data', 'lookup' ), true ) ) {
@@ -55,6 +68,19 @@ class FrmFieldsHelper {
 		FrmSubmitHelper::update_last_row_fields_order_when_adding_field( $field_count );
 
 		return $values;
+	}
+
+	/**
+	 * Check if a form is the child form of a repeater.
+	 *
+	 * @since 7.1
+	 *
+	 * @param int|string $form_id The ID of the form the field is added to.
+	 *
+	 * @return bool
+	 */
+	private static function is_repeater_form( $form_id ) {
+		return $form_id && FrmDb::get_var( 'frm_forms', array( 'id' => $form_id ), 'parent_form_id' );
 	}
 
 	/**
@@ -74,8 +100,39 @@ class FrmFieldsHelper {
 	 * @return array
 	 */
 	public static function setup_edit_vars( $field, $doing_ajax = false ) {
+		if ( ! $doing_ajax && self::$builder_field_vars && is_object( $field ) ) {
+			$key = spl_object_hash( $field );
+
+			if ( isset( self::$builder_field_vars[ $key ] ) ) {
+				return self::$builder_field_vars[ $key ];
+			}
+		}
+
 		$values = self::field_object_to_array( $field );
 		return apply_filters( 'frm_setup_edit_field_vars', $values, array( 'doing_ajax' => $doing_ajax ) );
+	}
+
+	/**
+	 * Share prepared values during a builder render, returning the previous values to restore.
+	 *
+	 * @since 7.1
+	 *
+	 * @param object     $field  The field object used by the builder and its field type handler.
+	 * @param array|null $values Prepared field values, or null to stop sharing them.
+	 *
+	 * @return array|null
+	 */
+	public static function set_builder_field_vars( $field, $values = null ) {
+		$key      = spl_object_hash( $field );
+		$previous = self::$builder_field_vars[ $key ] ?? null;
+
+		if ( null === $values ) {
+			unset( self::$builder_field_vars[ $key ] );
+		} else {
+			self::$builder_field_vars[ $key ] = $values;
+		}
+
+		return $previous;
 	}
 
 	/**
@@ -293,7 +350,7 @@ class FrmFieldsHelper {
 				$frm_settings           = FrmAppHelper::get_settings();
 				$field_array['invalid'] = $frm_settings->re_msg;
 			} else {
-				$field_array['invalid'] = self::default_invalid_msg();
+				$field_array['invalid'] = self::default_invalid_msg( $field );
 			}
 		}
 
@@ -304,13 +361,30 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * Default "invalid" validation message. Gives field-type-specific correction guidance
+	 * for field types where the format requirement isn't obvious from the label alone
+	 * (WCAG 3.3.1/3.3.3), and falls back to a generic message for every other type.
+	 *
 	 * @since 6.8.3
+	 * @since 6.35 Added the $field param for a type-specific message.
+	 *
+	 * @param array|object|null $field Optional. Field to check the type of.
 	 *
 	 * @return string
 	 */
-	public static function default_invalid_msg() {
+	public static function default_invalid_msg( $field = null ) {
+		$type     = $field ? FrmField::get_field_type( $field ) : '';
+		$messages = array(
+			'email'  => __( 'Enter a valid email address, like name@example.com', 'formidable' ),
+			'url'    => __( 'Enter a valid web address, like https://example.com', 'formidable' ),
+			'phone'  => __( 'Enter a valid phone number', 'formidable' ),
+			'number' => __( 'Enter a number', 'formidable' ),
+		);
+		// Quantity validates identically to number (FrmFieldQuantity extends FrmFieldNumber) but is a distinct stored type.
+		$messages['quantity'] = $messages['number'];
+
 		/* translators: %s: [field_name] shortcode (Which gets replaced by a Field Name) */
-		return sprintf( __( '%s is invalid', 'formidable' ), '[field_name]' );
+		return $messages[ $type ] ?? sprintf( __( '%s is invalid', 'formidable' ), '[field_name]' );
 	}
 
 	/**
@@ -447,6 +521,28 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * Gets an error message with a different name in place of the field name.
+	 *
+	 * @since 7.0
+	 *
+	 * @param array|object $field
+	 * @param string       $error
+	 * @param string       $name  The name to use in the message.
+	 *
+	 * @return string
+	 */
+	public static function get_error_msg_for_name( $field, $error, $name ) {
+		if ( is_object( $field ) ) {
+			$field       = clone $field;
+			$field->name = $name;
+		} elseif ( is_array( $field ) ) {
+			$field['name'] = $name;
+		}
+
+		return self::get_error_msg( $field, $error );
+	}
+
+	/**
 	 * @since 2.0
 	 *
 	 * @param array|object $field
@@ -465,8 +561,7 @@ class FrmFieldsHelper {
 			),
 			'invalid'    => array(
 				'full' => __( 'This field is invalid', 'formidable' ),
-				/* translators: %s: Field name */
-				'part' => sprintf( __( '%s is invalid', 'formidable' ), '[field_name]' ),
+				'part' => self::default_invalid_msg( $field ),
 			),
 			'blank'      => array(
 				'full' => $frm_settings->blank_msg,
@@ -1185,6 +1280,11 @@ class FrmFieldsHelper {
 			return;
 		}
 
+		if ( isset( $atts['entry'] ) && FrmSpamEntriesHelper::is_spam( $atts['entry'] ) ) {
+			$value = str_replace( '[', '&#91;', esc_html( $value ) );
+			return;
+		}
+
 		$atts['value']   = $value;
 		$should_sanitize = apply_filters( 'frm_sanitize_shortcodes', true, $atts );
 
@@ -1376,11 +1476,17 @@ class FrmFieldsHelper {
 	 * @return mixed
 	 */
 	public static function get_display_value( $value, $field, $atts = array() ) {
+		if ( isset( $atts['entry'] ) && FrmSpamEntriesHelper::is_spam( $atts['entry'] ) ) {
+			$value = FrmSpamEntriesHelper::escape_value( $value );
+		}
+
 		$value = apply_filters( 'frm_get_' . $field->type . '_display_value', $value, $field, $atts );
 		$value = apply_filters( 'frm_get_display_value', $value, $field, $atts );
 		$value = self::get_unfiltered_display_value( compact( 'value', 'field', 'atts' ) );
 
-		return apply_filters( 'frm_display_value', $value, $field, $atts );
+		$value = apply_filters( 'frm_display_value', $value, $field, $atts );
+
+		return isset( $atts['entry'] ) && FrmSpamEntriesHelper::is_spam( $atts['entry'] ) ? FrmSpamEntriesHelper::escape_value( $value ) : $value;
 	}
 
 	/**
@@ -1621,6 +1727,19 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * Check if another plugin handles the text box for "Other" options.
+	 * Pro checks that this method exists to know the frm_prepare_other_input and
+	 * frm_include_other_input hooks are available.
+	 *
+	 * @since 7.0
+	 *
+	 * @return bool
+	 */
+	public static function other_input_is_handled() {
+		return false !== has_filter( 'frm_prepare_other_input' ) && false !== has_action( 'frm_include_other_input' );
+	}
+
+	/**
 	 * Check if there is a saved value for the "Other" text field. If so, set it as the $other_val.
 	 * Intended for front-end use
 	 *
@@ -1637,6 +1756,34 @@ class FrmFieldsHelper {
 			'name'  => '',
 			'value' => '',
 		);
+
+		if ( self::other_input_is_handled() ) {
+			/**
+			 * Prepares the text box for an "Other" option, in place of the fallback below.
+			 *
+			 * @since 7.0
+			 *
+			 * @param array $prepared {
+			 *
+			 *     @type array       $other_args The name and value for the text box.
+			 *     @type bool        $other_opt  True when this is an "Other" option.
+			 *     @type bool|string $checked    The checked attribute for the option.
+			 * }
+			 *
+			 * @param array $args Includes field, opt_key and field_name.
+			 */
+			$prepared = apply_filters( 'frm_prepare_other_input', compact( 'other_args', 'other_opt', 'checked' ), $args );
+
+			if ( is_array( $prepared ) && isset( $prepared['other_args'], $prepared['other_opt'] ) ) {
+				$other_opt = $prepared['other_opt'];
+				$checked   = $prepared['checked'] ?? $checked;
+
+				return $prepared['other_args'];
+			}
+		}//end if
+
+		// Fallback for when Pro is not active or is older than 7.0. Remove the rest of this method,
+		// set_other_name() and set_other_value() once Pro is required for "Other" options.
 
 		// Check if this is an "Other" option.
 		if ( ! self::is_other_opt( $args['opt_key'] ) ) {
@@ -1733,6 +1880,21 @@ class FrmFieldsHelper {
 		if ( ! $args['other_opt'] ) {
 			return;
 		}
+
+		if ( self::other_input_is_handled() ) {
+			/**
+			 * Shows the text box for an "Other" option, in place of the fallback below.
+			 *
+			 * @since 7.0
+			 *
+			 * @param array $args Includes field, opt_key, html_id, name, value, checked and read_only.
+			 */
+			do_action( 'frm_include_other_input', $args );
+			return;
+		}
+
+		// Fallback for when Pro is not active or is older than 7.0. Remove the rest of this method
+		// once Pro is required for "Other" options.
 
 		$classes = array( 'frm_other_input' );
 
@@ -2380,6 +2542,12 @@ class FrmFieldsHelper {
 	public static function show_add_field_link( $field_type ) {
 		$field_label = FrmFormsHelper::get_field_link_name( $field_type );
 		$classes     = 'frmbutton frm6 frm_t' . $field_type['key'];
+		$type        = explode( '|', $field_type['key'] )[0];
+		$field       = FrmFieldFactory::get_field_type( $type );
+
+		if ( ! $field->allows_in_repeater() ) {
+			$classes .= ' frm-no-repeater';
+		}
 
 		if ( ! empty( $field_type['hide'] ) ) {
 			$classes .= ' frm_hidden';
@@ -3005,7 +3173,7 @@ class FrmFieldsHelper {
 	/**
 	 * Get the values available for the autocomplete HTML attribute.
 	 *
-	 * @since x.x This was moved from FrmProFieldsHelper::get_autocomplete_options.
+	 * @since 7.0 This was moved from FrmProFieldsHelper::get_autocomplete_options.
 	 *
 	 * @param array<string> $filter_keys Only include these keys. An empty array will include every key.
 	 *

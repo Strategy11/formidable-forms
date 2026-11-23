@@ -239,16 +239,17 @@ class FrmSMTPController {
 
 		printf(
 			'<section class="step step-install">
-				<aside class="num">
-					%1$s
+				<aside class="num" aria-label="%1$s">
+					%2$s
 					<i class="loader hidden"></i>
 				</aside>
 				<div>
-					<h2>%2$s</h2>
-					<p>%3$s</p>
-					<span><a rel="%4$s" class="button button-primary frm-button-primary %5$s">%6$s</a></span>
+					<h2>%3$s</h2>
+					<p>%4$s</p>
+					<span><a rel="%5$s" class="button button-primary frm-button-primary %6$s">%7$s</a></span>
 				</div>
 			</section>',
+			esc_attr__( 'Step 1', 'formidable' ),
 			FrmAppHelper::kses( $icon, array( 'a', 'i', 'span', 'use', 'svg' ) ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			esc_html( $label ),
 			esc_html__( 'Install WP Mail SMTP from the WordPress.org plugin repository.', 'formidable' ),
@@ -283,17 +284,18 @@ class FrmSMTPController {
 
 		printf(
 			'<section class="step step-setup %1$s">
-				<aside class="num">
-					%2$s
+				<aside class="num" aria-label="%2$s">
+					%3$s
 					<i class="loader hidden"></i>
 				</aside>
 				<div>
-					<h2>%3$s</h2>
-					<p>%4$s</p>
-					<span><a href="%5$s" class="button button-primary frm-button-primary %6$s">%7$s</a></span>
-				</div>		
+					<h2>%4$s</h2>
+					<p>%5$s</p>
+					<span><a href="%6$s" class="button button-primary frm-button-primary %7$s">%8$s</a></span>
+				</div>
 			</section>',
 			esc_attr( $step['section_class'] ),
+			esc_attr__( 'Step 2', 'formidable' ),
 			FrmAppHelper::kses( $icon, array( 'a', 'i', 'span', 'use', 'svg' ) ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			esc_html__( 'Set Up WP Mail SMTP', 'formidable' ),
 			esc_html__( 'Select and configure your mailer.', 'formidable' ),

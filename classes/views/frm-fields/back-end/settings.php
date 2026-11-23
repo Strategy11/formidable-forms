@@ -160,6 +160,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		$field_obj->show_primary_options( compact( 'field', 'display', 'values' ) );
 
+		if ( 'address' === $field['type'] ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/combo-fields/addresses/preview-templates.php';
+		}
+
 		if ( $display['format'] ) {
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/format-dropdown.php';
 			FrmFieldsController::show_format_option( $field, true );
@@ -352,7 +356,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 		do_action( 'frm_field_options_after_description', compact( 'field', 'display', 'values' ) );
 
 		// Field Size
-		if ( $display['size'] && ! in_array( $field['type'], array( 'select', 'data', 'time' ), true ) ) {
+		if ( $field_obj->should_show_size_setting( $display ) ) {
 			$display_max = $display['max'];
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/pixels-wide.php';
 		}
@@ -375,7 +379,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			<p class="frm_form_field">
 				<label class="frm-force-flex frm-gap-xs" for="frm_show_image_<?php echo esc_attr( $field['id'] ); ?>">
 					<input class="frm-m-0" type="checkbox" id="frm_show_image_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[show_image_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['show_image'], 1 ); ?> />
-					<span class="-frm-mt-2xs"><?php esc_html_e( 'If this URL points to an image, show to image on the entries listing page.', 'formidable' ); ?></span>
+					<span class="-frm-mt-2xs"><?php esc_html_e( 'If this URL points to an image, show the image on the entries listing page.', 'formidable' ); ?></span>
 				</label>
 			</p>
 		<?php } ?>
@@ -432,43 +436,35 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 				<label for="field_options_required_indicator_<?php echo esc_attr( $field['id'] ); ?>">
 					<?php esc_html_e( 'Required Field Indicator', 'formidable' ); ?>
 				</label>
-				<input type="text" id="field_options_required_indicator_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[required_indicator_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['required_indicator'] ); ?>" />
+				<input type="text" id="field_options_required_indicator_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[required_indicator_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['required_indicator'] ); ?>" data-changeme="frm_required_indicator_<?php echo esc_attr( $field['id'] ); ?>" data-changeatt="textContent" />
 			</p>
 		<?php } ?>
 
 		<?php if ( $display['label_position'] ) { ?>
 			<p class="frm6 frm_form_field">
 				<label for="field_options_label_<?php echo esc_attr( $field['id'] ); ?>"><?php esc_html_e( 'Label Position', 'formidable' ); ?></label>
-				<select id="field_options_label_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[label_<?php echo esc_attr( $field['id'] ); ?>]">
-					<option value="" <?php selected( $field['label'], '' ); ?>>
-						<?php esc_html_e( 'Default', 'formidable' ); ?>
-					</option>
-					<?php
-					foreach ( FrmStylesHelper::get_single_label_positions( $field ) as $pos => $pos_label ) {
-						if ( ! $display['clear_on_focus'] && 'inside' === $pos ) {
-							// Don't allow inside labels for fields without placeholders.
-							continue;
-						}
-						FrmHtmlHelper::echo_dropdown_option(
-							$pos_label,
-							$pos === $field['label'],
-							array(
-								'value' => $pos,
-							)
-						);
-					}
+				<?php
+				$label_options = array( '' => __( 'Default', 'formidable' ) );
 
-					if ( $field['type'] === 'divider' ) {
-						FrmHtmlHelper::echo_dropdown_option(
-							__( 'Center', 'formidable' ),
-							'center' === $field['label'],
-							array(
-								'value' => 'center',
-							)
-						);
+				foreach ( FrmStylesHelper::get_single_label_positions( $field ) as $pos => $pos_label ) {
+					if ( ! $display['clear_on_focus'] && 'inside' === $pos ) {
+						continue;
 					}
-					?>
-				</select>
+					$label_options[ $pos ] = $pos_label;
+				}
+
+				if ( 'divider' === $field['type'] ) {
+					$label_options['center'] = __( 'Center', 'formidable' );
+				}
+				FrmBuilderSelectHelper::render(
+					array(
+						'id'   => 'field_options_label_' . $field['id'],
+						'name' => 'field_options[label_' . $field['id'] . ']',
+					),
+					$label_options,
+					$field['label']
+				);
+				?>
 			</p>
 			<?php
 		}//end if
@@ -486,27 +482,29 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 				<label for="field_options_type_<?php echo esc_attr( $field['id'] ); ?>">
 					<?php esc_html_e( 'Field Type', 'formidable' ); ?>
 				</label>
-				<select name="field_options[type_<?php echo esc_attr( $field['id'] ); ?>]" id="field_options_type_<?php echo esc_attr( $field['id'] ); ?>">
-					<?php
-					foreach ( $field_types as $fkey => $ftype ) {
-						// We need to avoid the word "select" in POST requests.
-						// When "dropdown" is sent as a type value, we'll map it back to "select" with PHP.
-						$type_option_value  = 'select' === $fkey ? 'dropdown' : $fkey;
-						$type_option_params = array( 'value' => $type_option_value );
+				<?php
+				$type_options    = array();
+				$type_attributes = array();
 
-						if ( array_key_exists( $fkey, $disabled_fields ) ) {
-							$type_option_params['disabled'] = 'disabled';
-						}
+				foreach ( $field_types as $fkey => $ftype ) {
+					// Avoid the word "select" in POST requests. PHP maps "dropdown" back to "select".
+					$type_value                  = 'select' === $fkey ? 'dropdown' : $fkey;
+					$type_options[ $type_value ] = is_array( $ftype ) ? $ftype['name'] : $ftype;
 
-						FrmHtmlHelper::echo_dropdown_option(
-							is_array( $ftype ) ? $ftype['name'] : $ftype,
-							$fkey === $field['type'],
-							$type_option_params
-						);
-						unset( $fkey, $ftype, $type_option_value, $type_option_params );
+					if ( array_key_exists( $fkey, $disabled_fields ) ) {
+						$type_attributes[ $type_value ] = array( 'disabled' => 'disabled' );
 					}
-					?>
-				</select>
+				}
+				FrmBuilderSelectHelper::render(
+					array(
+						'name' => 'field_options[type_' . $field['id'] . ']',
+						'id'   => 'field_options_type_' . $field['id'],
+					),
+					$type_options,
+					'select' === $field['type'] ? 'dropdown' : $field['type'],
+					$type_attributes
+				);
+				?>
 			</p>
 		<?php } else { ?>
 			<input type="hidden" id="field_options_type_<?php echo esc_attr( $field['id'] ); ?>" value="<?php echo esc_attr( $field['type'] ); ?>" />

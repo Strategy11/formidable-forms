@@ -9,6 +9,45 @@
 #[\PHPUnit\Framework\Attributes\CoversClass( FrmEntryMeta::class )]
 class test_FrmEntryMeta extends FrmUnitTest {
 
+	/**
+	 * Integrations can restore source whitespace while ordinary fields retain trimming.
+	 */
+	public function test_add_entry_meta_filter_receives_original_source() {
+		$form_id  = $this->factory->form->create();
+		$entry_id = $this->factory->entry->create( array( 'form_id' => $form_id ) );
+		$field_id = $this->factory->field->create( array( 'form_id' => $form_id ) );
+		$source   = "\n\tcode sample\n\n";
+
+		add_filter( 'frm_add_entry_meta', array( $this, 'restore_original_source' ), 10, 2 );
+
+		try {
+			$meta_id = FrmEntryMeta::add_entry_meta( $entry_id, $field_id, '', $source );
+			$this->assertNotFalse( $meta_id, 'The filtered metadata should be stored.' );
+			$this->assertSame( $source, FrmEntryMeta::get_entry_meta_by_field( $entry_id, $field_id ), 'The filter should preserve exact leading and trailing whitespace.' );
+		} finally {
+			remove_filter( 'frm_add_entry_meta', array( $this, 'restore_original_source' ) );
+		}
+
+		$field_id = $this->factory->field->create( array( 'form_id' => $form_id ) );
+		FrmEntryMeta::add_entry_meta( $entry_id, $field_id, '', $source );
+		$this->assertSame( trim( $source ), FrmEntryMeta::get_entry_meta_by_field( $entry_id, $field_id ), 'Ordinary metadata should retain its existing trimming behavior.' );
+	}
+
+	/**
+	 * Restore source after checking the prepared and original hook arguments.
+	 *
+	 * @param array  $values Prepared metadata columns.
+	 * @param string $source Original source before trimming.
+	 *
+	 * @return array
+	 */
+	public function restore_original_source( $values, $source ) {
+		$this->assertSame( "\n\tcode sample\n\n", $source, 'The second hook argument should contain the original source.' );
+		$this->assertSame( trim( $source ), $values['meta_value'], 'The first hook argument should retain the prepared value.' );
+		$values['meta_value'] = $source;
+		return $values;
+	}
+
 	public function test_update_entry_metas() {
 		$form       = $this->factory->form->create_and_get();
 		$field_id   = $this->factory->field->create(

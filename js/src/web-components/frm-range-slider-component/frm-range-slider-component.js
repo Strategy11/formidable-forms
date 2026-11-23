@@ -6,7 +6,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Accessible labels for each part of a multi part slider.
  *
- * @since x.x
+ * @since 7.0
  *
  * @param {string} type - The slider part, for instance 'top' or 'left'.
  * @return {string} The label describing that part.

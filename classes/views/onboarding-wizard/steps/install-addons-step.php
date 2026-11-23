@@ -8,6 +8,8 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
+$connect_link = $pro_is_installed ? '' : FrmAddonsController::connect_link();
 ?>
 <section id="frm-onboarding-install-addons-step" class="frm-onboarding-step frm-card-box frm-has-progress-bar frm_hidden" data-step-name="<?php echo esc_attr( $step ); ?>">
 	<div class="frm-card-box-header">
@@ -73,11 +75,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 				?>
 			</span>
 
-			<?php if ( ! $pro_is_installed ) { ?>
+			<?php if ( $connect_link ) { ?>
 				<div class="frm-cta-footer frm-flex frm-gap-xs frm-text-xs">
 					<span><?php esc_html_e( 'Already have Pro?', 'formidable' ); ?></span>
 
-					<a href="<?php echo esc_url( FrmAddonsController::connect_link() ); ?>" class="frm-link-with-external-icon" target="_blank">
+					<a href="<?php echo esc_url( $connect_link ); ?>" class="frm-link-with-external-icon" target="_blank">
 						<span><?php esc_html_e( 'Connect Account', 'formidable' ); ?></span>
 						<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowup8_icon' ); ?>
 					</a>

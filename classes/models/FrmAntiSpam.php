@@ -239,7 +239,7 @@ class FrmAntiSpam extends FrmValidate {
 
 		// If the antispam setting is enabled and we don't have a token, bail.
 		if ( ! $token ) {
-			if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
+			if ( $this->is_admin_entry_submission() ) {
 				// Add an exception for the entries page.
 				return true;
 			}
@@ -253,6 +253,21 @@ class FrmAntiSpam extends FrmValidate {
 		}
 
 		return $this->process_antispam_filter( true );
+	}
+
+	/**
+	 * Check if a user who may manage entries is submitting from the admin entries page.
+	 *
+	 * @since 7.1
+	 *
+	 * @return bool
+	 */
+	private function is_admin_entry_submission() {
+		if ( ! FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
+			return false;
+		}
+
+		return current_user_can( 'frm_create_entries' ) || current_user_can( 'frm_edit_entries' );
 	}
 
 	/**

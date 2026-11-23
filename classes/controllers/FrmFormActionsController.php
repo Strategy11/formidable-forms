@@ -954,6 +954,11 @@ class FrmFormActionsController {
 				continue;
 			}
 
+			if ( FrmSpamEntriesHelper::is_spam( $entry ) ) {
+				// Actions never run for spam. They can be triggered when the entry is marked as not spam.
+				continue;
+			}
+
 			$child_entry = ( is_numeric( $form->parent_form_id ) && $form->parent_form_id ) || ( $entry && ( (int) $entry->form_id !== (int) $form->id || $entry->parent_item_id ) ) || ! empty( $args['is_child'] ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 			if ( $child_entry ) {

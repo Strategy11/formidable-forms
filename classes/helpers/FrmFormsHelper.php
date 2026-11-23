@@ -6,6 +6,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFormsHelper {
 
 	/**
+	 * Forms with more fields than this load and save in the builder with AJAX.
+	 *
+	 * @since 7.1
+	 *
+	 * @var int
+	 */
+	const AJAX_BUILDER_FIELD_THRESHOLD = 40;
+
+	/**
 	 * Store and re-use field type data for the insert_opt_html function (to avoid multiple calls to FrmField::all_field_selection).
 	 *
 	 * @since 6.10
@@ -17,7 +26,7 @@ class FrmFormsHelper {
 	/**
 	 * Icon classes for deferred code list items, keyed by field type, printed once each by print_deferred_code_list_icons().
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var array<string, string>
 	 */
@@ -72,7 +81,13 @@ class FrmFormsHelper {
 		}
 
 		$where    = apply_filters( 'frm_forms_dropdown', $query, $field_name );
-		$forms    = FrmForm::get_published_forms( $where, 999, $args['inc_children'] );
+		$forms    = FrmForm::get_published_form_names(
+			$where,
+			array(
+				'limit'        => 999,
+				'inc_children' => $args['inc_children'],
+			)
+		);
 		$add_html = array();
 		self::add_html_attr( $args['onchange'], 'onchange', $add_html );
 		self::add_html_attr( $args['class'], 'class', $add_html );
@@ -312,7 +327,7 @@ class FrmFormsHelper {
 	 * that form currently has any validation errors. Used to resolve the per-form focus/
 	 * alert-role defaults in FrmAppHelper before a submission has happened.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param stdClass $form
 	 *
@@ -334,7 +349,7 @@ class FrmFormsHelper {
 	 * JS can resolve focus/alert-role behavior for a form without reading page-global
 	 * defaults that don't account for that form's own summary state.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param stdClass $form
 	 *
@@ -353,7 +368,7 @@ class FrmFormsHelper {
 	/**
 	 * Get clickable field error messages.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $args
 	 *
@@ -368,7 +383,7 @@ class FrmFormsHelper {
 		 * Allows the list of clickable field errors to be turned off, leaving only the invalid
 		 * message on its own. Return false to opt a site, or a single form, out of the summary.
 		 *
-		 * @since x.x
+		 * @since 7.0
 		 *
 		 * @param bool  $show_summary Whether to list each field that failed validation.
 		 * @param array $args         Includes 'form' and 'errors'.
@@ -467,7 +482,7 @@ class FrmFormsHelper {
 	 * validating the entry) and only queries for any field it still cannot resolve, keeping
 	 * the error summary from adding a database round trip in the normal flow.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param array $args      Includes optional 'fields'.
 	 * @param int[] $field_ids Field IDs referenced by the current errors.
@@ -522,7 +537,7 @@ class FrmFormsHelper {
 	 * being shown. Hidden and user ID fields render as hidden inputs that cannot receive focus, and
 	 * a field on another page of a multi-page form is not visible, so neither should be linked.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param stdClass $field Field row with at least type, field_order and form_id.
 	 *
@@ -582,11 +597,16 @@ class FrmFormsHelper {
 
 		$message = do_shortcode( $message );
 		$role    = $atts['role'] ?? 'status';
-		// A focusable tabindex, plus a stable marker JS can select on regardless of the
-		// filterable wrapper class, lets JS move focus onto the error summary instead of
-		// the first field, when should_focus_error_summary() resolves true.
+		// A focusable tabindex lets js/formidable.js move focus onto the message after an
+		// AJAX submit without a screen reader user having to tab to it. An error summary
+		// (role="alert") is always focusable this way; any other message is only focusable
+		// when the caller marks it via $atts['focusable'] (the AJAX success path) — a
+		// plain page-rendered message is never focused, so it stays out of the tab order.
+		// The stable data-frm-error-summary marker additionally lets JS single out the
+		// error summary from any other focusable message on the page.
 		$is_error_summary = 'alert' === $role;
-		$tabindex         = $is_error_summary ? ' tabindex="-1"' : '';
+		$focusable        = $is_error_summary || ! empty( $atts['focusable'] );
+		$tabindex         = $focusable ? ' tabindex="-1"' : '';
 		$summary_marker   = $is_error_summary ? ' data-frm-error-summary="1"' : '';
 
 		return '<div class="' . esc_attr( $atts['class'] ) . '" role="' . esc_attr( $role ) . '"' . $tabindex . $summary_marker . '>' . $message . '</div>';
@@ -734,6 +754,56 @@ class FrmFormsHelper {
 			'show_description' => 0,
 			'ajax_submit'      => 0,
 		);
+	}
+
+	/**
+	 * Check if the form builder should load and save fields with AJAX.
+	 * Rendering every field on page load slows down exponentially as a form grows,
+	 * so long forms always use AJAX.
+	 *
+	 * @since 7.1
+	 *
+	 * @param int $field_count The number of fields in the form.
+	 * @param int $form_id     The id of the form being edited.
+	 *
+	 * @return bool
+	 */
+	public static function should_ajax_load_builder( $field_count, $form_id ) {
+		/**
+		 * Allows turning AJAX loading in the form builder on or off.
+		 * Use __return_false to always load every field with the page.
+		 *
+		 * @since 7.1
+		 *
+		 * @param bool  $ajax_load True when the form has more than AJAX_BUILDER_FIELD_THRESHOLD fields.
+		 * @param array $args      Contains `field_count` and `form_id`.
+		 */
+		return apply_filters(
+			'frm_ajax_load_form_builder',
+			$field_count > self::AJAX_BUILDER_FIELD_THRESHOLD,
+			compact( 'field_count', 'form_id' )
+		);
+	}
+
+	/**
+	 * Count the fields in a form the way a user sees them, without the Submit field.
+	 *
+	 * @since 7.1
+	 *
+	 * @param array $fields Field objects or arrays.
+	 *
+	 * @return int
+	 */
+	public static function count_fields_without_submit( $fields ) {
+		$count = 0;
+
+		foreach ( $fields as $field ) {
+			if ( FrmSubmitHelper::FIELD_TYPE !== FrmField::get_field_type( $field ) ) {
+				++$count;
+			}
+		}
+
+		return $count;
 	}
 
 	/**
@@ -1018,7 +1088,7 @@ BEFORE_HTML;
 	 * Prints one hidden copy of each icon used by deferred code list items, for JS to copy into the list when it opens.
 	 * This keeps the markup for a form with many fields down to a field type per item.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */

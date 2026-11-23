@@ -735,11 +735,38 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Assert that every <aside> tag in some rendered HTML has a non-empty aria-label.
+	 * <aside> carries an implicit role="complementary", which the IBM Equal Access
+	 * checker flags as unlabelled complementary content otherwise (aria_complementary_labelled).
+	 *
+	 * @since 7.0
+	 *
+	 * @param string $html
+	 * @param int    $expected_count Required so an empty/short match list fails loudly instead of
+	 *                               passing vacuously (assertNotContains passes on an empty array).
+	 *
+	 * @return void
+	 */
+	protected function assert_complementary_landmarks_are_labelled( $html, $expected_count ) {
+		preg_match_all( '/<aside\b[^>]*>/', $html, $matches );
+		$this->assertCount( $expected_count, $matches[0], 'Unexpected number of <aside> elements' );
+
+		$labels = array();
+
+		foreach ( $matches[0] as $aside_tag ) {
+			preg_match( '/aria-label="([^"]*)"/', $aside_tag, $label_match );
+			$labels[] = $label_match[1] ?? '';
+		}
+
+		$this->assertNotContains( '', $labels, 'Every complementary landmark needs a non-empty accessible name' );
+	}
+
+	/**
 	 * Assert that none of the given HTML element ids appears more than once in some
 	 * rendered HTML (aria_id_unique — a duplicate id breaks any ARIA property that
 	 * references it, since the reference can no longer resolve to a single element).
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $html
 	 * @param array  $ids
@@ -757,7 +784,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * Assert that every <form> tag in some rendered HTML has a non-empty aria-label,
 	 * and that no two forms share the same one (aria_landmark_name_unique).
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $html
 	 * @param int    $expected_count Required so an empty/short match list fails loudly instead of
@@ -787,7 +814,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * redundant `for`/id pair makes Safari VoiceOver announce the label twice
 	 * (label_name_visible / duplicate association).
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $html
 	 * @param string $field_description Used only in the failure message, e.g. "checkbox option" or "GDPR".

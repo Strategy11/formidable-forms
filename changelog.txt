@@ -1,4 +1,115 @@
 == Changelog ==
+= 7.1.1 =
+* Fix: Invisible reCAPTCHA v2 no longer blocks form submission when "Allow multiple reCAPTCHAs" is off.
+* Fix: Clicking "Click here to set up progress indicator" in the form builder no longer causes an error, and the Rootline settings now open.
+
+= 7.1 =
+* Security: Additional protection has been added to prevent unauthenticated shortcode execution.
+* Security: Additional validation has been added to PayPal Commerce orders and subscriptions to help prevent payment tampering.
+* New: The form builder now loads long forms with AJAX automatically. The "Load and save form builder page with AJAX" setting has been removed.
+* New: Large forms now load previews and field settings in smaller batches. Previews below the screen wait until you scroll near them.
+* New: The builder now blocks fields that don't work in a Repeater or Section, such as CAPTCHA, Submit, GDPR, Summary, Page Break, and embedded forms.
+* New: The style editor now uses a new color picker. Colors save in the format you pick: RGB, HSL, or Hex.
+* New: Style changes in the visual styler now show in the preview right away, without waiting for the server.
+* New: Phone fields now have an Autocomplete setting.
+* New: A new CAPTCHA service unavailable spam setting saves a submission as a spam entry when the CAPTCHA can't be verified because the service is down or its response can't be read.
+* New: Boosts now show in their own section on the Add-Ons page.
+* New: Stripe Link elements now share additional form styling to closer match other inputs.
+* New: Formidable AI has a new get-ai-status ability so AI tools can see how to turn on access, and a new mark-entry-spam ability.
+* New: Forms created with the create-form ability now start with anti-spam on and an email action, like forms made in the builder.
+* New: The list-entries ability can now list spam entries, and the update-form ability can turn entry editing on or off.
+* New: New frm_no_save_fields, frm_embed_modal_options, frm_field_created, frm_field_updated, frm_field_destroyed, and frm_field_order_updated hooks, plus a new hook that runs before a form is destroyed.
+* New: The frm_add_entry_meta filter now receives the original value as a second argument.
+* Performance: Moving a field in a large form now saves only the new field order. The builder uses fewer database queries when creating, updating, or reordering many fields.
+* Performance: Form dropdowns, the next-field-order lookup, and form field cache clearing now use faster queries.
+* Performance: The Stripe Link check no longer runs a query on admin pages.
+* Fix: PayPal Commerce now checks the capture status before marking an order as paid. Declined cards no longer create a payment, and pending captures create a pending payment.
+* Fix: PayPal Commerce card fields could stay empty on multi-page forms when the script loaded late.
+* Fix: PayPal Commerce validation failed for products inside repeaters.
+* Fix: PayPal Commerce Apple Pay failed when the page title had a non-ASCII character.
+* Fix: PayPal Commerce rejected cards when the Address field was on an earlier page, because the billing country code was missing.
+* Fix: Going to the previous page on a multi-page PayPal Commerce form no longer tries to submit the empty card.
+* Fix: Square rejected a different card entered after a declined card.
+* Fix: Deleting a multisite site now also removes the payments, subscriptions, and gated tokens tables.
+* Fix: The Denylist check no longer marks accented text, like "Máster", as spam.
+* Fix: The submit button could ignore the first click after fixing a field error.
+* Fix: The "Disable submit button styling" toggle always loaded as off.
+* Fix: A form lost its styling when the style it used was deleted. It now falls back to the default style.
+* Fix: The inline Submit button sat below the inputs when using the default submit HTML.
+* Fix: Primary labels did not line up with inputs in themes that set a label line height, like Hello Elementor.
+* Fix: Long style names could push the dropdown out of the style card.
+* Fix: Test mode controls now look the same in any theme.
+* Fix: Admin dropdowns and tooltips broke when another plugin loaded Popper 1.
+* Fix: Field Size now shows in the builder preview.
+* Fix: Builder previews kept the field label markup and the required indicator when drawn in the browser.
+* Fix: Errors with deferred field settings panels in the builder. A dropdown posted the wrong type, and a failed load could silently drop settings on save.
+* Fix: Duplicating a field no longer fails on forms saved with the older field placement format.
+* Fix: Dragging a Repeater into a Section was allowed in the builder.
+* Fix: Form and field keys longer than 60 characters could collide when duplicated.
+* Fix: An empty Number Step rendered step="any" instead of step="1" and rejected decimals.
+* Fix: Dropdown, radio, and checkbox fields filled by setup hooks could reject valid values.
+* Fix: Hex colors like #ffffff caused a PHP deprecation notice when brightness was calculated.
+* Fix: Style Reset and the live preview now keep the # on hex colors, and an invalid typed hex no longer becomes #000000.
+* Fix: The Entry Key typed on an earlier page was lost on multi-page Entries > Add New forms.
+* Fix: Form Templates > Create Template opened a copy of the new template instead of the template itself.
+* Fix: Inserting Default HTML in the Message editor's Code tab added escaped markup.
+* Fix: JS-built search boxes, like Applications > Search Templates, showed no magnifier icon.
+* Fix: Payment status hooks ran on the wrong payment because trigger_payment_status_change ignored the payment passed in.
+* Fix: Duplicate-entry errors now show in the error summary when submitting with AJAX.
+* Fix: The Square script no longer shows a Missing Dependencies warning in the visual styler.
+* Fix: The list-entries, list-forms, list-fields, list-payments, and list-subscriptions abilities now return correct defaults and no longer error on star rating or scale fields, spam entries, or a missing payments table.
+* Fix: The create-field and update-field abilities skipped the settings clean-up that the builder runs.
+
+= 7.0 =
+* Security: Additional permission checks have been added to prevent unauthorized plugin installations.
+* Security: Download URL validation has been hardened to prevent downloads from untrusted sources.
+* New: Built-in MCP support now lets AI assistants manage forms, entries, styles, actions, payments, and subscriptions.
+* New: Suspected spam can now be saved for review instead of blocking submissions.
+* New: Entries can now be marked as spam or not spam, with details about failed spam checks.
+* New: Autocomplete settings are now available in Lite.
+* New: Validation errors now include a clickable summary that focuses the input needing correction.
+* New: Default validation messages now provide guidance for email addresses, URLs, phone numbers, and numbers.
+* New: Name and Address inputs now display more specific validation errors for missing parts.
+* New: Form settings now include a GDPR section.
+* New: Style classes can now be renamed in the visual styler.
+* New: Global Settings now warns before leaving with unsaved changes.
+* New: PayPal Commerce actions now support conditional logic.
+* New: Website/URL inputs now include an option to accept international domain names.
+* New: Clicking a section header in the builder now selects the whole section.
+* New: Keyboard navigation, screen reader support, and color contrast have been improved across admin pages.
+* New: Payment connection errors now explain when the selected gateway or mode needs to be connected.
+* New: A new frm_show_clickable_field_errors filter has been added for disabling the validation error summary.
+* New: New frm_before_entry_meta_change, frm_after_entry_meta_change, and frm_entry_meta_write_failed hooks have been added for tracking entry data changes.
+* New: New frm_prepare_other_input and frm_include_other_input hooks have been added for customizing Other option text boxes.
+* New: A form can now have more than one Stripe Link action. A one-time and a recurring action each get their own Stripe intent, and each payment keeps the action that created it.
+* New: On multi-page forms, a Stripe intent is now only created when the buyer reaches the page with the payment field, so skipped pages don't leave unused intents.
+* New: Shipping details are now sent to Stripe for one-time payments when the billing name and address are filled in.
+* New: A clear error now shows when live Stripe payments are used on a page that isn't HTTPS.
+* New: The Stripe card and Link inputs now use the form style's input font, and fall back to defaults when a form has no style.
+* Performance: The builder now loads faster and uses less memory when editing large forms.
+* Performance: The form switcher, form templates page, and forms list now use faster database queries.
+* Fix: Stripe Link payments could not be retried after a failed payment.
+* Fix: Stripe Link payment descriptions could remain blank when buyers did not return after paying.
+* Fix: Stripe subscriptions could fail with a No such price error.
+* Fix: Stripe payment amounts would not refresh correctly after pricing changes.
+* Fix: The license status shown while connecting would be wrong.
+* Fix: Resetting styles would use the wrong defaults and leave Quick Settings colors unchanged.
+* Fix: Spam and form errors would reload the page instead of showing on the form when submitting with AJAX.
+* Fix: In Pro, custom validation errors would remain visible after correcting a value.
+* Fix: Single Product names and prices would not update immediately in the builder preview.
+* Fix: Selecting groups inside a section could unexpectedly clear other selections in the builder.
+* Fix: AJAX submission success messages would not receive focus for screen reader users.
+* Fix: In Pro, validation errors in repeaters would not correctly set aria-invalid.
+* Fix: Stripe Link payments can now be retried after a failure. The failed payment is marked failed, its entry is removed, and the submit button stays disabled until cleanup finishes.
+* Fix: A payment left pending by an earlier failed attempt no longer blocks a retry on the same intent.
+* Fix: Stripe Link payment descriptions are now filled in by the webhook when the buyer never returns to the site.
+* Fix: Stripe subscriptions no longer fail with a No such price error when the plan needs to be created.
+* Fix: The Stripe amount now refreshes after a conditional pricing change, and Stripe is only called when the amount actually changed.
+* Fix: A returning Stripe Link payment now uses the action saved on the payment, even if the form's settings changed after the buyer submitted.
+* Fix: Stripe webhook events that belong to another site or plugin are now ignored instead of returning errors and being passed on as handled.
+* Fix: A subscription cancel event for a subscription that isn't on this site no longer causes an error.
+* Fix: Posted Stripe client secrets are now checked against Stripe before they're trusted.
+
 = 6.35 =
 * Security: More strict sanitizing is now applied to entry key values before it gets used in the HTML of a form.
 * Security: The value that records who last saved an entry is now always set from the current user, not allowing for any custom values unless importing.

@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.35';
+	public static $plug_version = '7.1.1';
 
 	/**
 	 * @var bool
@@ -1099,9 +1099,11 @@ class FrmAppHelper {
 		remove_filter( 'frm_striphtml_allowed_tags', 'FrmAppHelper::add_allowed_submit_button_tags' );
 
 		if ( $included_button_action ) {
-			if ( str_contains( $html, '<input type="submit"' ) ) {
-				$pattern = '/(<input type="submit")([^>]*)(\/>)/';
-				$html    = preg_replace( $pattern, '$1$2[button_action] $3', $html, 1 );
+			// Since WordPress 7.2, wp_kses sorts attributes and drops the self-closing slash from void tags.
+			$input_pattern = '/(<input\b[^>]*\btype="submit"[^>]*?)(\s*\/?>)/';
+
+			if ( preg_match( $input_pattern, $html ) ) {
+				$html = preg_replace( $input_pattern, '$1 [button_action]$2', $html, 1 );
 			} else {
 				$pattern = '/(<button)(.*)(class=")(.*)(frm_button_submit)(.*)(")(.*)([^>]+)(>)/';
 				$html    = preg_replace( $pattern, '$1$2$3$4$5$6$7 [button_action]$8$9$10', $html, 1 );
@@ -1369,7 +1371,7 @@ class FrmAppHelper {
 	 *
 	 * @since 4.0.02
 	 *
-	 * @param string $class Icon classes. A class list without an SVG marker is treated as a font icon, which is deprecated since x.x.
+	 * @param string $class Icon classes. A class list without an SVG marker is treated as a font icon, which is deprecated since 7.0.
 	 * @param array  $atts
 	 *
 	 * @return string|null
@@ -1408,7 +1410,7 @@ class FrmAppHelper {
 		$icon = implode( ' ', $icon_classes );
 
 		if ( $is_font_icon && $icon_classes ) {
-			_deprecated_argument( __METHOD__, 'x.x', 'Font icons are deprecated. Pass the class of an icon in the SVG sprite instead.' );
+			_deprecated_argument( __METHOD__, '7.0', 'Font icons are deprecated. Pass the class of an icon in the SVG sprite instead.' );
 		}
 
 		// Replace icons that have been removed or renamed.
@@ -1422,7 +1424,7 @@ class FrmAppHelper {
 		$icon_name = $icon_classes ? $icon_classes[0] : '';
 
 		if ( isset( $deprecated[ $icon_name ] ) ) {
-			_deprecated_argument( __METHOD__, 'x.x', 'The ' . esc_html( $icon_name ) . ' icon is deprecated. Use ' . esc_html( $deprecated[ $icon_name ] ) . ' instead.' );
+			_deprecated_argument( __METHOD__, '7.0', 'The ' . esc_html( $icon_name ) . ' icon is deprecated. Use ' . esc_html( $deprecated[ $icon_name ] ) . ' instead.' );
 
 			$class = str_replace( $icon_name, $deprecated[ $icon_name ], $class );
 			$icon  = str_replace( $icon_name, $deprecated[ $icon_name ], $icon );
@@ -1530,30 +1532,9 @@ class FrmAppHelper {
 	public static function allow_style( $allow_css, $css_string ) {
 		if ( ! $allow_css && str_starts_with( $css_string, '--primary-700:' ) ) {
 			$split     = explode( ':', $css_string, 2 );
-			$allow_css = 2 === count( $split ) && self::is_a_valid_color( $split[1] );
+			$allow_css = 2 === count( $split ) && FrmStylesHelper::is_valid_color( $split[1] );
 		}
 		return $allow_css;
-	}
-
-	/**
-	 * @since 5.0.13
-	 *
-	 * @param string $value
-	 *
-	 * @return bool
-	 */
-	private static function is_a_valid_color( $value ) {
-		$match = 0;
-
-		if ( str_starts_with( $value, 'rgba(' ) ) {
-			$match = preg_match( '/^rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d*(?:\.\d+)?)\)$/', $value );
-		} elseif ( str_starts_with( $value, 'rgb(' ) ) {
-			$match = preg_match( '/^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/', $value );
-		} elseif ( str_starts_with( $value, '#' ) ) {
-			$match = preg_match( '/^#([a-f0-9]{6}|[a-f0-9]{3})\b$/', $value );
-		}
-
-		return (bool) $match;
 	}
 
 	/**
@@ -1797,6 +1778,7 @@ class FrmAppHelper {
 			'placeholder'   => $atts['placeholder'],
 			'class'         => $class,
 			'data-tosearch' => $atts['tosearch'],
+			'aria-label'    => $atts['text'],
 		);
 
 		if ( is_string( $atts['value'] ) ) {
@@ -1951,6 +1933,28 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Format a page or View choice with a title and its ID.
+	 *
+	 * @since x.x
+	 *
+	 * @param object   $post     Post containing ID and post_title.
+	 * @param bool|int $truncate Maximum title length, or false for the full title.
+	 *
+	 * @return string
+	 */
+	public static function get_post_dropdown_label( $post, $truncate = false ) {
+		$title = trim( $post->post_title );
+		$title = '' === $title ? FrmFormsHelper::get_no_title_text() : $title;
+
+		if ( $truncate ) {
+			$title = self::truncate( $title, $truncate );
+		}
+
+		/* translators: 1: Post title, 2: Post ID. */
+		return sprintf( __( '%1$s (ID: %2$d)', 'formidable' ), $title, $post->ID );
+	}
+
+	/**
 	 * Renders an autocomplete page selection or a regular dropdown depending on
 	 * the total page count
 	 *
@@ -1974,7 +1978,17 @@ class FrmAppHelper {
 		$title    = '';
 
 		if ( $selected ) {
-			$title = get_the_title( $selected );
+			$post = get_post( $selected );
+
+			if ( $post ) {
+				// Use the displayed title so the Private and Protected prefixes are kept.
+				$title = self::get_post_dropdown_label(
+					(object) array(
+						'ID'         => $post->ID,
+						'post_title' => get_the_title( $post ),
+					)
+				);
+			}
 		}
 
 		?>
@@ -2105,7 +2119,7 @@ class FrmAppHelper {
 			<option value=""><?php echo esc_html( $args['placeholder'] ); ?></option>
 			<?php foreach ( $pages as $page ) { ?>
 				<option value="<?php echo esc_attr( $page->ID ); ?>" <?php selected( $selected, $page->ID ); ?>>
-					<?php echo esc_html( $args['truncate'] ? self::truncate( $page->post_title, $args['truncate'] ) : $page->post_title ); ?>
+					<?php echo esc_html( self::get_post_dropdown_label( $page, $args['truncate'] ) ); ?>
 				</option>
 			<?php } ?>
 		</select>
@@ -2778,23 +2792,21 @@ class FrmAppHelper {
 			$key = self::generate_new_key( $num_chars );
 		}
 
-		$key = self::prevent_numeric_and_reserved_keys( $key );
-
-		$similar_keys = FrmDb::get_col(
-			$table_name,
-			array(
-				$column . ' like%' => $key,
-				'ID !'             => $id,
-			),
-			$column
-		);
+		$key          = self::prevent_numeric_and_reserved_keys( $key );
+		$similar_keys = self::get_similar_keys( $key, $table_name, $column, $id );
 
 		// Create a unique field id if it has already been used.
 		if ( ! in_array( $key, $similar_keys, true ) ) {
 			return $key;
 		}
 
-		$key = self::maybe_truncate_key_before_appending( $column, $key );
+		$truncated_key = self::maybe_truncate_key_before_appending( $column, $key );
+
+		if ( $truncated_key !== $key ) {
+			// Keys already created from the truncated key aren't in the list loaded for the full key.
+			$key          = $truncated_key;
+			$similar_keys = self::get_similar_keys( $key, $table_name, $column, $id );
+		}
 
 		/**
 		 * Allow for a custom separator between the attempted key and the generated suffix.
@@ -2813,6 +2825,25 @@ class FrmAppHelper {
 		} while ( in_array( $key_check, $similar_keys, true ) );
 
 		return $key_check;
+	}
+
+	/**
+	 * @param string $key
+	 * @param string $table_name
+	 * @param string $column
+	 * @param int    $id
+	 *
+	 * @return array<string>
+	 */
+	private static function get_similar_keys( $key, $table_name, $column, $id ) {
+		return FrmDb::get_col(
+			$table_name,
+			array(
+				$column . ' like%' => $key,
+				'ID !'             => $id,
+			),
+			$column
+		);
 	}
 
 	/**
@@ -4060,6 +4091,10 @@ class FrmAppHelper {
 
 			self::add_form_builder_modal_data( $admin_script_strings );
 
+			if ( self::is_form_builder_page() ) {
+				$admin_script_strings['currency'] = FrmCurrencyHelper::get_currency();
+			}
+
 			/**
 			 * @param array $admin_script_strings
 			 */
@@ -4187,7 +4222,7 @@ class FrmAppHelper {
 		// Keyed off whether the summary will actually take focus, not merely whether it's
 		// active — otherwise filtering frm_focus_error_summary off leaves focus going
 		// nowhere instead of falling back to the first field.
-		$default = $form && self::should_focus_error_summary( $form ) ? false : true;
+		$default = ! $form || ! self::should_focus_error_summary( $form );
 
 		return (bool) apply_filters( 'frm_focus_first_error', $default, $form );
 	}
@@ -4196,7 +4231,7 @@ class FrmAppHelper {
 	 * Returns whether or not the clickable error summary should receive focus when it's
 	 * active for a form (default true). No effect when the summary isn't active.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param stdClass|null $form
 	 *
@@ -4217,7 +4252,7 @@ class FrmAppHelper {
 	 * summary wins and a _doing_it_wrong() notice is triggered rather than silently
 	 * picking one.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param stdClass $form
 	 *
@@ -4231,7 +4266,7 @@ class FrmAppHelper {
 			_doing_it_wrong(
 				__METHOD__,
 				esc_html__( 'frm_focus_first_error and frm_focus_error_summary cannot both resolve true for the same form. The error summary takes priority.', 'formidable' ),
-				'x.x'
+				'7.0'
 			);
 			$focus_first_error = false;
 		}
@@ -4255,7 +4290,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function should_include_alert_role_on_field_errors( $form = null ) {
-		$default = $form && FrmFormsHelper::is_error_summary_active_for_form( $form ) ? false : true;
+		$default = ! $form || ! FrmFormsHelper::is_error_summary_active_for_form( $form );
 		return (bool) apply_filters( 'frm_include_alert_role_on_field_errors', $default, $form );
 	}
 
@@ -5040,7 +5075,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function validate_url_is_in_s3_bucket( $url, $expected_extension ) {
-		$file_is_in_expected_s3_bucket = str_starts_with( $url, 'https://s3.amazonaws.com/fp.strategy11.com' );
+		$file_is_in_expected_s3_bucket = str_starts_with( $url, 'https://s3.amazonaws.com/fp.strategy11.com/' );
 
 		if ( ! $file_is_in_expected_s3_bucket ) {
 			return false;
@@ -5050,6 +5085,12 @@ class FrmAppHelper {
 
 		if ( ! is_array( $parsed ) ) {
 			// URL is malformed.
+			return false;
+		}
+
+		$path = rawurldecode( $parsed['path'] );
+
+		if ( str_contains( $path, '\\' ) || preg_match( '#(?:^|/)\.\.?(?:/|$)#', $path ) ) {
 			return false;
 		}
 
@@ -5162,7 +5203,7 @@ class FrmAppHelper {
 	 * Tooltip strings deferred on the form builder page and its ajax field-load request,
 	 * keyed for `frm_admin_js.tooltips`.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @var array<string,string>
 	 */
@@ -5212,7 +5253,7 @@ class FrmAppHelper {
 	 * merged last would win. A hash gives identical text the same key everywhere, which makes
 	 * the client-side merge safe to repeat and dedupes repeated strings for free.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $tooltip_text Tooltip text.
 	 *
@@ -5233,17 +5274,17 @@ class FrmAppHelper {
 	/**
 	 * Checks if this request can hand its tooltip strings to `frm_admin_js.tooltips`.
 	 *
-	 * `is_form_builder_page()` alone misses the `frm_load_field` ajax request because that
-	 * request never sends `frm_action`. Other builder ajax requests are left out on purpose
+	 * `is_form_builder_page()` alone misses the `frm_load_field` and `frm_load_field_settings`
+	 * ajax requests because they never send `frm_action`. Other builder ajax requests are left out on purpose
 	 * since nothing ships their collected strings to the page.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return bool
 	 */
 	private static function should_defer_tooltips() {
 		if ( wp_doing_ajax() ) {
-			return 'frm_load_field' === self::get_post_param( 'action', '', 'sanitize_text_field' );
+			return in_array( self::get_post_param( 'action', '', 'sanitize_text_field' ), array( 'frm_load_field', 'frm_load_field_settings' ), true );
 		}
 
 		return self::is_form_builder_page( false );
@@ -5252,7 +5293,7 @@ class FrmAppHelper {
 	/**
 	 * Gets the tooltip strings collected by `get_tooltip_attr()` so far in this request.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return array<string,string> Tooltip text keyed by its `data-tip-key`.
 	 */
@@ -5264,7 +5305,7 @@ class FrmAppHelper {
 	 * Prints the tooltip strings collected by `get_tooltip_attr()` during this page's render,
 	 * merged into the already-localized `frm_admin_js.tooltips` object.
 	 *
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @return void
 	 */

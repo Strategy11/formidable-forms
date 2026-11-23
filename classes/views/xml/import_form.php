@@ -140,7 +140,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<tr>
 							<td class="column-cb check-column">
 								<label class="screen-reader-text" for="frm-export-select-all"><?php esc_html_e( 'Select All', 'formidable' ); ?></label>
-								<input id="frm-export-select-all" type="checkbox">
+								<input id="frm-export-select-all" type="checkbox" aria-label="<?php esc_attr_e( 'Select All', 'formidable' ); ?>">
 							</td>
 							<td><?php esc_html_e( 'Form Title', 'formidable' ); ?></td>
 							<td><?php esc_html_e( 'ID / Form Key', 'formidable' ); ?></td>

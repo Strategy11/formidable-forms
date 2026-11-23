@@ -21,7 +21,7 @@ describe( 'Field option choices list defers jQuery UI sortable init until its se
 	const openFieldSettings = fieldId => {
 		cy.log( `Open settings panel for the ${ fieldId } field` );
 		cy.get( `li[data-ftype="${ fieldId }"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons`, { timeout: 10000 } )
-			.invoke( 'css', 'opacity', 1 )
+			.revealFieldActions()
 			.find( '.dropdown > .frm_bstooltip > .frmsvg > use' )
 			.first()
 			.scrollIntoView()

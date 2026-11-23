@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 
 			<div class="frm-tabs-navs">
-				<ul class="frm-flex-box">
+				<ul class="frm-flex-box" aria-label="<?php esc_attr_e( 'Field panels', 'formidable' ); ?>">
 					<li class="frm-active">
 						<a href="#frm-insert-fields" id="frm_insert_fields_tab">
 							<?php esc_html_e( 'Add Fields', 'formidable' ); ?>

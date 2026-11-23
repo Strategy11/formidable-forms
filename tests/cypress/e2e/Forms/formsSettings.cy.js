@@ -6,16 +6,15 @@ describe( 'Updating form settings', () => {
 	} );
 
 	it( "should 'Show the form title' and 'Show the form description' on the preview form", () => {
-		cy.log( 'Create a blank form' );
-		cy.contains( '.frm_nav_bar .button-primary', 'Add New' ).click();
-		cy.get( '.frm-list-grid-layout #frm-form-templates-create-form' ).should( 'contain', 'Create a blank form' ).click();
-		cy.get( '#frm_submit_side_top', { timeout: 5000 } ).should( 'contain', 'Save' ).click();
-		cy.get( '#frm_new_form_name_input' ).type( 'Test Form' );
-		cy.get( '#frm-save-form-name-button' ).should( 'contain', 'Save' ).click();
+		// Saving the form name redirects to the forms list asynchronously, so open the builder
+		// deliberately instead of racing that redirect.
+		cy.createNewForm();
+		cy.openForm();
 
 		cy.log( `Create a text field` );
 		// Plain, always-visible sidebar link - no hover gating involved.
 		cy.get( `li[id="text"] a[title="Text"]` ).should( 'be.visible' ).click();
+		cy.get( '.frm-type-text', { timeout: 10000 } ).should( 'exist' );
 
 		cy.log( 'Update form' );
 		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click();
@@ -81,16 +80,15 @@ describe( 'Updating form settings', () => {
 	it( 'should redirect you to a specific URL after submitting a form', () => {
 		const Origin = Cypress.config( 'baseUrl' );
 
-		cy.log( 'Create a blank form' );
-		cy.contains( '.frm_nav_bar .button-primary', 'Add New' ).click();
-		cy.get( '.frm-list-grid-layout #frm-form-templates-create-form' ).should( 'contain', 'Create a blank form' ).click();
-		cy.get( '#frm_submit_side_top', { timeout: 5000 } ).should( 'contain', 'Save' ).click();
-		cy.get( '#frm_new_form_name_input' ).type( 'Test Form' );
-		cy.get( '#frm-save-form-name-button' ).should( 'contain', 'Save' ).click();
+		// Saving the form name redirects to the forms list asynchronously, so open the builder
+		// deliberately instead of racing that redirect.
+		cy.createNewForm();
+		cy.openForm();
 
 		cy.log( `Create a text field` );
 		// Plain, always-visible sidebar link - no hover gating involved.
 		cy.get( 'li[id="text"] a[title="Text"]', { timeout: 5000 } ).should( 'be.visible' ).click();
+		cy.get( '.frm-type-text', { timeout: 10000 } ).should( 'exist' );
 
 		cy.log( 'Update form' );
 		// Plain cy.get() rather than cy.contains() works unforced elsewhere in the suite for this
@@ -124,7 +122,9 @@ describe( 'Updating form settings', () => {
 
 		cy.log( 'Verify URL redirect after submitting form' );
 		cy.origin( 'https://formidableforms.com', () => {
-			cy.location( 'href', { timeout: 10000 } ).should( 'include', 'https://formidableforms.com/' );
+			// Errors thrown by the marketing site's own scripts are not under test here.
+			Cypress.on( 'uncaught:exception', () => false );
+			cy.location( 'href', { timeout: 20000 } ).should( 'include', 'https://formidableforms.com/' );
 		} );
 
 		cy.log( 'Navigate back to the formidable form page' );
@@ -145,7 +145,9 @@ describe( 'Updating form settings', () => {
 
 		cy.log( 'Verify URL redirect after submitting form' );
 		cy.origin( 'https://formidableforms.com', () => {
-			cy.location( 'href', { timeout: 10000 } ).should( 'include', 'https://formidableforms.com/' );
+			// Errors thrown by the marketing site's own scripts are not under test here.
+			Cypress.on( 'uncaught:exception', () => false );
+			cy.location( 'href', { timeout: 20000 } ).should( 'include', 'https://formidableforms.com/' );
 		} );
 
 		cy.log( 'Navigate back to the formidable form page' );

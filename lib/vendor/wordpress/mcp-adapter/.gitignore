@@ -1,0 +1,49 @@
+### WordPress ###
+
+# macOS/IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Log files
+*.log
+/tests/logs
+
+# Dependencies
+/vendor/
+/node_modules/
+
+# Build output
+build/
+
+# Generated language files
+/languages/*
+!/languages/.gitkeep
+
+# Environment
+.env
+
+# AI files
+.gemini/
+.claude/
+AGENTS.md
+GEMINI.md
+CLAUDE.md
+
+# Test output
+/tests/_output/*
+!/tests/_output/.gitkeep
+
+# Configs
+/phpcs.xml
+/phpunit.xml
+/phpstan.neon
+
+# WP ENV
+/.wp-env.override.json
+
+# Build
+mcp-adapter.zip

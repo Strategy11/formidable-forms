@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 /**
- * @since x.x This was moved from Pro.
+ * @since 7.0 This was moved from Pro.
  *
  * @var array $field
  */
@@ -16,7 +16,7 @@ $autocomplete_options = $field_obj->autocomplete_options();
  * Allows modifying the list of autocomplete attribute options.
  *
  * @since 5.4.1 This was added in Pro.
- * @since x.x   This was moved to Lite.
+ * @since 7.0   This was moved to Lite.
  *
  * @param array $autocomplete_options The list of autocomplete attribute options.
  * @param array $field                The form field.
@@ -36,13 +36,14 @@ $autocomplete_options = apply_filters( 'frm_autocomplete_options', $autocomplete
 		);
 		?>
 	</label>
-	<select name="field_options[autocomplete_<?php echo absint( $field['id'] ); ?>]" id="field_options_autocomplete_<?php echo absint( $field['id'] ); ?>">
-		<?php
-		FrmHtmlHelper::echo_dropdown_option( __( '&mdash; Select &mdash;', 'formidable' ), '' === $selected_value, array( 'value' => '' ) );
-
-		foreach ( $autocomplete_options as $value => $label ) {
-			FrmHtmlHelper::echo_dropdown_option( $label, $selected_value === (string) $value, array( 'value' => $value ) );
-		}
-		?>
-	</select>
+	<?php
+	FrmBuilderSelectHelper::render(
+		array(
+			'name' => 'field_options[autocomplete_' . $field['id'] . ']',
+			'id'   => 'field_options_autocomplete_' . $field['id'],
+		),
+		array( '' => __( '&mdash; Select &mdash;', 'formidable' ) ) + $autocomplete_options,
+		$selected_value
+	);
+	?>
 </p>

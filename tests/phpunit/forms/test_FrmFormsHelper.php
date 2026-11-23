@@ -578,4 +578,58 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		);
 		$this->assertStringNotContainsString( 'tabindex="-1"', $status_html );
 	}
+
+	/**
+	 * A non-alert message also becomes focusable when the caller marks it via `focusable`
+	 * (the AJAX success path, so js/formidable.js can focus the message after submit) —
+	 * on top of, not instead of, the alert-role case above.
+	 *
+	 * @covers FrmFormsHelper::get_success_message
+	 */
+	public function test_get_success_message_adds_tabindex_when_focusable() {
+		$form = $this->factory->form->create_and_get();
+
+		$focusable_html = FrmFormsHelper::get_success_message(
+			array(
+				'message'   => 'Thanks',
+				'form'      => $form,
+				'entry_id'  => 0,
+				'class'     => 'frm_message',
+				'focusable' => true,
+			)
+		);
+		$this->assertStringContainsString( 'tabindex="-1"', $focusable_html );
+	}
+
+	/**
+	 * @covers FrmFormsHelper::should_ajax_load_builder
+	 */
+	public function test_should_ajax_load_builder() {
+		$threshold = FrmFormsHelper::AJAX_BUILDER_FIELD_THRESHOLD;
+
+		$this->assertFalse( FrmFormsHelper::should_ajax_load_builder( $threshold, 1 ), 'A form at the threshold should not load with AJAX.' );
+		$this->assertTrue( FrmFormsHelper::should_ajax_load_builder( $threshold + 1, 1 ), 'A form over the threshold should load with AJAX.' );
+
+		add_filter( 'frm_ajax_load_form_builder', '__return_false' );
+		$this->assertFalse( FrmFormsHelper::should_ajax_load_builder( 1000, 1 ), '__return_false should turn AJAX loading off for long forms.' );
+		remove_filter( 'frm_ajax_load_form_builder', '__return_false' );
+
+		add_filter( 'frm_ajax_load_form_builder', '__return_true' );
+		$this->assertTrue( FrmFormsHelper::should_ajax_load_builder( 1, 1 ), '__return_true should turn AJAX loading on for short forms.' );
+		remove_filter( 'frm_ajax_load_form_builder', '__return_true' );
+	}
+
+	/**
+	 * @covers FrmFormsHelper::count_fields_without_submit
+	 */
+	public function test_count_fields_without_submit() {
+		$fields = array(
+			(object) array( 'type' => 'text' ),
+			array( 'type' => 'email' ),
+			(object) array( 'type' => FrmSubmitHelper::FIELD_TYPE ),
+		);
+
+		$this->assertSame( 2, FrmFormsHelper::count_fields_without_submit( $fields ) );
+		$this->assertSame( 0, FrmFormsHelper::count_fields_without_submit( array() ) );
+	}
 }

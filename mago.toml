@@ -18,7 +18,11 @@ includes = [
     "stubs.php",
     "tests/phpunit/phpunit-attributes-stubs.php",
 ]
-excludes = ["node_modules"]
+excludes = [
+    "node_modules",
+    # Each fixture redefines a Pro or Views class for an isolated compatibility test.
+    "tests/phpunit/fixtures/spam-compatibility",
+]
 extensions = ["php"]
 
 [formatter]

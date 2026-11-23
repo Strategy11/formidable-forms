@@ -233,7 +233,7 @@ class FrmStylesPreviewHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.0
 	 *
 	 * @param string $attributes
 	 *

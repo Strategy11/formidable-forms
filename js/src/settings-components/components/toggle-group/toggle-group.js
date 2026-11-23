@@ -40,16 +40,20 @@ const DATA_ATTRIBUTES = {
 function initToggleGroupComponents() {
 	applyInitialState();
 	addEventListeners();
+	wp.hooks.addAction( 'frm_field_settings_loaded', 'formidable-toggle-group', applyInitialState );
+	wp.hooks.addAction( 'frmShowedFieldSettings', 'formidable-toggle-group', ( field, settings ) => applyInitialState( settings ) );
+	document.addEventListener( 'frm_added_field', event => applyInitialState( event.frmField ) );
 }
 
 /**
  * Apply the initial state for all toggle buttons on the page
  *
  * @private
+ * @param {HTMLElement|Document} container The settings panel or page to initialize.
  * @return {void}
  */
-function applyInitialState() {
-	const toggleGroups = document.querySelectorAll( `.${ CLASS_NAMES.GROUP_TOGGLE }` );
+function applyInitialState( container = document ) {
+	const toggleGroups = container.querySelectorAll( `.${ CLASS_NAMES.GROUP_TOGGLE }` );
 
 	if ( ! toggleGroups.length ) {
 		return;
