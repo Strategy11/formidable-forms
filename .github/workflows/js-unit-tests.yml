@@ -1,0 +1,44 @@
+name: JS unit tests
+
+on:
+  pull_request:
+    types: [opened, labeled, synchronize]
+
+concurrency:
+  group: formidable-js-unit-tests-${{ github.ref }}-${{ ((contains(github.event.pull_request.labels.*.name, 'run analysis') || contains(github.event.pull_request.labels.*.name, 'full automated qa')) && (github.event.action != 'labeled' || github.event.label.name == 'run analysis' || github.event.label.name == 'full automated qa')) && 'active' || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  runJsUnitTests:
+    if: >-
+      (contains(github.event.pull_request.labels.*.name, 'run analysis') || contains(github.event.pull_request.labels.*.name, 'full automated qa'))
+      && (github.event.action != 'labeled' || github.event.label.name == 'run analysis' || github.event.label.name == 'full automated qa')
+    name: Run node --test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+
+      # Some tests parse plugin source with @babel/core, so install dev dependencies.
+      - name: Cache dependencies
+        id: cache-npm
+        uses: actions/cache@v5
+        with:
+          path: |
+            ~/.npm
+            node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
+
+      - name: Install dependencies
+        if: steps.cache-npm.outputs.cache-hit != 'true'
+        run: npm ci --include=dev --legacy-peer-deps
+
+      - name: Run JS unit tests
+        run: node --test tests/js/*.test.mjs

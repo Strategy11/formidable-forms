@@ -277,7 +277,27 @@
 		}
 	}
 
+	/**
+	 * Show the WordPress Iris picker when an older Pro initializes it on a Lite color input.
+	 *
+	 * Pro 7.0.1 and older call wpColorPicker() on the email style color inputs. Lite now renders
+	 * its own disabled toggle with a hidden input, so remove the toggle and show the input instead.
+	 *
+	 * @since 7.1
+	 *
+	 * @return {void}
+	 */
+	function releaseColorInputsToIris() {
+		document.querySelectorAll( '.frm-block-color-picker .wp-picker-container input.hex' ).forEach( input => {
+			input.hidden = false;
+			input.closest( '.frm-block-color-picker' ).querySelector( ':scope > .frm-block-color-toggle' )?.remove();
+		} );
+	}
+
 	addEventListeners();
+
+	// Pro initializes its pickers on DOMContentLoaded. The timeout runs after every listener for that event.
+	document.addEventListener( 'DOMContentLoaded', () => setTimeout( releaseColorInputsToIris, 0 ) );
 
 	if ( document.getElementById( 'frm_mcp_steps' )?.dataset.waiting ) {
 		waitForMcpConnection();
