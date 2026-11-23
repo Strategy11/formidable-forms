@@ -1,6 +1,7 @@
 == Changelog ==
-= Unreleased =
-* New: Existing CAPTCHA fields now use ALTCHA when the site has neither provider keys nor an explicit provider choice.
+= 7.1.1 =
+* Fix: Invisible reCAPTCHA v2 no longer blocks form submission when "Allow multiple reCAPTCHAs" is off.
+* Fix: Clicking "Click here to set up progress indicator" in the form builder no longer causes an error, and the Rootline settings now open.
 
 = 7.1 =
 * Security: Additional protection has been added to prevent unauthenticated shortcode execution.
