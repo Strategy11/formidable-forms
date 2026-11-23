@@ -68,7 +68,7 @@ export function showTemplateDependencies( addons, opener, onImport ) {
 
 	const skipButton = tag( 'button', {
 		className: 'button button-secondary frm-button-secondary',
-		text: __( 'Use template anyway', 'formidable' )
+		text: __( 'Use Template Anyway', 'formidable' )
 	} );
 	skipButton.type = 'button';
 	skipButton.hidden = Boolean( pending.length );
@@ -91,7 +91,7 @@ export function showTemplateDependencies( addons, opener, onImport ) {
 	if ( ! pending.length && manual.some( row => row.addon.url ) ) {
 		const manageLink = tag( 'a', {
 			className: 'button button-primary frm-button-primary',
-			text: __( 'Go to add-ons', 'formidable' )
+			text: __( 'Go to Add-Ons', 'formidable' )
 		} );
 		manageLink.href = manual.find( row => row.addon.url ).addon.url;
 		footerButtons.push( manageLink );
@@ -147,7 +147,7 @@ export function showTemplateDependencies( addons, opener, onImport ) {
 
 		if ( failed ) {
 			primaryButton.removeAttribute( 'aria-disabled' );
-			primaryButton.textContent = __( 'Try again', 'formidable' );
+			primaryButton.textContent = __( 'Try Again', 'formidable' );
 			skipButton.hidden = false;
 			return;
 		}
@@ -163,12 +163,12 @@ export function showTemplateDependencies( addons, opener, onImport ) {
  */
 function getPrimaryLabel( pending ) {
 	if ( pending.every( row => 'frm_activate_addon' === row.addon.action ) ) {
-		return __( 'Activate and use template', 'formidable' );
+		return __( 'Activate and Use Template', 'formidable' );
 	}
 	if ( pending.every( row => 'frm_install_addon' === row.addon.action ) ) {
-		return __( 'Install and use template', 'formidable' );
+		return __( 'Install and Use Template', 'formidable' );
 	}
-	return __( 'Set up add-ons and use template', 'formidable' );
+	return __( 'Set Up Add-Ons and Use Template', 'formidable' );
 }
 
 /**
@@ -181,7 +181,7 @@ function getPrimaryLabel( pending ) {
  * @return {Object} The row element, its add-on and an activate function.
  */
 function createDependencyRow( addon, progress ) {
-	const status = span( { className: 'frm-template-deps-status' } );
+	const status = span( { className: 'frm-meta-tag frm-grey-tag frm-text-xs frm-template-deps-status' } );
 	const error = tag( 'p', { className: 'frm-template-deps-error' } );
 	error.setAttribute( 'role', 'alert' );
 
@@ -201,6 +201,9 @@ function createDependencyRow( addon, progress ) {
 	const setStatus = ( state, label ) => {
 		element.dataset.state = state;
 		status.textContent = label;
+		status.classList.toggle( 'frm-grey-tag', 'done' !== state && 'failed' !== state );
+		status.classList.toggle( 'frm-lt-green-tag', 'done' === state );
+		status.classList.toggle( 'frm-red-tag', 'failed' === state );
 		if ( 'done' === state ) {
 			const checkmark = svg( { href: '#frm_checkmark_icon' } );
 			checkmark.setAttribute( 'aria-hidden', 'true' );
