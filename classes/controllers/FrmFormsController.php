@@ -120,7 +120,7 @@ class FrmFormsController {
 	 * Create the default email action
 	 *
 	 * @since 2.02.11
-	 * @since x.x Changed from private to public.
+	 * @since 7.1 Changed from private to public.
 	 *
 	 * @param int|object $form
 	 *
@@ -413,7 +413,13 @@ class FrmFormsController {
 
 		self::maybe_remove_draft_option_from_fields( $id );
 
-		FrmForm::update( $id, $values );
+		$updated = FrmForm::update( $id, $values );
+
+		if ( false === $updated ) {
+			self::show_update_failed( $id );
+			return;
+		}
+
 		$message = __( 'Form was successfully updated.', 'formidable' );
 
 		if ( self::is_too_long( $values ) ) {
@@ -426,10 +432,33 @@ class FrmFormsController {
 		}
 
 		if ( defined( 'DOING_AJAX' ) ) {
+			header( 'X-Frm-Form-Saved: 1' );
 			wp_die( FrmAppHelper::kses( $message, array( 'a' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		self::get_edit_vars( $id, array(), $message );
+	}
+
+	/**
+	 * Report a form save that did not complete, so the builder does not show a success message.
+	 * An AJAX save gets a 500 response with the X-Frm-Form-Saved: 0 header, and the builder keeps
+	 * the unsaved field order to send again.
+	 *
+	 * @since 7.1
+	 *
+	 * @param int $id Form ID.
+	 *
+	 * @return void
+	 */
+	private static function show_update_failed( $id ) {
+		$error = __( 'Some form changes could not be saved. Please try again.', 'formidable' );
+
+		if ( defined( 'DOING_AJAX' ) ) {
+			header( 'X-Frm-Form-Saved: 0' );
+			wp_die( esc_html( $error ), '', array( 'response' => 500 ) );
+		}
+
+		self::get_edit_vars( $id, array( 'form' => $error ) );
 	}
 
 	/**
@@ -2700,7 +2729,7 @@ class FrmFormsController {
 		$form         = apply_filters( 'frm_pre_display_form', $form );
 		$frm_settings = FrmAppHelper::get_settings( array( 'current_form' => $form->id ) );
 
-		if ( self::is_viewable_draft_form( $form ) ) {
+		if ( self::is_hidden_draft_form( $form ) ) {
 			// Don't show a draft form on a page
 			$form = __( 'Please select a valid form', 'formidable' );
 		} elseif ( ! FrmForm::is_visible_to_user( $form ) ) {
@@ -2742,12 +2771,72 @@ class FrmFormsController {
 	}
 
 	/**
+	 * Check if a draft form should be hidden from a visitor without permission to edit forms.
+	 * Shared previews and their AJAX submissions can still display the form.
+	 *
 	 * @param object $form
 	 *
 	 * @return bool
 	 */
-	private static function is_viewable_draft_form( $form ) {
-		return $form->status === 'draft' && current_user_can( 'frm_edit_forms' ) && ! FrmAppHelper::is_preview_page();
+	private static function is_hidden_draft_form( $form ) {
+		return $form->status === 'draft'
+		&& ! FrmAppHelper::current_user_can( 'frm_edit_forms' )
+		&& ! FrmAppHelper::is_preview_page()
+		&& ! self::is_ajax_submit_from_preview_page( $form );
+	}
+
+	/**
+	 * Check if the current request is an AJAX form submission sent from the preview page.
+	 * The AJAX submit response renders the form again, so it needs the same draft exemption as the preview page.
+	 * The preview page adds a nonce to the draft form, so this does not depend on the Referer header,
+	 * which a Referrer-Policy can strip. Only a visitor who could already open the preview has the nonce.
+	 *
+	 * @since 7.1
+	 *
+	 * @param object $form The form being shown.
+	 *
+	 * @return bool
+	 */
+	public static function is_ajax_submit_from_preview_page( $form ) {
+		if ( ! wp_doing_ajax() || FrmAppHelper::get_post_param( 'action', '', 'sanitize_title' ) !== 'frm_entries_create' ) {
+			return false;
+		}
+
+		$nonce = FrmAppHelper::get_post_param( self::get_draft_preview_nonce_name( $form ), '', 'sanitize_text_field' );
+
+		return $nonce && wp_verify_nonce( $nonce, self::get_draft_preview_nonce_name( $form ) );
+	}
+
+	/**
+	 * Add a preview nonce so AJAX responses can display draft forms, including embedded drafts.
+	 * Published preview forms need it too when they contain an embedded draft.
+	 *
+	 * @since 7.1
+	 *
+	 * @param object $form The form being rendered.
+	 *
+	 * @return void
+	 */
+	public static function maybe_add_draft_preview_nonce( $form ) {
+		if ( $form->status !== 'draft' && ! FrmAppHelper::is_preview_page() && ! self::is_ajax_submit_from_preview_page( $form ) ) {
+			return;
+		}
+
+		$name = self::get_draft_preview_nonce_name( $form );
+		wp_nonce_field( $name, $name, false );
+	}
+
+	/**
+	 * Get the nonce action and field name used to show a draft form again after an AJAX submit from the preview page.
+	 *
+	 * @since 7.1
+	 *
+	 * @param object $form The draft form.
+	 *
+	 * @return string
+	 */
+	private static function get_draft_preview_nonce_name( $form ) {
+		return 'frm_preview_draft_' . $form->id;
 	}
 
 	/**

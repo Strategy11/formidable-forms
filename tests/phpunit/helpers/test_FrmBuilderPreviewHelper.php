@@ -16,6 +16,99 @@ class test_FrmBuilderPreviewReplacedText extends FrmFieldText {
 class test_FrmBuilderPreviewHelper extends FrmUnitTest {
 
 	/**
+	 * Pin the pixel estimates shared by browser previews and AJAX placeholders.
+	 *
+	 * @covers FrmBuilderPreviewHelper::get_placeholder_height
+	 *
+	 * @dataProvider placeholder_height_provider
+	 *
+	 * @param string       $type     The field type.
+	 * @param array        $settings The display options.
+	 * @param array|string $options  The choices shown in the preview.
+	 * @param int          $expected The estimated card height in pixels.
+	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'placeholder_height_provider' )]
+	public function test_get_placeholder_height( $type, $settings, $options, $expected ) {
+		$saved_field = (object) array(
+			'type'          => $type,
+			'options'       => $options,
+			'field_options' => $settings,
+		);
+		$field       = array_merge(
+			array(
+				'type'    => $type,
+				'options' => $options,
+			),
+			$settings
+		);
+
+		$this->assertSame( $expected, FrmBuilderPreviewHelper::get_placeholder_height( $saved_field ), 'The saved field should reserve the expected card height.' );
+		$this->assertSame( $expected, FrmBuilderPreviewHelper::get_placeholder_height( $field ), 'The prepared field should reserve the expected card height.' );
+	}
+
+	/**
+	 * Expected heights are literals so changes to the estimates require review.
+	 * Compare these estimates with real builder cards when changing builder CSS.
+	 *
+	 * @return \Generator
+	 */
+	public static function placeholder_height_provider() {
+		yield 'html' => array( 'html', array(), array(), 194 );
+		yield 'summary' => array( 'summary', array(), array(), 194 );
+		yield 'virtual' => array( 'virtual', array(), array(), 194 );
+		yield 'textarea missing rows' => array( 'textarea', array(), array(), 89 );
+		yield 'textarea zero rows' => array( 'textarea', array( 'max' => 0 ), array(), 89 );
+		yield 'textarea one row minimum' => array( 'textarea', array( 'max' => 1 ), array(), 89 );
+		yield 'textarea two rows' => array( 'textarea', array( 'max' => '2' ), array(), 107 );
+		yield 'textarea five rows' => array( 'textarea', array( 'max' => 5 ), array(), 170 );
+		yield 'page break' => array( 'break', array(), array(), 113 );
+		yield 'default text' => array( 'text', array(), array(), 89 );
+		yield 'default number' => array( 'number', array(), array(), 89 );
+		yield 'unknown type' => array( 'custom', array(), array(), 89 );
+
+		$choices = array( 'First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh' );
+
+		foreach ( array( 'radio', 'checkbox' ) as $type ) {
+			yield $type . ' stacked' => array( $type, array(), $choices, 231 );
+			yield $type . ' empty choices minimum' => array( $type, array(), array(), 89 );
+			yield $type . ' scalar choices minimum' => array( $type, array(), 'First', 89 );
+			yield $type . ' two columns round up' => array( $type, array( 'align' => 'frm_two_col' ), $choices, 153 );
+			yield $type . ' three columns round up' => array( $type, array( 'align' => 'frm_three_col' ), $choices, 127 );
+			yield $type . ' four columns round up' => array( $type, array( 'align' => 'frm_four_col' ), $choices, 101 );
+			yield $type . ' inline minimum' => array( $type, array( 'align' => 'inline' ), $choices, 89 );
+			yield $type . ' buttons' => array( $type, array( 'image_options' => 'buttons' ), $choices, 364 );
+			yield $type . ' inline buttons' => array(
+				$type,
+				array(
+					'image_options' => 'buttons',
+					'align'         => 'inline',
+				),
+				$choices,
+				94,
+			);
+			yield $type . ' image buttons override' => array(
+				$type,
+				array(
+					'image_options'         => 'buttons',
+					'use_images_in_buttons' => 1,
+				),
+				$choices,
+				280,
+			);
+			yield $type . ' image buttons in columns' => array(
+				$type,
+				array(
+					'image_options'         => 'buttons',
+					'use_images_in_buttons' => 1,
+					'align'                 => 'frm_two_col',
+				),
+				$choices,
+				181,
+			);
+		}
+	}
+
+	/**
 	 * @covers FrmBuilderPreviewHelper::supports
 	 */
 	public function test_supports_lite_and_pro_field_classes() {

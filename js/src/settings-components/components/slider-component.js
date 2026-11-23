@@ -78,23 +78,33 @@ export default class frmSliderComponent {
 
 			this.initSteps( rangeInput, index );
 
-			// Update display while dragging.
+			// Update the display and preview while dragging.
 			rangeInput.addEventListener( 'input', () => {
 				const value = this.getRangeValue( rangeInput, index );
 				valueInput.value = value;
 				frmSliderComponent.refreshRange( rangeInput, element, value );
 				this.syncGroupSliders( element, value );
+				this.options[ index ].fullValue = this.updateValue( element, value + frmSliderComponent.getUnit( element ) );
+				this.triggerValueChange( index );
 			} );
 
-			// Commit value to hidden input on release.
+			// Also handle committed changes from other input methods.
 			rangeInput.addEventListener( 'change', () => {
 				const value = this.getRangeValue( rangeInput, index );
 				this.options[ index ].fullValue = this.updateValue( element, value + frmSliderComponent.getUnit( element ) );
 				this.triggerValueChange( index );
 			} );
 
+			// The value the slider had before the user started typing. Each valid keystroke is
+			// previewed live, so typing "999" commits "9" before "99" is rejected. A rejected
+			// final value restores this one rather than keeping the partially typed prefix.
+			let valueBeforeEdit = null;
+			valueInput.addEventListener( 'focus', () => {
+				valueBeforeEdit = this.getRangeValue( rangeInput, index );
+			} );
+
 			// Sync text input changes back to the range.
-			valueInput.addEventListener( 'change', event => {
+			const onValueChange = event => {
 				const unit = frmSliderComponent.getUnit( element );
 				const newValue = parseFloat( event.target.value );
 				const { steps } = this.options[ index ];
@@ -109,15 +119,26 @@ export default class frmSliderComponent {
 				// always false - reject it and resync the text box to the last committed value instead
 				// of leaving it showing the rejected input while the range stays unchanged.
 				if ( isNaN( newValue ) || ! isValid ) {
+					if ( 'change' !== event.type ) {
+						return;
+					}
+
+					if ( null !== valueBeforeEdit && String( valueBeforeEdit ) !== String( this.getRangeValue( rangeInput, index ) ) ) {
+						this.applyTextValue( element, rangeInput, index, valueBeforeEdit, unit );
+					}
+
 					valueInput.value = this.getRangeValue( rangeInput, index );
 					return;
 				}
 
-				this.setRangeValue( rangeInput, index, newValue );
-				frmSliderComponent.refreshRange( rangeInput, element, newValue );
-				this.options[ index ].fullValue = this.updateValue( element, newValue + unit );
-				this.triggerValueChange( index );
-			} );
+				this.applyTextValue( element, rangeInput, index, newValue, unit );
+
+				if ( 'change' === event.type ) {
+					valueBeforeEdit = newValue;
+				}
+			};
+			valueInput.addEventListener( 'input', onValueChange );
+			valueInput.addEventListener( 'change', onValueChange );
 
 			frmSliderComponent.expandSliderGroup( element );
 			this.updateOnUnitChange( element, rangeInput, valueInput, index );
@@ -245,6 +266,25 @@ export default class frmSliderComponent {
 
 		frmSliderComponent.applyStep( rangeInput, value );
 		rangeInput.value = value;
+	}
+
+	/**
+	 * Moves a slider to a value typed into its text box and saves it to the hidden input.
+	 *
+	 * @since 7.1
+	 *
+	 * @param {HTMLElement}      element    - The slider component element.
+	 * @param {HTMLInputElement} rangeInput - The native range input element.
+	 * @param {number}           index      - The index of this slider in the options array.
+	 * @param {number|string}    value      - The value to apply, without the unit.
+	 * @param {string}           unit       - The unit selected for the slider.
+	 * @return {void}
+	 */
+	applyTextValue( element, rangeInput, index, value, unit ) {
+		this.setRangeValue( rangeInput, index, value );
+		frmSliderComponent.refreshRange( rangeInput, element, value );
+		this.options[ index ].fullValue = this.updateValue( element, value + unit );
+		this.triggerValueChange( index );
 	}
 
 	/**

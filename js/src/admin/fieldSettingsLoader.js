@@ -4,16 +4,19 @@
  * Settings load in the background in page order. A field the builder needs right away, because
  * it was selected or edited, jumps the queue in its own request.
  *
- * @since x.x
+ * @since 7.1
  */
 
 import { cacheFieldSettings } from './deferredFieldSettings';
+import { getFieldLoadBatch } from './fieldLoadWeights';
 
 /**
  * How many fields to ask for in one request. Settings cost about the same to render in any
  * batch, so this mostly decides how many times WordPress loads.
  */
 const BATCH_SIZE = 50;
+// Even simple fields have advanced controls and source-form selectors in their settings.
+const SETTINGS_FIELD_WEIGHT = 5;
 
 /**
  * How many background requests may run at once. Requests for fields the builder needs right
@@ -37,7 +40,7 @@ let backgroundStarted = false;
  * Nothing loads in the background until startFieldSettingsQueue() is called, but a field the
  * builder needs right away can be requested as soon as it is queued.
  *
- * @since x.x
+ * @since 7.1
  * @param {Object}   options
  * @param {string}   options.formId   The form being edited.
  * @param {string[]} options.fieldIds The fields that still need their settings, in page order.
@@ -52,7 +55,7 @@ export function queueFieldSettings( options ) {
 /**
  * Load the queued settings in the background, in page order.
  *
- * @since x.x
+ * @since 7.1
  * @return {void}
  */
 export function startFieldSettingsQueue() {
@@ -61,7 +64,7 @@ export function startFieldSettingsQueue() {
 }
 
 /**
- * @since x.x
+ * @since 7.1
  * @param {string} fieldId Numeric field ID.
  * @return {boolean} True until the field's settings have been requested and received.
  */
@@ -75,7 +78,7 @@ export function isFieldSettingsPending( fieldId ) {
  *
  * Fields requested in the same task share one request.
  *
- * @since x.x
+ * @since 7.1
  * @param {string} fieldId Numeric field ID.
  * @return {void}
  */
@@ -92,7 +95,7 @@ export function requestFieldSettingsNow( fieldId ) {
 }
 
 /**
- * @since x.x
+ * @since 7.1
  * @param {string[]} fieldIds Numeric field IDs.
  * @return {Promise<void>} Resolves once none of the fields has a request in progress.
  */
@@ -103,9 +106,28 @@ export function waitForFieldSettings( fieldIds ) {
 }
 
 /**
+ * Ask once more for settings whose last request failed.
+ *
+ * @since 7.1
+ * @param {string[]} fieldIds Numeric field IDs.
+ * @return {Promise<string[]>} Resolves with the fields whose settings still failed to load.
+ */
+export function retryFailedFieldSettings( fieldIds ) {
+	const failed = fieldIds.map( String ).filter( fieldId => failedFieldIds.has( fieldId ) );
+	if ( ! failed.length ) {
+		return Promise.resolve( [] );
+	}
+
+	// Send now instead of in a microtask, so the requests exist before waiting on them.
+	failed.forEach( fieldId => urgentFieldIds.add( fieldId ) );
+	sendUrgentRequests();
+	return waitForFieldSettings( failed ).then( () => failed.filter( fieldId => failedFieldIds.has( fieldId ) ) );
+}
+
+/**
  * Forget a deleted field so its settings are not requested.
  *
- * @since x.x
+ * @since 7.1
  * @param {string} fieldId Numeric field ID.
  * @return {void}
  */
@@ -120,8 +142,10 @@ function sendUrgentRequests() {
 	const fieldIds = [ ...urgentFieldIds ];
 	urgentFieldIds.clear();
 
-	for ( let index = 0; index < fieldIds.length; index += BATCH_SIZE ) {
-		sendRequest( fieldIds.slice( index, index + BATCH_SIZE ) );
+	for ( let index = 0; index < fieldIds.length; ) {
+		const batch = getFieldLoadBatch( fieldIds.slice( index ), BATCH_SIZE, SETTINGS_FIELD_WEIGHT );
+		sendRequest( batch );
+		index += batch.length;
 	}
 }
 
@@ -131,7 +155,7 @@ function fillQueue() {
 	}
 
 	while ( activeRequests < CONCURRENCY && queuedFieldIds.size ) {
-		sendBackgroundRequest( [ ...queuedFieldIds ].slice( 0, BATCH_SIZE ) );
+		sendBackgroundRequest( getFieldLoadBatch( queuedFieldIds, BATCH_SIZE, SETTINGS_FIELD_WEIGHT ) );
 	}
 }
 
@@ -178,6 +202,8 @@ function sendRequest( fieldIds ) {
  */
 function fetchSettings( fieldIds ) {
 	const formData = new FormData();
+	// Builder select sharing also checks the POST action when rendering these panels.
+	formData.append( 'action', 'frm_load_field_settings' );
 	formData.append( 'form_id', formId );
 	// eslint-disable-next-line formidable/prefer-document-fragment -- FormData, not the DOM
 	fieldIds.forEach( fieldId => formData.append( 'field_ids[]', fieldId ) );

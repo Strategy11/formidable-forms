@@ -1,0 +1,14 @@
+<input <?php checked( (bool) ( $value === 'yes' ), true ); ?> />
+<option <?php selected( (bool) ( $value == 1 ), true ); ?>>A</option>
+<input <?php disabled( (bool) ( $value === 1 ), true ); ?> />
+<input <?php wp_readonly( (bool) ( $value === 1 ), true ); ?> />
+<?php
+echo $value ? 'checked' : '';
+$x = $value ? 'selected' : '';
+?><p><?php echo $value ? 'disabled' : ''; ?></p>
+<input <?php echo $value ? 'readonly onclick="return false;"' : ''; ?> />
+<input <?php echo $value ? 'checked' : 'unchecked'; ?> />
+<input <?php echo $value = $other ? 'checked' : ''; ?> />
+<input <?php echo print $value ? 'checked' : ''; ?> />
+<input data-state="<?php echo $value ? 'checked' : ''; ?>" />
+<option data-value='<?php echo $value ? 'selected' : ''; ?>'>A</option>
