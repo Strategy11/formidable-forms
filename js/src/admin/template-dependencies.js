@@ -49,6 +49,13 @@ export function showTemplateDependencies( addons, onImport ) {
 		className: 'frm-template-deps-note',
 		text: message
 	} ) );
+	if ( pending.length && manual.length ) {
+		notes.push( tag( 'p', {
+			className: 'frm-template-deps-note',
+			text: __( 'After setup, you can review the remaining add-ons or use the template anyway.', 'formidable' )
+		} ) );
+	}
+
 	const content = div( {
 		className: 'inside',
 		children: [ description, list, ...notes ]
