@@ -452,8 +452,9 @@ class PreferIdentifierPlaceholderSniff implements Sniff {
 				continue;
 			}
 
-			if ( 'sq' !== $part['type'] ) {
-				break;
+			if ( 'dq' === $part['type'] && false !== strpbrk( $part['content'], '$\\' ) ) {
+				// Escapes or interpolation can continue the identifier at runtime.
+				return false;
 			}
 
 			if ( ! preg_match( '/^([A-Za-z0-9_]+)/', $part['content'], $match ) ) {

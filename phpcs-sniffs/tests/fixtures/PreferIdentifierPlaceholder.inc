@@ -48,3 +48,7 @@ $payments = $wpdb->get_results(
 		"SELECT * FROM {$wpdb->prefix}frm_payments WHERE completed is NOT NULL"
 	)
 );
+$wpdb->prepare( 'SELECT id FROM ' . $wpdb->prefix . "frm_items WHERE id=%d", $id );
+$wpdb->prepare( "SELECT id FROM " . $wpdb->prefix . "frm_items WHERE id=%d", $id );
+$wpdb->prepare( 'SELECT id FROM ' . $wpdb->prefix . "frm_items" . ' WHERE id=%d', $id );
+$wpdb->prepare( 'SELECT id FROM ' . $wpdb->prefix . "frm_items\nWHERE id=%d", $id );

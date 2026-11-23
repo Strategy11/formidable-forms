@@ -51,3 +51,7 @@ $payments = $wpdb->get_results(
 		$wpdb->prefix . 'frm_payments'
 	)
 );
+$wpdb->prepare( 'SELECT id FROM %i WHERE id=%d', $wpdb->prefix . 'frm_items', $id );
+$wpdb->prepare( 'SELECT id FROM %i WHERE id=%d', $wpdb->prefix . 'frm_items', $id );
+$wpdb->prepare( 'SELECT id FROM %i WHERE id=%d', $wpdb->prefix . 'frm_items', $id );
+$wpdb->prepare( 'SELECT id FROM ' . $wpdb->prefix . "frm_items\nWHERE id=%d", $id );
