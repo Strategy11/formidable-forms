@@ -19,7 +19,7 @@ if ( $blocker ) {
 <div class="frm_note_style frm-paypal-legacy-migration">
 	<div class="frm-paypal-migration-intro">
 		<p class="frm-mt-0 frm-mb-xs">
-			<strong class="frm-text-grey-900"><?php esc_html_e( 'Upgrade to PayPal Commerce', 'formidable' ); ?></strong>
+			<strong class="frm-text-grey-900"><?php esc_html_e( 'Convert to PayPal Commerce', 'formidable' ); ?></strong>
 		</p>
 		<p class="frm-mt-0 frm-mb-xs">
 			<?php esc_html_e( 'PayPal Standard is a legacy integration. Convert this action to a PayPal Commerce payment action to take payments on your form page, including cards, Pay Later and wallets. Your settings are copied to the new action and this legacy action is turned off.', 'formidable' ); ?>
