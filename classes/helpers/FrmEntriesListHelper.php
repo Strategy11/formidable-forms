@@ -145,37 +145,12 @@ class FrmEntriesListHelper extends FrmListHelper {
 			if ( in_array( $order_field_type, array( 'number', 'scale', 'star' ), true ) ) {
 				$orderby .= '+0';
 			}
-		} elseif ( ! in_array( $orderby, self::get_sortable_entry_columns(), true ) ) {
+		} elseif ( ! in_array( $orderby, array( 'id', 'item_key', 'name', 'ip', 'form_id', 'user_id', 'is_draft', 'created_at', 'updated_at' ), true ) ) {
 			// An unknown column would break the query, so fall back to the default sort.
 			$orderby = 'id';
 		}
 
 		return FrmDb::esc_order( $orderby . ' ' . $order );
-	}
-
-	/**
-	 * Get the entry table columns the entries list and CSV export can sort by.
-	 * Field columns are sorted with a meta_{field id} alias instead.
-	 *
-	 * @since x.x
-	 *
-	 * @return array
-	 */
-	private static function get_sortable_entry_columns() {
-		return array(
-			'id',
-			'item_key',
-			'name',
-			'ip',
-			'form_id',
-			'post_id',
-			'user_id',
-			'parent_item_id',
-			'is_draft',
-			'updated_by',
-			'created_at',
-			'updated_at',
-		);
 	}
 
 	/**
