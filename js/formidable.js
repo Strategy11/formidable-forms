@@ -2614,9 +2614,8 @@ function frmFrontFormJS() {
 	/**
 	 * Recalculate the total price when a product field changes.
 	 *
-	 * Dropdowns are matched here instead of with a `select:has([data-frmprice])` delegated selector.
-	 * jQuery evaluates `:has` against every ancestor of every change event, so it ran thousands of
-	 * document-wide queries on long forms. See https://github.com/Strategy11/formidable-pro/issues/3447.
+	 * Check dropdowns directly to avoid evaluating a delegated `:has` selector against every event ancestor.
+	 * See https://github.com/Strategy11/formidable-pro/issues/3447.
 	 *
 	 * @since x.x
 	 *
