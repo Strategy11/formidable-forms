@@ -133,8 +133,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					if ( ! $is_template && $frm_gc_item_type === $frm_gc_pt_key ) {
 						foreach ( $frm_gc_pt_posts as $frm_gc_post ) {
-							if ( $frm_gc_item_id === $frm_gc_post->ID ) {
-								$frm_gc_pt_selected_title = $frm_gc_post->post_title;
+							if ( $frm_gc_item_id === (int) $frm_gc_post->ID ) {
+								$frm_gc_pt_selected_title = FrmAppHelper::get_post_dropdown_label( $frm_gc_post );
 								break;
 							}
 						}
@@ -187,7 +187,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 									<?php selected( $frm_gc_item_id, $frm_gc_post->ID ); ?>
 								<?php endif; ?>
 							>
-								<?php echo esc_html( $frm_gc_post->post_title ); ?>
+								<?php echo esc_html( FrmAppHelper::get_post_dropdown_label( $frm_gc_post ) ); ?>
 							</option>
 						<?php endforeach; ?>
 					</select>
