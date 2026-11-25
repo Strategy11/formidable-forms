@@ -305,6 +305,38 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	}
 
 	/**
+	 * A '<' followed by a letter makes wp_kses() in WP 7.2+ drop the rest of the string.
+	 * It must only cost that one option, not the options after it.
+	 */
+	public function test_import_options_keeps_lines_after_one_with_less_than_and_letter() {
+		$field_id = $this->factory->field->create(
+			array(
+				'form_id' => $this->form_id,
+				'type'    => 'checkbox',
+			)
+		);
+
+		$truncate_at_tag = static function ( $content ) {
+			return preg_replace( '/<[a-zA-Z].*$/s', '', $content );
+		};
+		add_filter( 'pre_kses', $truncate_at_tag );
+
+		$_POST = array(
+			'action'   => 'frm_import_options',
+			'nonce'    => wp_create_nonce( 'frm_ajax' ),
+			'field_id' => $field_id,
+			'opts'     => "Option A\nUnder<eighteen\nOption C\nAdults 18+ & <65",
+		);
+
+		$response = $this->trigger_action( 'frm_import_options' );
+		remove_filter( 'pre_kses', $truncate_at_tag );
+
+		$this->assertStringContainsString( 'Option A', $response );
+		$this->assertStringContainsString( 'Option C', $response );
+		$this->assertStringContainsString( 'Adults 18+', $response );
+	}
+
+	/**
 	 * @param string $type    The field type.
 	 * @param int    $form_id The form to add the field to. Defaults to the test form.
 	 *
