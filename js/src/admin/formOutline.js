@@ -77,7 +77,12 @@ export function initFormOutline() {
 			const text = pendingPreview
 				? field.querySelector( '.frm-deferred-settings-meta input[id^="frm_name_"]' )?.value.trim() || ''
 				: heading || getFieldText( field );
-			fieldDetails.set( field, { heading, text, searchText: text.toLocaleLowerCase() } );
+			const label = text || sprintf(
+				/* translators: %s: Field ID. */
+				__( 'Untitled field (%s)', 'formidable' ),
+				field.dataset.fid
+			);
+			fieldDetails.set( field, { heading, text, label, searchText: label.toLocaleLowerCase() } );
 		}
 		return fieldDetails.get( field );
 	};
@@ -171,10 +176,7 @@ export function initFormOutline() {
 				if ( query !== '' && type !== SECTION_TYPE && fieldResultCount >= MAX_FIELD_RESULTS ) {
 					return;
 				}
-				const { text, searchText } = getFieldDetails( field );
-				if ( ! text ) {
-					return;
-				}
+				const { label, searchText } = getFieldDetails( field );
 				const isSection = type === SECTION_TYPE;
 				const matches = searchText.includes( query ) || field.dataset.fid.includes( query );
 				if ( query !== '' ) {
@@ -190,11 +192,11 @@ export function initFormOutline() {
 				}
 				if ( isSection ) {
 					const fieldCount = sections.get( field ).filter( child => ! STRUCTURE_TYPES.includes( child.dataset.type ) ).length;
-					const row = makeButton( 'frm-builder-outline-section', text, field, page.index, fieldCount );
+					const row = makeButton( 'frm-builder-outline-section', label, field, page.index, fieldCount );
 					sectionRows.set( field, { row, children: [], matches, siblings } );
 					siblings.push( row );
 				} else {
-					const row = makeButton( 'frm-builder-outline-field', text, field, page.index );
+					const row = makeButton( 'frm-builder-outline-field', label, field, page.index );
 					siblings.push( row );
 				}
 				if ( ! isSection && query !== '' ) {

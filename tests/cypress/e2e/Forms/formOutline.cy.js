@@ -80,6 +80,25 @@ describe( 'Form outline', { retries: 0 }, () => {
 		} );
 	};
 
+	it( 'keeps a field reachable after clearing its label in Field Options', () => {
+		addField( 'text' );
+		addPageBreak();
+		cy.get( '#frm-show-fields li[data-type="text"]' ).then( field => {
+			const fieldId = field.attr( 'data-fid' );
+			const row = `.frm-builder-outline-field[data-field-id="${ fieldId }"]`;
+			field[ 0 ].click();
+			cy.get( `#frm_name_${ fieldId }` ).clear().blur();
+			openOutline();
+
+			cy.get( '.frm-builder-outline-page' ).first().find( '.frm-builder-outline-meta' ).should( 'have.text', '1 field' );
+			cy.get( row ).should( 'have.text', `Untitled field (${ fieldId })` );
+			search( `Untitled field (${ fieldId })` );
+			cy.get( '.frm-builder-outline-status' ).should( 'have.text', '1 matching result found.' );
+			cy.get( row ).click();
+			cy.get( `#frm_field_id_${ fieldId }` ).should( 'have.class', 'frm-builder-outline-target' );
+		} );
+	} );
+
 	it( 'renders only in its tab and finds preview labels', () => {
 		cy.get( '.frm-builder-outline-list' ).should( 'be.empty' );
 
