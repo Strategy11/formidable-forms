@@ -33,4 +33,13 @@ class test_FrmAddonsController extends FrmUnitTest {
 			$this->assertFalse( $allowed );
 		}
 	}
+
+	/**
+	 * @covers FrmAddonsController::get_views_slug_for_version
+	 */
+	public function test_get_views_slug_for_version() {
+		$this->assertSame( 'views', FrmAddonsController::get_views_slug_for_version( '4.9.2' ) );
+		$this->assertSame( 'visual-views', FrmAddonsController::get_views_slug_for_version( '5.0' ) );
+		$this->assertSame( 'visual-views', FrmAddonsController::get_views_slug_for_version( '5.6.1' ) );
+	}
 }

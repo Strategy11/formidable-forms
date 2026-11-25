@@ -159,7 +159,7 @@ class FrmTemplateDependenciesHelper {
 	 * @return string The Views product slug.
 	 */
 	private static function get_installed_views_variant( $plugin ) {
-		return version_compare( $plugin['Version'], '5.0', '>=' ) ? 'visual-views' : 'views';
+		return FrmAddonsController::get_views_slug_for_version( $plugin['Version'] );
 	}
 
 	/**
