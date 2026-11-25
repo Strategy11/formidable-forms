@@ -109,6 +109,23 @@
 		color: var(--grey-600);
 	}
 
+	.frm-builder-outline-loading {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: var(--gap-xs);
+		padding: var(--gap-md) var(--gap-sm);
+		color: var(--grey-500);
+
+		&.frm_hidden {
+			display: none;
+		}
+
+		.frm-wait {
+			margin: 0;
+		}
+	}
+
 	.frm-builder-outline-empty {
 		display: flex;
 		flex-direction: column;

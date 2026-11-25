@@ -11,6 +11,13 @@ const MAX_FIELD_RESULTS = 60;
 const RENDER_DELAY = 100;
 // togglePage() in admin.js animates the first rows for 150 ms.
 const PAGE_EXPAND_DELAY = 160;
+// Previews above a jump target can still be drawing after the scroll ends, which moves the target.
+const JUMP_SETTLE_TIME = 8000;
+const HIGHLIGHT_TIME = 1800;
+const JUMP_SETTLE_FRAMES = 4;
+const JUMP_TOLERANCE = 2;
+// Ajax placeholders carry no type or name until their batch arrives, so the outline waits for them.
+const LOADING_FIELD_SELECTOR = 'li.frm_field_loading:not(.frm_field_load_failed)';
 
 const getFieldContent = field => field.querySelector( ':scope > .frm_inner_field_container, :scope > .divider_section_only > .frm_inner_field_container' ) || field;
 
@@ -58,6 +65,7 @@ export function initFormOutline() {
 	const emptyTitle = emptyMessage.querySelector( '.frm-builder-outline-empty-title' );
 	const emptyText = emptyMessage.querySelector( '.frm-builder-outline-empty-text' );
 	const status = popover.querySelector( '.frm-builder-outline-status' );
+	const loadingMessage = popover.querySelector( '.frm-builder-outline-loading' );
 	const isOpen = () => tab.classList.contains( 'frm-active' );
 	const scroller = document.getElementById( 'post-body-content' );
 	let currentPageIndex = 0;
@@ -69,6 +77,8 @@ export function initFormOutline() {
 	let highlightedField;
 	let highlightTimeout;
 	let jumpTimeout;
+	let jumpFrame;
+	let stopJumpSettle = () => {};
 
 	const getFieldDetails = field => {
 		if ( ! fieldDetails.has( field ) ) {
@@ -116,6 +126,16 @@ export function initFormOutline() {
 
 	const render = () => {
 		if ( ! isOpen() ) {
+			return;
+		}
+
+		const loading = Boolean( builder.querySelector( LOADING_FIELD_SELECTOR ) );
+		loadingMessage.classList.toggle( 'frm_hidden', ! loading );
+		if ( loading ) {
+			list.replaceChildren();
+			emptyMessage.classList.add( 'frm_hidden' );
+			search.parentElement.classList.add( 'frm_hidden' );
+			status.textContent = __( 'Loading fields…', 'formidable' );
 			return;
 		}
 
@@ -294,16 +314,64 @@ export function initFormOutline() {
 			pagePills = getPagePills();
 			render();
 			updateCurrentPage();
-			// Preview hydration can shift the target after a long jump.
-			if ( highlightedField?.isConnected ) {
-				const targetBounds = highlightedField.getBoundingClientRect();
-				const viewportBounds = scroller.getBoundingClientRect();
-				if ( targetBounds.bottom < viewportBounds.top || targetBounds.top > viewportBounds.bottom ) {
-					highlightedField.scrollIntoView( { block: 'start' } );
-				}
-			}
 		}, RENDER_DELAY );
 	} );
+
+	/**
+	 * Keep a jump target at the top of the canvas while the previews above it finish drawing.
+	 *
+	 * Drawing a preview changes its height, so a smooth scroll that started before it can end
+	 * a little past the target. Whenever the scroll comes to rest, put the target back in place.
+	 * Stop as soon as the person scrolls, so this never fights them.
+	 *
+	 * @param {HTMLElement} field  The field the outline jumped to.
+	 * @param {Function}    onRest Runs once, when the target first rests in place or settling stops.
+	 * @return {void}
+	 */
+	const settleJump = ( field, onRest ) => {
+		stopJumpSettle();
+		const deadline = performance.now() + JUMP_SETTLE_TIME;
+		const marginTop = parseFloat( window.getComputedStyle( field ).scrollMarginTop ) || 0;
+		let lastScrollTop = -1;
+		let stableFrames = 0;
+		let rested = false;
+		const rest = () => {
+			if ( ! rested ) {
+				rested = true;
+				onRest();
+			}
+		};
+		const stop = () => {
+			window.cancelAnimationFrame( jumpFrame );
+			jumpFrame = null;
+			[ 'wheel', 'touchstart', 'pointerdown', 'keydown' ].forEach( type => scroller.removeEventListener( type, stop ) );
+			stopJumpSettle = () => {};
+			rest();
+		};
+		const step = () => {
+			if ( ! field.isConnected || performance.now() > deadline ) {
+				stop();
+				return;
+			}
+			if ( scroller.scrollTop !== lastScrollTop ) {
+				lastScrollTop = scroller.scrollTop;
+				stableFrames = 0;
+			} else if ( ++stableFrames >= JUMP_SETTLE_FRAMES ) {
+				stableFrames = 0;
+				const offset = field.getBoundingClientRect().top - scroller.getBoundingClientRect().top - marginTop;
+				const atBottom = offset > 0 && scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 1;
+				if ( Math.abs( offset ) > JUMP_TOLERANCE && ! atBottom ) {
+					field.scrollIntoView( { block: 'start' } );
+				} else {
+					rest();
+				}
+			}
+			jumpFrame = window.requestAnimationFrame( step );
+		};
+		[ 'wheel', 'touchstart', 'pointerdown', 'keydown' ].forEach( type => scroller.addEventListener( type, stop, { passive: true } ) );
+		stopJumpSettle = stop;
+		jumpFrame = window.requestAnimationFrame( step );
+	};
 
 	const expandCollapsedPage = pageContainer => {
 		const collapseButton = pageContainer?.querySelector( '.frm-collapse-page' );
@@ -318,7 +386,14 @@ export function initFormOutline() {
 		clearTimeout( renderTimeout );
 		clearTimeout( searchTimeout );
 		searchTimeout = null;
-		clearTimeout( jumpTimeout );
+		if ( jumpTimeout ) {
+			// The jump never started, so neither did the timer that clears its highlight.
+			clearTimeout( jumpTimeout );
+			jumpTimeout = null;
+			highlightedField?.classList.remove( 'frm-builder-outline-target' );
+			highlightedField = null;
+		}
+		stopJumpSettle();
 		window.cancelAnimationFrame( scrollFrame );
 		scrollFrame = null;
 		observer.disconnect();
@@ -448,6 +523,8 @@ export function initFormOutline() {
 			ancestor = ancestor.parentElement.closest( '.frm-section-collapsed' );
 		}
 
+		// Stop the last jump first. Stopping it starts its highlight timer, which is cleared next.
+		stopJumpSettle();
 		clearTimeout( highlightTimeout );
 		highlightedField?.classList.remove( 'frm-builder-outline-target' );
 		highlightedField = field;
@@ -455,14 +532,20 @@ export function initFormOutline() {
 		field.classList.add( 'frm-builder-outline-target' );
 		clearTimeout( jumpTimeout );
 		jumpTimeout = window.setTimeout( () => {
+			jumpTimeout = null;
 			window.requestAnimationFrame( () => {
 				const reduceMotion = window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches;
 				field.scrollIntoView( { behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' } );
+				// A long smooth scroll can take most of the highlight time, so start it on arrival.
+				// The highlight's scroll margin is part of the position, so keep settling until it ends.
+				settleJump( field, () => {
+					highlightTimeout = window.setTimeout( () => {
+						stopJumpSettle();
+						field.classList.remove( 'frm-builder-outline-target' );
+						highlightedField = null;
+					}, HIGHLIGHT_TIME );
+				} );
 			} );
 		}, expandedPage ? PAGE_EXPAND_DELAY : 0 );
-		highlightTimeout = window.setTimeout( () => {
-			field.classList.remove( 'frm-builder-outline-target' );
-			highlightedField = null;
-		}, 1800 );
 	} );
 }

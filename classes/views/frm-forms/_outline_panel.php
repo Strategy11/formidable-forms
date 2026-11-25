@@ -17,6 +17,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php FrmAppHelper::icon_by_class( 'frmfont frm_search_icon frm_svg20' ); ?>
 		<input type="search" id="frm-builder-outline-search-input" class="frm-search-input" autocomplete="off" placeholder="<?php esc_attr_e( 'Search Pages and Fields', 'formidable' ); ?>" />
 	</p>
+	<div class="frm-builder-outline-loading frm_hidden">
+		<span class="frm-wait frm_visible_spinner"></span>
+		<span><?php esc_html_e( 'Loading fields…', 'formidable' ); ?></span>
+	</div>
 	<nav aria-label="<?php esc_attr_e( 'Form Outline', 'formidable' ); ?>">
 		<ul class="frm-builder-outline-list"></ul>
 	</nav>
