@@ -71,14 +71,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	);
 	?>
 	<label id="frm_mcp_label" for="frm_mcp">
-		<?php esc_html_e( 'Enable the Formidable MCP server', 'formidable' ); ?>
+		<?php esc_html_e( 'Enable AI access', 'formidable' ); ?>
 	</label>
 	<?php
 	// frm-leading-none drops the span to the height of the icon it holds, so the
 	// flex row centers the glyph on the toggle and the label instead of on the
 	// taller line box the icon is drawn at the top of.
 	FrmAppHelper::tooltip_icon(
-		__( 'Controls AI access for the whole site. While it is off, no MCP server can use Formidable\'s abilities.', 'formidable' ),
+		__( 'Allows WPVibe and other connected AI assistants to use Formidable abilities, and enables the Formidable MCP server. While off, only setup discovery is available.', 'formidable' ),
 		array( 'class' => 'frm-leading-none' )
 	);
 	?>

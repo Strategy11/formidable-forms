@@ -49,7 +49,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<ul id="frm-show-fields" class="frm_sorting inside">
 		<?php
 		if ( ! empty( $values['fields'] ) ) {
-			$grid_helper     = new FrmFieldGridHelper();
+			$grid_helper     = FrmFieldGridHelper::get_instance();
 			$values['count'] = 0;
 
 			if ( ! empty( $values['ajax_load'] ) ) {

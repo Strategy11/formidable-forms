@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: "📥 Fetching Repository Contents"
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v6
 
       - name: "💽  Installing PHP, Composer, CS2PR"
         uses: shivammathur/setup-php@2.30.2
@@ -58,7 +58,7 @@ jobs:
       # suffix is needed because cache entries are immutable - without it the
       # first entry would win forever and the cache would never advance.
       - name: Cache PHPStan results
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: /tmp/phpstan
           key: formidable-phpstan-${{ hashFiles('composer.json', 'phpstan.neon') }}-${{ github.sha }}

@@ -50,8 +50,8 @@ class AddDirectFileAccessCheckSniff implements Sniff {
 			return $phpcsFile->numTokens;
 		}
 
-		// Skip rector.php.
-		if ( basename( $filename ) === 'rector.php' ) {
+		// Skip rector.php and uninstall.php.
+		if ( in_array( basename( $filename ), array( 'rector.php', 'uninstall.php' ), true ) ) {
 			return $phpcsFile->numTokens;
 		}
 

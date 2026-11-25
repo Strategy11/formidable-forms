@@ -55,8 +55,15 @@ class test_FrmEntriesController extends FrmUnitTest {
 		$_POST             = $this->factory->field->generate_entry_array( $form );
 		$_POST['item_key'] = $entry_key;
 		$_POST['action']   = 'create';
-		$_POST['post_id']  = $new_post->ID;
+
+		// Link the post in code, the way a post action does.
+		$add_post_id = function ( $values ) use ( $new_post ) {
+			$values['post_id'] = $new_post->ID;
+			return $values;
+		};
+		add_filter( 'frm_pre_create_entry', $add_post_id );
 		FrmEntriesController::process_entry();
+		remove_filter( 'frm_pre_create_entry', $add_post_id );
 
 		$entry = FrmEntry::getOne( $entry_key );
 		$this->assertNotEmpty( $entry );

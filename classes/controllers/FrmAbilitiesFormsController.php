@@ -38,7 +38,7 @@ class FrmAbilitiesFormsController {
 			array(
 				'label'               => __( 'List Forms', 'formidable' ),
 				'description'         => __(
-					'Retrieve all Formidable forms. Returns id, form_key, name, and description. Use the form_key or id for create-entry, list-fields, or get-form.',
+					'Retrieve all Formidable forms. Returns id, form_key, name, and description. Use the form_key or id for list-entries, list-fields, or get-form.',
 					'formidable'
 				),
 				'category'            => FrmAbilitiesController::CATEGORY,
@@ -54,12 +54,12 @@ class FrmAbilitiesFormsController {
 						'page_size' => array(
 							'type'        => 'integer',
 							'description' => __( 'Maximum number of items to return per page.', 'formidable' ),
-							'default'     => 20,
+							'default'     => 50,
 						),
 						'order'     => array(
 							'type'        => 'string',
 							'description' => __( 'Order of results (asc or desc, case-insensitive).', 'formidable' ),
-							'default'     => 'asc',
+							'default'     => 'desc',
 							'enum'        => array( 'asc', 'desc', 'ASC', 'DESC' ),
 						),
 						'order_by'  => array(

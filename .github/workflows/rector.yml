@@ -18,7 +18,7 @@ jobs:
     name: Run Rector inspection
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.1.1
+      - uses: actions/checkout@v6
       # Install only what this job runs, instead of every require-dev package.
       # phpstan/phpstan is here for its exact pin, which is what holds Rector at
       # 2.3.5 - resolving without it picks Rector 2.6.2, which fails this job on

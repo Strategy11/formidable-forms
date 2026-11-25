@@ -93,14 +93,80 @@ class FrmTransLiteActionsController {
 
 		$gateway = self::get_gateway_for_action( $action );
 
-		if ( ! $gateway ) {
+		if ( $gateway ) {
+			self::trigger_gateway_for_action( $action, $entry, $form, $gateway );
+		}
+	}
+
+	/**
+	 * Process a payment the Payments submodule would skip.
+	 *
+	 * When the Stripe add-on is active, its Payments submodule handles payment actions instead of Lite.
+	 * It only finds the gateway through a Gateway field, and returns without charging when a form has none.
+	 * That covers Square, PayPal and Stripe forms built while the add-on was inactive, and forms created
+	 * through MCP or imported. The entry would be saved and the success message shown with no payment.
+	 * Lite processes only those submissions, so the submodule and Lite never handle the same payment.
+	 * If the submodule starts falling back to the action's gateway, remove this or payments run twice.
+	 *
+	 * @since 7.1
+	 *
+	 * @param WP_Post $action The payment action.
+	 * @param object  $entry  The entry being submitted.
+	 * @param object  $form   The form being submitted.
+	 *
+	 * @return void
+	 */
+	public static function trigger_action_without_gateway_field( $action, $entry, $form ) {
+		if ( self::submodule_finds_gateway_field( $action ) ) {
 			return;
 		}
 
+		$gateway = self::get_gateway_for_action( $action );
+
+		if ( is_array( $gateway ) ) {
+			$gateway = reset( $gateway );
+		}
+
+		if ( ! $gateway || ! FrmTransLiteAppHelper::get_setting_for_gateway( $gateway, 'class' ) ) {
+			return;
+		}
+
+		self::prepare_description( $action, compact( 'entry', 'form' ) );
+
+		$response = self::trigger_gateway_for_action( $action, $entry, $form, $gateway );
+
+		if ( ! $response || ! $response['success'] || empty( $response['run_triggers'] ) ) {
+			return;
+		}
+
+		// The add-on's Stripe gateway expects its caller to run the triggers for a completed charge.
+		// The submodule's version also sets the After Payment fields, which Pro leaves to it for Stripe payments.
+		$status = 'complete';
+
+		if ( is_callable( array( 'FrmTransActionsController', 'trigger_payment_status_change' ) ) ) {
+			FrmTransActionsController::trigger_payment_status_change( compact( 'status', 'action', 'entry' ) );
+		} else {
+			self::trigger_payment_status_change( compact( 'status', 'entry' ) );
+		}
+	}
+
+	/**
+	 * Send a payment action to its gateway and show the error message when the payment fails.
+	 *
+	 * @since 7.1
+	 *
+	 * @param WP_Post $action  The payment action.
+	 * @param object  $entry   The entry being submitted.
+	 * @param object  $form    The form being submitted.
+	 * @param string  $gateway The gateway key, like stripe, square or paypal.
+	 *
+	 * @return array|false The gateway response, or false when the gateway has no controller.
+	 */
+	private static function trigger_gateway_for_action( $action, $entry, $form, $gateway ) {
 		$class_name = FrmTransLiteAppHelper::get_setting_for_gateway( $gateway, 'class' );
 
 		if ( ! $class_name ) {
-			return;
+			return false;
 		}
 
 		$class_name = 'Frm' . $class_name . 'ActionsController';
@@ -110,6 +176,31 @@ class FrmTransLiteActionsController {
 			// The payment failed
 			self::show_failed_message( compact( 'action', 'entry', 'form', 'response' ) );
 		}
+
+		return $response;
+	}
+
+	/**
+	 * Check if the Payments submodule can find a gateway for this submission.
+	 * This matches FrmTransActionsController::get_gateway_for_entry() in the submodule.
+	 *
+	 * @since 7.1
+	 *
+	 * @param WP_Post $action The payment action.
+	 *
+	 * @return bool
+	 */
+	private static function submodule_finds_gateway_field( $action ) {
+		if ( FrmAppHelper::get_post_param( 'frm_gateway', '', 'absint' ) ) {
+			return true;
+		}
+
+		return (bool) FrmField::getAll(
+			array(
+				'fi.form_id' => $action->menu_order,
+				'type'       => 'gateway',
+			)
+		);
 	}
 
 	/**
@@ -221,11 +312,21 @@ class FrmTransLiteActionsController {
 		$atts     = array(
 			'trigger'  => $atts['status'],
 			'entry_id' => $entry_id,
+			'payment'  => $atts['payment'] ?? null,
 		);
 
+		$frm_payment = new FrmTransLitePayment();
+
 		if ( ! isset( $atts['payment'] ) ) {
-			$frm_payment     = new FrmTransLitePayment();
 			$atts['payment'] = $frm_payment->get_one_by( $entry_id, 'item_id' );
+		} elseif ( ! empty( $atts['payment']->id ) ) {
+			// Callers pass the payment as it was loaded before they saved the new status.
+			// Load it again so the hooks and payment actions see the current status.
+			$current_payment = $frm_payment->get_one( $atts['payment']->id );
+
+			if ( $current_payment ) {
+				$atts['payment'] = $current_payment;
+			}
 		}
 
 		if ( ! isset( $atts['trigger'] ) ) {

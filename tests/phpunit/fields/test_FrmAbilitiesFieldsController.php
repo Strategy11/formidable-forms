@@ -111,6 +111,59 @@ class test_FrmAbilitiesFieldsController extends FrmUnitTest {
 	}
 
 	/**
+	 * Choice options keyed by option text, array defaults and a NULL default are what Formidable
+	 * can store, so list-fields must not reject them, or one such field fails the whole form.
+	 *
+	 * @return void
+	 */
+	public function test_list_fields_accepts_string_keyed_options_and_array_default_values() {
+		$select_id  = FrmField::create(
+			array(
+				'form_id'       => $this->form->id,
+				'type'          => 'select',
+				'name'          => 'Location',
+				'default_value' => '',
+				'options'       => array(
+					'1'         => array(
+						'label' => '',
+						'value' => '',
+					),
+					'Asheville' => array(
+						'label' => 'Asheville',
+						'value' => 'asheville',
+					),
+					'other_1'   => 'Other',
+				),
+			)
+		);
+		$address_id = FrmField::create(
+			array(
+				'form_id'       => $this->form->id,
+				'type'          => 'address',
+				'name'          => 'Address',
+				'default_value' => array(
+					'line1' => '1 Main St',
+					'city'  => 'Asheville',
+				),
+			)
+		);
+		$text_id    = FrmField::create(
+			array(
+				'form_id' => $this->form->id,
+				'type'    => 'text',
+				'name'    => 'No default',
+			)
+		);
+
+		$listed = $this->execute( 'list-fields', array( 'form_id' => $this->form->id ) );
+
+		$this->assertNotWPError( $listed, 'list-fields should validate for string-keyed options, array default values and a NULL default.' );
+		$this->assertArrayHasKey( FrmField::getOne( $select_id )->field_key, $listed );
+		$this->assertArrayHasKey( FrmField::getOne( $address_id )->field_key, $listed );
+		$this->assertArrayHasKey( FrmField::getOne( $text_id )->field_key, $listed );
+	}
+
+	/**
 	 * @return void
 	 */
 	public function test_list_fields_requires_a_form_id() {
@@ -252,6 +305,266 @@ class test_FrmAbilitiesFieldsController extends FrmUnitTest {
 
 		$stored = FrmField::getOne( $field->id );
 		$this->assertSame( 'Type here', $stored->field_options['placeholder'] ?? null, 'The placeholder should be stored inside field_options.' );
+	}
+
+	/**
+	 * The builder cleans a field's options through frm_clean_{type}_field_options_before_update
+	 * when it saves, so create-field has to run the same filter.
+	 *
+	 * @return void
+	 */
+	public function test_create_field_runs_the_type_clean_filter() {
+		add_filter( 'frm_clean_text_field_options_before_update', array( $this, 'clean_test_option' ), 10, 2 );
+
+		$created = $this->execute(
+			'create-field',
+			array(
+				'form_id'       => $this->form->id,
+				'type'          => 'text',
+				'field_options' => array( 'test_clean_option' => 'abc' ),
+			)
+		);
+
+		remove_filter( 'frm_clean_text_field_options_before_update', array( $this, 'clean_test_option' ), 10 );
+
+		$this->assertNotWPError( $created );
+
+		$stored = FrmField::getOne( $created['id'] );
+		$this->assertSame( 0, $stored->field_options['test_clean_option'] ?? null, 'The clean filter should run on a field created through MCP.' );
+	}
+
+	/**
+	 * The create-form ability builds inline fields through the same pipeline as create-field.
+	 *
+	 * @return void
+	 */
+	public function test_create_form_runs_the_type_clean_filter_on_inline_fields() {
+		add_filter( 'frm_clean_text_field_options_before_update', array( $this, 'clean_test_option' ), 10, 2 );
+
+		$created = $this->execute(
+			'create-form',
+			array(
+				'name'   => 'Inline Clean Form',
+				'fields' => array(
+					array(
+						'type'          => 'text',
+						'name'          => 'Inline',
+						'field_options' => array( 'test_clean_option' => 'abc' ),
+					),
+				),
+			)
+		);
+
+		remove_filter( 'frm_clean_text_field_options_before_update', array( $this, 'clean_test_option' ), 10 );
+
+		$this->assertNotWPError( $created );
+
+		$fields = FrmField::get_all_for_form( $created['id'] );
+		$this->assertCount( 1, $fields, 'The inline field should be created.' );
+
+		$stored = reset( $fields );
+		$this->assertSame( 0, $stored->field_options['test_clean_option'] ?? null, 'The clean filter should run on inline fields.' );
+	}
+
+	/**
+	 * The update-field ability sends no type unless the caller changes it, and
+	 * FrmField::update() only cleans when it has one.
+	 *
+	 * @return void
+	 */
+	public function test_update_field_runs_the_type_clean_filter_without_a_type_in_the_input() {
+		$field = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $this->form->id,
+				'type'    => 'text',
+			)
+		);
+
+		add_filter( 'frm_clean_text_field_options_before_update', array( $this, 'clean_test_option' ), 10, 2 );
+
+		$updated = $this->execute(
+			'update-field',
+			array(
+				'id'            => $field->id,
+				'field_options' => array( 'test_clean_option' => 'abc' ),
+			)
+		);
+
+		remove_filter( 'frm_clean_text_field_options_before_update', array( $this, 'clean_test_option' ), 10 );
+
+		$this->assertNotWPError( $updated );
+
+		$stored = FrmField::getOne( $field->id );
+		$this->assertSame( 0, $stored->field_options['test_clean_option'] ?? null, 'The clean filter should run on a field updated through MCP.' );
+		$this->assertSame( $field->name, $stored->name, 'The stored name should be unchanged.' );
+	}
+
+	/**
+	 * A default_value-only or name-only update still reaches the cleaners, with
+	 * the stored type and options they expect.
+	 *
+	 * @return void
+	 */
+	public function test_update_field_runs_the_type_clean_filter_for_a_top_level_only_update() {
+		$field = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $this->form->id,
+				'type'    => 'text',
+				'name'    => 'Stored Name',
+			)
+		);
+
+		$seen = array();
+		$spy  = function ( $values ) use ( &$seen ) {
+			$seen[] = $values;
+			return $values;
+		};
+
+		add_filter( 'frm_clean_text_field_options_before_update', $spy );
+
+		$this->execute(
+			'update-field',
+			array(
+				'id'            => $field->id,
+				'default_value' => 'abc',
+			)
+		);
+		$this->execute(
+			'update-field',
+			array(
+				'id'   => $field->id,
+				'name' => 'New Name',
+			)
+		);
+
+		remove_filter( 'frm_clean_text_field_options_before_update', $spy );
+
+		$this->assertCount( 2, $seen, 'The clean filter should run for each top level update.' );
+		$this->assertArrayNotHasKey( 'name', $seen[0], 'A default_value update should not save the stored name again.' );
+		$this->assertSame( 'New Name', $seen[1]['name'], 'A name update should keep the new name.' );
+		$this->assertIsArray( $seen[0]['field_options'], 'The cleaners expect field_options.' );
+
+		$stored = FrmField::getOne( $field->id );
+		$this->assertSame( 'New Name', $stored->name );
+		$this->assertSame( 'abc', $stored->default_value );
+	}
+
+	/**
+	 * A user without unfiltered_html can change a setting without stripping the markup an admin put in the label.
+	 *
+	 * @covers FrmAbilitiesFieldsController::execute_update_field
+	 *
+	 * @return void
+	 */
+	public function test_update_field_keeps_stored_label_markup_for_users_without_unfiltered_html() {
+		global $wpdb;
+
+		$label     = '<script>alert(1)</script>Label';
+		$text      = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $this->form->id,
+				'type'    => 'text',
+			)
+		);
+		$section   = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $this->form->id,
+				'type'    => 'divider',
+			)
+		);
+		$field_ids = array( $text->id, $section->id );
+
+		foreach ( $field_ids as $field_id ) {
+			$wpdb->update( $wpdb->prefix . 'frm_fields', array( 'name' => $label ), array( 'id' => $field_id ) );
+		}
+
+		FrmField::delete_form_transient( $this->form->id );
+
+		$seen = array();
+		$spy  = function ( $values ) use ( &$seen ) {
+			$seen[] = $values;
+			return $values;
+		};
+		$deny = function ( $caps, $cap ) {
+			return 'unfiltered_html' === $cap ? array( 'do_not_allow' ) : $caps;
+		};
+		add_filter( 'frm_clean_divider_field_options_before_update', $spy );
+		add_filter( 'map_meta_cap', $deny, 10, 2 );
+
+		try {
+			foreach ( $field_ids as $field_id ) {
+				$this->assertNotWPError(
+					$this->execute(
+						'update-field',
+						array(
+							'id'       => $field_id,
+							'required' => true,
+						)
+					)
+				);
+			}
+		} finally {
+			remove_filter( 'map_meta_cap', $deny, 10 );
+			remove_filter( 'frm_clean_divider_field_options_before_update', $spy );
+		}
+
+		foreach ( $field_ids as $field_id ) {
+			$stored = FrmField::getOne( $field_id );
+			$this->assertSame( $label, $stored->name, 'The label markup should be kept.' );
+			$this->assertSame( '1', (string) $stored->required );
+		}
+		$this->assertCount( 0, $seen, 'The section cleaner should be skipped instead of saving a filtered name.' );
+	}
+
+	/**
+	 * The section and repeater cleaner renames the repeater's child form, so it gets the stored name.
+	 *
+	 * @covers FrmAbilitiesFieldsController::execute_update_field
+	 *
+	 * @return void
+	 */
+	public function test_update_field_gives_the_section_cleaner_the_stored_name() {
+		$section = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $this->form->id,
+				'type'    => 'divider',
+				'name'    => 'Section Name',
+			)
+		);
+
+		$seen = array();
+		$spy  = function ( $values ) use ( &$seen ) {
+			$seen[] = $values;
+			return $values;
+		};
+		add_filter( 'frm_clean_divider_field_options_before_update', $spy );
+
+		$this->execute(
+			'update-field',
+			array(
+				'id'          => $section->id,
+				'description' => 'New description',
+			)
+		);
+
+		remove_filter( 'frm_clean_divider_field_options_before_update', $spy );
+
+		$this->assertCount( 1, $seen );
+		$this->assertSame( 'Section Name', $seen[0]['name'] );
+		$this->assertSame( 'Section Name', FrmField::getOne( $section->id )->name );
+	}
+
+	/**
+	 * @param array $values Field values.
+	 *
+	 * @return array
+	 */
+	public function clean_test_option( $values ) {
+		if ( isset( $values['field_options']['test_clean_option'] ) ) {
+			$values['field_options']['test_clean_option'] = absint( $values['field_options']['test_clean_option'] );
+		}
+
+		return $values;
 	}
 
 	/**
