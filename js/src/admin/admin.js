@@ -16,6 +16,7 @@ const { getFieldLoadBatch } = require( './fieldLoadWeights' );
 const { hydrateFieldPlaceholders } = require( './fieldPlaceholders' );
 const { renderDropdownPreview, updateComboSelectPreview, updateAddressPreview } = require( './fieldPreview' );
 const { captureFieldSettings, applyFieldSettings, restoreFieldSettingValues } = require( './duplicateFieldSettings' );
+const { groupCopiesBySourceRow, copiedRowsNeedRestore } = require( './duplicateSectionLayout' );
 const { addFieldSettingsMetadata, cacheFieldSettings, forgetFieldSettings, materializeFieldSettings, materializeAllFieldSettings, setPendingFieldSetting } = require( './deferredFieldSettings' );
 const { hydrateFieldPreviews, renderFieldPreviews, PENDING_PREVIEW_CLASS } = require( './fieldPreviews' );
 const { queueFieldPreview, renderFieldPreviewNow, forgetFieldPreview, setInitialFieldPreviews } = require( './fieldPreviewQueue' );
@@ -3682,40 +3683,13 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function restoreDuplicatedSectionRows( layouts, copies ) {
-		const sections = new Map();
-		layouts.forEach( ( { row }, sourceId ) => {
-			const field = copies.get( sourceId );
-			const section = field?.parentElement.closest( 'ul.start_divider' );
-			if ( ! section || ! row?.parentElement || ! isFieldGroup( row.parentElement ) ) {
-				return;
-			}
-			if ( ! sections.has( section ) ) {
-				sections.set( section, new Map() );
-			}
-			const rows = sections.get( section );
-			if ( ! rows.has( row ) ) {
-				rows.set( row, [] );
-			}
-			rows.get( row ).push( field );
-		} );
-
-		sections.forEach( ( rows, section ) => {
+		groupCopiesBySourceRow( layouts, copies, isFieldGroup ).forEach( ( rows, section ) => {
 			const currentRows = [ ...section.querySelectorAll(
 				':scope > li.frm_field_box:not(.form-field) > ul.frm_sorting'
 			) ];
 			const desiredRows = [ ...rows.values() ];
 			const currentFields = currentRows.map( row => [ ...row.querySelectorAll( ':scope > li.form-field' ) ] );
-			const allCurrentFields = currentFields.flat();
-			const desiredFields = new Set( desiredRows.flat() );
-			if ( ! currentRows.length || allCurrentFields.length !== desiredFields.size ||
-				allCurrentFields.some( field => ! desiredFields.has( field ) ) ) {
-				return;
-			}
-			const rowsMatch = currentFields.length === desiredRows.length && currentFields.every(
-				( fields, index ) => fields.length === desiredRows[ index ].length &&
-					fields.every( ( field, fieldIndex ) => field === desiredRows[ index ][ fieldIndex ] )
-			);
-			if ( rowsMatch ) {
+			if ( ! copiedRowsNeedRestore( currentFields, desiredRows ) ) {
 				return;
 			}
 
