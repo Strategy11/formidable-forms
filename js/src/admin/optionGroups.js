@@ -252,7 +252,7 @@ function getControls( list ) {
 		checkbox = tag( 'input', { id: `frm-option-groups-enable-${ fieldId }`, className: 'frm-option-groups-enable' } );
 		checkbox.type = 'checkbox';
 		// The same tooltip icon FrmAppHelper::tooltip_icon() prints beside the other option settings.
-		const tooltip = span( { className: 'frm_help', child: svg( { href: '#frm_tooltip_icon', classList: [ 'frm_tooltip_icon' ] } ) } );
+		const tooltip = span( { className: 'frm-flex frm_help', child: svg( { href: '#frm_tooltip_icon', classList: [ 'frm_tooltip_icon' ] } ) } );
 		setAttributes( tooltip, {
 			title: __( 'Sort the options under headings. Each group shows as a labeled section in the dropdown.', 'formidable' ),
 			'data-placement': 'right',
