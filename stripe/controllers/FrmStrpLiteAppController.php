@@ -44,7 +44,7 @@ class FrmStrpLiteAppController {
 		);
 
 		$modes            = array( 'test', 'live' );
-		$option_name_keys = array( 'account_id', 'client_password', 'server_password', 'details_submitted' );
+		$option_name_keys = array( 'account_id', 'client_password', 'server_password', 'details_submitted', 'site_url' );
 
 		foreach ( $modes as $mode ) {
 			foreach ( $option_name_keys as $key ) {

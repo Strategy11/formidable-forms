@@ -25,6 +25,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 			or
 		<?php } ?>
 		<a class="frm_disconnect_stripe" href="#" style="font-size:13px"><?php esc_html_e( 'Disconnect', 'formidable' ); ?></a>
+		<?php if ( $mismatched_url ) { ?>
+			<div class="frm_error_style frm_strp_site_url_mismatch" role="alert" style="margin-top:10px;">
+				<?php
+				printf(
+					/* translators: %1$s: The site URL Stripe was connected on, %2$s: The current site URL */
+					esc_html__( 'This Stripe account was connected on %1$s, but this site is %2$s. This usually happens when a database is copied from one site to another. Please disconnect and reconnect Stripe so payments are linked to this site.', 'formidable' ),
+					'<strong>' . esc_html( $mismatched_url ) . '</strong>',
+					'<strong>' . esc_html( $current_url ) . '</strong>'
+				);
+				?>
+			</div>
+		<?php } ?>
 	<?php } else { ?>
 		<br/><br/>
 		<a class="frm_connect_with_oauth button-primary frm-button-primary">
