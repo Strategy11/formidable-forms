@@ -123,14 +123,14 @@ class FrmEntryMeta {
 	 * @param int           $field_id       Field ID.
 	 * @param array|string  $meta_value     The value to save, before it is prepared for the database.
 	 * @param stdClass|null $field          The field $field_id belongs to, when the caller already has it loaded.
-	 * @param string|null   $previous_value The value currently stored in the database, or null when it is unknown.
+	 * @param string|null   $previous_hash  The MD5 hash of the value currently stored in the database, or null when it is unknown.
 	 *
 	 * @return bool|int The number of updated rows, 0 when the stored value already matches, or false on failure.
 	 */
-	private static function update_entry_meta_if_changed( $entry_id, $field_id, $meta_value, $field, $previous_value ) {
+	private static function update_entry_meta_if_changed( $entry_id, $field_id, $meta_value, $field, $previous_hash ) {
 		$meta_value = self::prepare_meta_value_for_update( $entry_id, $field_id, $meta_value, $field );
 
-		if ( is_string( $meta_value ) && $meta_value === $previous_value ) {
+		if ( is_string( $meta_value ) && null !== $previous_hash && md5( $meta_value ) === $previous_hash ) {
 			// Writing the same value again would only cost a query and trigger the meta change hooks.
 			return 0;
 		}
@@ -255,8 +255,8 @@ class FrmEntryMeta {
 	public static function update_entry_metas( $entry_id, $values ) {
 		global $wpdb;
 
-		$previous_values            = self::get_stored_meta_values( $entry_id );
-		$previous_field_ids         = array_map( 'strval', array_keys( $previous_values ) );
+		$previous_hashes            = self::get_stored_meta_hashes( $entry_id );
+		$previous_field_ids         = array_map( 'strval', array_keys( $previous_hashes ) );
 		$values_indexed_by_field_id = array();
 
 		foreach ( $values as $field_id_or_key => $meta_value ) {
@@ -286,7 +286,7 @@ class FrmEntryMeta {
 				unset( $values_indexed_by_field_id[ $field_id ] );
 			} else {
 				// If value exists, then update it
-				self::update_entry_meta_if_changed( $entry_id, $field_id, $meta_value, $field, $previous_values[ $field_id ] );
+				self::update_entry_meta_if_changed( $entry_id, $field_id, $meta_value, $field, $previous_hashes[ $field_id ] );
 			}
 		}//end foreach
 
@@ -321,10 +321,11 @@ class FrmEntryMeta {
 	}
 
 	/**
-	 * Get the stored meta values for an entry, indexed by field ID.
+	 * Get an MD5 hash of each stored meta value for an entry, indexed by field ID.
 	 *
 	 * Reads the database directly instead of the object cache, because a stale cached value
-	 * could cause a changed value to be skipped.
+	 * could cause a changed value to be skipped. The hash is computed in SQL so large stored
+	 * values, like long text or serialized repeater data, are not loaded into memory.
 	 *
 	 * @since x.x
 	 *
@@ -332,24 +333,24 @@ class FrmEntryMeta {
 	 *
 	 * @return array<int, string|null> A field with more than one stored row maps to null so it is always updated.
 	 */
-	private static function get_stored_meta_values( $entry_id ) {
+	private static function get_stored_meta_hashes( $entry_id ) {
 		global $wpdb;
 
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				'SELECT field_id, meta_value FROM %i WHERE item_id = %d AND field_id != 0',
+				'SELECT field_id, MD5(meta_value) AS meta_hash FROM %i WHERE item_id = %d AND field_id != 0',
 				$wpdb->prefix . 'frm_item_metas',
 				$entry_id
 			)
 		);
 
-		$values = array();
+		$hashes = array();
 
 		foreach ( $rows as $row ) {
-			$values[ $row->field_id ] = array_key_exists( $row->field_id, $values ) ? null : $row->meta_value;
+			$hashes[ $row->field_id ] = array_key_exists( $row->field_id, $hashes ) ? null : $row->meta_hash;
 		}
 
-		return $values;
+		return $hashes;
 	}
 
 	/**

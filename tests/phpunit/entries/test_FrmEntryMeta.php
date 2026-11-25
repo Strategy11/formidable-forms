@@ -308,7 +308,8 @@ class test_FrmEntryMeta extends FrmUnitTest {
 		);
 
 		$values   = array(
-			$text_field_id     => 'Unchanged',
+			// Multibyte text checks that the hash computed in SQL matches the one computed in PHP.
+			$text_field_id     => 'Unchanged café 日本',
 			$checkbox_field_id => array( 'Red', 'Green' ),
 			$changed_field_id  => 'Before',
 		);
@@ -324,7 +325,7 @@ class test_FrmEntryMeta extends FrmUnitTest {
 
 		$this->assertSame( array( (int) $changed_field_id ), $writes['changed_fields'], 'Only the changed field should fire the meta change hook.' );
 		$this->assertCount( 1, $writes['updates'], 'Only the changed value should be written.' );
-		$this->assertSame( 'Unchanged', FrmEntryMeta::get_entry_meta_by_field( $entry_id, $text_field_id ) );
+		$this->assertSame( 'Unchanged café 日本', FrmEntryMeta::get_entry_meta_by_field( $entry_id, $text_field_id ) );
 		$this->assertSame( array( 'Red', 'Green' ), FrmEntryMeta::get_entry_meta_by_field( $entry_id, $checkbox_field_id ) );
 		$this->assertSame( 'After', FrmEntryMeta::get_entry_meta_by_field( $entry_id, $changed_field_id ) );
 
@@ -375,7 +376,7 @@ class test_FrmEntryMeta extends FrmUnitTest {
 	 * A field with more than one stored row has no single previous value to compare with, so it
 	 * is always written. The update then brings every row to the submitted value.
 	 *
-	 * @see FrmEntryMeta::get_stored_meta_values
+	 * @see FrmEntryMeta::get_stored_meta_hashes
 	 */
 	public function test_update_entry_metas_always_writes_a_field_with_duplicate_rows() {
 		global $wpdb;
