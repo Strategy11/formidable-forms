@@ -70,63 +70,6 @@ class FrmStrpLiteConnectHelper {
 	}
 
 	/**
-	 * Handle the request to initialize with Stripe Connect
-	 *
-	 * @return void
-	 */
-	private static function handle_initialize() {
-		$data = self::initialize();
-
-		if ( is_string( $data ) ) {
-			wp_send_json_error( $data );
-		}
-
-		if ( false === $data || empty( $data->password ) || empty( $data->account_id ) || empty( $data->connect_url ) ) {
-			wp_send_json_error();
-		}
-
-		$response_data = array(
-			'connect_url' => $data->connect_url,
-		);
-		wp_send_json_success( $response_data );
-	}
-
-	/**
-	 * Initialize a Stripe Connect integration with the connect server
-	 *
-	 *  @return object|string
-	 */
-	private static function initialize() {
-		$mode = self::get_mode_value_from_post();
-
-		if ( self::get_account_id( $mode ) ) {
-			// Do not allow for initialize if there is already a configured account id.
-			return 'Cannot initialize another account';
-		}
-
-		$additional_body = array(
-			'password'              => self::generate_client_password( $mode ),
-			'user_id'               => get_current_user_id(),
-			'frm_strp_connect_mode' => $mode,
-		);
-		$data            = self::post_to_connect_server( 'initialize', $additional_body );
-
-		if ( is_string( $data ) ) {
-			return $data;
-		}
-
-		if ( ! empty( $data->password ) ) {
-			update_option( self::get_server_side_token_option_name( $mode ), $data->password, false );
-		}
-
-		if ( ! empty( $data->account_id ) ) {
-			update_option( self::get_account_id_option_name( $mode ), $data->account_id, false );
-		}
-
-		return $data;
-	}
-
-	/**
 	 * Generate a new client password for authenticating with Connect Service and save it locally as an option.
 	 *
 	 * @param string $mode 'live' or 'test'.
