@@ -189,6 +189,8 @@ class FrmFormApi {
 	}
 
 	/**
+	 * Build the add-ons API URL, with or without a license.
+	 *
 	 * @since x.x
 	 *
 	 * @param string $license The license key to include in the request. Blank to leave it out.
