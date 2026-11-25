@@ -68,8 +68,23 @@ class FrmFieldNumber extends FrmFieldType {
 	protected function add_extra_html_atts( $args, &$input_html ) {
 		$this->add_min_max( $args, $input_html );
 
-		$input_html .= ' data-minmsg="' . esc_attr( $this->get_min_error_message() ) . '"';
-		$input_html .= ' data-maxmsg="' . esc_attr( $this->get_max_error_message() ) . '"';
+		if ( $this->uses_default_invalid_message() ) {
+			$input_html .= ' data-minmsg="' . esc_attr( $this->get_min_error_message() ) . '"';
+			$input_html .= ' data-maxmsg="' . esc_attr( $this->get_max_error_message() ) . '"';
+		}
+	}
+
+	/**
+	 * A custom invalid message keeps showing for a value outside the range in JS validation.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private function uses_default_invalid_message() {
+		$invalid = FrmField::get_option( $this->field, 'invalid' );
+
+		return '' === $invalid || FrmFieldsHelper::default_invalid_msg( $this->field ) === $invalid;
 	}
 
 	/**
