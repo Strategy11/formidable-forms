@@ -98,6 +98,7 @@ class FrmStylesThemeCssHelper {
 			$paths = wp_list_pluck( self::get_theme_stylesheets(), 'path' );
 			set_transient( $cache_key, $paths, DAY_IN_SECONDS );
 		}
+
 		$paths[] = get_template_directory() . '/style.css';
 		$paths[] = get_stylesheet_directory() . '/style.css';
 
