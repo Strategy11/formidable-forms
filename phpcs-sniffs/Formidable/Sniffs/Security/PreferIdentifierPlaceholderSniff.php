@@ -349,6 +349,7 @@ class PreferIdentifierPlaceholderSniff implements Sniff {
 	 *   'expr'      => string (PHP expression to move into the prepare arguments),
 	 *   'parts'     => array (part indexes consumed, cross_part only),
 	 *   'lead_word' => string (leading identifier characters absorbed from the following literal, cross_part only),
+	 *   'unfixable' => bool (true when the identifier is cut off by an unbalanced backtick, in_string only),
 	 * ).
 	 *
 	 * @param array $parts The concatenation parts.
@@ -408,19 +409,16 @@ class PreferIdentifierPlaceholderSniff implements Sniff {
 			$tickAfter   = $matches[3][ $index ][0];
 			$startOffset = $matches[1][ $index ][1];
 
-			if ( '' !== $tickBefore && '' === $tickAfter ) {
-				// Unbalanced backtick, the identifier continues in another part. Not safely fixable.
-				$tickAfter = '';
-			}
-
 			$refs[] = array(
-				'type'   => 'in_string',
-				'ptr'    => $part['start'],
-				'part'   => $p,
-				'offset' => $startOffset,
-				'length' => strlen( $tickBefore ) + strlen( $text ) + strlen( $tickAfter ),
-				'text'   => $text,
-				'expr'   => $this->segments_to_expression( $text ),
+				'type'      => 'in_string',
+				'ptr'       => $part['start'],
+				'part'      => $p,
+				'offset'    => $startOffset,
+				'length'    => strlen( $tickBefore ) + strlen( $text ) + strlen( $tickAfter ),
+				'text'      => $text,
+				'expr'      => $this->segments_to_expression( $text ),
+				// An unbalanced backtick means the identifier continues in another part. Not safely fixable.
+				'unfixable' => '' !== $tickBefore && '' === $tickAfter,
 			);
 		}
 
@@ -467,6 +465,11 @@ class PreferIdentifierPlaceholderSniff implements Sniff {
 				$consumed[] = $p;
 				$p++;
 				continue;
+			}
+
+			if ( $match[1] === $part['content'] && $p + 1 < $count && preg_match( '/^[A-Za-z0-9_]/', $parts[ $p + 1 ]['content'] ) ) {
+				// The identifier continues in the next literal, so the whole name cannot be bound. Not safely fixable.
+				return false;
 			}
 
 			$exprBits[] = "'" . $match[1] . "'";
@@ -658,6 +661,10 @@ class PreferIdentifierPlaceholderSniff implements Sniff {
 		$refPartIndexes = array();
 
 		foreach ( $refs as $ref ) {
+			if ( ! empty( $ref['unfixable'] ) ) {
+				return false;
+			}
+
 			if ( 'cross_part' === $ref['type'] ) {
 				foreach ( $ref['parts'] as $p ) {
 					$refPartIndexes[ $p ] = true;

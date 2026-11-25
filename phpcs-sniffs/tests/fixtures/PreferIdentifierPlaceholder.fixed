@@ -55,3 +55,6 @@ $wpdb->prepare( 'SELECT id FROM %i WHERE id=%d', $wpdb->prefix . 'frm_items', $i
 $wpdb->prepare( 'SELECT id FROM %i WHERE id=%d', $wpdb->prefix . 'frm_items', $id );
 $wpdb->prepare( 'SELECT id FROM %i WHERE id=%d', $wpdb->prefix . 'frm_items', $id );
 $wpdb->prepare( 'SELECT id FROM ' . $wpdb->prefix . "frm_items\nWHERE id=%d", $id );
+$wpdb->prepare( "SELECT id FROM `{$wpdb->prefix}frm_" . "items` WHERE id=%d", $id );
+$wpdb->prepare( 'SELECT id FROM ' . $wpdb->prefix . 'frm_items' . "_old WHERE id=%d", $id );
+$wpdb->prepare( 'SELECT id FROM ' . $wpdb->prefix . 'frm_items' . '_old WHERE id=%d', $id );
