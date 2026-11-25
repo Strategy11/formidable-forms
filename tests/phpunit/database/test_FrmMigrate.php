@@ -292,6 +292,22 @@ class test_FrmMigrate extends FrmUnitTest {
 		}
 	}
 
+	/**
+	 * @covers FrmMigrate::migrate_to_108
+	 */
+	public function test_migrate_to_108() {
+		update_option( 'frm_strp_connect_account_id_live', 'acct_live' );
+		delete_option( 'frm_strp_connect_site_url_live' );
+		delete_option( 'frm_strp_connect_account_id_test' );
+		delete_option( 'frm_strp_connect_site_url_test' );
+
+		$frmdb = new FrmMigrate();
+		$this->run_private_method( array( $frmdb, 'migrate_to_108' ), array() );
+
+		$this->assertNotEmpty( get_option( 'frm_strp_connect_site_url_live' ), 'An existing Stripe connection should get the current site URL.' );
+		$this->assertFalse( get_option( 'frm_strp_connect_site_url_test' ), 'A mode with no Stripe connection should not get a site URL.' );
+	}
+
 	public function test_collation() {
 		global $wpdb;
 

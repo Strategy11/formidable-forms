@@ -148,7 +148,7 @@ class FrmStrpLiteConnectHelper {
 	}
 
 	/**
-	 * @param string $key 'account_id', 'client_password', 'server_password', 'details_submitted'.
+	 * @param string $key 'account_id', 'client_password', 'server_password', 'details_submitted', 'site_url'.
 	 * @param string $mode either 'auto', 'live', or 'test'.
 	 *
 	 * @return string
@@ -194,17 +194,6 @@ class FrmStrpLiteConnectHelper {
 	}
 
 	/**
-	 * @since x.x
-	 *
-	 * @param string $mode either 'auto', 'live', or 'test'.
-	 *
-	 * @return string
-	 */
-	private static function get_site_url_option_name( $mode = 'auto' ) {
-		return self::get_strp_connect_option_name( 'site_url', $mode );
-	}
-
-	/**
 	 * Save the current site URL as the URL this Stripe connection belongs to.
 	 *
 	 * @since x.x
@@ -214,7 +203,23 @@ class FrmStrpLiteConnectHelper {
 	 * @return void
 	 */
 	private static function save_connected_site_url( $mode ) {
-		update_option( self::get_site_url_option_name( $mode ), self::get_site_url_for_connect_server(), false );
+		update_option( self::get_strp_connect_option_name( 'site_url', $mode ), self::get_site_url_for_connect_server(), false );
+	}
+
+	/**
+	 * Save the current site URL for connections made before it was tracked. This runs from the database upgrade.
+	 * It is best-effort, since a database copied before the update records the URL of the copy instead.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function save_missing_connected_site_urls() {
+		foreach ( array( 'test', 'live' ) as $mode ) {
+			if ( self::get_account_id( $mode ) && ! get_option( self::get_strp_connect_option_name( 'site_url', $mode ) ) ) {
+				self::save_connected_site_url( $mode );
+			}
+		}
 	}
 
 	/**
@@ -224,18 +229,13 @@ class FrmStrpLiteConnectHelper {
 	 *
 	 * @param string $mode 'live' or 'test'.
 	 *
-	 * @return false|string The site URL the account was connected on, or false when it matches. A trailing slash (WPML can add one) is ignored.
+	 * @return false|string The site URL the account was connected on, or false when it matches or no URL is saved. A trailing slash (WPML can add one) is ignored.
 	 */
 	public static function get_mismatched_site_url( $mode ) {
-		if ( ! self::get_account_id( $mode ) ) {
-			return false;
-		}
+		$connected_url = self::get_account_id( $mode ) ? get_option( self::get_strp_connect_option_name( 'site_url', $mode ) ) : false;
 
-		$connected_url = get_option( self::get_site_url_option_name( $mode ) );
-
+		// The database upgrade saves a URL for older connections. Without one there is nothing to compare.
 		if ( ! $connected_url || ! is_string( $connected_url ) ) {
-			// Connections made before the site URL was tracked have nothing saved yet.
-			self::save_connected_site_url( $mode );
 			return false;
 		}
 
@@ -270,7 +270,7 @@ class FrmStrpLiteConnectHelper {
 		delete_option( self::get_server_side_token_option_name( $mode ) );
 		delete_option( self::get_client_side_token_option_name( $mode ) );
 		delete_option( self::get_stripe_details_submitted_option_name( $mode ) );
-		delete_option( self::get_site_url_option_name( $mode ) );
+		delete_option( self::get_strp_connect_option_name( 'site_url', $mode ) );
 	}
 
 	/**
