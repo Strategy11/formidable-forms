@@ -364,7 +364,7 @@ class PreferIdentifierPlaceholderSniff implements Sniff {
 			$part = $parts[ $p ];
 
 			if ( 'dq' === $part['type'] ) {
-				$refs = array_merge( $refs, $this->find_in_string_refs( $part, $p ) );
+				$refs = array_merge( $refs, $this->find_in_string_refs( $parts, $p ) );
 			}
 
 			if ( 'expr' === $part['type'] || $p + 1 >= $count || 'expr' !== $parts[ $p + 1 ]['type'] ) {
@@ -388,12 +388,13 @@ class PreferIdentifierPlaceholderSniff implements Sniff {
 	/**
 	 * Finds table references fully contained inside a double quoted string part.
 	 *
-	 * @param array $part The dq part.
-	 * @param int   $p    The part index.
+	 * @param array $parts The concatenation parts.
+	 * @param int   $p     The index of the dq part.
 	 *
 	 * @return array
 	 */
-	private function find_in_string_refs( $part, $p ) {
+	private function find_in_string_refs( $parts, $p ) {
+		$part   = $parts[ $p ];
 		$interp = self::INTERP_SEGMENT;
 		$refRun = '(?:[A-Za-z0-9_]+)?(?:' . $interp . '(?:[A-Za-z0-9_]+)?)+';
 
@@ -408,17 +409,19 @@ class PreferIdentifierPlaceholderSniff implements Sniff {
 			$tickBefore  = $matches[1][ $index ][0];
 			$tickAfter   = $matches[3][ $index ][0];
 			$startOffset = $matches[1][ $index ][1];
+			$length      = strlen( $tickBefore ) + strlen( $text ) + strlen( $tickAfter );
+			$rest        = substr( $part['content'], $startOffset + $length );
 
 			$refs[] = array(
 				'type'      => 'in_string',
 				'ptr'       => $part['start'],
 				'part'      => $p,
 				'offset'    => $startOffset,
-				'length'    => strlen( $tickBefore ) + strlen( $text ) + strlen( $tickAfter ),
+				'length'    => $length,
 				'text'      => $text,
 				'expr'      => $this->segments_to_expression( $text ),
-				// An unbalanced backtick means the identifier continues in another part. Not safely fixable.
-				'unfixable' => '' !== $tickBefore && '' === $tickAfter,
+				// An unbalanced backtick, or SQL that continues the name in another part, cannot be bound safely.
+				'unfixable' => ( '' !== $tickBefore && '' === $tickAfter ) || ! $this->identifier_ends_cleanly( $parts, $p, $rest ),
 			);
 		}
 
@@ -438,6 +441,8 @@ class PreferIdentifierPlaceholderSniff implements Sniff {
 		$exprBits  = array();
 		$consumed  = array();
 		$leadWord  = '';
+		$rest      = '';
+		$restPart  = $count - 1;
 		$p         = $start;
 
 		while ( $p < $count ) {
@@ -456,6 +461,8 @@ class PreferIdentifierPlaceholderSniff implements Sniff {
 			}
 
 			if ( ! preg_match( '/^([A-Za-z0-9_]+)/', $part['content'], $match ) ) {
+				$rest     = $part['content'];
+				$restPart = $p;
 				break;
 			}
 
@@ -467,17 +474,24 @@ class PreferIdentifierPlaceholderSniff implements Sniff {
 				continue;
 			}
 
-			if ( $match[1] === $part['content'] && $p + 1 < $count && preg_match( '/^[A-Za-z0-9_]/', $parts[ $p + 1 ]['content'] ) ) {
-				// The identifier continues in the next literal, so the whole name cannot be bound. Not safely fixable.
-				return false;
-			}
-
 			$exprBits[] = "'" . $match[1] . "'";
 			$leadWord   = $match[1];
+			$rest       = substr( $part['content'], strlen( $match[1] ) );
+			$restPart   = $p;
 			break;
 		}
 
 		if ( ! $exprBits ) {
+			return false;
+		}
+
+		if ( '`' === substr( $rest, 0, 1 ) && preg_match( '/`\s*$/', $parts[ $start - 1 ]['content'] ) ) {
+			// The closing backtick sits in the same literal as the end of the name, so the fixer removes it.
+			$rest = substr( $rest, 1 );
+		}
+
+		if ( ! $this->identifier_ends_cleanly( $parts, $restPart, $rest ) ) {
+			// The identifier continues past what can be bound, or a backtick is left behind. Not safely fixable.
 			return false;
 		}
 
@@ -489,6 +503,36 @@ class PreferIdentifierPlaceholderSniff implements Sniff {
 			'lead_word' => $leadWord,
 			'expr'      => implode( ' . ', $exprBits ),
 		);
+	}
+
+	/**
+	 * Checks whether the SQL right after a table identifier ends the identifier.
+	 *
+	 * The next character, in the same literal or the next one, must be whitespace,
+	 * a comma, a semicolon, a parenthesis, or the end of the query. Anything else,
+	 * such as identifier characters, a backtick or interpolation, would continue the
+	 * name or leave a stray character next to the %i placeholder.
+	 *
+	 * @param array  $parts The concatenation parts.
+	 * @param int    $p     The index of the part holding the end of the identifier.
+	 * @param string $rest  The text of that part after the identifier.
+	 *
+	 * @return bool
+	 */
+	private function identifier_ends_cleanly( $parts, $p, $rest ) {
+		if ( '' === $rest ) {
+			if ( ! isset( $parts[ $p + 1 ] ) ) {
+				return true;
+			}
+
+			if ( 'expr' === $parts[ $p + 1 ]['type'] ) {
+				return false;
+			}
+
+			$rest = $parts[ $p + 1 ]['content'];
+		}
+
+		return (bool) preg_match( '/^[\s,;()]/', $rest );
 	}
 
 	/**
