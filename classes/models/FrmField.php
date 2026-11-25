@@ -1497,7 +1497,7 @@ class FrmField {
 
 		// Save the first chunk last so a request reading meanwhile never finds it without the rest.
 		for ( $i = count( $field_chunks ) - 1; $i >= 0; $i-- ) {
-			$name = ( $next + $i ) ? $base_name . ( $next + $i ) : $base_name;
+			$name = $next + $i ? $base_name . ( $next + $i ) : $base_name;
 			$set  = set_transient( $name, $field_chunks[ $i ], 60 * 60 * 6 );
 
 			// An unchanged value reports false even though the chunk is cached.

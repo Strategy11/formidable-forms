@@ -179,7 +179,7 @@ class test_FrmField extends FrmUnitTest {
 	 * @return array{0: int, 1: string, 2: array<int>} Form ID, transient base name, field IDs.
 	 */
 	private function create_form_with_fields( $total ) {
-		$form_id = $this->factory->form->create_and_get()->id;
+		$form_id = $this->factory->form->create();
 		$missing = $total - count( FrmField::get_all_for_form( $form_id ) );
 
 		for ( $i = 0; $i < $missing; $i++ ) {
