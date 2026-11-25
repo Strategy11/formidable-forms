@@ -11,7 +11,9 @@ test( 'Only a priced dropdown runs the product total calculation', () => {
 	const context = {
 		window: { addEventListener() {}, requestAnimationFrame() {} },
 		ResizeObserver: class {},
-		MutationObserver: class { observe() {} },
+		MutationObserver: class {
+			observe() {}
+		},
 		document: {
 			body: { classList: { contains: () => false } },
 			addEventListener() {},
