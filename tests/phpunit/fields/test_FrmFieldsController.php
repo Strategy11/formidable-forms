@@ -225,7 +225,13 @@ class test_FrmFieldsController extends FrmUnitTest {
 	}
 
 	public function test_builder_placeholder_manifest_preserves_attributes_and_order() {
-		$form_id  = $this->factory->form->create();
+		$form_id = $this->factory->form->create();
+
+		/**
+		 * Filled in by FrmFieldsController::load_single_field() as each placeholder renders.
+		 *
+		 * @var stdClass $manifest
+		 */
 		$manifest = (object) array(
 			'definitions' => array(),
 			'fields'      => array(),

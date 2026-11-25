@@ -283,7 +283,7 @@
 	 * Pro 7.0.1 and older call wpColorPicker() on the email style color inputs. Lite now renders
 	 * its own disabled toggle with a hidden input, so remove the toggle and show the input instead.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return {void}
 	 */

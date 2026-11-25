@@ -148,7 +148,7 @@ class FrmPayPalLiteAppController {
 	 * Fields inside a repeater are posted under the repeater's section ID,
 	 * one array of field values per row, so they are not found at the top level of item_meta.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array $fields      The form fields, including fields inside repeaters.
 	 * @param array $posted_data The posted item_meta values.
@@ -178,7 +178,7 @@ class FrmPayPalLiteAppController {
 	/**
 	 * Extract pricing data from one set of field values, either the top level of the form or a single repeater row.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array $fields The form fields.
 	 * @param array $values The posted values, keyed by field ID.
@@ -274,7 +274,7 @@ class FrmPayPalLiteAppController {
 	 * more than the product fields, like a calculated tax, gratuity, fee, or discount.
 	 * Without line items, no breakdown is sent and the order is created with the amount alone.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array  $pricing_data The products with prices and quantities.
 	 * @param string $amount       The order amount, formatted with two decimals.

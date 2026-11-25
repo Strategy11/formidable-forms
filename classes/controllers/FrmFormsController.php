@@ -120,7 +120,7 @@ class FrmFormsController {
 	 * Create the default email action
 	 *
 	 * @since 2.02.11
-	 * @since x.x Changed from private to public.
+	 * @since 7.1 Changed from private to public.
 	 *
 	 * @param int|object $form
 	 *
@@ -444,7 +444,7 @@ class FrmFormsController {
 	 * An AJAX save gets a 500 response with the X-Frm-Form-Saved: 0 header, and the builder keeps
 	 * the unsaved field order to send again.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param int $id Form ID.
 	 *
@@ -2771,15 +2771,18 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Check if a draft form should be hidden. A draft form is hidden on every page, for everyone.
-	 * It only renders on the preview page, and when a form submitted from the preview page with AJAX is shown again.
+	 * Check if a draft form should be hidden from a visitor without permission to edit forms.
+	 * Shared previews and their AJAX submissions can still display the form.
 	 *
 	 * @param object $form
 	 *
 	 * @return bool
 	 */
 	private static function is_hidden_draft_form( $form ) {
-		return $form->status === 'draft' && ! FrmAppHelper::is_preview_page() && ! self::is_ajax_submit_from_preview_page( $form );
+		return $form->status === 'draft'
+		&& ! FrmAppHelper::current_user_can( 'frm_edit_forms' )
+		&& ! FrmAppHelper::is_preview_page()
+		&& ! self::is_ajax_submit_from_preview_page( $form );
 	}
 
 	/**
@@ -2788,13 +2791,13 @@ class FrmFormsController {
 	 * The preview page adds a nonce to the draft form, so this does not depend on the Referer header,
 	 * which a Referrer-Policy can strip. Only a visitor who could already open the preview has the nonce.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param object $form The form being shown.
 	 *
 	 * @return bool
 	 */
-	private static function is_ajax_submit_from_preview_page( $form ) {
+	public static function is_ajax_submit_from_preview_page( $form ) {
 		if ( ! wp_doing_ajax() || FrmAppHelper::get_post_param( 'action', '', 'sanitize_title' ) !== 'frm_entries_create' ) {
 			return false;
 		}
@@ -2805,17 +2808,17 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Add a nonce to a draft form so an AJAX submit from the preview page can show the draft form again.
-	 * A draft form only renders on the preview page or in that AJAX response, so the nonce never reaches other pages.
+	 * Add a preview nonce so AJAX responses can display draft forms, including embedded drafts.
+	 * Published preview forms need it too when they contain an embedded draft.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param object $form The form being rendered.
 	 *
 	 * @return void
 	 */
 	public static function maybe_add_draft_preview_nonce( $form ) {
-		if ( $form->status !== 'draft' ) {
+		if ( $form->status !== 'draft' && ! FrmAppHelper::is_preview_page() && ! self::is_ajax_submit_from_preview_page( $form ) ) {
 			return;
 		}
 
@@ -2826,7 +2829,7 @@ class FrmFormsController {
 	/**
 	 * Get the nonce action and field name used to show a draft form again after an AJAX submit from the preview page.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param object $form The draft form.
 	 *

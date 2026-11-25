@@ -332,7 +332,7 @@
 		/**
 		 * Add embed choices with access to the panel they render into.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 */
 		wp.hooks.applyFilters( 'frm_embed_modal_options', options, {
 			type: state.type,

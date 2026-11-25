@@ -234,7 +234,7 @@ class FrmGatedContentAction extends FrmFormAction {
 	 *
 	 * Returns a JSON string suitable for passing as a `data-source` attribute to a
 	 * jQuery UI autocomplete widget. Each entry has a `value` (post ID string) and
-	 * a `label` (post title).
+	 * a `label` (post title and ID).
 	 *
 	 * @param object[] $posts Posts returned by get_posts().
 	 *
@@ -246,7 +246,7 @@ class FrmGatedContentAction extends FrmFormAction {
 				static function ( $p ) {
 					return array(
 						'value' => (string) $p->ID,
-						'label' => $p->post_title,
+						'label' => FrmAppHelper::get_post_dropdown_label( $p ),
 					);
 				},
 				$posts

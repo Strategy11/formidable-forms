@@ -95,6 +95,20 @@ class test_FrmCaptchaSpam extends FrmUnitTest {
 		return $errors;
 	}
 
+	/**
+	 * Create an entry for the submission validated in this request.
+	 *
+	 * @return int
+	 */
+	private function create_entry() {
+		return (int) FrmEntry::create(
+			array(
+				'form_id'   => $this->captcha->form_id,
+				'item_meta' => array(),
+			)
+		);
+	}
+
 	public function test_captcha_errors_block_by_default() {
 		$this->assertArrayHasKey( 'field' . $this->captcha->id, $this->validate_captcha(), 'CAPTCHA failures should block by default.' );
 		$this->assertSame( '', FrmSpamEntriesHelper::get_flagged_source( array( 'form_id' => $this->captcha->form_id ) ), 'Blocked submissions should not be saved.' );
@@ -141,14 +155,67 @@ class test_FrmCaptchaSpam extends FrmUnitTest {
 		);
 	}
 
-	public function test_transport_error_can_be_saved_as_spam() {
-		FrmAppHelper::get_settings()->spam_handling['captcha'] = FrmSpamEntriesHelper::SAVE;
-		$this->response                                        = new WP_Error( 'http_request_failed', 'Verification service unavailable.' );
-		$this->assertSame( array(), $this->validate_captcha(), 'Transport failures should follow the save setting.' );
+	public function test_transport_error_is_saved_as_spam_by_default() {
+		$this->response = new WP_Error( 'http_request_failed', 'Verification service unavailable.' );
+		$this->assertSame( array(), $this->validate_captcha(), 'An unreachable CAPTCHA service should not block the submission by default.' );
+		$this->assertSame(
+			'captcha_unavailable',
+			FrmSpamEntriesHelper::get_flagged_source( array( 'form_id' => $this->captcha->form_id ) ),
+			'The submission should be flagged with the unavailable service source.'
+		);
 		$this->assertSame(
 			'Verification service unavailable.',
 			FrmSpamEntriesHelper::get_flagged_reason( array( 'form_id' => $this->captcha->form_id ) ),
 			'The transport error should be recorded.'
+		);
+	}
+
+	public function test_unreadable_response_is_saved_as_spam_by_default() {
+		$this->response = array( 'body' => '<html>Service unavailable</html>' );
+		$this->assertSame( array(), $this->validate_captcha(), 'An unreadable CAPTCHA response should not block the submission by default.' );
+		$this->assertSame(
+			'captcha_unavailable',
+			FrmSpamEntriesHelper::get_flagged_source( array( 'form_id' => $this->captcha->form_id ) ),
+			'The submission should be flagged with the unavailable service source.'
+		);
+		$this->assertStringContainsString(
+			'could not be read',
+			FrmSpamEntriesHelper::get_flagged_reason( array( 'form_id' => $this->captcha->form_id ) ),
+			'The reason should be recorded.'
+		);
+	}
+
+	public function test_response_without_success_key_is_saved_as_spam_by_default() {
+		$this->response = array( 'body' => wp_json_encode( array( 'hostname' => 'example.com' ) ) );
+		$this->assertSame( array(), $this->validate_captcha(), 'A response without a success key should not pass or block by default.' );
+		$this->assertSame(
+			'captcha_unavailable',
+			FrmSpamEntriesHelper::get_flagged_source( array( 'form_id' => $this->captcha->form_id ) ),
+			'A response without a success key should never be treated as a pass.'
+		);
+	}
+
+	public function test_unavailable_service_can_be_blocked() {
+		FrmAppHelper::get_settings()->spam_handling['captcha_unavailable'] = FrmSpamEntriesHelper::BLOCK;
+		$this->response = array( 'body' => '<html>Service unavailable</html>' );
+		$this->assertArrayHasKey( 'field' . $this->captcha->id, $this->validate_captcha(), 'The block setting should reject the submission.' );
+		$this->assertSame( '', FrmSpamEntriesHelper::get_flagged_source( array( 'form_id' => $this->captcha->form_id ) ), 'A blocked submission should not be flagged.' );
+	}
+
+	public function test_failed_captcha_still_follows_captcha_errors_setting() {
+		FrmAppHelper::get_settings()->spam_handling['captcha_unavailable'] = FrmSpamEntriesHelper::SAVE;
+		$this->assertArrayHasKey( 'field' . $this->captcha->id, $this->validate_captcha(), 'A CAPTCHA the visitor failed should still block by default.' );
+	}
+
+	public function test_saved_unavailable_service_entry_shows_its_reason() {
+		$this->response = new WP_Error( 'http_request_failed', 'Verification service unavailable.' );
+		$this->assertSame( array(), $this->validate_captcha(), 'The submission should be allowed.' );
+		$entry = FrmEntry::getOne( $this->create_entry() );
+		$this->assertSame( FrmSpamEntriesHelper::SPAM_ENTRY_STATUS, (int) $entry->is_draft, 'The entry should have spam status.' );
+		$this->assertSame(
+			'CAPTCHA service unavailable: Verification service unavailable.',
+			FrmSpamEntriesHelper::get_source_label( $entry ),
+			'The label should name the source and the error.'
 		);
 	}
 
@@ -171,6 +238,40 @@ class test_FrmCaptchaSpam extends FrmUnitTest {
 			FrmSpamEntriesHelper::get_flagged_reason( array( 'form_id' => $this->captcha->form_id ) ),
 			'The score and threshold should be recorded.'
 		);
+		$this->assertSame(
+			'captcha',
+			FrmSpamEntriesHelper::get_flagged_source( array( 'form_id' => $this->captcha->form_id ) ),
+			'A low score is a failed CAPTCHA, not an unavailable service.'
+		);
+
+		$entry = FrmEntry::getOne( $this->create_entry() );
+		$this->assertSame( FrmSpamEntriesHelper::SPAM_ENTRY_STATUS, (int) $entry->is_draft, 'The low score entry should have spam status.' );
+		$this->assertSame(
+			'CAPTCHA errors: The reCAPTCHA v3 score of 0.1 is below the threshold of 0.5.',
+			FrmSpamEntriesHelper::get_source_label( $entry ),
+			'The stored spam reason should show the score and threshold.'
+		);
+
+		ob_start();
+
+		try {
+			FrmEntriesController::entry_sidebar( $entry );
+			$html = ob_get_contents();
+		} finally {
+			ob_end_clean();
+		}
+		$this->assertStringContainsString( 'The reCAPTCHA v3 score of 0.1 is below the threshold of 0.5.', $html, 'The entry sidebar should show the spam reason.' );
+		$this->assertMatchesRegularExpression( '/<b>0\.1<\/b>/', $html, 'The entry sidebar should show the stored CAPTCHA score.' );
+	}
+
+	public function test_v3_success_without_score_passes() {
+		$settings                           = FrmAppHelper::get_settings();
+		$settings->spam_handling['captcha'] = FrmSpamEntriesHelper::SAVE;
+		$settings->re_type                  = 'v3';
+		$settings->re_threshold             = '0.5';
+		$this->response                     = array( 'body' => wp_json_encode( array( 'success' => true ) ) );
+		$this->assertSame( array(), $this->validate_captcha(), 'A successful v3 response without a score should pass.' );
+		$this->assertSame( '', FrmSpamEntriesHelper::get_flagged_source( array( 'form_id' => $this->captcha->form_id ) ), 'A response without a score should not be spam.' );
 	}
 
 	public function test_entry_updates_keep_captcha_errors() {

@@ -243,7 +243,7 @@ class FrmStylesHelper {
 	/**
 	 * Parse the color formats supported by the styler.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param string $color Hex, RGB or HSL color value.
 	 *
@@ -323,7 +323,7 @@ class FrmStylesHelper {
 	/**
 	 * Expand a validated hex color into numeric channels.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param string $color Hex color with an optional hash.
 	 *
@@ -344,7 +344,7 @@ class FrmStylesHelper {
 	/**
 	 * Check whether a value is a supported color without accepting CSS declarations.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param string $color Hex, RGB or HSL color value.
 	 *
@@ -357,7 +357,7 @@ class FrmStylesHelper {
 	/**
 	 * Read opacity consistently across the supported color formats.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param string $color Hex, RGB or HSL color value.
 	 *
@@ -371,7 +371,7 @@ class FrmStylesHelper {
 	/**
 	 * Restore the hash only for a bare hexadecimal color setting.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param string $color Saved color value.
 	 *
@@ -828,7 +828,7 @@ class FrmStylesHelper {
 	/**
 	 * Get the font size settings that are scaled from the "Base Font Size" value.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return array<string>
 	 */
@@ -854,7 +854,7 @@ class FrmStylesHelper {
 	 * Settings used directly in a CSS template (in a condition, a calculation, or a raw value) need the server.
 	 * This includes the templates from Pro versions that are still supported, so those settings are left out until Pro outputs them only as CSS variables.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return array<string>
 	 */
@@ -920,7 +920,7 @@ class FrmStylesHelper {
 		 * Remove any setting that a frm_output_single_style callback uses directly, so it still gets new CSS from the server.
 		 * Add a setting only when every template outputs it as a CSS variable and nothing else.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param array<string> $settings Style setting keys.
 		 */

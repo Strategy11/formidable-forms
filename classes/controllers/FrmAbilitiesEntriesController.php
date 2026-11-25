@@ -56,7 +56,7 @@ class FrmAbilitiesEntriesController {
 	 * The search term is only applied when Pro is active, so it is only
 	 * advertised then. Without Pro an agent would send it and get every entry.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return array
 	 */
@@ -245,7 +245,7 @@ class FrmAbilitiesEntriesController {
 	/**
 	 * Register the mark entry as spam ability.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return void
 	 */
@@ -416,7 +416,7 @@ class FrmAbilitiesEntriesController {
 	/**
 	 * Mark a submitted entry as spam.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array $input Ability input parameters.
 	 *
@@ -839,7 +839,7 @@ class FrmAbilitiesEntriesController {
 	/**
 	 * Build the error returned when an entry cannot be moved to spam.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return WP_Error
 	 */
@@ -882,7 +882,7 @@ class FrmAbilitiesEntriesController {
 	/**
 	 * Permission callback for mark entry as spam.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array $input Ability input parameters.
 	 *

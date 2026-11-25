@@ -5,7 +5,7 @@
  *
  * @package Formidable
  *
- * @since x.x
+ * @since 7.1
  */
 
 declare(strict_types=1);

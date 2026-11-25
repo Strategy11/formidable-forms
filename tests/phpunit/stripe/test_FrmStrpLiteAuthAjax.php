@@ -63,6 +63,36 @@ class test_FrmStrpLiteAuthAjax extends FrmAjaxUnitTest {
 		);
 	}
 
+	public function test_legacy_initialize_does_not_contact_connect() {
+		$response = $this->post_connect_settings_action( 'frm_stripe_connect_initialize' );
+
+		$this->assertSame( array( 'success' => false ), json_decode( $response, true ) );
+		$this->assertSame( array(), $this->requests );
+	}
+
+	public function test_oauth_contacts_connect() {
+		$this->post_connect_settings_action( 'frm_stripe_connect_oauth' );
+		$this->assertSame( array( 'oauth_request' ), array_column( $this->requests, 'frm_strp_connect_action' ) );
+	}
+
+	/**
+	 * @param string $action The Stripe settings action submitted by the admin.
+	 *
+	 * @return string The AJAX response.
+	 */
+	private function post_connect_settings_action( $action ) {
+		$this->set_as_user_role( 'administrator' );
+		delete_option( 'frm_strp_connect_account_id_test' );
+		$_POST = array(
+			'nonce'    => wp_create_nonce( 'frm_ajax' ),
+			'testMode' => '1',
+		);
+
+		// The settings dispatcher is normally called during init, which the AJAX test runner skips.
+		add_action( 'wp_ajax_' . $action, 'FrmStrpLiteConnectHelper::check_for_stripe_connect_webhooks' );
+		return $this->trigger_action( $action );
+	}
+
 	/**
 	 * @param array $form The posted form inputs.
 	 *

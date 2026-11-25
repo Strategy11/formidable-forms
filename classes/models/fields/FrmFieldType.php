@@ -32,7 +32,7 @@ abstract class FrmFieldType {
 	/**
 	 * Whether this field can be placed in a repeater.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @var bool
 	 */
@@ -41,7 +41,7 @@ abstract class FrmFieldType {
 	/**
 	 * Get the repeater placement policy, including declarations from add-ons.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return bool
 	 */
@@ -375,7 +375,7 @@ DEFAULT_HTML;
 	/**
 	 * Keep only displayed choices in a dropdown preview. Settings retain every choice.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array $field The prepared builder field.
 	 *
@@ -485,7 +485,7 @@ DEFAULT_HTML;
 	 * The width is printed with the field so the preview renders at its final size, with no
 	 * resize after the builder scripts load. The builder updates it live as the setting changes.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return string The style attribute value, or an empty string when no size applies.
 	 */
@@ -512,7 +512,7 @@ DEFAULT_HTML;
 	/**
 	 * Whether the field settings panel offers a width control.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array $display Display options for the field settings panel.
 	 *

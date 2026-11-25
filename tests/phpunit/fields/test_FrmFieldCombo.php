@@ -312,8 +312,8 @@ class test_FrmFieldCombo extends FrmUnitTest {
 			)
 		);
 
-		$field_id   = $field['id'];
-		$field_name = $field['name'];
+		$field_id   = (int) $field['id'];
+		$field_name = (string) $field['name'];
 
 		$this->set_private_property( $combo_field, 'field', $field );
 

@@ -40,7 +40,7 @@ class FrmFieldPhone extends FrmFieldType {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return array<string>
 	 */
@@ -52,7 +52,7 @@ class FrmFieldPhone extends FrmFieldType {
 	 * Default new phone fields to tel autocomplete. Saved fields without the
 	 * setting keep the empty parent default so their output does not change.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @return array
 	 */
