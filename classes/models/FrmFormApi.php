@@ -120,16 +120,6 @@ class FrmFormApi {
 	 * @return array
 	 */
 	public function get_api_info() {
-		$url = $this->api_url();
-
-		if ( $this->license ) {
-			$url .= '?l=' . urlencode( base64_encode( $this->license ) );
-		}
-
-		if ( $this->include_boosts() ) {
-			$url = add_query_arg( 'include_boosts', 1, $url );
-		}
-
 		if ( $this->force ) {
 			$addons      = false;
 			$this->force = false;
@@ -147,6 +137,89 @@ class FrmFormApi {
 		}
 
 		$this->set_running();
+
+		$addons = $this->request_addons( $this->get_request_url( $this->license ) );
+
+		$this->set_cached( $addons );
+		$this->done_running();
+
+		return $addons;
+	}
+
+	/**
+	 * Get an add-on's API data, including the changelog that is left out of the cached data.
+	 *
+	 * The changelog is requested without the license, so every site requests the same URL
+	 * and the response can come from the server cache. That response is never saved, since
+	 * it has no license-specific data like download packages and license status.
+	 *
+	 * The licensed request is still used when the public data has a different version than
+	 * this license gets. For example, the public data lists the legacy version of Views.
+	 *
+	 * @since x.x
+	 *
+	 * @param int|string $item_id The download id of the add-on.
+	 *
+	 * @return array Empty if the add-on is not found.
+	 */
+	public function get_addon_with_changelog( $item_id ) {
+		$addons  = $this->get_api_info();
+		$version = $addons[ $item_id ]['version'] ?? '';
+
+		if ( $version ) {
+			$public_addons = $this->request_addons( $this->get_request_url( '' ) );
+			$public_addon  = $public_addons[ $item_id ] ?? array();
+
+			if ( isset( $public_addon['changelog'], $public_addon['version'] ) && $version === $public_addon['version'] ) {
+				$addon              = $addons[ $item_id ];
+				$addon['changelog'] = $public_addon['changelog'];
+
+				if ( isset( $public_addon['banners'] ) ) {
+					$addon['banners'] = $public_addon['banners'];
+				}
+
+				return $addon;
+			}
+		}
+
+		$this->force_api_request();
+		$addons = $this->get_api_info();
+
+		return $addons[ $item_id ] ?? array();
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $license The license key to include in the request. Blank to leave it out.
+	 *
+	 * @return string
+	 */
+	private function get_request_url( $license ) {
+		$url = $this->api_url();
+
+		if ( $license ) {
+			$url .= '?l=' . urlencode( base64_encode( $license ) );
+		}
+
+		if ( $this->include_boosts() ) {
+			return add_query_arg( 'include_boosts', 1, $url );
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Request add-on data from the API, without reading or saving the cache.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $url The API URL to request.
+	 *
+	 * @return array
+	 */
+	private function request_addons( $url ) {
+		$addons = false;
 
 		// We need to know the version number to allow different downloads.
 		$agent = 'formidable/' . FrmAppHelper::plugin_version();
@@ -191,9 +264,6 @@ class FrmFormApi {
 				$addons[ $k ]['is_new'] = $this->is_new( $addon );
 			}
 		}
-
-		$this->set_cached( $addons );
-		$this->done_running();
 
 		return $addons;
 	}
