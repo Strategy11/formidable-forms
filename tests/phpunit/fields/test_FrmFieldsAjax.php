@@ -316,6 +316,8 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 			)
 		);
 
+		wp_get_current_user()->add_cap( 'frm_edit_forms' );
+
 		$truncate_at_tag = static function ( $content ) {
 			return preg_replace( '/<[a-zA-Z].*$/s', '', $content );
 		};
