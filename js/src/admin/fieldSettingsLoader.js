@@ -134,6 +134,33 @@ export function waitForFieldSettings( fieldIds ) {
 }
 
 /**
+ * Run a change once the settings panels it reads have loaded.
+ *
+ * Pending panels are requested right away. The change runs after every request settles,
+ * even one that failed, and runs at once when nothing is pending.
+ *
+ * @since 7.1
+ * @param {string[]} fieldIds  The fields whose settings the change reads.
+ * @param {Function} onRequest Called with each field id requested, before its settings arrive.
+ * @param {Function} update    The change to run.
+ * @return {Promise<void>} Resolves after the change has run.
+ */
+export function whenFieldSettingsLoaded( fieldIds, onRequest, update ) {
+	const pendingFieldIds = fieldIds.map( String ).filter( isFieldSettingsPending );
+	if ( ! pendingFieldIds.length ) {
+		update();
+		return Promise.resolve();
+	}
+
+	pendingFieldIds.forEach( fieldId => {
+		onRequest( fieldId );
+		requestFieldSettingsNow( fieldId );
+	} );
+	// The requests are sent in a microtask, so wait for them after it.
+	return Promise.resolve().then( () => waitForFieldSettings( pendingFieldIds ) ).then( update );
+}
+
+/**
  * Ask once more for settings whose last request failed.
  *
  * @since 7.1

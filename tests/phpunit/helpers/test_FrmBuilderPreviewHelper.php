@@ -193,7 +193,8 @@ class test_FrmBuilderPreviewHelper extends FrmUnitTest {
 		$this->assertArrayHasKey( 'inputHtml', $grouped );
 		$this->assertArrayNotHasKey( 'htmlId', $grouped );
 
-		if ( class_exists( 'FrmProFieldNumber' ) ) {
+		// Pro classes can autoload while Pro is inactive, and then the Lite number field is used. This check needs Pro active.
+		if ( FrmAppHelper::pro_is_installed() ) {
 			$this->assertStringContainsString( 'frm_input_group', $grouped['inputHtml'], 'Pro wraps the number in its prefix group.' );
 		}
 	}

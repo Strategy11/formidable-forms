@@ -19,7 +19,7 @@ const { captureFieldSettings, applyFieldSettings, restoreFieldSettingValues } = 
 const { addFieldSettingsMetadata, cacheFieldSettings, forgetFieldSettings, materializeFieldSettings, materializeAllFieldSettings, setPendingFieldSetting } = require( './deferredFieldSettings' );
 const { hydrateFieldPreviews, renderFieldPreviews, getFieldsWithLogicOn, PENDING_PREVIEW_CLASS } = require( './fieldPreviews' );
 const { queueFieldPreview, renderFieldPreviewNow, forgetFieldPreview, setInitialFieldPreviews } = require( './fieldPreviewQueue' );
-const { queueFieldSettings, observeFieldSettings, startFieldSettingsQueue, isFieldSettingsPending, requestFieldSettingsNow, waitForFieldSettings, retryFailedFieldSettings, cancelFieldSettings } = require( './fieldSettingsLoader' );
+const { queueFieldSettings, observeFieldSettings, startFieldSettingsQueue, isFieldSettingsPending, requestFieldSettingsNow, waitForFieldSettings, retryFailedFieldSettings, whenFieldSettingsLoaded, cancelFieldSettings } = require( './fieldSettingsLoader' );
 
 const fieldHtmlTemplate = document.createElement( 'template' );
 
@@ -3136,19 +3136,8 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function whenLogicSettingsLoaded( fieldId, update ) {
-		const fieldIds = getFieldsWithLogicOn( fieldId ).filter( isFieldSettingsPending );
-		if ( ! fieldIds.length ) {
-			update();
-			return;
-		}
-
-		fieldIds.forEach( logicFieldId => {
-			// Saving waits for these, and they move into the save form when they arrive. See handleLoadedFieldSettings.
-			fieldsAwaitingSettings.add( logicFieldId );
-			requestFieldSettingsNow( logicFieldId );
-		} );
-		// The requests are sent in a microtask, so wait for them after it.
-		Promise.resolve().then( () => waitForFieldSettings( fieldIds ) ).then( update );
+		// Saving waits for these, and they move into the save form when they arrive. See handleLoadedFieldSettings.
+		whenFieldSettingsLoaded( getFieldsWithLogicOn( fieldId ), logicFieldId => fieldsAwaitingSettings.add( logicFieldId ), update );
 	}
 
 	/**
