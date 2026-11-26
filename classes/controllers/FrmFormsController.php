@@ -3386,9 +3386,7 @@ class FrmFormsController {
 
 		if ( ! empty( $args['ajax'] ) && $doing_ajax && empty( $args['force_delay_redirect'] ) ) {
 			// Is AJAX submit and there is just one Redirect action runs.
-			// phpcs:ignore Formidable.CodeAnalysis.PreferWpSendJson -- formidable.js parses this as text, a JSON Content-Type would break it.
-			echo json_encode( self::get_ajax_redirect_response_data( $args + compact( 'success_url' ) ) );
-			wp_die();
+			wp_send_json( self::get_ajax_redirect_response_data( $args + compact( 'success_url' ) ) );
 		}
 
 		if ( ! headers_sent() && empty( $args['force_delay_redirect'] ) && empty( $args['form']->options['redirect_delay'] ) ) {

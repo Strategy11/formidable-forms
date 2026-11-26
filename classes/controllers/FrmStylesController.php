@@ -1048,9 +1048,7 @@ class FrmStylesController {
 		if ( ! $style_id ) {
 			// No style is known yet (for example, a style that has not been created). Send generic defaults so the inputs can be updated with JavaScript.
 			$frm_style = new FrmStyle();
-			// phpcs:ignore Formidable.CodeAnalysis.PreferWpSendJson -- style.js parses this as text, a JSON Content-Type would break it.
-			echo json_encode( $frm_style->get_defaults() );
-			wp_die();
+			wp_send_json( $frm_style->get_defaults() );
 		}
 
 		$frm_style              = new FrmStyle();
@@ -1058,9 +1056,7 @@ class FrmStylesController {
 
 		if ( ! FrmAppHelper::get_post_param( 'persist', '', 'absint' ) ) {
 			// Resetting from the edit view. Send this style's own default values back without persisting them.
-			// phpcs:ignore Formidable.CodeAnalysis.PreferWpSendJson -- style.js parses this as text, a JSON Content-Type would break it.
-			echo json_encode( json_decode( $default_template_style, true ) );
-			wp_die();
+			wp_send_json( json_decode( $default_template_style, true ) );
 		}
 
 		$where = array(

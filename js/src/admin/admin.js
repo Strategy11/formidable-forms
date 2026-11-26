@@ -2875,6 +2875,7 @@ window.frmAdminBuildJS = function() {
 
 		jQuery.ajax( {
 			type: 'POST',
+			dataType: 'json',
 			url: ajaxurl,
 			data: {
 				action: 'frm_load_field',
@@ -2938,18 +2939,11 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Swap placeholders in short slices while keeping each slice's controls ready for input.
 	 *
-	 * @param {string}   response A JSON object of field HTML and shared option and tooltip maps.
+	 * @param {Object}   data     Field HTML and shared option and tooltip maps.
 	 * @param {string[]} fieldIds The fields requested in this batch.
 	 * @return {Promise<void>|void} Resolves after the last slice has initialized.
 	 */
-	function handleAjaxLoadFieldSuccess( response, fieldIds ) {
-		let data;
-		try {
-			data = JSON.parse( response );
-		} catch {
-			showFieldLoadError( fieldIds );
-			return;
-		}
+	function handleAjaxLoadFieldSuccess( data, fieldIds ) {
 		if ( ! data || typeof data !== 'object' || Array.isArray( data ) ) {
 			showFieldLoadError( fieldIds );
 			return;
