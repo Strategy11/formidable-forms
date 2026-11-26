@@ -31,6 +31,54 @@ class test_FrmFieldNumber extends FrmUnitTest {
 	}
 
 	/**
+	 * @covers FrmFieldNumber::add_extra_html_atts
+	 */
+	public function test_add_extra_html_atts_includes_range_messages() {
+		$number     = new FrmFieldNumber(
+			array(
+				'id'            => 0,
+				'type'          => 'number',
+				'field_options' => array(),
+			)
+		);
+		$input_html = '';
+		$this->run_private_method( array( $number, 'add_extra_html_atts' ), array( array(), &$input_html ) );
+
+		$this->assertStringContainsString( 'data-minmsg="Please select a higher number"', $input_html );
+		$this->assertStringContainsString( 'data-maxmsg="Please select a lower number"', $input_html );
+	}
+
+	/**
+	 * @covers FrmFieldNumber::add_extra_html_atts
+	 */
+	public function test_add_extra_html_atts_skips_range_messages_for_custom_invalid_message() {
+		$number     = new FrmFieldNumber(
+			array(
+				'id'            => 0,
+				'type'          => 'number',
+				'field_options' => array( 'invalid' => 'Numbers only' ),
+			)
+		);
+		$input_html = '';
+		$this->run_private_method( array( $number, 'add_extra_html_atts' ), array( array(), &$input_html ) );
+
+		$this->assertStringNotContainsString( 'data-minmsg', $input_html );
+		$this->assertStringNotContainsString( 'data-maxmsg', $input_html );
+
+		$number     = new FrmFieldNumber(
+			array(
+				'id'            => 0,
+				'type'          => 'number',
+				'field_options' => array( 'invalid' => FrmFieldsHelper::default_invalid_msg( array( 'type' => 'number' ) ) ),
+			)
+		);
+		$input_html = '';
+		$this->run_private_method( array( $number, 'add_extra_html_atts' ), array( array(), &$input_html ) );
+
+		$this->assertStringContainsString( 'data-minmsg', $input_html );
+	}
+
+	/**
 	 * @param array $options
 	 *
 	 * @return string

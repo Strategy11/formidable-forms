@@ -988,14 +988,28 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function checkNumberField( field, errors ) {
-		let fieldID;
 		const number = field.value;
 
-		if ( number !== '' && isNaN( number / 1 ) !== false ) {
-			fieldID = getFieldId( field, true );
-			if ( ! ( fieldID in errors ) ) {
-				errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
-			}
+		if ( number === '' ) {
+			return;
+		}
+
+		let messageType = '';
+		if ( isNaN( number / 1 ) !== false ) {
+			messageType = 'data-invmsg';
+		} else if ( field.validity?.rangeUnderflow ) {
+			messageType = 'data-minmsg';
+		} else if ( field.validity?.rangeOverflow ) {
+			messageType = 'data-maxmsg';
+		}
+
+		if ( ! messageType ) {
+			return;
+		}
+
+		const fieldID = getFieldId( field, true );
+		if ( ! ( fieldID in errors ) ) {
+			errors[ fieldID ] = getFieldValidationMessage( field, messageType ) || getFieldValidationMessage( field, 'data-invmsg' );
 		}
 	}
 
