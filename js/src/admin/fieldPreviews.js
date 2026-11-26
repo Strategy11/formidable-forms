@@ -167,9 +167,7 @@ function createFieldTemplate( strings ) {
 		children: [
 			span( { className: 'frm_builder_field_name' } ),
 			' ',
-			span( { className: 'frm_required' } ),
-			' ',
-			span( { className: 'frm-sub-label frm-collapsed-label', text: strings.collapsed } )
+			span( { className: 'frm_required' } )
 		]
 	} );
 
@@ -218,13 +216,20 @@ function createField( template, data, strings ) {
 	if ( ! data.required ) {
 		required.classList.add( 'frm_hidden' );
 	}
+	if ( field.classList.contains( 'divider_section_only' ) ) {
+		label.append( ' ', frmDom.span( { className: 'frm-sub-label frm-collapsed-label', text: strings.collapsed } ) );
+	}
 	if ( data.afterLabel ) {
 		label.insertAdjacentHTML( 'beforeend', data.afterLabel );
 	}
 
 	const inputs = container.lastElementChild;
 	inputs.dataset.ftype = ftype;
-	inputs.prepend( ...createInputs( data, strings ) );
+	if ( data.inputHtml !== undefined ) {
+		inputs.insertAdjacentHTML( 'afterbegin', data.inputHtml );
+	} else {
+		inputs.prepend( ...createInputs( data, strings ) );
+	}
 
 	if ( data.description !== undefined ) {
 		const description = frmDom.div( { id: `field_description_${ id }`, className: 'frm_description' } );

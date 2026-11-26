@@ -1,7 +1,7 @@
 /**
  * Request the settings panels for field previews the browser drew from page data.
  *
- * Settings load in the background in page order. A field the builder needs right away, because
+ * Nearby settings load in the background. A field the builder needs right away, because
  * it was selected or edited, jumps the queue in its own request.
  *
  * @since 7.1
@@ -15,14 +15,16 @@ import { getFieldLoadBatch } from './fieldLoadWeights';
  * batch, so this mostly decides how many times WordPress loads.
  */
 const BATCH_SIZE = 50;
-// Even simple fields have advanced controls and source-form selectors in their settings.
-const SETTINGS_FIELD_WEIGHT = 5;
+// Keep a batch requested by an interaction small so its first panel arrives promptly.
+const URGENT_FIELD_WEIGHT = 5;
 
 /**
  * How many background requests may run at once. Requests for fields the builder needs right
  * away are not counted, so they never wait behind the background queue.
  */
-const CONCURRENCY = 2;
+const CONCURRENCY = 1;
+const nearbyFields = new Set();
+let observer;
 
 const queuedFieldIds = new Set();
 const failedFieldIds = new Set();
@@ -53,7 +55,7 @@ export function queueFieldSettings( options ) {
 }
 
 /**
- * Load the queued settings in the background, in page order.
+ * Start background prefetch for previews near the viewport.
  *
  * @since 7.1
  * @return {void}
@@ -61,6 +63,32 @@ export function queueFieldSettings( options ) {
 export function startFieldSettingsQueue() {
 	backgroundStarted = true;
 	fillQueue();
+}
+
+/**
+ * @param {HTMLElement} field A rendered preview whose settings can be prefetched.
+ * @return {void}
+ */
+export function observeFieldSettings( field ) {
+	if ( ! queuedFieldIds.has( field.dataset.fid ) ) {
+		return;
+	}
+
+	observer ??= new IntersectionObserver( entries => {
+		for ( const { target, isIntersecting } of entries ) {
+			const id = target.dataset.fid;
+			if ( isIntersecting && queuedFieldIds.has( id ) ) {
+				nearbyFields.add( id );
+			} else {
+				nearbyFields.delete( id );
+			}
+		}
+		fillQueue();
+	}, {
+		root: document.getElementById( 'post-body-content' ),
+		rootMargin: '400px 0px'
+	} );
+	observer.observe( field );
 }
 
 /**
@@ -133,6 +161,11 @@ export function retryFailedFieldSettings( fieldIds ) {
  */
 export function cancelFieldSettings( fieldId ) {
 	const key = String( fieldId );
+	const field = document.getElementById( `frm_field_id_${ key }` );
+	if ( field ) {
+		observer?.unobserve( field );
+	}
+	nearbyFields.delete( key );
 	queuedFieldIds.delete( key );
 	failedFieldIds.delete( key );
 	urgentFieldIds.delete( key );
@@ -143,7 +176,7 @@ function sendUrgentRequests() {
 	urgentFieldIds.clear();
 
 	for ( let index = 0; index < fieldIds.length; ) {
-		const batch = getFieldLoadBatch( fieldIds.slice( index ), BATCH_SIZE, SETTINGS_FIELD_WEIGHT );
+		const batch = getFieldLoadBatch( fieldIds.slice( index ), BATCH_SIZE, URGENT_FIELD_WEIGHT );
 		sendRequest( batch );
 		index += batch.length;
 	}
@@ -154,8 +187,8 @@ function fillQueue() {
 		return;
 	}
 
-	while ( activeRequests < CONCURRENCY && queuedFieldIds.size ) {
-		sendBackgroundRequest( getFieldLoadBatch( queuedFieldIds, BATCH_SIZE, SETTINGS_FIELD_WEIGHT ) );
+	while ( activeRequests < CONCURRENCY && nearbyFields.size ) {
+		sendBackgroundRequest( getFieldLoadBatch( nearbyFields, BATCH_SIZE, URGENT_FIELD_WEIGHT ) );
 	}
 }
 
@@ -179,6 +212,11 @@ function onBackgroundRequestDone() {
  */
 function sendRequest( fieldIds ) {
 	fieldIds.forEach( fieldId => {
+		const field = document.getElementById( `frm_field_id_${ fieldId }` );
+		if ( field ) {
+			observer?.unobserve( field );
+		}
+		nearbyFields.delete( fieldId );
 		queuedFieldIds.delete( fieldId );
 		failedFieldIds.delete( fieldId );
 	} );

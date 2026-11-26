@@ -143,13 +143,31 @@ class test_FrmBuilderPreviewHelper extends FrmUnitTest {
 		);
 
 		foreach ( $options as $option => $value ) {
-			$field = $this->create_field( 'number', array( $option => $value ) );
+			$number = $this->create_field( 'number', array( $option => $value ) );
+			$this->assertTrue( $this->supports( $number ) );
+			$field = $this->create_field( 'text', array( $option => $value ) );
 			$this->assertFalse( $this->supports( $field ), 'A field with ' . $option . ' is rendered on the server.' );
 		}
 
 		// A textarea is not drawn as an input group, so these options do not apply to it.
 		$textarea = $this->create_field( 'textarea', array( 'prepend' => '$' ) );
 		$this->assertTrue( $this->supports( $textarea ) );
+	}
+
+	/**
+	 * @covers FrmBuilderPreviewHelper::supports
+	 */
+	public function test_supports_small_saved_radio_choice_lists() {
+		$field          = $this->create_field( 'radio' );
+		$field->options = array( 'First', 'Second' );
+		$this->assertTrue( $this->supports( $field ) );
+
+		$field->field_options['post_field'] = 'post_category';
+		$this->assertFalse( $this->supports( $field ) );
+
+		unset( $field->field_options['post_field'] );
+		$field->options = range( 1, 21 );
+		$this->assertFalse( $this->supports( $field ) );
 	}
 
 	/**
