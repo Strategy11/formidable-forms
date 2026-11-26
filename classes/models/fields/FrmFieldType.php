@@ -703,8 +703,7 @@ DEFAULT_HTML;
 			return;
 		}
 
-		$has_options = ! empty( $args['field']['options'] );
-		$short_name  = FrmAppHelper::truncate( strip_tags( str_replace( '"', '&quot;', $args['field']['name'] ) ), 20 );
+		$short_name = FrmAppHelper::truncate( strip_tags( str_replace( '"', '&quot;', $args['field']['name'] ) ), 20 );
 
 		/* translators: %s: Field name */
 		$option_title = sprintf( __( '%s Options', 'formidable' ), $short_name );
