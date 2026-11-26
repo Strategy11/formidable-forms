@@ -16,7 +16,7 @@ const responses = [];
 const requestedFieldIds = [];
 const events = [];
 
-// Stands in for the builder's fieldsAwaitingSettings. See whenLogicSettingsLoaded in admin.js.
+// Stands in for the builder's fieldsAwaitingSettings, which whenLogicSettingsLoaded in admin.js passes as is.
 const awaitingFieldIds = new Set();
 
 globalThis.window = {};
@@ -50,7 +50,7 @@ queueFieldSettings( {
 console.error = () => {};
 
 function whenLogicSettingsLoaded( dependentIds ) {
-	return whenFieldSettingsLoaded( dependentIds, fieldId => awaitingFieldIds.add( fieldId ), () => events.push( 'update' ) );
+	return whenFieldSettingsLoaded( dependentIds, awaitingFieldIds, () => events.push( 'update' ) );
 }
 
 function settings( fieldIds ) {

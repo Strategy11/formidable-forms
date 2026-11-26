@@ -136,16 +136,17 @@ export function waitForFieldSettings( fieldIds ) {
 /**
  * Run a change once the settings panels it reads have loaded.
  *
- * Pending panels are requested right away. The change runs after every request settles,
- * even one that failed, and runs at once when nothing is pending.
+ * Pending panels are requested right away and added to awaitingFieldIds, so the builder holds a
+ * save for them and moves each one into the save form when it arrives. The change runs after
+ * every request settles, even one that failed, and runs at once when nothing is pending.
  *
  * @since 7.1
- * @param {string[]} fieldIds  The fields whose settings the change reads.
- * @param {Function} onRequest Called with each field id requested, before its settings arrive.
- * @param {Function} update    The change to run.
+ * @param {string[]}    fieldIds         The fields whose settings the change reads.
+ * @param {Set<string>} awaitingFieldIds The builder's fields waiting for their settings.
+ * @param {Function}    update           The change to run.
  * @return {Promise<void>} Resolves after the change has run.
  */
-export function whenFieldSettingsLoaded( fieldIds, onRequest, update ) {
+export function whenFieldSettingsLoaded( fieldIds, awaitingFieldIds, update ) {
 	const pendingFieldIds = fieldIds.map( String ).filter( isFieldSettingsPending );
 	if ( ! pendingFieldIds.length ) {
 		update();
@@ -153,7 +154,7 @@ export function whenFieldSettingsLoaded( fieldIds, onRequest, update ) {
 	}
 
 	pendingFieldIds.forEach( fieldId => {
-		onRequest( fieldId );
+		awaitingFieldIds.add( fieldId );
 		requestFieldSettingsNow( fieldId );
 	} );
 	// The requests are sent in a microtask, so wait for them after it.

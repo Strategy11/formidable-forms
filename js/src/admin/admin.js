@@ -3137,7 +3137,7 @@ window.frmAdminBuildJS = function() {
 	 */
 	function whenLogicSettingsLoaded( fieldId, update ) {
 		// Saving waits for these, and they move into the save form when they arrive. See handleLoadedFieldSettings.
-		whenFieldSettingsLoaded( getFieldsWithLogicOn( fieldId ), logicFieldId => fieldsAwaitingSettings.add( logicFieldId ), update );
+		whenFieldSettingsLoaded( getFieldsWithLogicOn( fieldId ), fieldsAwaitingSettings, update );
 	}
 
 	/**
