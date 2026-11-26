@@ -351,7 +351,7 @@ class FrmXMLController {
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
-		$has_file = ! empty( $_FILES['frm_import_file'] ) && ! empty( $_FILES['frm_import_file']['name'] ) && ! empty( $_FILES['frm_import_file']['size'] ) && (int) $_FILES['frm_import_file']['size'] > 0;
+		$has_file = ! empty( $_FILES['frm_import_file'] ) && ! empty( $_FILES['frm_import_file']['name'] ) && ! empty( $_FILES['frm_import_file']['size'] ) && $_FILES['frm_import_file']['size'] > 0;
 
 		if ( ! $has_file ) {
 			$errors[] = __( 'Oops, you didn\'t select a file.', 'formidable' );
@@ -597,6 +597,8 @@ class FrmXMLController {
 	 * Prepare the types array.
 	 *
 	 * @param array<string>|string $type
+	 *
+	 * @param-out array<string> $type
 	 *
 	 * @return void
 	 */

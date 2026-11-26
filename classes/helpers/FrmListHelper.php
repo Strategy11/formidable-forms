@@ -158,6 +158,9 @@ class FrmListHelper {
 		}
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function ajax_user_can() {
 		return current_user_can( 'administrator' );
 	}
@@ -169,6 +172,9 @@ class FrmListHelper {
 		return array();
 	}
 
+	/**
+	 * @return void
+	 */
 	public function display_rows() {
 		foreach ( $this->items as $item ) {
 			echo "\n\t", $this->single_row( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -183,6 +189,8 @@ class FrmListHelper {
 	 * @since 2.0.18
 	 *
 	 * @abstract
+	 *
+	 * @return void
 	 */
 	public function prepare_items() {
 		die( 'function FrmListHelper::prepare_items() must be over-ridden in a sub-class.' );
@@ -210,6 +218,8 @@ class FrmListHelper {
 	 * An internal method that sets all the necessary pagination arguments
 	 *
 	 * @param array $args An associative array with information about the pagination.
+	 *
+	 * @return void
 	 */
 	protected function set_pagination_args( $args ) {
 		$args = wp_parse_args(
@@ -274,6 +284,8 @@ class FrmListHelper {
 	 * Message to be displayed when there are no items
 	 *
 	 * @since 2.0.18
+	 *
+	 * @return void
 	 */
 	public function no_items() {
 		esc_html_e( 'No items found.', 'formidable' );
@@ -286,6 +298,8 @@ class FrmListHelper {
 	 *
 	 * @param string $text     The search button text.
 	 * @param string $input_id The search input id.
+	 *
+	 * @return void
 	 */
 	public function search_box( $text, $input_id ) {
 		if ( empty( $_REQUEST['s'] ) && ! $this->has_items() ) {
@@ -329,6 +343,8 @@ class FrmListHelper {
 	 * Display the list of views available on this table.
 	 *
 	 * @since 2.0.18
+	 *
+	 * @return void
 	 */
 	public function views() {
 		$views = $this->get_views();
@@ -376,6 +392,8 @@ class FrmListHelper {
 	 *
 	 * @param string $which The location of the bulk actions: 'top' or 'bottom'.
 	 *                      This is designated as optional for backwards-compatibility.
+	 *
+	 * @return void
 	 */
 	protected function bulk_actions( $which = '' ) {
 		if ( is_null( $this->_actions ) ) {
@@ -534,6 +552,8 @@ class FrmListHelper {
 	 * @since 2.0.18
 	 *
 	 * @param string $current_mode
+	 *
+	 * @return void
 	 */
 	protected function view_switcher( $current_mode ) {
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
@@ -617,6 +637,8 @@ class FrmListHelper {
 	 * @since 2.0.18
 	 *
 	 * @param string $which
+	 *
+	 * @return void
 	 */
 	protected function pagination( $which ) {
 		if ( ! $this->_pagination_args ) {
@@ -760,6 +782,9 @@ class FrmListHelper {
 		return $labels[ $link ];
 	}
 
+	/**
+	 * @return string
+	 */
 	private function current_url() {
 		$current_url = set_url_scheme( 'http://' . FrmAppHelper::get_server_value( 'HTTP_HOST' ) . FrmAppHelper::get_server_value( 'REQUEST_URI' ) );
 		return remove_query_arg( array( 'hotkeys_highlight_last', 'hotkeys_highlight_first' ), $current_url );
@@ -1140,6 +1165,8 @@ class FrmListHelper {
 	 * @since 2.0.18
 	 *
 	 * @param string $which
+	 *
+	 * @return void
 	 */
 	protected function display_tablenav( $which ) {
 		if ( 'top' === $which ) {
@@ -1191,6 +1218,8 @@ class FrmListHelper {
 	 * @since 2.0.18
 	 *
 	 * @param string $which
+	 *
+	 * @return void
 	 */
 	protected function extra_tablenav( $which ) {
 	}
@@ -1199,6 +1228,8 @@ class FrmListHelper {
 	 * Generate the tbody element for the list table.
 	 *
 	 * @since 2.0.18
+	 *
+	 * @return void
 	 */
 	public function display_rows_or_placeholder() {
 		if ( $this->has_items() ) {
@@ -1229,6 +1260,8 @@ class FrmListHelper {
 	 * @since 2.0.18
 	 *
 	 * @param object $item The current item.
+	 *
+	 * @return void
 	 */
 	protected function single_row_columns( $item ) {
 		list( $columns, $hidden,, $primary ) = $this->get_column_info();
@@ -1260,7 +1293,7 @@ class FrmListHelper {
 				echo '>';
 
 				if ( method_exists( $this, 'column_' . $column_name ) ) {
-					echo call_user_func( array( $this, 'column_' . $column_name ), $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					echo (string) call_user_func( array( $this, 'column_' . $column_name ), $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				}
 
 				echo $this->handle_row_actions( $item, $column_name, $primary ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -1288,6 +1321,8 @@ class FrmListHelper {
 	 * Handle an incoming ajax request (called from admin-ajax.php)
 	 *
 	 * @since 2.0.18
+	 *
+	 * @return void
 	 */
 	public function ajax_response() {
 		$this->prepare_items();

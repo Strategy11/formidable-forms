@@ -68,6 +68,8 @@ class FrmInstallerSkin extends WP_Upgrader_Skin {
 	 * @since 3.04.02
 	 *
 	 * @param string|\WP_Error $errors The WP Error object of errors with the install process.
+	 *
+	 * @return void
 	 */
 	public function error( $errors ) {
 		if ( ! $errors ) {

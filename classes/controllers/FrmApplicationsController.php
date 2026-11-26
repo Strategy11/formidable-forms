@@ -136,8 +136,8 @@ class FrmApplicationsController {
 	}
 
 	/**
-	 * @param array $total the accumulated array of reduced application data.
-	 * @param array $current data for the current template from the API.
+	 * @param array<array> $total the accumulated array of reduced application data.
+	 * @param array        $current data for the current template from the API.
 	 *
 	 * @return array<array>
 	 */

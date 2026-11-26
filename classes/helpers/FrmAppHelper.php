@@ -121,6 +121,8 @@ class FrmAppHelper {
 	 *
 	 * @param array|string $args If a string is passed, it is used for the utm_campaign attribute.
 	 * @param string       $page
+	 *
+	 * @return string
 	 */
 	public static function admin_upgrade_link( $args, $page = '' ) {
 		if ( $page ) {
@@ -195,7 +197,7 @@ class FrmAppHelper {
 			return '';
 		}
 
-		$parsed = parse_url( $link );
+		$parsed = wp_parse_url( $link );
 
 		if ( ! is_array( $parsed ) || ! isset( $parsed['query'] ) ) {
 			return '';
@@ -238,6 +240,8 @@ class FrmAppHelper {
 	 *
 	 * @param string $cta_link
 	 * @param array  $utm
+	 *
+	 * @return string
 	 */
 	public static function maybe_add_missing_utm( $cta_link, $utm ) {
 		$utm        = self::adjust_legacy_utm_args( $utm );
@@ -679,9 +683,9 @@ class FrmAppHelper {
 
 			$key = self::get_server_value( $key );
 
-			foreach ( explode( ',', $key ) as $ip ) {
+			foreach ( explode( ',', $key ) as $ip_value ) {
 				// Just to be safe.
-				$ip = trim( $ip );
+				$ip = trim( $ip_value );
 
 				if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) !== false ) {
 					return sanitize_text_field( $ip );
@@ -958,6 +962,8 @@ class FrmAppHelper {
 	 * @since 6.7.1
 	 *
 	 * @param string $value
+	 *
+	 * @return string
 	 */
 	public static function strip_most_html( $value ) {
 		if ( '' === $value ) {
@@ -992,6 +998,8 @@ class FrmAppHelper {
 	 * @since 4.0.04
 	 *
 	 * @param mixed $value Value to decode, passed by reference.
+	 *
+	 * @return void
 	 */
 	public static function decode_specialchars( &$value ) {
 		if ( is_array( $value ) ) {
@@ -1013,6 +1021,8 @@ class FrmAppHelper {
 	 * @since 4.03.01
 	 *
 	 * @param string $string The string to prep, passed by reference.
+	 *
+	 * @return void
 	 */
 	private static function decode_amp( &$string ) {
 		// Don't bother if there are no entities - saves a lot of processing
@@ -1326,6 +1336,8 @@ class FrmAppHelper {
 	 * Used when switching the action for a bulk action
 	 *
 	 * @since 2.0
+	 *
+	 * @return void
 	 */
 	public static function remove_get_action() {
 		if ( empty( $_GET ) ) {
@@ -1528,6 +1540,8 @@ class FrmAppHelper {
 	 *
 	 * @param bool   $allow_css
 	 * @param string $css_string
+	 *
+	 * @return bool
 	 */
 	public static function allow_style( $allow_css, $css_string ) {
 		if ( ! $allow_css && str_starts_with( $css_string, '--primary-700:' ) ) {
@@ -1962,6 +1976,8 @@ class FrmAppHelper {
 	 * @since 4.10.01 Added `post_type` and `autocomplete_placeholder` to the arguments array.
 	 *
 	 * @param array $args Selection arguments.
+	 *
+	 * @return void
 	 */
 	public static function maybe_autocomplete_pages_options( $args ) {
 		$args        = self::preformat_selection_args( $args );
@@ -2008,6 +2024,8 @@ class FrmAppHelper {
 	 * @since 6.21
 	 *
 	 * @param array $args Args. See the method for details.
+	 *
+	 * @return void
 	 */
 	public static function maybe_autocomplete_options( $args ) {
 		$defaults = array(
@@ -2107,6 +2125,8 @@ class FrmAppHelper {
 	 * @param array  $args
 	 * @param string $page_id Deprecated.
 	 * @param bool   $truncate Deprecated.
+	 *
+	 * @return void
 	 */
 	public static function wp_pages_dropdown( $args = array(), $page_id = '', $truncate = false ) {
 		self::prep_page_dropdown_params( $page_id, $truncate, $args );
@@ -2247,6 +2267,8 @@ class FrmAppHelper {
 	 * @param string       $field_name
 	 * @param array|string $capability
 	 * @param string       $multiple 'single' and 'multiple'.
+	 *
+	 * @return void
 	 */
 	public static function wp_roles_dropdown( $field_name, $capability, $multiple = 'single' ) {
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
@@ -2265,6 +2287,8 @@ class FrmAppHelper {
 	 *
 	 * @param array|string $selected
 	 * @param string       $current
+	 *
+	 * @return void
 	 */
 	private static function selected( $selected, $current ) {
 		if ( is_callable( 'FrmProAppHelper::selected' ) ) {
@@ -2276,6 +2300,8 @@ class FrmAppHelper {
 
 	/**
 	 * @param array|string $capability
+	 *
+	 * @return void
 	 */
 	public static function roles_options( $capability ) {
 		global $frm_vars;
@@ -2417,6 +2443,8 @@ class FrmAppHelper {
 	 * Make sure administrators can see Formidable menu
 	 *
 	 * @since 2.0
+	 *
+	 * @return void
 	 */
 	public static function maybe_add_permissions() {
 		self::force_capability( 'frm_view_entries' );
@@ -2464,6 +2492,8 @@ class FrmAppHelper {
 	 *
 	 * @param string $permission
 	 * @param string $show_message
+	 *
+	 * @return void
 	 */
 	public static function permission_check( $permission, $show_message = 'show' ) {
 		$permission_error = self::permission_nonce_error( $permission );
@@ -2779,6 +2809,8 @@ class FrmAppHelper {
 	 * @param string $column
 	 * @param int    $id
 	 * @param int    $num_chars
+	 *
+	 * @return string
 	 */
 	public static function get_unique_key( $name, $table_name, $column, $id = 0, $num_chars = 5 ) {
 		$key = '';
@@ -3087,6 +3119,8 @@ class FrmAppHelper {
 	 * @param string $table
 	 * @param array  $post_values
 	 * @param array  $values
+	 *
+	 * @return void
 	 */
 	private static function fill_form_opts( $record, $table, $post_values, array &$values ) {
 		if ( $table === 'entries' ) {
@@ -4531,6 +4565,8 @@ class FrmAppHelper {
 	 *     @type string  $classes     Custom CSS classes for the wrapper element.
 	 *     @type array   $input_attrs Attributes of value input.
 	 * }
+	 *
+	 * @return void
 	 */
 	public static function images_dropdown( $args ) {
 		$args            = self::fill_default_images_dropdown_args( $args );
@@ -4547,7 +4583,7 @@ class FrmAppHelper {
 		 * @param string $output The output.
 		 * @param array  $args   Passed arguments.
 		 */
-		echo apply_filters( 'frm_images_dropdown_output', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo (string) apply_filters( 'frm_images_dropdown_output', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -4945,6 +4981,8 @@ class FrmAppHelper {
 	 * Set the current screen to avoid undefined notices.
 	 *
 	 * @since 5.2.01
+	 *
+	 * @return void
 	 */
 	public static function set_current_screen_and_hook_suffix() {
 		global $hook_suffix;
@@ -4963,6 +5001,8 @@ class FrmAppHelper {
 	 * @since 5.2.02
 	 *
 	 * @param string|null $text Text in the pill. Default is NEW.
+	 *
+	 * @return void
 	 */
 	public static function show_pill_text( $text = null ) {
 		if ( null === $text ) {
@@ -5081,7 +5121,7 @@ class FrmAppHelper {
 			return false;
 		}
 
-		$parsed = parse_url( $url );
+		$parsed = wp_parse_url( $url );
 
 		if ( ! is_array( $parsed ) ) {
 			// URL is malformed.

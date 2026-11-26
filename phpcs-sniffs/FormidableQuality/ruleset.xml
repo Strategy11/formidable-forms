@@ -23,7 +23,6 @@
 		<!-- These rules are new. Work on fixing these. -->
 		<exclude name="WordPress.WP.Capabilities.RoleFound" />
 		<exclude name="Generic.Files.OneObjectStructurePerFile.MultipleFound" />
-		<exclude name="Generic.CodeAnalysis.RequireExplicitBooleanOperatorPrecedence.MissingParentheses" />
 	</rule>
 
 	<rule ref="Squiz.Scope.StaticThisUsage" />
@@ -125,6 +124,22 @@
 	</rule>
 
 	<rule ref="Generic.CodeAnalysis.UselessOverridingMethod.Found">
+		<severity>8</severity>
+		<type>error</type>
+	</rule>
+	<rule ref="Squiz.PHP.NonExecutableCode">
+		<severity>8</severity>
+		<type>error</type>
+	</rule>
+	<rule ref="WordPress.WP.I18n.MissingArgDomainDefault">
+		<severity>8</severity>
+		<type>error</type>
+	</rule>
+	<rule ref="WordPress.WP.AlternativeFunctions.rand_mt_rand">
+		<severity>8</severity>
+		<type>error</type>
+	</rule>
+	<rule ref="WordPress.WP.AlternativeFunctions.parse_url_parse_url">
 		<severity>8</severity>
 		<type>error</type>
 	</rule>

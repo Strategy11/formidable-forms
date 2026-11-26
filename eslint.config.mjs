@@ -177,7 +177,18 @@ export default [
 			'id-length': 'off',
 			'no-use-before-define': 'off',
 			'consistent-return': 'off',
-			'guard-for-in': 'off',
+			'guard-for-in': 'error',
+			'no-prototype-builtins': 'error',
+			// Object.hasOwn() throws in Safari < 15.4 and Chrome < 93, and front-end scripts run for every visitor.
+			'prefer-object-has-own': 'off',
+			'no-restricted-properties': [
+				'error',
+				{
+					object: 'Object',
+					property: 'hasOwn',
+					message: 'Object.hasOwn() is not supported in older browsers. Use Object.prototype.hasOwnProperty.call() instead.',
+				},
+			],
 			'no-return-assign': 'off',
 			'no-useless-escape': 'off',
 			'import/no-unresolved': 'off',
@@ -253,7 +264,7 @@ export default [
 			'sonarjs/no-duplicate-string': 'off',
 			'sonarjs/prefer-single-boolean-return': 'off',
 			'sonarjs/no-collapsible-if': 'off',
-			'sonarjs/no-duplicated-branches': 'off',
+			'sonarjs/no-duplicated-branches': 'error',
 			'sonarjs/no-nested-template-literals': 'off',
 
 			// No-jquery overrides

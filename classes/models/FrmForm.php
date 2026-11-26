@@ -442,8 +442,13 @@ class FrmForm {
 		$existing_keys = array_keys( $values['item_meta'] );
 
 		foreach ( $all_fields as $fid ) {
-			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict, SlevomatCodingStandard.Files.LineLength.LineTooLong
-			if ( ! in_array( $fid->id, $existing_keys ) && ( isset( $values['frm_fields_submitted'] ) && in_array( $fid->id, $values['frm_fields_submitted'] ) ) || isset( $values['options'] ) ) {
+			// The settings page posts no item_meta, so every field is added there.
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+			$is_new_field = ! in_array( $fid->id, $existing_keys );
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+			$was_submitted = isset( $values['frm_fields_submitted'] ) && in_array( $fid->id, $values['frm_fields_submitted'] );
+
+			if ( $is_new_field && ( $was_submitted || isset( $values['options'] ) ) ) {
 				$values['item_meta'][ $fid->id ] = '';
 			}
 

@@ -385,7 +385,12 @@ class FrmDashboardHelper {
 
 		$params                   = FrmForm::get_admin_params();
 		$controller_entries_table = apply_filters( 'frm_entries_list_class', 'FrmEntriesListHelper' );
-		$wp_list_table            = new $controller_entries_table( array( 'params' => $params ) );
+		/**
+		 * The list class is filterable, but always extends FrmListHelper.
+		 *
+		 * @var FrmListHelper $wp_list_table
+		 */
+		$wp_list_table = new $controller_entries_table( array( 'params' => $params ) );
 		$wp_list_table->prepare_items();
 
 		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/entries-list.php';

@@ -2213,7 +2213,7 @@ BEFORE_HTML;
 	 * @return array An array of params whose names are reserved words or an empty array.
 	 */
 	private static function get_unsafe_params( $url ) {
-		$redirect_components = parse_url( $url );
+		$redirect_components = wp_parse_url( $url );
 
 		if ( empty( $redirect_components['query'] ) ) {
 			return array();

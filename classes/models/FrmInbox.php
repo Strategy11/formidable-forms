@@ -459,7 +459,7 @@ class FrmInbox extends FrmFormApi {
 					return 'href="#"';
 				}
 
-				$parts = parse_url( $url );
+				$parts = wp_parse_url( $url );
 				$query = array();
 
 				if ( isset( $parts['query'] ) ) {

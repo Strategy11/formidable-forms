@@ -404,6 +404,10 @@ function frmFrontFormJS() {
 			removeFieldError( fieldContainer );
 			if ( hasErrors ) {
 				for ( key in errors ) {
+					if ( ! Object.prototype.hasOwnProperty.call( errors, key ) ) {
+						continue;
+					}
+
 					addFieldError( fieldContainer, key, errors );
 				}
 			}
@@ -1337,6 +1341,10 @@ function frmFrontFormJS() {
 				const formErrors = {};
 
 				for ( const key in response.errors ) {
+					if ( ! Object.prototype.hasOwnProperty.call( response.errors, key ) ) {
+						continue;
+					}
+
 					const fieldContEl = object.querySelector( `#frm_field_${ key }_container` );
 					$fieldCont = fieldContEl ? jQuery( fieldContEl ) : jQuery();
 
@@ -2156,7 +2164,7 @@ function frmFrontFormJS() {
 			let target;
 
 			// loop parent nodes from the target to the delegation node.
-			for ( target = e.target; target && target != this; target = target.parentNode ) {
+			for ( target = e.target; target && target !== this; target = target.parentNode ) {
 				if ( target.matches && target.matches( selector ) ) {
 					handler.call( target, e );
 					break;
@@ -2497,7 +2505,7 @@ function frmFrontFormJS() {
 	 * Destroys the formidable generated global hcaptcha object since it wouldn't otherwise render.
 	 */
 	function destroyhCaptcha() {
-		if ( ! window.hasOwnProperty( 'hcaptcha' ) || ! document.querySelector( '.frm-show-form .h-captcha' ) ) {
+		if ( ! Object.prototype.hasOwnProperty.call( window, 'hcaptcha' ) || ! document.querySelector( '.frm-show-form .h-captcha' ) ) {
 			return;
 		}
 		window.hcaptcha = null;
@@ -2527,7 +2535,7 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function animateScroll( start, end, duration ) {
-		if ( ! window.hasOwnProperty( 'performance' ) || ! window.hasOwnProperty( 'requestAnimationFrame' ) ) {
+		if ( ! Object.prototype.hasOwnProperty.call( window, 'performance' ) || ! Object.prototype.hasOwnProperty.call( window, 'requestAnimationFrame' ) ) {
 			document.documentElement.scrollTop = end;
 			return;
 		}
@@ -3224,6 +3232,10 @@ function frmFrontFormJS() {
 				customErrors = frmThemeOverride_jsErrors( action, object );
 				if ( Object.keys( customErrors ).length ) {
 					for ( key in customErrors ) {
+						if ( ! Object.prototype.hasOwnProperty.call( customErrors, key ) ) {
+							continue;
+						}
+
 						jsErrors[ key ] = customErrors[ key ];
 					}
 				}
@@ -3247,6 +3259,10 @@ function frmFrontFormJS() {
 			removeAllErrors();
 
 			for ( key in jsErrors ) {
+				if ( ! Object.prototype.hasOwnProperty.call( jsErrors, key ) ) {
+					continue;
+				}
+
 				const fieldCont = form ? getFieldContainerForErrorKey( form, key ) : null;
 
 				if ( fieldCont ) {

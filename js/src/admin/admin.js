@@ -436,6 +436,10 @@ window.frmAdminBuildJS = function() {
 
 		if ( continueButton ) {
 			for ( const i in continueButton.dataset ) {
+				if ( ! Object.prototype.hasOwnProperty.call( continueButton.dataset, i ) ) {
+					continue;
+				}
+
 				continueButton.removeAttribute( `data-${ i }` );
 			}
 
@@ -1890,9 +1894,10 @@ window.frmAdminBuildJS = function() {
 				const children = [].slice.call( divider.children );
 				children.forEach(
 					function( child ) {
-						if ( 0 === child.children.length ) {
-							child.remove();
-						} else if ( 1 === child.children.length && 'ul' === child.firstElementChild.nodeName.toLowerCase() && 0 === child.firstElementChild.children.length ) {
+						if (
+							0 === child.children.length ||
+							( 1 === child.children.length && 'ul' === child.firstElementChild.nodeName.toLowerCase() && 0 === child.firstElementChild.children.length )
+						) {
 							child.remove();
 						}
 					}
@@ -4156,7 +4161,7 @@ window.frmAdminBuildJS = function() {
 				stack.push( formulaArray[ i ] );
 				continue;
 			}
-			if ( Object.hasOwn( closing, formulaArray[ i ] ) ) {
+			if ( Object.prototype.hasOwnProperty.call( closing, formulaArray[ i ] ) ) {
 				top = stack.pop();
 				if ( top !== closing[ formulaArray[ i ] ] ) {
 					hasUnmatchedClosing = true;
@@ -6755,7 +6760,7 @@ window.frmAdminBuildJS = function() {
 		let optionInput;
 
 		for ( index in optionInputs ) {
-			if ( Object.hasOwn( optionInputs, index ) ) {
+			if ( Object.prototype.hasOwnProperty.call( optionInputs, index ) ) {
 				optionInput = optionInputs[ index ];
 				if ( optionInput.id !== input.id && optionInput.value === input.value && optionInput.getAttribute( 'data-duplicate' ) !== 'true' ) {
 					return true;
@@ -6949,7 +6954,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		for ( fieldIndex in fieldIds ) {
-			if ( Object.hasOwn( fieldIds, fieldIndex ) ) {
+			if ( Object.prototype.hasOwnProperty.call( fieldIds, fieldIndex ) ) {
 				settingId = fieldIds[ fieldIndex ];
 				setting = document.getElementById( `frm-single-settings-${ settingId }` );
 				moveFieldSettings( setting );
@@ -11185,9 +11190,10 @@ window.frmAdminBuildJS = function() {
 		}
 
 		const $thisName = this.name;
-		if ( $thisName === 'type[]' && jQuery( 'input[name="type[]"]:checked' ).val() ) {
-			$blankField.removeClass( 'frm_blank_field' );
-		} else if ( $thisName === 'frm_export_forms[]' && jQuery( this ).val() ) {
+		if (
+			( $thisName === 'type[]' && jQuery( 'input[name="type[]"]:checked' ).val() ) ||
+			( $thisName === 'frm_export_forms[]' && jQuery( this ).val() )
+		) {
 			$blankField.removeClass( 'frm_blank_field' );
 		}
 	}
@@ -11682,7 +11688,7 @@ window.frmAdminBuildJS = function() {
 
 		xmlHttp.open( 'post', ajaxurl, true );
 		xmlHttp.onreadystatechange = function() {
-			if ( xmlHttp.readyState > 3 && xmlHttp.status == 200 ) {
+			if ( xmlHttp.readyState > 3 && xmlHttp.status === 200 ) {
 				response = xmlHttp.responseText;
 				try {
 					response = JSON.parse( response );

@@ -7,7 +7,7 @@
  * @return {Array} Findings which must fail the test.
  */
 export function getIbmAccessibilityFailures( label, results, baseline ) {
-	if ( ! Object.hasOwn( baseline, label ) ) {
+	if ( ! Object.prototype.hasOwnProperty.call( baseline, label ) ) {
 		throw new Error( `Missing IBM accessibility baseline for ${ label }.` );
 	}
 
@@ -32,7 +32,7 @@ export function getIbmAccessibilityFailures( label, results, baseline ) {
 		const count = ( counts.get( result.ruleId ) ?? 0 ) + 1;
 		counts.set( result.ruleId, count );
 
-		if ( ! Object.hasOwn( rules, result.ruleId ) ) {
+		if ( ! Object.prototype.hasOwnProperty.call( rules, result.ruleId ) ) {
 			return true;
 		}
 

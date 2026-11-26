@@ -53,6 +53,9 @@ class FrmSquareLiteAppController {
 		wp_send_json_success( $response_data );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function handle_disconnect() {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 

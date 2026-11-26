@@ -92,7 +92,7 @@
 		xmlHttp.open( 'post', ajaxurl, true );
 		xmlHttp.onreadystatechange = function() {
 			let response;
-			if ( xmlHttp.readyState > 3 && xmlHttp.status == 200 ) {
+			if ( xmlHttp.readyState > 3 && xmlHttp.status === 200 ) {
 				response = xmlHttp.responseText;
 				if ( response !== '' ) {
 					response = JSON.parse( response );

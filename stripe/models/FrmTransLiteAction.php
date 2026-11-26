@@ -188,7 +188,7 @@ class FrmTransLiteAction extends FrmFormAction {
 		?>
 		<?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 		<select class="frm_with_left_label" name="<?php echo esc_attr( $this->get_field_name( $field_atts['name'] ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( $field_atts['name'] ) ); ?>">
-			<option value=""><?php esc_html_e( '&mdash; Select &mdash;' ); ?></option>
+			<option value=""><?php esc_html_e( '&mdash; Select &mdash;', 'default' ); ?></option>
 			<?php
 			foreach ( $form_atts['form_fields'] as $field ) {
 				if ( $field_atts['skipped_fields'] && in_array( $field->type, (array) $field_atts['skipped_fields'], true ) ) {

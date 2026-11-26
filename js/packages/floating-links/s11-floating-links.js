@@ -198,7 +198,7 @@ class S11FloatingLinks {
 
 	linkHasRequiredProperties( link ) {
 		const requiredProperties = [ 'title', 'icon', 'url' ];
-		return requiredProperties.every( prop => link.hasOwnProperty( prop ) );
+		return requiredProperties.every( prop => Object.prototype.hasOwnProperty.call( link, prop ) );
 	}
 
 	/**

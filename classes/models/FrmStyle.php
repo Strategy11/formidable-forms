@@ -235,10 +235,10 @@ class FrmStyle {
 		$color_val  = rtrim( $color_val, ')' );
 		$color_val .= ')';
 
-		$color_rgba = substr( $color_val, strpos( $color_val, '(' ) + 1, strlen( $color_val ) - strpos( $color_val, '(' ) - 2 );
+		$color_rgba = substr( $color_val, (int) strpos( $color_val, '(' ) + 1, strlen( $color_val ) - (int) strpos( $color_val, '(' ) - 2 );
 		// Remove any excessive braces from the rgba like rgba((.
 		$color_rgba            = trim( $color_rgba, '()' );
-		$length_of_color_codes = strpos( $color_val, '(' );
+		$length_of_color_codes = (int) strpos( $color_val, '(' );
 		$new_color_values      = array();
 
 		// replace empty values by 0 or 1 (if alpha position).
@@ -287,7 +287,7 @@ class FrmStyle {
 		}
 
 		$new_color = implode( ',', $new_color_values );
-		$prefix    = substr( $color_val, 0, strpos( $color_val, '(' ) + 1 );
+		$prefix    = substr( $color_val, 0, (int) strpos( $color_val, '(' ) + 1 );
 		// Limit the number of opening braces after rgb/rgba. There should only be one.
 		$prefix    = rtrim( $prefix, '(' ) . '(';
 		$new_color = $prefix . $new_color . ')';

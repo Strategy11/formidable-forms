@@ -320,6 +320,8 @@ class FrmTransLiteAppHelper {
 	 * @param array $currency
 	 * @param float $amount
 	 *
+	 * @param-out string $amount
+	 *
 	 * @return void
 	 */
 	public static function format_amount_for_currency( $currency, &$amount ) {

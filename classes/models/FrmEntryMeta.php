@@ -727,7 +727,13 @@ class FrmEntryMeta {
 			} elseif ( str_contains( $args['is_draft'], ',' ) ) {
 				$is_draft = array_reduce(
 					explode( ',', $args['is_draft'] ),
-					function ( $total, $current ) {
+					/**
+					 * @param array<int> $total   The draft statuses collected so far.
+					 * @param string     $current The current comma separated value.
+					 *
+					 * @return array<int>
+					 */
+					function ( array $total, $current ) {
 						if ( is_numeric( $current ) ) {
 							$total[] = absint( $current );
 						}

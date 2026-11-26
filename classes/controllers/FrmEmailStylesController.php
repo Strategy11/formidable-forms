@@ -259,6 +259,8 @@ class FrmEmailStylesController {
 
 	/**
 	 * AJAX handler for previewing email style.
+	 *
+	 * @return void
 	 */
 	public static function ajax_preview() {
 		// Check permission and nonce.
@@ -288,6 +290,8 @@ class FrmEmailStylesController {
 
 	/**
 	 * AJAX handler for sending a test email.
+	 *
+	 * @return void
 	 */
 	public static function ajax_send_test_email() {
 		// Check permission and nonce.

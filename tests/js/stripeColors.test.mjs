@@ -70,7 +70,7 @@ async function getStripeColor( color, backgrounds = [] ) {
 	if ( color ) {
 		assert.equal( appearance.variables.colorPrimary, appearance.variables.colorBackground );
 	} else {
-		assert.equal( Object.hasOwn( appearance.variables, 'colorPrimary' ), false );
+		assert.equal( Object.prototype.hasOwnProperty.call( appearance.variables, 'colorPrimary' ), false );
 	}
 	return appearance.variables.colorBackground;
 }

@@ -400,6 +400,8 @@ class FrmDb {
 	 * @param string       $order_by
 	 * @param int|string   $limit
 	 *
+	 * @param-out array $args
+	 *
 	 * @return void
 	 */
 	private static function convert_options_to_array( &$args, $order_by = '', $limit = '' ) {

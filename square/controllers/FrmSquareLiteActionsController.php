@@ -110,7 +110,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		$amount   = self::prepare_amount( $action->post_content['amount'], $atts );
 
 		// phpcs:ignore Universal.Operators.StrictComparisons
-		if ( ! $amount || $amount == 000 ) {
+		if ( ! $amount || $amount == 0.0 ) {
 			$response['error'] = __( 'Please specify an amount for the payment', 'formidable' );
 			return $response;
 		}

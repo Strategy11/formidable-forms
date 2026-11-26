@@ -129,7 +129,7 @@ class FrmStrpLiteLinkRedirectHelper {
 		}
 
 		$home_url = home_url();
-		$parsed   = parse_url( $home_url );
+		$parsed   = wp_parse_url( $home_url );
 
 		if ( is_array( $parsed ) ) {
 			$home_url = $parsed['scheme'] . '://' . $parsed['host'];
@@ -188,6 +188,8 @@ class FrmStrpLiteLinkRedirectHelper {
 	 * Redirect, have FrmStrpLiteAuth::maybe_show_message handle it similar to 3D secure.
 	 *
 	 * @param string $url
+	 *
+	 * @return void
 	 */
 	private function add_intent_info_and_redirect( $url ) {
 		if ( str_starts_with( $this->stripe_id, 'pi_' ) ) {

@@ -915,7 +915,6 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function field_choices_heading_attrs( $args ) {
-		return;
 	}
 
 	/**
@@ -928,7 +927,6 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function show_priority_field_choices( $args = array() ) {
-		return;
 	}
 
 	/**
@@ -941,7 +939,6 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	public function show_extra_field_choices( $args ) {
-		return;
 	}
 
 	/**
@@ -954,7 +951,6 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	public function show_after_default( $args ) {
-		return;
 	}
 
 	/**
