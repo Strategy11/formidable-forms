@@ -262,9 +262,4 @@
 
 	<!-- Custom Formidable sniffs (defined in phpcs-sniffs/Formidable/ruleset.xml) -->
 	<rule ref="Formidable" />
-
-	<!-- Off in the shared ruleset until each plugin is clean. -->
-	<rule ref="Formidable.CodeAnalysis.RemoveUnusedVariable">
-		<severity>5</severity>
-	</rule>
 </ruleset>
