@@ -388,7 +388,7 @@ class RemoveUnusedVariableSniff implements Sniff {
 			$scopeParens = $tokens[ $tokens[ $owner ]['scope_opener'] ]['nested_parenthesis'];
 		}
 
-		$ownParens = isset( $tokens[ $stackPtr ]['nested_parenthesis'] ) ? $tokens[ $stackPtr ]['nested_parenthesis'] : array();
+		$ownParens = $tokens[ $stackPtr ]['nested_parenthesis'] ?? array();
 
 		if ( $ownParens !== $scopeParens ) {
 			return false;
