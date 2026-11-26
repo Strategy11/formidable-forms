@@ -12,6 +12,13 @@
 	<arg name="extensions" value="php,css" />
 	<arg value="nsp" />
 
+	<!-- Flag PHP features newer than the minimum PHP version in readme.txt. The WP ruleset skips functions WordPress polyfills. -->
+	<!-- Tests run on PHP 7.4+ (see phpunit.yml) and syntax.yml skips them too, so they are excluded. -->
+	<config name="testVersion" value="7.0-" />
+	<rule ref="PHPCompatibilityWP">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+
 	<rule ref="WordPress">
 		<exclude name="Squiz.Commenting.FunctionCommentThrowTag.Missing" />
 		<exclude name="Squiz.Commenting.FunctionComment.MissingParamComment" />
