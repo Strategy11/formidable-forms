@@ -17,7 +17,7 @@ const { hydrateFieldPlaceholders } = require( './fieldPlaceholders' );
 const { renderDropdownPreview, updateComboSelectPreview, updateAddressPreview } = require( './fieldPreview' );
 const { captureFieldSettings, applyFieldSettings, restoreFieldSettingValues } = require( './duplicateFieldSettings' );
 const { addFieldSettingsMetadata, cacheFieldSettings, forgetFieldSettings, materializeFieldSettings, materializeAllFieldSettings, setPendingFieldSetting } = require( './deferredFieldSettings' );
-const { hydrateFieldPreviews, renderFieldPreviews, PENDING_PREVIEW_CLASS } = require( './fieldPreviews' );
+const { hydrateFieldPreviews, renderFieldPreviews, getFieldsWithLogicOn, PENDING_PREVIEW_CLASS } = require( './fieldPreviews' );
 const { queueFieldPreview, renderFieldPreviewNow, forgetFieldPreview, setInitialFieldPreviews } = require( './fieldPreviewQueue' );
 const { queueFieldSettings, observeFieldSettings, startFieldSettingsQueue, isFieldSettingsPending, requestFieldSettingsNow, waitForFieldSettings, retryFailedFieldSettings, cancelFieldSettings } = require( './fieldSettingsLoader' );
 
@@ -3122,6 +3122,33 @@ window.frmAdminBuildJS = function() {
 			requestFieldSettingsNow( fieldId );
 		}
 		return settings;
+	}
+
+	/**
+	 * Run a change to the conditional logic that points at a field once those panels have loaded.
+	 *
+	 * Settings panels far from the viewport load only when needed. A field whose logic uses this
+	 * one gets its settings first, so a renamed choice reaches its logic and is saved with it.
+	 *
+	 * @since 7.1
+	 * @param {string}   fieldId The field whose choices changed.
+	 * @param {Function} update  Reads and changes the loaded logic rows.
+	 * @return {void}
+	 */
+	function whenLogicSettingsLoaded( fieldId, update ) {
+		const fieldIds = getFieldsWithLogicOn( fieldId ).filter( isFieldSettingsPending );
+		if ( ! fieldIds.length ) {
+			update();
+			return;
+		}
+
+		fieldIds.forEach( logicFieldId => {
+			// Saving waits for these, and they move into the save form when they arrive. See handleLoadedFieldSettings.
+			fieldsAwaitingSettings.add( logicFieldId );
+			requestFieldSettingsNow( logicFieldId );
+		} );
+		// The requests are sent in a microtask, so wait for them after it.
+		Promise.resolve().then( () => waitForFieldSettings( fieldIds ) ).then( update );
 	}
 
 	/**
@@ -6902,63 +6929,65 @@ window.frmAdminBuildJS = function() {
 			optionMap[ fieldId ][ originalValue ].value = newValue;
 		}
 
-		materializeAllFieldSettings( prepareLoadedFieldMarkup );
-		const fieldIds = [];
-		const rows = builderPage.querySelectorAll( '.frm_logic_row' );
-		const rowLength = rows.length;
-		for ( let rowIndex = 0; rowIndex < rowLength; rowIndex++ ) {
-			const row = rows[ rowIndex ];
-			const opts = row.querySelector( '.frm_logic_field_opts' );
+		whenLogicSettingsLoaded( fieldId, () => {
+			materializeAllFieldSettings( prepareLoadedFieldMarkup );
+			const fieldIds = [];
+			const rows = builderPage.querySelectorAll( '.frm_logic_row' );
+			const rowLength = rows.length;
+			for ( let rowIndex = 0; rowIndex < rowLength; rowIndex++ ) {
+				const row = rows[ rowIndex ];
+				const opts = row.querySelector( '.frm_logic_field_opts' );
 
-			if ( opts.value !== fieldId ) {
-				continue;
-			}
+				if ( opts.value !== fieldId ) {
+					continue;
+				}
 
-			const logicId = row.id.split( '_' )[ 2 ];
-			const valueSelect = row.querySelector( `select[name="field_options[hide_opt_${ logicId }][]"]` );
+				const logicId = row.id.split( '_' )[ 2 ];
+				const valueSelect = row.querySelector( `select[name="field_options[hide_opt_${ logicId }][]"]` );
 
-			let optionMatches;
-			if ( '' === oldValue ) {
-				optionMatches = [];
-			} else {
-				optionMatches = valueSelect.querySelectorAll( `option[value="${ oldValue }"]` );
-			}
+				let optionMatches;
+				if ( '' === oldValue ) {
+					optionMatches = [];
+				} else {
+					optionMatches = valueSelect.querySelectorAll( `option[value="${ oldValue }"]` );
+				}
 
-			let option;
-			if ( ! optionMatches.length ) {
-				optionMatches = valueSelect.querySelectorAll( `option[value="${ newValue }"]` );
-
+				let option;
 				if ( ! optionMatches.length ) {
-					if ( ! singleSettingsContainer.querySelector( '.frm_toggle_sep_values' )?.checked ) {
-						option = searchSelectByText( valueSelect, oldValue ); // Find conditional logic option with oldValue
-					}
+					optionMatches = valueSelect.querySelectorAll( `option[value="${ newValue }"]` );
 
-					if ( ! option ) {
-						option = document.createElement( 'option' );
-						valueSelect.append( option );
+					if ( ! optionMatches.length ) {
+						if ( ! singleSettingsContainer.querySelector( '.frm_toggle_sep_values' )?.checked ) {
+							option = searchSelectByText( valueSelect, oldValue ); // Find conditional logic option with oldValue
+						}
+
+						if ( ! option ) {
+							option = document.createElement( 'option' );
+							valueSelect.append( option );
+						}
 					}
+				}
+
+				if ( optionMatches.length ) {
+					option = optionMatches[ optionMatches.length - 1 ];
+				}
+
+				option.setAttribute( 'value', newValue );
+				option.textContent = newLabel;
+
+				if ( ! fieldIds.includes( logicId ) ) {
+					fieldIds.push( logicId );
 				}
 			}
 
-			if ( optionMatches.length ) {
-				option = optionMatches[ optionMatches.length - 1 ];
+			for ( fieldIndex in fieldIds ) {
+				if ( Object.hasOwn( fieldIds, fieldIndex ) ) {
+					settingId = fieldIds[ fieldIndex ];
+					setting = document.getElementById( `frm-single-settings-${ settingId }` );
+					moveFieldSettings( setting );
+				}
 			}
-
-			option.setAttribute( 'value', newValue );
-			option.textContent = newLabel;
-
-			if ( ! fieldIds.includes( logicId ) ) {
-				fieldIds.push( logicId );
-			}
-		}
-
-		for ( fieldIndex in fieldIds ) {
-			if ( Object.hasOwn( fieldIds, fieldIndex ) ) {
-				settingId = fieldIds[ fieldIndex ];
-				setting = document.getElementById( `frm-single-settings-${ settingId }` );
-				moveFieldSettings( setting );
-			}
-		}
+		} );
 	}
 
 	/**

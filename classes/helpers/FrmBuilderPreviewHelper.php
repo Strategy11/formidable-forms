@@ -275,6 +275,10 @@ class FrmBuilderPreviewHelper {
 		}
 
 		self::add_input_data( $data, $field_obj, $field, $atts['saved_field'] );
+
+		// The settings panel may not load, so list the fields its conditional logic points at. A choice renamed in one of them must reach this panel.
+		$data['logic'] = array_values( array_unique( array_filter( array_map( 'absint', (array) FrmField::get_option( $atts['saved_field'], 'hide_field' ) ) ) ) );
+
 		/**
 		 * Filters the data used to draw a field's inputs in the browser.
 		 *

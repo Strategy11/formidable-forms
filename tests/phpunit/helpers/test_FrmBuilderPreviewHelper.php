@@ -171,6 +171,45 @@ class test_FrmBuilderPreviewHelper extends FrmUnitTest {
 	}
 
 	/**
+	 * Radios and number input groups send the inputs the field class prints, so filtered choices and number formatting are kept.
+	 *
+	 * @covers FrmBuilderPreviewHelper::add_to_manifest
+	 * @covers FrmBuilderPreviewHelper::add_input_data
+	 */
+	public function test_preview_data_sends_server_inputs_for_radios_and_number_groups() {
+		$radio          = $this->create_field( 'radio' );
+		$radio->options = array( 'First', 'Second' );
+		$data           = $this->get_preview_data( $radio );
+		$this->assertStringContainsString( 'type="radio"', $data['inputHtml'] );
+		$this->assertStringContainsString( 'First', $data['inputHtml'] );
+		$this->assertStringContainsString( 'Second', $data['inputHtml'] );
+		$this->assertArrayNotHasKey( 'htmlId', $data, 'The browser does not draw inputs for a radio.' );
+
+		$number = $this->get_preview_data( $this->create_field( 'number' ) );
+		$this->assertArrayNotHasKey( 'inputHtml', $number, 'A plain number input is drawn in the browser.' );
+		$this->assertArrayHasKey( 'htmlId', $number );
+
+		$grouped = $this->get_preview_data( $this->create_field( 'number', array( 'prepend' => '$' ) ) );
+		$this->assertArrayHasKey( 'inputHtml', $grouped );
+		$this->assertArrayNotHasKey( 'htmlId', $grouped );
+
+		if ( class_exists( 'FrmProFieldNumber' ) ) {
+			$this->assertStringContainsString( 'frm_input_group', $grouped['inputHtml'], 'Pro wraps the number in its prefix group.' );
+		}
+	}
+
+	/**
+	 * @covers FrmBuilderPreviewHelper::add_to_manifest
+	 */
+	public function test_preview_data_lists_fields_used_by_conditional_logic() {
+		$this->assertArrayNotHasKey( 'logic', $this->get_preview_data( $this->create_field( 'text' ) ) );
+
+		$field                              = $this->create_field( 'text' );
+		$field->field_options['hide_field'] = array( '12', 12, '', '15' );
+		$this->assertSame( array( 12, 15 ), $this->get_preview_data( $field )['logic'] );
+	}
+
+	/**
 	 * @covers FrmBuilderPreviewHelper::supports
 	 */
 	public function test_supports_falls_back_for_array_default_value() {
@@ -254,6 +293,36 @@ class test_FrmBuilderPreviewHelper extends FrmUnitTest {
 		}
 
 		return FrmBuilderPreviewHelper::supports( $field, $field_obj, FrmFieldsController::display_field_options( array(), $field_obj ) );
+	}
+
+	/**
+	 * Add a field to a manifest the way the form builder does.
+	 *
+	 * @param object $saved_field The saved field.
+	 *
+	 * @return array The data the browser draws the preview from.
+	 */
+	private function get_preview_data( $saved_field ) {
+		$saved_field->parent_form_id = $saved_field->form_id;
+		$field_obj                   = FrmFieldFactory::get_field_factory( $saved_field );
+		$manifest                    = (object) array(
+			'definitions' => array(),
+			'fields'      => array(),
+		);
+		$atts                        = array(
+			'field'                  => FrmFieldsHelper::setup_edit_vars( $saved_field ),
+			'saved_field'            => $saved_field,
+			'field_obj'              => $field_obj,
+			'display'                => FrmFieldsController::display_field_options( array(), $field_obj ),
+			'li_classes'             => '',
+			'extra_field_attributes' => array(),
+		);
+
+		ob_start();
+		FrmBuilderPreviewHelper::add_to_manifest( $atts, $manifest );
+		ob_end_clean();
+
+		return $manifest->fields[0];
 	}
 
 	/**
