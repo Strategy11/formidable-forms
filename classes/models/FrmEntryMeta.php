@@ -361,7 +361,7 @@ class FrmEntryMeta {
 			$cached   = FrmDb::check_cache( $entry_id, 'frm_entry' );
 		}
 
-		if ( $cached && isset( $cached->metas ) && isset( $cached->metas[ $field_id ] ) ) {
+		if ( $cached && isset( $cached->metas, $cached->metas[ $field_id ] ) ) {
 			$result = $cached->metas[ $field_id ];
 			return wp_unslash( $result );
 		}

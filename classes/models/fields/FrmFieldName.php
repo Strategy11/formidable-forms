@@ -62,7 +62,7 @@ class FrmFieldName extends FrmFieldCombo {
 	 */
 	protected function get_processed_sub_fields() {
 		$names     = explode( '_', $this->get_name_layout() );
-		$col_class = 'frm' . intval( 12 / count( $names ) );
+		$col_class = 'frm' . (int) ( 12 / count( $names ) );
 		$result    = array();
 
 		foreach ( $names as $name ) {
@@ -345,7 +345,7 @@ class FrmFieldName extends FrmFieldCombo {
 
 		$field_id = (int) ( is_array( $args['field'] ) ? $args['field']['id'] : $args['field']->id );
 
-		if ( intval( self::$first_name_field_ids[ $form_id ] ) === $field_id ) {
+		if ( (int) self::$first_name_field_ids[ $form_id ] === $field_id ) {
 			if ( 'first' === $sub_field['name'] ) {
 				$attrs['autocomplete'] = 'given-name';
 			} elseif ( 'last' === $sub_field['name'] ) {

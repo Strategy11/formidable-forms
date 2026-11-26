@@ -1078,13 +1078,7 @@ class FrmAddonsController {
 	 */
 	protected static function get_license_type() {
 		$license_type = '';
-		$addons       = self::get_api_addons();
-
-		if ( isset( $addons['error'] ) && isset( $addons['error']['type'] ) ) {
-			return $addons['error']['type'];
-		}
-
-		return $license_type;
+		return self::get_api_addons()['error']['type'] ?? $license_type;
 	}
 
 	/**

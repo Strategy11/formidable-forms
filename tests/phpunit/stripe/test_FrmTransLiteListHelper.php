@@ -223,6 +223,6 @@ class test_FrmTransLiteListHelper extends FrmUnitTest {
 		$form_ids = $this->run_private_method( array( $list_helper, 'get_form_ids' ), array() );
 
 		$this->assertArrayHasKey( $entry->id, $form_ids );
-		$this->assertEquals( $form->id, $form_ids[ $entry->id ]->form_id );
+		$this->assertSame( $form->id, $form_ids[ $entry->id ]->form_id );
 	}
 }

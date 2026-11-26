@@ -475,7 +475,7 @@ class FrmFormEmbedsHelper {
 
 		foreach ( $ids as $id ) {
 			// A key in either attribute resolves to the same form the shortcode would render.
-			$form_ids[] = is_numeric( $id ) ? intval( $id ) : FrmForm::get_id_by_key( $id );
+			$form_ids[] = is_numeric( $id ) ? (int) $id : FrmForm::get_id_by_key( $id );
 		}
 
 		$form_ids = array_filter( $form_ids );
@@ -508,7 +508,7 @@ class FrmFormEmbedsHelper {
 		$ids = array();
 
 		foreach ( $form_ids as $form_id ) {
-			$ids[] = intval( $form_id );
+			$ids[] = (int) $form_id;
 		}
 
 		$form_ids = array_unique( $ids );
@@ -542,7 +542,7 @@ class FrmFormEmbedsHelper {
 		$expanded = array();
 
 		foreach ( $affected as $form_id ) {
-			$expanded[] = intval( $form_id );
+			$expanded[] = (int) $form_id;
 		}
 
 		$expanded = array_values( array_unique( $expanded ) );
@@ -576,7 +576,7 @@ class FrmFormEmbedsHelper {
 
 			foreach ( $posts as $post_data ) {
 				if ( isset( $post_data->ID ) ) {
-					self::$cached_post_ids[ intval( $post_data->ID ) ] = true;
+					self::$cached_post_ids[ (int) $post_data->ID ] = true;
 				}
 			}
 		}
@@ -594,7 +594,7 @@ class FrmFormEmbedsHelper {
 	 * @return array
 	 */
 	private static function get_cached_form_ids_for_post( $post_id ) {
-		$post_id = intval( $post_id );
+		$post_id = absint( $post_id );
 
 		if ( ! isset( self::get_cached_post_ids()[ $post_id ] ) ) {
 			// Answers the overwhelming majority of saves without walking the cache.
@@ -609,8 +609,8 @@ class FrmFormEmbedsHelper {
 			}
 
 			foreach ( $posts as $post_data ) {
-				if ( isset( $post_data->ID ) && intval( $post_data->ID ) === $post_id ) {
-					$form_ids[] = intval( $form_id );
+				if ( isset( $post_data->ID ) && (int) $post_data->ID === $post_id ) {
+					$form_ids[] = (int) $form_id;
 					break;
 				}
 			}
