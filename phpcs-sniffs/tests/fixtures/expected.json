@@ -31,5 +31,23 @@
   ],
   "CheckFunctionCallable": [
     2
+  ],
+  "RemoveRedundantDieAfterSendJson": [
+    3,
+    5,
+    7,
+    9,
+    11,
+    14,
+    19,
+    26
+  ],
+  "PreferWpSendJson": [
+    2,
+    4,
+    6,
+    8,
+    11,
+    20
   ]
 }

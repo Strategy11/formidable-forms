@@ -52,6 +52,10 @@
 	<rule ref="Formidable.CodeAnalysis.PreferStrcasecmp" />
 	<rule ref="Formidable.CodeAnalysis.PreferTruthyOverNotEmptyForFunctionCall" />
 	<rule ref="Formidable.CodeAnalysis.PreferWpAttributeHelpers" />
+	<!-- Off by default: wp_send_json() adds a JSON Content-Type header that breaks jQuery consumers without a dataType. Opt in per plugin after checking each consumer. -->
+	<rule ref="Formidable.CodeAnalysis.PreferWpSendJson">
+		<severity>0</severity>
+	</rule>
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyAfterTypeCheck" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnAssignedVariable" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnGlobal" />
@@ -67,6 +71,7 @@
 	<rule ref="Formidable.CodeAnalysis.RedundantParentheses" />
 	<rule ref="Formidable.CodeAnalysis.RedundantTruthyBeforeStringComparison" />
 	<rule ref="Formidable.CodeAnalysis.RedundantUnsetBeforeReturn" />
+	<rule ref="Formidable.CodeAnalysis.RemoveRedundantDieAfterSendJson" />
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantEmptyAfterTruthy" />
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantTrimAfterSanitize" />
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantReturnVariable" />

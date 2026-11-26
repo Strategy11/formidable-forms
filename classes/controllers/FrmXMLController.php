@@ -51,8 +51,7 @@ class FrmXMLController {
 			$response = array(
 				'message' => __( 'Your server is missing the Simple XML extension. This is required to install a template.', 'formidable' ),
 			);
-			echo wp_json_encode( $response );
-			wp_die();
+			wp_send_json( $response );
 		}
 
 		$form = self::get_posted_form();
@@ -63,8 +62,7 @@ class FrmXMLController {
 			$response = array(
 				'message' => __( 'The template you are trying to install could not be validated.', 'formidable' ),
 			);
-			echo wp_json_encode( $response );
-			wp_die();
+			wp_send_json( $response );
 		}
 
 		$response = wp_remote_get( $url );
@@ -75,8 +73,7 @@ class FrmXMLController {
 			$response = array(
 				'message' => __( 'There was an error reading the form template.', 'formidable' ),
 			);
-			echo wp_json_encode( $response );
-			wp_die();
+			wp_send_json( $response );
 		}
 
 		self::set_new_form_name( $xml );
@@ -118,8 +115,7 @@ class FrmXMLController {
 		 */
 		$response = apply_filters( 'frm_xml_response', $response, compact( 'form', 'imported', 'url' ) );
 
-		echo wp_json_encode( $response );
-		wp_die();
+		wp_send_json( $response );
 	}
 
 	/**

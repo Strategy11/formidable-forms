@@ -43,6 +43,7 @@ class FrmEntriesAJAXSubmitController {
 		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 
 		if ( ! $form_id ) {
+			// phpcs:ignore Formidable.CodeAnalysis.PreferWpSendJson -- formidable.js parses this as text, a JSON Content-Type would break it.
 			echo json_encode( $response );
 			wp_die();
 		}
@@ -50,6 +51,7 @@ class FrmEntriesAJAXSubmitController {
 		$form = FrmForm::getOne( $form_id );
 
 		if ( ! $form ) {
+			// phpcs:ignore Formidable.CodeAnalysis.PreferWpSendJson -- formidable.js parses this as text, a JSON Content-Type would break it.
 			echo json_encode( $response );
 			wp_die();
 		}
@@ -57,6 +59,7 @@ class FrmEntriesAJAXSubmitController {
 		if ( ! FrmForm::is_ajax_on( $form ) ) {
 			// This continues in the Pro version as it is required for other features including in-place edit.
 			// In Lite, if AJAX submit is not on, just exit early as this function is getting called incorrectly.
+			// phpcs:ignore Formidable.CodeAnalysis.PreferWpSendJson -- formidable.js parses this as text, a JSON Content-Type would break it.
 			echo json_encode( $response );
 			wp_die();
 		}
@@ -112,6 +115,7 @@ class FrmEntriesAJAXSubmitController {
 
 		$response = self::check_for_failed_form_submission( $response, $form );
 
+		// phpcs:ignore Formidable.CodeAnalysis.PreferWpSendJson -- formidable.js parses this as text, a JSON Content-Type would break it.
 		echo json_encode( $response );
 		wp_die();
 	}

@@ -1152,8 +1152,7 @@ class FrmFormsController {
 			'redirect' => FrmForm::get_edit_link( $form_id ) . '&new_template=true',
 		);
 
-		echo wp_json_encode( $response );
-		wp_die();
+		wp_send_json( $response );
 	}
 
 	/**
@@ -3387,6 +3386,7 @@ class FrmFormsController {
 
 		if ( ! empty( $args['ajax'] ) && $doing_ajax && empty( $args['force_delay_redirect'] ) ) {
 			// Is AJAX submit and there is just one Redirect action runs.
+			// phpcs:ignore Formidable.CodeAnalysis.PreferWpSendJson -- formidable.js parses this as text, a JSON Content-Type would break it.
 			echo json_encode( self::get_ajax_redirect_response_data( $args + compact( 'success_url' ) ) );
 			wp_die();
 		}
