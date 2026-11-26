@@ -41,3 +41,13 @@ if ( ! $x || $y === '' ) {
 if ( ! $x || $x === '' || $y ) {
 	$n = true;
 }
+// Yoda comparisons are not recognised; pin them as not flagged.
+if ( ! $x || null == $x ) {
+	$o = true;
+}
+if ( ! $x || 0 == $x ) {
+	$p = true;
+}
+if ( false == $x || ! $x ) {
+	$q = true;
+}
