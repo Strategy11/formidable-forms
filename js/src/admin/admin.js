@@ -4341,6 +4341,11 @@ window.frmAdminBuildJS = function() {
 		list.innerHTML = '';
 
 		for ( let i = 0; i < fields.length; i++ ) {
+			if ( fields[ i ].fieldId === fieldId ) {
+				// A field can't be used in its own calculation, since that would create a loop.
+				continue;
+			}
+
 			if ( exclude?.includes( fields[ i ].fieldType ) ||
 				( excludedOpts.length && hasExcludedOption( fields[ i ], excludedOpts ) ) ) {
 				continue;
