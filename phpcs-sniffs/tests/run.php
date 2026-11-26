@@ -65,11 +65,17 @@ function count_standard_violations( $root, $path ) {
 }
 
 try {
-	$rules = '<ruleset name="FormidableFixtures">';
+	$rules      = '<ruleset name="FormidableFixtures">';
+	$categories = array();
 
 	foreach ( $expected as $name => $lines ) {
-		$fixturePath = $root . '/phpcs-sniffs/Formidable/Sniffs/CodeAnalysis/' . $name . 'Sniff.php';
-		$rules      .= '<rule ref="' . htmlspecialchars( $fixturePath, ENT_QUOTES, 'UTF-8' ) . '" />';
+		$matches = glob( $root . '/phpcs-sniffs/Formidable/Sniffs/*/' . $name . 'Sniff.php' );
+
+		if ( ! $matches || count( $matches ) !== 1 ) {
+			throw new RuntimeException( $name . ': cannot find a unique sniff file.' );
+		}
+		$categories[ $name ] = basename( dirname( $matches[0] ) );
+		$rules              .= '<rule ref="' . htmlspecialchars( $matches[0], ENT_QUOTES, 'UTF-8' ) . '" />';
 	}
 	$rules .= '</ruleset>';
 	file_put_contents( $scratch . '/ruleset.xml', $rules );
@@ -190,7 +196,7 @@ try {
 			foreach ( $report['files'][ $fixturePath ]['messages'] as $message ) {
 				$sourceParts = explode( '.', $message['source'] );
 
-				if ( array_slice( $sourceParts, 0, 3 ) !== array( 'Formidable', 'CodeAnalysis', (string) $name ) ) {
+				if ( array_slice( $sourceParts, 0, 3 ) !== array( 'Formidable', $categories[ $name ], (string) $name ) ) {
 					continue;
 				}
 
