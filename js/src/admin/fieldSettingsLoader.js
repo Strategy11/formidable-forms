@@ -181,6 +181,30 @@ export function retryFailedFieldSettings( fieldIds ) {
 }
 
 /**
+ * Wait until no field the builder is waiting on still has settings to load.
+ *
+ * Each pass waits for the fields awaited when it starts, retries the ones that failed, and then
+ * removes only those fields from awaitingFieldIds. A field added in the meantime, for example by
+ * a choice rename that reads another field's logic, keeps its place and gets another pass.
+ *
+ * @since 7.1
+ * @param {Set<string>} awaitingFieldIds The builder's fields waiting for their settings.
+ * @return {Promise<string[]>} Resolves with the fields whose settings still failed to load.
+ */
+export function waitForAwaitedFieldSettings( awaitingFieldIds ) {
+	const fieldIds = [ ...awaitingFieldIds ];
+	return waitForFieldSettings( fieldIds ).then( () => retryFailedFieldSettings( fieldIds ) ).then( failed => {
+		// Loaded fields were already removed. Deleted fields have nothing to save.
+		fieldIds.forEach( fieldId => awaitingFieldIds.delete( fieldId ) );
+		if ( ! awaitingFieldIds.size ) {
+			return failed;
+		}
+
+		return waitForAwaitedFieldSettings( awaitingFieldIds ).then( failedLater => [ ...new Set( [ ...failed, ...failedLater ] ) ] );
+	} );
+}
+
+/**
  * Forget a deleted field so its settings are not requested.
  *
  * @since 7.1

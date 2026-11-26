@@ -19,7 +19,7 @@ const { captureFieldSettings, applyFieldSettings, restoreFieldSettingValues } = 
 const { addFieldSettingsMetadata, cacheFieldSettings, forgetFieldSettings, materializeFieldSettings, materializeAllFieldSettings, setPendingFieldSetting } = require( './deferredFieldSettings' );
 const { hydrateFieldPreviews, renderFieldPreviews, getFieldsWithLogicOn, PENDING_PREVIEW_CLASS } = require( './fieldPreviews' );
 const { queueFieldPreview, renderFieldPreviewNow, forgetFieldPreview, setInitialFieldPreviews } = require( './fieldPreviewQueue' );
-const { queueFieldSettings, observeFieldSettings, startFieldSettingsQueue, isFieldSettingsPending, requestFieldSettingsNow, waitForFieldSettings, retryFailedFieldSettings, whenFieldSettingsLoaded, cancelFieldSettings } = require( './fieldSettingsLoader' );
+const { queueFieldSettings, observeFieldSettings, startFieldSettingsQueue, isFieldSettingsPending, requestFieldSettingsNow, waitForAwaitedFieldSettings, whenFieldSettingsLoaded, cancelFieldSettings } = require( './fieldSettingsLoader' );
 
 const fieldHtmlTemplate = document.createElement( 'template' );
 
@@ -3216,10 +3216,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		button.classList.add( 'frm_loading_button' );
-		const fieldIds = [ ...fieldsAwaitingSettings ];
-		waitForFieldSettings( fieldIds ).then( () => retryFailedFieldSettings( fieldIds ) ).then( failedFieldIds => {
-			// Loaded fields were already removed. Deleted fields have nothing to save.
-			fieldsAwaitingSettings.clear();
+		waitForAwaitedFieldSettings( fieldsAwaitingSettings ).then( failedFieldIds => {
 			if ( ! failedFieldIds.length ) {
 				fieldsFailedOnSave.clear();
 			} else if ( ! confirmSaveWithoutFieldSettings( failedFieldIds, button ) ) {
