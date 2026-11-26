@@ -2612,6 +2612,25 @@ function frmFrontFormJS() {
 	}
 
 	/**
+	 * Recalculate the total price when a product field changes.
+	 *
+	 * Check dropdowns directly to avoid evaluating a delegated `:has` selector against every event ancestor.
+	 * See https://github.com/Strategy11/formidable-pro/issues/3447.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Event} e The change event.
+	 * @return {void}
+	 */
+	function onProductFieldChange( e ) {
+		if ( 'SELECT' === this.tagName && ! this.querySelector( '[data-frmprice]' ) ) {
+			return;
+		}
+
+		calcProductsTotal.call( this, e );
+	}
+
+	/**
 	 * Calculates the total price.
 	 *
 	 * @param {Event|undefined} e The event object.
@@ -3032,7 +3051,7 @@ function frmFrontFormJS() {
 			);
 
 			jQuery( document ).on( 'frmAfterAddRow frmAfterRemoveRow', calcProductsTotal );
-			jQuery( document ).on( 'change', '[type="checkbox"][data-frmprice],[type="radio"][data-frmprice],[type="hidden"][data-frmprice],select:has([data-frmprice])', calcProductsTotal );
+			jQuery( document ).on( 'change', '[type="checkbox"][data-frmprice],[type="radio"][data-frmprice],[type="hidden"][data-frmprice],select', onProductFieldChange );
 			jQuery( document ).on( 'keyup change', '[data-frmproduct],[type="text"][data-frmprice]', calcProductsTotal );
 			calcProductsTotal();
 		},
