@@ -22,6 +22,8 @@ const GROUP_INPUT_SELECTOR = ':scope > .frm-option-group-input';
 const ENABLED_CLASS = 'frm-option-groups-on';
 
 const initializedLists = new WeakSet();
+const groupHeads = new WeakMap();
+let hoveredGroupHead;
 const knownRows = new WeakSet();
 const observers = new WeakMap();
 const pendingNewGroup = new WeakMap();
@@ -209,6 +211,10 @@ function render( list ) {
 		const inGroup = enabled && '' !== group;
 
 		rows.forEach( ( row, index ) => {
+			if ( inGroup ) {
+				groupHeads.set( row, rows[ 0 ] );
+			}
+			row.classList.toggle( 'frm-option-group-hover', row === hoveredGroupHead && inGroup && 0 === index );
 			row.classList.toggle( 'frm-option-in-group', inGroup );
 			row.classList.toggle( 'frm-option-group-first', inGroup && 0 === index );
 			row.classList.toggle( 'frm-option-group-last', inGroup && rows.length - 1 === index );
@@ -629,15 +635,14 @@ function findList( target ) {
  */
 function markHoveredGroup( event ) {
 	const row = event.target.closest( '.frm-option-in-group' );
-	const list = row?.parentElement;
-	const first = row ? getRunOf( list, row )?.rows[ 0 ] : null;
+	const first = groupHeads.get( row );
+	if ( first === hoveredGroupHead ) {
+		return;
+	}
 
-	document.querySelectorAll( '.frm-option-group-hover' ).forEach( el => {
-		if ( el !== first ) {
-			el.classList.remove( 'frm-option-group-hover' );
-		}
-	} );
+	hoveredGroupHead?.classList.remove( 'frm-option-group-hover' );
 	first?.classList.add( 'frm-option-group-hover' );
+	hoveredGroupHead = first;
 }
 
 /**
