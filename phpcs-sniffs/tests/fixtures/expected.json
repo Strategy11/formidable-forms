@@ -31,5 +31,13 @@
   ],
   "CheckFunctionCallable": [
     2
+  ],
+  "SimplifyRedundantFalsyCheck": [
+    2,
+    5,
+    8,
+    11,
+    14,
+    17
   ]
 }

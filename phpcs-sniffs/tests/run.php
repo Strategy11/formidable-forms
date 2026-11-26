@@ -139,6 +139,19 @@ try {
 			}
 		}
 
+		if ( 'SimplifyRedundantFalsyCheck' === $name ) {
+			// Truthy strings such as '0.00' and objects that convert to '' must keep their original result.
+			foreach ( array( 'null', 'false', 'true', '0', '1', '-1', '0.0', "'0'", "''", "'0.0'", "'0.00'", "' 0'", "'00'", "'abc'", "'1abc'", 'array()', 'array( 0 )', 'new class() { public function __toString() { return ""; } }' ) as $value ) {
+				$code   = 'error_reporting( E_ALL & ~E_NOTICE ); $a = $b = $c = $d = $e = $f = $g = $h = $i = $j = $k = $l = $m = $n = false; $x = ' . $value . '; $y = false; include $argv[1]; echo serialize( array( $a, $b, $c, $d, $e, $f, $g, $h, $i, $j, $k, $l, $m, $n ) );';
+				$before = run_sniff_command( array( PHP_BINARY, '-r', $code, $fixtures . '/' . $name . '.inc' ) );
+				$after  = run_sniff_command( array( PHP_BINARY, '-r', $code, $fixturePath ) );
+
+				if ( 0 !== $before[0] || $before !== $after ) {
+					throw new RuntimeException( $name . ': runtime values changed for ' . $value );
+				}
+			}
+		}
+
 		if ( 'PreferWpAttributeHelpers' === $name ) {
 			$runtimeBefore = $scratch . '/attributes-before.php';
 			$runtimeAfter  = $scratch . '/attributes-after.php';
