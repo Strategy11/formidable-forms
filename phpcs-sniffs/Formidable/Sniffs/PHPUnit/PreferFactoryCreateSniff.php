@@ -138,7 +138,14 @@ class PreferFactoryCreateSniff implements Sniff {
 			$isCall  = true;
 		}
 
-		if ( false === $factory || $tokens[ $factory ]['code'] !== T_STRING || strtolower( $tokens[ $factory ]['content'] ) !== 'factory' ) {
+		if ( false === $factory || $tokens[ $factory ]['code'] !== T_STRING ) {
+			return false;
+		}
+
+		// Property names are case-sensitive, method names are not.
+		$factoryName = $isCall ? strtolower( $tokens[ $factory ]['content'] ) : $tokens[ $factory ]['content'];
+
+		if ( 'factory' !== $factoryName ) {
 			return false;
 		}
 
@@ -183,6 +190,11 @@ class PreferFactoryCreateSniff implements Sniff {
 
 		$code = $tokens[ $before ]['code'];
 
+		// A semicolon inside a for header separates its expressions, so the value is the loop condition.
+		if ( T_SEMICOLON === $code && $this->isInsideForHeader( $phpcsFile, $before ) ) {
+			return false;
+		}
+
 		if ( in_array( $code, array( T_SEMICOLON, T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_OPEN_TAG ), true ) ) {
 			return true;
 		}
@@ -193,6 +205,27 @@ class PreferFactoryCreateSniff implements Sniff {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Checks whether a token sits directly inside the parentheses of a for header.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $ptr       The token to check.
+	 *
+	 * @return bool
+	 */
+	private function isInsideForHeader( File $phpcsFile, $ptr ) {
+		$tokens = $phpcsFile->getTokens();
+
+		if ( empty( $tokens[ $ptr ]['nested_parenthesis'] ) ) {
+			return false;
+		}
+
+		$openers = array_keys( $tokens[ $ptr ]['nested_parenthesis'] );
+		$opener  = end( $openers );
+
+		return isset( $tokens[ $opener ]['parenthesis_owner'] ) && T_FOR === $tokens[ $tokens[ $opener ]['parenthesis_owner'] ]['code'];
 	}
 
 	/**

@@ -34,3 +34,7 @@ create_and_get();
 Foo::create_and_get();
 $this->assertNotEmpty( $this->factory->field->create_and_get() );
 echo $this->factory->field->create_and_get();
+for ( $i = 0; $this->factory->field->create_and_get(); $i++ ) {}
+$this->Factory->field->create_and_get();
+?>
+<div><?php $this->factory->post->create_and_get() ?></div>
