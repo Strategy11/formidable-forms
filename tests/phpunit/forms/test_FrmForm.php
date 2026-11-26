@@ -50,6 +50,34 @@ class test_FrmForm extends FrmUnitTest {
 		$this->assertSame( $before->field_options, $after->field_options );
 	}
 
+	public function test_settings_page_save_keeps_posted_item_meta() {
+		$form_id  = $this->factory->form->create();
+		$existing = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $form_id,
+				'type'    => 'text',
+			)
+		);
+		$missing  = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $form_id,
+				'type'    => 'text',
+			)
+		);
+
+		$values = FrmForm::update_fields(
+			$form_id,
+			array(
+				'options'   => array(),
+				'item_meta' => array( $existing->id => 'posted' ),
+			)
+		);
+
+		$this->assertSame( 'posted', $values['item_meta'][ $existing->id ] );
+		$this->assertArrayHasKey( $missing->id, $values['item_meta'] );
+		$this->assertSame( '', $values['item_meta'][ $missing->id ] );
+	}
+
 	public function test_create() {
 		$values  = FrmFormsHelper::setup_new_vars( false );
 		$form_id = FrmForm::create( $values );
