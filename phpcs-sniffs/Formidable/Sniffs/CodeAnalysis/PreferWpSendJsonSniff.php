@@ -19,6 +19,8 @@
  *   JSON.parse( response ) or response.replace() on it then throws. A consumer that uses
  *   dataType: 'json', fetch() with response.json(), or XMLHttpRequest.responseText is unaffected.
  * - Outside an AJAX request wp_send_json() ends with die, where wp_die() would print its HTML page.
+ * - An echo preceded in the same function, closure or file scope by a header() call that may set a
+ *   Content-Type is skipped, because wp_send_json() would replace that Content-Type with JSON.
  * - A json_encode() source is reported as UseWpSendJsonFromJsonEncode because wp_send_json()
  *   encodes with wp_json_encode(). The output is identical when json_encode() succeeds, and
  *   wp_json_encode() repairs invalid UTF-8 where json_encode() would have printed nothing.
@@ -138,6 +140,11 @@ class PreferWpSendJsonSniff implements Sniff {
 			return;
 		}
 
+		// wp_send_json() would override a Content-Type the code chose on purpose.
+		if ( $this->hasContentTypeHeaderBefore( $phpcsFile, $stackPtr ) ) {
+			return;
+		}
+
 		$replacement = 'wp_send_json(' . $phpcsFile->getTokensAsString( $openParen + 1, $closeParen - $openParen - 1 ) . ');';
 
 		$fix = $phpcsFile->addFixableError(
@@ -241,5 +248,109 @@ class PreferWpSendJsonSniff implements Sniff {
 		}
 
 		return $next;
+	}
+
+	/**
+	 * Check whether a header() call that may set a Content-Type precedes a token in its scope.
+	 *
+	 * The scope is the innermost enclosing function or closure, or the file outside any function.
+	 * Nested function and closure bodies are skipped, because their headers are not sent by this code.
+	 * A header() whose first argument is not built from string literals is treated as a Content-Type,
+	 * since the sniff cannot see its value.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The token to look back from.
+	 *
+	 * @return bool
+	 */
+	private function hasContentTypeHeaderBefore( File $phpcsFile, $stackPtr ) {
+		$tokens     = $phpcsFile->getTokens();
+		$scopeStart = 0;
+
+		foreach ( array_reverse( $tokens[ $stackPtr ]['conditions'], true ) as $conditionPtr => $conditionCode ) {
+			if ( T_FUNCTION === $conditionCode || T_CLOSURE === $conditionCode ) {
+				$scopeStart = $tokens[ $conditionPtr ]['scope_opener'] + 1;
+				break;
+			}
+		}
+
+		for ( $i = $scopeStart; $i < $stackPtr; $i++ ) {
+			$code = $tokens[ $i ]['code'];
+
+			if ( ( T_FUNCTION === $code || T_CLOSURE === $code || T_FN === $code ) && isset( $tokens[ $i ]['scope_closer'] ) ) {
+				$i = $tokens[ $i ]['scope_closer'];
+				continue;
+			}
+
+			if ( T_STRING !== $code || 'header' !== strtolower( $tokens[ $i ]['content'] ) ) {
+				continue;
+			}
+
+			$prev = $phpcsFile->findPrevious( Tokens::$emptyTokens, $i - 1, null, true );
+
+			if ( false !== $prev && T_NS_SEPARATOR === $tokens[ $prev ]['code'] ) {
+				$prev = $phpcsFile->findPrevious( Tokens::$emptyTokens, $prev - 1, null, true );
+			}
+
+			if ( false !== $prev && isset( Tokens::$objectOperators[ $tokens[ $prev ]['code'] ] ) ) {
+				continue;
+			}
+
+			if ( false !== $prev && in_array( $tokens[ $prev ]['code'], array( T_FUNCTION, T_NEW, T_CONST ), true ) ) {
+				continue;
+			}
+
+			$openParen = $phpcsFile->findNext( Tokens::$emptyTokens, $i + 1, null, true );
+
+			if ( false === $openParen || T_OPEN_PARENTHESIS !== $tokens[ $openParen ]['code'] || ! isset( $tokens[ $openParen ]['parenthesis_closer'] ) ) {
+				continue;
+			}
+
+			if ( $this->firstArgumentMaySetContentType( $phpcsFile, $openParen ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check whether the first argument of a header() call may set a Content-Type.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $openParen The opening parenthesis of the call.
+	 *
+	 * @return bool
+	 */
+	private function firstArgumentMaySetContentType( File $phpcsFile, $openParen ) {
+		$tokens     = $phpcsFile->getTokens();
+		$closeParen = $tokens[ $openParen ]['parenthesis_closer'];
+		$hasLiteral = false;
+
+		for ( $i = $openParen + 1; $i < $closeParen; $i++ ) {
+			if ( isset( $tokens[ $i ]['parenthesis_closer'] ) && $tokens[ $i ]['parenthesis_closer'] > $i ) {
+				$i = $tokens[ $i ]['parenthesis_closer'];
+				continue;
+			}
+
+			if ( isset( $tokens[ $i ]['bracket_closer'] ) && $tokens[ $i ]['bracket_closer'] > $i ) {
+				$i = $tokens[ $i ]['bracket_closer'];
+				continue;
+			}
+
+			if ( T_COMMA === $tokens[ $i ]['code'] ) {
+				break;
+			}
+
+			if ( isset( Tokens::$stringTokens[ $tokens[ $i ]['code'] ] ) || T_DOUBLE_QUOTED_STRING === $tokens[ $i ]['code'] ) {
+				$hasLiteral = true;
+
+				if ( false !== stripos( $tokens[ $i ]['content'], 'content-type' ) ) {
+					return true;
+				}
+			}
+		}
+
+		return ! $hasLiteral;
 	}
 }

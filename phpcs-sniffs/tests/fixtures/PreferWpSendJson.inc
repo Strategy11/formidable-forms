@@ -75,3 +75,34 @@ echo wp_json_encode( $t ); ?>
 // Short echo tag.
 ?><?= wp_json_encode( $u ); ?><?php
 wp_die();
+// An explicit Content-Type in the same function.
+function plain_text_response() {
+	header( 'Content-Type: text/plain' );
+	echo json_encode( $v );
+	wp_die();
+}
+// A header() with an unknown value in the same function.
+function dynamic_header_response( $header ) {
+	header( $header );
+	echo wp_json_encode( $w );
+	wp_die();
+}
+// A Content-Type set in a different function does not apply.
+function other_response() {
+	echo wp_json_encode( $x );
+	wp_die();
+}
+// A header in a nested closure does not apply.
+function closure_header_response() {
+	$send = function () {
+		header( 'Content-Type: text/plain' );
+	};
+	echo wp_json_encode( $y );
+	wp_die();
+}
+// A header that is not a Content-Type does not apply.
+function robots_header_response() {
+	header( 'X-Robots-Tag: noindex' );
+	echo wp_json_encode( $z );
+	wp_die();
+}
