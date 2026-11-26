@@ -1077,8 +1077,7 @@ class FrmAddonsController {
 	 * @return string
 	 */
 	protected static function get_license_type() {
-		$license_type = '';
-		return self::get_api_addons()['error']['type'] ?? $license_type;
+		return self::get_api_addons()['error']['type'] ?? '';
 	}
 
 	/**

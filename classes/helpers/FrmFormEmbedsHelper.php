@@ -594,7 +594,7 @@ class FrmFormEmbedsHelper {
 	 * @return array
 	 */
 	private static function get_cached_form_ids_for_post( $post_id ) {
-		$post_id = absint( $post_id );
+		$post_id = (int) $post_id;
 
 		if ( ! isset( self::get_cached_post_ids()[ $post_id ] ) ) {
 			// Answers the overwhelming majority of saves without walking the cache.
