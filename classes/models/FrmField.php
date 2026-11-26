@@ -458,11 +458,7 @@ class FrmField {
 	 * @return void
 	 */
 	public static function remove_moved_field_types_from_pro( &$pro_fields ) {
-		unset( $pro_fields['credit_card'] );
-		unset( $pro_fields['product'] );
-		unset( $pro_fields['quantity'] );
-		unset( $pro_fields['total'] );
-		unset( $pro_fields['address'] );
+		unset( $pro_fields['credit_card'], $pro_fields['product'], $pro_fields['quantity'], $pro_fields['total'], $pro_fields['address'] );
 	}
 
 	/**
@@ -774,7 +770,7 @@ class FrmField {
 			}
 
 			// If this is a field inside of a repeating section, associate it with the correct form
-			if ( (int) $field->form_id !== (int) $old_form_id && isset( $old_repeat_form_id ) && isset( $new_repeat_form_id ) && (int) $field->form_id === (int) $old_repeat_form_id ) { // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			if ( (int) $field->form_id !== (int) $old_form_id && isset( $old_repeat_form_id, $new_repeat_form_id ) && (int) $field->form_id === (int) $old_repeat_form_id ) { // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				$values['form_id'] = $new_repeat_form_id;
 			}
 
@@ -825,7 +821,7 @@ class FrmField {
 			 */
 			$values = apply_filters( 'frm_clean_' . $values['type'] . '_field_options_before_update', $values, $id );
 
-			if ( $values['type'] === 'hidden' && isset( $values['field_options'] ) && isset( $values['field_options']['clear_on_focus'] ) ) {
+			if ( $values['type'] === 'hidden' && isset( $values['field_options']['clear_on_focus'] ) ) {
 				// Don't keep the old placeholder setting for hidden fields
 				$values['field_options']['clear_on_focus'] = 0;
 			}
