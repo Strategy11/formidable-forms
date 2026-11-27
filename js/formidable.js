@@ -883,8 +883,8 @@ function frmFrontFormJS() {
 		// JS matches UTF-16 code units, so it uses the u flag and a code point range where the PHP side
 		// matches raw UTF-8 bytes. PHP must NOT gain /u: preg_match() returns false on malformed UTF-8.
 		const pattern = field.hasAttribute( 'data-intl-domains' )
-			? /^http(s)?:\/\/(?:localhost|(?:[\da-z\u0080-\u{10FFFF}\.-]+\.[\da-z\u0080-\u{10FFFF}\.-]+))/iu
-			: /^http(s)?:\/\/(?:localhost|(?:[\da-z\.-]+\.[\da-z\.-]+))/i;
+			? /^http(s)?:\/\/(?:localhost|[\da-z_\u0080-\u{10FFFF}\.-][\da-z_\u0080-\u{10FFFF}-]*\.[\da-z_\u0080-\u{10FFFF}\.-]+)(?=[\/?#:]|$)/iu
+			: /^http(s)?:\/\/(?:localhost|[\da-z_\.-][\da-z_-]*\.[\da-z_\.-]+)(?=[\/?#:]|$)/i;
 
 		if ( url !== '' && ! pattern.test( url ) ) {
 			fieldID = getFieldId( field, true );
@@ -1920,7 +1920,7 @@ function frmFrontFormJS() {
 			return;
 		}
 
-		document.querySelectorAll( '.frm_loading_form' ).forEach( function( form ) {
+		document.querySelectorAll( '.frm_loading_form, .frm_loading_prev' ).forEach( function( form ) {
 			form.classList.remove( 'frm_loading_form', 'frm_loading_prev' );
 			jQuery( form ).trigger( 'frmEndFormLoading' );
 
@@ -2564,7 +2564,7 @@ function frmFrontFormJS() {
 	function enableSubmitButtonOnBackButtonPress() {
 		window.addEventListener( 'pageshow', function( event ) {
 			if ( event.persisted ) {
-				document.querySelectorAll( '.frm_loading_form' ).forEach(
+				document.querySelectorAll( '.frm_loading_form, .frm_loading_prev' ).forEach(
 					function( form ) {
 						enableSubmitButton( form );
 					}
@@ -2690,6 +2690,25 @@ function frmFrontFormJS() {
 		}
 
 		jQuery( input ).trigger( { type: 'change', selfTriggered: true, frmTriggered: fieldKey } );
+	}
+
+	/**
+	 * Recalculate the total price when a product field changes.
+	 *
+	 * Check dropdowns directly to avoid evaluating a delegated `:has` selector against every event ancestor.
+	 * See https://github.com/Strategy11/formidable-pro/issues/3447.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Event} e The change event.
+	 * @return {void}
+	 */
+	function onProductFieldChange( e ) {
+		if ( 'SELECT' === this.tagName && ! this.querySelector( '[data-frmprice]' ) ) {
+			return;
+		}
+
+		calcProductsTotal.call( this, e );
 	}
 
 	/**
@@ -3322,7 +3341,7 @@ function frmFrontFormJS() {
 			);
 
 			jQuery( document ).on( 'frmAfterAddRow frmAfterRemoveRow', calcProductsTotal );
-			jQuery( document ).on( 'change', '[type="checkbox"][data-frmprice],[type="radio"][data-frmprice],[type="hidden"][data-frmprice],select:has([data-frmprice])', calcProductsTotal );
+			jQuery( document ).on( 'change', '[type="checkbox"][data-frmprice],[type="radio"][data-frmprice],[type="hidden"][data-frmprice],select', onProductFieldChange );
 			jQuery( document ).on( 'keyup change', '[data-frmproduct],[type="text"][data-frmprice]', calcProductsTotal );
 			calcProductsTotal();
 		},

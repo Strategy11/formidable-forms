@@ -377,9 +377,7 @@ describe( 'Form Templates page', () => {
 		cy.get( '#frm_new_form_name_input' ).type( 'Form Template Test' );
 		// Plain #frm-save-form-name-button click - no force needed (see commands.js's createNewForm()).
 		cy.get( '#frm-save-form-name-button' ).should( 'contain', 'Save' ).click();
-		cy.get( "a[aria-label='Close'] svg", { timeout: 10000 } )
-			.should( 'be.visible' )
-			.click();
+		cy.closeFullScreen();
 
 		cy.get( '#toplevel_page_formidable > .wp-submenu > :nth-child(8) > a' ).should( 'contain', 'Form Templates' ).click();
 		cy.get( '[data-category="custom"]' ).click();
@@ -400,9 +398,7 @@ describe( 'Form Templates page', () => {
 		cy.get( '#frm-create-template-button' ).should( 'be.visible' ).and( 'contain', 'Create Template' ).click();
 		// Create Template opens the new template in the builder. Templates are not listed with
 		// the forms, so closing the builder must not show a "Form Template Test Template" form.
-		cy.get( "a[aria-label='Close'] svg", { timeout: 10000 } )
-			.should( 'be.visible' )
-			.click();
+		cy.closeFullScreen();
 		cy.get( '.row-title' ).should( 'contain', 'Form Template Test' );
 		cy.get( '.row-title' ).should( 'not.contain', 'Form Template Test Template' );
 
@@ -426,9 +422,7 @@ describe( 'Form Templates page', () => {
 			.should( 'contain', 'Edit' )
 			.click();
 
-		cy.get( "a[aria-label='Close'] svg", { timeout: 10000 } )
-			.should( 'be.visible' )
-			.click();
+		cy.closeFullScreen();
 
 		cy.get( '#toplevel_page_formidable > .wp-submenu > :nth-child(8) > a' ).should( 'contain', 'Form Templates' ).click();
 		cy.get( '[data-category="custom"]' ).click();
@@ -443,9 +437,7 @@ describe( 'Form Templates page', () => {
 			.should( 'contain', 'Use Template' )
 			.click();
 
-		cy.get( "a[aria-label='Close'] svg", { timeout: 10000 } )
-			.should( 'be.visible' )
-			.click();
+		cy.closeFullScreen();
 
 		cy.get( '#toplevel_page_formidable > .wp-submenu > :nth-child(8) > a' ).should( 'contain', 'Form Templates' ).click();
 		cy.get( '[data-category="custom"]' ).click();
@@ -523,7 +515,7 @@ describe( 'Form Templates page', () => {
 			.click();
 
 		cy.get( 'span[title]' ).should( 'contain', 'Employee Referral' );
-		cy.get( "a[aria-label='Close']", { timeout: 5000 } ).click();
+		cy.closeFullScreen();
 		cy.log( 'Delete Form' );
 		cy.contains( '#the-list tr', 'Employee Referral' ).trigger( 'mouseover' ).then( $row => {
 			console.log( 'Hovered Row:', $row );

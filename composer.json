@@ -43,7 +43,8 @@
 		"rector/rector": "^2.3.4",
 		"phpstan/phpstan-strict-rules": "^2.0",
 		"kubawerlos/php-cs-fixer-custom-fixers": "^3.36",
-		"carthage-software/mago": "1.46.0"
+		"carthage-software/mago": "1.46.0",
+		"phpcompatibility/phpcompatibility-wp": "^2.1"
 	},
 	"config": {
 		"allow-plugins": {

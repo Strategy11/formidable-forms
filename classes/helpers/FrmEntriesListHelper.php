@@ -263,8 +263,6 @@ class FrmEntriesListHelper extends FrmListHelper {
 			$has_form = ! empty( $has_form );
 		}
 
-		$colspan = $this->get_column_count();
-
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/no_entries.php';
 	}
 

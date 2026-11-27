@@ -55,8 +55,6 @@ class FrmSettingsController {
 		global $frm_vars;
 
 		$frm_settings = FrmAppHelper::get_settings();
-		$uploads      = wp_upload_dir();
-		$target_path  = $uploads['basedir'] . '/formidable/css';
 		$sections     = self::get_settings_tabs();
 		$current      = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
 
@@ -387,9 +385,6 @@ class FrmSettingsController {
 	 */
 	public static function general_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
-		$uploads      = wp_upload_dir();
-		$target_path  = $uploads['basedir'] . '/formidable/css';
-
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/general.php';
 	}
 
@@ -440,7 +435,6 @@ class FrmSettingsController {
 	 * @return void
 	 */
 	public static function email_settings() {
-		$frm_settings = FrmAppHelper::get_settings();
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/email/email-styles.php';
 	}
 

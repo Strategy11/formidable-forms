@@ -196,7 +196,7 @@ class FrmInbox extends FrmFormApi {
 		$user_id = get_current_user_id();
 
 		foreach ( $messages as $k => $message ) {
-			$dismissed = isset( $message['dismissed'] ) && isset( $message['dismissed'][ $user_id ] );
+			$dismissed = isset( $message['dismissed'], $message['dismissed'][ $user_id ] );
 
 			if ( ! $k || ! $this->within_valid_timeframe( $message ) || ( $type === 'dismissed' ) !== $dismissed ) {
 				unset( $messages[ $k ] );
@@ -295,7 +295,7 @@ class FrmInbox extends FrmFormApi {
 	 * @return void
 	 */
 	public function mark_unread( $key ) {
-		$is_read = isset( self::$messages[ $key ] ) && isset( self::$messages[ $key ]['read'] ) && isset( self::$messages[ $key ]['read'][ get_current_user_id() ] );
+		$is_read = isset( self::$messages[ $key ], self::$messages[ $key ]['read'], self::$messages[ $key ]['read'][ get_current_user_id() ] );
 
 		if ( ! $is_read ) {
 			return;
@@ -356,7 +356,7 @@ class FrmInbox extends FrmFormApi {
 		$user_id  = get_current_user_id();
 
 		foreach ( $messages as $t => $message ) {
-			if ( isset( $message['read'] ) && isset( $message['read'][ $user_id ] ) ) {
+			if ( isset( $message['read'], $message['read'][ $user_id ] ) ) {
 				unset( $messages[ $t ] );
 			}
 		}

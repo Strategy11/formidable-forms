@@ -17,13 +17,13 @@ const { hydrateFieldPlaceholders } = require( './fieldPlaceholders' );
 const { renderDropdownPreview, updateComboSelectPreview, updateAddressPreview } = require( './fieldPreview' );
 const { captureFieldSettings, applyFieldSettings, restoreFieldSettingValues } = require( './duplicateFieldSettings' );
 const { addFieldSettingsMetadata, cacheFieldSettings, forgetFieldSettings, materializeFieldSettings, materializeAllFieldSettings, materializeLogicFieldSettings, setPendingFieldSetting } = require( './deferredFieldSettings' );
-const { hydrateFieldPreviews, renderFieldPreviews, PENDING_PREVIEW_CLASS } = require( './fieldPreviews' );
+const { hydrateFieldPreviews, renderFieldPreviews, getFieldsWithLogicOn, PENDING_PREVIEW_CLASS } = require( './fieldPreviews' );
 const { initBuilderPreviewSync, syncHtmlFieldPreview } = require( './builderPreviewSync' );
 const { initLivePreview, getSettingKey, clampToInputRange } = require( './livePreview' );
 const { createFieldReadiness, getFieldPreviewBody } = require( './fieldReadiness' );
 const { createRefreshFieldPreview } = require( './refreshFieldPreview' );
 const { queueFieldPreview, renderFieldPreviewNow, forgetFieldPreview, setInitialFieldPreviews } = require( './fieldPreviewQueue' );
-const { queueFieldSettings, startFieldSettingsQueue, isFieldSettingsPending, requestFieldSettingsNow, waitForFieldSettings, retryFailedFieldSettings, cancelFieldSettings } = require( './fieldSettingsLoader' );
+const { queueFieldSettings, observeFieldSettings, startFieldSettingsQueue, isFieldSettingsPending, requestFieldSettingsNow, waitForAwaitedFieldSettings, whenFieldSettingsLoaded, cancelFieldSettings } = require( './fieldSettingsLoader' );
 
 const fieldHtmlTemplate = document.createElement( 'template' );
 
@@ -2844,6 +2844,20 @@ window.frmAdminBuildJS = function() {
 	const fieldsAwaitingSettings = new Set();
 	// Fields whose settings failed to load during the last save attempt.
 	const fieldsFailedOnSave = new Set();
+
+	if ( thisFormId && browserPreviewFieldIds.length ) {
+		queueFieldSettings( {
+			formId: thisFormId,
+			fieldIds: browserPreviewFieldIds,
+			onLoaded: handleLoadedFieldSettings
+		} );
+
+		// Start the first field's small request before the background preview batches occupy the server.
+		const firstFieldId = fieldsContainer.querySelector( 'li.form-field' )?.dataset.fid;
+		if ( firstFieldId === browserPreviewFieldIds[ 0 ] ) {
+			requestFieldSettingsNow( firstFieldId );
+		}
+	}
 	let placeholderSpinnerObserver;
 
 	/**
@@ -3182,6 +3196,22 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
+	 * Run a change to the conditional logic that points at a field once those panels have loaded.
+	 *
+	 * Settings panels far from the viewport load only when needed. A field whose logic uses this
+	 * one gets its settings first, so a renamed choice reaches its logic and is saved with it.
+	 *
+	 * @since x.x
+	 * @param {string}   fieldId The field whose choices changed.
+	 * @param {Function} update  Reads and changes the loaded logic rows.
+	 * @return {void}
+	 */
+	function whenLogicSettingsLoaded( fieldId, update ) {
+		// Saving waits for these, and they move into the save form when they arrive. See handleLoadedFieldSettings.
+		whenFieldSettingsLoaded( getFieldsWithLogicOn( fieldId ), fieldsAwaitingSettings, update );
+	}
+
+	/**
 	 * Prepare the previews drawn from page data, and start loading their settings.
 	 *
 	 * @since 7.1
@@ -3193,12 +3223,6 @@ window.frmAdminBuildJS = function() {
 		}
 
 		renderFieldPreviews( replaceFieldPreviewPlaceholder, initializeLoadedFieldSlice );
-
-		queueFieldSettings( {
-			formId: thisFormId,
-			fieldIds: browserPreviewFieldIds,
-			onLoaded: handleLoadedFieldSettings
-		} );
 
 		// Previews still loading over ajax are on screen, so they go first. See afterAllFieldsLoad.
 		if ( ! fieldLoadStarted ) {
@@ -3215,6 +3239,7 @@ window.frmAdminBuildJS = function() {
 	 * @return {Object} The field, in the shape initializeLoadedFieldSlice expects.
 	 */
 	function replaceFieldPreviewPlaceholder( placeholder, field ) {
+		observeFieldSettings( field );
 		dragDropObserver?.unobserve( placeholder );
 		dragDropAttachers.delete( placeholder );
 		prepareLoadedFieldMarkup( field );
@@ -3262,10 +3287,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		button.classList.add( 'frm_loading_button' );
-		const fieldIds = [ ...fieldsAwaitingSettings ];
-		waitForFieldSettings( fieldIds ).then( () => retryFailedFieldSettings( fieldIds ) ).then( failedFieldIds => {
-			// Loaded fields were already removed. Deleted fields have nothing to save.
-			fieldsAwaitingSettings.clear();
+		waitForAwaitedFieldSettings( fieldsAwaitingSettings ).then( failedFieldIds => {
 			if ( ! failedFieldIds.length ) {
 				fieldsFailedOnSave.clear();
 			} else if ( ! confirmSaveWithoutFieldSettings( failedFieldIds, button ) ) {
@@ -3345,7 +3367,7 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function prepareInteractedFieldSettings( event ) {
-		const field = event.target.closest( '#frm-show-fields li.form-field' );
+		const field = event.target.closest( 'li.form-field' );
 		if ( field && ! field.matches( UNRENDERED_FIELD_SELECTOR ) ) {
 			ensureFieldSettings( field.dataset.fid );
 		}
@@ -3359,8 +3381,8 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function ignoreLoadingFieldMouseEvent( event ) {
-		const pendingPreview = event.target.closest( `.${ PENDING_PREVIEW_CLASS }` );
-		if ( pendingPreview && event.type === 'click' ) {
+		const pendingPreview = event.type === 'click' && event.target.closest( `.${ PENDING_PREVIEW_CLASS }` );
+		if ( pendingPreview ) {
 			event.preventDefault();
 			event.stopImmediatePropagation();
 			const rendered = renderFieldPreviewNow( pendingPreview.dataset.fid );
@@ -3829,9 +3851,9 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 
-		const elementFromPoint = document.elementFromPoint( event.clientX, event.clientY );
-		if ( null !== elementFromPoint && ! elementFromPoint.classList.contains( 'edit_field_type_divider' ) ) {
-			const list = elementFromPoint.closest( 'ul.frm_sorting' );
+		const { target } = event;
+		if ( ! target.classList.contains( 'edit_field_type_divider' ) ) {
+			const list = target.closest( 'ul.frm_sorting' );
 
 			if ( null !== list && ! list.classList.contains( 'start_divider' ) && 'frm-show-fields' !== list.id ) {
 				if ( list.querySelector( `:scope > :is(${ UNRENDERED_FIELD_SELECTOR })` ) ) {
@@ -3873,8 +3895,8 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function maybeRemoveHoverTargetOnMouseMove( event ) {
-		const elementFromPoint = document.elementFromPoint( event.clientX, event.clientY );
-		if ( null !== elementFromPoint && null !== elementFromPoint.closest( '#frm-show-fields' ) ) {
+		const target = dragState.dragging ? document.elementFromPoint( event.clientX, event.clientY ) : event.target;
+		if ( fieldsContainer.contains( target ) ) {
 			return;
 		}
 		maybeRemoveGroupHoverTarget();
@@ -6463,12 +6485,14 @@ window.frmAdminBuildJS = function() {
 			optionMap[ fieldId ][ originalValue ].value = newValue;
 		}
 
-		callBuilderFeature( 'logic_option_sync', 'updateLogicRowsForChoiceEdit', {
-			fieldId,
-			oldValue,
-			newValue,
-			newLabel,
-			settingsContainer: singleSettingsContainer,
+		whenLogicSettingsLoaded( fieldId, () => {
+			callBuilderFeature( 'logic_option_sync', 'updateLogicRowsForChoiceEdit', {
+				fieldId,
+				oldValue,
+				newValue,
+				newLabel,
+				settingsContainer: singleSettingsContainer,
+			} );
 		} );
 	}
 
@@ -11802,8 +11826,12 @@ window.frmAdminBuildJS = function() {
 			[ 'click', 'dblclick', 'mousedown', 'mousemove', 'mouseover', 'mouseout', 'contextmenu' ].forEach( eventType => {
 				fieldsContainer.addEventListener( eventType, ignoreLoadingFieldMouseEvent, true );
 			} );
-			document.addEventListener( 'click', prepareInteractedFieldSettings, true );
-			document.addEventListener( 'focusin', prepareInteractedFieldSettings, true );
+			fieldsContainer.addEventListener( 'click', prepareInteractedFieldSettings, true );
+			fieldsContainer.addEventListener( 'focusin', event => {
+				if ( event.target.matches( 'input, select, textarea, [contenteditable]' ) ) {
+					prepareInteractedFieldSettings( event );
+				}
+			}, true );
 
 			document.addEventListener( 'focusin', event => {
 				if ( event.target.matches( 'select[data-frm-options]' ) ) {

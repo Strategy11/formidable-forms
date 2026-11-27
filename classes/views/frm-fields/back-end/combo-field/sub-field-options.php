@@ -25,7 +25,7 @@ $labels    = $this->get_built_in_option_labels();
 <div
 	class="<?php echo esc_attr( $wrapper_classes ); ?>"
 	data-sub-field-name="<?php echo esc_attr( $sub_field['name'] ); ?>"
-	data-field-id="<?php echo intval( $field_id ); ?>"
+	data-field-id="<?php echo (int) $field_id; ?>"
 >
 	<h4 id="<?php echo esc_attr( $uniq_str ); ?>" class="frm_primary_label frm-font-semibold frm-text-grey-600 frm-mt-xs frm-mb-xs">
 		<?php echo esc_html( $sub_field['label'] ); ?>

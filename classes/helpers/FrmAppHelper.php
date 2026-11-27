@@ -2596,7 +2596,7 @@ class FrmAppHelper {
 	public static function check_selected( $values, $current ) {
 		$values  = self::recursive_function_map( $values, 'trim' );
 		$values  = self::recursive_function_map( $values, 'htmlspecialchars_decode' );
-		$current = is_null( $current ) ? '' : htmlspecialchars_decode( trim( $current ) );
+		$current = null === $current ? '' : htmlspecialchars_decode( trim( $current ) );
 
 		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict, Universal.Operators.StrictComparisons
 		return is_array( $values ) ? in_array( $current, $values ) : $values == $current;
@@ -3890,7 +3890,7 @@ class FrmAppHelper {
 	 * @return array|string|null
 	 */
 	public static function maybe_json_decode( $string, $single_to_array = true ) {
-		if ( is_array( $string ) || is_null( $string ) ) {
+		if ( is_array( $string ) || null === $string ) {
 			return $string;
 		}
 
@@ -5013,7 +5013,7 @@ class FrmAppHelper {
 	public static function set_current_screen_and_hook_suffix() {
 		global $hook_suffix;
 
-		if ( is_null( $hook_suffix ) ) {
+		if ( null === $hook_suffix ) {
 			// $hook_suffix gets used in substr so make sure it's not null. PHP 8.1 deprecates null in substr.
 			$hook_suffix = ''; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		}
@@ -5456,7 +5456,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function is_valid_utf8( $string ) {
-		if ( is_null( $string ) ) {
+		if ( null === $string ) {
 			// Return true so we do not attempt to change encoding on a null value.
 			return true;
 		}
