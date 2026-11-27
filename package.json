@@ -102,7 +102,7 @@
 		"raw-loader": "^4.0.2",
 		"sass": "1.54.0",
 		"sass-loader": "16.0.3",
-		"serialize-javascript": "^7.0.5",
+		"serialize-javascript": "^7.1.4",
 		"style-loader": "3.2.1",
 		"terser-webpack-plugin": "5.6.1",
 		"webpack": "5.97.0",
