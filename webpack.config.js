@@ -71,6 +71,14 @@ const entries = {
 const sharedConfig = {
   mode: isDevelopment ? 'development' : 'production',
   devtool: isDevelopment ? 'source-map' : undefined,
+  // Keep build results on disk so a rebuild only reprocesses the files that changed.
+  // Editing this file or .babelrc throws the cache away. Pass --no-cache for a clean build.
+  cache: {
+    type: 'filesystem',
+    buildDependencies: {
+      config: [__filename, path.resolve(__dirname, '.babelrc')]
+    }
+  },
   resolve: {
     extensions: ['.json', '.js', '.jsx', '.scss', '.css'],
     modules: [paths.jsSource, 'node_modules'],
