@@ -42,6 +42,7 @@
 	<rule ref="Formidable.CodeAnalysis.PreferFrmHtmlHelper" />
 	<rule ref="Formidable.CodeAnalysis.PreferHtmlParamsEchoMode" />
 	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
+	<rule ref="Formidable.CodeAnalysis.PreferListPluck" />
 	<rule ref="Formidable.CodeAnalysis.PreferNegationOverEmptyForFunctionCall" />
 	<rule ref="Formidable.CodeAnalysis.PreferNotEmptyTernary" />
 	<rule ref="Formidable.CodeAnalysis.PreferObGetClean" />
