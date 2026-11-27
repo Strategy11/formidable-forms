@@ -230,9 +230,11 @@ class FrmWelcomeTourController {
 				);
 				break;
 			case 'add-fields':
+				// Open below the tab. Beside it, the tip covers the Field Options and Outline tabs.
 				$spotlight_data = array(
 					'target'        => '.frm-settings-panel .frm-tabs-navs li.frm-active',
-					'left-position' => '140px',
+					'left-position' => 'middle',
+					'placement'     => 'bottom',
 				);
 				break;
 			case 'style-form':
