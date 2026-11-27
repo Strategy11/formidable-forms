@@ -518,7 +518,7 @@ class FrmUsage {
 
 				if ( ! $style->id ) {
 					$style_name = 0;
-				} elseif ( 1 === intval( $style->id ) ) {
+				} elseif ( 1 === (int) $style->id ) {
 					$style_name = 'formidable-style';
 				} else {
 					$style_post = $style->get_one();

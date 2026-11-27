@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<input
 			type="number"
 			id="frm-forms-list-per-page"
-			value="<?php echo intval( $per_page ); ?>"
+			value="<?php echo absint( $per_page ); ?>"
 			min="1"
 			data-wp-screen-option-id="formidable_page_formidable_per_page"
 		/>
