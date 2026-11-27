@@ -2773,6 +2773,8 @@ window.frmAdminBuildJS = function() {
 	const fieldsAwaitingSettings = new Set();
 	// Fields whose settings failed to load during the last save attempt.
 	const fieldsFailedOnSave = new Set();
+	// Logic changes, in order, still to apply to fields whose settings failed to load.
+	const pendingLogicUpdates = new Map();
 
 	if ( thisFormId && browserPreviewFieldIds.length ) {
 		queueFieldSettings( {
@@ -3132,12 +3134,58 @@ window.frmAdminBuildJS = function() {
 	 *
 	 * @since x.x
 	 * @param {string}   fieldId The field whose choices changed.
-	 * @param {Function} update  Reads and changes the loaded logic rows.
+	 * @param {Function} update  Reads and changes the loaded logic rows. Gets a field ID when only that field's rows should change.
 	 * @return {void}
 	 */
 	function whenLogicSettingsLoaded( fieldId, update ) {
+		const logicFieldIds = getFieldsWithLogicOn( fieldId ).map( String );
 		// Saving waits for these, and they move into the save form when they arrive. See handleLoadedFieldSettings.
-		whenFieldSettingsLoaded( getFieldsWithLogicOn( fieldId ), fieldsAwaitingSettings, update );
+		whenFieldSettingsLoaded( logicFieldIds, fieldsAwaitingSettings, () => {
+			update();
+			// A field whose settings failed to load still has the old logic, so change it again once they arrive.
+			logicFieldIds.filter( isFieldSettingsPending ).forEach( logicFieldId => {
+				const updates = pendingLogicUpdates.get( logicFieldId ) || [];
+				updates.push( update );
+				pendingLogicUpdates.set( logicFieldId, updates );
+			} );
+		} );
+	}
+
+	/**
+	 * Apply the logic changes made while these fields' settings failed to load.
+	 *
+	 * @since x.x
+	 * @param {string[]} fieldIds The fields whose settings were just cached.
+	 * @return {void}
+	 */
+	function runPendingLogicUpdates( fieldIds ) {
+		fieldIds.forEach( fieldId => {
+			const updates = pendingLogicUpdates.get( fieldId );
+			if ( ! updates ) {
+				return;
+			}
+
+			pendingLogicUpdates.delete( fieldId );
+			updates.forEach( update => update( fieldId ) );
+		} );
+	}
+
+	/**
+	 * Run a read of other fields' settings again once the pending ones arrive.
+	 *
+	 * Settings far from the viewport load only when needed, so a read made before they arrive
+	 * finds no inputs. The refresh runs once after the requests settle, even when one failed.
+	 *
+	 * @since x.x
+	 * @param {string[]} fieldIds The fields whose settings were read.
+	 * @param {Function} refresh  Reads the settings again.
+	 * @return {void}
+	 */
+	function refreshWhenFieldSettingsLoad( fieldIds, refresh ) {
+		const pendingFieldIds = fieldIds.map( String ).filter( isFieldSettingsPending );
+		if ( pendingFieldIds.length ) {
+			whenFieldSettingsLoaded( pendingFieldIds, fieldsAwaitingSettings, refresh );
+		}
 	}
 
 	/**
@@ -3200,6 +3248,8 @@ window.frmAdminBuildJS = function() {
 
 			moveFieldSettings( ensureFieldSettings( fieldId ) );
 		} );
+
+		runPendingLogicUpdates( fieldIds );
 	}
 
 	/**
@@ -4322,10 +4372,11 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Populates the calculation field list.
 	 *
-	 * @param {HTMLElement} element The calculation box element.
-	 * @param {boolean}     force   Whether to force the refresh.
+	 * @param {HTMLElement} element        The calculation box element.
+	 * @param {boolean}     force          Whether to force the refresh.
+	 * @param {boolean}     settingsLoaded Whether this is the refresh after pending field settings arrived.
 	 */
-	function popCalcFields( element, force ) {
+	function popCalcFields( element, force, settingsLoaded = false ) {
 		const settingsBox = jQuery( element ).closest( '.frm-single-settings' );
 		const calc = settingsBox.find( '.frm-calc-field' );
 
@@ -4361,6 +4412,7 @@ window.frmAdminBuildJS = function() {
 		const fields = wp.hooks.applyFilters( 'frm_calc_field_list', getFieldList(), { box, codeList, isSummary } );
 		const list = document.getElementById( `frm-calc-list-${ fieldId }` );
 		list.innerHTML = '';
+		const checkedFieldIds = [];
 
 		for ( let i = 0; i < fields.length; i++ ) {
 			if ( fields[ i ].fieldId === fieldId ) {
@@ -4368,9 +4420,15 @@ window.frmAdminBuildJS = function() {
 				continue;
 			}
 
-			if ( exclude?.includes( fields[ i ].fieldType ) ||
-				( excludedOpts.length && hasExcludedOption( fields[ i ], excludedOpts ) ) ) {
+			if ( exclude?.includes( fields[ i ].fieldType ) ) {
 				continue;
+			}
+
+			if ( excludedOpts.length ) {
+				checkedFieldIds.push( fields[ i ].fieldId );
+				if ( hasExcludedOption( fields[ i ], excludedOpts ) ) {
+					continue;
+				}
 			}
 
 			addCalcFieldLiToList( list, fieldId, fields[ i ].fieldId, fields[ i ].fieldName, fields[ i ].fieldType );
@@ -4379,6 +4437,15 @@ window.frmAdminBuildJS = function() {
 				// The summary field list is a list of fields to exclude, not a list of shortcodes, so field parts don't belong in it.
 				addFieldPartShortcodes( fields[ i ], fieldId, list );
 			}
+		}
+
+		if ( ! settingsLoaded ) {
+			// Fields whose settings haven't loaded can't be checked for excluded options yet.
+			refreshWhenFieldSettingsLoad( checkedFieldIds, () => {
+				if ( element.isConnected ) {
+					popCalcFields( element, force, true );
+				}
+			} );
 		}
 	}
 
@@ -6920,7 +6987,7 @@ window.frmAdminBuildJS = function() {
 			optionMap[ fieldId ][ originalValue ].value = newValue;
 		}
 
-		whenLogicSettingsLoaded( fieldId, () => {
+		whenLogicSettingsLoaded( fieldId, onlyLogicFieldId => {
 			materializeAllFieldSettings( prepareLoadedFieldMarkup );
 			const fieldIds = [];
 			const rows = builderPage.querySelectorAll( '.frm_logic_row' );
@@ -6934,6 +7001,11 @@ window.frmAdminBuildJS = function() {
 				}
 
 				const logicId = row.id.split( '_' )[ 2 ];
+				if ( onlyLogicFieldId && logicId !== onlyLogicFieldId ) {
+					// Other rows already have this change.
+					continue;
+				}
+
 				const valueSelect = row.querySelector( `select[name="field_options[hide_opt_${ logicId }][]"]` );
 
 				let optionMatches;
@@ -7977,6 +8049,10 @@ window.frmAdminBuildJS = function() {
 		}
 		const { sourceID } = atts;
 		ensureFieldSettings( sourceID );
+		if ( ! atts.settingsLoaded ) {
+			// A source field far from the viewport has no option inputs until its settings arrive.
+			refreshWhenFieldSettingsLoad( [ sourceID ], () => refillDropdownOpts( field, atts ) );
+		}
 		const { placeholder } = atts;
 		const isProduct = isProductField( sourceID );
 		const showOther = atts.other;
@@ -8011,6 +8087,27 @@ window.frmAdminBuildJS = function() {
 
 				field.append( opt );
 			}
+		}
+	}
+
+	/**
+	 * Fill a dropdown again once its source field's settings have loaded, keeping the chosen value.
+	 *
+	 * @since x.x
+	 * @param {HTMLElement} field The dropdown to fill.
+	 * @param {Object}      atts  The options fillDropdownOpts was first called with.
+	 * @return {void}
+	 */
+	function refillDropdownOpts( field, atts ) {
+		if ( ! field.isConnected ) {
+			return;
+		}
+
+		const { value } = field;
+		fillDropdownOpts( field, { ...atts, settingsLoaded: true } );
+
+		if ( value && field.options && Array.from( field.options ).some( option => option.value === value ) ) {
+			field.value = value;
 		}
 	}
 
