@@ -603,8 +603,30 @@ class FrmAbilitiesFormsController {
 			FrmFormsController::create_default_email_action( $new_form );
 		}
 
-		if ( ! empty( $input['fields'] ) && is_array( $input['fields'] ) ) {
-			foreach ( $input['fields'] as $field ) {
+		$fields = ! empty( $input['fields'] ) && is_array( $input['fields'] ) ? $input['fields'] : array();
+
+		/**
+		 * Short-circuits creating the inline fields of a create-form ability call.
+		 *
+		 * Pro uses it to put the fields listed between a section and its end_divider
+		 * inside that section. Return true when the fields were created, a WP_Error to
+		 * stop, or null to create them one at a time here. Any other value is treated
+		 * like null, so the fields are only skipped on an explicit true.
+		 *
+		 * @since x.x
+		 *
+		 * @param true|WP_Error|null $created Null to let Formidable create the fields.
+		 * @param array              $fields  The inline field input, in order.
+		 * @param stdClass           $form    The new form.
+		 */
+		$created = $fields ? apply_filters( 'frm_ability_create_inline_fields', null, $fields, $new_form ) : true;
+
+		if ( is_wp_error( $created ) ) {
+			return FrmAbilitiesHelper::flatten_error( $created );
+		}
+
+		if ( true !== $created ) {
+			foreach ( $fields as $field ) {
 				// Share create-field's pipeline so inline fields get the same
 				// separate-value detection, repeater child form, and validation.
 				$prepared = FrmAbilitiesFieldsController::prepare_new_field( $field, $new_form );
@@ -613,8 +635,7 @@ class FrmAbilitiesFormsController {
 					return FrmAbilitiesHelper::flatten_error( $prepared );
 				}
 
-				$prepared['form_id'] = $form_id;
-
+				// Keep the form_id prepare_new_field() set, so a placement hook can move the field.
 				FrmField::create( $prepared );
 				unset( $prepared, $field );
 			}

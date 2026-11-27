@@ -379,14 +379,13 @@ class FrmAbilitiesFieldsController {
 			return FrmAbilitiesHelper::flatten_error( $prepared );
 		}
 
-		$prepared['form_id'] = (int) $form->id;
-		$field_id            = FrmField::create( $prepared );
+		$field_id = FrmField::create( $prepared );
 
 		if ( ! $field_id ) {
 			return new WP_Error( 'frm_create_field', __( 'Field creation failed.', 'formidable' ), array( 'status' => 409 ) );
 		}
 
-		FrmField::delete_form_transient( $form->id );
+		FrmField::delete_form_transient( $prepared['form_id'] );
 		FrmForm::clear_form_cache();
 
 		return self::prepare_field_for_response( FrmField::getOne( $field_id ) );
@@ -430,7 +429,30 @@ class FrmAbilitiesFieldsController {
 			return new WP_Error( 'frm_no_update_data', __( 'No data provided to update.', 'formidable' ), array( 'status' => 400 ) );
 		}
 
-		$field_data    = self::add_stored_values_for_cleaning( $field, $field_data );
+		$field_data = self::add_stored_values_for_cleaning( $field, $field_data );
+
+		/**
+		 * Filters update-field data before it is saved. Pro moves the field when its section changes. Return an array, or a WP_Error to stop. Anything else is ignored.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $field_data Field data to save, with field_options merged over the stored options.
+		 * @param array $args       Contains `field`, the stored field, and `input`, the update as sent.
+		 */
+		$placed = apply_filters(
+			'frm_ability_update_field_placement',
+			$field_data,
+			array(
+				'field' => $field,
+				'input' => $input,
+			)
+		);
+
+		if ( is_wp_error( $placed ) ) {
+			return $placed;
+		}
+
+		$field_data    = is_array( $placed ) ? $placed : $field_data;
 		$new_type      = ! empty( $field_data['type'] ) ? $field_data['type'] : $field->type;
 		$field_options = isset( $field_data['field_options'] ) && is_array( $field_data['field_options'] ) ? $field_data['field_options'] : (array) $field->field_options;
 		$checked       = self::check_form_select( $new_type, $field_options );
@@ -444,6 +466,11 @@ class FrmAbilitiesFieldsController {
 		}
 
 		FrmField::delete_form_transient( $field->form_id );
+
+		if ( isset( $field_data['form_id'] ) ) {
+			FrmField::delete_form_transient( $field_data['form_id'] );
+		}
+
 		FrmForm::clear_form_cache();
 
 		return self::prepare_field_for_response( FrmField::getOne( $field->id ) );
@@ -489,6 +516,15 @@ class FrmAbilitiesFieldsController {
 		$data    = self::prepare_field_for_response( $field );
 		$form_id = $field->form_id;
 
+		/**
+		 * Fires before a delete-field ability call deletes a field, while its section is still intact.
+		 *
+		 * @since x.x
+		 *
+		 * @param stdClass $field The field about to be deleted.
+		 */
+		do_action( 'frm_ability_before_delete_field', $field );
+
 		if ( FrmField::is_repeating_field( $field ) && ! empty( $field->field_options['form_select'] ) ) {
 			self::destroy_fields_in_repeater( $field );
 		}
@@ -496,6 +532,15 @@ class FrmAbilitiesFieldsController {
 		if ( ! FrmField::destroy( $field->id ) ) {
 			return self::get_invalid_field_error();
 		}
+
+		/**
+		 * Fires after a delete-field ability call deletes a field, so Pro can remove what a section leaves behind.
+		 *
+		 * @since x.x
+		 *
+		 * @param stdClass $field The deleted field.
+		 */
+		do_action( 'frm_ability_after_delete_field', $field );
 
 		FrmField::delete_form_transient( $form_id );
 		FrmForm::clear_form_cache();
@@ -542,7 +587,12 @@ class FrmAbilitiesFieldsController {
 		$prepared['form_id'] = $form_id;
 
 		$prepared = self::maybe_create_repeat_form( $prepared, $form_id );
-		$prepared = self::maybe_position_in_repeater( $prepared, $field, $form );
+		$prepared = FrmFieldPlacementHelper::place_new_ability_field( $prepared, $field, $form );
+
+		if ( is_wp_error( $prepared ) ) {
+			return $prepared;
+		}
+
 		$prepared = self::maybe_enable_separate_values( $prepared, $field );
 
 		if ( empty( $field['field_key'] ) && ! empty( $field['name'] ) ) {
@@ -673,56 +723,6 @@ class FrmAbilitiesFieldsController {
 					'field_name'     => $prepared['name'],
 				)
 			);
-		}
-
-		return $prepared;
-	}
-
-	/**
-	 * Slot a new repeater child field after the last field of its section.
-	 *
-	 * Repeater child fields sort into the parent form's field list purely by
-	 * field_order, so an order computed against the child form alone can land
-	 * before the repeater's own divider and render outside the section in the
-	 * builder. When the caller gives no explicit order, the field goes right
-	 * after the last field of its section and the fields that follow shift down.
-	 *
-	 * @since 7.0
-	 *
-	 * @param array    $prepared Prepared field data.
-	 * @param array    $field    Raw field input.
-	 * @param stdClass $form     The form the field is created on.
-	 *
-	 * @return array
-	 */
-	private static function maybe_position_in_repeater( $prepared, $field, $form ) {
-		if ( isset( $field['field_order'] ) || empty( $form->parent_form_id ) ) {
-			return $prepared;
-		}
-
-		$parent_fields = FrmField::get_all_for_form( $form->parent_form_id, '', 'include' );
-		$section_order = 0;
-
-		foreach ( $parent_fields as $parent_field ) {
-			$form_select         = isset( $parent_field->field_options['form_select'] ) ? (int) $parent_field->field_options['form_select'] : 0;
-			$starts_this_section = 'divider' === $parent_field->type && $form_select === (int) $form->id;
-			$in_this_section     = (int) $parent_field->form_id === (int) $form->id;
-
-			if ( $starts_this_section || $in_this_section ) {
-				$section_order = max( $section_order, (int) $parent_field->field_order );
-			}
-		}
-
-		if ( ! $section_order ) {
-			return $prepared;
-		}
-
-		$prepared['field_order'] = $section_order + 1;
-
-		foreach ( $parent_fields as $parent_field ) {
-			if ( (int) $parent_field->field_order > $section_order ) {
-				FrmField::update( $parent_field->id, array( 'field_order' => (int) $parent_field->field_order + 1 ) );
-			}
 		}
 
 		return $prepared;
