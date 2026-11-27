@@ -102,8 +102,8 @@ class test_FrmAbilitiesFieldPlacement extends FrmUnitTest {
 		add_filter(
 			'frm_ability_new_field_placement',
 			function ( $prepared, $args ) use ( $other, &$checked ) {
-				$checked                = $args;
-				$prepared['form_id']    = $other;
+				$checked                 = $args;
+				$prepared['form_id']     = $other;
 				$prepared['field_order'] = 77;
 				return $prepared;
 			},

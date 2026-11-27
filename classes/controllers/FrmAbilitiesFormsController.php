@@ -614,7 +614,7 @@ class FrmAbilitiesFormsController {
 		 *
 		 * @since x.x
 		 *
-		 * @param null|true|WP_Error $created Null to let Formidable create the fields.
+		 * @param true|WP_Error|null $created Null to let Formidable create the fields.
 		 * @param array              $fields  The inline field input, in order.
 		 * @param stdClass           $form    The new form.
 		 */

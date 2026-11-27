@@ -98,6 +98,102 @@ class FrmFieldPlacementHelper {
 	 * @return bool
 	 */
 	public static function has_ability_section_placement() {
-		return (bool) has_filter( 'frm_ability_new_field_placement' );
+		return has_filter( 'frm_ability_new_field_placement' );
+	}
+
+	/**
+	 * Decide which form, section and field_order a new field gets.
+	 *
+	 * Sections and repeaters are Pro fields, so Pro places fields in them
+	 * through the frm_ability_new_field_placement filter. With a Pro version
+	 * that does not, the earlier repeater placement is kept.
+	 *
+	 * @since x.x
+	 *
+	 * @param array    $prepared Prepared field data.
+	 * @param array    $field    Raw field input.
+	 * @param stdClass $form     The form the field is created on.
+	 *
+	 * @return array|WP_Error
+	 */
+	public static function place_new_ability_field( $prepared, $field, $form ) {
+		if ( ! self::has_ability_section_placement() ) {
+			return self::maybe_position_in_repeater( $prepared, $field, $form );
+		}
+
+		/**
+		 * Filters where a field created by an ability is stored.
+		 *
+		 * A callback may change form_id, field_order and field_options.in_section,
+		 * or return a WP_Error to reject the field.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $prepared Prepared field data.
+		 * @param array $args     Contains `field`, the input as sent, `form`, the form the field is created on,
+		 *                        and `has_order`, true when the caller chose the field_order.
+		 */
+		$placed = apply_filters(
+			'frm_ability_new_field_placement',
+			$prepared,
+			array(
+				'field'     => $field,
+				'form'      => $form,
+				'has_order' => isset( $field['field_order'] ),
+			)
+		);
+
+		return is_array( $placed ) || is_wp_error( $placed ) ? $placed : $prepared;
+	}
+
+	/**
+	 * Slot a new repeater child field after the last field of its section.
+	 *
+	 * Repeater child fields sort into the parent form's field list purely by
+	 * field_order, so an order computed against the child form alone can land
+	 * before the repeater's own divider and render outside the section in the
+	 * builder. When the caller gives no explicit order, the field goes right
+	 * after the last field of its section and the fields that follow shift down.
+	 *
+	 * @since 7.0
+	 * @since x.x Moved here from FrmAbilitiesFieldsController.
+	 *
+	 * @param array    $prepared Prepared field data.
+	 * @param array    $field    Raw field input.
+	 * @param stdClass $form     The form the field is created on.
+	 *
+	 * @return array
+	 */
+	private static function maybe_position_in_repeater( $prepared, $field, $form ) {
+		if ( isset( $field['field_order'] ) || empty( $form->parent_form_id ) ) {
+			return $prepared;
+		}
+
+		$parent_fields = FrmField::get_all_for_form( $form->parent_form_id, '', 'include' );
+		$section_order = 0;
+
+		foreach ( $parent_fields as $parent_field ) {
+			$form_select         = isset( $parent_field->field_options['form_select'] ) ? (int) $parent_field->field_options['form_select'] : 0;
+			$starts_this_section = 'divider' === $parent_field->type && $form_select === (int) $form->id;
+			$in_this_section     = (int) $parent_field->form_id === (int) $form->id;
+
+			if ( $starts_this_section || $in_this_section ) {
+				$section_order = max( $section_order, (int) $parent_field->field_order );
+			}
+		}
+
+		if ( ! $section_order ) {
+			return $prepared;
+		}
+
+		$prepared['field_order'] = $section_order + 1;
+
+		foreach ( $parent_fields as $parent_field ) {
+			if ( (int) $parent_field->field_order > $section_order ) {
+				FrmField::update( $parent_field->id, array( 'field_order' => (int) $parent_field->field_order + 1 ) );
+			}
+		}
+
+		return $prepared;
 	}
 }
