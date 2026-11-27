@@ -1,0 +1,66 @@
+name: Branch 2 Playground
+
+# Manual only. Pick the branch to build in the "Run workflow" dropdown.
+on:
+  workflow_dispatch:
+
+# PLUGIN_SLUG is the WordPress plugin slug ("formidable"), which is not the
+# repo name. It has to match so the ZIP unpacks to wp-content/plugins/formidable
+# the same way the wordpress.org build does.
+env:
+  PLUGIN_SLUG: formidable-forms
+  ZIP_NAME: formidable.zip
+
+# One upload at a time, since the object key is fixed and later runs overwrite
+# earlier ones.
+concurrency:
+  group: branch-2-playground
+  cancel-in-progress: false
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      # No build step by design. The compiled JS in /js is committed on every
+      # update, and the playground blueprint sets SCRIPT_DEBUG so the
+      # unminified files are the ones that get loaded.
+      - name: Create zip
+        run: |
+          git archive --format=zip --prefix="${PLUGIN_SLUG}/" -o "/tmp/${ZIP_NAME}" HEAD
+          ls -lh "/tmp/${ZIP_NAME}"
+          unzip -Z -1 "/tmp/${ZIP_NAME}" | head -20
+
+      - name: Upload to Cloudflare R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          # R2 rejects the newer AWS CLI default of always sending integrity
+          # checksums, so only send them when the API requires it.
+          AWS_REQUEST_CHECKSUM_CALCULATION: when_required
+          AWS_RESPONSE_CHECKSUM_VALIDATION: when_required
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          aws s3 cp "/tmp/${ZIP_NAME}" "s3://${R2_BUCKET}/${ZIP_NAME}" \
+            --endpoint-url "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com" \
+            --content-type application/zip \
+            --cache-control "no-cache, max-age=0"
+
+      - name: Summary
+        run: |
+          {
+            echo "### Uploaded to R2"
+            echo ""
+            echo "- **Branch:** \`${{ github.ref_name }}\`"
+            echo "- **Commit:** \`${{ github.sha }}\`"
+            echo "- **Object:** \`${ZIP_NAME}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
