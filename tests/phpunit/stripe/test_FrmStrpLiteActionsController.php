@@ -68,8 +68,8 @@ class test_FrmStrpLiteActionsController extends FrmUnitTest {
 		$settings['trial_interval_count'] = 30;
 		$one_month_trial                  = FrmStrpLiteActionsController::create_plan_id( $settings );
 
-		$this->assertNotEquals( $no_trial, $two_week_trial );
-		$this->assertNotEquals( $two_week_trial, $one_month_trial );
+		$this->assertNotSame( $no_trial, $two_week_trial );
+		$this->assertNotSame( $two_week_trial, $one_month_trial );
 		$this->assertSame( 'monthly-membership_1000_1month_usd_14', $two_week_trial );
 
 		// The same settings always produce the same id, so an existing plan is reused.

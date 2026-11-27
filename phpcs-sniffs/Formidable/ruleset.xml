@@ -71,10 +71,7 @@
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantTrimAfterSanitize" />
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantReturnVariable" />
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantWpdbPrefix" />
-	<!-- Off by default: each plugin enables it in its own phpcs.xml once its violations are fixed. -->
-	<rule ref="Formidable.CodeAnalysis.RemoveUnusedVariable">
-		<severity>0</severity>
-	</rule>
+	<rule ref="Formidable.CodeAnalysis.RemoveUnusedVariable" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyBooleanTernary" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyDualConditionToTernary" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyEmptyTernary" />
