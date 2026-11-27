@@ -458,11 +458,7 @@ class FrmField {
 	 * @return void
 	 */
 	public static function remove_moved_field_types_from_pro( &$pro_fields ) {
-		unset( $pro_fields['credit_card'] );
-		unset( $pro_fields['product'] );
-		unset( $pro_fields['quantity'] );
-		unset( $pro_fields['total'] );
-		unset( $pro_fields['address'] );
+		unset( $pro_fields['credit_card'], $pro_fields['product'], $pro_fields['quantity'], $pro_fields['total'], $pro_fields['address'] );
 	}
 
 	/**
@@ -775,7 +771,7 @@ class FrmField {
 			}
 
 			// If this is a field inside of a repeating section, associate it with the correct form
-			if ( (int) $field->form_id !== (int) $old_form_id && isset( $old_repeat_form_id ) && isset( $new_repeat_form_id ) && (int) $field->form_id === (int) $old_repeat_form_id ) { // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			if ( (int) $field->form_id !== (int) $old_form_id && isset( $old_repeat_form_id, $new_repeat_form_id ) && (int) $field->form_id === (int) $old_repeat_form_id ) { // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				$values['form_id'] = $new_repeat_form_id;
 			}
 
@@ -826,7 +822,7 @@ class FrmField {
 			 */
 			$values = apply_filters( 'frm_clean_' . $values['type'] . '_field_options_before_update', $values, $id );
 
-			if ( $values['type'] === 'hidden' && isset( $values['field_options'] ) && isset( $values['field_options']['clear_on_focus'] ) ) {
+			if ( $values['type'] === 'hidden' && isset( $values['field_options']['clear_on_focus'] ) ) {
 				// Don't keep the old placeholder setting for hidden fields
 				$values['field_options']['clear_on_focus'] = 0;
 			}
@@ -1437,10 +1433,11 @@ class FrmField {
 	 * @return array
 	 */
 	private static function get_fields_from_transients( $form_id, $args ) {
-		$fields = array();
-		self::get_next_transient( $fields, 'frm_form_fields_' . $form_id . $args['inc_embed'] . $args['inc_repeat'] );
+		$fields   = array();
+		$complete = self::get_next_transient( $fields, 'frm_form_fields_' . $form_id . $args['inc_embed'] . $args['inc_repeat'] );
 
-		return $fields;
+		// A missing chunk is a cache miss. Never return part of the form.
+		return $complete ? $fields : array();
 	}
 
 	/**
@@ -1452,25 +1449,26 @@ class FrmField {
 	 * @param string $base_name Base name.
 	 * @param int    $next      Next transient number.
 	 *
-	 * @return void
+	 * @return bool True when the list is complete. False when a chunk is missing.
 	 */
 	private static function get_next_transient( &$fields, $base_name, $next = 0 ) {
 		$name        = $next ? $base_name . $next : $base_name;
 		$next_fields = get_transient( $name );
 
 		if ( ! $next_fields ) {
-			return;
+			// After a full chunk, only the empty end marker means the list is complete.
+			return ! $next || array() === $next_fields;
 		}
 
 		$fields = array_merge( $fields, $next_fields );
 
 		if ( count( $next_fields ) < self::$transient_size ) {
-			return;
+			return true;
 		}
 
 		// If this transient is full, check for another
 		++$next;
-		self::get_next_transient( $fields, $base_name, $next );
+		return self::get_next_transient( $fields, $base_name, $next );
 	}
 
 	/**
@@ -1489,21 +1487,23 @@ class FrmField {
 		$base_name    = 'frm_form_fields_' . $form_id . $args['inc_embed'] . $args['inc_repeat'];
 		$field_chunks = array_chunk( $fields, self::$transient_size );
 
-		foreach ( $field_chunks as $field ) {
-			$name = $next ? $base_name . $next : $base_name;
-			$set  = set_transient( $name, $field, 60 * 60 * 6 );
+		if ( $field_chunks && count( $fields ) % self::$transient_size === 0 ) {
+			// Mark the end so a missing chunk is never mistaken for the end of the list.
+			$field_chunks[] = array();
+		}
 
-			if ( ! $set ) {
-				// The transient didn't save
-				if ( $name !== $base_name ) {
-					// If the first saved an others fail, this will show an incomplete form
-					self::delete_form_transient( $form_id );
-				}
+		// Save the first chunk last so a request reading meanwhile never finds it without the rest.
+		for ( $i = count( $field_chunks ) - 1; $i >= 0; $i-- ) {
+			$name = $next + $i ? $base_name . ( $next + $i ) : $base_name;
+			$set  = set_transient( $name, $field_chunks[ $i ], 60 * 60 * 6 );
+
+			// An unchanged value reports false even though the chunk is cached.
+			if ( ! $set && maybe_serialize( get_transient( $name ) ) !== maybe_serialize( $field_chunks[ $i ] ) ) {
+				// The transient didn't save. Clear the rest so an incomplete form is never shown.
+				self::delete_form_transient( $form_id );
 
 				return;
 			}
-
-			++$next;
 		}
 	}
 

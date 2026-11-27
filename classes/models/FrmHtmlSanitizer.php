@@ -23,7 +23,7 @@ class FrmHtmlSanitizer {
 	 * @return string|null
 	 */
 	public static function sanitize_url_attributes( $value ) {
-		if ( is_null( $value ) ) {
+		if ( null === $value ) {
 			return $value;
 		}
 

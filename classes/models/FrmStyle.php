@@ -264,7 +264,7 @@ class FrmStyle {
 				} elseif ( $value > 1 || $value < 0 ) {
 					$new_value = 1;
 				} else {
-					$new_value = floatval( $value );
+					$new_value = (float) $value;
 				}
 			}//end if
 

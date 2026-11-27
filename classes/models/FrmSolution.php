@@ -577,7 +577,7 @@ class FrmSolution {
 		$api      = new FrmFormApi();
 		$addons   = $api->get_api_info();
 		$id       = $this->download_id();
-		$has_file = isset( $addons[ $id ] ) && isset( $addons[ $id ]['beta'] );
+		$has_file = isset( $addons[ $id ], $addons[ $id ]['beta'] );
 
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		if ( ! $step['current'] ) {

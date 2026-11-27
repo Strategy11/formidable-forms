@@ -32,7 +32,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 	$option_index = 0;
 
 	foreach ( $field['options'] as $opt_key => $opt ) {
-		if ( isset( $shortcode_atts ) && isset( $shortcode_atts['opt'] ) && $shortcode_atts['opt'] !== $opt_key ) {
+		if ( isset( $shortcode_atts['opt'] ) && $shortcode_atts['opt'] !== $opt_key ) {
 			continue;
 		}
 
