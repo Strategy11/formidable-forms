@@ -103,27 +103,51 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @return string
 	 */
 	protected function get_order_by() {
-		$orderby = self::get_param(
-			array(
-				'param'   => 'orderby',
-				'default' => 'id',
-			)
-		);
-		$order   = self::get_param(
-			array(
-				'param'   => 'order',
-				'default' => 'DESC',
-			)
-		);
+		$sort = self::get_sort_parameters();
+		return self::get_sort_query( $sort['orderby'], $sort['order'] );
+	}
 
+	/**
+	 * Get the effective entries list sort before leaving the current admin screen.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	public static function get_sort_parameters() {
+		$orderby = FrmAppHelper::get_param( 'orderby', 'id', 'request', 'sanitize_title' );
+		$order   = FrmAppHelper::get_param( 'order', 'DESC', 'request', 'sanitize_title' );
 		FrmAppController::apply_saved_sort_preference( $orderby, $order );
 
-		if ( str_contains( $orderby, 'meta' ) ) {
-			$order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
+		// A saved preference is stored as it was requested, so clean it before it is used in a URL or a query.
+		$orderby = sanitize_title( $orderby );
+		$order   = sanitize_title( $order );
+
+		return compact( 'orderby', 'order' );
+	}
+
+	/**
+	 * Build the same sort clause for the entries list and its CSV export.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $orderby Entry column or field meta alias.
+	 * @param string $order   Sort direction.
+	 *
+	 * @return string
+	 */
+	public static function get_sort_query( $orderby, $order ) {
+		$orderby = strtolower( $orderby );
+
+		if ( preg_match( '/^meta_(\d+)$/', $orderby, $matches ) ) {
+			$order_field_type = FrmField::get_type( $matches[1] );
 
 			if ( in_array( $order_field_type, array( 'number', 'scale', 'star' ), true ) ) {
 				$orderby .= '+0';
 			}
+		} elseif ( ! in_array( $orderby, array( 'id', 'item_key', 'name', 'ip', 'form_id', 'user_id', 'is_draft', 'created_at', 'updated_at' ), true ) ) {
+			// An unknown column would break the query, so fall back to the default sort.
+			$orderby = 'id';
 		}
 
 		return FrmDb::esc_order( $orderby . ' ' . $order );
