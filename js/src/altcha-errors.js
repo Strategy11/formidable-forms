@@ -62,6 +62,36 @@ export const linkError = ( checkbox, error ) => {
 };
 
 /**
+ * Show an error message in the widget's field, unless the field already shows one.
+ *
+ * @param {HTMLElement} widget  The altcha-widget element.
+ * @param {string}      message The error message.
+ * @return {HTMLElement|null} The error message element.
+ */
+export const showError = ( widget, message ) => {
+	const container = getFieldContainer( widget );
+
+	if ( ! container ) {
+		return null;
+	}
+
+	let error = container.querySelector( ERROR_SELECTOR );
+
+	if ( ! error ) {
+		error = container.ownerDocument.createElement( 'div' );
+		error.className = 'frm_error';
+		error.id = getErrorId( container );
+		error.setAttribute( 'role', 'alert' );
+		error.textContent = message;
+		container.append( error );
+	}
+
+	container.classList.add( 'frm_blank_field' );
+
+	return error;
+};
+
+/**
  * Remove the widget's field error once it is verified, so a verified checkbox is not shown as invalid.
  *
  * @param {HTMLElement} widget The altcha-widget element.

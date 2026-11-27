@@ -127,7 +127,7 @@ class FrmAltchaSettings extends FrmFieldCaptchaSettings {
 		$settings      = FrmAltchaHelper::get_settings();
 		$configuration = array(
 			'display'           => $settings['display'],
-			'validationMessage' => __( 'Please verify that you are not a robot.', 'formidable' ),
+			'validationMessage' => FrmAltchaHelper::verification_required_message(),
 		);
 
 		$attributes['data-name']          = $this->token_field;

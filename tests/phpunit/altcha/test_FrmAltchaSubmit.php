@@ -338,8 +338,27 @@ class test_FrmAltchaSubmit extends FrmUnitTest {
 
 		$this->assertSame( 'Bots go home', $errors[ 'field' . $this->altcha_id ] );
 
-		// Lite uses its own message when no response is posted at all, as for the other captcha types.
-		$this->assertSame( 'The captcha is missing from this form', $this->submit( null )[ 'field' . $this->altcha_id ] );
+		// A submit without a solution asks the visitor to verify, with the message the widget shows.
+		$this->assertSame( FrmAltchaHelper::verification_required_message(), $this->submit( null )[ 'field' . $this->altcha_id ] );
+	}
+
+	/**
+	 * A submit without a solution, for example before the visitor clicked the checkbox in the
+	 * "Only when the visitor clicks the checkbox" mode, fails with the message the widget shows.
+	 *
+	 * @covers FrmAltchaController::missing_solution_message
+	 */
+	public function test_missing_solution_asks_the_visitor_to_verify() {
+		update_option( FrmAltchaHelper::SETTINGS_OPTION, array( 'auto' => 'off' ) );
+
+		$errors = $this->submit( null );
+
+		$this->assertSame( array( 'field' . $this->altcha_id => 'Please verify that you are not a robot.' ), $errors );
+
+		$attributes    = FrmCaptchaFactory::get_settings_object( 'altcha' )->add_front_end_element_attributes( array(), array() );
+		$configuration = json_decode( $attributes['data-configuration'], true );
+
+		$this->assertSame( $errors[ 'field' . $this->altcha_id ], $configuration['validationMessage'], 'The server and the widget should show the same message.' );
 	}
 
 	/**

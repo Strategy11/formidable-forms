@@ -97,6 +97,40 @@ class FrmAltchaController {
 	}
 
 	/**
+	 * Ask the visitor to verify when the form is posted without a solution.
+	 *
+	 * Lite and Pro report a missing CAPTCHA response as "The captcha is missing from this form". For
+	 * ALTCHA it means the visitor submitted before verifying, for example before clicking the checkbox
+	 * in the "Only when the visitor clicks the checkbox" mode, so the widget's own message is used.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $errors       Validation errors so far.
+	 * @param object $posted_field The field being validated.
+	 * @param mixed  $value        The posted value.
+	 * @param array  $args         Validation arguments, including the error key's field ID.
+	 *
+	 * @return array
+	 */
+	public static function missing_solution_message( $errors, $posted_field, $value, $args ) {
+		$key = 'field' . ( $args['id'] ?? $posted_field->id );
+
+		if ( ! is_array( $errors ) || ! isset( $errors[ $key ] ) || ! self::is_active() ) {
+			return $errors;
+		}
+
+		$token = FrmAppHelper::get_post_param( FrmCaptchaFactory::get_settings_object()->token_field, '', 'sanitize_text_field' );
+
+		if ( '' !== $token || __( 'The captcha is missing from this form', 'formidable' ) !== $errors[ $key ] ) {
+			return $errors;
+		}
+
+		$errors[ $key ] = FrmAltchaHelper::verification_required_message();
+
+		return $errors;
+	}
+
+	/**
 	 * Spend the verified solution once the entry has no other errors.
 	 *
 	 * If a parallel request with the same payload spent it first, the entry is rejected.

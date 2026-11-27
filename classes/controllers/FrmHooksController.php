@@ -67,6 +67,7 @@ class FrmHooksController {
 
 		add_action( 'frm_enqueue_form_scripts', 'FrmAltchaController::maybe_enqueue_for_form' );
 		add_filter( 'frm_validate_entry', 'FrmAltchaController::claim_solution', 999 );
+		add_filter( 'frm_validate_captcha_field_entry', 'FrmAltchaController::missing_solution_message', 10, 4 );
 		add_filter( 'frm_usage_snapshot', 'FrmAltchaUsageHelper::add_snapshot_data' );
 		add_action( FrmAltchaReplayHelper::PURGE_HOOK, 'FrmAltchaReplayHelper::purge' );
 		add_action( 'frm_after_uninstall', 'FrmAltchaReplayHelper::uninstall' );

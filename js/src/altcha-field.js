@@ -6,10 +6,9 @@
  * including for form pages that load later over AJAX.
  */
 import 'altcha';
-import { skipsVerification } from './altcha-skip-verification';
 import { connectRenderedError, resetAfterError } from './altcha-errors';
+import { WIDGET_SELECTOR, verifyBeforeSubmit, verifyInvalidWidget } from './altcha-submit';
 
-const WIDGET_SELECTOR = 'altcha-widget.frm-altcha-widget';
 const CAPTCHA_SELECTOR = '.frm-altcha';
 
 /**
@@ -18,124 +17,6 @@ const CAPTCHA_SELECTOR = '.frm-altcha';
  * @type {string[]}
  */
 const WIDGET_ATTRIBUTES = [ 'name', 'challenge', 'auto', 'language', 'configuration' ];
-
-/**
- * Forms waiting for verification to finish, so repeated submit clicks only submit once.
- *
- * @type {WeakSet<HTMLFormElement>}
- */
-const waitingForms = new WeakSet();
-
-/**
- * Whether a widget has finished its proof of work.
- *
- * @param {HTMLElement} widget The altcha-widget element.
- * @return {boolean} True when verified, or when the widget has not loaded its methods yet.
- */
-const isVerified = widget => typeof widget.getState !== 'function' || widget.getState() === 'verified';
-
-/**
- * Resolve once a widget has finished verifying, starting verification if nothing is running.
- *
- * A second verify() call aborts one already in progress and the first call resolves to null,
- * for example when focusing the submit button starts the widget's onfocus verification. So the
- * result is read from the widget's state, not from the verify() return value.
- *
- * @param {HTMLElement} widget The altcha-widget element.
- * @return {Promise<boolean>} Whether the widget ended up verified.
- */
-const finishVerification = widget => new Promise( resolve => {
-	const settle = () => {
-		const state = widget.getState();
-
-		if ( state === 'verifying' ) {
-			return;
-		}
-
-		widget.removeEventListener( 'statechange', settle );
-		resolve( state === 'verified' );
-	};
-
-	widget.addEventListener( 'statechange', settle );
-
-	if ( widget.getState() !== 'verifying' ) {
-		widget.verify().then( settle );
-	}
-} );
-
-/**
- * Verify the widgets, then submit the form again once, if every widget verified.
- *
- * @param {HTMLFormElement}       form      The form.
- * @param {HTMLElement[]}         widgets   Widgets that still need to verify.
- * @param {HTMLElement|undefined} submitter The button that submitted the form, if known.
- * @return {void}
- */
-const verifyThenSubmit = ( form, widgets, submitter ) => {
-	if ( waitingForms.has( form ) ) {
-		return;
-	}
-
-	waitingForms.add( form );
-
-	Promise.all( widgets.map( finishVerification ) ).then( results => {
-		waitingForms.delete( form );
-
-		if ( results.every( Boolean ) ) {
-			form.requestSubmit( submitter );
-		}
-	} );
-};
-
-/**
- * Finish verification before the form is sent, whatever the widget's automatic mode.
- *
- * Runs in the capture phase on the document, so it stops the submit before Formidable's own
- * handler sees it. Previous page and Save Draft submits go through without verifying. Once every widget is verified the form is submitted again, and that
- * submit goes through to Formidable, including its AJAX submit.
- *
- * @param {SubmitEvent} event Submit event.
- * @return {void}
- */
-const verifyBeforeSubmit = event => {
-	const form = event.target;
-
-	if ( ! ( form instanceof HTMLFormElement ) || skipsVerification( form, event.submitter ) ) {
-		return;
-	}
-
-	const pending = Array.from( form.querySelectorAll( WIDGET_SELECTOR ) ).filter( widget => ! isVerified( widget ) );
-
-	if ( ! pending.length ) {
-		return;
-	}
-
-	event.preventDefault();
-	event.stopImmediatePropagation();
-
-	verifyThenSubmit( form, pending, event.submitter && form.contains( event.submitter ) ? event.submitter : undefined );
-};
-
-/**
- * Handle the widget's required checkbox blocking a submit in forms without novalidate.
- *
- * The browser fires invalid instead of submit, so verifyBeforeSubmit never runs. Verify in
- * the background instead of showing the browser's "check this box" message, then submit.
- *
- * @param {Event} event Invalid event.
- * @return {void}
- */
-const verifyInvalidWidget = event => {
-	const widget = event.target instanceof Element ? event.target.closest( WIDGET_SELECTOR ) : null;
-	const form = widget?.closest( 'form' );
-
-	if ( ! widget || ! form || isVerified( widget ) ) {
-		return;
-	}
-
-	event.preventDefault();
-	verifyThenSubmit( form, [ widget ] );
-};
 
 /**
  * Show verification feedback for layouts that start hidden, including automatic verification.

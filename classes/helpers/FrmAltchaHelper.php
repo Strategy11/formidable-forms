@@ -150,6 +150,19 @@ class FrmAltchaHelper {
 	}
 
 	/**
+	 * The message shown when the form is submitted before the widget is verified.
+	 *
+	 * The widget shows it next to its checkbox, and the server returns it when no solution is posted.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	public static function verification_required_message() {
+		return __( 'Please verify that you are not a robot.', 'formidable' );
+	}
+
+	/**
 	 * URL the widget fetches a fresh challenge from.
 	 *
 	 * An admin-ajax endpoint is used rather than a REST route, because security plugins

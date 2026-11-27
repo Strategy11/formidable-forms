@@ -63,7 +63,7 @@ $panel_attrs = array(
 			<p class="frm_form_field">
 				<label for="frm_altcha_auto">
 					<?php esc_html_e( 'Start verifying', 'formidable' ); ?>
-					<?php FrmAppHelper::tooltip_icon( __( 'When the browser starts solving the puzzle. Whatever you choose, an unsolved puzzle is finished when the form is submitted.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
+					<?php FrmAppHelper::tooltip_icon( __( 'When the browser starts solving the puzzle. An unsolved puzzle is finished when the form is submitted, except with Only when the visitor clicks the checkbox, where the form cannot be submitted until the visitor clicks it.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
 				</label>
 				<select name="frm_altcha[auto]" id="frm_altcha_auto">
 					<?php foreach ( FrmAltchaHelper::auto_modes() as $value => $label ) { ?>
