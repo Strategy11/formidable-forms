@@ -114,6 +114,8 @@ export default [
 			},
 			react: {
 				pragma: 'wp',
+				// React is a WordPress global (wp.element), not an npm dependency, so tell the plugin which version to lint for.
+				version: '16.14',
 			},
 		},
 		rules: {

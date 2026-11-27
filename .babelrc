@@ -24,13 +24,5 @@
 			}
 		]
 	],
-	"env": {
-		"test": {
-			"plugins": [
-				"@babel/plugin-transform-react-jsx",
-				"babel-plugin-styled-components"
-			]
-		}
-	},
 	"comments": true
 }
