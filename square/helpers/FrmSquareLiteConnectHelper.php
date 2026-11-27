@@ -383,6 +383,9 @@ class FrmSquareLiteConnectHelper {
 		return '_' . FrmSquareLiteAppHelper::active_mode();
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function check_for_redirects() {
 		if ( self::user_landed_on_the_oauth_return_url() ) {
 			self::redirect_oauth();
@@ -396,6 +399,9 @@ class FrmSquareLiteConnectHelper {
 		return isset( $_GET['frm_square_api_return_oauth'] );
 	}
 
+	/**
+	 * @return void
+	 */
 	private static function redirect_oauth() {
 		$connected = self::check_server_for_oauth_merchant_id();
 
@@ -694,6 +700,9 @@ class FrmSquareLiteConnectHelper {
 		return false !== self::post_with_authenticated_body( 'cancel_subscription', compact( 'subscription_id' ) );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function handle_disconnect() {
 		self::disconnect();
 		self::reset_square_api_integration();

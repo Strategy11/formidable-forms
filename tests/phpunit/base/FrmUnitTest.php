@@ -402,7 +402,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$GLOBALS['taxnow']  = '';
 		$GLOBALS['typenow'] = '';
 		$screen             = (object) $screens[ $page ];
-		$hook               = parse_url( $page );
+		$hook               = wp_parse_url( $page );
 
 		$GLOBALS['hook_suffix'] = $hook['path'];
 		set_current_screen();

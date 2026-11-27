@@ -697,8 +697,8 @@ class FrmStrpLiteAuth {
 	/**
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
-	 * @param int|string $form_id
-	 * @param array      $actions
+	 * @param int|string     $form_id
+	 * @param array<WP_Post> $actions
 	 *
 	 * @return void
 	 */

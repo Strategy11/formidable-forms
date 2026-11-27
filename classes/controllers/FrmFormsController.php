@@ -25,6 +25,9 @@ class FrmFormsController {
 	 */
 	private static $formidable_tinymce_button;
 
+	/**
+	 * @return void
+	 */
 	public static function menu() {
 		$menu_label = __( 'Forms', 'formidable' );
 
@@ -37,6 +40,9 @@ class FrmFormsController {
 		self::maybe_load_listing_hooks();
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function maybe_load_listing_hooks() {
 		if ( ! FrmAppHelper::on_form_listing_page() ) {
 			return;
@@ -61,6 +67,9 @@ class FrmFormsController {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function register_widgets() {
 		require_once FrmAppHelper::plugin_path() . '/classes/widgets/FrmShowForm.php';
 		register_widget( 'FrmShowForm' );
@@ -70,6 +79,8 @@ class FrmFormsController {
 	 * Show a message about conditional logic
 	 *
 	 * @since 4.06.03
+	 *
+	 * @return void
 	 */
 	public static function logic_tip() {
 		$images_url    = FrmAppHelper::plugin_url() . '/images/';
@@ -249,6 +260,9 @@ class FrmFormsController {
 		self::get_settings_vars( $id, array(), $message );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function update_settings() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		$process_form = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
@@ -521,6 +535,9 @@ class FrmFormsController {
 		return empty( $values['frm_end'] );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function duplicate() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		$nonce = FrmAppHelper::simple_get( '_wpnonce' );
@@ -783,7 +800,7 @@ class FrmFormsController {
 		$is_child_theme  = $stylesheet_path !== $template_path;
 		$template_name   = $template . '.php';
 
-		return file_exists( $stylesheet_path . '/' . $template_name ) || $is_child_theme && file_exists( $template_path . '/' . $template_name );
+		return file_exists( $stylesheet_path . '/' . $template_name ) || ( $is_child_theme && file_exists( $template_path . '/' . $template_name ) );
 	}
 
 	/**
@@ -833,6 +850,8 @@ class FrmFormsController {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	private static function load_direct_preview() {
 		$key = FrmAppHelper::simple_get( 'form', 'sanitize_title' );
@@ -919,6 +938,9 @@ class FrmFormsController {
 		);
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function untrash() {
 		self::change_form_status( 'untrash' );
 	}
@@ -944,6 +966,8 @@ class FrmFormsController {
 
 	/**
 	 * @since 3.06
+	 *
+	 * @return void
 	 */
 	public static function ajax_trash() {
 		FrmAppHelper::permission_check( 'frm_delete_forms' );
@@ -953,6 +977,9 @@ class FrmFormsController {
 		wp_die();
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function trash() {
 		self::change_form_status( 'trash' );
 	}
@@ -1045,6 +1072,9 @@ class FrmFormsController {
 		);
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function destroy() {
 		FrmAppHelper::permission_check( 'frm_delete_forms' );
 
@@ -1093,6 +1123,8 @@ class FrmFormsController {
 
 	/**
 	 * @since 6.7.1 Function went from private to public.
+	 *
+	 * @return void
 	 */
 	public static function delete_all() {
 		// Check nonce url.
@@ -1115,6 +1147,8 @@ class FrmFormsController {
 	 * Create a new form from the modal.
 	 *
 	 * @since 4.0
+	 *
+	 * @return void
 	 */
 	public static function build_new_form() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
@@ -1249,6 +1283,9 @@ class FrmFormsController {
 		return in_array( $page, array( 'post.php', 'page.php', 'page-new.php', 'post-new.php' ), true );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function get_shortcode_opts() {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
@@ -1321,7 +1358,12 @@ class FrmFormsController {
 		 *
 		 * @param string $table_class Class name for List Helper.
 		 */
-		$table_class   = apply_filters( 'frm_forms_list_class', 'FrmFormsListHelper' );
+		$table_class = apply_filters( 'frm_forms_list_class', 'FrmFormsListHelper' );
+		/**
+		 * The list class is filterable, but always extends FrmListHelper.
+		 *
+		 * @var FrmListHelper $wp_list_table
+		 */
 		$wp_list_table = new $table_class( compact( 'params' ) );
 		$pagenum       = $wp_list_table->get_pagenum();
 
@@ -2181,6 +2223,8 @@ class FrmFormsController {
 	 * @since 5.0.03
 	 *
 	 * @param stdClass $form
+	 *
+	 * @return void
 	 */
 	public static function add_js_validate_form_to_global_vars( $form ) {
 		global $frm_vars;
@@ -2191,6 +2235,9 @@ class FrmFormsController {
 		$frm_vars['js_validate_forms'][ $form->id ] = $form;
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function get_email_html() {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
@@ -2366,6 +2413,9 @@ class FrmFormsController {
 		include FrmAppHelper::plugin_path() . '/classes/views/shared/small-device-message.php';
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public static function route() { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.MaxExceeded
 		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
 		$vars   = array();
@@ -2560,6 +2610,8 @@ class FrmFormsController {
 
 	/**
 	 * FRONT-END FORMS.
+	 *
+	 * @return void
 	 */
 	public static function admin_bar_css() {
 		if ( is_admin() || ! current_user_can( 'frm_edit_forms' ) ) {
@@ -2574,6 +2626,8 @@ class FrmFormsController {
 
 	/**
 	 * @since 4.05.02
+	 *
+	 * @return void
 	 */
 	private static function move_menu_to_footer() {
 		if ( empty( FrmAppHelper::get_settings()->admin_bar ) ) {
@@ -2581,6 +2635,9 @@ class FrmFormsController {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function admin_bar_configure() {
 		global $frm_vars;
 
@@ -2607,6 +2664,8 @@ class FrmFormsController {
 
 	/**
 	 * @since 2.05.07
+	 *
+	 * @return void
 	 */
 	public static function add_menu_to_admin_bar() {
 		global $wp_admin_bar;
@@ -3035,6 +3094,8 @@ class FrmFormsController {
 	 * @param object       $form        Form object.
 	 * @param array        $params      See {@see FrmFormsController::maybe_trigger_redirect()}.
 	 * @param array        $args        See {@see FrmFormsController::maybe_trigger_redirect()}.
+	 *
+	 * @return void
 	 */
 	public static function maybe_trigger_redirect_with_action( $conf_method, $form, $params, $args ) {
 		if ( is_array( $conf_method ) && 1 === count( $conf_method ) && 'redirect' === FrmOnSubmitHelper::get_action_type( $conf_method[0] ) && empty( $conf_method[0]->post_content['redirect_delay'] ) ) { // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
@@ -3086,6 +3147,8 @@ class FrmFormsController {
 	 *     @type array  $fields               The array of fields.
 	 *     @type int    $force_delay_redirect Force to show the message before redirecting in case redirect method runs.
 	 * }
+	 *
+	 * @return void
 	 */
 	public static function run_success_action( $args ) {
 		global $frm_vars;
@@ -3227,6 +3290,8 @@ class FrmFormsController {
 	 * @since 6.0
 	 *
 	 * @param array $args See inside {@see FrmFormsController::get_form_contents()} method.
+	 *
+	 * @return void
 	 */
 	public static function run_on_submit_actions( $args ) {
 		$args['conf_method'] = self::get_confirmation_method(
@@ -3262,6 +3327,8 @@ class FrmFormsController {
 	 * @since 6.0
 	 *
 	 * @param array $args See {@see FrmFormsController::run_success_action()}.
+	 *
+	 * @return void
 	 */
 	public static function run_multi_on_submit_actions( $args ) {
 		$redirect_action = null;
@@ -3294,6 +3361,8 @@ class FrmFormsController {
 	 *
 	 * @param array  $args   See {@see FrmFormsController::run_success_action()}.
 	 * @param object $action On Submit action object.
+	 *
+	 * @return void
 	 */
 	public static function run_single_on_submit_action( $args, $action ) {
 		$new_args = self::get_run_success_action_args( $args, $action );
@@ -3355,7 +3424,7 @@ class FrmFormsController {
 				remove_filter( 'the_content', 'FrmFormsController::preview_content', 9999 );
 			}
 
-			echo apply_filters( 'the_content', $content ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo (string) apply_filters( 'the_content', $content ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 			if ( $has_preview_filter ) {
 				add_filter( 'the_content', 'FrmFormsController::preview_content', 9999 );
@@ -3369,6 +3438,8 @@ class FrmFormsController {
 	 * @since 3.0
 	 *
 	 * @param array $args See {@see FrmFormsController::run_success_action()}.
+	 *
+	 * @return void
 	 */
 	private static function redirect_after_submit( $args ) {
 		add_filter( 'frm_use_wpautop', '__return_false' );
@@ -3415,6 +3486,8 @@ class FrmFormsController {
 	 *
 	 * @param string $success_url Success URL.
 	 * @param array  $args        See {@see FrmFormsController::redirect_after_submit()}.
+	 *
+	 * @return void
 	 */
 	private static function print_open_in_new_tab_js_with_fallback_handler( $success_url, $args ) {
 		echo '<script>var newTab = window.open("' . esc_url_raw( $success_url ) . '", "_blank");';
@@ -3489,6 +3562,8 @@ class FrmFormsController {
 	 * @since 6.0
 	 *
 	 * @param array $args See {@see FrmFormsController::run_success_action()}.
+	 *
+	 * @return void
 	 */
 	private static function redirect_after_submit_using_js( $args ) {
 		$success_msg  = $args['form']->options['redirect_delay_msg'];
@@ -3533,6 +3608,8 @@ class FrmFormsController {
 	 * @param string $success_url
 	 * @param string $success_msg
 	 * @param array  $args
+	 *
+	 * @return string
 	 */
 	private static function get_redirect_message( $success_url, $success_msg, $args ) {
 		$success_msg = apply_filters( 'frm_content', $success_msg, $args['form'], $args['entry_id'] );
@@ -3788,6 +3865,8 @@ class FrmFormsController {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return bool
 	 */
 	public static function has_combo_js_file() {
 		return is_readable( FrmAppHelper::plugin_path() . '/js/frm.min.js' );

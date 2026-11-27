@@ -1735,6 +1735,8 @@ class FrmAppController {
 	 * from the given inbox notice.
 	 *
 	 * @since 6.19
+	 *
+	 * @return void
 	 */
 	private static function add_missing_tables() {
 		FrmAppHelper::permission_check( 'frm_view_forms' );

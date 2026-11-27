@@ -354,6 +354,9 @@ class FrmSettingsController {
 		return $first_key - $second_key;
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function load_settings_tab() {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
@@ -571,6 +574,8 @@ class FrmSettingsController {
 	 * Dismiss upgrade notice at the bottom on the plugin settings pages.
 	 *
 	 * @since 3.04.02
+	 *
+	 * @return void
 	 */
 	public static function settings_cta_dismiss() {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
@@ -585,6 +590,8 @@ class FrmSettingsController {
 	 * Autocomplete page admin ajax endpoint
 	 *
 	 * @since 4.03.06
+	 *
+	 * @return void
 	 */
 	public static function page_search() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );

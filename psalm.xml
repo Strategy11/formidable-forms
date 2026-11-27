@@ -37,15 +37,8 @@
 				<directory name="paypal" />
 			</errorLevel>
 		</InvalidGlobal>
-		<UndefinedDocblockClass>
-			<errorLevel type="suppress">
-				<file name="classes/controllers/FrmSMTPController.php" />
-			</errorLevel>
-		</UndefinedDocblockClass>
 		<UndefinedFunction>
 			 <errorLevel type="suppress">
-				<referencedFunction name="bp_core_email_from_address_filter" />
-				<referencedFunction name="bp_core_email_from_name_filter" />
 				<referencedFunction name="__autoload" />
 			</errorLevel>
 		</UndefinedFunction>
@@ -85,15 +78,6 @@
 				<file name="classes/models/FrmInstallerSkin.php" />
 			</errorLevel>
 		</ParamNameMismatch>
-		<MissingParamType>
-			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
-				<directory name="square" />
-				<directory name="paypal" />
-				<file name="formidable.php" />
-			</errorLevel>
-		</MissingParamType>
 		<PropertyNotSetInConstructor>
 			<errorLevel type="suppress">
 				<directory name="classes" />
@@ -111,14 +95,6 @@
 				<file name="formidable.php" />
 			</errorLevel>
 		</RiskyTruthyFalsyComparison>
-		<MissingReturnType>
-			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
-				<directory name="square" />
-				<directory name="paypal" />
-			</errorLevel>
-		</MissingReturnType>
 		<InvalidArgument>
 			<errorLevel type="suppress">
 				<directory name="classes" />
@@ -186,14 +162,6 @@
 				<file name="paypal/models/FrmPayPalLiteSettings.php" />
 			</errorLevel>
 		</PossiblyNullPropertyAssignment>
-		<MissingPropertyType>
-			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
-				<directory name="square" />
-				<directory name="paypal" />
-			</errorLevel>
-		</MissingPropertyType>
 		<TooManyArguments>
 			<errorLevel type="suppress">
 				<referencedFunction name="apply_filters" />
@@ -347,14 +315,6 @@
 				<file name="formidable.php" />
 			</errorLevel>
 		</RedundantCondition>
-		<MoreSpecificImplementedParamType>
-			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
-				<directory name="square" />
-				<directory name="paypal" />
-			</errorLevel>
-		</MoreSpecificImplementedParamType>
 		<MissingClosureReturnType>
 			<errorLevel type="suppress">
 				<directory name="classes" />
@@ -410,14 +370,6 @@
 				<directory name="paypal" />
 			</errorLevel>
 		</InvalidPropertyAssignmentValue>
-		<RedundantCast>
-			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
-				<directory name="square" />
-				<directory name="paypal" />
-			</errorLevel>
-		</RedundantCast>
 		<InvalidCast>
 			<errorLevel type="suppress">
 				<directory name="classes" />
@@ -428,10 +380,8 @@
 		</InvalidCast>
 		<PropertyTypeCoercion>
 			<errorLevel type="suppress">
-				<file name="classes/models/FrmEmail.php" />
 				<file name="classes/models/FrmEntryFormatter.php" />
 				<file name="classes/models/FrmEntryValues.php" />
-				<file name="classes/models/FrmInstallerSkin.php" />
 			</errorLevel>
 		</PropertyTypeCoercion>
 		<DirectConstructorCall>
@@ -474,25 +424,6 @@
 				<file name="classes/models/FrmFormState.php" />
 			</errorLevel>
 		</PossiblyNullReference>
-		<DeprecatedMethod>
-			<errorLevel type="suppress">
-				<file name="classes/controllers/FrmAppController.php" />
-				<file name="classes/views/frm-fields/back-end/field-options.php" />
-			</errorLevel>
-		</DeprecatedMethod>
-		<DeprecatedFunction>
-			<errorLevel type="suppress">
-				<file name="classes/models/FrmEntryValidate.php" />
-			</errorLevel>
-		</DeprecatedFunction>
-		<UndefinedThisPropertyAssignment>
-			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
-				<directory name="square" />
-				<directory name="paypal" />
-			</errorLevel>
-		</UndefinedThisPropertyAssignment>
 		<UnresolvableInclude>
 			<errorLevel type="suppress">
 				<directory name="classes" />
@@ -502,18 +433,6 @@
 				<file name="formidable.php" />
 			</errorLevel>
 		</UnresolvableInclude>
-		<PossiblyFalseIterator>
-			<errorLevel type="suppress">
-				<file name="classes/helpers/FrmXMLHelper.php" />
-				<file name="classes/models/FrmInbox.php" />
-			</errorLevel>
-		</PossiblyFalseIterator>
-		<UndefinedMethod>
-			<errorLevel type="suppress">
-				<file name="classes/helpers/FrmXMLHelper.php" />
-				<file name="classes/models/FrmFormTemplateApi.php" />
-			</errorLevel>
-		</UndefinedMethod>
 		<PossiblyInvalidMethodCall>
 			<errorLevel type="suppress">
 				<file name="classes/models/FrmFormAction.php" />
@@ -521,13 +440,18 @@
 		</PossiblyInvalidMethodCall>
 		<UndefinedMethod>
 			<errorLevel type="suppress">
+				<file name="classes/controllers/FrmFormActionsController.php" />
 				<file name="classes/helpers/FrmCSVExportHelper.php" />
 				<file name="classes/helpers/FrmXMLHelper.php" />
 				<file name="classes/models/FrmFormAction.php" />
-				<file name="classes/models/FrmFormTemplateApi.php" />
-				<file name="classes/controllers/FrmFormActionsController.php" />
 			</errorLevel>
 		</UndefinedMethod>
+		<PossiblyFalseIterator>
+			<errorLevel type="suppress">
+				<file name="classes/helpers/FrmXMLHelper.php" />
+				<file name="classes/models/FrmInbox.php" />
+			</errorLevel>
+		</PossiblyFalseIterator>
 		<InvalidMethodCall>
 			<errorLevel type="suppress">
 				<file name="classes/controllers/FrmFormActionsController.php" />
@@ -557,16 +481,6 @@
 				<directory name="paypal" />
 			</errorLevel>
 		</MissingOverrideAttribute>
-		<InaccessibleProperty>
-			<errorLevel type="suppress">
-				<file name="classes/controllers/FrmFieldsController.php" />
-			</errorLevel>
-		</InaccessibleProperty>
-		<DeprecatedFunction>
-			<errorLevel type="suppress">
-				<file name="classes/models/FrmSpamCheckWPDisallowedWords.php" />
-			</errorLevel>
-		</DeprecatedFunction>
 		<PossiblyNullArrayAccess>
 			<errorLevel type="suppress">
 				<file name="classes/controllers/FrmStylesController.php" />

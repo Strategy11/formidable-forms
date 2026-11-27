@@ -46,6 +46,8 @@ namespace {
 		/**
 		 * @param array|string|null $query Tag query.
 		 *
+		 * @phpstan-impure
+		 *
 		 * @return bool
 		 */
 		public function next_tag( $query = null ) {
@@ -115,6 +117,8 @@ namespace {
 		 * @param string       $current
 		 * @param bool         $echo
 		 *
+		 * @phpstan-impure
+		 *
 		 * @return string
 		 */
 		public static function selected( $selected, $current, $echo = true ) {
@@ -162,6 +166,8 @@ namespace {
 		 * @param int    $view_id
 		 * @param string $listing_layout
 		 * @param string $detail_layout
+		 *
+		 * @phpstan-impure
 		 */
 		public static function maybe_create_layouts_for_view( $view_id, $listing_layout, $detail_layout ) {
 		}
@@ -324,6 +330,10 @@ namespace {
 	class FrmProEntryFormatter extends FrmEntryFormatter {
 	}
 	class FrmProFieldText extends FrmFieldText {
+	}
+	class FrmPaymentAction extends FrmFormAction {
+		public function __construct() {
+		}
 	}
 	class FrmProCopy {
 		/**
@@ -503,6 +513,9 @@ namespace {
 	}
 	class FrmProFieldSettings {
 	}
+	/**
+	 * @return void
+	 */
 	function load_formidable_pro() {
 	}
 	/**
@@ -617,6 +630,11 @@ namespace {
 	}
 
 	class FrmProFormsController{
+		/**
+		 * @phpstan-impure
+		 *
+		 * @return void
+		 */
 		public static function enqueue_pro_web_components_script(){
 		}
 	}
@@ -911,6 +929,8 @@ namespace WP\MCP\Core {
 	class McpAdapter {
 		const VERSION = '';
 		/**
+		 * @phpstan-impure
+		 *
 		 * @return McpAdapter
 		 */
 		public static function instance() {
@@ -1001,6 +1021,8 @@ namespace WPMailSMTP {
 }
 
 namespace WPMailSMTP\Providers {
+	interface MailCatcherInterface {
+	}
 	interface MailerInterface {
 		/**
 		 * @return bool

@@ -190,6 +190,8 @@ class FrmFieldsController {
 
 	/**
 	 * Create a new field with ajax
+	 *
+	 * @return void
 	 */
 	public static function create() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
@@ -264,6 +266,9 @@ class FrmFieldsController {
 		return $field;
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function duplicate() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
@@ -508,6 +513,9 @@ class FrmFieldsController {
 		return $align;
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function destroy() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
@@ -519,6 +527,8 @@ class FrmFieldsController {
 
 	/**
 	 * Field Options.
+	 *
+	 * @return void
 	 */
 	public static function import_options() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
@@ -835,10 +845,8 @@ class FrmFieldsController {
 	 */
 	public static function display_field_options( $settings, $field_info = null ) {
 		if ( $field_info ) {
-			$settings = $field_info->display_field_settings();
-
-			// Field appears to be protected but there is a __get function in FrmFieldType that makes this public.
-			$settings['field_data'] = $field_info->field;
+			$settings               = $field_info->display_field_settings();
+			$settings['field_data'] = $field_info->get_field();
 		}
 
 		return apply_filters( 'frm_display_field_options', $settings );
@@ -1462,6 +1470,8 @@ class FrmFieldsController {
 
 	/**
 	 * @param array $field
+	 *
+	 * @return mixed
 	 */
 	private static function get_product_price( $field ) {
 		if ( is_array( $field['value'] ) ) {

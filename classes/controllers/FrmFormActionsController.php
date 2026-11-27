@@ -20,6 +20,8 @@ class FrmFormActionsController {
 	 * post_content: json settings
 	 * menu_order: form id
 	 * post_excerpt: action type
+	 *
+	 * @return void
 	 */
 	public static function register_post_types() {
 		register_post_type(
@@ -42,6 +44,9 @@ class FrmFormActionsController {
 		self::actions_init();
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function actions_init() {
 		self::$registered_actions = new Frm_Form_Action_Factory();
 		self::register_actions();
@@ -165,6 +170,8 @@ class FrmFormActionsController {
 	 * @since 4.0
 	 *
 	 * @param array $values
+	 *
+	 * @return void
 	 */
 	public static function email_settings( $values ) {
 		$form            = FrmForm::getOne( $values['id'] );
@@ -444,6 +451,8 @@ class FrmFormActionsController {
 	 *
 	 * @param object $action_control
 	 * @param array  $allowed
+	 *
+	 * @return void
 	 */
 	public static function show_action_icon_link( $action_control, $allowed ) {
 		$data        = array();
@@ -659,6 +668,9 @@ class FrmFormActionsController {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/form_action.php';
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function add_form_action() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
@@ -1217,6 +1229,9 @@ class Frm_Form_Action_Factory {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	public function _register_actions() {
 		$keys = array_keys( $this->actions );
 

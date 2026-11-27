@@ -6,12 +6,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
+	/**
+	 * @var string|null
+	 */
 	private static $active_order_id;
 
+	/**
+	 * @var string|null
+	 */
 	private static $active_payment_source;
 
+	/**
+	 * @var bool
+	 */
 	private static $pending_capture = false;
 
+	/**
+	 * @var object|null
+	 */
 	private static $active_subscription;
 
 	/**
@@ -207,7 +219,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		$amount   = self::prepare_amount( $action->post_content['amount'], $atts );
 
 		// phpcs:ignore Universal.Operators.StrictComparisons
-		if ( ! $amount || $amount == 000 ) {
+		if ( ! $amount || $amount == 0.0 ) {
 			$response['error'] = __( 'Please specify an amount for the payment', 'formidable' );
 			return $response;
 		}
@@ -789,10 +801,9 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			}
 
 			$captures = $payments->captures;
+			$capture  = reset( $captures );
 
-			foreach ( $captures as $capture ) {
-				return $capture->id;
-			}
+			return $capture->id;
 		}
 
 		return '';
@@ -811,13 +822,13 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		foreach ( $response->purchase_units ?? array() as $purchase_unit ) {
 			$captures = $purchase_unit->payments->captures ?? array();
 
-			if ( ! is_array( $captures ) ) {
+			if ( ! is_array( $captures ) || array() === $captures ) {
 				continue;
 			}
 
-			foreach ( $captures as $capture ) {
-				return $capture->status ?? '';
-			}
+			$capture = reset( $captures );
+
+			return $capture->status ?? '';
 		}
 
 		return '';

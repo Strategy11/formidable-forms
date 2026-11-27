@@ -291,7 +291,7 @@ class FrmSalesApi extends FrmFormApi {
 
 		if ( ! is_numeric( $option ) ) {
 			// Generate either 0 or 1.
-			$option = mt_rand( 0, 1 );
+			$option = wp_rand( 0, 1 );
 			update_option( 'frm_sale_ab_group', $option, false );
 		}
 
@@ -420,6 +420,8 @@ class FrmSalesApi extends FrmFormApi {
 	 * Dismiss a banner via AJAX hook.
 	 *
 	 * @since 6.21
+	 *
+	 * @return void
 	 */
 	public static function dismiss_banner() {
 		FrmAppHelper::permission_check( 'frm_view_forms' );

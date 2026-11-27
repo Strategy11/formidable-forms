@@ -186,7 +186,7 @@ class FrmFormMigratorsHelper {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 		$dismissed = get_option( 'frm_dismissed' );
 
-		if ( ! $dismissed ) {
+		if ( ! is_array( $dismissed ) ) {
 			$dismissed = array();
 		}
 

@@ -31,6 +31,8 @@ class FrmPayPalLiteAppController {
 
 	/**
 	 * Handle the request to initialize with PayPal Api
+	 *
+	 * @return void
 	 */
 	public static function handle_oauth() {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
@@ -51,6 +53,9 @@ class FrmPayPalLiteAppController {
 		wp_send_json_success( $response_data );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function handle_disconnect() {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 
@@ -298,6 +303,8 @@ class FrmPayPalLiteAppController {
 
 	/**
 	 * Create a PayPal order via AJAX.
+	 *
+	 * @return void
 	 */
 	public static function create_order() {
 		check_ajax_referer( 'frm_paypal_ajax', 'nonce' );
@@ -961,6 +968,8 @@ class FrmPayPalLiteAppController {
 
 	/**
 	 * @deprecated 6.32.1
+	 *
+	 * @return void
 	 */
 	public static function create_vault_setup_token() {
 		_deprecated_function( __METHOD__, '6.32.1' );

@@ -96,7 +96,7 @@ class FrmWelcomeTourController {
 		self::$checklist = self::get_checklist();
 
 		if (
-			self::is_tour_completed() && ( ! empty( self::$checklist['completed_seen'] ) || ! self::get_current_form_id() )
+			( self::is_tour_completed() && ( ! empty( self::$checklist['completed_seen'] ) || ! self::get_current_form_id() ) )
 			|| ! empty( self::$checklist['dismissed'] )
 		) {
 			return false;

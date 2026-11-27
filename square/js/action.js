@@ -164,6 +164,10 @@
 		const selectedOption = settings.querySelector( '.frm-repeat-cadence-value' );
 
 		for ( const optionKey in repeatCadenceOptions ) {
+			if ( ! Object.prototype.hasOwnProperty.call( repeatCadenceOptions, optionKey ) ) {
+				continue;
+			}
+
 			const option = document.createElement( 'option' );
 			option.value = optionKey;
 			option.textContent = repeatCadenceOptions[ optionKey ];

@@ -705,7 +705,7 @@ class FrmEntryValidate {
 	 * @return string
 	 */
 	private static function create_regular_expression_from_format( $pattern ) {
-		$pattern = preg_quote( $pattern );
+		$pattern = preg_quote( $pattern, '/' );
 
 		// Firefox doesn't like escaped dashes or colons
 		$pattern = str_replace( array( '\-', '\:' ), array( '-', ':' ), $pattern );
@@ -715,7 +715,6 @@ class FrmEntryValidate {
 		$pattern = str_replace( 'A', '[A-Z]', $pattern );
 		$pattern = str_replace( 'a', '[a-zA-Z]', $pattern );
 		$pattern = str_replace( '*', 'w', $pattern );
-		$pattern = str_replace( '/', '\/', $pattern );
 
 		if ( str_contains( $pattern, '\?' ) ) {
 			$parts   = explode( '\?', $pattern );

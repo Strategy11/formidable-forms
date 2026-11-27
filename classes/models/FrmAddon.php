@@ -1434,7 +1434,7 @@ class FrmAddon {
 			if ( null !== $json_res ) {
 				$this->license_response_is_json = true;
 				$message                        = is_array( $json_res ) && isset( $json_res['error'] ) ? $json_res['error'] : $json_res;
-			} elseif ( ! empty( $resp['response'] ) && ! empty( $resp['response']['code'] ) ) {
+			} elseif ( ! empty( $resp['response']['code'] ) ) {
 				$resp['body'] = wp_strip_all_tags( $resp['body'] );
 
 				$message = sprintf(

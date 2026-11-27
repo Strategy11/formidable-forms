@@ -577,7 +577,7 @@
 		xmlHttp.open( 'post', frm_stripe_vars.ajax, true );
 		xmlHttp.onreadystatechange = function() {
 			let response;
-			if ( xmlHttp.readyState > 3 && xmlHttp.status == 200 ) {
+			if ( xmlHttp.readyState > 3 && xmlHttp.status === 200 ) {
 				response = xmlHttp.responseText;
 				if ( response !== '' ) {
 					try {
@@ -1001,7 +1001,7 @@
 	 */
 	function getLayout() {
 		const settings = getStripeSettings()[ 0 ];
-		return ( settings.hasOwnProperty( 'layout' ) && settings.layout ) || 'tabs';
+		return ( Object.prototype.hasOwnProperty.call( settings, 'layout' ) && settings.layout ) || 'tabs';
 	}
 
 	/**

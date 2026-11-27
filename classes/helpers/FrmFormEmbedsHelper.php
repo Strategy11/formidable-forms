@@ -178,7 +178,7 @@ class FrmFormEmbedsHelper {
 	 *
 	 * @since 6.35
 	 *
-	 * @param array $posts Posts that embed a form.
+	 * @param array<object> $posts Posts that embed a form.
 	 *
 	 * @return array
 	 */

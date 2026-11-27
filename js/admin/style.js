@@ -1299,6 +1299,10 @@
 		}
 
 		for ( const key in defaultValues ) {
+			if ( ! Object.prototype.hasOwnProperty.call( defaultValues, key ) ) {
+				continue;
+			}
+
 			let targetInput = document.querySelector( `input[name$="[${ key }]"], select[name$="[${ key }]"]` );
 			if ( ! targetInput ) {
 				continue;

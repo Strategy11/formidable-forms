@@ -289,12 +289,18 @@ class FrmStrpLiteConnectHelper {
 		);
 	}
 
+	/**
+	 * @return void
+	 */
 	private static function redirect() {
 		$connected = self::check_server_for_connected_account_status();
 		wp_safe_redirect( self::get_url_for_stripe_settings( $connected ) );
 		exit;
 	}
 
+	/**
+	 * @return void
+	 */
 	private static function redirect_oauth() {
 		$connected = self::check_server_for_oauth_account_id();
 

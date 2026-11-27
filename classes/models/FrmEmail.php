@@ -101,9 +101,9 @@ class FrmEmail {
 	/**
 	 * FrmEmail constructor
 	 *
-	 * @param object $action
-	 * @param object $entry
-	 * @param object $form
+	 * @param object   $action
+	 * @param stdClass $entry
+	 * @param stdClass $form
 	 */
 	public function __construct( $action, $entry, $form ) {
 		$this->set_email_key( $action );

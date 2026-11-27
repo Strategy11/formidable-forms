@@ -30,6 +30,8 @@ class FrmPayPalLiteFieldsController {
 	 * @param array $field The field settings.
 	 * @param array $display The display settings for the field.
 	 * @param array $values The values associated with the field.
+	 *
+	 * @return void
 	 */
 	public static function add_paypal_order_field_note( $field, $display, $values ) {
 		// Add a note about PayPal order fields here.

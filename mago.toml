@@ -58,7 +58,6 @@ no-sprintf-concat = { enabled = false }
 prefer-arrow-function = { enabled = false }
 prefer-early-continue = { enabled = false }
 prefer-static-closure = { enabled = false }
-require-preg-quote-delimiter = { enabled = false }
 sensitive-parameter = { enabled = false }
 strict-behavior = { enabled = false }
 strict-types = { enabled = false }
@@ -79,7 +78,6 @@ no-roles-as-capabilities = { enabled = false }
 no-unescaped-output = { enabled = false }
 use-wp-functions = { enabled = false }
 valid-docblock = { enabled = false }
-loop-does-not-iterate = { enabled = false }
 
 [analyzer]
 plugins = []

@@ -823,7 +823,7 @@ class FrmStylesController {
 	 */
 	private static function maybe_redirect_after_save( $ids ) {
 		$referer             = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
-		$parsed              = parse_url( $referer );
+		$parsed              = wp_parse_url( $referer );
 		$query               = $parsed['query'];
 		$current_action      = false;
 		$actions_to_redirect = array( 'duplicate', 'new_style' );
@@ -1167,6 +1167,9 @@ class FrmStylesController {
 		echo '</div>';
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function load_css() {
 		header( 'Content-type: text/css' );
 
@@ -1198,7 +1201,7 @@ class FrmStylesController {
 		 */
 		$output = apply_filters( 'frm_saved_css', $output );
 
-		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo (string) $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		self::maybe_hide_sample_form_error_message();
 

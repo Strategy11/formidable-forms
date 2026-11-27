@@ -113,7 +113,7 @@ if ( $display['conf_field'] && ! is_callable( 'FrmProFieldsController::add_confi
 				 * @param string $input_html Input HTML.
 				 * @param array  $args       Contains `field` array.
 				 */
-				echo apply_filters( 'frm_conf_input_backend', $input_html, compact( 'field' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo (string) apply_filters( 'frm_conf_input_backend', $input_html, compact( 'field' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				?>
 			</div>
 			<div id="conf_field_description_<?php echo esc_attr( $field['id'] ); ?>" class="frm_description"><?php
