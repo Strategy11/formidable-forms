@@ -165,11 +165,7 @@ class test_FrmAltchaReplayHelper extends FrmUnitTest {
 		$this->assertCount( 2, $columns, 'Replay storage should contain only the hash and expiration.' );
 		$this->assertNotFalse( wp_next_scheduled( FrmAltchaReplayHelper::PURGE_HOOK ), 'The first replay should schedule cleanup.' );
 		$index_rows = $wpdb->get_results( $wpdb->prepare( 'SHOW INDEX FROM %i', $table ), ARRAY_A );
-		$indexed    = array();
-
-		foreach ( $index_rows as $index ) {
-			$indexed[ $index['Key_name'] ] = $index['Column_name'];
-		}
+		$indexed    = wp_list_pluck( $index_rows, 'Column_name', 'Key_name' );
 
 		$this->assertSame( 'challenge_hash', $indexed['PRIMARY'], 'The challenge hash should prevent duplicate claims.' );
 		$this->assertSame( 'expires_at', $indexed['expires_at'], 'Expiration cleanup should have its own index.' );
