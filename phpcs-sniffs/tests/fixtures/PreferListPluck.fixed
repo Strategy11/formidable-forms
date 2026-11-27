@@ -1,0 +1,61 @@
+<?php
+$names = wp_list_pluck( $fields, 'name', 'id' );
+render_list( $names );
+$labels = wp_list_pluck( $options, 'label' );
+render_list( $labels );
+$ids = array_column( $this->rows, 'id' );
+render_list( $ids );
+$values = wp_list_pluck( (array) $items, 'label', 'value' );
+render_list( $values );
+
+$existing[] = 'kept';
+foreach ( $fields as $field ) {
+	$existing[] = $field->id;
+}
+$generated = array();
+foreach ( get_rows() as $row ) {
+	$generated[] = $row->id;
+}
+$methods = array();
+foreach ( $rows as $row ) {
+	$methods[] = $row->get_id();
+}
+$both = array();
+foreach ( $rows as $row ) {
+	$both[] = $row->id;
+	$count++;
+}
+$commented = array();
+foreach ( $rows as $row ) {
+	// Keep this note.
+	$commented[] = $row->id;
+}
+$mixed = array();
+foreach ( $rows as $row ) {
+	$mixed[ $row['id'] ] = $row->name;
+}
+$falsy = array();
+foreach ( $rows as $row ) {
+	$falsy[ $row[0] ] = $row[1];
+}
+$leaked = array();
+foreach ( $entries as $entry ) {
+	$leaked[] = $entry->id;
+}
+echo esc_html( $entry->id );
+$byref = array();
+foreach ( $rows as &$ref ) {
+	$byref[] = $ref->id;
+}
+$self = array();
+foreach ( $self as $item ) {
+	$self[] = $item->id;
+}
+$other = array();
+foreach ( $rows as $key => $row ) {
+	$other[ $index ] = $row->id;
+}
+$dynamic = array();
+foreach ( $rows as $row ) {
+	$dynamic[] = $row->$prop;
+}
