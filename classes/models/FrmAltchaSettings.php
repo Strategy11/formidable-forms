@@ -133,7 +133,7 @@ class FrmAltchaSettings extends FrmFieldCaptchaSettings {
 		$attributes['data-name']          = $this->token_field;
 		$attributes['data-challenge']     = FrmAltchaHelper::challenge_url();
 		$attributes['data-auto']          = $settings['auto'];
-		$attributes['data-language']      = FrmAltchaController::language();
+		$attributes['data-language']      = FrmAltchaController::widget_language();
 		$attributes['data-configuration'] = (string) wp_json_encode( $configuration );
 
 		return $attributes;

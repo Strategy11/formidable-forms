@@ -75,6 +75,28 @@ class test_FrmAltchaAssets extends WP_UnitTestCase {
 	}
 
 	/**
+	 * The widget is told the language of the translation that was loaded, so it does not fall
+	 * back to English when the site locale has no file of its own.
+	 *
+	 * @dataProvider translation_cases
+	 *
+	 * @param string $language    Selected widget language.
+	 * @param string $translation Expected translation filename, or empty for English.
+	 */
+	public function test_widget_language_matches_loaded_translation( $language, $translation ) {
+		$this->language = $language;
+		add_filter( 'frm_altcha_language', array( $this, 'filter_language' ) );
+
+		try {
+			$attributes = FrmCaptchaFactory::get_settings_object( 'altcha' )->add_front_end_element_attributes( array(), array() );
+		} finally {
+			remove_filter( 'frm_altcha_language', array( $this, 'filter_language' ) );
+		}
+
+		$this->assertSame( '' === $translation ? $language : $translation, $attributes['data-language'] );
+	}
+
+	/**
 	 * @return array<string, array{string, string}>
 	 */
 	public static function translation_cases() {
@@ -91,6 +113,8 @@ class test_FrmAltchaAssets extends WP_UnitTestCase {
 			'Spanish Spain'     => array( 'es_ES', 'es-es' ),
 			'Spanish Mexico'    => array( 'es_MX', 'es-419' ),
 			'Chinese region'    => array( 'zh-SG', 'zh-cn' ),
+			'Norwegian Nynorsk' => array( 'nn_NO', 'nb' ),
+			'Norwegian'         => array( 'no', 'nb' ),
 			'Unknown language'  => array( 'xx-YY', '' ),
 			'Invalid language'  => array( '../../de', '' ),
 		);

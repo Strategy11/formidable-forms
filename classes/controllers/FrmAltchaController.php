@@ -245,10 +245,13 @@ class FrmAltchaController {
 		$base = explode( '-', $language )[0];
 		$path = FrmAppHelper::plugin_path() . '/js/altcha/i18n/';
 		// Regional locales without their own file, such as fr-be or es-mx, use the closest shipped variant.
-		// Spanish outside Spain uses the Latin American translation.
+		// Spanish outside Spain uses the Latin American translation. Norwegian Nynorsk, and Norwegian
+		// without a written standard, use the Bokmal translation.
 		$variants  = array(
 			'es' => 'es' === $language ? 'es-es' : 'es-419',
 			'fr' => 'fr-fr',
+			'nn' => 'nb',
+			'no' => 'nb',
 			'pt' => 'pt-pt',
 			'zh' => 'zh-cn',
 		);
@@ -261,6 +264,21 @@ class FrmAltchaController {
 		}
 
 		return '';
+	}
+
+	/**
+	 * The language to tell the widget: the translation that is loaded, or the site language for English.
+	 *
+	 * The widget only matches a translation with the same base language, so a locale such as nn-no
+	 * would show English next to the loaded nb translation.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	public static function widget_language() {
+		$translation = self::translation_language();
+		return '' === $translation ? self::language() : $translation;
 	}
 
 	/**
