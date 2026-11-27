@@ -189,7 +189,16 @@ class test_FrmField extends FrmUnitTest {
 		$field_ids = array_map( 'intval', wp_list_pluck( FrmField::getAll( array( 'fi.form_id' => $form_id ), 'field_order' ), 'id' ) );
 		FrmField::delete_form_transient( $form_id );
 
-		return array( $form_id, 'frm_form_fields_' . $form_id . 'excludeinclude', $field_ids );
+		return array( $form_id, 'frm_form_fields_' . $form_id . 'includeinclude', $field_ids );
+	}
+
+	/**
+	 * Forget the field lists loaded in this request, as a new request would.
+	 *
+	 * @return void
+	 */
+	private function forget_request_cache() {
+		$this->set_private_property( 'FrmField', 'request_cache', array() );
 	}
 
 	/**
@@ -208,6 +217,7 @@ class test_FrmField extends FrmUnitTest {
 			$this->assertNotFalse( get_transient( $base_name . '2' ), 'The last chunk should be cached.' );
 
 			delete_transient( $base_name . '1' );
+			$this->forget_request_cache();
 
 			$this->assertSame( $field_ids, array_map( 'intval', wp_list_pluck( FrmField::get_all_for_form( $form_id ), 'id' ) ) );
 			$this->assertNotFalse( get_transient( $base_name ), 'The cache should be rebuilt.' );
@@ -231,9 +241,11 @@ class test_FrmField extends FrmUnitTest {
 
 			$this->assertCount( 4, FrmField::get_all_for_form( $form_id ) );
 			$this->assertSame( array(), get_transient( $base_name . '2' ), 'The end marker should be cached.' );
+			$this->forget_request_cache();
 			$this->assertCount( 4, FrmField::get_all_for_form( $form_id ) );
 
 			delete_transient( $base_name . '1' );
+			$this->forget_request_cache();
 
 			$this->assertCount( 4, FrmField::get_all_for_form( $form_id ) );
 		} finally {
