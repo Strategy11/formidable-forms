@@ -239,7 +239,7 @@ class FrmFormAction {
 		$groups = FrmFormActionsController::form_action_groups();
 		$group  = 'misc';
 
-		if ( isset( $action_options['group'] ) && isset( $groups[ $action_options['group'] ] ) ) {
+		if ( isset( $action_options['group'], $groups[ $action_options['group'] ] ) ) {
 			$group = $action_options['group'];
 		} elseif ( isset( $groups[ $this->id_base ] ) ) {
 			$group = $this->id_base;

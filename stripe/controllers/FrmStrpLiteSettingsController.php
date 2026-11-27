@@ -52,24 +52,8 @@ class FrmStrpLiteSettingsController {
 	 * @return void
 	 */
 	public static function global_settings_form( $atts = array() ) {
-		$atts                          = array_merge( $atts, self::get_default_settings_atts() );
-		$errors                        = $atts['errors'];
-		$message                       = $atts['message'];
-		$settings                      = FrmStrpLiteAppHelper::get_settings();
-		$stripe_connect_is_live        = FrmStrpLiteConnectHelper::stripe_connect_is_setup( 'live' );
-		$stripe_connect_is_on_for_test = FrmStrpLiteConnectHelper::stripe_connect_is_setup( 'test' );
-
+		$settings = FrmStrpLiteAppHelper::get_settings();
 		include FrmStrpLiteAppHelper::plugin_path() . '/views/settings/form.php';
-	}
-
-	/**
-	 * @return array
-	 */
-	private static function get_default_settings_atts() {
-		return array(
-			'errors'  => array(),
-			'message' => '',
-		);
 	}
 
 	/**

@@ -277,6 +277,181 @@ class test_FrmEntryMeta extends FrmUnitTest {
 		$this->assertSame( '0', $stored_number, 'A value keyed by field id alongside it should still be packed with the number field.' );
 	}
 
+	/**
+	 * Saving a draft on every page turn submits every field again. A value that has not changed
+	 * should not be written again, and should not fire the meta change hooks, while a changed
+	 * value in the same save is still written.
+	 *
+	 * @see https://github.com/Strategy11/formidable-pro/issues/2048
+	 * @see FrmEntryMeta::update_entry_metas
+	 */
+	public function test_update_entry_metas_skips_unchanged_values() {
+		$form              = $this->factory->form->create_and_get();
+		$text_field_id     = $this->factory->field->create(
+			array(
+				'form_id' => $form->id,
+				'type'    => 'text',
+			)
+		);
+		$checkbox_field_id = $this->factory->field->create(
+			array(
+				'form_id' => $form->id,
+				'type'    => 'checkbox',
+				'options' => array( 'Red', 'Blue', 'Green' ),
+			)
+		);
+		$changed_field_id  = $this->factory->field->create(
+			array(
+				'form_id' => $form->id,
+				'type'    => 'text',
+			)
+		);
+
+		$values   = array(
+			// Multibyte text checks that the hash computed in SQL matches the one computed in PHP.
+			$text_field_id     => 'Unchanged café 日本',
+			$checkbox_field_id => array( 'Red', 'Green' ),
+			$changed_field_id  => 'Before',
+		);
+		$entry_id = $this->factory->entry->create(
+			array(
+				'form_id'   => $form->id,
+				'item_meta' => $values,
+			)
+		);
+
+		$values[ $changed_field_id ] = 'After';
+		$writes                      = $this->update_entry_metas_and_track_writes( $entry_id, $values );
+
+		$this->assertSame( array( (int) $changed_field_id ), $writes['changed_fields'], 'Only the changed field should fire the meta change hook.' );
+		$this->assertCount( 1, $writes['updates'], 'Only the changed value should be written.' );
+		$this->assertSame( 'Unchanged café 日本', FrmEntryMeta::get_entry_meta_by_field( $entry_id, $text_field_id ) );
+		$this->assertSame( array( 'Red', 'Green' ), FrmEntryMeta::get_entry_meta_by_field( $entry_id, $checkbox_field_id ) );
+		$this->assertSame( 'After', FrmEntryMeta::get_entry_meta_by_field( $entry_id, $changed_field_id ) );
+
+		$writes = $this->update_entry_metas_and_track_writes( $entry_id, $values );
+
+		$this->assertSame( array(), $writes['updates'], 'Saving the same values again should not write anything.' );
+		$this->assertSame( array(), $writes['changed_fields'], 'Saving the same values again should not fire the meta change hook.' );
+	}
+
+	/**
+	 * The comparison has to use the value after the update filter runs, so a filter that changes
+	 * the value still gets it written even when the submitted value matches the stored one.
+	 *
+	 * @see FrmEntryMeta::update_entry_metas
+	 */
+	public function test_update_entry_metas_compares_the_filtered_value() {
+		$form     = $this->factory->form->create_and_get();
+		$field_id = $this->factory->field->create(
+			array(
+				'form_id' => $form->id,
+				'type'    => 'text',
+			)
+		);
+		$entry_id = $this->factory->entry->create(
+			array(
+				'form_id'   => $form->id,
+				'item_meta' => array( $field_id => 'Same' ),
+			)
+		);
+
+		$filter = function ( $values ) {
+			$values['meta_value'] .= ' (filtered)';
+			return $values;
+		};
+		add_filter( 'frm_update_entry_meta', $filter );
+
+		try {
+			$writes = $this->update_entry_metas_and_track_writes( $entry_id, array( $field_id => 'Same' ) );
+		} finally {
+			remove_filter( 'frm_update_entry_meta', $filter );
+		}
+
+		$this->assertCount( 1, $writes['updates'], 'A value changed by the filter should be written.' );
+		$this->assertSame( 'Same (filtered)', FrmEntryMeta::get_entry_meta_by_field( $entry_id, $field_id ) );
+	}
+
+	/**
+	 * A field with more than one stored row has no single previous value to compare with, so it
+	 * is always written. The update then brings every row to the submitted value.
+	 *
+	 * @see FrmEntryMeta::get_stored_meta_hashes
+	 */
+	public function test_update_entry_metas_always_writes_a_field_with_duplicate_rows() {
+		global $wpdb;
+
+		$form     = $this->factory->form->create_and_get();
+		$field_id = $this->factory->field->create(
+			array(
+				'form_id' => $form->id,
+				'type'    => 'text',
+			)
+		);
+		$entry_id = $this->factory->entry->create(
+			array(
+				'form_id'   => $form->id,
+				'item_meta' => array( $field_id => 'Same' ),
+			)
+		);
+
+		$wpdb->insert(
+			$wpdb->prefix . 'frm_item_metas',
+			array(
+				'item_id'    => $entry_id,
+				'field_id'   => $field_id,
+				'meta_value' => 'Stale duplicate',
+				'created_at' => current_time( 'mysql', 1 ),
+			)
+		);
+
+		$writes = $this->update_entry_metas_and_track_writes( $entry_id, array( $field_id => 'Same' ) );
+
+		$this->assertCount( 1, $writes['updates'], 'A field with duplicate rows should be written.' );
+
+		$stored = $wpdb->get_col( $wpdb->prepare( 'SELECT meta_value FROM %i WHERE item_id = %d AND field_id = %d', $wpdb->prefix . 'frm_item_metas', $entry_id, $field_id ) );
+		$this->assertSame( array( 'Same', 'Same' ), $stored, 'Every row for the field should hold the submitted value.' );
+	}
+
+	/**
+	 * Run update_entry_metas() and record the meta UPDATE queries and meta change hooks it runs.
+	 *
+	 * @param int   $entry_id Entry ID.
+	 * @param array $values   Values indexed by field ID.
+	 *
+	 * @return array{updates: string[], changed_fields: int[]}
+	 */
+	private function update_entry_metas_and_track_writes( $entry_id, $values ) {
+		global $wpdb;
+
+		$writes        = array(
+			'updates'        => array(),
+			'changed_fields' => array(),
+		);
+		$table         = $wpdb->prefix . 'frm_item_metas';
+		$track_query   = function ( $query ) use ( &$writes, $table ) {
+			if ( str_starts_with( ltrim( $query ), 'UPDATE `' . $table . '`' ) ) {
+				$writes['updates'][] = $query;
+			}
+			return $query;
+		};
+		$track_changes = function ( $changed_entry_id, $field_id ) use ( &$writes ) {
+			$writes['changed_fields'][] = (int) $field_id;
+		};
+
+		add_filter( 'query', $track_query );
+		add_action( 'frm_after_entry_meta_change', $track_changes, 10, 2 );
+
+		try {
+			FrmEntryMeta::update_entry_metas( $entry_id, $values );
+		} finally {
+			remove_filter( 'query', $track_query );
+			remove_action( 'frm_after_entry_meta_change', $track_changes, 10 );
+		}
+
+		return $writes;
+	}
+
 	public function test_should_join_fields_table() {
 		$where = 'fi.form_id=123';
 		$this->assertFalse( $this->run_private_method( array( 'FrmEntryMeta', 'should_join_fields_table' ), array( &$where ) ) );

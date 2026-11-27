@@ -24,7 +24,7 @@ $field_id = $field['id'];
 		name="field_options[format_dropdown_<?php echo esc_attr( $field_id ); ?>]"
 		id="frm_format_dropdown_<?php echo esc_attr( $field_id ); ?>"
 		class="frm_format_dropdown frm_select_with_upgrade frm_select_with_dependency"
-		data-field-id="<?php echo intval( $field_id ); ?>"
+		data-field-id="<?php echo (int) $field_id; ?>"
 	>
 		<?php
 		$options_view_path = FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/format-dropdown-options.php';
