@@ -1,0 +1,63 @@
+<?php
+$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE field_id=%d AND item_id=%d', $wpdb->prefix . 'frm_item_metas', $field_id, $entry_id ) );
+$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE field_id=%d', $wpdb->prefix . 'frm_item_metas', $id ) );
+$ids = $wpdb->get_col( $wpdb->prepare( 'SELECT ID FROM %i WHERE post_type in (%s, %s)', $wpdb->posts, $a, $b ) );
+$result = $wpdb->get_results( $wpdb->prepare( 'SHOW COLUMNS FROM %i LIKE %s', $wpdb->prefix . $table, $column ) );
+$wpdb->query( $wpdb->prepare( 'DELETE fi FROM %i AS fi LEFT JOIN %i fr ON (fi.form_id = fr.id) WHERE fi.form_id=%d OR parent_form_id=%d', $wpdb->prefix . 'frm_fields', $wpdb->prefix . 'frm_forms', $id, $id ) );
+$query = $wpdb->prepare( "SELECT DISTINCT item_id FROM %i WHERE meta_value {$operator} %s and field_id = %d", $wpdb->prefix . 'frm_item_metas', $search, $field_id );
+$sub = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE id = %d', $wpdb->prefix . 'frm_subscriptions', $id ) );
+$rows = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE completed is NOT NULL', $wpdb->prefix . 'frm_payments' ) );
+$results = $wpdb->get_results( $wpdb->prepare( 'SELECT p.* FROM %i p LEFT JOIN %i e ON p.item_id = e.id WHERE e.id = %d', $wpdb->prefix . 'frm_' . $table_name, $wpdb->prefix . 'frm_items', $id ) );
+$wpdb->query( $wpdb->prepare( 'CREATE INDEX idx_is_draft_created_at ON %i (is_draft, created_at)', $wpdb->prefix . 'frm_items' ) );
+$result = $wpdb->get_results(
+	$wpdb->prepare(
+		'SELECT COUNT(*) as items_count
+			FROM %i AS it INNER JOIN %i AS fr ON it.form_id = fr.id
+			WHERE it.created_at BETWEEN %s AND %s',
+		$wpdb->prefix . 'frm_items',
+		$wpdb->prefix . 'frm_forms',
+		$from_date,
+		$to_date
+	)
+);
+$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $this->fields ) );
+$wpdb->query( $wpdb->prepare( 'CREATE INDEX idx_form_id_type ON %i (form_id, type(30))', $wpdb->prefix . 'frm_fields' ) );
+$count = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i', $wpdb->prefix . $this->table_name ) );
+$late = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE name = %s AND form_id IN ( SELECT id FROM %i WHERE status = %s )', $wpdb->prefix . 'frm_items', $name, $wpdb->prefix . 'frm_forms', $status ) );
+// A second dynamic SQL fragment makes the argument order unknowable.
+$wpdb->query( $wpdb->prepare( 'UPDATE ' . $wpdb->prefix . 'frm_forms SET status = %s ' . $where['where'], $where['values'] ) );
+$sql = $wpdb->prepare( ' LEFT JOIN ' . $wpdb->prefix . 'frm_item_metas em' . $o_key . ' ON em' . $o_key . '.field_id=%d ', $o_field->id );
+// prepare() only unpacks an array when it is the sole argument.
+$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_items WHERE id = %d', array( $id ) ) );
+$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_items WHERE id IN (%d, %d)', $ids ) );
+// Numbered placeholders change the argument mapping.
+$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_items WHERE id = %1$d OR parent_item_id = %1$d', $id ) );
+// A percent sign or an interpolated value would be read as a placeholder once wrapped in prepare().
+$found = $wpdb->get_var( "SELECT 1 FROM {$wpdb->posts} WHERE post_content LIKE '%[formidable %' LIMIT 1" );
+$match = $wpdb->get_var( "SELECT 1 FROM {$wpdb->posts} WHERE post_title = '{$title}'" );
+$other = $wpdb->get_var( 'SELECT 1 FROM ' . $wpdb->posts . ' WHERE ' . $where );
+// Already correct, or not a table built into the SQL.
+$wpdb->query( "CREATE TABLE {$wpdb->prefix}frm_payments ( id BIGINT )" );
+$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id = %d', $wpdb->prefix . 'frm_items', $id ) );
+$wpdb->query( $wpdb->prepare( 'DELETE FROM wp_frm_items WHERE id = %d', $id ) );
+$count = FrmDb::get_var( 'frm_forms', array( 'id' => $id ), 'COUNT(*)' );
+$x = $wpdb->prepare( "SELECT * FROM %i em{$o_key} WHERE em{$o_key}.field_id = %d", $wpdb->prefix . 'frm_item_metas', $o_field->id );
+$y = $wpdb->prepare( "SELECT * FROM %i pm{$o_key} INNER JOIN %i it ON pm{$o_key}.post_id = it.post_id WHERE it.id = %d", $wpdb->postmeta, $wpdb->prefix . 'frm_items', $id );
+$wpdb->query( $sql );
+$other_db->query( 'DROP TABLE IF EXISTS ' . $this->fields );
+$payments = $wpdb->get_results(
+	$wpdb->prepare(
+		'SELECT * FROM %i WHERE completed is NOT NULL',
+		$wpdb->prefix . 'frm_payments'
+	)
+);
+$wpdb->prepare( 'SELECT id FROM %i WHERE id=%d', $wpdb->prefix . 'frm_items', $id );
+$wpdb->prepare( 'SELECT id FROM %i WHERE id=%d', $wpdb->prefix . 'frm_items', $id );
+$wpdb->prepare( 'SELECT id FROM %i WHERE id=%d', $wpdb->prefix . 'frm_items', $id );
+$wpdb->prepare( 'SELECT id FROM ' . $wpdb->prefix . "frm_items\nWHERE id=%d", $id );
+$wpdb->prepare( "SELECT id FROM `{$wpdb->prefix}frm_" . "items` WHERE id=%d", $id );
+$wpdb->prepare( 'SELECT id FROM ' . $wpdb->prefix . 'frm_items' . "_old WHERE id=%d", $id );
+$wpdb->prepare( 'SELECT id FROM ' . $wpdb->prefix . 'frm_items' . '_old WHERE id=%d', $id );
+$wpdb->prepare( "SELECT id FROM {$wpdb->prefix}frm_" . "items WHERE id=%d", $id );
+$wpdb->prepare( "SELECT id FROM {$wpdb->prefix}frm_items" . "_old WHERE id=%d", $id );
+$wpdb->prepare( 'SELECT id FROM `' . $wpdb->prefix . 'frm_items' . '` WHERE id=%d', $id );

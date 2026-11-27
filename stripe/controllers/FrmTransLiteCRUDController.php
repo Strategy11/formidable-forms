@@ -65,20 +65,18 @@ class FrmTransLiteCRUDController {
 	private static function get_payment_row( $id ) {
 		global $wpdb;
 
-		$table_name = self::table_name();
-
-		// @codingStandardsIgnoreStart
 		return $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT
+				'SELECT
 					p.*, e.user_id
-				FROM `{$wpdb->prefix}frm_{$table_name}` p
-				LEFT JOIN `{$wpdb->prefix}frm_items` e ON p.item_id = e.id
-				WHERE p.id=%d",
+				FROM %i p
+				LEFT JOIN %i e ON p.item_id = e.id
+				WHERE p.id=%d',
+				$wpdb->prefix . 'frm_' . self::table_name(),
+				$wpdb->prefix . 'frm_items',
 				$id
 			)
 		);
-		// @codingStandardsIgnoreEnd
 	}
 
 	/**
