@@ -499,13 +499,7 @@ class FrmEmailSummaryHelper {
 			return array();
 		}
 
-		$plugins = array();
-
-		foreach ( $update_data->response as $plugin_data ) {
-			$plugins[] = $plugin_data->display_name;
-		}
-
-		return $plugins;
+		return array_column( $update_data->response, 'display_name' );
 	}
 
 	/**
