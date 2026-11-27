@@ -737,7 +737,9 @@ class FrmAppController {
 			self::enqueue_floating_links( $plugin_url, $version );
 		}
 
-		wp_register_script( 'formidable_admin', $plugin_url . '/js/formidable_admin.js', self::get_admin_js_dependencies(), $version, true );
+		$page               = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+		$admin_dependencies = self::get_admin_js_dependencies( $page, $plugin_url, $version );
+		wp_register_script( 'formidable_admin', $plugin_url . '/js/formidable_admin.js', $admin_dependencies, $version, true );
 
 		wp_register_script(
 			'formidable_forms_list',
@@ -761,7 +763,6 @@ class FrmAppController {
 			FrmTransLiteAppController::hide_gateway_fields_in_builder();
 		}
 
-		$page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
 
 		global $pagenow;
@@ -795,6 +796,7 @@ class FrmAppController {
 				// Registers and enqueues the entries page scripts.
 				wp_register_script( 'formidable_entries', $plugin_url . '/js/admin/entries.js', array( 'formidable_admin', 'wp-dom-ready' ), $version, true );
 				wp_enqueue_script( 'formidable_entries' );
+				wp_set_script_translations( 'formidable_entries', 'formidable' );
 			}
 
 			do_action( 'frm_enqueue_builder_scripts' );
@@ -857,9 +859,13 @@ class FrmAppController {
 	/**
 	 * @since 6.27
 	 *
+	 * @param string $page       The admin page slug.
+	 * @param string $plugin_url The plugin asset URL.
+	 * @param string $version    The plugin version.
+	 *
 	 * @return array
 	 */
-	private static function get_admin_js_dependencies() {
+	private static function get_admin_js_dependencies( $page, $plugin_url, $version ) {
 		$dependencies = array(
 			'formidable_admin_global',
 			'jquery',
@@ -880,7 +886,53 @@ class FrmAppController {
 			$dependencies[] = 'formidable-color-picker';
 		}
 
+		$page_script = self::get_admin_page_script( $page );
+
+		if ( ! $page_script ) {
+			return $dependencies;
+		}
+
+		// Register page hooks before the shared script creates the public admin API.
+		wp_register_script( $page_script, $plugin_url . '/js/' . $page_script . '.js', array( 'jquery', 'wp-hooks', 'wp-i18n' ), $version, true );
+		wp_set_script_translations( $page_script, 'formidable' );
+		$dependencies[] = $page_script;
+
 		return $dependencies;
+	}
+
+	/**
+	 * Get the script for the current Formidable admin screen.
+	 *
+	 * @param string $page The admin page slug.
+	 *
+	 * @return string
+	 */
+	private static function get_admin_page_script( $page ) {
+		if ( 'formidable-import' === $page ) {
+			return 'formidable-import-export';
+		}
+
+		if ( 'formidable-settings' === $page ) {
+			return 'formidable-global-settings';
+		}
+
+		if ( 'formidable' === $page ) {
+			$action = FrmAppHelper::get_param( 'frm_action', '', 'get', 'sanitize_title' );
+
+			if ( '' === $action ) {
+				$action = FrmAppHelper::get_param( 'action', '', 'get', 'sanitize_title' );
+			}
+
+			if ( in_array( $action, array( 'edit', 'create', 'update', 'duplicate' ), true ) ) {
+				return 'formidable_builder';
+			}
+
+			if ( in_array( $action, array( 'settings', 'update_settings' ), true ) ) {
+				return 'formidable-form-settings';
+			}
+		}
+
+		return '';
 	}
 
 	/**
