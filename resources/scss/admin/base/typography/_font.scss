@@ -7,7 +7,7 @@
 	src: url("../fonts/Inter-VariableFont_slnt,wght.ttf?v=1") format("truetype");
 }
 
-.with_frm_style,
+.with_frm_style#{$outside-styler-preview},
 .frm-block-color-panel,
 .frm-white-body .wpbody-content,
 .frm_wrap {
@@ -19,7 +19,7 @@
 
 	@supports (-webkit-appearance:none) and (stroke-color:transparent) {
 
-		.with_frm_style,
+		.with_frm_style#{$outside-styler-preview},
 		.frm-white-body .wpbody-content,
 		.frm_wrap {
 			-webkit-font-smoothing: antialiased;

@@ -2,14 +2,14 @@
  * Components - Form Field
  */
 
-.form-field p {
+.form-field p#{$outside-styler-preview} {
 
 	/* for conflicts */
 	background: none;
 	border: none;
 }
 
-.form-field label.frm_primary_label {
+.form-field label.frm_primary_label#{$outside-styler-preview} {
 	display: block;
 	float: none;
 	width: auto;
@@ -23,7 +23,7 @@
 .accordion-container label,
 .frm-fields td > label,
 .frm-fields td > div > label,
-.frm_form_field > label:first-child,
+.frm_form_field > label:first-child#{$outside-styler-preview},
 .frm-fields p > label,
 .frm_on_submit_type > label,
 .post-type-frm_display .frm_form_field > label,
@@ -57,7 +57,7 @@ form .frm_primary_label input {
 	font-size: 12px;
 }
 
-.with_frm_style form .form-field {
+.with_frm_style form .form-field#{$outside-styler-preview} {
 	margin-bottom: 20px;
 }
 
@@ -78,15 +78,15 @@ form .frm_primary_label input {
 	row-gap: 10px;
 }
 
-.frm_description,
-.with_frm_style form div.description,
-.frm_error,
-.with_frm_style form div.description textarea {
+.frm_description#{$outside-styler-preview},
+.with_frm_style form div.description#{$outside-styler-preview},
+.frm_error#{$outside-styler-preview},
+.with_frm_style form div.description textarea#{$outside-styler-preview} {
 	padding: 0;
 	font-size: 11px;
 }
 
-.with_frm_style .description {
+.with_frm_style .description#{$outside-styler-preview} {
 	color: inherit;
 }
 

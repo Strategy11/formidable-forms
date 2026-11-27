@@ -584,7 +584,9 @@ class FrmFormsController {
 			);
 		}
 
+		echo '<div class="js-frm-in-theme-preview">';
 		echo $preview; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '</div>';
 	}
 
 	/**
@@ -689,14 +691,18 @@ class FrmFormsController {
 		add_action( 'loop_no_results', 'FrmFormsController::show_page_preview' );
 		add_filter( 'is_active_sidebar', '__return_false' );
 		FrmStylesController::enqueue_css( 'enqueue', true );
+		wp_enqueue_script(
+			'frm-in-theme-preview',
+			FrmAppHelper::plugin_url() . '/js/in-theme-preview.js',
+			array(),
+			FrmAppHelper::plugin_version(),
+			true
+		);
 
 		if ( false !== get_template_part( 'page' ) ) {
 			return;
 		}
 
-		if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
-			add_filter( 'body_class', 'FrmFormsController::preview_block_theme_body_classnames' );
-		}
 		self::fallback_when_page_template_part_is_not_supported_by_theme();
 	}
 
@@ -725,13 +731,20 @@ class FrmFormsController {
 			return;
 		}
 
+		// Match common classic theme containers and the content width of block themes.
+		$attributes = array( 'class' => 'container entry-content' );
+
+		if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
+			$attributes['class'] .= ' is-layout-constrained';
+			add_filter( 'body_class', 'FrmFormsController::preview_block_theme_body_classnames' );
+		}
+
 		the_post();
 		self::get_template( 'header' );
 
-		// Add some generic class names to the container to add some natural padding to the content.
-		// .entry-content catches the WordPress TwentyTwenty theme.
-		// .container catches Customizr content.
-		echo '<div class="container entry-content">';
+		echo '<div';
+		FrmAppHelper::array_to_html_params( $attributes, true );
+		echo '>';
 		the_content();
 		echo '</div>';
 

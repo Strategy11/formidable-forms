@@ -2,7 +2,7 @@
  * Components - MCE Styles
  */
 
-.with_frm_style .wp-editor-container textarea,
+.with_frm_style .wp-editor-container textarea#{$outside-styler-preview},
 .postbox .wp-editor-container textarea,
 .frm_remove_border {
 	border: none;

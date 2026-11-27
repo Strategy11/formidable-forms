@@ -73,8 +73,8 @@
 		width: 100%;
 	}
 
-	.with_frm_style .frm_radio input[type="radio"],
-	.with_frm_style .frm_checkbox input[type="checkbox"] {
+	.with_frm_style .frm_radio input[type="radio"]#{$outside-styler-preview},
+	.with_frm_style .frm_checkbox input[type="checkbox"]#{$outside-styler-preview} {
 		width: 25px !important;
 	}
 
