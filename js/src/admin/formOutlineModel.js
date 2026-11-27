@@ -163,3 +163,35 @@ export function throttle( callback, wait ) {
 		}, wait );
 	};
 }
+
+// How far below the top of the canvas a page's pill can be and still count as reached.
+const CURRENT_PAGE_OFFSET = 8;
+
+/**
+ * Find the page the canvas is showing: the last one whose pill has reached the top.
+ *
+ * Pages near the end of a form can be too short to scroll their pill up to the top, so over the
+ * last screen of scrolling the line a pill has to cross moves down, reaching the bottom of the
+ * canvas at the end. Each of those pages becomes current in turn, and the last one at the bottom.
+ *
+ * @param {Array<{index: number, top: number}>} pills The visible page pills and their tops on screen.
+ * @param {Object}                              view  The canvas: its top on screen, height, scrollTop and scrollHeight.
+ * @return {number} The index of the current page.
+ */
+export function getCurrentPageIndex( pills, view ) {
+	const maxScroll = view.scrollHeight - view.height;
+	let progress = 0;
+	if ( maxScroll > 0 ) {
+		const lastScreen = Math.min( maxScroll, view.height );
+		const remaining = maxScroll - view.scrollTop;
+		progress = Math.min( Math.max( ( lastScreen - remaining ) / lastScreen, 0 ), 1 );
+	}
+	const line = view.top + CURRENT_PAGE_OFFSET + ( progress * ( view.height - CURRENT_PAGE_OFFSET ) );
+	let index = 0;
+	pills.forEach( pill => {
+		if ( pill.top < line ) {
+			index = Math.max( index, pill.index );
+		}
+	} );
+	return index;
+}

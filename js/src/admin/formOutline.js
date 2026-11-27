@@ -1,6 +1,6 @@
 import { __, _n, sprintf } from '@wordpress/i18n';
 import { renderFieldPreviewNow } from './fieldPreviewQueue';
-import { buildOutline, groupPages, MAX_FIELD_RESULTS, throttle } from './formOutlineModel';
+import { buildOutline, getCurrentPageIndex, groupPages, MAX_FIELD_RESULTS, throttle } from './formOutlineModel';
 
 const RENDER_DELAY = 100;
 // togglePage() in admin.js animates the first rows for 150 ms.
@@ -314,15 +314,15 @@ export function initFormOutline() {
 		if ( ! isOpen() ) {
 			return;
 		}
-		const { top } = scroller.getBoundingClientRect();
-		let index = -1;
-		pagePills.forEach( pill => {
-			if ( pill.offsetParent && pill.getBoundingClientRect().top < top + 8 ) {
-				index = Math.max( index, getPillPage( pill ) );
-			}
+		const pills = pagePills.filter( pill => pill.offsetParent ).map( pill => ( { index: getPillPage( pill ), top: pill.getBoundingClientRect().top } ) );
+		const index = getCurrentPageIndex( pills, {
+			top: scroller.getBoundingClientRect().top,
+			height: scroller.clientHeight,
+			scrollTop: scroller.scrollTop,
+			scrollHeight: scroller.scrollHeight
 		} );
-		if ( currentPageIndex !== Math.max( index, 0 ) ) {
-			currentPageIndex = Math.max( index, 0 );
+		if ( currentPageIndex !== index ) {
+			currentPageIndex = index;
 			list.querySelector( '[aria-current]' )?.removeAttribute( 'aria-current' );
 			if ( search.value.trim() === '' ) {
 				list.querySelector( `.frm-builder-outline-page[data-page-index="${ currentPageIndex }"]` )?.setAttribute( 'aria-current', 'location' );

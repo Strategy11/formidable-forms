@@ -1,7 +1,7 @@
 /* oxlint-disable import/no-nodejs-modules -- Tests run with the Node test runner. */
 import assert from 'node:assert/strict';
 import { mock, test } from 'node:test';
-import { buildOutline, groupPages, throttle } from '../../js/src/admin/formOutlineModel.js';
+import { buildOutline, getCurrentPageIndex, groupPages, throttle } from '../../js/src/admin/formOutlineModel.js';
 
 const pageNumber = index => `Page ${ index + 1 }`;
 
@@ -113,4 +113,31 @@ test( 'throttle runs during a steady stream of calls, not only after it stops', 
 	mock.timers.reset();
 
 	assert.ok( runs >= 9, `Ran ${ runs } times.` );
+} );
+
+test( 'the page at the top of the canvas is current', () => {
+	const pills = [ { index: 0, top: -900 }, { index: 1, top: -20 }, { index: 2, top: 300 } ];
+
+	assert.equal( getCurrentPageIndex( pills, { top: 0, height: 800, scrollTop: 900, scrollHeight: 4000 } ), 1 );
+	// A form with nothing to scroll stays on page 1.
+	assert.equal( getCurrentPageIndex( [ { index: 0, top: 10 }, { index: 1, top: 300 } ], { top: 0, height: 800, scrollTop: 0, scrollHeight: 800 } ), 0 );
+} );
+
+test( 'short last pages become current as the canvas scrolls to the bottom', () => {
+	// Pages 3 and 4 are short, so their pills can never reach the top of the canvas.
+	const view = { top: 0, height: 800, scrollHeight: 3000 };
+	const pillsAt = scrollTop => [
+		{ index: 0, top: -scrollTop },
+		{ index: 1, top: 1500 - scrollTop },
+		{ index: 2, top: 2400 - scrollTop },
+		{ index: 3, top: 2700 - scrollTop }
+	];
+	const seen = new Set();
+	for ( let scrollTop = 0; scrollTop <= 2200; scrollTop += 10 ) {
+		seen.add( getCurrentPageIndex( pillsAt( scrollTop ), { ...view, scrollTop } ) );
+	}
+
+	assert.deepEqual( Array.from( seen ), [ 0, 1, 2, 3 ] );
+	assert.equal( getCurrentPageIndex( pillsAt( 2200 ), { ...view, scrollTop: 2200 } ), 3 );
+	assert.equal( getCurrentPageIndex( pillsAt( 1400 ), { ...view, scrollTop: 1400 } ), 0 );
 } );
