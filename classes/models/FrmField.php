@@ -804,6 +804,18 @@ class FrmField {
 			$values['required'] = (int) $values['required'];
 		}
 
+		/**
+		 * Filter field values before any update is persisted.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $values Field values to save. Only the columns being changed are included, so a
+		 *                      column that must keep its value needs to be set here on every update.
+		 *                      The field_options value may be an array or a serialized string.
+		 * @param int   $id     Existing field ID.
+		 */
+		$values = apply_filters( 'frm_field_values_before_update', $values, $id );
+
 		self::preserve_format_option_backslashes( $values );
 
 		if ( isset( $values['type'] ) ) {
@@ -908,6 +920,10 @@ class FrmField {
 	public static function destroy( $id ) {
 		global $wpdb;
 
+		if ( ! self::can_destroy( $id ) ) {
+			return false;
+		}
+
 		do_action( 'frm_before_destroy_field', $id );
 
 		wp_cache_delete( $id, 'frm_field' );
@@ -935,6 +951,27 @@ class FrmField {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Whether a field may be deleted.
+	 *
+	 * @since x.x
+	 *
+	 * @param int|string $id Field ID.
+	 *
+	 * @return bool
+	 */
+	public static function can_destroy( $id ) {
+		/**
+		 * Filter whether a field may be deleted. Deleting a whole form does not run this filter.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool       $can_destroy Whether the field may be deleted.
+		 * @param int|string $id          Field ID.
+		 */
+		return (bool) apply_filters( 'frm_can_destroy_field', true, $id );
 	}
 
 	/**
