@@ -113,7 +113,11 @@ const sharedConfig = {
  * Sass loader configuration with shared options
  */
 const sassLoaderOptions = {
+  // Reuse one sass-embedded compiler process for every file.
+  api: 'modern-compiler',
   sassOptions: {
+    // The SCSS still uses @import. Hide its deprecation notice until it moves to @use.
+    silenceDeprecations: [ 'import' ],
     includePaths: [
       paths.scss,
       paths.css,
