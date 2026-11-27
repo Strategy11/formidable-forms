@@ -2,11 +2,10 @@
  * Formidable Forms Development Server
  *
  * Run `npm run serve` to start the development server. You'll be prompted
- * for your WordPress site URL and JS/PHP watching, then a dev server starts at localhost:8880.
+ * for your WordPress site URL, then a dev server starts at localhost:8880.
  *
- * Development is streamlined with automatic updates:
  * - CSS/SCSS changes are injected in real-time without page refresh
- * - JavaScript and PHP changes trigger an automatic full page reload (opt-in)
+ * - JavaScript is rebuilt on change. Reload the page to see it.
  * - Browser opens automatically to localhost:8880
  */
 
@@ -30,9 +29,7 @@ const config = {
 
 	// Paths to watch for changes
 	cssPath: '../formidable*/**/*.css',
-	jsPath: '../formidable*/**/*.js',
 	jsSrcPath: '../formidable*/*/js/src/**/*.js',
-	phpPath: '../formidable*/**/*.php',
 
 	// Public path for webpack
 	publicPath: '/wp-content/plugins/formidable/css/'
@@ -89,24 +86,7 @@ const init = () => {
 			{
 				match: [ config.jsSrcPath ],
 				fn: ( event, file ) => console.log( `JS source updated: ${ file }\nRebuilding JS bundles...` )
-			},
-			// Conditionally watch compiled JS and PHP files for full page reload
-			...( process.env.ENABLE_WATCH && process.env.ENABLE_WATCH.toLowerCase().startsWith( 'y' ) ? [
-				{
-					match: [ config.jsPath ],
-					fn: ( event, file ) => {
-						console.log( `JS updated: ${ file }` );
-						browserSyncInstance.reload();
-					}
-				},
-				{
-					match: [ config.phpPath ],
-					fn: ( event, file ) => {
-						console.log( `PHP updated: ${ file }` );
-						browserSyncInstance.reload();
-					}
-				}
-			] : [] )
+			}
 		],
 
 		// Server settings
