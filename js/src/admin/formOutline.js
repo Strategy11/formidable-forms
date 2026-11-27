@@ -1,13 +1,7 @@
 import { __, _n, sprintf } from '@wordpress/i18n';
 import { renderFieldPreviewNow } from './fieldPreviewQueue';
+import { buildOutline, groupPages, MAX_FIELD_RESULTS } from './formOutlineModel';
 
-const PAGE_BREAK_TYPE = 'break';
-const SECTION_TYPE = 'divider';
-const HTML_FIELD_TYPE = 'html';
-const SUBMIT_TYPE = 'submit';
-// Layout pieces that sit in the field list but aren't fields people fill in.
-const STRUCTURE_TYPES = [ SECTION_TYPE, 'end_divider', PAGE_BREAK_TYPE, SUBMIT_TYPE ];
-const MAX_FIELD_RESULTS = 60;
 const RENDER_DELAY = 100;
 // togglePage() in admin.js animates the first rows for 150 ms.
 const PAGE_EXPAND_DELAY = 160;
@@ -92,37 +86,30 @@ export function initFormOutline() {
 				__( 'Untitled field (%s)', 'formidable' ),
 				field.dataset.fid
 			);
-			fieldDetails.set( field, { heading, text, label, searchText: label.toLocaleLowerCase() } );
+			fieldDetails.set( field, { heading, text, label } );
 		}
 		return fieldDetails.get( field );
 	};
 
-	const getPages = () => {
-		if ( pagesCache ) {
-			return pagesCache;
+	const describeField = field => {
+		const { heading, text, label } = getFieldDetails( field );
+		const sectionIds = [];
+		let section = field.parentElement.closest( 'li[data-type="divider"]' );
+		while ( section ) {
+			sectionIds.push( section.dataset.fid );
+			section = section.parentElement.closest( 'li[data-type="divider"]' );
 		}
-		const pages = [ { fields: [], breakField: null } ];
-		const fields = builder.querySelectorAll( 'li[data-fid]' );
-		fields.forEach( field => {
-			if ( field.dataset.type === SUBMIT_TYPE ) {
-				return;
-			}
-			if ( field.dataset.type === PAGE_BREAK_TYPE ) {
-				pages.push( { fields: [], breakField: field } );
-				return;
-			}
-			pages[ pages.length - 1 ].fields.push( field );
-		} );
+		return { id: field.dataset.fid, type: field.dataset.type, heading, text, label, sectionId: sectionIds[ 0 ] || '', sectionIds, element: field };
+	};
 
-		pagesCache = pages.map( ( page, index ) => {
-			const headingField = page.fields.find( field => getFieldDetails( field ).heading );
-			const labelField = headingField || page.fields.find( field => field.dataset.type !== HTML_FIELD_TYPE && field.dataset.type !== 'end_divider' && getFieldDetails( field ).text );
-			const heading = labelField ? getFieldDetails( labelField ).text : '';
-			const title = ( labelField?.dataset.type !== SECTION_TYPE && heading ) || sprintf( __( 'Page %d', 'formidable' ), index + 1 );
-			return { fields: page.fields, breakField: page.breakField, index, title };
-		} );
+	const getPages = () => {
+		if ( ! pagesCache ) {
+			pagesCache = groupPages( Array.from( builder.querySelectorAll( 'li[data-fid]' ), describeField ) );
+		}
 		return pagesCache;
 	};
+
+	const getPageNumber = index => sprintf( __( 'Page %d', 'formidable' ), index + 1 );
 
 	const render = () => {
 		if ( ! isOpen() ) {
@@ -139,142 +126,42 @@ export function initFormOutline() {
 			return;
 		}
 
-		const query = search.value.trim().toLocaleLowerCase();
+		const query = search.value.trim();
 		const pages = getPages();
+		const { items, resultCount, fieldResultCount, hasFields } = buildOutline( pages, query, getPageNumber );
 		const { tag, span } = frmDom;
-		const children = [];
-		let fieldResultCount = 0;
-		let resultCount = 0;
 
-		const makeButton = ( className, text, field, pageIndex, fieldCount ) => {
+		const drawItem = item => {
 			const button = tag( 'button', {
-				className,
-				child: span( { className: 'frm-builder-outline-label', text } )
+				className: `frm-builder-outline-${ item.kind }`,
+				child: span( { className: 'frm-builder-outline-label', text: item.label } )
 			} );
-			if ( fieldCount !== undefined ) {
+			if ( item.fieldCount !== undefined ) {
 				button.append( span( {
 					className: 'frm-builder-outline-meta',
-					/* translators: %d: Number of fields in the section */
-					text: sprintf( _n( '%d field', '%d fields', fieldCount, 'formidable' ), fieldCount )
+					/* translators: %d: Number of fields on the page or in the section */
+					text: sprintf( _n( '%d field', '%d fields', item.fieldCount, 'formidable' ), item.fieldCount )
 				} ) );
 			}
 			button.type = 'button';
-			button.title = text;
-			button.dataset.fieldId = field.dataset.fid;
-			button.dataset.pageIndex = pageIndex;
-			return tag( 'li', { child: button } );
+			button.title = item.label;
+			button.dataset.fieldId = item.id;
+			button.dataset.pageIndex = item.pageIndex;
+			if ( item.kind === 'page' && item.pageIndex === currentPageIndex && query === '' ) {
+				button.setAttribute( 'aria-current', 'location' );
+			}
+			const children = [ button ];
+			if ( item.children?.length ) {
+				children.push( tag( 'ul', { className: 'frm-builder-outline-children', children: item.children.map( drawItem ) } ) );
+			}
+			return tag( 'li', { children } );
 		};
 
-		pages.forEach( page => {
-			const previousResultCount = resultCount;
-			const pageNumber = sprintf( __( 'Page %d', 'formidable' ), page.index + 1 );
-			const pageMatches = `${ pageNumber }: ${ page.title }`.toLocaleLowerCase().includes( query );
-			const firstField = page.fields[ 0 ] || page.breakField || pages[ 1 ]?.breakField;
-			if ( ! firstField ) {
-				return;
-			}
-
-			// Group by the builder containers, including fields inside layout rows.
-			const sections = new Map();
-			page.fields.forEach( field => {
-				if ( field.dataset.type === SECTION_TYPE ) {
-					sections.set( field, [] );
-				}
-				let section = field.parentElement.closest( 'li[data-type="divider"]' );
-				while ( section ) {
-					sections.get( section )?.push( field );
-					section = section.parentElement.closest( 'li[data-type="divider"]' );
-				}
-			} );
-			const sectionRows = new Map();
-			const rows = [];
-			page.fields.forEach( field => {
-				const { type } = field.dataset;
-				if ( type === 'end_divider' ) {
-					return;
-				}
-				if ( query !== '' && type !== SECTION_TYPE && fieldResultCount >= MAX_FIELD_RESULTS ) {
-					return;
-				}
-				const { label, searchText } = getFieldDetails( field );
-				const isSection = type === SECTION_TYPE;
-				const matches = searchText.includes( query ) || field.dataset.fid.includes( query );
-				if ( query !== '' ) {
-					if ( ! matches && ! isSection ) {
-						return;
-					}
-				}
-				const section = field.parentElement.closest( 'li[data-type="divider"]' );
-				const parent = sectionRows.get( section );
-				const siblings = parent ? parent.children : rows;
-				if ( matches ) {
-					resultCount++;
-				}
-				if ( isSection ) {
-					const fieldCount = sections.get( field ).filter( child => ! STRUCTURE_TYPES.includes( child.dataset.type ) ).length;
-					const row = makeButton( 'frm-builder-outline-section', label, field, page.index, fieldCount );
-					sectionRows.set( field, { row, children: [], matches, siblings } );
-					siblings.push( row );
-				} else {
-					const row = makeButton( 'frm-builder-outline-field', label, field, page.index );
-					siblings.push( row );
-				}
-				if ( ! isSection && query !== '' ) {
-					fieldResultCount++;
-				}
-			} );
-			// eslint-disable-next-line unicorn/no-array-reverse -- toReversed() is ES2023 and breaks older browsers. Array.from() already made a copy to reverse.
-			Array.from( sectionRows.values() ).reverse().forEach( section => {
-				if ( query !== '' && ! section.matches && ! pageMatches && section.children.length === 0 ) {
-					section.siblings.splice( section.siblings.indexOf( section.row ), 1 );
-					return;
-				}
-				if ( section.children.length ) {
-					section.row.replaceChildren( section.row.firstElementChild, tag( 'ul', { className: 'frm-builder-outline-children', children: section.children } ) );
-				}
-			} );
-
-			if ( query !== '' && ! pageMatches && rows.length === 0 ) {
-				return;
-			}
-
-			// A one-page form has no pages to show, only its sections and fields.
-			if ( pages.length > 1 ) {
-				if ( pageMatches && resultCount === previousResultCount ) {
-					resultCount++;
-				}
-				const pageLabel = page.title === pageNumber ? pageNumber : `${ pageNumber }: ${ page.title }`;
-				const fieldCount = page.fields.filter( field => ! STRUCTURE_TYPES.includes( field.dataset.type ) ).length;
-				const pageButton = tag( 'button', {
-					className: 'frm-builder-outline-page',
-					children: [
-						span( { className: 'frm-builder-outline-label', text: pageLabel } ),
-						/* translators: %d: Number of fields on the page */
-						span( { className: 'frm-builder-outline-meta', text: sprintf( _n( '%d field', '%d fields', fieldCount, 'formidable' ), fieldCount ) } )
-					]
-				} );
-				pageButton.type = 'button';
-				pageButton.title = pageLabel;
-				if ( page.index === currentPageIndex && query === '' ) {
-					pageButton.setAttribute( 'aria-current', 'location' );
-				}
-				pageButton.dataset.fieldId = firstField.dataset.fid;
-				pageButton.dataset.pageIndex = page.index;
-				children.push( tag( 'li', { children: [
-					pageButton,
-					... rows.length ? [ tag( 'ul', { className: 'frm-builder-outline-children', children: rows } ) ] : []
-				] } ) );
-			} else {
-				children.push( ...rows );
-			}
-		} );
-
-		const hasFields = pages.length > 1 || pages.some( page => page.fields.length > 0 );
 		const noResults = query !== '' && resultCount === 0;
 		const showEmpty = noResults || ! hasFields;
 		const fragment = document.createDocumentFragment();
 		if ( ! showEmpty ) {
-			fragment.append( ...children );
+			fragment.append( ...items.map( drawItem ) );
 		}
 		const focusedButton = list.contains( document.activeElement ) ? document.activeElement : null;
 		const focusedFieldId = focusedButton?.dataset.fieldId;
@@ -513,7 +400,7 @@ export function initFormOutline() {
 
 		const page = getPages()[ Number( button.dataset.pageIndex ) ];
 		const pageContainer = page?.breakField
-			? page.breakField.closest( 'li.frm_field_box' )
+			? page.breakField.element.closest( 'li.frm_field_box' )
 			: document.getElementById( 'frm-fake-page' );
 		const expandedPage = expandCollapsedPage( pageContainer );
 
