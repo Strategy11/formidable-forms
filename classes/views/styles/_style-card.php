@@ -7,7 +7,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 // This includes a basic preview (text field and submit button only).
 // It also includes the title of the style and possibly some basic tags if "selected" or "default".
 
-$is_template  = 0 === $style->ID;
 $include_info = $is_active_style;
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $params, true ); ?>>
