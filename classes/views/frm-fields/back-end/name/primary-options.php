@@ -28,8 +28,8 @@ $name_layout = FrmField::get_option( $field, 'name_layout' );
 		name="field_options[name_layout_<?php echo esc_attr( $field_id ); ?>]"
 		id="name_layout_<?php echo esc_attr( $field_id ); ?>"
 		class="frm_name_layout_dropdown"
-		data-field-id="<?php echo intval( $field_id ); ?>"
-		data-changeme="frm_combo_inputs_container_<?php echo intval( $field_id ); ?>"
+		data-field-id="<?php echo (int) $field_id; ?>"
+		data-changeme="frm_combo_inputs_container_<?php echo (int) $field_id; ?>"
 		data-changeatt="data-name-layout"
 	>
 		<option value="first_last" <?php selected( $name_layout, 'first_last' ); ?>>

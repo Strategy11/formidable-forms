@@ -107,15 +107,15 @@ class test_FrmForm extends FrmUnitTest {
 		FrmForm::set_status( $form_id_1, 'draft' );
 		FrmForm::set_status( $form_id_2, 'draft' );
 
-		$this->assertEquals( 'draft', FrmForm::getOne( $form_id_1 )->status );
-		$this->assertEquals( 'draft', FrmForm::getOne( $form_id_2 )->status );
+		$this->assertSame( 'draft', FrmForm::getOne( $form_id_1 )->status );
+		$this->assertSame( 'draft', FrmForm::getOne( $form_id_2 )->status );
 
 		// An array of ids runs a single prepared query.
 		$result = FrmForm::set_status( array( $form_id_1, $form_id_2 ), 'published' );
 
 		$this->assertNotFalse( $result );
-		$this->assertEquals( 'published', FrmForm::getOne( $form_id_1 )->status );
-		$this->assertEquals( 'published', FrmForm::getOne( $form_id_2 )->status );
+		$this->assertSame( 'published', FrmForm::getOne( $form_id_1 )->status );
+		$this->assertSame( 'published', FrmForm::getOne( $form_id_2 )->status );
 	}
 
 	/**

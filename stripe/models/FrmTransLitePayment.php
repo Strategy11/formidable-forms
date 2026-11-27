@@ -160,7 +160,7 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 				$data[ $currency ] = 0;
 			}
 
-			$data[ $currency ] += floatval( $amount );
+			$data[ $currency ] += (float) $amount;
 		}
 
 		return $data;

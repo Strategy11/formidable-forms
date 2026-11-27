@@ -71,6 +71,7 @@
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantTrimAfterSanitize" />
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantReturnVariable" />
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantWpdbPrefix" />
+	<rule ref="Formidable.CodeAnalysis.RemoveUnusedVariable" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyBooleanTernary" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyDualConditionToTernary" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyEmptyTernary" />
@@ -85,6 +86,7 @@
 
 	<!-- PHPUnit -->
 	<rule ref="Formidable.PHPUnit.PreferAssertIsArray" />
+	<rule ref="Formidable.PHPUnit.PreferFactoryCreate" />
 
 	<!-- Commenting -->
 	<rule ref="Formidable.Commenting.AddBoolReturnTag" />

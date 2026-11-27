@@ -643,7 +643,7 @@ class FrmSettings {
 		$this->privkey           = trim( $params['frm_privkey'] );
 		$this->re_type           = $params['frm_re_type'];
 		$this->re_lang           = $params['frm_re_lang'];
-		$this->re_threshold      = floatval( $params['frm_re_threshold'] );
+		$this->re_threshold      = (float) $params['frm_re_threshold'];
 		$this->hcaptcha_pubkey   = trim( $params['frm_hcaptcha_pubkey'] );
 		$this->hcaptcha_privkey  = trim( $params['frm_hcaptcha_privkey'] );
 		$this->turnstile_pubkey  = trim( $params['frm_turnstile_pubkey'] );

@@ -27,7 +27,7 @@ if ( $display_type === 'checkbox' ) {
 $option_index = 0;
 
 foreach ( $field['options'] as $opt_key => $opt ) {
-	if ( isset( $shortcode_atts ) && isset( $shortcode_atts['opt'] ) && $shortcode_atts['opt'] !== $opt_key ) {
+	if ( isset( $shortcode_atts['opt'] ) && $shortcode_atts['opt'] !== $opt_key ) {
 		continue;
 	}
 

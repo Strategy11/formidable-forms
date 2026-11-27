@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <p class="frm-form-button">
-	<button id="field_label_<?php echo intval( $field['id'] ); ?>" class="frm_button_submit" disabled>
+	<button id="field_label_<?php echo (int) $field['id']; ?>" class="frm_button_submit" disabled>
 		<?php echo esc_html( $field['name'] ); ?>
 	</button>
 </p>
