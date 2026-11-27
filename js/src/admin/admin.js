@@ -9,6 +9,7 @@ const { allowContainerDrop } = require( './fieldPlacement' );
 const { getRangeSettingsDefaults, validateNumberRangeSetting, validateStepSetting, validateRangeSettings } = require( './settings/validateRangeSettings' );
 const { initFieldListHoverPill } = require( './fieldListHoverPill' );
 const { initShowBoxIconSwap } = require( './showBoxIconSwap' );
+const { initFormOutline } = require( './formOutline' );
 const { initFieldSizePreview } = require( './fieldSizePreview' );
 const { hydrateBuilderSelect, hydrateBuilderSelectsIn } = require( './sharedSelectOptions' );
 const { processFieldLoadBatch } = require( './fieldLoadBatch' );
@@ -2944,6 +2945,8 @@ window.frmAdminBuildJS = function() {
 			const field = document.getElementById( `frm_field_id_${ fieldId }` );
 			if ( field?.classList.contains( 'frm_field_loading' ) ) {
 				placeholderSpinnerObserver?.unobserve( field );
+				// Tells the outline this placeholder is done, so it stops waiting for it.
+				field.classList.add( 'frm_field_load_failed' );
 				field.textContent = __( 'Unable to load field.', 'formidable' );
 			}
 		} );
@@ -13579,6 +13582,7 @@ window.frmAdminBuild = frmAdminBuildJS();
 jQuery( document ).ready(
 	() => {
 		frmAdminBuild.init();
+		initFormOutline();
 
 		initShowBoxIconSwap();
 

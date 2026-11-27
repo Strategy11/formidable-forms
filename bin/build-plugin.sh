@@ -62,6 +62,8 @@ fi
 # Run the build.
 status "Installing dependencies..."
 npm install
+# npm install can replace a symlinked node_modules, so forget any npm path bash cached from it.
+hash -r
 status "Generating build..."
 npm run build
 status "Minimizing JS..."

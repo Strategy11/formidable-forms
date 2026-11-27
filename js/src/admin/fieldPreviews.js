@@ -229,7 +229,7 @@ export function createField( template, data, strings ) {
 
 	const label = container.querySelector( '.frm_primary_label' );
 	label.id = `field_label_${ id }`;
-	// Keep the name in its own span, like show_label_on_form_builder in PHP, so live label edits leave the rest of the label alone.
+	// Keep the name in its own span, like show_label_on_form_builder in PHP, so live label edits and other code can read or update it without touching the required and collapsed markers.
 	label.firstElementChild.innerHTML = data.label || '';
 
 	const required = label.querySelector( '.frm_required' );
