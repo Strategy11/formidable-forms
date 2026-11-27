@@ -27,6 +27,7 @@ class FrmCronController {
 		return array(
 			'formidable_send_usage' => 'weekly',
 			'frm_daily_event'       => 'daily',
+			'frm_altcha_purge_used' => 'hourly',
 			'frm_payment_cron'      => 'daily',
 		);
 	}
@@ -42,7 +43,7 @@ class FrmCronController {
 		$events = self::get_events();
 
 		// These are scheduled in another place.
-		unset( $events['formidable_send_usage'], $events['frm_payment_cron'] );
+		unset( $events['formidable_send_usage'], $events['frm_payment_cron'], $events['frm_altcha_purge_used'] );
 
 		foreach ( $events as $event => $recurrence ) {
 			if ( ! wp_next_scheduled( $event ) ) {

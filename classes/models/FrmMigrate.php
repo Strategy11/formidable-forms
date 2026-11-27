@@ -478,6 +478,8 @@ class FrmMigrate {
 		delete_option( 'frmpro_css' );
 		delete_option( FrmOnboardingWizardController::REDIRECT_STATUS_OPTION );
 		delete_option( FrmEmailSummaryHelper::$option_name );
+		delete_option( FrmAltchaChallengeHelper::SECRET_OPTION );
+		delete_option( FrmAltchaHelper::SETTINGS_OPTION );
 
 		// Delete roles.
 		$frm_roles = FrmAppHelper::frm_capabilities();

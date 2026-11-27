@@ -362,9 +362,14 @@ class test_FrmMigrate extends FrmUnitTest {
 	public function test_uninstall() {
 		$this->set_user_by_role( 'administrator' );
 
+		update_option( FrmAltchaChallengeHelper::SECRET_OPTION, 'test-secret', false );
+		update_option( FrmAltchaHelper::SETTINGS_OPTION, array( 'complexity' => 'medium' ), false );
+
 		$frmdb       = new FrmMigrate();
 		$uninstalled = $frmdb->uninstall();
 		$this->assertTrue( $uninstalled );
+		$this->assertFalse( get_option( FrmAltchaChallengeHelper::SECRET_OPTION ), 'Uninstall should delete the ALTCHA signing key.' );
+		$this->assertFalse( get_option( FrmAltchaHelper::SETTINGS_OPTION ), 'Uninstall should delete the ALTCHA settings.' );
 
 		$this->markTestIncomplete( 'Make sure uninstall is complete' );
 		self::do_tables_exist( false );

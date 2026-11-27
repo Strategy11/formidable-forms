@@ -27,14 +27,16 @@ class test_FrmCaptchaFallback extends FrmUnitTest {
 	 *
 	 * @param string   $active     The saved provider selection.
 	 * @param string[] $configured The providers with both keys configured.
+	 * @param bool     $selected   Whether the CAPTCHA type was explicitly saved.
 	 *
 	 * @return FrmSettings
 	 */
-	private function load_settings( $active, $configured ) {
-		$settings                 = clone $this->original_settings;
-		$settings->active_captcha = $active;
-		$settings->re_type        = 'v2';
-		$prefixes                 = array(
+	private function load_settings( $active, $configured, $selected = true ) {
+		$settings                        = clone $this->original_settings;
+		$settings->active_captcha        = $active;
+		$settings->captcha_type_selected = $selected;
+		$settings->re_type               = 'v2';
+		$prefixes                        = array(
 			'recaptcha' => '',
 			'hcaptcha'  => 'hcaptcha_',
 			'turnstile' => 'turnstile_',
@@ -55,10 +57,10 @@ class test_FrmCaptchaFallback extends FrmUnitTest {
 		$providers = array( 'recaptcha', 'hcaptcha', 'turnstile' );
 
 		foreach ( $providers as $expected ) {
-			$settings = $this->load_settings( 'altcha', $providers );
+			$settings = $this->load_settings( 'unsupported', $providers );
 			$this->assertSame( $expected, $settings->active_captcha );
 			$this->assertSame( $expected, FrmFieldCaptcha::get_captcha_image_name() );
-			$this->assertSame( 'altcha', get_option( $settings->option_name )->active_captcha, 'Loading settings must preserve the saved selection.' );
+			$this->assertSame( 'unsupported', get_option( $settings->option_name )->active_captcha, 'Loading settings must preserve the saved selection.' );
 			array_shift( $providers );
 		}
 	}
@@ -71,15 +73,28 @@ class test_FrmCaptchaFallback extends FrmUnitTest {
 	}
 
 	public function test_fallback_requires_both_keys() {
-		$settings                 = $this->load_settings( 'altcha', array( 'turnstile' ) );
+		$settings                 = $this->load_settings( 'unsupported', array( 'turnstile' ) );
 		$settings->pubkey         = 'test-site-key';
-		$settings->active_captcha = 'altcha';
+		$settings->active_captcha = 'unsupported';
 		update_option( $settings->option_name, $settings );
 		$this->assertSame( 'turnstile', ( new FrmSettings() )->active_captcha );
 
-		$settings = $this->load_settings( 'altcha', array() );
+		$settings = $this->load_settings( 'unsupported', array() );
 		$this->assertSame( 'recaptcha', $settings->active_captcha );
 		$this->assertFalse( FrmFieldCaptcha::should_show_captcha() );
+	}
+
+	public function test_saved_altcha_selection_is_supported() {
+		$settings = $this->load_settings( 'altcha', array( 'recaptcha', 'hcaptcha', 'turnstile' ) );
+		$this->assertSame( 'altcha', $settings->active_captcha );
+	}
+
+	public function test_legacy_unsupported_selection_without_keys_uses_altcha() {
+		$settings = $this->load_settings( 'unsupported', array(), false );
+		$this->assertSame( 'altcha', $settings->active_captcha );
+
+		$settings = $this->load_settings( 'unsupported', array( 'turnstile' ), false );
+		$this->assertSame( 'turnstile', $settings->active_captcha );
 	}
 
 	public function test_fallback_renders_matching_captcha_and_loads_matching_script() {
@@ -97,7 +112,7 @@ class test_FrmCaptchaFallback extends FrmUnitTest {
 		);
 
 		foreach ( $providers as $type => $expected ) {
-			$this->load_settings( 'altcha', array( $type ) );
+			$this->load_settings( 'unsupported', array( $type ) );
 			wp_deregister_script( 'captcha-api' );
 			$html = do_shortcode( '[formidable id="' . $form_id . '"]' );
 			$this->assertStringContainsString( $expected[0], $html );
