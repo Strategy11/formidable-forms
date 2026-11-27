@@ -2697,6 +2697,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			array( 'wp-hooks', 'wp-i18n' ),
 			FrmAppHelper::plugin_version()
 		);
+		wp_set_script_translations( 'frm_paypal_admin', 'formidable' );
 	}
 
 	/**
