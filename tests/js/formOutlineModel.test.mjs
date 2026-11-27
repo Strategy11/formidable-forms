@@ -1,7 +1,7 @@
 /* oxlint-disable import/no-nodejs-modules -- Tests run with the Node test runner. */
 import assert from 'node:assert/strict';
-import { test } from 'node:test';
-import { buildOutline, groupPages } from '../../js/src/admin/formOutlineModel.js';
+import { mock, test } from 'node:test';
+import { buildOutline, groupPages, throttle } from '../../js/src/admin/formOutlineModel.js';
 
 const pageNumber = index => `Page ${ index + 1 }`;
 
@@ -73,4 +73,44 @@ test( 'search keeps the sections that hold a match', () => {
 	];
 
 	assert.deepEqual( outline( fields, 'name' ), [ 'section Contact', '  field Name' ] );
+} );
+
+test( 'fields still loading keep the pages but get no rows until they arrive', () => {
+	const loading = { label: '', text: '', placeholder: true };
+	const fields = [
+		field( '1', 'text', 'Name' ),
+		field( '2', 'text', '', loading ),
+		// A placeholder only knows its type from data-ftype, which still marks a page break.
+		field( '3', 'break', '', loading ),
+		field( '4', 'text', '', loading ),
+		field( '5', 'text', 'Address' ),
+		field( '6', 'submit', '', loading )
+	];
+	const pages = groupPages( fields );
+	const { items } = buildOutline( pages, '', pageNumber );
+
+	assert.deepEqual( outline( fields ), [
+		'page Page 1: Name',
+		'  field Name',
+		'page Page 2: Address',
+		'  field Address'
+	] );
+	assert.deepEqual( items.map( item => item.fieldCount ), [ 2, 2 ] );
+	assert.deepEqual( outline( fields, 'untitled' ), [] );
+} );
+
+test( 'throttle runs during a steady stream of calls, not only after it stops', () => {
+	mock.timers.enable( { apis: [ 'setTimeout' ] } );
+	let runs = 0;
+	const queue = throttle( () => runs++, 100 );
+
+	// Field batches keep arriving every 50 ms for a second.
+	for ( let elapsed = 0; elapsed < 1000; elapsed += 50 ) {
+		queue();
+		mock.timers.tick( 50 );
+	}
+	mock.timers.tick( 100 );
+	mock.timers.reset();
+
+	assert.ok( runs >= 9, `Ran ${ runs } times.` );
 } );

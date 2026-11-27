@@ -14,13 +14,14 @@ export const MAX_FIELD_RESULTS = 60;
 
 /**
  * @typedef {Object} OutlineField
- * @property {string}   id         The field ID.
- * @property {string}   type       The field type.
- * @property {string}   heading    The text of a heading in the field's content, if any.
- * @property {string}   text       The heading, or else the field's name.
- * @property {string}   label      What the outline shows for the field.
- * @property {string}   sectionId  The ID of the section the field sits in directly, or ''.
- * @property {string[]} sectionIds The IDs of every section the field sits in.
+ * @property {string}   id          The field ID.
+ * @property {string}   type        The field type.
+ * @property {string}   heading     The text of a heading in the field's content, if any.
+ * @property {string}   text        The heading, or else the field's name.
+ * @property {string}   label       What the outline shows for the field.
+ * @property {string}   sectionId   The ID of the section the field sits in directly, or ''.
+ * @property {string[]} sectionIds  The IDs of every section the field sits in.
+ * @property {boolean}  placeholder True while the field's preview is still loading, so only its type is known.
  */
 
 /**
@@ -43,8 +44,8 @@ export function groupPages( fields ) {
 	} );
 
 	return pages.map( ( page, index ) => {
-		const headingField = page.fields.find( field => field.heading );
-		const labelField = headingField || page.fields.find( field => field.type !== HTML_FIELD_TYPE && field.type !== END_SECTION_TYPE && field.text );
+		const headingField = page.fields.find( field => field.heading && ! field.placeholder );
+		const labelField = headingField || page.fields.find( field => field.type !== HTML_FIELD_TYPE && field.type !== END_SECTION_TYPE && field.text && ! field.placeholder );
 		const heading = labelField?.type !== SECTION_TYPE && labelField?.text ? labelField.text : '';
 		return { fields: page.fields, breakField: page.breakField, index, heading };
 	} );
@@ -78,7 +79,8 @@ export function buildOutline( pages, query, pageNumber ) {
 		const rows = [];
 		page.fields.forEach( field => {
 			const { type } = field;
-			if ( type === END_SECTION_TYPE ) {
+			// A loading field has no name to show or search yet. The outline redraws when it arrives.
+			if ( type === END_SECTION_TYPE || field.placeholder ) {
 				return;
 			}
 			if ( query !== '' && type !== SECTION_TYPE && fieldResultCount >= MAX_FIELD_RESULTS ) {
@@ -137,4 +139,27 @@ export function buildOutline( pages, query, pageNumber ) {
 
 	const hasFields = pages.length > 1 || pages.some( page => page.fields.length > 0 );
 	return { items, resultCount, fieldResultCount, hasFields };
+}
+
+/**
+ * Run a callback at most once per wait, while calls keep coming.
+ *
+ * A debounce would wait for the calls to stop, and the builder inserts field batches for
+ * many seconds on a long form, so the outline would stay stale until the last one.
+ *
+ * @param {Function} callback The callback.
+ * @param {number}   wait     Milliseconds between runs.
+ * @return {Function} Queues a run. Calls while one is queued are folded into it.
+ */
+export function throttle( callback, wait ) {
+	let timeout = null;
+	return () => {
+		if ( timeout !== null ) {
+			return;
+		}
+		timeout = setTimeout( () => {
+			timeout = null;
+			callback();
+		}, wait );
+	};
 }

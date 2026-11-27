@@ -1,6 +1,6 @@
 import { __, _n, sprintf } from '@wordpress/i18n';
 import { renderFieldPreviewNow } from './fieldPreviewQueue';
-import { buildOutline, groupPages, MAX_FIELD_RESULTS } from './formOutlineModel';
+import { buildOutline, groupPages, MAX_FIELD_RESULTS, throttle } from './formOutlineModel';
 
 const RENDER_DELAY = 100;
 // togglePage() in admin.js animates the first rows for 150 ms.
@@ -10,7 +10,7 @@ const JUMP_SETTLE_TIME = 8000;
 const HIGHLIGHT_TIME = 1800;
 const JUMP_SETTLE_FRAMES = 4;
 const JUMP_TOLERANCE = 2;
-// Ajax placeholders carry no type or name until their batch arrives, so the outline waits for them.
+// Ajax placeholders carry no name until their batch arrives, so the outline leaves them out and redraws as they arrive.
 const LOADING_FIELD_SELECTOR = 'li.frm_field_loading:not(.frm_field_load_failed)';
 
 const getFieldContent = field => field.querySelector( ':scope > .frm_inner_field_container, :scope > .divider_section_only > .frm_inner_field_container' ) || field;
@@ -63,7 +63,6 @@ export function initFormOutline() {
 	const isOpen = () => tab.classList.contains( 'frm-active' );
 	const scroller = document.getElementById( 'post-body-content' );
 	let currentPageIndex = 0;
-	let renderTimeout;
 	let searchTimeout;
 	let pagesCache;
 	let fieldDetails = new WeakMap();
@@ -99,7 +98,10 @@ export function initFormOutline() {
 			sectionIds.push( section.dataset.fid );
 			section = section.parentElement.closest( 'li[data-type="divider"]' );
 		}
-		return { id: field.dataset.fid, type: field.dataset.type, heading, text, label, sectionId: sectionIds[ 0 ] || '', sectionIds, element: field };
+		// A placeholder has no data-type until its batch arrives, but data-ftype still tells a page break apart.
+		const type = field.dataset.type || field.dataset.ftype;
+		const placeholder = field.classList.contains( 'frm_field_loading' );
+		return { id: field.dataset.fid, type, heading, text, label, sectionId: sectionIds[ 0 ] || '', sectionIds, placeholder, element: field };
 	};
 
 	const getPages = () => {
@@ -118,13 +120,6 @@ export function initFormOutline() {
 
 		const loading = Boolean( builder.querySelector( LOADING_FIELD_SELECTOR ) );
 		loadingMessage.classList.toggle( 'frm_hidden', ! loading );
-		if ( loading ) {
-			list.replaceChildren();
-			emptyMessage.classList.add( 'frm_hidden' );
-			search.parentElement.classList.add( 'frm_hidden' );
-			status.textContent = __( 'Loading fields…', 'formidable' );
-			return;
-		}
 
 		const query = search.value.trim();
 		const pages = getPages();
@@ -158,7 +153,7 @@ export function initFormOutline() {
 		};
 
 		const noResults = query !== '' && resultCount === 0;
-		const showEmpty = noResults || ! hasFields;
+		const showEmpty = noResults || ( ! hasFields && ! loading );
 		const fragment = document.createDocumentFragment();
 		if ( ! showEmpty ) {
 			fragment.append( ...items.map( drawItem ) );
@@ -171,14 +166,20 @@ export function initFormOutline() {
 			list.querySelector( `button.${ focusedClass }[data-field-id="${ focusedFieldId }"]` )?.focus( { preventScroll: true } );
 		}
 		emptyMessage.classList.toggle( 'frm_hidden', ! showEmpty );
-		search.parentElement.classList.toggle( 'frm_hidden', ! hasFields );
+		search.parentElement.classList.toggle( 'frm_hidden', ! hasFields && ! loading );
 		if ( noResults ) {
 			/* translators: %s: The search text */
 			emptyTitle.textContent = sprintf( __( 'No results for “%s”', 'formidable' ), search.value.trim() );
-			emptyText.textContent = __( 'Try a page, section or field name.', 'formidable' );
+			emptyText.textContent = loading
+				? __( 'Some fields are still loading.', 'formidable' )
+				: __( 'Try a page, section or field name.', 'formidable' );
 		} else if ( showEmpty ) {
 			emptyTitle.textContent = __( 'No fields yet', 'formidable' );
 			emptyText.textContent = __( 'Fields you add to this form will show up here, so you can jump to any of them.', 'formidable' );
+		}
+		if ( query === '' && loading ) {
+			status.textContent = __( 'Loading fields…', 'formidable' );
+			return;
 		}
 		if ( query === '' ) {
 			status.textContent = sprintf( _n( '%d page', '%d pages', pages.length, 'formidable' ), pages.length );
@@ -193,15 +194,16 @@ export function initFormOutline() {
 			: sprintf( _n( '%d matching result found.', '%d matching results found.', resultCount, 'formidable' ), resultCount );
 	};
 
+	const queueRender = throttle( () => {
+		pagePills = getPagePills();
+		render();
+		updateCurrentPage();
+	}, RENDER_DELAY );
+
 	const observer = new MutationObserver( () => {
 		pagesCache = null;
 		fieldDetails = new WeakMap();
-		clearTimeout( renderTimeout );
-		renderTimeout = setTimeout( () => {
-			pagePills = getPagePills();
-			render();
-			updateCurrentPage();
-		}, RENDER_DELAY );
+		queueRender();
 	} );
 
 	/**
@@ -270,7 +272,6 @@ export function initFormOutline() {
 	};
 
 	const updateOutline = () => {
-		clearTimeout( renderTimeout );
 		clearTimeout( searchTimeout );
 		searchTimeout = null;
 		if ( jumpTimeout ) {
