@@ -198,6 +198,7 @@ class FrmFieldsController {
 		$field_type    = FrmAppHelper::get_post_param( 'field_type', '', 'sanitize_text_field' );
 		$form_id       = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 		$field_options = FrmAppHelper::get_post_param( 'field_options', array(), 'wp_kses_post' );
+		$field_order   = FrmAppHelper::get_post_param( 'field_order', 0, 'absint' );
 		$section_id    = ! empty( $field_options['in_section'] ) ? (int) $field_options['in_section'] : FrmAppHelper::get_post_param( 'section_id', 0, 'absint' );
 
 		if ( ! FrmFieldPlacementHelper::is_allowed( $field_type, $form_id, $section_id ) ) {
@@ -206,7 +207,7 @@ class FrmFieldsController {
 
 		do_action( 'frm_before_create_field', $field_type, $form_id );
 
-		$field = self::include_new_field( $field_type, $form_id, $field_options );
+		$field = self::include_new_field( $field_type, $form_id, $field_options, $field_order );
 
 		// This hook will allow for multiple fields to be added at once
 		do_action( 'frm_after_field_created', $field, $form_id );
@@ -217,18 +218,22 @@ class FrmFieldsController {
 	/**
 	 * Set up and create a new field
 	 *
+	 * @since x.x The $field_order parameter was added.
+	 *
 	 * @param string $field_type
 	 * @param int    $form_id
 	 * @param array  $field_options
+	 * @param int    $field_order   The field order reserved by the form builder.
+	 *                              Pass 0 to allocate one from the database instead.
 	 *
 	 * @return array|false
 	 */
-	public static function include_new_field( $field_type, $form_id, $field_options = array() ) {
+	public static function include_new_field( $field_type, $form_id, $field_options = array(), $field_order = 0 ) {
 		if ( ! FrmFieldPlacementHelper::is_allowed( $field_type, $form_id, (int) ( $field_options['in_section'] ?? 0 ) ) ) {
 			return false;
 		}
 
-		$field_values = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
+		$field_values = FrmFieldsHelper::setup_new_vars( $field_type, $form_id, $field_order );
 
 		if ( $field_options ) {
 			$field_values['field_options'] = array_merge( $field_values['field_options'], $field_options );
