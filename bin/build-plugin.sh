@@ -63,7 +63,8 @@ fi
 status "Installing dependencies..."
 npm install
 status "Generating build..."
-npm run build
+# Skip the webpack cache so the release is built from scratch.
+npm run build -- --no-cache
 status "Minimizing JS..."
 npm run minimize
 

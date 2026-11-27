@@ -5,9 +5,11 @@
 	"scripts": {
 		"test:unit": "node --test tests/js/*.test.mjs",
 		"build": "cross-env NODE_ENV=production webpack --progress",
+		"build:js": "cross-env NODE_ENV=production webpack --config-name js",
+		"build:css": "cross-env NODE_ENV=production webpack --config-name css",
 		"dev": "cross-env NODE_ENV=default webpack --watch",
 		"watch": "npm run dev",
-		"serve": "node -e \"const prompts=require('prompts');(async()=>{const responses=await prompts([{type:'text',name:'domain',message:'WordPress site domain',initial:'formidable.local'},{type:'text',name:'watch',message:'Enable JS/PHP watching (N/Y)',initial:'N'}]);process.env.SITE_DOMAIN=responses.domain;process.env.ENABLE_WATCH=responses.watch;require('./webpack.dev.js')})()\"",
+		"serve": "node -e \"const prompts=require('prompts');(async()=>{const responses=await prompts([{type:'text',name:'domain',message:'WordPress site domain',initial:'formidable.local'}]);process.env.SITE_DOMAIN=responses.domain;require('./webpack.dev.js')})()\"",
 		"lint": "./node_modules/.bin/eslint .",
 		"lint:fix": "./node_modules/.bin/eslint . --fix",
 		"test:js": "node --test tests/js/*.test.mjs",
