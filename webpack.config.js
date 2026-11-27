@@ -4,6 +4,7 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
+const TerserPlugin = require( 'terser-webpack-plugin' );
 const glob = require( 'glob' );
 
 // Generate web component SCSS entries using glob
@@ -81,6 +82,28 @@ const sharedConfig = {
   externals: {
     jquery: 'jQuery',
     $: 'jQuery'
+  },
+  optimization: {
+    // Scope hoisting renames the `__` locals of concatenated modules, which hides strings from make-pot.
+    concatenateModules: false,
+    minimizer: [
+      // Keep i18n function names and translator comments so translate.wordpress.org can extract strings from the built files.
+      new TerserPlugin( {
+        extractComments: false,
+        terserOptions: {
+          compress: {
+            // Prevents folding `a ? __( x ) : __( y )` into `__( a ? x : y )`, which make-pot cannot read.
+            conditionals: false
+          },
+          mangle: {
+            reserved: [ '__', '_n', '_nx', '_x' ]
+          },
+          format: {
+            comments: /translators:/i
+          }
+        }
+      } )
+    ]
   }
 };
 
