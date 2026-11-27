@@ -153,12 +153,32 @@ class FrmAltchaHelper {
 	 * The message shown when the form is submitted before the widget is verified.
 	 *
 	 * The widget shows it next to its checkbox, and the server returns it when no solution is posted.
+	 * A Captcha field's own invalid message is used when it has one. The global CAPTCHA message,
+	 * which a field shows when its own message is empty, describes a failed check instead.
 	 *
 	 * @since x.x
 	 *
+	 * @param array|object $field The Captcha field, if known.
+	 *
 	 * @return string
 	 */
-	public static function verification_required_message() {
+	public static function verification_required_message( $field = array() ) {
+		$type = is_array( $field ) ? $field['type'] ?? '' : $field->type ?? '';
+
+		if ( 'captcha' === $type ) {
+			$message = FrmField::get_option( $field, 'invalid' );
+			$ignored = array(
+				'',
+				FrmAppHelper::get_settings()->re_msg,
+				// Like FrmFieldCaptcha, ignore the default message saved by old versions.
+				__( 'The reCAPTCHA was not entered correctly', 'formidable' ),
+			);
+
+			if ( is_string( $message ) && ! in_array( $message, $ignored, true ) ) {
+				return $message;
+			}
+		}
+
 		return __( 'Please verify that you are not a robot.', 'formidable' );
 	}
 

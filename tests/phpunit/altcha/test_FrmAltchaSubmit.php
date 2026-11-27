@@ -338,8 +338,8 @@ class test_FrmAltchaSubmit extends FrmUnitTest {
 
 		$this->assertSame( 'Bots go home', $errors[ 'field' . $this->altcha_id ] );
 
-		// A submit without a solution asks the visitor to verify, with the message the widget shows.
-		$this->assertSame( FrmAltchaHelper::verification_required_message(), $this->submit( null )[ 'field' . $this->altcha_id ] );
+		// A submit without a solution asks the visitor to verify with the same message.
+		$this->assertSame( 'Bots go home', $this->submit( null )[ 'field' . $this->altcha_id ] );
 	}
 
 	/**
@@ -359,6 +359,64 @@ class test_FrmAltchaSubmit extends FrmUnitTest {
 		$configuration = json_decode( $attributes['data-configuration'], true );
 
 		$this->assertSame( $errors[ 'field' . $this->altcha_id ], $configuration['validationMessage'], 'The server and the widget should show the same message.' );
+	}
+
+	/**
+	 * In the "Only when the visitor clicks the checkbox" mode, refusing an unverified submit uses the
+	 * Captcha field's own invalid message when it has one, on the server and in the widget. The global
+	 * CAPTCHA message, which new fields copy, is about a failed check, so it is not used.
+	 *
+	 * @covers FrmAltchaController::missing_solution_message
+	 * @covers FrmAltchaHelper::verification_required_message
+	 * @covers FrmAltchaSettings::add_front_end_element_attributes
+	 *
+	 * @dataProvider field_invalid_messages
+	 *
+	 * @param string $invalid  The Captcha field's invalid message.
+	 * @param string $expected The message the visitor should see.
+	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'field_invalid_messages' )]
+	public function test_missing_solution_uses_the_field_invalid_message( $invalid, $expected ) {
+		update_option( FrmAltchaHelper::SETTINGS_OPTION, array( 'auto' => 'off' ) );
+		FrmField::update( $this->altcha_id, array( 'field_options' => array( 'invalid' => $invalid ) ) );
+
+		$this->assertSame( array( 'field' . $this->altcha_id => $expected ), $this->submit( null ) );
+
+		$field         = FrmFieldsHelper::setup_edit_vars( FrmField::getOne( $this->altcha_id ) );
+		$attributes    = FrmCaptchaFactory::get_settings_object( 'altcha' )->add_front_end_element_attributes( array(), $field );
+		$configuration = json_decode( $attributes['data-configuration'], true );
+
+		$this->assertSame( $expected, $configuration['validationMessage'], 'The widget should refuse the submit with the same message.' );
+	}
+
+	/**
+	 * @return array
+	 */
+	public static function field_invalid_messages() {
+		return array(
+			'custom message'        => array( 'Click the box first', 'Click the box first' ),
+			'no message'            => array( '', 'Please verify that you are not a robot.' ),
+			'global message'        => array( 'The CAPTCHA was not entered correctly', 'Please verify that you are not a robot.' ),
+			'old reCAPTCHA default' => array( 'The reCAPTCHA was not entered correctly', 'Please verify that you are not a robot.' ),
+		);
+	}
+
+	/**
+	 * An upload field's invalid message is about the file, so the upload CAPTCHA keeps the default message.
+	 *
+	 * @covers FrmAltchaSettings::add_front_end_element_attributes
+	 */
+	public function test_other_field_types_keep_the_default_message() {
+		$attributes    = FrmCaptchaFactory::get_settings_object( 'altcha' )->add_front_end_element_attributes(
+			array(),
+			array(
+				'type'    => 'file',
+				'invalid' => 'This file type is not allowed',
+			)
+		);
+		$configuration = json_decode( $attributes['data-configuration'], true );
+
+		$this->assertSame( 'Please verify that you are not a robot.', $configuration['validationMessage'] );
 	}
 
 	/**

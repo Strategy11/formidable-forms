@@ -101,7 +101,7 @@ class FrmAltchaController {
 	 *
 	 * Lite and Pro report a missing CAPTCHA response as "The captcha is missing from this form". For
 	 * ALTCHA it means the visitor submitted before verifying, for example before clicking the checkbox
-	 * in the "Only when the visitor clicks the checkbox" mode, so the widget's own message is used.
+	 * in the "Only when the visitor clicks the checkbox" mode, so the message the widget shows is used.
 	 *
 	 * @since x.x
 	 *
@@ -125,7 +125,7 @@ class FrmAltchaController {
 			return $errors;
 		}
 
-		$errors[ $key ] = FrmAltchaHelper::verification_required_message();
+		$errors[ $key ] = FrmAltchaHelper::verification_required_message( $posted_field );
 
 		return $errors;
 	}
