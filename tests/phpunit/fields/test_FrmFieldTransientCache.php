@@ -112,6 +112,55 @@ class test_FrmFieldTransientCache extends FrmUnitTest {
 	}
 
 	/**
+	 * Sources saved by another request for a different field list are not used with these fields.
+	 *
+	 * @covers FrmField::get_all_for_form
+	 */
+	public function test_sources_from_another_field_list_are_rebuilt() {
+		list( $form_id, $ids ) = $this->create_form_with_repeater_and_embed();
+		FrmField::get_all_for_form( $form_id );
+		$this->forget_request_cache();
+
+		// Another request built its list before a field was added, and saved its sources last.
+		$name  = 'frm_form_fields_' . $form_id . 'includesources';
+		$saved = get_transient( $name );
+		$this->assertIsArray( $saved, 'The sources should be cached.' );
+		$saved['signature'] = md5( 'an older field list' );
+		$saved['sources']   = array();
+		set_transient( $name, $saved, HOUR_IN_SECONDS );
+
+		$this->assertSame( $ids['own'], $this->get_field_ids( $form_id, 'exclude', 'exclude' ), 'Repeater and embedded fields should not be counted as form fields.' );
+		$this->assertNotSame( md5( 'an older field list' ), get_transient( $name )['signature'], 'The sources should be saved again with this list.' );
+	}
+
+	/**
+	 * Sources saved before they carried a signature are rebuilt.
+	 *
+	 * @covers FrmField::get_all_for_form
+	 */
+	public function test_unsigned_sources_are_rebuilt() {
+		list( $form_id, $ids ) = $this->create_form_with_repeater_and_embed();
+		FrmField::get_all_for_form( $form_id );
+		$this->forget_request_cache();
+		set_transient( 'frm_form_fields_' . $form_id . 'includesources', array(), HOUR_IN_SECONDS );
+
+		$this->assertSame( $ids['own'], $this->get_field_ids( $form_id, 'exclude', 'exclude' ), 'Only the form fields should be returned.' );
+	}
+
+	/**
+	 * A list loaded on one blog is not reused after switching to another.
+	 *
+	 * @covers FrmField::get_all_for_form
+	 */
+	public function test_request_cache_is_kept_per_blog() {
+		list( $form_id ) = $this->create_form_with_repeater_and_embed();
+		FrmField::get_all_for_form( $form_id );
+
+		$cache = $this->get_private_property( 'FrmField', 'request_cache' );
+		$this->assertArrayHasKey( get_current_blog_id() . ':' . $form_id, $cache, 'The request cache should be keyed by blog and form.' );
+	}
+
+	/**
 	 * Calls in the same request read the transient once.
 	 *
 	 * @covers FrmField::get_all_for_form

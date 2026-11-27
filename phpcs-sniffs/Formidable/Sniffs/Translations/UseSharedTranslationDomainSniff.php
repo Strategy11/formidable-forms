@@ -280,25 +280,47 @@ class UseSharedTranslationDomainSniff implements Sniff {
 
 		$strings = array();
 
-		// Parse msgid entries from the .pot file.
-		// Match msgid "string" or msgid "" followed by continuation strings.
-		preg_match_all( '/^msgid\s+"(.*)"/m', $content, $matches );
-
-		if ( ! empty( $matches[1] ) ) {
-			foreach ( $matches[1] as $string ) {
-				// Skip empty strings (header).
-				if ( '' === $string ) {
-					continue;
-				}
-
-				// Unescape the string.
-				$string = $this->unescapePotString( $string );
-
-				$strings[ $string ] = true;
+		// Each entry is a block of lines, separated from the next by a blank line.
+		foreach ( preg_split( '/\R\s*\R/', $content ) as $entry ) {
+			// Match msgid "string". Skip the empty msgid of the header.
+			if ( ! preg_match( '/^msgid\s+"(.*)"/m', $entry, $match ) || '' === $match[1] ) {
+				continue;
 			}
+
+			// Lite only loads a JS string from its JSON translations, so PHP in an add-on can't use it.
+			if ( ! $this->hasPhpReference( $entry ) ) {
+				continue;
+			}
+
+			$strings[ $this->unescapePotString( $match[1] ) ] = true;
 		}
 
 		return $strings;
+	}
+
+	/**
+	 * Check whether a .pot entry is used outside JavaScript.
+	 *
+	 * @param string $entry One .pot entry, with its reference comments.
+	 *
+	 * @return bool True when a reference is not a script, or the entry lists no references.
+	 */
+	private function hasPhpReference( $entry ) {
+		if ( ! preg_match_all( '/^#:\s*(.+)$/m', $entry, $lines ) ) {
+			return true;
+		}
+
+		foreach ( $lines[1] as $line ) {
+			foreach ( preg_split( '/\s+/', trim( $line ) ) as $reference ) {
+				$file = preg_replace( '/:\d+$/', '', $reference );
+
+				if ( ! preg_match( '/\.(?:jsx?|mjs|tsx?)$/', $file ) ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	/**

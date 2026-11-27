@@ -72,11 +72,11 @@ const sharedConfig = {
   mode: isDevelopment ? 'development' : 'production',
   devtool: isDevelopment ? 'source-map' : undefined,
   // Keep build results on disk so a rebuild only reprocesses the files that changed.
-  // Editing this file or .babelrc throws the cache away. Pass --no-cache for a clean build.
+  // Editing this file, .babelrc, .browserslistrc or package.json throws the cache away. Pass --no-cache for a clean build.
   cache: {
     type: 'filesystem',
     buildDependencies: {
-      config: [__filename, path.resolve(__dirname, '.babelrc')]
+      config: [__filename, path.resolve(__dirname, '.babelrc'), path.resolve(__dirname, '.browserslistrc'), path.resolve(__dirname, 'package.json')]
     }
   },
   resolve: {

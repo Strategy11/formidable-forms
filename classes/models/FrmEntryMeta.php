@@ -132,6 +132,18 @@ class FrmEntryMeta {
 
 		if ( is_string( $meta_value ) && null !== $previous_hash && md5( $meta_value ) === $previous_hash ) {
 			// Writing the same value again would only cost a query and trigger the meta change hooks.
+			/**
+			 * Fires when an entry meta update is skipped because the stored value already matches.
+			 *
+			 * The frm_update_entry_meta filter has already run for this value, so a listener that
+			 * keeps state from that filter can finish here, as it would after a write.
+			 *
+			 * @since x.x
+			 *
+			 * @param int $entry_id Entry ID.
+			 * @param int $field_id Field ID.
+			 */
+			do_action( 'frm_entry_meta_unchanged', $entry_id, $field_id );
 			return 0;
 		}
 

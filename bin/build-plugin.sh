@@ -5,6 +5,7 @@ set -e
 
 # Change to the expected directory.
 cd "$(dirname "$0")"
+lite_dir="$(cd .. && pwd)"
 plugin="$1"
 cd ../../$plugin
 
@@ -63,8 +64,15 @@ fi
 status "Installing dependencies..."
 npm install
 status "Generating build..."
-# Skip the webpack cache so the release is built from scratch.
-npm run build -- --no-cache
+# Drop the webpack cache so the release is built from scratch. Every add-on runs this script,
+# and not every build script accepts a --no-cache flag, so the cache is removed instead.
+rm -rf node_modules/.cache/webpack
+npm run build
+# Add-ons minimize with Lite's closure compiler, so make sure Lite has its dependencies.
+if [ ! -x "$lite_dir/node_modules/.bin/google-closure-compiler" ]; then
+	status "Installing Lite dependencies for the JS minimizer..."
+	( cd "$lite_dir" && npm ci )
+fi
 status "Minimizing JS..."
 npm run minimize
 
