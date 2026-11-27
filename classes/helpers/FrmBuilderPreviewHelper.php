@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Only the values a preview shows are printed with the page. The settings panels, which are most
  * of the cost of rendering a field, are requested separately once the previews are on screen.
  *
- * @since x.x
+ * @since 7.1
  */
 class FrmBuilderPreviewHelper {
 
@@ -26,6 +26,7 @@ class FrmBuilderPreviewHelper {
 		'email'    => array( 'FrmFieldEmail', 'FrmProFieldEmail' ),
 		'url'      => array( 'FrmFieldUrl', 'FrmProFieldUrl' ),
 		'number'   => array( 'FrmFieldNumber', 'FrmProFieldNumber' ),
+		'radio'    => array( 'FrmFieldRadio', 'FrmProFieldRadio' ),
 		'phone'    => array( 'FrmFieldPhone', 'FrmProFieldPhone' ),
 		'textarea' => array( 'FrmFieldTextarea', 'FrmProFieldTextarea' ),
 		'hidden'   => array( 'FrmFieldHidden', 'FrmProFieldHidden' ),
@@ -44,7 +45,7 @@ class FrmBuilderPreviewHelper {
 	 *
 	 * This runs before the field settings are prepared, so it only looks at the saved field.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param object       $field     The field being added to the form builder.
 	 * @param FrmFieldType $field_obj The field type object for the field.
@@ -60,7 +61,7 @@ class FrmBuilderPreviewHelper {
 		 *
 		 * Register a matching renderer with the frm_builder_preview_inputs JavaScript filter.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param array<string,string[]> $field_classes Supported classes keyed by field type.
 		 */
@@ -75,7 +76,11 @@ class FrmBuilderPreviewHelper {
 			return false;
 		}
 
-		if ( in_array( $type, self::$text_input_types, true ) && self::has_input_group( $field ) ) {
+		if ( 'radio' === $type && ( ! is_array( $field->options ) || count( $field->options ) > 20 || 'post_category' === FrmField::get_option( $field, 'post_field' ) ) ) {
+			return false;
+		}
+
+		if ( 'number' !== $type && in_array( $type, self::$text_input_types, true ) && self::has_input_group( $field ) ) {
 			return false;
 		}
 
@@ -89,7 +94,7 @@ class FrmBuilderPreviewHelper {
 		 * Return false for a field whose preview is changed on the server, so it keeps
 		 * the preview rendered by PHP.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param bool   $supported Whether the preview can be drawn in the browser.
 		 * @param object $field     The field being added to the form builder.
@@ -100,7 +105,7 @@ class FrmBuilderPreviewHelper {
 	/**
 	 * Pro wraps an input in a prefix and suffix group, which the browser does not draw.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param object $field The field being added to the form builder.
 	 *
@@ -119,7 +124,7 @@ class FrmBuilderPreviewHelper {
 	/**
 	 * Record a field preview and print the empty list item it will be drawn into.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array{field: array, saved_field: object, field_obj: FrmFieldType, display: array, li_classes: string, extra_field_attributes: array} $atts     The field settings from FrmFieldsHelper::setup_edit_vars(), the saved field, its type object, display settings, and list item classes and attributes.
 	 * @param object{definitions: array, fields: array}&\stdClass                                                                                  $manifest The previews printed with the form builder.
@@ -130,13 +135,66 @@ class FrmBuilderPreviewHelper {
 		$index              = count( $manifest->fields );
 		$manifest->fields[] = self::get_preview_data( $atts, $manifest );
 
-		echo '<li data-frm-preview="' . esc_attr( $index ) . '"></li>';
+		$attributes = array(
+			'data-frm-preview' => $index,
+			'class'            => 'frm-preview-placeholder ' . ( $atts['field']['classes'] ?? '' ),
+			'style'            => '--frm-preview-height:' . self::get_placeholder_height( $atts['field'] ) . 'px',
+		);
+		echo '<li ';
+		FrmAppHelper::array_to_html_params( $attributes, true );
+		echo '></li>';
+	}
+
+	/**
+	 * Reserve the builder card's label, input and spacing before its preview is drawn.
+	 *
+	 * @since 7.1
+	 *
+	 * @param array|object $field The saved field and its display options.
+	 *
+	 * @return int Estimated card height in pixels.
+	 */
+	public static function get_placeholder_height( $field ) {
+		$type = FrmField::get_field_type( $field );
+		// Card borders and padding, a label line, the input gap and bottom spacing total 49px.
+		$height = 49;
+
+		if ( in_array( $type, array( 'html', 'summary', 'virtual' ), true ) ) {
+			// Matches .frm-embed-field-placeholder.
+			$height += 145;
+		} elseif ( 'textarea' === $type ) {
+			$rows    = absint( FrmField::get_option( $field, 'max' ) );
+			$height += max( 40, $rows * 21 + 16 );
+		} elseif ( in_array( $type, array( 'radio', 'checkbox' ), true ) ) {
+			$options    = is_object( $field ) ? $field->options : $field['options'];
+			$count      = is_array( $options ) ? count( $options ) : 1;
+			$align      = FrmField::get_option( $field, 'align' );
+			$columns    = array(
+				'frm_two_col'   => 2,
+				'frm_three_col' => 3,
+				'frm_four_col'  => 4,
+			);
+			$rows       = 'inline' === $align ? 1 : max( 1, (int) ceil( $count / ( $columns[ $align ] ?? 1 ) ) );
+			$row_height = 'buttons' === FrmField::get_option( $field, 'image_options' ) ? 45 : 26;
+
+			if ( FrmField::get_option( $field, 'use_images_in_buttons' ) ) {
+				$row_height = 33;
+			}
+
+			$height += $rows * $row_height;
+		} elseif ( 'break' === $type ) {
+			$height += 64;
+		} else {
+			$height += 40;
+		}//end if
+
+		return max( 89, $height );
 	}
 
 	/**
 	 * Print the previews and the text they share for the browser to draw.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param object{definitions: array, fields: array}&\stdClass $manifest The previews collected while the fields were listed.
 	 *
@@ -173,7 +231,7 @@ class FrmBuilderPreviewHelper {
 	 * value the browser would read from the escaped attribute, so they match the PHP preview.
 	 * Empty values are left out to keep the page small.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array{field: array, saved_field: object, field_obj: FrmFieldType, display: array, li_classes: string, extra_field_attributes: array} $atts     The prepared field. See add_to_manifest().
 	 * @param object{definitions: array, fields: array}&\stdClass                                                                                  $manifest The previews printed with the form builder.
@@ -217,10 +275,14 @@ class FrmBuilderPreviewHelper {
 		}
 
 		self::add_input_data( $data, $field_obj, $field, $atts['saved_field'] );
+
+		// The settings panel may not load, so list the fields its conditional logic points at. A choice renamed in one of them must reach this panel.
+		$data['logic'] = array_values( array_unique( array_filter( array_map( 'absint', (array) FrmField::get_option( $atts['saved_field'], 'hide_field' ) ) ) ) );
+
 		/**
 		 * Filters the data used to draw a field's inputs in the browser.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param array        $data      Preview data.
 		 * @param array        $field     Prepared field settings.
@@ -259,7 +321,7 @@ class FrmBuilderPreviewHelper {
 	/**
 	 * Share the classes, form and type of a list item between the fields that use the same ones.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array                                               $definition The list item classes, form id, field type and display type.
 	 * @param object{definitions: array, fields: array}&\stdClass $manifest   The previews printed with the form builder.
@@ -280,7 +342,7 @@ class FrmBuilderPreviewHelper {
 	/**
 	 * Add the values shown in the field input.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array        $data        The preview data.
 	 * @param FrmFieldType $field_obj   The field type object.
@@ -292,6 +354,14 @@ class FrmBuilderPreviewHelper {
 	private static function add_input_data( &$data, $field_obj, $field, $saved_field ) {
 		$type          = $field['type'];
 		$default_value = $field_obj->get_field_column( 'default_value' );
+
+		if ( 'radio' === $type || ( 'number' === $type && self::has_input_group( $saved_field ) ) ) {
+			// Preserve filtered choices and number formatting while the browser draws the card.
+			ob_start();
+			$field_obj->show_on_form_builder();
+			$data['inputHtml'] = ob_get_clean();
+			return;
+		}
 
 		if ( 'html' === $type ) {
 			$data['html'] = esc_html( FrmAppHelper::truncate( htmlentities( $field['description'] ), 60 ) );
@@ -329,7 +399,7 @@ class FrmBuilderPreviewHelper {
 	/**
 	 * Add the markup printed by actions inside the field preview.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array $data    The preview data.
 	 * @param array $field   The field settings.
@@ -367,7 +437,7 @@ class FrmBuilderPreviewHelper {
 	/**
 	 * Get the value the browser reads from an attribute escaped with esc_attr().
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param mixed $value The attribute value.
 	 *

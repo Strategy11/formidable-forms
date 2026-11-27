@@ -8,7 +8,7 @@ class FrmFormsHelper {
 	/**
 	 * Forms with more fields than this load and save in the builder with AJAX.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @var int
 	 */
@@ -177,7 +177,7 @@ class FrmFormsHelper {
 		}
 
 		$name           = $selected === false ? __( 'Switch Form', 'formidable' ) : $selected;
-		$name           = '' === $name || is_null( $name ) ? self::get_no_title_text() : strip_tags( $name );
+		$name           = '' === $name || null === $name ? self::get_no_title_text() : strip_tags( $name );
 		$truncated_name = FrmAppHelper::truncate( $name, 25 );
 
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
@@ -711,7 +711,7 @@ class FrmFormsHelper {
 
 					if ( is_array( $v ) ) {
 						foreach ( $v as $k1 => $v1 ) {
-							$values[ $var ][ $k ][ $k1 ] = $post_values && isset( $post_values[ $var ][ $k ][ $k1 ] ) ? $post_values[ $var ][ $k ][ $k1 ] : ( $record && isset( $record->options[ $var ] ) && isset( $record->options[ $var ][ $k ] ) && isset( $record->options[ $var ][ $k ][ $k1 ] ) ? $record->options[ $var ][ $k ][ $k1 ] : $v1 ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+							$values[ $var ][ $k ][ $k1 ] = $post_values && isset( $post_values[ $var ][ $k ][ $k1 ] ) ? $post_values[ $var ][ $k ][ $k1 ] : ( $record && isset( $record->options[ $var ], $record->options[ $var ][ $k ] ) && isset( $record->options[ $var ][ $k ][ $k1 ] ) ? $record->options[ $var ][ $k ][ $k1 ] : $v1 ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 							unset( $k1, $v1 );
 						}
 					}
@@ -761,7 +761,7 @@ class FrmFormsHelper {
 	 * Rendering every field on page load slows down exponentially as a form grows,
 	 * so long forms always use AJAX.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param int $field_count The number of fields in the form.
 	 * @param int $form_id     The id of the form being edited.
@@ -773,12 +773,12 @@ class FrmFormsHelper {
 		 * Allows turning AJAX loading in the form builder on or off.
 		 * Use __return_false to always load every field with the page.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param bool  $ajax_load True when the form has more than AJAX_BUILDER_FIELD_THRESHOLD fields.
 		 * @param array $args      Contains `field_count` and `form_id`.
 		 */
-		return (bool) apply_filters(
+		return apply_filters(
 			'frm_ajax_load_form_builder',
 			$field_count > self::AJAX_BUILDER_FIELD_THRESHOLD,
 			compact( 'field_count', 'form_id' )
@@ -788,7 +788,7 @@ class FrmFormsHelper {
 	/**
 	 * Count the fields in a form the way a user sees them, without the Submit field.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param array $fields Field objects or arrays.
 	 *

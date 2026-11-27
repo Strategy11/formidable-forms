@@ -18,7 +18,7 @@ jobs:
     name: Run PHP CS Fixer inspection
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.1.1
+      - uses: actions/checkout@v6
       # Install only what this job runs, instead of every require-dev package.
       # .php-cs-fixer.php references PhpCsFixerCustomFixers\Fixer\* rules, which is
       # what the second package provides.

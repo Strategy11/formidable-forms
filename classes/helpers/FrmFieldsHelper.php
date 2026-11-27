@@ -13,6 +13,15 @@ class FrmFieldsHelper {
 	private static $context_is_safe_to_load_field_options_from_request_data;
 
 	/**
+	 * Prepared field arrays shared only while their builder markup is being rendered.
+	 *
+	 * @since 7.1
+	 *
+	 * @var array<string,array>
+	 */
+	private static $builder_field_vars = array();
+
+	/**
 	 * @param string     $type
 	 * @param int|string $form_id
 	 *
@@ -29,8 +38,7 @@ class FrmFieldsHelper {
 		$field_count = FrmDb::get_var(
 			'frm_fields',
 			array( 'form_id' => $form_id ),
-			'field_order',
-			array( 'order_by' => 'field_order DESC' )
+			'MAX(field_order)'
 		);
 
 		$values['field_key']   = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_fields', 'field_key' );
@@ -42,6 +50,11 @@ class FrmFieldsHelper {
 		}
 
 		$values['field_options']['custom_html'] = self::get_default_html( $type );
+
+		if ( 'phone' === $type && 'tel' === ( $values['field_options']['autocomplete'] ?? '' ) && self::is_repeater_form( $form_id ) ) {
+			// Browser autofill would put the same phone number in every repeater row.
+			$values['field_options']['autocomplete'] = '';
+		}
 
 		if ( ! empty( $setting ) ) {
 			if ( in_array( $type, array( 'data', 'lookup' ), true ) ) {
@@ -55,6 +68,19 @@ class FrmFieldsHelper {
 		FrmSubmitHelper::update_last_row_fields_order_when_adding_field( $field_count );
 
 		return $values;
+	}
+
+	/**
+	 * Check if a form is the child form of a repeater.
+	 *
+	 * @since 7.1
+	 *
+	 * @param int|string $form_id The ID of the form the field is added to.
+	 *
+	 * @return bool
+	 */
+	private static function is_repeater_form( $form_id ) {
+		return $form_id && FrmDb::get_var( 'frm_forms', array( 'id' => $form_id ), 'parent_form_id' );
 	}
 
 	/**
@@ -74,8 +100,39 @@ class FrmFieldsHelper {
 	 * @return array
 	 */
 	public static function setup_edit_vars( $field, $doing_ajax = false ) {
+		if ( ! $doing_ajax && self::$builder_field_vars && is_object( $field ) ) {
+			$key = spl_object_hash( $field );
+
+			if ( isset( self::$builder_field_vars[ $key ] ) ) {
+				return self::$builder_field_vars[ $key ];
+			}
+		}
+
 		$values = self::field_object_to_array( $field );
 		return apply_filters( 'frm_setup_edit_field_vars', $values, array( 'doing_ajax' => $doing_ajax ) );
+	}
+
+	/**
+	 * Share prepared values during a builder render, returning the previous values to restore.
+	 *
+	 * @since 7.1
+	 *
+	 * @param object     $field  The field object used by the builder and its field type handler.
+	 * @param array|null $values Prepared field values, or null to stop sharing them.
+	 *
+	 * @return array|null
+	 */
+	public static function set_builder_field_vars( $field, $values = null ) {
+		$key      = spl_object_hash( $field );
+		$previous = self::$builder_field_vars[ $key ] ?? null;
+
+		if ( null === $values ) {
+			unset( self::$builder_field_vars[ $key ] );
+		} else {
+			self::$builder_field_vars[ $key ] = $values;
+		}
+
+		return $previous;
 	}
 
 	/**
@@ -1219,7 +1276,7 @@ class FrmFieldsHelper {
 	 * @return void
 	 */
 	public static function sanitize_embedded_shortcodes( $atts, &$value ) {
-		if ( is_null( $value ) ) {
+		if ( null === $value ) {
 			return;
 		}
 
@@ -1614,7 +1671,7 @@ class FrmFieldsHelper {
 			return $other_val;
 		}
 
-		if ( isset( $field['id'] ) && isset( $_POST['item_meta']['other'][ $field['id'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( isset( $field['id'], $_POST['item_meta']['other'][ $field['id'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			// For normal fields
 
 			if ( FrmField::is_field_with_multiple_values( $field ) ) {
@@ -1972,8 +2029,7 @@ class FrmFieldsHelper {
 			if ( false === $index ) {
 				continue;
 			}
-			unset( $replace[ $index ] );
-			unset( $replace_with[ $index ] );
+			unset( $replace[ $index ], $replace_with[ $index ] );
 		}
 
 		return str_replace( $replace, $replace_with, $value );
@@ -2485,6 +2541,12 @@ class FrmFieldsHelper {
 	public static function show_add_field_link( $field_type ) {
 		$field_label = FrmFormsHelper::get_field_link_name( $field_type );
 		$classes     = 'frmbutton frm6 frm_t' . $field_type['key'];
+		$type        = explode( '|', $field_type['key'] )[0];
+		$field       = FrmFieldFactory::get_field_type( $type );
+
+		if ( ! $field->allows_in_repeater() ) {
+			$classes .= ' frm-no-repeater';
+		}
 
 		if ( ! empty( $field_type['hide'] ) ) {
 			$classes .= ' frm_hidden';

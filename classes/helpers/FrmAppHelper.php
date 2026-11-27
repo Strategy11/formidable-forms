@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '7.0';
+	public static $plug_version = '7.1.1';
 
 	/**
 	 * @var bool
@@ -1532,30 +1532,9 @@ class FrmAppHelper {
 	public static function allow_style( $allow_css, $css_string ) {
 		if ( ! $allow_css && str_starts_with( $css_string, '--primary-700:' ) ) {
 			$split     = explode( ':', $css_string, 2 );
-			$allow_css = 2 === count( $split ) && self::is_a_valid_color( $split[1] );
+			$allow_css = 2 === count( $split ) && FrmStylesHelper::is_valid_color( $split[1] );
 		}
 		return $allow_css;
-	}
-
-	/**
-	 * @since 5.0.13
-	 *
-	 * @param string $value
-	 *
-	 * @return bool
-	 */
-	private static function is_a_valid_color( $value ) {
-		$match = 0;
-
-		if ( str_starts_with( $value, 'rgba(' ) ) {
-			$match = preg_match( '/^rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d*(?:\.\d+)?)\)$/', $value );
-		} elseif ( str_starts_with( $value, 'rgb(' ) ) {
-			$match = preg_match( '/^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/', $value );
-		} elseif ( str_starts_with( $value, '#' ) ) {
-			$match = preg_match( '/^#([a-f0-9]{6}|[a-f0-9]{3})\b$/', $value );
-		}
-
-		return (bool) $match;
 	}
 
 	/**
@@ -1954,6 +1933,28 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Format a page or View choice with a title and its ID.
+	 *
+	 * @since x.x
+	 *
+	 * @param object   $post     Post containing ID and post_title.
+	 * @param bool|int $truncate Maximum title length, or false for the full title.
+	 *
+	 * @return string
+	 */
+	public static function get_post_dropdown_label( $post, $truncate = false ) {
+		$title = trim( $post->post_title );
+		$title = '' === $title ? FrmFormsHelper::get_no_title_text() : $title;
+
+		if ( $truncate ) {
+			$title = self::truncate( $title, $truncate );
+		}
+
+		/* translators: 1: Post title, 2: Post ID. */
+		return sprintf( __( '%1$s (ID: %2$d)', 'formidable' ), $title, $post->ID );
+	}
+
+	/**
 	 * Renders an autocomplete page selection or a regular dropdown depending on
 	 * the total page count
 	 *
@@ -1977,7 +1978,17 @@ class FrmAppHelper {
 		$title    = '';
 
 		if ( $selected ) {
-			$title = get_the_title( $selected );
+			$post = get_post( $selected );
+
+			if ( $post ) {
+				// Use the displayed title so the Private and Protected prefixes are kept.
+				$title = self::get_post_dropdown_label(
+					(object) array(
+						'ID'         => $post->ID,
+						'post_title' => get_the_title( $post ),
+					)
+				);
+			}
 		}
 
 		?>
@@ -2108,7 +2119,7 @@ class FrmAppHelper {
 			<option value=""><?php echo esc_html( $args['placeholder'] ); ?></option>
 			<?php foreach ( $pages as $page ) { ?>
 				<option value="<?php echo esc_attr( $page->ID ); ?>" <?php selected( $selected, $page->ID ); ?>>
-					<?php echo esc_html( $args['truncate'] ? self::truncate( $page->post_title, $args['truncate'] ) : $page->post_title ); ?>
+					<?php echo esc_html( self::get_post_dropdown_label( $page, $args['truncate'] ) ); ?>
 				</option>
 			<?php } ?>
 		</select>
@@ -2522,7 +2533,7 @@ class FrmAppHelper {
 	public static function check_selected( $values, $current ) {
 		$values  = self::recursive_function_map( $values, 'trim' );
 		$values  = self::recursive_function_map( $values, 'htmlspecialchars_decode' );
-		$current = is_null( $current ) ? '' : htmlspecialchars_decode( trim( $current ) );
+		$current = null === $current ? '' : htmlspecialchars_decode( trim( $current ) );
 
 		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict, Universal.Operators.StrictComparisons
 		return is_array( $values ) ? in_array( $current, $values ) : $values == $current;
@@ -2781,23 +2792,21 @@ class FrmAppHelper {
 			$key = self::generate_new_key( $num_chars );
 		}
 
-		$key = self::prevent_numeric_and_reserved_keys( $key );
-
-		$similar_keys = FrmDb::get_col(
-			$table_name,
-			array(
-				$column . ' like%' => $key,
-				'ID !'             => $id,
-			),
-			$column
-		);
+		$key          = self::prevent_numeric_and_reserved_keys( $key );
+		$similar_keys = self::get_similar_keys( $key, $table_name, $column, $id );
 
 		// Create a unique field id if it has already been used.
 		if ( ! in_array( $key, $similar_keys, true ) ) {
 			return $key;
 		}
 
-		$key = self::maybe_truncate_key_before_appending( $column, $key );
+		$truncated_key = self::maybe_truncate_key_before_appending( $column, $key );
+
+		if ( $truncated_key !== $key ) {
+			// Keys already created from the truncated key aren't in the list loaded for the full key.
+			$key          = $truncated_key;
+			$similar_keys = self::get_similar_keys( $key, $table_name, $column, $id );
+		}
 
 		/**
 		 * Allow for a custom separator between the attempted key and the generated suffix.
@@ -2816,6 +2825,25 @@ class FrmAppHelper {
 		} while ( in_array( $key_check, $similar_keys, true ) );
 
 		return $key_check;
+	}
+
+	/**
+	 * @param string $key
+	 * @param string $table_name
+	 * @param string $column
+	 * @param int    $id
+	 *
+	 * @return array<string>
+	 */
+	private static function get_similar_keys( $key, $table_name, $column, $id ) {
+		return FrmDb::get_col(
+			$table_name,
+			array(
+				$column . ' like%' => $key,
+				'ID !'             => $id,
+			),
+			$column
+		);
 	}
 
 	/**
@@ -3799,7 +3827,7 @@ class FrmAppHelper {
 	 * @return array|string|null
 	 */
 	public static function maybe_json_decode( $string, $single_to_array = true ) {
-		if ( is_array( $string ) || is_null( $string ) ) {
+		if ( is_array( $string ) || null === $string ) {
 			return $string;
 		}
 
@@ -4194,7 +4222,7 @@ class FrmAppHelper {
 		// Keyed off whether the summary will actually take focus, not merely whether it's
 		// active — otherwise filtering frm_focus_error_summary off leaves focus going
 		// nowhere instead of falling back to the first field.
-		$default = $form && self::should_focus_error_summary( $form ) ? false : true;
+		$default = ! $form || ! self::should_focus_error_summary( $form );
 
 		return (bool) apply_filters( 'frm_focus_first_error', $default, $form );
 	}
@@ -4262,7 +4290,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function should_include_alert_role_on_field_errors( $form = null ) {
-		$default = $form && FrmFormsHelper::is_error_summary_active_for_form( $form ) ? false : true;
+		$default = ! $form || ! FrmFormsHelper::is_error_summary_active_for_form( $form );
 		return (bool) apply_filters( 'frm_include_alert_role_on_field_errors', $default, $form );
 	}
 
@@ -4921,7 +4949,7 @@ class FrmAppHelper {
 	public static function set_current_screen_and_hook_suffix() {
 		global $hook_suffix;
 
-		if ( is_null( $hook_suffix ) ) {
+		if ( null === $hook_suffix ) {
 			// $hook_suffix gets used in substr so make sure it's not null. PHP 8.1 deprecates null in substr.
 			$hook_suffix = ''; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		}
@@ -5364,7 +5392,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function is_valid_utf8( $string ) {
-		if ( is_null( $string ) ) {
+		if ( null === $string ) {
 			// Return true so we do not attempt to change encoding on a null value.
 			return true;
 		}

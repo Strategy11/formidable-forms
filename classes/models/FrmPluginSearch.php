@@ -34,7 +34,7 @@ class FrmPluginSearch {
 	 */
 	public function start( $screen ) {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( 'plugin-install' !== $screen->base || ( isset( $_GET['paged'] ) && 1 !== intval( $_GET['paged'] ) ) ) {
+		if ( 'plugin-install' !== $screen->base || ( isset( $_GET['paged'] ) && 1 !== (int) $_GET['paged'] ) ) {
 			return;
 		}
 
@@ -124,7 +124,8 @@ class FrmPluginSearch {
 
 		// Try to match a passed search term with addon's search terms.
 		foreach ( $addon_list as $addon_id => $addon_opts ) {
-			if ( ! is_array( $addon_opts ) || empty( $addon_opts['excerpt'] ) ) {
+			if ( ! is_array( $addon_opts ) || empty( $addon_opts['excerpt'] ) || FrmAddonsHelper::is_boost( $addon_opts ) ) {
+				// Boosts are purchased separately, so they are not suggested as add-ons in the plugin search.
 				continue;
 			}
 

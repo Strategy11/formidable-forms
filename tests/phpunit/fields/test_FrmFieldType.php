@@ -5,13 +5,94 @@
  *
  * @covers FrmFieldCombo
  * @covers FrmFieldNumber
+ * @covers FrmFieldPhone
  * @covers FrmFieldType
  */
 #[\PHPUnit\Framework\Attributes\Group( 'fields' )]
 #[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldCombo::class )]
 #[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldNumber::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldPhone::class )]
 #[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldType::class )]
 class test_FrmFieldType extends FrmUnitTest {
+
+	public function test_phone_autocomplete_defaults_to_tel_without_format() {
+		$field_type = FrmFieldFactory::get_field_type( 'phone' );
+		$options    = $field_type->get_default_field_options();
+
+		$this->assertSame( 'tel', $options['autocomplete'], 'Phone fields without a format should default to tel autocomplete.' );
+	}
+
+	public function test_phone_autocomplete_default_is_empty_with_format() {
+		$field_type = FrmFieldFactory::get_field_type(
+			'phone',
+			array(
+				'type'          => 'phone',
+				'field_options' => array( 'format' => 'custom' ),
+			)
+		);
+		$options    = $field_type->get_default_field_options();
+
+		$this->assertSame( '', $options['autocomplete'], 'Phone fields with a format should keep autocomplete empty by default.' );
+	}
+
+	public function test_phone_saved_empty_autocomplete_stays_empty() {
+		$field_type = FrmFieldFactory::get_field_type(
+			'phone',
+			array(
+				'type'          => 'phone',
+				'field_options' => array( 'autocomplete' => '' ),
+			)
+		);
+		$options    = $field_type->get_default_field_options();
+
+		$this->assertSame( '', $options['autocomplete'], 'A saved empty autocomplete value should stay empty.' );
+	}
+
+	public function test_phone_saved_field_without_autocomplete_key_stays_empty() {
+		$field_type = FrmFieldFactory::get_field_type(
+			'phone',
+			array(
+				'id'            => 1,
+				'type'          => 'phone',
+				'field_options' => array(),
+			)
+		);
+		$options    = $field_type->get_default_field_options();
+
+		$this->assertSame( '', $options['autocomplete'], 'Saved phone fields without an autocomplete setting should not gain tel autocomplete.' );
+	}
+
+	public function test_phone_autocomplete_default_is_empty_in_repeater() {
+		$parent_form_id = $this->factory->form->create();
+		$child_form_id  = $this->factory->form->create( array( 'parent_form_id' => $parent_form_id ) );
+		$child_values   = FrmFieldsHelper::setup_new_vars( 'phone', $child_form_id );
+		$parent_values  = FrmFieldsHelper::setup_new_vars( 'phone', $parent_form_id );
+
+		$this->assertSame( '', $child_values['field_options']['autocomplete'], 'New phone fields in a repeater should not default to tel autocomplete.' );
+		$this->assertSame( 'tel', $parent_values['field_options']['autocomplete'], 'New phone fields outside a repeater should still default to tel autocomplete.' );
+	}
+
+	public function test_email_autocomplete_default_is_kept_in_repeater() {
+		$parent_form_id = $this->factory->form->create();
+		$child_form_id  = $this->factory->form->create( array( 'parent_form_id' => $parent_form_id ) );
+		$child_values   = FrmFieldsHelper::setup_new_vars( 'email', $child_form_id );
+
+		$this->assertSame( 'email', $child_values['field_options']['autocomplete'], 'Only the phone tel default should be skipped in a repeater.' );
+	}
+
+	public function test_phone_autocomplete_default_can_be_filtered() {
+		$filter = function ( $options ) {
+			$options['autocomplete'] = '';
+			return $options;
+		};
+		add_filter( 'frm_default_field_options', $filter );
+
+		$options = FrmFieldFactory::get_field_type( 'phone' )->get_default_field_options();
+
+		remove_filter( 'frm_default_field_options', $filter );
+
+		$this->assertSame( '', $options['autocomplete'], 'The frm_default_field_options filter should be able to clear the tel default.' );
+	}
 
 	public function test_html_min_number() {
 		$form_id = $this->factory->form->create();
@@ -126,9 +207,9 @@ class test_FrmFieldType extends FrmUnitTest {
 					'a1',
 				),
 				'expected' => array(
-					'6',
-					'2',
-					'0',
+					6,
+					2,
+					0,
 				),
 			),
 		);
@@ -136,7 +217,7 @@ class test_FrmFieldType extends FrmUnitTest {
 		foreach ( $values as $value ) {
 			$frm_field_type = FrmFieldFactory::get_field_type( $value['type'] );
 			$frm_field_type->sanitize_value( $value['value'] );
-			$this->assertEquals( $value['expected'], $value['value'] );
+			$this->assertSame( $value['expected'], $value['value'] );
 		}
 
 		$this->use_frm_role( 'loggedout' );

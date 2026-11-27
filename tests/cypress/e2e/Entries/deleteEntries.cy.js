@@ -78,7 +78,7 @@ describe( 'Entries submitted from a form', () => {
 
 		cy.log( 'Teardown - Close and delete form' );
 		cy.get( '.frm_form_nav > :nth-child(1) > a' ).should( 'contain', 'Build' ).click();
-		cy.get( "a[aria-label='Close']", { timeout: 5000 } ).should( 'be.visible' ).click();
+		cy.closeFullScreen();
 		cy.deleteForm();
 	} );
 } );

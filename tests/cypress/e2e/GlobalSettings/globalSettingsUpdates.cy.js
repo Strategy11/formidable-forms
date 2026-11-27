@@ -50,7 +50,7 @@ describe( 'Updating global settings', () => {
 	} );
 	afterEach( () => {
 		cy.log( 'Teardown - Save the form and delete it' );
-		cy.get( "a[aria-label='Close']", { timeout: 5000 } ).should( 'be.visible' ).click();
+		cy.closeFullScreen();
 		cy.deleteForm();
 	} );
 } );

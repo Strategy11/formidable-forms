@@ -518,7 +518,7 @@ class FrmUsage {
 
 				if ( ! $style->id ) {
 					$style_name = 0;
-				} elseif ( 1 === intval( $style->id ) ) {
+				} elseif ( 1 === (int) $style->id ) {
 					$style_name = 'formidable-style';
 				} else {
 					$style_post = $style->get_one();
@@ -590,8 +590,10 @@ class FrmUsage {
 		$fields = FrmDb::get_results( 'frm_fields', array(), 'id, form_id, name, type, field_options', $args );
 
 		foreach ( $fields as $k => $field ) {
-			FrmAppHelper::unserialize_or_decode( $field->field_options );
-			$fields[ $k ]->field_options = $field->field_options;
+			$field = (array) $field;
+
+			FrmAppHelper::unserialize_or_decode( $field['field_options'] );
+			$fields[ $k ] = $field;
 		}
 
 		return $fields;

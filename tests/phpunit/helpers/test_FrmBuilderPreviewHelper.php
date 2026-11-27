@@ -16,6 +16,99 @@ class test_FrmBuilderPreviewReplacedText extends FrmFieldText {
 class test_FrmBuilderPreviewHelper extends FrmUnitTest {
 
 	/**
+	 * Pin the pixel estimates shared by browser previews and AJAX placeholders.
+	 *
+	 * @covers FrmBuilderPreviewHelper::get_placeholder_height
+	 *
+	 * @dataProvider placeholder_height_provider
+	 *
+	 * @param string       $type     The field type.
+	 * @param array        $settings The display options.
+	 * @param array|string $options  The choices shown in the preview.
+	 * @param int          $expected The estimated card height in pixels.
+	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'placeholder_height_provider' )]
+	public function test_get_placeholder_height( $type, $settings, $options, $expected ) {
+		$saved_field = (object) array(
+			'type'          => $type,
+			'options'       => $options,
+			'field_options' => $settings,
+		);
+		$field       = array_merge(
+			array(
+				'type'    => $type,
+				'options' => $options,
+			),
+			$settings
+		);
+
+		$this->assertSame( $expected, FrmBuilderPreviewHelper::get_placeholder_height( $saved_field ), 'The saved field should reserve the expected card height.' );
+		$this->assertSame( $expected, FrmBuilderPreviewHelper::get_placeholder_height( $field ), 'The prepared field should reserve the expected card height.' );
+	}
+
+	/**
+	 * Expected heights are literals so changes to the estimates require review.
+	 * Compare these estimates with real builder cards when changing builder CSS.
+	 *
+	 * @return \Generator
+	 */
+	public static function placeholder_height_provider() {
+		yield 'html' => array( 'html', array(), array(), 194 );
+		yield 'summary' => array( 'summary', array(), array(), 194 );
+		yield 'virtual' => array( 'virtual', array(), array(), 194 );
+		yield 'textarea missing rows' => array( 'textarea', array(), array(), 89 );
+		yield 'textarea zero rows' => array( 'textarea', array( 'max' => 0 ), array(), 89 );
+		yield 'textarea one row minimum' => array( 'textarea', array( 'max' => 1 ), array(), 89 );
+		yield 'textarea two rows' => array( 'textarea', array( 'max' => '2' ), array(), 107 );
+		yield 'textarea five rows' => array( 'textarea', array( 'max' => 5 ), array(), 170 );
+		yield 'page break' => array( 'break', array(), array(), 113 );
+		yield 'default text' => array( 'text', array(), array(), 89 );
+		yield 'default number' => array( 'number', array(), array(), 89 );
+		yield 'unknown type' => array( 'custom', array(), array(), 89 );
+
+		$choices = array( 'First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh' );
+
+		foreach ( array( 'radio', 'checkbox' ) as $type ) {
+			yield $type . ' stacked' => array( $type, array(), $choices, 231 );
+			yield $type . ' empty choices minimum' => array( $type, array(), array(), 89 );
+			yield $type . ' scalar choices minimum' => array( $type, array(), 'First', 89 );
+			yield $type . ' two columns round up' => array( $type, array( 'align' => 'frm_two_col' ), $choices, 153 );
+			yield $type . ' three columns round up' => array( $type, array( 'align' => 'frm_three_col' ), $choices, 127 );
+			yield $type . ' four columns round up' => array( $type, array( 'align' => 'frm_four_col' ), $choices, 101 );
+			yield $type . ' inline minimum' => array( $type, array( 'align' => 'inline' ), $choices, 89 );
+			yield $type . ' buttons' => array( $type, array( 'image_options' => 'buttons' ), $choices, 364 );
+			yield $type . ' inline buttons' => array(
+				$type,
+				array(
+					'image_options' => 'buttons',
+					'align'         => 'inline',
+				),
+				$choices,
+				94,
+			);
+			yield $type . ' image buttons override' => array(
+				$type,
+				array(
+					'image_options'         => 'buttons',
+					'use_images_in_buttons' => 1,
+				),
+				$choices,
+				280,
+			);
+			yield $type . ' image buttons in columns' => array(
+				$type,
+				array(
+					'image_options'         => 'buttons',
+					'use_images_in_buttons' => 1,
+					'align'                 => 'frm_two_col',
+				),
+				$choices,
+				181,
+			);
+		}
+	}
+
+	/**
 	 * @covers FrmBuilderPreviewHelper::supports
 	 */
 	public function test_supports_lite_and_pro_field_classes() {
@@ -50,13 +143,71 @@ class test_FrmBuilderPreviewHelper extends FrmUnitTest {
 		);
 
 		foreach ( $options as $option => $value ) {
-			$field = $this->create_field( 'number', array( $option => $value ) );
+			$number = $this->create_field( 'number', array( $option => $value ) );
+			$this->assertTrue( $this->supports( $number ) );
+			$field = $this->create_field( 'text', array( $option => $value ) );
 			$this->assertFalse( $this->supports( $field ), 'A field with ' . $option . ' is rendered on the server.' );
 		}
 
 		// A textarea is not drawn as an input group, so these options do not apply to it.
 		$textarea = $this->create_field( 'textarea', array( 'prepend' => '$' ) );
 		$this->assertTrue( $this->supports( $textarea ) );
+	}
+
+	/**
+	 * @covers FrmBuilderPreviewHelper::supports
+	 */
+	public function test_supports_small_saved_radio_choice_lists() {
+		$field          = $this->create_field( 'radio' );
+		$field->options = array( 'First', 'Second' );
+		$this->assertTrue( $this->supports( $field ) );
+
+		$field->field_options['post_field'] = 'post_category';
+		$this->assertFalse( $this->supports( $field ) );
+
+		unset( $field->field_options['post_field'] );
+		$field->options = range( 1, 21 );
+		$this->assertFalse( $this->supports( $field ) );
+	}
+
+	/**
+	 * Radios and number input groups send the inputs the field class prints, so filtered choices and number formatting are kept.
+	 *
+	 * @covers FrmBuilderPreviewHelper::add_to_manifest
+	 * @covers FrmBuilderPreviewHelper::add_input_data
+	 */
+	public function test_preview_data_sends_server_inputs_for_radios_and_number_groups() {
+		$radio          = $this->create_field( 'radio' );
+		$radio->options = array( 'First', 'Second' );
+		$data           = $this->get_preview_data( $radio );
+		$this->assertStringContainsString( 'type="radio"', $data['inputHtml'] );
+		$this->assertStringContainsString( 'First', $data['inputHtml'] );
+		$this->assertStringContainsString( 'Second', $data['inputHtml'] );
+		$this->assertArrayNotHasKey( 'htmlId', $data, 'The browser does not draw inputs for a radio.' );
+
+		$number = $this->get_preview_data( $this->create_field( 'number' ) );
+		$this->assertArrayNotHasKey( 'inputHtml', $number, 'A plain number input is drawn in the browser.' );
+		$this->assertArrayHasKey( 'htmlId', $number );
+
+		$grouped = $this->get_preview_data( $this->create_field( 'number', array( 'prepend' => '$' ) ) );
+		$this->assertArrayHasKey( 'inputHtml', $grouped );
+		$this->assertArrayNotHasKey( 'htmlId', $grouped );
+
+		// Pro classes can autoload while Pro is inactive, and then the Lite number field is used. This check needs Pro active.
+		if ( FrmAppHelper::pro_is_installed() ) {
+			$this->assertStringContainsString( 'frm_input_group', $grouped['inputHtml'], 'Pro wraps the number in its prefix group.' );
+		}
+	}
+
+	/**
+	 * @covers FrmBuilderPreviewHelper::add_to_manifest
+	 */
+	public function test_preview_data_lists_fields_used_by_conditional_logic() {
+		$this->assertArrayNotHasKey( 'logic', $this->get_preview_data( $this->create_field( 'text' ) ) );
+
+		$field                              = $this->create_field( 'text' );
+		$field->field_options['hide_field'] = array( '12', 12, '', '15' );
+		$this->assertSame( array( 12, 15 ), $this->get_preview_data( $field )['logic'] );
 	}
 
 	/**
@@ -143,6 +294,36 @@ class test_FrmBuilderPreviewHelper extends FrmUnitTest {
 		}
 
 		return FrmBuilderPreviewHelper::supports( $field, $field_obj, FrmFieldsController::display_field_options( array(), $field_obj ) );
+	}
+
+	/**
+	 * Add a field to a manifest the way the form builder does.
+	 *
+	 * @param object $saved_field The saved field.
+	 *
+	 * @return array The data the browser draws the preview from.
+	 */
+	private function get_preview_data( $saved_field ) {
+		$saved_field->parent_form_id = $saved_field->form_id;
+		$field_obj                   = FrmFieldFactory::get_field_factory( $saved_field );
+		$manifest                    = (object) array(
+			'definitions' => array(),
+			'fields'      => array(),
+		);
+		$atts                        = array(
+			'field'                  => FrmFieldsHelper::setup_edit_vars( $saved_field ),
+			'saved_field'            => $saved_field,
+			'field_obj'              => $field_obj,
+			'display'                => FrmFieldsController::display_field_options( array(), $field_obj ),
+			'li_classes'             => '',
+			'extra_field_attributes' => array(),
+		);
+
+		ob_start();
+		FrmBuilderPreviewHelper::add_to_manifest( $atts, $manifest );
+		ob_end_clean();
+
+		return $manifest->fields[0];
 	}
 
 	/**

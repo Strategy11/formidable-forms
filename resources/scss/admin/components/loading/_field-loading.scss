@@ -13,6 +13,14 @@
 	text-align: center;
 }
 
+/* Match the card's spacing. Content height excludes 10px padding and two 1px borders. */
+#frm-show-fields li:is(.frm-preview-placeholder, .frm_field_loading, .frm_field_preview_pending) {
+	min-height: calc(var(--frm-preview-height, 89px) - 12px);
+	margin: 0;
+	padding: 10px 10px 0;
+	border: 1px solid transparent;
+}
+
 /* Keep the spinner outside the flow so adding it never moves the fields below. */
 .frm_sorting > .frm_field_loading .frm_visible_spinner.frm-wait {
 	position: absolute;

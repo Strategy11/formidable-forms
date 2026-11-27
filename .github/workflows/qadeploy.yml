@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: 🚚 Get latest code
-      uses: actions/checkout@v3.5.0
+      uses: actions/checkout@v6
 
     - name: 🔄 Sanitize branch name
       id: sanitize
@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: 🚚 Get latest code
-      uses: actions/checkout@v3.5.0
+      uses: actions/checkout@v6
 
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.1

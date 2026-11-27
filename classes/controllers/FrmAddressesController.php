@@ -166,7 +166,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 
 		// Include the placeholder with the sub field.
 		foreach ( $fields as $name => $f ) {
-			if ( isset( $field['placeholder'] ) && isset( $field['placeholder'][ $name ] ) ) {
+			if ( isset( $field['placeholder'], $field['placeholder'][ $name ] ) ) {
 				$fields[ $name ]['placeholder'] = $field['placeholder'][ $name ];
 			}
 		}
@@ -198,6 +198,18 @@ class FrmAddressesController extends FrmComboFieldsController {
 		self::maybe_define_country_codes();
 		$code = self::$country_codes[ $country ] ?? '';
 		return is_string( $code ) ? $code : '';
+	}
+
+	/**
+	 * Gets the country name to country code mapping.
+	 *
+	 * @since 7.1
+	 *
+	 * @return array
+	 */
+	public static function get_country_codes() {
+		self::maybe_define_country_codes();
+		return self::$country_codes ?? array();
 	}
 
 	/**

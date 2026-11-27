@@ -5,10 +5,11 @@
  * shows. The markup matches classes/views/frm-forms/add_field.php, and the settings panels are
  * requested separately by fieldSettingsLoader.js.
  *
- * @since x.x
+ * @since 7.1
  */
 
 import { addFieldSettingsMetadata } from './deferredFieldSettings';
+import { queueFieldPreview } from './fieldPreviewQueue';
 
 const MANIFEST_ID = 'frm-field-previews';
 const TEXT_INPUT_TYPES = new Set( [ 'text', 'email', 'url', 'number', 'phone' ] );
@@ -18,14 +19,11 @@ const TEXT_INPUT_TYPES = new Set( [ 'text', 'email', 'url', 'number', 'phone' ] 
  */
 export const PENDING_PREVIEW_CLASS = 'frm_field_preview_pending';
 
-/**
- * Target time spent drawing previews before the browser gets a frame to paint and handle input.
- */
-const RENDER_BUDGET = 4;
-
 let pendingPreviews = [];
 let template;
 let strings;
+// Fields whose conditional logic points at each field, keyed by the field it points at.
+const logicDependents = new Map();
 
 /**
  * Turn each preview placeholder into an empty field list item, before the builder scans its grid.
@@ -34,7 +32,7 @@ let strings;
  * builder and add-ons need to find the fields. The previews themselves are drawn later by
  * renderFieldPreviews(), so the page does not lay out every field at once.
  *
- * @since x.x
+ * @since 7.1
  * @return {string[]} The ids of the fields, in page order.
  */
 export function hydrateFieldPreviews() {
@@ -64,6 +62,13 @@ export function hydrateFieldPreviews() {
 
 		// Layout and order changes made before the settings arrive are kept here.
 		addFieldSettingsMetadata( placeholder, fieldId, getSettingsMetadata( data ) );
+		data.logic?.forEach( logicFieldId => {
+			const key = String( logicFieldId );
+			if ( ! logicDependents.has( key ) ) {
+				logicDependents.set( key, [] );
+			}
+			logicDependents.get( key ).push( fieldId );
+		} );
 		pendingPreviews.push( { placeholder, data } );
 	} );
 	manifestElement.remove();
@@ -72,47 +77,42 @@ export function hydrateFieldPreviews() {
 }
 
 /**
- * Draw the hydrated previews in short slices, giving the browser a frame between slices.
+ * Find the previews whose conditional logic points at a field, so a change to its choices can
+ * reach settings panels that have not loaded.
  *
  * @since x.x
+ * @param {string} fieldId Numeric field ID.
+ * @return {string[]} The ids of the previews whose logic uses the field.
+ */
+export function getFieldsWithLogicOn( fieldId ) {
+	return logicDependents.get( String( fieldId ) ) || [];
+}
+
+/**
+ * Queue hydrated previews for rendering as their placeholders approach the viewport.
+ *
+ * @since 7.1
  * @param {Function} onRendered Called with the old and new list item of each preview drawn.
  * @param {Function} onSlice    Called with what onRendered returned for each preview in a slice.
- * @return {Promise<void>} Resolves once every preview has been drawn.
+ * @return {void}
  */
-export async function renderFieldPreviews( onRendered, onSlice ) {
+export function renderFieldPreviews( onRendered, onSlice ) {
 	const previews = pendingPreviews;
 	pendingPreviews = [];
-
-	let index = 0;
-	while ( index < previews.length ) {
-		// Wait for a frame first, so the page paints before the first slice too.
-		await waitForNextFrame();
-
-		const sliceStarted = performance.now();
-		const slice = [];
-		while ( index < previews.length && performance.now() - sliceStarted < RENDER_BUDGET ) {
-			const { placeholder, data } = previews[ index++ ];
-			if ( ! placeholder.isConnected ) {
-				continue;
-			}
+	previews.forEach( ( { placeholder, data } ) => {
+		queueFieldPreview( placeholder, () => {
 			const field = createField( template, data, strings );
+			field.className = placeholder.className;
+			field.classList.remove( PENDING_PREVIEW_CLASS );
 			// Keep the order input object, which drag and drop code caches, and any settings
 			// that were needed before the preview was drawn.
 			// eslint-disable-next-line formidable/prefer-document-fragment -- the field is not in the page yet
 			field.append( ...placeholder.querySelectorAll( ':scope > .frm-deferred-settings-meta, :scope > .frm-single-settings' ) );
 			const rendered = onRendered( placeholder, field );
 			placeholder.replaceWith( field );
-			slice.push( rendered );
-		}
-		onSlice( slice );
-	}
-}
-
-/**
- * @return {Promise<void>} Resolves after the next frame, in a new task so input can run first.
- */
-function waitForNextFrame() {
-	return new Promise( resolve => requestAnimationFrame( () => setTimeout( resolve, 0 ) ) );
+			return rendered;
+		}, onSlice );
+	} );
 }
 
 /**
@@ -186,11 +186,9 @@ function createFieldTemplate( strings ) {
 	const label = tag( 'label', {
 		className: 'frm_primary_label',
 		children: [
-			span( { className: 'frm-label-text' } ),
+			span( { className: 'frm_builder_field_name' } ),
 			' ',
-			span( { className: 'frm_required' } ),
-			' ',
-			span( { className: 'frm-sub-label frm-collapsed-label', text: strings.collapsed } )
+			span( { className: 'frm_required' } )
 		]
 	} );
 
@@ -208,12 +206,13 @@ function createFieldTemplate( strings ) {
 }
 
 /**
+ * @since x.x
  * @param {HTMLElement} template The shared field markup.
  * @param {Object}      data     The values printed for this field.
  * @param {Object}      strings  Translated text shared by every preview.
  * @return {HTMLElement} The field list item.
  */
-function createField( template, data, strings ) {
+export function createField( template, data, strings ) {
 	const { id, type, ftype } = data;
 	const field = template.cloneNode( true );
 	field.id = `frm_field_id_${ id }`;
@@ -230,14 +229,17 @@ function createField( template, data, strings ) {
 
 	const label = container.querySelector( '.frm_primary_label' );
 	label.id = `field_label_${ id }`;
-	const labelText = label.firstElementChild;
-	labelText.insertAdjacentHTML( 'beforebegin', data.label || '' );
-	labelText.remove();
+	// Keep the name in its own span, like show_label_on_form_builder in PHP, so live label edits leave the rest of the label alone.
+	label.firstElementChild.innerHTML = data.label || '';
 
 	const required = label.querySelector( '.frm_required' );
+	required.id = `frm_required_indicator_${ id }`;
 	required.textContent = data.indicator ?? '*';
 	if ( ! data.required ) {
 		required.classList.add( 'frm_hidden' );
+	}
+	if ( field.classList.contains( 'divider_section_only' ) ) {
+		label.append( ' ', frmDom.span( { className: 'frm-sub-label frm-collapsed-label', text: strings.collapsed } ) );
 	}
 	if ( data.afterLabel ) {
 		label.insertAdjacentHTML( 'beforeend', data.afterLabel );
@@ -245,7 +247,11 @@ function createField( template, data, strings ) {
 
 	const inputs = container.lastElementChild;
 	inputs.dataset.ftype = ftype;
-	inputs.prepend( ...createInputs( data, strings ) );
+	if ( data.inputHtml !== undefined ) {
+		inputs.insertAdjacentHTML( 'afterbegin', data.inputHtml );
+	} else {
+		inputs.prepend( ...createInputs( data, strings ) );
+	}
 
 	if ( data.description !== undefined ) {
 		const description = frmDom.div( { id: `field_description_${ id }`, className: 'frm_description' } );

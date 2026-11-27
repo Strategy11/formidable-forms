@@ -375,8 +375,9 @@ class FrmSalesApi extends FrmFormApi {
 		}
 
 		$dismiss_attrs = array(
-			'href'  => '#',
-			'class' => 'dismiss',
+			'href'       => '#',
+			'class'      => 'dismiss',
+			'aria-label' => __( 'Close', 'formidable' ),
 		);
 
 		$content_attrs = array();
@@ -405,7 +406,9 @@ class FrmSalesApi extends FrmFormApi {
 					<?php echo esc_html( $banner_cta_text ); ?>
 				</a>
 			</div>
-			<a <?php FrmAppHelper::array_to_html_params( $dismiss_attrs, true ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon' ); ?></a>
+			<a <?php FrmAppHelper::array_to_html_params( $dismiss_attrs, true ); ?>>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon', array( 'aria-hidden' => 'true' ) ); ?>
+			</a>
 		</div>
 		<?php
 		// phpcs:enable Generic.WhiteSpace.ScopeIndent

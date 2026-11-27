@@ -246,11 +246,15 @@
 		}
 	}
 
+	/**
+	 * @param {Object} paymentMethod The Square card payment method.
+	 * @return {Promise<Object>} The Square token result, with the token and the card details.
+	 */
 	async function tokenize( paymentMethod ) {
 		const tokenResult = await paymentMethod.tokenize();
 
 		if ( tokenResult.status === 'OK' ) {
-			return tokenResult.token;
+			return tokenResult;
 		}
 
 		let errorMessage = `Tokenization failed with status: ${ tokenResult.status }`;
@@ -261,8 +265,33 @@
 		throw new Error( errorMessage );
 	}
 
+	/**
+	 * Identify the card used for a token, so a buyer verification is only reused for the same card.
+	 * Square ties a verification token to the card, and rejects it for a different card with PAYMENT_SOURCE_MISMATCH.
+	 *
+	 * @since 7.1
+	 *
+	 * @param {Object} tokenResult The Square token result.
+	 * @return {string} A key for the card, or the token itself when the card details are missing so nothing is reused.
+	 */
+	function getCardKey( tokenResult ) {
+		const card = tokenResult.details?.card;
+
+		if ( ! card || ! card.last4 ) {
+			return tokenResult.token;
+		}
+
+		return [ card.brand, card.last4, card.expMonth, card.expYear ].join( '|' );
+	}
+
 	// Required in SCA Mandated Regions: Learn more at https://developer.squareup.com/docs/sca-overview
-	async function verifyBuyer( payments, token ) {
+	/**
+	 * @param {Object} payments    The Square payments object.
+	 * @param {Object} tokenResult The Square token result.
+	 * @return {Promise<string>} The verification token.
+	 */
+	async function verifyBuyer( payments, tokenResult ) {
+		const { token } = tokenResult;
 		const formData = new FormData( thisForm );
 		formData.append( 'action', 'frm_verify_buyer' );
 		formData.append( 'nonce', frmSquareVars.nonce );
@@ -286,15 +315,17 @@
 			throw new Error( verificationData.data );
 		}
 
-		if ( buyerTokens[ verificationData.data.hash ] ) {
-			// Avoid a second verify buyer request if the verification data has not changed.
-			return buyerTokens[ verificationData.data.hash ];
+		const cacheKey = `${ verificationData.data.hash }|${ getCardKey( tokenResult ) }`;
+
+		if ( buyerTokens[ cacheKey ] ) {
+			// Avoid a second verify buyer request if the card and the verification data have not changed.
+			return buyerTokens[ cacheKey ];
 		}
 
 		const { verificationDetails } = verificationData.data;
 		const verificationResults = await payments.verifyBuyer( token, verificationDetails );
 
-		buyerTokens[ verificationData.data.hash ] = verificationResults.token;
+		buyerTokens[ cacheKey ] = verificationResults.token;
 
 		return verificationResults.token;
 	}
@@ -405,9 +436,9 @@
 					disableSubmit( thisForm );
 				}
 
-				const token = await tokenize( card );
-				const verificationToken = await verifyBuyer( payments, token );
-				await createPayment( event, token, verificationToken );
+				const tokenResult = await tokenize( card );
+				const verificationToken = await verifyBuyer( payments, tokenResult );
+				await createPayment( event, tokenResult.token, verificationToken );
 
 				// Decrement running counter after successful payment
 				running--;
