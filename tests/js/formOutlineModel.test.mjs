@@ -141,3 +141,20 @@ test( 'short last pages become current as the canvas scrolls to the bottom', () 
 	assert.equal( getCurrentPageIndex( pillsAt( 2200 ), { ...view, scrollTop: 2200 } ), 3 );
 	assert.equal( getCurrentPageIndex( pillsAt( 1400 ), { ...view, scrollTop: 1400 } ), 0 );
 } );
+
+test( 'a page title match does not list the page\'s sections with nothing in them', () => {
+	const fields = [
+		field( '1', 'text', 'Name' ),
+		field( '2', 'break', 'Next' ),
+		field( '3', 'text', 'Delivery' ),
+		field( '4', 'divider', 'Billing' ),
+		inSection( '4', field( '5', 'text', 'Street' ) ),
+		field( '6', 'divider', 'Shipping' ),
+		inSection( '6', field( '7', 'text', 'Street' ) )
+	];
+
+	assert.deepEqual( outline( fields, 'page 2' ), [ 'page Page 2: Delivery' ] );
+	// The page title comes from its first field, which still shows as a match.
+	assert.deepEqual( outline( fields, 'delivery' ), [ 'page Page 2: Delivery', '  field Delivery' ] );
+	assert.deepEqual( outline( fields, 'billing' ), [ 'page Page 2: Delivery', '  section Billing' ] );
+} );

@@ -110,7 +110,8 @@ export function buildOutline( pages, query, pageNumber ) {
 		} );
 		// eslint-disable-next-line unicorn/no-array-reverse -- toReversed() is ES2023 and breaks older browsers. Array.from() already made a copy to reverse.
 		Array.from( sectionRows.values() ).reverse().forEach( section => {
-			if ( query !== '' && ! section.matches && ! pageMatches && section.row.children.length === 0 ) {
+			// A page title match shows the page, not every section on it.
+			if ( query !== '' && ! section.matches && section.row.children.length === 0 ) {
 				section.siblings.splice( section.siblings.indexOf( section.row ), 1 );
 			}
 		} );
