@@ -170,6 +170,38 @@ class test_FrmAbilitiesFieldPlacement extends FrmUnitTest {
 	}
 
 	/**
+	 * The end of a section is after its last field, not its first.
+	 *
+	 * @return void
+	 */
+	public function test_create_field_in_a_section_with_several_fields_is_added_after_the_last_one() {
+		$form    = $this->create_empty_form();
+		$section = $this->store_field( 'divider', $form, 1 );
+		$first   = $this->store_field( 'text', $form, 2, array( 'in_section' => $section ) );
+		$second  = $this->store_field( 'text', $form, 3, array( 'in_section' => $section ) );
+		$last    = $this->store_field( 'text', $form, 4, array( 'in_section' => $section ) );
+		$end     = $this->store_field( 'end_divider', $form, 5 );
+		$after   = $this->store_field( 'text', $form, 6 );
+
+		$created = $this->execute(
+			'create-field',
+			array(
+				'form_id'       => $form,
+				'type'          => 'text',
+				'field_options' => array( 'in_section' => $section ),
+			)
+		);
+
+		$this->assertNotWPError( $created );
+		$this->assertSame( 5, $created['field_order'], 'The field goes after the last field of the section.' );
+		$this->assertSame( 2, (int) FrmField::getOne( $first )->field_order );
+		$this->assertSame( 3, (int) FrmField::getOne( $second )->field_order );
+		$this->assertSame( 4, (int) FrmField::getOne( $last )->field_order, 'Fields already in the section keep their order.' );
+		$this->assertSame( 6, (int) FrmField::getOne( $end )->field_order, 'The end_divider moves down so the field stays inside.' );
+		$this->assertSame( 7, (int) FrmField::getOne( $after )->field_order );
+	}
+
+	/**
 	 * @return void
 	 */
 	public function test_create_field_with_an_order_outside_its_section_is_rejected() {
