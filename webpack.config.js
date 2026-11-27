@@ -5,15 +5,18 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
 const TerserPlugin = require( 'terser-webpack-plugin' );
-const glob = require( 'glob' );
+const fs = require( 'fs' );
 
-// Generate web component SCSS entries using glob
-const webComponentScssFiles = glob.sync('./js/src/web-components/*/**.scss')
-  .reduce( ( scssList, file ) => {
-    const match = file.match(/web-components\/(.+)\/(.+)\.scss$/);
-    if (match) {
-      scssList[`../js/src/web-components/${match[1]}/${match[2]}`] = './' + file;
-    }
+// Generate web component SCSS entries: every .scss file directly inside each web component folder.
+const webComponentsDir = './js/src/web-components';
+const webComponentScssFiles = fs.readdirSync( webComponentsDir, { withFileTypes: true } )
+  .filter( dir => dir.isDirectory() )
+  .reduce( ( scssList, dir ) => {
+    fs.readdirSync( `${ webComponentsDir }/${ dir.name }` )
+      .filter( file => file.endsWith( '.scss' ) )
+      .forEach( file => {
+        scssList[`../js/src/web-components/${ dir.name }/${ file.slice( 0, -5 ) }`] = `${ webComponentsDir }/${ dir.name }/${ file }`;
+      } );
     return scssList;
 }, {});
 

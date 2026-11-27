@@ -61,7 +61,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.cache-npm.outputs.cache-hit != 'true'
-        run: npm ci --legacy-peer-deps --include=dev
+        run: npm ci --legacy-peer-deps --include=dev --omit=optional
 
       # Serve the formidableforms.com APIs from fixtures instead of calling
       # them on every run. The cache key is the UTC date, so the fixtures are

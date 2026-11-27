@@ -40,7 +40,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.cache-npm.outputs.cache-hit != 'true'
-        run: npm ci --include=dev --legacy-peer-deps
+        run: npm ci --include=dev --omit=optional --legacy-peer-deps
 
       - name: Run ESLint
         run: ./node_modules/.bin/eslint .

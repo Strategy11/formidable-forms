@@ -38,7 +38,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.cache-npm.outputs.cache-hit != 'true'
-        run: npm ci --include=dev --legacy-peer-deps
+        run: npm ci --include=dev --omit=optional --legacy-peer-deps
 
       - name: Run JS unit tests
         run: node --test tests/js/*.test.mjs
