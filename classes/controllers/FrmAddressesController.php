@@ -166,7 +166,7 @@ class FrmAddressesController extends FrmComboFieldsController {
 
 		// Include the placeholder with the sub field.
 		foreach ( $fields as $name => $f ) {
-			if ( isset( $field['placeholder'] ) && isset( $field['placeholder'][ $name ] ) ) {
+			if ( isset( $field['placeholder'], $field['placeholder'][ $name ] ) ) {
 				$fields[ $name ]['placeholder'] = $field['placeholder'][ $name ];
 			}
 		}

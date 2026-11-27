@@ -338,7 +338,7 @@ class FrmEmailSummaryHelper {
 				$wpdb->prefix . 'frm_forms',
 				$from_date,
 				$to_date . ' 23:59:59',
-				intval( $limit )
+				$limit
 			)
 		);
 
@@ -383,7 +383,7 @@ class FrmEmailSummaryHelper {
 				</span>',
 			esc_attr( $color ),
 			esc_html( $arrow ),
-			intval( $displayed_value ) . '%'
+			(int) $displayed_value . '%'
 		);
 	}
 
@@ -501,13 +501,7 @@ class FrmEmailSummaryHelper {
 			return array();
 		}
 
-		$plugins = array();
-
-		foreach ( $update_data->response as $plugin_data ) {
-			$plugins[] = $plugin_data->display_name;
-		}
-
-		return $plugins;
+		return array_column( $update_data->response, 'display_name' );
 	}
 
 	/**

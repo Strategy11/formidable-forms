@@ -42,6 +42,7 @@
 	<rule ref="Formidable.CodeAnalysis.PreferFrmHtmlHelper" />
 	<rule ref="Formidable.CodeAnalysis.PreferHtmlParamsEchoMode" />
 	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
+	<rule ref="Formidable.CodeAnalysis.PreferListPluck" />
 	<rule ref="Formidable.CodeAnalysis.PreferNegationOverEmptyForFunctionCall" />
 	<rule ref="Formidable.CodeAnalysis.PreferNotEmptyTernary" />
 	<rule ref="Formidable.CodeAnalysis.PreferObGetClean" />
@@ -71,6 +72,7 @@
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantTrimAfterSanitize" />
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantReturnVariable" />
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantWpdbPrefix" />
+	<rule ref="Formidable.CodeAnalysis.RemoveUnusedVariable" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyBooleanTernary" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyDualConditionToTernary" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyEmptyTernary" />
@@ -85,6 +87,7 @@
 
 	<!-- PHPUnit -->
 	<rule ref="Formidable.PHPUnit.PreferAssertIsArray" />
+	<rule ref="Formidable.PHPUnit.PreferFactoryCreate" />
 
 	<!-- Commenting -->
 	<rule ref="Formidable.Commenting.AddBoolReturnTag" />
