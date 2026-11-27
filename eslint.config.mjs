@@ -69,7 +69,6 @@ export default [
 				sourceType: 'module',
 				babelOptions: {
 					presets: ['@babel/preset-env', '@babel/preset-react'],
-					plugins: ['@babel/plugin-syntax-jsx'],
 				},
 				ecmaFeatures: {
 					jsx: true,
