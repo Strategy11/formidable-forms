@@ -535,4 +535,84 @@ class test_FrmAbilitiesEntriesController extends FrmUnitTest {
 
 		$this->set_current_user_to_1();
 	}
+
+	/**
+	 * Child field keys in a repeater row are swapped for the child field IDs,
+	 * unless the row already sets that ID, and stray row keys are renumbered.
+	 *
+	 * @return void
+	 */
+	public function test_normalize_repeater_rows_maps_child_field_keys_to_ids() {
+		$child_form_id = $this->factory->form->create();
+		$name_id       = $this->factory->field->create(
+			array(
+				'form_id'   => $child_form_id,
+				'type'      => 'text',
+				'field_key' => 'child-name-key',
+			)
+		);
+		$email_id      = $this->factory->field->create(
+			array(
+				'form_id'   => $child_form_id,
+				'type'      => 'email',
+				'field_key' => 'child-email-key',
+			)
+		);
+		$repeater      = (object) array(
+			'field_options' => array( 'form_select' => $child_form_id ),
+		);
+
+		$rows = array(
+			0         => array(
+				'child-name-key'  => 'Ann',
+				'child-email-key' => 'ann@example.com',
+			),
+			'by-name' => array(
+				$name_id         => 'Set by ID',
+				'child-name-key' => 'Ignored because the ID is already set',
+			),
+			'row_ids' => array( 'stale' ),
+		);
+
+		$this->run_private_method( array( 'FrmAbilitiesEntriesController', 'normalize_repeater_rows' ), array( &$rows, $repeater ) );
+
+		$this->assertSame(
+			array(
+				'form'    => $child_form_id,
+				'row_ids' => array( 0, 'i1' ),
+				0         => array(
+					$name_id  => 'Ann',
+					$email_id => 'ann@example.com',
+				),
+				'i1'      => array(
+					$name_id         => 'Set by ID',
+					'child-name-key' => 'Ignored because the ID is already set',
+				),
+			),
+			$rows
+		);
+	}
+
+	/**
+	 * Without a child form there are no keys to map, so row values are kept as sent.
+	 *
+	 * @return void
+	 */
+	public function test_normalize_repeater_rows_without_a_child_form_keeps_row_keys() {
+		$repeater = (object) array( 'field_options' => array() );
+		$rows     = array(
+			array( 'child-name-key' => 'Ann' ),
+		);
+
+		$this->run_private_method( array( 'FrmAbilitiesEntriesController', 'normalize_repeater_rows' ), array( &$rows, $repeater ) );
+
+		$this->assertSame(
+			array(
+				'form'    => 0,
+				'row_ids' => array( 0 ),
+				0         => array( 'child-name-key' => 'Ann' ),
+			),
+			$rows
+		);
+	}
 }
