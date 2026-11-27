@@ -215,3 +215,29 @@ export function getCurrentPageIndex( pills, view ) {
 	} );
 	return index;
 }
+
+/**
+ * Read an element's text the way it looks, emoji included.
+ *
+ * When the browser can't draw an emoji, WordPress swaps it for an image with the emoji as its
+ * alt text, and textContent would drop it.
+ *
+ * @param {Node}     node The element.
+ * @param {Function} skip Returns true for child elements to leave out, like the required marker.
+ * @return {string} The text, trimmed.
+ */
+export function getNodeText( node, skip = () => false ) {
+	const read = current => {
+		if ( current.nodeType === 3 ) {
+			return current.nodeValue;
+		}
+		if ( current.nodeType !== 1 || ( current !== node && skip( current ) ) ) {
+			return '';
+		}
+		if ( current.tagName === 'IMG' ) {
+			return current.classList.contains( 'emoji' ) || current.classList.contains( 'wp-smiley' ) ? current.alt : '';
+		}
+		return Array.from( current.childNodes, read ).join( '' );
+	};
+	return read( node ).trim();
+}

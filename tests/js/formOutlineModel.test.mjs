@@ -1,7 +1,7 @@
 /* oxlint-disable import/no-nodejs-modules -- Tests run with the Node test runner. */
 import assert from 'node:assert/strict';
 import { mock, test } from 'node:test';
-import { buildOutline, getCurrentPageIndex, groupPages, throttle } from '../../js/src/admin/formOutlineModel.js';
+import { buildOutline, getCurrentPageIndex, getNodeText, groupPages, throttle } from '../../js/src/admin/formOutlineModel.js';
 
 const pageNumber = index => `Page ${ index + 1 }`;
 
@@ -191,4 +191,26 @@ test( 'search ignores accents and case', () => {
 	assert.deepEqual( outline( fields, 'numero' ), [ 'page Page 2: Numéro', '  field Numéro' ] );
 	// Labels saved in decomposed form match too.
 	assert.deepEqual( outline( [ field( '4', 'text', 'Numéro' ) ], 'numéro' ), [ 'field Numéro' ] );
+} );
+
+// Minimal DOM nodes: text nodes and elements with classes and children.
+const text = value => ( { nodeType: 3, nodeValue: value } );
+const el = ( tagName, className, children = [], props = {} ) => ( {
+	nodeType: 1,
+	tagName: tagName.toUpperCase(),
+	classList: { contains: name => className.split( ' ' ).includes( name ) },
+	childNodes: children,
+	...props
+} );
+
+test( 'label text keeps emoji that WordPress swapped for images', () => {
+	// wp-emoji replaces emoji the browser can't draw with <img class="emoji" alt="🎉">.
+	const label = el( 'label', 'frm_primary_label', [
+		el( 'span', 'frm_builder_field_name', [ text( 'Party ' ), el( 'img', 'emoji', [], { alt: '🎉' } ), text( ' time' ) ] ),
+		el( 'span', 'frm_required', [ text( '*' ) ] )
+	] );
+	const skipMarkers = node => node.classList.contains( 'frm_required' );
+
+	assert.equal( getNodeText( label, skipMarkers ), 'Party 🎉 time' );
+	assert.equal( getNodeText( el( 'h2', '', [ el( 'img', 'other', [], { alt: 'Logo' } ), text( 'Hi' ) ] ) ), 'Hi' );
 } );

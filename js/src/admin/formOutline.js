@@ -1,6 +1,6 @@
 import { __, _n, sprintf } from '@wordpress/i18n';
 import { renderFieldPreviewNow } from './fieldPreviewQueue';
-import { buildOutline, getCurrentPageIndex, groupPages, throttle } from './formOutlineModel';
+import { buildOutline, getCurrentPageIndex, getNodeText, groupPages, throttle } from './formOutlineModel';
 
 const RENDER_DELAY = 100;
 // togglePage() in admin.js animates the first rows for 150 ms.
@@ -17,7 +17,7 @@ const getFieldContent = field => field.querySelector( ':scope > .frm_inner_field
 
 const getHeadingText = field => {
 	const heading = getFieldContent( field ).querySelector( '.frm_opt_container h1, .frm_opt_container h2, .frm_opt_container h3, .frm_opt_container h4, .frm_opt_container h5, .frm_opt_container h6, .frm_description h1, .frm_description h2, .frm_description h3, .frm_description h4, .frm_description h5, .frm_description h6' );
-	return heading?.textContent.trim() || '';
+	return heading ? getNodeText( heading ) : '';
 };
 
 const getFieldText = field => {
@@ -29,12 +29,7 @@ const getFieldText = field => {
 	}
 
 	// Some field types print the name straight into the label, so drop the markers that sit beside it.
-	if ( label.classList.contains( 'frm_builder_field_name' ) ) {
-		return label.textContent.trim();
-	}
-	const labelClone = label.cloneNode( true );
-	labelClone.querySelectorAll( '.frm_required, .frm-collapsed-label' ).forEach( marker => marker.remove() );
-	return labelClone.textContent.trim();
+	return getNodeText( label, node => node.classList.contains( 'frm_required' ) || node.classList.contains( 'frm-collapsed-label' ) );
 };
 
 /**
