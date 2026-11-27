@@ -162,3 +162,12 @@ test( 'clearing removes only the error ID from the checkbox description', () => 
 
 	assert.equal( checkbox.getAttribute( 'aria-describedby' ), 'frm_desc_field_7' );
 } );
+
+test( 'a floating widget with an error is shown inline next to its error, not hidden', () => {
+	const { widget, error, checkbox, calls } = captchaField( 'unverified' );
+
+	resetAfterError( widget, error );
+
+	assert.equal( calls.configure.at( -1 ).display, 'standard' );
+	assert.equal( checkbox.getAttribute( 'aria-describedby' ), 'frm_error_field_7' );
+} );

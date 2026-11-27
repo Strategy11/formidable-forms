@@ -96,11 +96,11 @@ export const clearError = widget => {
 };
 
 /**
- * Put a widget with an error back in the unverified state until the visitor verifies again.
+ * Put a widget with an error back in the unverified state, inline in its field, until the visitor verifies again.
  *
  * Verification no longer starts by itself, so the widget does not go back to Verified while its field
- * still shows the error, for example when Formidable focuses the invalid checkbox. The error is removed
- * once verified.
+ * still shows the error, for example when Formidable focuses the invalid checkbox. A floating widget is
+ * shown in its field, next to its error, instead of staying hidden. The error is removed once verified.
  *
  * @param {HTMLElement}      widget The altcha-widget element.
  * @param {HTMLElement|null} error  The error message element in the widget's field.
@@ -115,7 +115,7 @@ export const resetAfterError = ( widget, error ) => {
 		widget.reset();
 	}
 
-	widget.configure( { auto: 'off' } );
+	widget.configure( { auto: 'off', display: 'standard' } );
 
 	const checkbox = getCheckbox( widget );
 
