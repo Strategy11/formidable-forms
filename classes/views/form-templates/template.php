@@ -72,7 +72,7 @@ FrmFormTemplatesHelper::prepare_template_details( $template, $pricing, $license_
 				<a <?php FrmFormTemplatesHelper::add_template_link_attributes( $template ); ?>>
 					<?php echo $template['is_custom'] ? esc_html__( 'Edit', 'formidable' ) : esc_html__( 'View Demo', 'formidable' ); ?>
 				</a>
-				<a href="<?php echo esc_url( $template['use_template'] ); ?>" class="button button-primary frm-button-primary frm-small frm-form-templates-use-template-button" role="button">
+				<a href="<?php echo esc_url( $template['use_template'] ); ?>" class="button button-primary frm-button-primary frm-small frm-form-templates-use-template-button" role="button" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: Template name. */ __( 'Use Template %s', 'formidable' ), $template['name'] ) ); ?>">
 					<?php esc_html_e( 'Use Template', 'formidable' ); ?>
 				</a>
 			</div>

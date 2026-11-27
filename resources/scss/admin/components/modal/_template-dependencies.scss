@@ -1,0 +1,161 @@
+// Add-ons a template needs before it can be imported.
+.frm-template-deps-dialog {
+	max-width: calc(100% - 24px) !important;
+	overflow-wrap: anywhere;
+
+	#frmTemplateDependenciesModal .postbox {
+		max-height: calc(100dvh - 24px);
+		overflow-y: auto;
+	}
+
+	.frm-modal .postbox .frm_modal_top {
+		padding-inline-end: calc(var(--gap-md) + 36px);
+	}
+
+	.frm-modal-title {
+		font-size: var(--text-lg);
+		font-weight: 600;
+		color: var(--grey-900);
+	}
+
+	// Same hover square as the style and confirm modals.
+	.frm_modal_top button.dismiss {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 32px;
+		height: 32px;
+		margin-block-start: -4px;
+		margin-inline-end: -4px;
+		padding: 0;
+		border: 0;
+		border-radius: var(--small-radius);
+		background: transparent;
+		color: var(--grey-700);
+		cursor: pointer;
+		transition: 0.12s background-color ease;
+
+		&:hover {
+			background-color: var(--grey-100);
+		}
+
+	}
+
+	// Keeps the description right under the title.
+	.frm_modal_content > div.inside {
+		margin: 0;
+		padding-top: var(--gap-xs);
+	}
+
+	.frm-template-deps-description {
+		max-width: 416px; // Keeps clear of the close button.
+		margin: 0 0 var(--gap-sm);
+		font-size: var(--text-sm);
+		line-height: 1.5;
+		color: var(--grey-600);
+	}
+
+	.frm-template-deps-list {
+		margin: 0;
+		padding: 0;
+		border-radius: var(--small-radius);
+		box-shadow: inset 0 0 0 1px var(--grey-200);
+
+		li {
+			display: flex;
+			align-items: center;
+			gap: var(--gap-sm);
+			margin: 0;
+			padding: 12px 14px;
+
+			+ li {
+				border-top: 1px solid var(--grey-200);
+			}
+		}
+	}
+
+	.frm-template-deps-text {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		gap: 2px;
+		min-width: 0;
+	}
+
+	.frm-template-deps-name {
+		font-size: var(--text-sm);
+		font-weight: 500;
+		color: var(--grey-900);
+	}
+
+	.frm-template-deps-excerpt {
+		font-size: var(--text-xs);
+		line-height: 1.45;
+		color: var(--grey-500);
+	}
+
+	.frm-template-deps-error {
+		margin: 2px 0 0;
+		font-size: var(--text-xs);
+		line-height: 1.45;
+		color: var(--error-700);
+
+		&:empty {
+			margin: 0;
+		}
+	}
+
+	.frm-template-deps-heading {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var(--gap-2xs) var(--gap-xs);
+	}
+
+	// The checkmark shown in the status tag once the add-on is ready.
+	.frm-template-deps-status svg {
+		width: 12px;
+		height: 12px;
+	}
+
+	.frm-template-deps-note {
+		margin: var(--gap-sm) 0 0;
+		font-size: var(--text-sm);
+		color: var(--grey-600);
+	}
+
+	.frm_modal_top button.dismiss:focus-visible,
+	.frm-template-deps-footer .button:focus-visible {
+		outline: 2px solid var(--primary-700);
+		outline-offset: 2px;
+	}
+
+	.frm-template-deps-footer {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+		gap: var(--gap-xs);
+
+		.button {
+			min-height: 32px;
+			max-width: 100%;
+			margin: 0;
+			white-space: normal;
+		}
+
+		.button[aria-disabled="true"] {
+			cursor: wait;
+		}
+
+		.button[hidden] {
+			display: none;
+		}
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.frm-template-deps-dialog .frm_modal_top button.dismiss {
+		transition: none;
+	}
+}

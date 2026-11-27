@@ -10,7 +10,7 @@
 	}
 
 	const modal = {
-		maybeCreateModal: ( id, { title, content, footer, width, dialogClass } = {} ) => {
+		maybeCreateModal: ( id, { title, content, footer, width, dialogClass, closeLabel, descriptionId } = {} ) => {
 			let modal = document.getElementById( id );
 
 			if ( ! modal ) {
@@ -25,13 +25,16 @@
 					titleElement.textContent = title;
 				}
 
-				const a = tag(
-					'a',
-					{
-						child: svg( { href: '#frm_close_icon' } ),
-						className: 'dismiss'
-					}
-				);
+				const closeIcon = svg( { href: '#frm_close_icon' } );
+				const closeControl = tag( closeLabel ? 'button' : 'a', {
+					child: closeIcon,
+					className: 'dismiss'
+				} );
+				if ( closeLabel ) {
+					closeControl.type = 'button';
+					closeControl.setAttribute( 'aria-label', closeLabel );
+					closeIcon.setAttribute( 'aria-hidden', 'true' );
+				}
 				const postbox = modal.querySelector( '.postbox' );
 
 				postbox.append(
@@ -39,7 +42,7 @@
 						className: 'frm_modal_top',
 						children: [
 							titleElement,
-							div( { child: a } )
+							div( { child: closeControl } )
 						]
 					} )
 				);
@@ -58,7 +61,7 @@
 			}
 
 			if ( ! content && ! footer ) {
-				makeModalIntoADialogAndOpen( modal, { width, dialogClass } );
+				makeModalIntoADialogAndOpen( modal, { width, dialogClass, descriptionId } );
 				return modal;
 			}
 
@@ -73,7 +76,7 @@
 				modalHelper( footer, 'frm_modal_footer' );
 			}
 
-			makeModalIntoADialogAndOpen( modal, { width, dialogClass } );
+			makeModalIntoADialogAndOpen( modal, { width, dialogClass, descriptionId } );
 			return modal;
 		},
 		footerButton: args => {
@@ -623,7 +626,7 @@
 		return modal;
 	}
 
-	function makeModalIntoADialogAndOpen( modal, { width, dialogClass = '' } = {} ) {
+	function makeModalIntoADialogAndOpen( modal, { width, dialogClass = '', descriptionId } = {} ) {
 		const bodyWithModalClassName = 'frm-body-with-open-modal';
 
 		const $modal = jQuery( modal );
@@ -642,11 +645,6 @@
 					jQuery( '.frm-dialog' ).removeClass( 'ui-widget ui-widget-content ui-corner-all' );
 
 					modal.classList.remove( 'ui-dialog-content', 'ui-widget-content' );
-
-					$modal.on( 'click', 'a.dismiss', function( event ) {
-						event.preventDefault();
-						$modal.dialog( 'close' );
-					} );
 
 					const overlay = document.querySelector( '.ui-widget-overlay' );
 					if ( overlay ) {
@@ -670,7 +668,17 @@
 			// span by default, but that span is left empty since no `title` option is
 			// ever passed to .dialog(). Point it at the real visible title instead so
 			// the dialog has an accessible name.
-			$modal.dialog( 'widget' ).attr( 'aria-labelledby', `${ modal.id }-title` );
+			const dialog = $modal.dialog( 'widget' )[ 0 ];
+			dialog.setAttribute( 'aria-labelledby', `${ modal.id }-title` );
+			dialog.setAttribute( 'aria-modal', 'true' );
+			if ( descriptionId ) {
+				dialog.setAttribute( 'aria-describedby', descriptionId );
+			}
+
+			$modal.on( 'click', 'a.dismiss, button.dismiss', function( event ) {
+				event.preventDefault();
+				$modal.dialog( 'close' );
+			} );
 		}
 
 		document.body.classList.add( bodyWithModalClassName );

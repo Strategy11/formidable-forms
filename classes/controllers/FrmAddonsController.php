@@ -1250,8 +1250,21 @@ class FrmAddonsController {
 			return false;
 		}
 
-		$plugin_version = FrmViewsAppHelper::plugin_version();
-		return version_compare( $plugin_version, '5.0', '>=' ) ? 'visual-views' : 'views';
+		return self::get_views_slug_for_version( FrmViewsAppHelper::plugin_version() );
+	}
+
+	/**
+	 * Map a Views plugin version to its catalog product slug.
+	 * Both Legacy Views and Visual Views ship in the same plugin file, so the version tells them apart.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $version The Views plugin version.
+	 *
+	 * @return string Either 'visual-views' or 'views'.
+	 */
+	public static function get_views_slug_for_version( $version ) {
+		return version_compare( $version, '5.0', '>=' ) ? 'visual-views' : 'views';
 	}
 
 	/**
