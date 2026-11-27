@@ -39,7 +39,7 @@ class test_FrmTransLiteActionsController extends FrmUnitTest {
 		$this->assertNotEmpty( $fields );
 
 		$field = reset( $fields );
-		$this->assertEquals( $field_id, $field );
+		$this->assertSame( (string) $field_id, $field );
 	}
 
 	private function get_fields_for_price( $action ) {
@@ -86,8 +86,8 @@ class test_FrmTransLiteActionsController extends FrmUnitTest {
 		);
 
 		$this->assertNotNull( $atts );
-		$this->assertEquals( $older_id, $atts['payment']->id );
-		$this->assertEquals( $entry['id'], $atts['entry_id'] );
+		$this->assertSame( (string) $older_id, $atts['payment']->id );
+		$this->assertSame( $entry['id'], $atts['entry_id'] );
 	}
 
 	/**
@@ -120,7 +120,7 @@ class test_FrmTransLiteActionsController extends FrmUnitTest {
 
 		$this->assertSame( 'pending', $stale->status, 'The test should pass a copy loaded before the update.' );
 		$this->assertNotNull( $received );
-		$this->assertEquals( $payment_id, $received['payment']->id, 'The passed payment should still be used.' );
+		$this->assertSame( (string) $payment_id, $received['payment']->id, 'The passed payment should still be used.' );
 		$this->assertSame( 'complete', $received['payment']->status, 'The payment should have the saved status, so payment actions run.' );
 	}
 
@@ -138,7 +138,7 @@ class test_FrmTransLiteActionsController extends FrmUnitTest {
 		);
 
 		$this->assertNotNull( $atts );
-		$this->assertEquals( $entry['payment_ids'][0], $atts['payment']->id );
+		$this->assertSame( (string) $entry['payment_ids'][0], $atts['payment']->id );
 	}
 
 	/**

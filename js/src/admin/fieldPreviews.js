@@ -22,6 +22,8 @@ export const PENDING_PREVIEW_CLASS = 'frm_field_preview_pending';
 let pendingPreviews = [];
 let template;
 let strings;
+// Fields whose conditional logic points at each field, keyed by the field it points at.
+const logicDependents = new Map();
 
 /**
  * Turn each preview placeholder into an empty field list item, before the builder scans its grid.
@@ -60,11 +62,30 @@ export function hydrateFieldPreviews() {
 
 		// Layout and order changes made before the settings arrive are kept here.
 		addFieldSettingsMetadata( placeholder, fieldId, getSettingsMetadata( data ) );
+		data.logic?.forEach( logicFieldId => {
+			const key = String( logicFieldId );
+			if ( ! logicDependents.has( key ) ) {
+				logicDependents.set( key, [] );
+			}
+			logicDependents.get( key ).push( fieldId );
+		} );
 		pendingPreviews.push( { placeholder, data } );
 	} );
 	manifestElement.remove();
 
 	return pendingPreviews.map( ( { data } ) => String( data.id ) );
+}
+
+/**
+ * Find the previews whose conditional logic points at a field, so a change to its choices can
+ * reach settings panels that have not loaded.
+ *
+ * @since x.x
+ * @param {string} fieldId Numeric field ID.
+ * @return {string[]} The ids of the previews whose logic uses the field.
+ */
+export function getFieldsWithLogicOn( fieldId ) {
+	return logicDependents.get( String( fieldId ) ) || [];
 }
 
 /**
@@ -167,9 +188,7 @@ function createFieldTemplate( strings ) {
 		children: [
 			span( { className: 'frm_builder_field_name' } ),
 			' ',
-			span( { className: 'frm_required' } ),
-			' ',
-			span( { className: 'frm-sub-label frm-collapsed-label', text: strings.collapsed } )
+			span( { className: 'frm_required' } )
 		]
 	} );
 
@@ -187,12 +206,13 @@ function createFieldTemplate( strings ) {
 }
 
 /**
+ * @since x.x
  * @param {HTMLElement} template The shared field markup.
  * @param {Object}      data     The values printed for this field.
  * @param {Object}      strings  Translated text shared by every preview.
  * @return {HTMLElement} The field list item.
  */
-function createField( template, data, strings ) {
+export function createField( template, data, strings ) {
 	const { id, type, ftype } = data;
 	const field = template.cloneNode( true );
 	field.id = `frm_field_id_${ id }`;
@@ -218,13 +238,20 @@ function createField( template, data, strings ) {
 	if ( ! data.required ) {
 		required.classList.add( 'frm_hidden' );
 	}
+	if ( field.classList.contains( 'divider_section_only' ) ) {
+		label.append( ' ', frmDom.span( { className: 'frm-sub-label frm-collapsed-label', text: strings.collapsed } ) );
+	}
 	if ( data.afterLabel ) {
 		label.insertAdjacentHTML( 'beforeend', data.afterLabel );
 	}
 
 	const inputs = container.lastElementChild;
 	inputs.dataset.ftype = ftype;
-	inputs.prepend( ...createInputs( data, strings ) );
+	if ( data.inputHtml !== undefined ) {
+		inputs.insertAdjacentHTML( 'afterbegin', data.inputHtml );
+	} else {
+		inputs.prepend( ...createInputs( data, strings ) );
+	}
 
 	if ( data.description !== undefined ) {
 		const description = frmDom.div( { id: `field_description_${ id }`, className: 'frm_description' } );

@@ -48,17 +48,9 @@ describe( 'Entries submitted from a form', () => {
 			] );
 		} );
 
-		cy.log( 'Check that the upgrade text matches one of the expected messages' );
-		cy.get( '.frm-tip-cta' ).then( $el => {
-			const text = $el.text().trim();
-			expect( text ).to.be.oneOf( [
-				'Upgrade to Pro.',
-				'Get 60% Off Pro!',
-				'Black Friday Deals',
-				'Cyber Monday Deals',
-				'Get 60% Off Pro'
-			] );
-		} );
+		// Campaigns supply their own CTA copy, including prices during Black Friday.
+		cy.get( 'a.frm_pro_tip[href] .frm-tip-cta' ).should( 'be.visible' )
+			.invoke( 'text' ).should( 'match', /\S/ );
 
 		cy.get( 'h3' ).should( 'contain', 'This form is not set to save any entries.' );
 
@@ -75,7 +67,7 @@ describe( 'Entries submitted from a form', () => {
 			} );
 
 		cy.get( '.frm_form_nav > :nth-child(1) > a' ).should( 'contain', 'Build' ).click();
-		cy.get( "a[aria-label='Close']", { timeout: 5000 } ).should( 'be.visible' ).click();
+		cy.closeFullScreen();
 		cy.log( 'Verify that entries are not allowed from the forms list' );
 		cy.get( 'td[data-colname="Entries"] svg[title="Saving entries is disabled for this form"]' ).should( 'exist' );
 	} );
@@ -197,7 +189,7 @@ describe( 'Entries submitted from a form', () => {
 		cy.get( '.frm_no_entries_header' ).should( 'contain', 'No Entries for form: Test Form' );
 
 		cy.get( '.frm_form_nav > :nth-child(1) > a' ).should( 'contain', 'Build' ).click();
-		cy.get( "a[aria-label='Close']", { timeout: 5000 } ).should( 'be.visible' ).click();
+		cy.closeFullScreen();
 	} );
 
 	afterEach( () => {
