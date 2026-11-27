@@ -110,7 +110,7 @@ li.selected .divider_section_only::before {
 	transition: border 0.7s ease-out;
 }
 
-.frm-section-collapsed {
+.frm-section-collapsed:not(.frm-builder-section) {
 	border-left-color: transparent !important;
 }
 
