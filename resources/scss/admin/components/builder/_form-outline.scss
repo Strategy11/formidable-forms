@@ -153,3 +153,11 @@
 	outline-offset: 2px;
 	background: var(--primary-50);
 }
+
+// Three tabs are wider than a narrow sidebar, like the half-width one on a phone. Let them
+// share the width and shorten long names, so the last tab is never cut off.
+.frm-settings-panel .frm-tabs-navs ul li {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
