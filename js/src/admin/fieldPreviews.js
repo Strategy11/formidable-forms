@@ -80,7 +80,7 @@ export function hydrateFieldPreviews() {
  * Find the previews whose conditional logic points at a field, so a change to its choices can
  * reach settings panels that have not loaded.
  *
- * @since 7.1
+ * @since x.x
  * @param {string} fieldId Numeric field ID.
  * @return {string[]} The ids of the previews whose logic uses the field.
  */
@@ -206,7 +206,7 @@ function createFieldTemplate( strings ) {
 }
 
 /**
- * @since 7.1
+ * @since x.x
  * @param {HTMLElement} template The shared field markup.
  * @param {Object}      data     The values printed for this field.
  * @param {Object}      strings  Translated text shared by every preview.

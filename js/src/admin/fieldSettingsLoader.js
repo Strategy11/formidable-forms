@@ -66,6 +66,7 @@ export function startFieldSettingsQueue() {
 }
 
 /**
+ * @since x.x
  * @param {HTMLElement} field A rendered preview whose settings can be prefetched.
  * @return {void}
  */
@@ -140,7 +141,7 @@ export function waitForFieldSettings( fieldIds ) {
  * save for them and moves each one into the save form when it arrives. The change runs after
  * every request settles, even one that failed, and runs at once when nothing is pending.
  *
- * @since 7.1
+ * @since x.x
  * @param {string[]}    fieldIds         The fields whose settings the change reads.
  * @param {Set<string>} awaitingFieldIds The builder's fields waiting for their settings.
  * @param {Function}    update           The change to run.
@@ -187,7 +188,7 @@ export function retryFailedFieldSettings( fieldIds ) {
  * removes only those fields from awaitingFieldIds. A field added in the meantime, for example by
  * a choice rename that reads another field's logic, keeps its place and gets another pass.
  *
- * @since 7.1
+ * @since x.x
  * @param {Set<string>} awaitingFieldIds The builder's fields waiting for their settings.
  * @return {Promise<string[]>} Resolves with the fields whose settings still failed to load.
  */

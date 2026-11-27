@@ -3130,7 +3130,7 @@ window.frmAdminBuildJS = function() {
 	 * Settings panels far from the viewport load only when needed. A field whose logic uses this
 	 * one gets its settings first, so a renamed choice reaches its logic and is saved with it.
 	 *
-	 * @since 7.1
+	 * @since x.x
 	 * @param {string}   fieldId The field whose choices changed.
 	 * @param {Function} update  Reads and changes the loaded logic rows.
 	 * @return {void}
