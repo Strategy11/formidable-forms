@@ -26,6 +26,7 @@ class FrmBuilderPreviewHelper {
 		'email'    => array( 'FrmFieldEmail', 'FrmProFieldEmail' ),
 		'url'      => array( 'FrmFieldUrl', 'FrmProFieldUrl' ),
 		'number'   => array( 'FrmFieldNumber', 'FrmProFieldNumber' ),
+		'radio'    => array( 'FrmFieldRadio', 'FrmProFieldRadio' ),
 		'phone'    => array( 'FrmFieldPhone', 'FrmProFieldPhone' ),
 		'textarea' => array( 'FrmFieldTextarea', 'FrmProFieldTextarea' ),
 		'hidden'   => array( 'FrmFieldHidden', 'FrmProFieldHidden' ),
@@ -75,7 +76,11 @@ class FrmBuilderPreviewHelper {
 			return false;
 		}
 
-		if ( in_array( $type, self::$text_input_types, true ) && self::has_input_group( $field ) ) {
+		if ( 'radio' === $type && ( ! is_array( $field->options ) || count( $field->options ) > 20 || 'post_category' === FrmField::get_option( $field, 'post_field' ) ) ) {
+			return false;
+		}
+
+		if ( 'number' !== $type && in_array( $type, self::$text_input_types, true ) && self::has_input_group( $field ) ) {
 			return false;
 		}
 
@@ -270,6 +275,10 @@ class FrmBuilderPreviewHelper {
 		}
 
 		self::add_input_data( $data, $field_obj, $field, $atts['saved_field'] );
+
+		// The settings panel may not load, so list the fields its conditional logic points at. A choice renamed in one of them must reach this panel.
+		$data['logic'] = array_values( array_unique( array_filter( array_map( 'absint', (array) FrmField::get_option( $atts['saved_field'], 'hide_field' ) ) ) ) );
+
 		/**
 		 * Filters the data used to draw a field's inputs in the browser.
 		 *
@@ -345,6 +354,14 @@ class FrmBuilderPreviewHelper {
 	private static function add_input_data( &$data, $field_obj, $field, $saved_field ) {
 		$type          = $field['type'];
 		$default_value = $field_obj->get_field_column( 'default_value' );
+
+		if ( 'radio' === $type || ( 'number' === $type && self::has_input_group( $saved_field ) ) ) {
+			// Preserve filtered choices and number formatting while the browser draws the card.
+			ob_start();
+			$field_obj->show_on_form_builder();
+			$data['inputHtml'] = ob_get_clean();
+			return;
+		}
 
 		if ( 'html' === $type ) {
 			$data['html'] = esc_html( FrmAppHelper::truncate( htmlentities( $field['description'] ), 60 ) );

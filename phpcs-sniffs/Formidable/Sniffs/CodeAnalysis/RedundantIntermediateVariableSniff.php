@@ -141,7 +141,7 @@ class RedundantIntermediateVariableSniff implements Sniff {
 		// Walk up to find the function we're in.
 		for ( $i = $stackPtr - 1; $i >= 0; $i-- ) {
 			if ( in_array( $tokens[ $i ]['code'], array( T_FUNCTION, T_CLOSURE ), true ) ) {
-				if ( isset( $tokens[ $i ]['scope_opener'] ) && isset( $tokens[ $i ]['scope_closer'] ) ) {
+				if ( isset( $tokens[ $i ]['scope_opener'], $tokens[ $i ]['scope_closer'] ) ) {
 					// Make sure we're actually inside this function's scope.
 					if ( $stackPtr > $tokens[ $i ]['scope_opener'] && $stackPtr < $tokens[ $i ]['scope_closer'] ) {
 						return $i;
