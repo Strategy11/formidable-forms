@@ -39,12 +39,10 @@ $captcha_configured = $captcha_settings->has_pubkey();
 // Check if form has a captcha field
 $form_fields       = FrmField::get_all_for_form( $values['id'], '', 'exclude' );
 $has_captcha_field = false;
-$captcha_field_id  = 0;
 
 foreach ( $form_fields as $field ) {
 	if ( 'captcha' === $field->type ) {
 		$has_captcha_field = true;
-		$captcha_field_id  = $field->id;
 		break;
 	}
 }

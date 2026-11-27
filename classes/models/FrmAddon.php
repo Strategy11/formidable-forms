@@ -844,7 +844,7 @@ class FrmAddon {
 			if ( isset( $transient->response[ $this->plugin_folder ] ) ) {
 				unset( $transient->response[ $this->plugin_folder ] );
 			}
-		} elseif ( isset( $transient->response ) && isset( $transient->response[ $this->plugin_folder ] ) ) {
+		} elseif ( isset( $transient->response, $transient->response[ $this->plugin_folder ] ) ) {
 			$this->prepare_update_details( $transient->response[ $this->plugin_folder ] );
 
 			// If the transient has expired, clear the update and trigger it again

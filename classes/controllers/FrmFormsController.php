@@ -576,7 +576,7 @@ class FrmFormsController {
 	public static function show_page_preview() {
 		$preview = self::page_preview();
 
-		if ( is_null( $preview ) ) {
+		if ( null === $preview ) {
 			wp_die(
 				'<h1>' . esc_html__( 'Form key is invalid', 'formidable' ) . '</h1>',
 				'<p>' . esc_html__( 'Form key is invalid', 'formidable' ) . '</p>',
@@ -927,7 +927,7 @@ class FrmFormsController {
 			 * @return string
 			 */
 			function ( $src ) {
-				return is_null( $src ) ? '' : $src;
+				return $src ?? '';
 			}
 		);
 	}
@@ -3434,7 +3434,7 @@ class FrmFormsController {
 		echo 'if ( ! newTab ) {';
 
 		$data = array(
-			'formId'  => intval( $args['form']->id ),
+			'formId'  => (int) $args['form']->id,
 			'message' => self::get_redirect_fallback_message( $success_url, $args ),
 		);
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -3532,7 +3532,7 @@ class FrmFormsController {
 			// Not AJAX submit, delay JS until window.load.
 			echo 'window.onload=function(){';
 		}
-		echo 'setTimeout(function(){' . $redirect_js . '}, ' . intval( $delay_time ) . ');'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo 'setTimeout(function(){' . $redirect_js . '}, ' . (int) $delay_time . ');'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		if ( empty( $args['doing_ajax'] ) ) {
 			echo '};';
