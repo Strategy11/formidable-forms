@@ -79,11 +79,11 @@ class test_FrmTransLiteSubscription extends FrmUnitTest {
 		$this->assertSame( 'active', $row->status );
 
 		$row = $subscription->get_one_by( 'sub_crud', 'sub_id' );
-		$this->assertEquals( $id, $row->id );
+		$this->assertSame( (string) $id, $row->id );
 
 		$rows = $subscription->get_all_by( 42, 'item_id' );
 		$this->assertCount( 1, $rows );
-		$this->assertEquals( $id, $rows[0]->id );
+		$this->assertSame( (string) $id, $rows[0]->id );
 
 		$this->assertGreaterThanOrEqual( 1, (int) $subscription->get_count() );
 

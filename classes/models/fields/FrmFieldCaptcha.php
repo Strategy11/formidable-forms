@@ -382,8 +382,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 		$is_recaptcha_v3 = $frm_settings->active_captcha === 'recaptcha' && 'v3' === $frm_settings->re_type;
 
 		if ( $is_recaptcha_v3 && array_key_exists( 'score', $response ) ) {
-			$threshold = floatval( $frm_settings->re_threshold );
-			$score     = floatval( $response['score'] );
+			$threshold = (float) $frm_settings->re_threshold;
+			$score     = (float) $response['score'];
 
 			$this->set_score( $score );
 

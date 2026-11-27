@@ -80,7 +80,7 @@ if ( ! $redirect_delay ) {
 <div class="<?php echo esc_attr( $css_class ); ?>">
 	<?php
 	$id_attr    = $args['action_control']->get_field_id( 'redirect_delay_time' );
-	$delay_time = intval( $args['form_action']->post_content['redirect_delay_time'] );
+	$delay_time = (int) $args['form_action']->post_content['redirect_delay_time'];
 
 	if ( $delay_time < 1 ) {
 		$delay_time = 8;
@@ -95,7 +95,7 @@ if ( ! $redirect_delay ) {
 				step="1"
 				id="<?php echo esc_attr( $id_attr ); ?>"
 				name="<?php echo esc_attr( $args['action_control']->get_field_name( 'redirect_delay_time' ) ); ?>"
-				value="<?php echo intval( $delay_time ); ?>"
+				value="<?php echo absint( $delay_time ); ?>"
 				style="width:60px;"
 			/><span class="frm_suffix"><?php esc_html_e( 'seconds', 'formidable' ); ?></span>
 		</span>

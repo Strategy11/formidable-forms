@@ -282,7 +282,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 				$response = FrmPayPalLiteConnectHelper::refund_payment( $payment->receipt_id );
 
 				// Check for structured error response with message and debug_id
-				if ( is_object( $response ) && isset( $response->message ) && isset( $response->debug_id ) ) {
+				if ( is_object( $response ) && isset( $response->message, $response->debug_id ) ) {
 					$refunded = false;
 					$reason   = $response->message;
 					$debug_id = $response->debug_id;

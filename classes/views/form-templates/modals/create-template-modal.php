@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				}
 
 				foreach ( $published_forms as $form ) {
-					if ( is_null( $form->description ) ) {
+					if ( null === $form->description ) {
 						$form_description = '';
 					} else {
 						$form_description = FrmAppHelper::kses( $form->description, array( 'a', 'i', 'span', 'use', 'svg' ) );

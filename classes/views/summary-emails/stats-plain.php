@@ -26,7 +26,7 @@ FrmEmailSummaryHelper::plain_text_echo( __( 'Statistics', 'formidable' ) );
 echo "\r\n\r\n";
 
 foreach ( $args['stats'] as $stat ) {
-	FrmEmailSummaryHelper::plain_text_echo( $stat['label'] . ': ' . ( $stat['display'] ?? intval( $stat['count'] ) ) . "\r\n" );
+	FrmEmailSummaryHelper::plain_text_echo( $stat['label'] . ': ' . ( $stat['display'] ?? (int) $stat['count'] ) . "\r\n" );
 }
 
 echo "\r\n";
@@ -46,7 +46,7 @@ if ( $args['top_forms'] ) {
 		echo ': ';
 
 		// translators: submission count.
-		$submissions_count = sprintf( _n( '%s submission', '%s submissions', $top_form->items_count, 'formidable' ), intval( number_format_i18n( $top_form->items_count ) ) );
+		$submissions_count = sprintf( _n( '%s submission', '%s submissions', $top_form->items_count, 'formidable' ), (int) number_format_i18n( $top_form->items_count ) );
 		FrmEmailSummaryHelper::plain_text_echo( $submissions_count );
 		unset( $submissions_count );
 		echo "\r\n";

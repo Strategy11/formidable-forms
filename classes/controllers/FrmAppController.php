@@ -266,7 +266,6 @@ class FrmAppController {
 			return;
 		}
 
-		$id           = $form->id;
 		$current_page = self::get_current_page();
 		$nav_items    = self::get_form_nav_items( $form );
 
