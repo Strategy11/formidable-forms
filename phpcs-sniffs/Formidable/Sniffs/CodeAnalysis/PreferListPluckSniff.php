@@ -321,7 +321,7 @@ class PreferListPluckSniff implements Sniff {
 	 * @param int    $stackPtr  The position of the foreach token.
 	 * @param string $target    The variable the loop fills.
 	 *
-	 * @return int|false Position of the empty array's opening token, or false when the loop is not preceded by an empty array assignment.
+	 * @return false|int Position of the empty array's opening token, or false when the loop is not preceded by an empty array assignment.
 	 */
 	private function findEmptyArrayInit( File $phpcsFile, $stackPtr, $target ) {
 		$tokens    = $phpcsFile->getTokens();
