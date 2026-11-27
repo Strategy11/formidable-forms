@@ -20,14 +20,14 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       # Install only what this job runs, instead of every require-dev package.
-      # phpcs.xml references WordPress, WordPressVIPMinimum and SlevomatCodingStandard;
+      # phpcs.xml references WordPress, WordPressVIPMinimum, SlevomatCodingStandard and PHPCompatibilityWP;
       # wpcs also pulls phpcsextra/phpcsutils and the dealerdirect installer that
-      # registers all three standards with phpcs.
+      # registers the standards with phpcs.
       # The guard fails the job if a package is renamed or dropped from
       # composer.json, rather than silently narrowing to nothing.
       - name: Install PHPCS and its standards
         run: |
-          NEED='squizlabs/php_codesniffer wp-coding-standards/wpcs automattic/vipwpcs slevomat/coding-standard'
+          NEED='squizlabs/php_codesniffer wp-coding-standards/wpcs automattic/vipwpcs slevomat/coding-standard phpcompatibility/phpcompatibility-wp'
           for pkg in $NEED; do
             jq -e --arg pkg "$pkg" '."require-dev" | has($pkg)' composer.json > /dev/null \
               || { echo "::error::composer.json has no require-dev entry for $pkg"; exit 1; }
@@ -40,6 +40,9 @@ jobs:
         run: |
           CURRENT_PATHS=$(./vendor/bin/phpcs --config-show | grep 'installed_paths' | cut -d' ' -f2)
           ./vendor/bin/phpcs --config-set installed_paths "$CURRENT_PATHS,../../../phpcs-sniffs"
+
+      - name: Custom sniff fixtures
+        run: php phpcs-sniffs/tests/run.php
 
       - name: PHPCS check
         run: ./vendor/bin/phpcs --parallel=10 ./

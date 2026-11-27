@@ -8,7 +8,10 @@ class FrmField {
 	/**
 	 * Version of the persistent field write hooks available to derived indexes.
 	 *
-	 * @since x.x
+	 * Version 1 covers frm_field_created and frm_field_updated, plus frm_field_order_updated for
+	 * builder saves that write the field order of many fields in one query without frm_field_updated.
+	 *
+	 * @since 7.1
 	 */
 	const WRITE_HOOKS_VERSION = 1;
 
@@ -21,6 +24,15 @@ class FrmField {
 	 * @var int
 	 */
 	public static $transient_size = 200;
+
+	/**
+	 * Set by create_copy() so the next create() keeps the source placement.
+	 *
+	 * @since 7.1
+	 *
+	 * @var bool
+	 */
+	private static $preserve_placement = false;
 
 	/**
 	 * @return array
@@ -446,11 +458,7 @@ class FrmField {
 	 * @return void
 	 */
 	public static function remove_moved_field_types_from_pro( &$pro_fields ) {
-		unset( $pro_fields['credit_card'] );
-		unset( $pro_fields['product'] );
-		unset( $pro_fields['quantity'] );
-		unset( $pro_fields['total'] );
-		unset( $pro_fields['address'] );
+		unset( $pro_fields['credit_card'], $pro_fields['product'], $pro_fields['quantity'], $pro_fields['total'], $pro_fields['address'] );
 	}
 
 	/**
@@ -472,6 +480,10 @@ class FrmField {
 	 */
 	public static function create( $values, $return = true ) {
 		global $wpdb, $frm_duplicate_ids;
+
+		// Read the copy flag first so a field created from a hook below is checked normally.
+		$preserve_placement       = self::$preserve_placement;
+		self::$preserve_placement = false;
 
 		$new_values              = array();
 		$key                     = $values['field_key'] ?? $values['name'];
@@ -503,6 +515,14 @@ class FrmField {
 			$new_values                                = apply_filters( 'frm_duplicated_field', $new_values );
 		}
 
+		if ( ! $preserve_placement && ! FrmFieldPlacementHelper::is_allowed(
+			$new_values['type'] ?? '',
+			(int) $new_values['form_id'],
+			(int) ( $new_values['field_options']['in_section'] ?? 0 )
+		) ) {
+			return false;
+		}
+
 		self::preserve_format_option_backslashes( $new_values );
 
 		foreach ( $new_values as $k => $v ) {
@@ -525,7 +545,7 @@ class FrmField {
 		/**
 		 * Fires after a field is saved to the database.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param int $new_id Created field ID.
 		 */
@@ -540,6 +560,25 @@ class FrmField {
 		}
 
 		return $new_id;
+	}
+
+	/**
+	 * Create a field copied from an existing one, as in a form or section duplicate or an XML import.
+	 *
+	 * The copy keeps the placement of its source even when the current rules would refuse a new
+	 * field there, so forms saved before a rule existed keep their layout. Callers that build a new
+	 * field from user input must use create() so the placement rules apply.
+	 *
+	 * @since 7.1
+	 *
+	 * @param array $values Field values, as passed to create().
+	 * @param bool  $return Whether to return the new field ID.
+	 *
+	 * @return false|int
+	 */
+	public static function create_copy( $values, $return = true ) {
+		self::$preserve_placement = true;
+		return self::create( $values, $return );
 	}
 
 	/**
@@ -656,8 +695,10 @@ class FrmField {
 			'id' => $copy_field->id,
 		);
 		FrmFieldsHelper::fill_field( $values, $copy_field, $copy_field->form_id );
-		$values   = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
-		$field_id = self::create( $values );
+		$values = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
+
+		// A copy keeps the placement of its source, even one saved before a placement rule existed.
+		$field_id = self::create_copy( $values );
 
 		/**
 		 * Fires after duplicating a field.
@@ -729,14 +770,14 @@ class FrmField {
 			}
 
 			// If this is a field inside of a repeating section, associate it with the correct form
-			if ( (int) $field->form_id !== (int) $old_form_id && isset( $old_repeat_form_id ) && isset( $new_repeat_form_id ) && (int) $field->form_id === (int) $old_repeat_form_id ) { // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			if ( (int) $field->form_id !== (int) $old_form_id && isset( $old_repeat_form_id, $new_repeat_form_id ) && (int) $field->form_id === (int) $old_repeat_form_id ) { // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				$values['form_id'] = $new_repeat_form_id;
 			}
 
 			$values['description'] = FrmFieldsHelper::switch_field_ids( $values['description'] );
 
 			$values                                 = apply_filters( 'frm_duplicated_field', $values );
-			$new_id                                 = self::create( $values );
+			$new_id                                 = self::create_copy( $values );
 			$frm_duplicate_ids[ $field->id ]        = $new_id;
 			$frm_duplicate_ids[ $field->field_key ] = $new_id;
 			unset( $field );
@@ -780,10 +821,14 @@ class FrmField {
 			 */
 			$values = apply_filters( 'frm_clean_' . $values['type'] . '_field_options_before_update', $values, $id );
 
-			if ( $values['type'] === 'hidden' && isset( $values['field_options'] ) && isset( $values['field_options']['clear_on_focus'] ) ) {
+			if ( $values['type'] === 'hidden' && isset( $values['field_options']['clear_on_focus'] ) ) {
 				// Don't keep the old placeholder setting for hidden fields
 				$values['field_options']['clear_on_focus'] = 0;
 			}
+		}
+
+		if ( ! FrmFieldPlacementHelper::is_allowed_update( $id, $values ) ) {
+			return false;
 		}
 
 		// Serialize array values
@@ -830,7 +875,7 @@ class FrmField {
 			/**
 			 * Fires after a field update succeeds, including updates with unchanged values.
 			 *
-			 * @since x.x
+			 * @since 7.1
 			 *
 			 * @param int $id Updated field ID.
 			 */
@@ -882,7 +927,7 @@ class FrmField {
 			/**
 			 * Fires after a field is deleted from the database.
 			 *
-			 * @since x.x
+			 * @since 7.1
 			 *
 			 * @param int $id Deleted field ID.
 			 */
@@ -926,7 +971,7 @@ class FrmField {
 	 * The LIKE prefixes are escaped so the underscores are matched literally.
 	 * Unescaped, the leading underscore is a wildcard and MySQL scans the whole options table.
 	 *
-	 * @since x.x
+	 * @since 7.1
 	 *
 	 * @param int $form_id Form ID.
 	 *
@@ -1387,10 +1432,11 @@ class FrmField {
 	 * @return array
 	 */
 	private static function get_fields_from_transients( $form_id, $args ) {
-		$fields = array();
-		self::get_next_transient( $fields, 'frm_form_fields_' . $form_id . $args['inc_embed'] . $args['inc_repeat'] );
+		$fields   = array();
+		$complete = self::get_next_transient( $fields, 'frm_form_fields_' . $form_id . $args['inc_embed'] . $args['inc_repeat'] );
 
-		return $fields;
+		// A missing chunk is a cache miss. Never return part of the form.
+		return $complete ? $fields : array();
 	}
 
 	/**
@@ -1402,25 +1448,26 @@ class FrmField {
 	 * @param string $base_name Base name.
 	 * @param int    $next      Next transient number.
 	 *
-	 * @return void
+	 * @return bool True when the list is complete. False when a chunk is missing.
 	 */
 	private static function get_next_transient( &$fields, $base_name, $next = 0 ) {
 		$name        = $next ? $base_name . $next : $base_name;
 		$next_fields = get_transient( $name );
 
 		if ( ! $next_fields ) {
-			return;
+			// After a full chunk, only the empty end marker means the list is complete.
+			return ! $next || array() === $next_fields;
 		}
 
 		$fields = array_merge( $fields, $next_fields );
 
 		if ( count( $next_fields ) < self::$transient_size ) {
-			return;
+			return true;
 		}
 
 		// If this transient is full, check for another
 		++$next;
-		self::get_next_transient( $fields, $base_name, $next );
+		return self::get_next_transient( $fields, $base_name, $next );
 	}
 
 	/**
@@ -1439,21 +1486,23 @@ class FrmField {
 		$base_name    = 'frm_form_fields_' . $form_id . $args['inc_embed'] . $args['inc_repeat'];
 		$field_chunks = array_chunk( $fields, self::$transient_size );
 
-		foreach ( $field_chunks as $field ) {
-			$name = $next ? $base_name . $next : $base_name;
-			$set  = set_transient( $name, $field, 60 * 60 * 6 );
+		if ( $field_chunks && count( $fields ) % self::$transient_size === 0 ) {
+			// Mark the end so a missing chunk is never mistaken for the end of the list.
+			$field_chunks[] = array();
+		}
 
-			if ( ! $set ) {
-				// The transient didn't save
-				if ( $name !== $base_name ) {
-					// If the first saved an others fail, this will show an incomplete form
-					self::delete_form_transient( $form_id );
-				}
+		// Save the first chunk last so a request reading meanwhile never finds it without the rest.
+		for ( $i = count( $field_chunks ) - 1; $i >= 0; $i-- ) {
+			$name = $next + $i ? $base_name . ( $next + $i ) : $base_name;
+			$set  = set_transient( $name, $field_chunks[ $i ], 60 * 60 * 6 );
+
+			// An unchanged value reports false even though the chunk is cached.
+			if ( ! $set && maybe_serialize( get_transient( $name ) ) !== maybe_serialize( $field_chunks[ $i ] ) ) {
+				// The transient didn't save. Clear the rest so an incomplete form is never shown.
+				self::delete_form_transient( $form_id );
 
 				return;
 			}
-
-			++$next;
 		}
 	}
 
@@ -1473,7 +1522,7 @@ class FrmField {
 		/**
 		 * Filters the field types that do not store entry metadata.
 		 *
-		 * @since x.x
+		 * @since 7.1
 		 *
 		 * @param string[] $field_types Display-only field types.
 		 */

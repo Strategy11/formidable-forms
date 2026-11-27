@@ -212,6 +212,14 @@ class FrmStyle {
 			return;
 		}
 
+		// Preserve valid percentage, fractional and space-separated RGB syntax.
+		// The parser accepts out-of-range channels, so legacy comma syntax still needs the repair below.
+		$modern_syntax = str_contains( $color_val, '%' ) || str_contains( $color_val, '/' ) || ! str_contains( $color_val, ',' ) || preg_match( '/\.\d+\s*,/', $color_val );
+
+		if ( $modern_syntax && FrmStylesHelper::is_valid_color( $color_val ) ) {
+			return;
+		}
+
 		$color_val = trim( $color_val );
 		// Remove leading braces so (rgba(1,1,1,1) doesn't cause inconsistent braces.
 		$color_val = ltrim( $color_val, '(' );
@@ -256,7 +264,7 @@ class FrmStyle {
 				} elseif ( $value > 1 || $value < 0 ) {
 					$new_value = 1;
 				} else {
-					$new_value = floatval( $value );
+					$new_value = (float) $value;
 				}
 			}//end if
 

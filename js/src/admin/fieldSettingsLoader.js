@@ -1,10 +1,10 @@
 /**
  * Request the settings panels for field previews the browser drew from page data.
  *
- * Settings load in the background in page order. A field the builder needs right away, because
+ * Nearby settings load in the background. A field the builder needs right away, because
  * it was selected or edited, jumps the queue in its own request.
  *
- * @since x.x
+ * @since 7.1
  */
 
 import { cacheFieldSettings } from './deferredFieldSettings';
@@ -15,14 +15,16 @@ import { getFieldLoadBatch } from './fieldLoadWeights';
  * batch, so this mostly decides how many times WordPress loads.
  */
 const BATCH_SIZE = 50;
-// Even simple fields have advanced controls and source-form selectors in their settings.
-const SETTINGS_FIELD_WEIGHT = 5;
+// Keep a batch requested by an interaction small so its first panel arrives promptly.
+const URGENT_FIELD_WEIGHT = 5;
 
 /**
  * How many background requests may run at once. Requests for fields the builder needs right
  * away are not counted, so they never wait behind the background queue.
  */
-const CONCURRENCY = 2;
+const CONCURRENCY = 1;
+const nearbyFields = new Set();
+let observer;
 
 const queuedFieldIds = new Set();
 const failedFieldIds = new Set();
@@ -40,7 +42,7 @@ let backgroundStarted = false;
  * Nothing loads in the background until startFieldSettingsQueue() is called, but a field the
  * builder needs right away can be requested as soon as it is queued.
  *
- * @since x.x
+ * @since 7.1
  * @param {Object}   options
  * @param {string}   options.formId   The form being edited.
  * @param {string[]} options.fieldIds The fields that still need their settings, in page order.
@@ -53,9 +55,9 @@ export function queueFieldSettings( options ) {
 }
 
 /**
- * Load the queued settings in the background, in page order.
+ * Start background prefetch for previews near the viewport.
  *
- * @since x.x
+ * @since 7.1
  * @return {void}
  */
 export function startFieldSettingsQueue() {
@@ -65,6 +67,33 @@ export function startFieldSettingsQueue() {
 
 /**
  * @since x.x
+ * @param {HTMLElement} field A rendered preview whose settings can be prefetched.
+ * @return {void}
+ */
+export function observeFieldSettings( field ) {
+	if ( ! queuedFieldIds.has( field.dataset.fid ) ) {
+		return;
+	}
+
+	observer ??= new IntersectionObserver( entries => {
+		for ( const { target, isIntersecting } of entries ) {
+			const id = target.dataset.fid;
+			if ( isIntersecting && queuedFieldIds.has( id ) ) {
+				nearbyFields.add( id );
+			} else {
+				nearbyFields.delete( id );
+			}
+		}
+		fillQueue();
+	}, {
+		root: document.getElementById( 'post-body-content' ),
+		rootMargin: '400px 0px'
+	} );
+	observer.observe( field );
+}
+
+/**
+ * @since 7.1
  * @param {string} fieldId Numeric field ID.
  * @return {boolean} True until the field's settings have been requested and received.
  */
@@ -78,7 +107,7 @@ export function isFieldSettingsPending( fieldId ) {
  *
  * Fields requested in the same task share one request.
  *
- * @since x.x
+ * @since 7.1
  * @param {string} fieldId Numeric field ID.
  * @return {void}
  */
@@ -95,7 +124,7 @@ export function requestFieldSettingsNow( fieldId ) {
 }
 
 /**
- * @since x.x
+ * @since 7.1
  * @param {string[]} fieldIds Numeric field IDs.
  * @return {Promise<void>} Resolves once none of the fields has a request in progress.
  */
@@ -106,14 +135,90 @@ export function waitForFieldSettings( fieldIds ) {
 }
 
 /**
- * Forget a deleted field so its settings are not requested.
+ * Run a change once the settings panels it reads have loaded.
+ *
+ * Pending panels are requested right away and added to awaitingFieldIds, so the builder holds a
+ * save for them and moves each one into the save form when it arrives. The change runs after
+ * every request settles, even one that failed, and runs at once when nothing is pending.
  *
  * @since x.x
+ * @param {string[]}    fieldIds         The fields whose settings the change reads.
+ * @param {Set<string>} awaitingFieldIds The builder's fields waiting for their settings.
+ * @param {Function}    update           The change to run.
+ * @return {Promise<void>} Resolves after the change has run.
+ */
+export function whenFieldSettingsLoaded( fieldIds, awaitingFieldIds, update ) {
+	const pendingFieldIds = fieldIds.map( String ).filter( isFieldSettingsPending );
+	if ( ! pendingFieldIds.length ) {
+		update();
+		return Promise.resolve();
+	}
+
+	pendingFieldIds.forEach( fieldId => {
+		awaitingFieldIds.add( fieldId );
+		requestFieldSettingsNow( fieldId );
+	} );
+	// The requests are sent in a microtask, so wait for them after it.
+	return Promise.resolve().then( () => waitForFieldSettings( pendingFieldIds ) ).then( update );
+}
+
+/**
+ * Ask once more for settings whose last request failed.
+ *
+ * @since 7.1
+ * @param {string[]} fieldIds Numeric field IDs.
+ * @return {Promise<string[]>} Resolves with the fields whose settings still failed to load.
+ */
+export function retryFailedFieldSettings( fieldIds ) {
+	const failed = fieldIds.map( String ).filter( fieldId => failedFieldIds.has( fieldId ) );
+	if ( ! failed.length ) {
+		return Promise.resolve( [] );
+	}
+
+	// Send now instead of in a microtask, so the requests exist before waiting on them.
+	failed.forEach( fieldId => urgentFieldIds.add( fieldId ) );
+	sendUrgentRequests();
+	return waitForFieldSettings( failed ).then( () => failed.filter( fieldId => failedFieldIds.has( fieldId ) ) );
+}
+
+/**
+ * Wait until no field the builder is waiting on still has settings to load.
+ *
+ * Each pass waits for the fields awaited when it starts, retries the ones that failed, and then
+ * removes only those fields from awaitingFieldIds. A field added in the meantime, for example by
+ * a choice rename that reads another field's logic, keeps its place and gets another pass.
+ *
+ * @since x.x
+ * @param {Set<string>} awaitingFieldIds The builder's fields waiting for their settings.
+ * @return {Promise<string[]>} Resolves with the fields whose settings still failed to load.
+ */
+export function waitForAwaitedFieldSettings( awaitingFieldIds ) {
+	const fieldIds = [ ...awaitingFieldIds ];
+	return waitForFieldSettings( fieldIds ).then( () => retryFailedFieldSettings( fieldIds ) ).then( failed => {
+		// Loaded fields were already removed. Deleted fields have nothing to save.
+		fieldIds.forEach( fieldId => awaitingFieldIds.delete( fieldId ) );
+		if ( ! awaitingFieldIds.size ) {
+			return failed;
+		}
+
+		return waitForAwaitedFieldSettings( awaitingFieldIds ).then( failedLater => [ ...new Set( [ ...failed, ...failedLater ] ) ] );
+	} );
+}
+
+/**
+ * Forget a deleted field so its settings are not requested.
+ *
+ * @since 7.1
  * @param {string} fieldId Numeric field ID.
  * @return {void}
  */
 export function cancelFieldSettings( fieldId ) {
 	const key = String( fieldId );
+	const field = document.getElementById( `frm_field_id_${ key }` );
+	if ( field ) {
+		observer?.unobserve( field );
+	}
+	nearbyFields.delete( key );
 	queuedFieldIds.delete( key );
 	failedFieldIds.delete( key );
 	urgentFieldIds.delete( key );
@@ -124,7 +229,7 @@ function sendUrgentRequests() {
 	urgentFieldIds.clear();
 
 	for ( let index = 0; index < fieldIds.length; ) {
-		const batch = getFieldLoadBatch( fieldIds.slice( index ), BATCH_SIZE, SETTINGS_FIELD_WEIGHT );
+		const batch = getFieldLoadBatch( fieldIds.slice( index ), BATCH_SIZE, URGENT_FIELD_WEIGHT );
 		sendRequest( batch );
 		index += batch.length;
 	}
@@ -135,8 +240,8 @@ function fillQueue() {
 		return;
 	}
 
-	while ( activeRequests < CONCURRENCY && queuedFieldIds.size ) {
-		sendBackgroundRequest( getFieldLoadBatch( queuedFieldIds, BATCH_SIZE, SETTINGS_FIELD_WEIGHT ) );
+	while ( activeRequests < CONCURRENCY && nearbyFields.size ) {
+		sendBackgroundRequest( getFieldLoadBatch( nearbyFields, BATCH_SIZE, URGENT_FIELD_WEIGHT ) );
 	}
 }
 
@@ -160,6 +265,11 @@ function onBackgroundRequestDone() {
  */
 function sendRequest( fieldIds ) {
 	fieldIds.forEach( fieldId => {
+		const field = document.getElementById( `frm_field_id_${ fieldId }` );
+		if ( field ) {
+			observer?.unobserve( field );
+		}
+		nearbyFields.delete( fieldId );
 		queuedFieldIds.delete( fieldId );
 		failedFieldIds.delete( fieldId );
 	} );
