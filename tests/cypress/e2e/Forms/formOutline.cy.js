@@ -129,7 +129,7 @@ describe( 'Form outline', { retries: 0 }, () => {
 		} );
 	} );
 
-	it( 'groups fields by page, lists sections and caps field results', () => {
+	it( 'groups fields by page, lists sections and lists every field result', () => {
 		cy.get( '#frm-show-fields' ).then( list => {
 			const doc = list[ 0 ].ownerDocument;
 			const fields = [];
@@ -177,8 +177,8 @@ describe( 'Form outline', { retries: 0 }, () => {
 		cy.get( '.frm-builder-outline-field' ).should( 'not.exist' );
 
 		search( 'item' );
-		cy.get( '.frm-builder-outline-field' ).should( 'have.length', 60 );
-		cy.get( '.frm-builder-outline-status' ).should( 'have.text', 'Showing up to 60 matching fields.' );
+		cy.get( '.frm-builder-outline-field' ).should( 'have.length', 70 );
+		cy.get( '.frm-builder-outline-status' ).should( 'have.text', '70 matching results found.' );
 
 		search( 'item 1' );
 		cy.get( '.frm-builder-outline-status' ).should( 'have.text', '11 matching results found.' );

@@ -1,6 +1,6 @@
 import { __, _n, sprintf } from '@wordpress/i18n';
 import { renderFieldPreviewNow } from './fieldPreviewQueue';
-import { buildOutline, getCurrentPageIndex, groupPages, MAX_FIELD_RESULTS, throttle } from './formOutlineModel';
+import { buildOutline, getCurrentPageIndex, groupPages, throttle } from './formOutlineModel';
 
 const RENDER_DELAY = 100;
 // togglePage() in admin.js animates the first rows for 150 ms.
@@ -125,7 +125,7 @@ export function initFormOutline() {
 
 		const query = search.value.trim();
 		const pages = getPages();
-		const { items, resultCount, fieldResultCount, hasFields } = buildOutline( pages, query, getPageNumber );
+		const { items, resultCount, hasFields } = buildOutline( pages, query, getPageNumber );
 		const { tag, span } = frmDom;
 
 		const drawItem = item => {
@@ -191,9 +191,7 @@ export function initFormOutline() {
 			status.textContent = __( 'No pages or fields found.', 'formidable' );
 			return;
 		}
-		status.textContent = fieldResultCount === MAX_FIELD_RESULTS
-			? sprintf( __( 'Showing up to %d matching fields.', 'formidable' ), MAX_FIELD_RESULTS )
-			: sprintf( _n( '%d matching result found.', '%d matching results found.', resultCount, 'formidable' ), resultCount );
+		status.textContent = sprintf( _n( '%d matching result found.', '%d matching results found.', resultCount, 'formidable' ), resultCount );
 	};
 
 	const queueRender = throttle( () => {

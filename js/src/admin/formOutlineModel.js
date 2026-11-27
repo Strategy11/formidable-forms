@@ -10,7 +10,6 @@ export const HTML_FIELD_TYPE = 'html';
 export const SUBMIT_TYPE = 'submit';
 // Layout pieces that sit in the field list but aren't fields people fill in.
 export const STRUCTURE_TYPES = [ SECTION_TYPE, END_SECTION_TYPE, PAGE_BREAK_TYPE, SUBMIT_TYPE ];
-export const MAX_FIELD_RESULTS = 60;
 
 /**
  * @typedef {Object} OutlineField
@@ -74,12 +73,11 @@ export function groupPages( fields ) {
  * @param {Array}    pages      The pages from groupPages().
  * @param {string}   query      The search text. Empty for the full outline.
  * @param {Function} pageNumber Returns the "Page N" text for a page index.
- * @return {{items: Array, resultCount: number, fieldResultCount: number, hasFields: boolean}} The rows to draw and the counts.
+ * @return {{items: Array, resultCount: number, hasFields: boolean}} The rows to draw and the counts.
  */
 export function buildOutline( pages, query, pageNumber ) {
 	query = query.trim().toLocaleLowerCase();
 	const items = [];
-	let fieldResultCount = 0;
 	let resultCount = 0;
 
 	pages.forEach( page => {
@@ -100,9 +98,6 @@ export function buildOutline( pages, query, pageNumber ) {
 			if ( type === END_SECTION_TYPE || field.placeholder ) {
 				return;
 			}
-			if ( query !== '' && type !== SECTION_TYPE && fieldResultCount >= MAX_FIELD_RESULTS ) {
-				return;
-			}
 			const isSection = type === SECTION_TYPE;
 			const matches = fieldMatches( field, query );
 			if ( query !== '' && ! matches && ! isSection ) {
@@ -120,9 +115,6 @@ export function buildOutline( pages, query, pageNumber ) {
 				siblings.push( row );
 			} else {
 				siblings.push( { kind: 'field', id: field.id, label: field.label, pageIndex: page.index } );
-				if ( query !== '' ) {
-					fieldResultCount++;
-				}
 			}
 		} );
 		// eslint-disable-next-line unicorn/no-array-reverse -- toReversed() is ES2023 and breaks older browsers. Array.from() already made a copy to reverse.
@@ -156,7 +148,7 @@ export function buildOutline( pages, query, pageNumber ) {
 	} );
 
 	const hasFields = pages.length > 1 || pages.some( page => page.fields.length > 0 );
-	return { items, resultCount, fieldResultCount, hasFields };
+	return { items, resultCount, hasFields };
 }
 
 /**

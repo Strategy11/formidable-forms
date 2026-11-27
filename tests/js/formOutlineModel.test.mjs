@@ -170,3 +170,11 @@ test( 'search matches a field ID exactly and a field key by its start', () => {
 	assert.deepEqual( outline( fields, 'email' ), [ 'field Email' ] );
 	assert.deepEqual( outline( fields, 'key10' ), [] );
 } );
+
+test( 'search lists every match', () => {
+	const fields = Array.from( { length: 70 }, ( item, index ) => field( `${ index + 1 }`, 'text', `Item ${ index + 1 }` ) );
+	const result = buildOutline( groupPages( fields ), 'item', pageNumber );
+
+	assert.equal( result.items.length, 70 );
+	assert.equal( result.resultCount, 70 );
+} );
