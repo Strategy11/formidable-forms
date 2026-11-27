@@ -328,6 +328,7 @@ class test_FrmEntryMeta extends FrmUnitTest {
 		$this->assertSame( 'Unchanged café 日本', FrmEntryMeta::get_entry_meta_by_field( $entry_id, $text_field_id ) );
 		$this->assertSame( array( 'Red', 'Green' ), FrmEntryMeta::get_entry_meta_by_field( $entry_id, $checkbox_field_id ) );
 		$this->assertSame( 'After', FrmEntryMeta::get_entry_meta_by_field( $entry_id, $changed_field_id ) );
+		$this->assertSame( array( (int) $text_field_id, (int) $checkbox_field_id ), $writes['unchanged_fields'], 'Each skipped value should fire the unchanged hook.' );
 
 		$writes = $this->update_entry_metas_and_track_writes( $entry_id, $values );
 
@@ -424,29 +425,35 @@ class test_FrmEntryMeta extends FrmUnitTest {
 	private function update_entry_metas_and_track_writes( $entry_id, $values ) {
 		global $wpdb;
 
-		$writes        = array(
-			'updates'        => array(),
-			'changed_fields' => array(),
+		$writes          = array(
+			'updates'          => array(),
+			'changed_fields'   => array(),
+			'unchanged_fields' => array(),
 		);
-		$table         = $wpdb->prefix . 'frm_item_metas';
-		$track_query   = function ( $query ) use ( &$writes, $table ) {
+		$table           = $wpdb->prefix . 'frm_item_metas';
+		$track_query     = function ( $query ) use ( &$writes, $table ) {
 			if ( str_starts_with( ltrim( $query ), 'UPDATE `' . $table . '`' ) ) {
 				$writes['updates'][] = $query;
 			}
 			return $query;
 		};
-		$track_changes = function ( $changed_entry_id, $field_id ) use ( &$writes ) {
+		$track_changes   = function ( $changed_entry_id, $field_id ) use ( &$writes ) {
 			$writes['changed_fields'][] = (int) $field_id;
+		};
+		$track_unchanged = function ( $unchanged_entry_id, $field_id ) use ( &$writes ) {
+			$writes['unchanged_fields'][] = (int) $field_id;
 		};
 
 		add_filter( 'query', $track_query );
 		add_action( 'frm_after_entry_meta_change', $track_changes, 10, 2 );
+		add_action( 'frm_entry_meta_unchanged', $track_unchanged, 10, 2 );
 
 		try {
 			FrmEntryMeta::update_entry_metas( $entry_id, $values );
 		} finally {
 			remove_filter( 'query', $track_query );
 			remove_action( 'frm_after_entry_meta_change', $track_changes, 10 );
+			remove_action( 'frm_entry_meta_unchanged', $track_unchanged, 10 );
 		}
 
 		return $writes;
