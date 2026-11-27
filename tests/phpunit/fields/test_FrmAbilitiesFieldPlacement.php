@@ -222,6 +222,32 @@ class test_FrmAbilitiesFieldPlacement extends FrmUnitTest {
 	}
 
 	/**
+	 * An update hook that returns nothing must not break the update.
+	 *
+	 * @return void
+	 */
+	public function test_update_field_ignores_a_non_array_from_the_update_hook() {
+		$form     = $this->create_empty_form();
+		$field_id = $this->store_field( 'text', $form, 1 );
+
+		add_filter( 'frm_ability_update_field_placement', '__return_null' );
+
+		$updated = $this->execute(
+			'update-field',
+			array(
+				'id'   => $field_id,
+				'name' => 'Renamed',
+			)
+		);
+
+		$this->assertNotWPError( $updated );
+
+		$stored = FrmField::getOne( $field_id );
+		$this->assertSame( 'Renamed', $stored->name, 'The unfiltered update is saved.' );
+		$this->assertSame( $form, (int) $stored->form_id );
+	}
+
+	/**
 	 * @return void
 	 */
 	public function test_delete_field_fires_hooks_before_and_after_the_field_is_gone() {
@@ -282,6 +308,43 @@ class test_FrmAbilitiesFieldPlacement extends FrmUnitTest {
 		$this->assertNotWPError( $created );
 		$this->assertSame( array( 2, (int) $created['id'] ), $received );
 		$this->assertEmpty( FrmField::get_all_for_form( $created['id'] ), 'Formidable must not create the fields a second time.' );
+	}
+
+	/**
+	 * Only an explicit true means a callback created the fields.
+	 *
+	 * @return void
+	 */
+	public function test_create_form_creates_inline_fields_when_the_hook_returns_false() {
+		add_filter( 'frm_ability_create_inline_fields', '__return_false' );
+
+		$created = $this->execute( 'create-form', $this->inline_form_input() );
+
+		$this->assertNotWPError( $created );
+		$this->assertCount( 2, FrmField::get_all_for_form( $created['id'] ) );
+	}
+
+	/**
+	 * Inline fields go through the placement hook like create-field, and the form it picks is kept.
+	 *
+	 * @return void
+	 */
+	public function test_create_form_stores_inline_fields_where_the_placement_hook_puts_them() {
+		$other = $this->create_empty_form();
+
+		add_filter(
+			'frm_ability_new_field_placement',
+			function ( $prepared ) use ( $other ) {
+				$prepared['form_id'] = $other;
+				return $prepared;
+			}
+		);
+
+		$created = $this->execute( 'create-form', $this->inline_form_input() );
+
+		$this->assertNotWPError( $created );
+		$this->assertEmpty( FrmField::get_all_for_form( $created['id'] ), 'The requested form must not overwrite the form the hook chose.' );
+		$this->assertCount( 2, FrmField::get_all_for_form( $other ) );
 	}
 
 	/**

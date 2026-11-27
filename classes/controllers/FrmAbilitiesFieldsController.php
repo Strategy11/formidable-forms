@@ -432,14 +432,14 @@ class FrmAbilitiesFieldsController {
 		$field_data = self::add_stored_values_for_cleaning( $field, $field_data );
 
 		/**
-		 * Filters an update-field ability call before it is saved. Pro moves the field when its section changes, or returns a WP_Error.
+		 * Filters update-field data before it is saved. Pro moves the field when its section changes. Return an array, or a WP_Error to stop. Anything else is ignored.
 		 *
 		 * @since x.x
 		 *
 		 * @param array $field_data Field data to save, with field_options merged over the stored options.
 		 * @param array $args       Contains `field`, the stored field, and `input`, the update as sent.
 		 */
-		$field_data = apply_filters(
+		$placed = apply_filters(
 			'frm_ability_update_field_placement',
 			$field_data,
 			array(
@@ -448,10 +448,11 @@ class FrmAbilitiesFieldsController {
 			)
 		);
 
-		if ( is_wp_error( $field_data ) ) {
-			return $field_data;
+		if ( is_wp_error( $placed ) ) {
+			return $placed;
 		}
 
+		$field_data    = is_array( $placed ) ? $placed : $field_data;
 		$new_type      = ! empty( $field_data['type'] ) ? $field_data['type'] : $field->type;
 		$field_options = isset( $field_data['field_options'] ) && is_array( $field_data['field_options'] ) ? $field_data['field_options'] : (array) $field->field_options;
 		$checked       = self::check_form_select( $new_type, $field_options );
