@@ -173,6 +173,74 @@ class test_FrmField extends FrmUnitTest {
 		}
 	}
 
+	/**
+	 * @param int $total Number of fields the new form ends up with, including any it starts with.
+	 *
+	 * @return array{0: int, 1: string, 2: array<int>} Form ID, transient base name, field IDs.
+	 */
+	private function create_form_with_fields( $total ) {
+		$form_id = $this->factory->form->create();
+		$missing = $total - count( FrmField::get_all_for_form( $form_id ) );
+
+		for ( $i = 0; $i < $missing; $i++ ) {
+			$this->factory->field->create( array( 'form_id' => $form_id ) );
+		}
+
+		$field_ids = array_map( 'intval', wp_list_pluck( FrmField::getAll( array( 'fi.form_id' => $form_id ), 'field_order' ), 'id' ) );
+		FrmField::delete_form_transient( $form_id );
+
+		return array( $form_id, 'frm_form_fields_' . $form_id . 'excludeinclude', $field_ids );
+	}
+
+	/**
+	 * A missing chunk is a cache miss, never a shorter form.
+	 *
+	 * @covers FrmField::get_all_for_form
+	 */
+	public function test_get_all_for_form_reloads_when_a_chunk_is_missing() {
+		$size_before              = FrmField::$transient_size;
+		FrmField::$transient_size = 2;
+
+		try {
+			list( $form_id, $base_name, $field_ids ) = $this->create_form_with_fields( 5 );
+
+			$this->assertCount( 5, FrmField::get_all_for_form( $form_id ) );
+			$this->assertNotFalse( get_transient( $base_name . '2' ), 'The last chunk should be cached.' );
+
+			delete_transient( $base_name . '1' );
+
+			$this->assertSame( $field_ids, array_map( 'intval', wp_list_pluck( FrmField::get_all_for_form( $form_id ), 'id' ) ) );
+			$this->assertNotFalse( get_transient( $base_name ), 'The cache should be rebuilt.' );
+			$this->assertNotFalse( get_transient( $base_name . '1' ), 'The cache should be rebuilt.' );
+		} finally {
+			FrmField::$transient_size = $size_before;
+		}
+	}
+
+	/**
+	 * A list that fills its last chunk exactly ends with an empty chunk, so a missing chunk can be told from the end.
+	 *
+	 * @covers FrmField::get_all_for_form
+	 */
+	public function test_get_all_for_form_marks_the_end_of_a_chunk_aligned_list() {
+		$size_before              = FrmField::$transient_size;
+		FrmField::$transient_size = 2;
+
+		try {
+			list( $form_id, $base_name ) = $this->create_form_with_fields( 4 );
+
+			$this->assertCount( 4, FrmField::get_all_for_form( $form_id ) );
+			$this->assertSame( array(), get_transient( $base_name . '2' ), 'The end marker should be cached.' );
+			$this->assertCount( 4, FrmField::get_all_for_form( $form_id ) );
+
+			delete_transient( $base_name . '1' );
+
+			$this->assertCount( 4, FrmField::get_all_for_form( $form_id ) );
+		} finally {
+			FrmField::$transient_size = $size_before;
+		}
+	}
+
 	public function test_destroy() {
 		$form     = $this->factory->form->create_and_get();
 		$field_id = $this->factory->field->create(

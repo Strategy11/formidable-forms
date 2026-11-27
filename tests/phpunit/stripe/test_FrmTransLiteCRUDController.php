@@ -36,8 +36,8 @@ class test_FrmTransLiteCRUDController extends FrmUnitTest {
 
 		$row = $this->run_private_method( array( 'FrmTransLiteCRUDController', 'get_payment_row' ), array( $payment_id ) );
 
-		$this->assertEquals( $payment_id, $row->id );
+		$this->assertSame( (string) $payment_id, $row->id );
 		$this->assertSame( 'rcpt_123', $row->receipt_id );
-		$this->assertEquals( $entry->user_id, $row->user_id );
+		$this->assertSame( $entry->user_id, $row->user_id );
 	}
 }
