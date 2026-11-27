@@ -1068,8 +1068,7 @@ class FrmEntryValidate {
 		$values = array_filter( $values );
 
 		self::recursive_add_akismet_guest_info( $datas, $values );
-		unset( $datas['name_field_ids'] );
-		unset( $datas['missing_keys'] );
+		unset( $datas['name_field_ids'], $datas['missing_keys'] );
 
 		return $datas;
 	}
@@ -1097,7 +1096,7 @@ class FrmEntryValidate {
 				continue;
 			}
 
-			$field_id = ! is_null( $custom_index ) ? $custom_index : $index;
+			$field_id = $custom_index ?? $index;
 
 			foreach ( $datas['missing_keys'] as $key_index => $key ) {
 				$found = self::is_akismet_guest_info_value( $key, $value, $field_id, $datas['name_field_ids'], $values );
@@ -1384,7 +1383,7 @@ class FrmEntryValidate {
 			}
 
 			// Convert name array to string.
-			if ( isset( $value['first'] ) && isset( $value['last'] ) ) {
+			if ( isset( $value['first'], $value['last'] ) ) {
 				$values['item_meta'][ $field_id ] = trim( implode( ' ', $value ) );
 				$values['name_field_ids'][]       = $field_id;
 				continue;
@@ -1411,7 +1410,7 @@ class FrmEntryValidate {
 					}
 
 					// Convert name array to string.
-					if ( isset( $subsubvalue['first'] ) && isset( $subsubvalue['last'] ) ) {
+					if ( isset( $subsubvalue['first'], $subsubvalue['last'] ) ) {
 						$subsubvalue                = trim( implode( ' ', $subsubvalue ) );
 						$values['name_field_ids'][] = $subsubindex;
 					}

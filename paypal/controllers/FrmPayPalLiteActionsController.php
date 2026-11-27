@@ -1280,7 +1280,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	public static function prepare_amount( $amount, $atts = array() ) {
 		$amount   = parent::prepare_amount( $amount, $atts );
 		$currency = self::get_currency_for_action( $atts );
-		return number_format( floatval( $amount ), $currency['decimals'], '', '' );
+		return number_format( (float) $amount, $currency['decimals'], '', '' );
 	}
 
 	/**

@@ -336,7 +336,7 @@ class FrmEmailSummaryHelper {
 						GROUP BY form_id ORDER BY items_count DESC LIMIT %d",
 				$from_date,
 				$to_date . ' 23:59:59',
-				intval( $limit )
+				$limit
 			)
 		);
 
@@ -381,7 +381,7 @@ class FrmEmailSummaryHelper {
 				</span>',
 			esc_attr( $color ),
 			esc_html( $arrow ),
-			intval( $displayed_value ) . '%'
+			(int) $displayed_value . '%'
 		);
 	}
 

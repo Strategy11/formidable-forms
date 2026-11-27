@@ -291,7 +291,7 @@ class FrmPayPalLiteAppController {
 
 		foreach ( $pricing_data as $item ) {
 			// Match how the line items are rounded when the breakdown is built.
-			$item_total += floatval( number_format( floatval( $item['price'] ), 2, '.', '' ) ) * intval( $item['quantity'] );
+			$item_total += (float) number_format( (float) $item['price'], 2, '.', '' ) * (int) $item['quantity'];
 		}
 
 		if ( number_format( $item_total, 2, '.', '' ) !== $amount ) {
@@ -351,12 +351,12 @@ class FrmPayPalLiteAppController {
 		$pricing_data        = self::get_pricing_data_from_posted_values( $form_id );
 		$description         = self::process_shortcodes_for_action( $action->post_content['description'] ?? '', $action );
 
-		if ( 0.0 === floatval( $amount ) ) {
+		if ( 0.0 === (float) $amount ) {
 			wp_send_json_error( __( 'Order amount cannot be zero.', 'formidable' ) );
 		}
 
 		// PayPal expects the amount in a format like 10.00, so format it.
-		$amount       = number_format( floatval( $amount ), 2, '.', '' );
+		$amount       = number_format( (float) $amount, 2, '.', '' );
 		$currency     = strtoupper( $action->post_content['currency'] );
 		$pricing_data = self::maybe_remove_pricing_data_for_amount_mismatch( $pricing_data, $amount );
 
@@ -379,7 +379,7 @@ class FrmPayPalLiteAppController {
 
 		if ( ! isset( $order_response->order_id ) ) {
 			// Check if the response is a structured error with debug_id
-			if ( isset( $order_response->message ) && isset( $order_response->debug_id ) ) {
+			if ( isset( $order_response->message, $order_response->debug_id ) ) {
 				wp_send_json_error( self::format_paypal_error( $order_response->message . '{{debug_id:' . $order_response->debug_id . '}}', 'Failed to create PayPal order' ) );
 			}
 
@@ -667,7 +667,7 @@ class FrmPayPalLiteAppController {
 		// Update amount based on field shortcodes.
 		$entry = self::generate_false_entry();
 
-		return number_format( floatval( FrmPayPalLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) ) ) / 100, 2, '.', '' );
+		return number_format( (float) FrmPayPalLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) ) / 100, 2, '.', '' );
 	}
 
 	/**
@@ -744,7 +744,7 @@ class FrmPayPalLiteAppController {
 		$amount = self::get_amount_value_for_verification( $action );
 
 		// PayPal expects the amount in a format like 10.00, so format it.
-		$amount   = number_format( floatval( $amount ), 2, '.', '' );
+		$amount   = number_format( (float) $amount, 2, '.', '' );
 		$currency = strtoupper( $action->post_content['currency'] );
 
 		// Pass $product_name, $interval and $interval_count to the helper
@@ -792,7 +792,7 @@ class FrmPayPalLiteAppController {
 		}
 
 		// Check if response is a structured error with message and debug_id (array or object)
-		if ( is_object( $response ) && isset( $response->message ) && isset( $response->debug_id ) ) {
+		if ( is_object( $response ) && isset( $response->message, $response->debug_id ) ) {
 			wp_send_json_error( $response );
 		}
 
@@ -948,7 +948,7 @@ class FrmPayPalLiteAppController {
 		}
 
 		// If error is already a structured array with message and debug_id, return it directly
-		if ( is_array( $error ) && isset( $error['message'] ) && isset( $error['debug_id'] ) ) {
+		if ( is_array( $error ) && isset( $error['message'], $error['debug_id'] ) ) {
 			return $error;
 		}
 

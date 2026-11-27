@@ -763,7 +763,7 @@ class FrmPayPalLiteConnectHelper {
 	 * @return string
 	 */
 	private static function get_url_for_paypal_settings( $connected ) {
-		return admin_url( 'admin.php?page=formidable-settings&t=paypal_settings&connected=' . intval( $connected ) );
+		return admin_url( 'admin.php?page=formidable-settings&t=paypal_settings&connected=' . (int) $connected );
 	}
 
 	/**

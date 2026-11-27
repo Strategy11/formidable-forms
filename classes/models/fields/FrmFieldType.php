@@ -1514,7 +1514,7 @@ DEFAULT_HTML;
 	protected function prepare_esc_value() {
 		$value = $this->field['value'];
 
-		if ( is_null( $value ) ) {
+		if ( null === $value ) {
 			return '';
 		}
 

@@ -555,7 +555,7 @@ class FrmStrpLiteConnectHelper {
 	 * @return string
 	 */
 	private static function get_url_for_stripe_settings( $connected ) {
-		return admin_url( 'admin.php?page=formidable-settings&t=stripe_settings&connected=' . intval( $connected ) );
+		return admin_url( 'admin.php?page=formidable-settings&t=stripe_settings&connected=' . (int) $connected );
 	}
 
 	/**

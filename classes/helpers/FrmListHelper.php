@@ -396,7 +396,7 @@ class FrmListHelper {
 	 * @return void
 	 */
 	protected function bulk_actions( $which = '' ) {
-		if ( is_null( $this->_actions ) ) {
+		if ( null === $this->_actions ) {
 			$no_new_actions = $this->get_bulk_actions();
 			$this->_actions = $no_new_actions;
 
