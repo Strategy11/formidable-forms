@@ -1,12 +1,12 @@
 const pendingSettings = new Map();
-const metadataInputs = {
+const metadataInputs = Object.entries( {
 	name: [ 'name', 'frm_name_' ],
 	type: [ 'type', 'field_options_type_' ],
 	key: [ 'field_key', 'field_options_field_key_' ],
 	order: [ 'field_order', '' ],
 	classes: [ 'classes', 'frm_classes_' ],
 	align: [ 'align', 'field_options_align_' ]
-};
+} );
 
 /**
  * Keep lightweight values available to layout code and field lists without shipping input HTML.
@@ -20,7 +20,7 @@ const metadataInputs = {
 export function addFieldSettingsMetadata( field, fieldId, metadata ) {
 	const container = frmDom.div( { className: 'frm-deferred-settings-meta' } );
 	container.hidden = true;
-	const inputs = Object.entries( metadataInputs ).flatMap( ( [ key, [ name, prefix ] ] ) => {
+	const inputs = metadataInputs.flatMap( ( [ key, [ name, prefix ] ] ) => {
 		let value = metadata[ key ];
 		if ( value === null || value === undefined ) {
 			return [];

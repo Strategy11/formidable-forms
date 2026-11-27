@@ -132,8 +132,8 @@ class FrmFieldNumber extends FrmFieldType {
 		$errors[ 'field' . $args['id'] ] = sprintf(
 			// Translators: %1$s: the first nearest value; %2$s: the second nearest value.
 			__( 'Please enter a valid value. Two nearest valid values are %1$s and %2$s', 'formidable' ),
-			is_numeric( $result[0] ) ? floatval( $result[0] ) : $result[0],
-			is_numeric( $result[1] ) ? floatval( $result[1] ) : $result[1]
+			is_numeric( $result[0] ) ? (float) $result[0] : $result[0],
+			is_numeric( $result[1] ) ? (float) $result[1] : $result[1]
 		);
 	}
 
@@ -153,8 +153,8 @@ class FrmFieldNumber extends FrmFieldType {
 
 		// Convert value and step to int to prevent precision problem.
 		$pow   = 10 ** $decimals;
-		$value = intval( $pow * $value );
-		$step  = intval( $pow * $step );
+		$value = (int) ( $pow * $value );
+		$step  = (int) ( $pow * $step );
 		$div   = $value / $step;
 
 		if ( is_int( $div ) ) {

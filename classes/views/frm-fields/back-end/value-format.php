@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php esc_html_e( 'Format', 'formidable' ); ?>
 	</label>
 	<span class="frm-with-right-icon frm-block">
-		<input type="text" class="frm_long_input frm_format_opt" value="<?php echo esc_attr( $field['format'] ); ?>" name="field_options[format_<?php echo absint( $field['id'] ); ?>]" id="frm_format_<?php echo absint( $field['id'] ); ?>" data-fid="<?php echo intval( $field['id'] ); ?>" />
+		<input type="text" class="frm_long_input frm_format_opt" value="<?php echo esc_attr( $field['format'] ); ?>" name="field_options[format_<?php echo absint( $field['id'] ); ?>]" id="frm_format_<?php echo absint( $field['id'] ); ?>" data-fid="<?php echo (int) $field['id']; ?>" />
 		<?php
 		FrmAppHelper::icon_by_class(
 			'frmfont frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
