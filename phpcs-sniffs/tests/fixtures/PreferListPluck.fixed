@@ -59,3 +59,13 @@ $dynamic = array();
 foreach ( $rows as $row ) {
 	$dynamic[] = $row->$prop;
 }
+$object = (object) array( 'a' => (object) array( 'x' => 1 ) );
+$fromObject = array();
+foreach ( $object as $key => $item ) {
+	$fromObject[ $key ] = $item->x;
+}
+$wrapped = new ArrayObject( $rows );
+$fromWrapped = array();
+foreach ( $wrapped as $row ) {
+	$fromWrapped[] = $row->id;
+}

@@ -20,6 +20,10 @@
  *   otherwise the loop may be appending to existing values.
  * - The list must be a plain variable, property or array element. Function and method calls are
  *   skipped because they may return a generator or other Traversable, which both functions reject.
+ * - The list must hold an array. wp_list_pluck() returns an empty array for anything else and array_column()
+ *   throws a TypeError, while a foreach also walks an object's public properties or an ArrayObject.
+ *   The sniff skips a plain variable last assigned a `new` object or an `(object)` cast in the same scope,
+ *   but it cannot see types beyond that, so review flagged loops over objects before running phpcbf.
  * - The loop body must be the single assignment, with no comments anywhere in the rewritten range.
  * - The loop's key and value variables must not be read after the loop, since a foreach leaves them set.
  *
@@ -183,6 +187,12 @@ class PreferListPluckSniff implements Sniff {
 			return false;
 		}
 
+		$source = trim( $phpcsFile->getTokensAsString( $open + 1, $as - $open - 1 ) );
+
+		if ( 1 === count( $sourceVariables ) && $source === $sourceVariables[0] && $this->isAssignedObject( $phpcsFile, $stackPtr, $source ) ) {
+			return false;
+		}
+
 		$parts = $this->meaningfulTokens( $phpcsFile, $as + 1, $close );
 
 		if ( 1 === count( $parts ) && T_VARIABLE === $tokens[ $parts[0] ]['code'] ) {
@@ -194,8 +204,6 @@ class PreferListPluckSniff implements Sniff {
 		} else {
 			return false;
 		}
-
-		$source = trim( $phpcsFile->getTokensAsString( $open + 1, $as - $open - 1 ) );
 
 		if ( in_array( $value, $sourceVariables, true ) || in_array( $key, $sourceVariables, true ) ) {
 			return false;
@@ -368,6 +376,45 @@ class PreferListPluckSniff implements Sniff {
 		}
 
 		return $open;
+	}
+
+	/**
+	 * Checks whether a variable's last assignment before the loop, in the same scope, is a new object or an (object) cast.
+	 *
+	 * @param File   $phpcsFile The file being scanned.
+	 * @param int    $stackPtr  The position of the foreach token.
+	 * @param string $name      The variable name, including the dollar sign.
+	 *
+	 * @return bool
+	 */
+	private function isAssignedObject( File $phpcsFile, $stackPtr, $name ) {
+		$tokens = $phpcsFile->getTokens();
+		$start  = 0;
+
+		foreach ( array_reverse( $tokens[ $stackPtr ]['conditions'], true ) as $conditionPtr => $conditionCode ) {
+			if ( in_array( $conditionCode, array( T_FUNCTION, T_CLOSURE ), true ) ) {
+				$start = $conditionPtr;
+				break;
+			}
+		}
+
+		for ( $i = $stackPtr - 1; $i > $start; $i-- ) {
+			if ( T_VARIABLE !== $tokens[ $i ]['code'] || $tokens[ $i ]['content'] !== $name ) {
+				continue;
+			}
+
+			$equal = $phpcsFile->findNext( T_WHITESPACE, $i + 1, null, true );
+
+			if ( false === $equal || T_EQUAL !== $tokens[ $equal ]['code'] ) {
+				continue;
+			}
+
+			$value = $phpcsFile->findNext( T_WHITESPACE, $equal + 1, null, true );
+
+			return false !== $value && in_array( $tokens[ $value ]['code'], array( T_NEW, T_OBJECT_CAST ), true );
+		}
+
+		return false;
 	}
 
 	/**
