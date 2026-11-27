@@ -178,3 +178,17 @@ test( 'search lists every match', () => {
 	assert.equal( result.items.length, 70 );
 	assert.equal( result.resultCount, 70 );
 } );
+
+test( 'search ignores accents and case', () => {
+	const fields = [
+		field( '1', 'text', 'Café Préférence' ),
+		field( '2', 'break', 'Next' ),
+		field( '3', 'text', 'Numéro' )
+	];
+
+	assert.deepEqual( outline( fields, 'cafe pref' ), [ 'page Page 1: Café Préférence', '  field Café Préférence' ] );
+	assert.deepEqual( outline( fields, 'CAFÉ' ), [ 'page Page 1: Café Préférence', '  field Café Préférence' ] );
+	assert.deepEqual( outline( fields, 'numero' ), [ 'page Page 2: Numéro', '  field Numéro' ] );
+	// Labels saved in decomposed form match too.
+	assert.deepEqual( outline( [ field( '4', 'text', 'Numéro' ) ], 'numéro' ), [ 'field Numéro' ] );
+} );

@@ -25,19 +25,29 @@ export const STRUCTURE_TYPES = [ SECTION_TYPE, END_SECTION_TYPE, PAGE_BREAK_TYPE
  */
 
 /**
+ * Prepare text for search, so "cafe" finds "Café" and case doesn't matter.
+ *
+ * @param {string} text The text.
+ * @return {string} The text without accents, in lowercase.
+ */
+export function normalizeSearchText( text ) {
+	return text.normalize( 'NFD' ).replace( /\p{Mn}/gu, '' ).toLocaleLowerCase();
+}
+
+/**
  * Check a field against a search.
  *
  * The name matches anywhere in it. The ID only matches in full, so "10" doesn't find 100 to 110.
  * The key matches from its start, since keys are random letters and numbers past what people type.
  *
  * @param {OutlineField} field The field.
- * @param {string}       query The search text, trimmed and lowercase.
+ * @param {string}       query The search text, from normalizeSearchText().
  * @return {boolean} True when the field matches.
  */
 function fieldMatches( field, query ) {
-	return field.label.toLocaleLowerCase().includes( query ) ||
+	return normalizeSearchText( field.label ).includes( query ) ||
 		field.id === query ||
-		field.key.toLocaleLowerCase().startsWith( query );
+		normalizeSearchText( field.key ).startsWith( query );
 }
 
 /**
@@ -76,7 +86,7 @@ export function groupPages( fields ) {
  * @return {{items: Array, resultCount: number, hasFields: boolean}} The rows to draw and the counts.
  */
 export function buildOutline( pages, query, pageNumber ) {
-	query = query.trim().toLocaleLowerCase();
+	query = normalizeSearchText( query.trim() );
 	const items = [];
 	let resultCount = 0;
 
@@ -84,7 +94,7 @@ export function buildOutline( pages, query, pageNumber ) {
 		const previousResultCount = resultCount;
 		const number = pageNumber( page.index );
 		const title = page.heading || number;
-		const pageMatches = `${ number }: ${ title }`.toLocaleLowerCase().includes( query );
+		const pageMatches = normalizeSearchText( `${ number }: ${ title }` ).includes( query );
 		const firstField = page.fields[ 0 ] || page.breakField || pages[ 1 ]?.breakField;
 		if ( ! firstField ) {
 			return;
