@@ -7,6 +7,7 @@
  */
 import 'altcha';
 import { skipsVerification } from './altcha-skip-verification';
+import { resetAfterError } from './altcha-errors';
 
 const WIDGET_SELECTOR = 'altcha-widget.frm-altcha-widget';
 const CAPTCHA_SELECTOR = '.frm-altcha';
@@ -191,34 +192,8 @@ const addWidgets = root => {
 };
 
 /**
- * Mark the widget's checkbox invalid after the server rejects it, as Formidable does for
- * other inputs, until the visitor verifies again.
- *
- * @param {HTMLElement} widget The altcha-widget element.
- * @return {void}
- */
-const markInvalid = widget => {
-	const checkbox = widget.querySelector( 'input[type="checkbox"]' );
-
-	if ( ! checkbox ) {
-		return;
-	}
-
-	checkbox.setAttribute( 'aria-invalid', 'true' );
-
-	const clear = () => {
-		if ( widget.getState() === 'verified' ) {
-			checkbox.removeAttribute( 'aria-invalid' );
-			widget.removeEventListener( 'statechange', clear );
-		}
-	};
-
-	widget.addEventListener( 'statechange', clear );
-};
-
-/**
  * Add widgets to new form pages, and reset a widget when the server rejects its solution,
- * so the visitor gets a fresh challenge.
+ * so the visitor gets a fresh challenge and the widget no longer says Verified.
  *
  * Formidable adds a .frm_error element to the field container for each server-side error.
  *
@@ -239,9 +214,8 @@ const watchChanges = records => {
 
 			const widget = node.closest( '.frm_form_field' )?.querySelector( WIDGET_SELECTOR );
 
-			if ( widget && typeof widget.reset === 'function' ) {
-				widget.reset();
-				markInvalid( widget );
+			if ( widget ) {
+				resetAfterError( widget, node );
 			}
 		} );
 	} );
