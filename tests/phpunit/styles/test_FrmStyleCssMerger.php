@@ -51,7 +51,6 @@ class test_FrmStyleCssMerger extends FrmUnitTest {
 		$merger->add_style( 'frm_style_a', '.frm_total input{font-size:32px;} .frm_style_a .x{color:red;}' );
 		$merger->add_style( 'frm_style_b', '.frm_total input{font-size:32px;} .frm_style_b .x{color:red;}' );
 
-
 		$this->assertSame( 1, substr_count( $merger->get_css(), '.frm_total input{font-size:32px;}' ) );
 	}
 
@@ -61,6 +60,30 @@ class test_FrmStyleCssMerger extends FrmUnitTest {
 		$merger->add_style( 'frm_style_b', '@media (max-width:600px){.frm_style_b .x{width:100%;}}' );
 
 		$this->assertSame( "@media (max-width:600px){:is(.frm_style_a,.frm_style_b) .x{width:100%;}\n}\n", $merger->get_css() );
+	}
+
+	public function test_keyframes_with_the_same_name_stay_separate_blocks() {
+		$merger = new FrmStyleCssMerger();
+		$merger->add_style( 'frm_style_a', '@keyframes foo{0%{opacity:0;}50%{opacity:1;}100%{opacity:0;}} .frm_style_a .x{animation:foo 1s;}' );
+		$merger->add_style( 'frm_style_b', '@keyframes foo{0%{opacity:0;}100%{opacity:1;}} .frm_style_b .x{animation:foo 1s;}' );
+
+		// The last @keyframes foo block replaces the earlier one, so style b's block must not include style a's 50% frame.
+		$expected  = "@keyframes foo{0%{opacity:0;}\n50%{opacity:1;}\n100%{opacity:0;}\n}\n@keyframes foo{0%{opacity:0;}\n100%{opacity:1;}\n}\n";
+		$expected .= ":is(.frm_style_a,.frm_style_b) .x{animation:foo 1s;}\n";
+
+		$this->assertSame( $expected, $merger->get_css() );
+	}
+
+	public function test_style_with_rules_in_another_style_css_is_not_merged() {
+		$merger = new FrmStyleCssMerger();
+		$merger->add_style( 'frm_style_a', '.frm_style_a .x{color:red;} .frm_style_b .x{color:green;}' );
+		$merger->add_style( 'frm_style_b', '.frm_style_b .x{color:red;}' );
+		$merger->add_style( 'frm_style_c', '.frm_style_c .x{color:red;}' );
+
+		// Style b's own rule must stay after the rule style a prints for it, so style b keeps the red color.
+		$expected = ":is(.frm_style_a,.frm_style_c) .x{color:red;}\n.frm_style_b .x{color:green;}\n.frm_style_b .x{color:red;}\n";
+
+		$this->assertSame( $expected, $merger->get_css() );
 	}
 
 	public function test_unsupported_css_is_printed_unchanged() {

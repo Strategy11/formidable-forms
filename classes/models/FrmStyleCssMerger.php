@@ -11,7 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * once with :is() listing the style classes, which keeps the specificity of a single class.
  * Each style keeps the original order of its own rules, so the cascade inside a style does
  * not change. Rules that are not scoped to a style keep their original order, and only the
- * last copy of a rule that is printed more than once is kept.
+ * last copy of a rule that is printed more than once is kept. When a style's CSS has a rule
+ * for another style's class, none of that other style's rules are combined, so they keep
+ * their order with that rule.
  *
  * @since x.x
  */
@@ -23,6 +25,13 @@ class FrmStyleCssMerger {
 	 * @var string
 	 */
 	const PLACEHOLDER = "\x00";
+
+	/**
+	 * Separates an at-rule prelude from the marker that keeps the block apart from other blocks.
+	 *
+	 * @var string
+	 */
+	const BLOCK_MARKER = "\x06";
 
 	/**
 	 * The CSS printed for each style, in output order.
@@ -65,16 +74,38 @@ class FrmStyleCssMerger {
 			return $original;
 		}
 
-		$sequences = array();
+		$parsed   = array();
+		$isolated = array();
+		$classes  = wp_list_pluck( $this->blocks, 'class' );
+		$pattern  = '/\.(' . implode( '|', array_map( array( self::class, 'quote_class' ), $classes ) ) . ')(?![\w-])/';
 
 		foreach ( $this->blocks as $index => $block ) {
-			$rules = self::parse_rules( $block['css'] );
+			$rules = self::parse_rules( $block['css'], $index );
 
 			if ( false === $rules ) {
 				return $original;
 			}
 
-			$sequences[] = self::key_rules( $rules, $block['class'], $index );
+			foreach ( $rules as $rule_index => $rule ) {
+				preg_match_all( $pattern, $rule['selector'], $matches );
+				$foreign = array_diff( $matches[1], array( $block['class'] ) );
+
+				if ( ! $foreign ) {
+					continue;
+				}
+
+				// A rule for another style has to keep its order with that style's rules.
+				$rules[ $rule_index ]['mergeable'] = false;
+				$isolated                         += array_fill_keys( $foreign, true );
+			}
+
+			$parsed[ $index ] = $rules;
+		}//end foreach
+
+		$sequences = array();
+
+		foreach ( $this->blocks as $index => $block ) {
+			$sequences[] = self::key_rules( $parsed[ $index ], $block['class'], $index, ! isset( $isolated[ $block['class'] ] ) );
 		}
 
 		$order = self::merge_order( $sequences );
@@ -83,15 +114,27 @@ class FrmStyleCssMerger {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @param string $style_class
+	 *
+	 * @return string
+	 */
+	private static function quote_class( $style_class ) {
+		return preg_quote( $style_class, '/' );
+	}
+
+	/**
 	 * Splits CSS into rules, each with the at-rule blocks it is nested in.
 	 *
 	 * @since x.x
 	 *
 	 * @param string $css
+	 * @param int    $block_index The position of the style in the output.
 	 *
 	 * @return array|false False when the CSS uses syntax this parser does not handle.
 	 */
-	private static function parse_rules( $css ) {
+	private static function parse_rules( $css, $block_index ) {
 		$css = preg_replace( '/\/\*.*?\*\//s', '', $css );
 
 		// A brace inside a quoted string would be read as a block boundary.
@@ -103,9 +146,10 @@ class FrmStyleCssMerger {
 			}
 		}
 
-		$rules   = array();
-		$context = array();
-		$offset  = 0;
+		$rules     = array();
+		$context   = array();
+		$offset    = 0;
+		$at_blocks = 0;
 
 		while ( true ) {
 			$close = strpos( $css, '}', $offset );
@@ -137,15 +181,23 @@ class FrmStyleCssMerger {
 
 			if ( '@' === $prelude[0] && false !== $next_open && $next_open < $close ) {
 				// An at-rule like @media that holds rules.
+				if ( preg_match( '/^@(-[a-z]+-)?keyframes\b/i', $prelude ) ) {
+					// A later @keyframes block with the same name replaces an earlier one instead of
+					// adding to it, so each block is kept apart from other blocks with the same prelude.
+					$prelude .= self::BLOCK_MARKER . $block_index . '-' . $at_blocks;
+				}
+
 				$context[] = $prelude;
 				$offset    = $open + 1;
+				++$at_blocks;
 				continue;
 			}
 
 			$rules[] = array(
-				'context'  => $context,
-				'selector' => $prelude,
-				'body'     => self::clean_whitespace( substr( $css, $open + 1, $close - $open - 1 ) ),
+				'context'   => $context,
+				'selector'  => $prelude,
+				'body'      => self::clean_whitespace( substr( $css, $open + 1, $close - $open - 1 ) ),
+				'mergeable' => true,
 			);
 			$offset  = $close + 1;
 		}//end while
@@ -178,17 +230,18 @@ class FrmStyleCssMerger {
 	 * @param array  $rules
 	 * @param string $style_class
 	 * @param int    $block_index The position of the style in the output.
+	 * @param bool   $mergeable   False when another style's CSS has rules for this style, so its rules keep their order with those.
 	 *
 	 * @return array<string, mixed> Rules keyed in their original order.
 	 */
-	private static function key_rules( $rules, $style_class, $block_index ) {
+	private static function key_rules( $rules, $style_class, $block_index, $mergeable ) {
 		$pattern     = '/\.' . preg_quote( $style_class, '/' ) . '(?![\w-])/';
 		$keyed       = array();
 		$occurrences = array();
 
 		foreach ( $rules as $rule ) {
 			$selector = preg_replace( $pattern, self::PLACEHOLDER, $rule['selector'] );
-			$scoped   = str_contains( $selector, self::PLACEHOLDER );
+			$scoped   = $mergeable && $rule['mergeable'] && str_contains( $selector, self::PLACEHOLDER );
 			$key      = implode( "\x01", $rule['context'] ) . "\x02" . $selector;
 
 			if ( ! $scoped ) {
@@ -429,7 +482,7 @@ class FrmStyleCssMerger {
 		$css = str_repeat( "}\n", count( $from ) - $shared );
 
 		foreach ( array_slice( $to, $shared ) as $prelude ) {
-			$css .= $prelude . '{';
+			$css .= explode( self::BLOCK_MARKER, $prelude )[0] . '{';
 		}
 
 		return $css;
