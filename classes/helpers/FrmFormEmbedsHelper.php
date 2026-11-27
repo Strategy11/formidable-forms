@@ -589,7 +589,7 @@ class FrmFormEmbedsHelper {
 	 *
 	 * @since 6.35
 	 *
-	 * @param int $post_id Post ID.
+	 * @param int|string $post_id Post ID.
 	 *
 	 * @return array
 	 */
