@@ -9,6 +9,7 @@
  */
 
 import { addFieldSettingsMetadata } from './deferredFieldSettings';
+import { PENDING_PREVIEW_CLASS } from './fieldPreviewSelectors';
 import { queueFieldPreview } from './fieldPreviewQueue';
 
 const MANIFEST_ID = 'frm-field-previews';
@@ -17,7 +18,7 @@ const TEXT_INPUT_TYPES = new Set( [ 'text', 'email', 'url', 'number', 'phone' ] 
 /**
  * Marks a list item whose preview has not been drawn yet.
  */
-export const PENDING_PREVIEW_CLASS = 'frm_field_preview_pending';
+export { PENDING_PREVIEW_CLASS };
 
 let pendingPreviews = [];
 let template;

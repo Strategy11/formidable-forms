@@ -1,13 +1,10 @@
 /**
- * WordPress dependencies
- */
-import { __ } from '@wordpress/i18n';
-
-/**
  * Internal dependencies
  */
 import { validateField } from './validateField';
 import { getFieldId, getFieldType } from './utils';
+
+const { __ } = wp.i18n;
 
 /**
  * Gets the default values for range settings validation.
