@@ -68,7 +68,7 @@ class FrmCurrencyHelper {
 		}
 
 		if ( is_string( $amount ) ) {
-			$amount = floatval( self::prepare_price( $amount, $currency ) );
+			$amount = (float) self::prepare_price( $amount, $currency );
 		}
 
 		$amount = number_format( $amount, $currency['decimals'], $currency['decimal_separator'], $currency['thousand_separator'] );

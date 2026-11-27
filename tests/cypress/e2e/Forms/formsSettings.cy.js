@@ -71,7 +71,7 @@ describe( 'Updating form settings', () => {
 		cy.get( '.frm_form_title' ).should( 'not.exist' );
 		cy.get( '.frm_description > p' ).should( 'not.exist' );
 		cy.go( 'back' );
-		cy.get( "a[aria-label='Close']", { timeout: 5000 } ).should( 'be.visible' ).click();
+		cy.closeFullScreen();
 
 		cy.log( 'Teardown - Delete form' );
 		cy.deleteForm();

@@ -27,7 +27,7 @@ $format   = FrmField::get_option( $field, 'format' );
 		name="field_options[phone_type_<?php echo esc_attr( $field_id ); ?>]"
 		id="phone_type_<?php echo esc_attr( $field_id ); ?>"
 		class="frm_phone_type_dropdown frm_select_with_upgrade frm_select_with_dependency"
-		data-field-id="<?php echo intval( $field_id ); ?>"
+		data-field-id="<?php echo (int) $field_id; ?>"
 	>
 		<option value="none" <?php selected( $format, '' ); ?>>
 			<?php esc_html_e( 'None', 'formidable' ); ?>

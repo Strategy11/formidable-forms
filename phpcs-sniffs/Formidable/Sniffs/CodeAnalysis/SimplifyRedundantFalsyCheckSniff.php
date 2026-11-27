@@ -3,8 +3,19 @@
  * Formidable_Sniffs_CodeAnalysis_SimplifyRedundantFalsyCheckSniff
  *
  * Detects redundant falsy checks that can be simplified.
- * For example: $value == '' || ! $value can be simplified to just ! $value
+ * For example: $value === '' || ! $value can be simplified to just ! $value
  * since '' is falsy and covered by ! $value.
+ *
+ * The comparison is only redundant when no truthy value can satisfy it, under
+ * both PHP 7 and PHP 8 loose comparison rules:
+ * - Strict comparisons (===) against '', false, 0 and null match only that
+ *   falsy literal, so they are always covered.
+ * - Loose comparisons (==) against false and null convert the variable to a
+ *   boolean (or, for a string, compare it to ''), so they are covered too.
+ * - Loose comparisons against 0, 0.0 or '0' are not: '0.00', '0.0', ' 0' and
+ *   '00' are truthy but loosely equal to zero (and so is 'abc' in PHP 7).
+ * - A loose comparison against '' is not either: an object whose __toString()
+ *   returns '' is truthy but loosely equal to ''.
  *
  * @package Formidable\Sniffs
  */
@@ -18,14 +29,17 @@ use PHP_CodeSniffer\Files\File;
  * Detects redundant falsy checks.
  *
  * Bad:
- * if ($value == '' || ! $value) { }
- * if (! $value || $value == '') { }
  * if ($value === '' || ! $value) { }
+ * if (! $value || $value === 0) { }
  * if ($value == false || ! $value) { }
- * if ($value == 0 || ! $value) { }
+ * if ($value == null || ! $value) { }
  *
  * Good:
  * if (! $value) { }
+ *
+ * Left alone, because the comparison also matches truthy values:
+ * if (! $amount || $amount == 0) { }
+ * if ($value == '' || ! $value) { }
  */
 class SimplifyRedundantFalsyCheckSniff implements Sniff {
 
@@ -67,7 +81,7 @@ class SimplifyRedundantFalsyCheckSniff implements Sniff {
 			return;
 		}
 
-		// Check for pattern: $var == '' || ! $var (or similar falsy comparisons).
+		// Check for pattern: $var === '' || ! $var (or similar falsy comparisons).
 		$simplification = $this->findRedundantPattern( $leftSide, $rightSide );
 
 		if ( false === $simplification ) {
@@ -228,8 +242,8 @@ class SimplifyRedundantFalsyCheckSniff implements Sniff {
 				return false;
 			}
 
-			// Check if it's a falsy value.
-			$falsyValue = $this->isFalsyValue( $phpcsFile, $valueToken );
+			// Check if it's a falsy value that only falsy values can match.
+			$falsyValue = $this->isFalsyValue( $phpcsFile, $valueToken, T_IS_IDENTICAL === $opCode );
 
 			if ( false === $falsyValue ) {
 				return false;
@@ -255,16 +269,35 @@ class SimplifyRedundantFalsyCheckSniff implements Sniff {
 	}
 
 	/**
-	 * Check if a token represents a falsy value.
+	 * Check if a token is a falsy value whose comparison is covered by a negation.
+	 *
+	 * Loose comparisons are only covered for false and null. A loose comparison
+	 * with 0 also matches truthy strings such as '0.00', and a loose comparison
+	 * with '' also matches objects that convert to an empty string.
 	 *
 	 * @param File $phpcsFile  The file being scanned.
 	 * @param int  $valueToken The token position.
+	 * @param bool $isStrict   Whether the comparison uses ===.
 	 *
 	 * @return false|string The falsy value type or false.
 	 */
-	private function isFalsyValue( File $phpcsFile, $valueToken ) {
+	private function isFalsyValue( File $phpcsFile, $valueToken, $isStrict ) {
 		$tokens = $phpcsFile->getTokens();
 		$code   = $tokens[ $valueToken ]['code'];
+
+		// false.
+		if ( $code === T_FALSE ) {
+			return 'false';
+		}
+
+		// null.
+		if ( $code === T_NULL ) {
+			return 'null';
+		}
+
+		if ( ! $isStrict ) {
+			return false;
+		}
 
 		// Empty string ''.
 		if ( $code === T_CONSTANT_ENCAPSED_STRING ) {
@@ -277,19 +310,9 @@ class SimplifyRedundantFalsyCheckSniff implements Sniff {
 			return false;
 		}
 
-		// false.
-		if ( $code === T_FALSE ) {
-			return 'false';
-		}
-
 		// 0.
 		if ( $code === T_LNUMBER && $tokens[ $valueToken ]['content'] === '0' ) {
 			return 'zero';
-		}
-
-		// null.
-		if ( $code === T_NULL ) {
-			return 'null';
 		}
 
 		return false;
@@ -304,7 +327,7 @@ class SimplifyRedundantFalsyCheckSniff implements Sniff {
 	 * @return array|false Array with 'original' and 'simplified' or false.
 	 */
 	private function findRedundantPattern( $leftSide, $rightSide ) {
-		// Pattern 1: $var == '' || ! $var.
+		// Pattern 1: $var === '' || ! $var.
 		if ( $leftSide['type'] === 'comparison' && $rightSide['type'] === 'negation' ) {
 			if ( $leftSide['variable'] === $rightSide['variable'] ) {
 				return array(
@@ -314,7 +337,7 @@ class SimplifyRedundantFalsyCheckSniff implements Sniff {
 			}
 		}
 
-		// Pattern 2: ! $var || $var == ''.
+		// Pattern 2: ! $var || $var === ''.
 		if ( $leftSide['type'] === 'negation' && $rightSide['type'] === 'comparison' ) {
 			if ( $leftSide['variable'] === $rightSide['variable'] ) {
 				return array(
