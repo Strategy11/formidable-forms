@@ -26,13 +26,13 @@ class FrmField {
 	public static $transient_size = 200;
 
 	/**
-	 * Cached field lists already loaded in this request, keyed by form ID.
+	 * Cached field lists already loaded in this request, keyed by blog ID and form ID.
 	 *
 	 * Each list includes repeater and embedded fields. Reading the transient again would unserialize it again.
 	 *
 	 * @since x.x
 	 *
-	 * @var array<int, array{fields: array, sources: array<int, int>}>
+	 * @var array<string, array{fields: array, sources: array<int, int>}>
 	 */
 	private static $request_cache = array();
 
@@ -1452,18 +1452,23 @@ class FrmField {
 	 * @return array{fields: array, sources: array<int, int>}|false False when there is no cached list and it was not built.
 	 */
 	private static function get_cached_fields( $form_id, $build ) {
-		if ( isset( self::$request_cache[ $form_id ] ) ) {
-			return self::$request_cache[ $form_id ];
+		// The current blog is part of the key, since a switch_to_blog() call can reuse a form ID.
+		$cache_key = get_current_blog_id() . ':' . $form_id;
+
+		if ( isset( self::$request_cache[ $cache_key ] ) ) {
+			return self::$request_cache[ $cache_key ];
 		}
 
 		$base_name = 'frm_form_fields_' . $form_id . 'includeinclude';
 		$fields    = array();
 		$complete  = self::get_next_transient( $fields, $base_name );
-		$sources   = $complete && $fields ? get_transient( 'frm_form_fields_' . $form_id . 'includesources' ) : false;
+		$saved     = $complete && $fields ? get_transient( 'frm_form_fields_' . $form_id . 'includesources' ) : false;
 
-		if ( is_array( $sources ) ) {
-			self::$request_cache[ $form_id ] = compact( 'fields', 'sources' );
-			return self::$request_cache[ $form_id ];
+		// Two requests can build the list at once, so the sources only count when they were saved with these fields.
+		if ( is_array( $saved ) && isset( $saved['signature'], $saved['sources'] ) && $saved['signature'] === self::get_field_list_signature( $fields ) ) {
+			$sources                           = $saved['sources'];
+			self::$request_cache[ $cache_key ] = compact( 'fields', 'sources' );
+			return self::$request_cache[ $cache_key ];
 		}
 
 		if ( ! $build || isset( self::$building_cache[ $form_id ] ) ) {
@@ -1476,7 +1481,14 @@ class FrmField {
 
 		if ( $cache['fields'] ) {
 			// Save the sources first. The list is only read once its first chunk exists.
-			set_transient( 'frm_form_fields_' . $form_id . 'includesources', $cache['sources'], 60 * 60 * 6 );
+			set_transient(
+				'frm_form_fields_' . $form_id . 'includesources',
+				array(
+					'signature' => self::get_field_list_signature( $cache['fields'] ),
+					'sources'   => $cache['sources'],
+				),
+				60 * 60 * 6
+			);
 			self::set_field_transient(
 				$cache['fields'],
 				$form_id,
@@ -1488,9 +1500,30 @@ class FrmField {
 			);
 		}
 
-		self::$request_cache[ $form_id ] = $cache;
+		self::$request_cache[ $cache_key ] = $cache;
 
 		return $cache;
+	}
+
+	/**
+	 * Identify a cached field list by the ID and form of each field, in order.
+	 *
+	 * The sources are saved apart from the fields, so this ties them to the list they were built with.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $fields Field objects in list order.
+	 *
+	 * @return string
+	 */
+	private static function get_field_list_signature( $fields ) {
+		$parts = array();
+
+		foreach ( $fields as $field ) {
+			$parts[] = $field->id . ':' . $field->form_id;
+		}
+
+		return md5( implode( ',', $parts ) );
 	}
 
 	/**
