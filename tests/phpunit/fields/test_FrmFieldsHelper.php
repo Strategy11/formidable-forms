@@ -219,18 +219,18 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 		// Test a single draft field.
 		$results = FrmFieldsHelper::get_draft_field_results( $form_id );
 		$ids     = wp_list_pluck( $results, 'id' );
-		$this->assertEquals( array( $draft_field_id ), $ids );
+		$this->assertSame( array( (string) $draft_field_id ), $ids );
 
 		// Test with two draft fields.
 		$draft_field_id2 = $this->factory->field->create( $draft_field_options );
 		$results         = FrmFieldsHelper::get_draft_field_results( $form_id );
 		$ids             = wp_list_pluck( $results, 'id' );
-		$this->assertEquals( array( $draft_field_id, $draft_field_id2 ), $ids );
+		$this->assertSame( array( (string) $draft_field_id, (string) $draft_field_id2 ), $ids );
 
 		// Test the $field_ids parameter. If this is not empty, we only want o query for these IDs.
 		$results = FrmFieldsHelper::get_draft_field_results( $form_id, array( $draft_field_id2 ) );
 		$ids     = wp_list_pluck( $results, 'id' );
-		$this->assertEquals( array( $draft_field_id2 ), $ids );
+		$this->assertSame( array( (string) $draft_field_id2 ), $ids );
 	}
 
 	/**

@@ -1329,7 +1329,7 @@ class FrmFieldsHelper {
 	 * @return void
 	 */
 	public static function sanitize_embedded_shortcodes( $atts, &$value ) {
-		if ( is_null( $value ) ) {
+		if ( null === $value ) {
 			return;
 		}
 
@@ -1724,7 +1724,7 @@ class FrmFieldsHelper {
 			return $other_val;
 		}
 
-		if ( isset( $field['id'] ) && isset( $_POST['item_meta']['other'][ $field['id'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( isset( $field['id'], $_POST['item_meta']['other'][ $field['id'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			// For normal fields
 
 			if ( FrmField::is_field_with_multiple_values( $field ) ) {
@@ -2082,8 +2082,7 @@ class FrmFieldsHelper {
 			if ( false === $index ) {
 				continue;
 			}
-			unset( $replace[ $index ] );
-			unset( $replace_with[ $index ] );
+			unset( $replace[ $index ], $replace_with[ $index ] );
 		}
 
 		return str_replace( $replace, $replace_with, $value );

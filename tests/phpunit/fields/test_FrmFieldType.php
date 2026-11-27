@@ -207,9 +207,9 @@ class test_FrmFieldType extends FrmUnitTest {
 					'a1',
 				),
 				'expected' => array(
-					'6',
-					'2',
-					'0',
+					6,
+					2,
+					0,
 				),
 			),
 		);
@@ -217,7 +217,7 @@ class test_FrmFieldType extends FrmUnitTest {
 		foreach ( $values as $value ) {
 			$frm_field_type = FrmFieldFactory::get_field_type( $value['type'] );
 			$frm_field_type->sanitize_value( $value['value'] );
-			$this->assertEquals( $value['expected'], $value['value'] );
+			$this->assertSame( $value['expected'], $value['value'] );
 		}
 
 		$this->use_frm_role( 'loggedout' );

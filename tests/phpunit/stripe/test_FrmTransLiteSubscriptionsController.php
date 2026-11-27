@@ -28,7 +28,7 @@ class test_FrmTransLiteSubscriptionsController extends FrmUnitTest {
 		$output = ob_get_clean();
 
 		$this->assertTrue( property_exists( $sub, 'user_id' ) );
-		$this->assertEquals( $entry->user_id, $sub->user_id );
+		$this->assertSame( $entry->user_id, $sub->user_id );
 		$this->assertNotEmpty( $output );
 	}
 }

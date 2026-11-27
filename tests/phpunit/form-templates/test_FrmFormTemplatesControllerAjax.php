@@ -75,6 +75,6 @@ class test_FrmFormTemplatesControllerAjax extends FrmAjaxUnitTest {
 		parse_str( wp_parse_url( $redirect, PHP_URL_QUERY ), $query );
 		$template = FrmForm::getOne( absint( $query['id'] ) );
 
-		$this->assertEquals( 1, $template->is_template, 'The redirect should open the new template, not a copy of it.' );
+		$this->assertSame( '1', $template->is_template, 'The redirect should open the new template, not a copy of it.' );
 	}
 }
