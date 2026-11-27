@@ -8,6 +8,7 @@ const { syncFieldOrder, confirmFieldOrderSaved } = require( './fieldOrder' );
 const { allowContainerDrop } = require( './fieldPlacement' );
 const { getRangeSettingsDefaults, validateNumberRangeSetting, validateStepSetting, validateRangeSettings } = require( './settings/validateRangeSettings' );
 const { initFieldListHoverPill } = require( './fieldListHoverPill' );
+const { setupOptionGroups, initOptionGroupLists, refreshOptionGroups, formatBulkOptionLabel } = require( './optionGroups' );
 const { initShowBoxIconSwap } = require( './showBoxIconSwap' );
 const { initFieldSizePreview } = require( './fieldSizePreview' );
 const { hydrateBuilderSelect, hydrateBuilderSelectsIn } = require( './sharedSelectOptions' );
@@ -4875,6 +4876,7 @@ window.frmAdminBuildJS = function() {
 				return;
 			}
 			let content = '';
+			const groupState = { previous: '' };
 			const fieldId = jQuery( this ).closest( '[data-fid]' ).data( 'fid' );
 			const separate = usingSeparateValues( fieldId );
 			const product = isProductField( fieldId );
@@ -4893,7 +4895,7 @@ window.frmAdminBuildJS = function() {
 				if ( key !== '000' ) {
 					const label = document.getElementsByName( `field_options[options_${ fieldId }][${ key }][label]` )[ 0 ];
 					if ( label !== undefined ) {
-						content += label.value;
+						content += formatBulkOptionLabel( opts[ i ], label.value, groupState );
 						if ( separate ) {
 							content += `|${ document.getElementsByName( `field_options[options_${ fieldId }][${ key }][value]` )[ 0 ].value }`;
 						}
@@ -4903,11 +4905,9 @@ window.frmAdminBuildJS = function() {
 						content += '\r\n';
 					}
 				}
-
-				if ( i >= opts.length - 1 ) {
-					document.getElementById( 'frm_bulk_options' ).value = content;
-				}
 			}
+
+			document.getElementById( 'frm_bulk_options' ).value = content;
 
 			$info.dialog( 'open' );
 
@@ -8254,7 +8254,8 @@ window.frmAdminBuildJS = function() {
 		}
 
 		const container = document.getElementById( `frm_field_${ fieldId }_opts` );
-		const conflicts = Array.from( container.querySelectorAll( 'input[type="text"]' ) ).filter(
+		// A group heading holds a name, not an option, so an option may share its text.
+		const conflicts = Array.from( container.querySelectorAll( 'input[type="text"]:not(.frm-option-group-name)' ) ).filter(
 			input => input.id !== targetInput.id &&
 				areValuesSeparate === input.name.endsWith( '[value]' ) &&
 				input.value === targetInput.value
@@ -9542,6 +9543,7 @@ window.frmAdminBuildJS = function() {
 			);
 		}
 
+		initOptionGroupLists( singleField );
 		wp.hooks.doAction( 'frmShowedFieldSettings', obj, singleField );
 		maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField );
 
@@ -12767,6 +12769,7 @@ window.frmAdminBuildJS = function() {
 
 			document.querySelectorAll( '.field_type_list > li:not(.frm_show_upgrade):not(.frm_show_update)' ).forEach( makeDraggable );
 			initFieldListHoverPill();
+			setupOptionGroups();
 			initFieldSizePreview();
 
 			jQuery( 'ul.field_type_list, .field_type_list li, ul.frm_code_list, .frm_code_list li, .frm_code_list li a, #frm_adv_info #category-tabs li, #frm_adv_info #category-tabs li a' ).disableSelection();
@@ -13491,6 +13494,7 @@ window.frmAdminBuildJS = function() {
 				},
 				success( html ) {
 					document.getElementById( `frm_field_${ fieldId }_opts` ).innerHTML = html;
+					refreshOptionGroups( fieldId );
 					wp.hooks.doAction( 'frm_after_bulk_edit_opts', fieldId );
 					resetDisplayedOpts( fieldId );
 
