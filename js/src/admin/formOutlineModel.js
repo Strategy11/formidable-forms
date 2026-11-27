@@ -21,8 +21,25 @@ export const MAX_FIELD_RESULTS = 60;
  * @property {string}   label       What the outline shows for the field.
  * @property {string}   sectionId   The ID of the section the field sits in directly, or ''.
  * @property {string[]} sectionIds  The IDs of every section the field sits in.
+ * @property {string}   key         The field key, or '' when it isn't known.
  * @property {boolean}  placeholder True while the field's preview is still loading, so only its type is known.
  */
+
+/**
+ * Check a field against a search.
+ *
+ * The name matches anywhere in it. The ID only matches in full, so "10" doesn't find 100 to 110.
+ * The key matches from its start, since keys are random letters and numbers past what people type.
+ *
+ * @param {OutlineField} field The field.
+ * @param {string}       query The search text, trimmed and lowercase.
+ * @return {boolean} True when the field matches.
+ */
+function fieldMatches( field, query ) {
+	return field.label.toLocaleLowerCase().includes( query ) ||
+		field.id === query ||
+		field.key.toLocaleLowerCase().startsWith( query );
+}
 
 /**
  * Split the builder's fields into pages at each page break.
@@ -87,7 +104,7 @@ export function buildOutline( pages, query, pageNumber ) {
 				return;
 			}
 			const isSection = type === SECTION_TYPE;
-			const matches = field.label.toLocaleLowerCase().includes( query ) || field.id.includes( query );
+			const matches = fieldMatches( field, query );
 			if ( query !== '' && ! matches && ! isSection ) {
 				return;
 			}

@@ -15,7 +15,7 @@ const pageNumber = index => `Page ${ index + 1 }`;
  * @return {Object} The field.
  */
 function field( id, type, label = '', props = {} ) {
-	return { id, type, heading: '', text: label, label: label || `Untitled field (${ id })`, sectionId: '', sectionIds: [], ...props };
+	return { id, type, heading: '', text: label, label: label || `Untitled field (${ id })`, key: '', sectionId: '', sectionIds: [], ...props };
 }
 
 function inSection( sectionId, item ) {
@@ -157,4 +157,16 @@ test( 'a page title match does not list the page\'s sections with nothing in the
 	// The page title comes from its first field, which still shows as a match.
 	assert.deepEqual( outline( fields, 'delivery' ), [ 'page Page 2: Delivery', '  field Delivery' ] );
 	assert.deepEqual( outline( fields, 'billing' ), [ 'page Page 2: Delivery', '  section Billing' ] );
+} );
+
+test( 'search matches a field ID exactly and a field key by its start', () => {
+	const fields = [ [ '10', 'A' ], [ '100', 'B' ], [ '105', 'C' ], [ '110', 'D' ] ].map( ( [ id, name ] ) => field( id, 'text', `Question ${ name }`, { key: `qkey${ id }` } ) );
+	fields.push( field( '7', 'text', 'Email', { key: 'contact_email' } ) );
+
+	assert.deepEqual( outline( fields, '10' ), [ 'field Question A' ] );
+	assert.deepEqual( outline( fields, 'contact_em' ), [ 'field Email' ] );
+	assert.deepEqual( outline( fields, 'CONTACT_EMAIL' ), [ 'field Email' ] );
+	// Keys are random letters and numbers, so a match in the middle of one is noise.
+	assert.deepEqual( outline( fields, 'email' ), [ 'field Email' ] );
+	assert.deepEqual( outline( fields, 'key10' ), [] );
 } );

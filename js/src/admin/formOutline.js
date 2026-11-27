@@ -101,7 +101,9 @@ export function initFormOutline() {
 		// A placeholder has no data-type until its batch arrives, but data-ftype still tells a page break apart.
 		const type = field.dataset.type || field.dataset.ftype;
 		const placeholder = field.classList.contains( 'frm_field_loading' );
-		return { id: field.dataset.fid, type, heading, text, label, sectionId: sectionIds[ 0 ] || '', sectionIds, placeholder, element: field };
+		// Deferred previews keep the key in their metadata, loaded settings in the Field Options input.
+		const key = document.getElementById( `field_options_field_key_${ field.dataset.fid }` )?.value || '';
+		return { id: field.dataset.fid, type, heading, text, label, key, sectionId: sectionIds[ 0 ] || '', sectionIds, placeholder, element: field };
 	};
 
 	const getPages = () => {
@@ -172,7 +174,7 @@ export function initFormOutline() {
 			emptyTitle.textContent = sprintf( __( 'No results for “%s”', 'formidable' ), search.value.trim() );
 			emptyText.textContent = loading
 				? __( 'Some fields are still loading.', 'formidable' )
-				: __( 'Try a page, section or field name.', 'formidable' );
+				: __( 'Try a page, section or field name, or a field ID or key.', 'formidable' );
 		} else if ( showEmpty ) {
 			emptyTitle.textContent = __( 'No fields yet', 'formidable' );
 			emptyText.textContent = __( 'Fields you add to this form will show up here, so you can jump to any of them.', 'formidable' );
