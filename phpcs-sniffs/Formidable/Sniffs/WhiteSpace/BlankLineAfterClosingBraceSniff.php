@@ -182,7 +182,7 @@ class BlankLineAfterClosingBraceSniff implements Sniff {
 			}
 
 			// Check if this function contains our token.
-			if ( isset( $tokens[ $searchPtr ]['scope_opener'] ) && isset( $tokens[ $searchPtr ]['scope_closer'] ) ) {
+			if ( isset( $tokens[ $searchPtr ]['scope_opener'], $tokens[ $searchPtr ]['scope_closer'] ) ) {
 				$funcStart = $tokens[ $searchPtr ]['scope_opener'];
 				$funcEnd   = $tokens[ $searchPtr ]['scope_closer'];
 

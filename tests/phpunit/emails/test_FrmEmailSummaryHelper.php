@@ -203,4 +203,92 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 		$this->assertSame( 2, $by_form[ $form_a->id ] );
 		$this->assertSame( 1, $by_form[ $form_b->id ] );
 	}
+
+	/**
+	 * Only installed add-ons with a newer version are listed, by display name, as a list.
+	 *
+	 * @return void
+	 */
+	public function test_get_out_of_date_plugins() {
+		$license = 'frm-test-license';
+		$api     = new FrmFormApi( $license );
+		delete_option( $api->get_cache_key() );
+
+		add_filter( 'frm_pro_installed', '__return_true' );
+		add_filter(
+			'frm_installed_addons',
+			function () use ( $license ) {
+				return array(
+					(object) array(
+						'store_url' => 'https://formidableforms.com',
+						'license'   => $license,
+					),
+				);
+			}
+		);
+		add_filter(
+			'pre_http_request',
+			function ( $pre, $parsed_args, $url ) {
+				if ( ! str_contains( $url, 'formidableforms.com' ) ) {
+					return $pre;
+				}
+
+				$addon = static function ( $plugin, $version, $name ) {
+					return array(
+						'plugin'       => $plugin,
+						'new_version'  => $version,
+						'package'      => 'https://example.com/' . $plugin . '.zip',
+						'display_name' => $name,
+					);
+				};
+
+				return array(
+					'response' => array(
+						'code'    => 200,
+						'message' => 'Fake response',
+					),
+					'body'     => json_encode(
+						array(
+							101 => $addon( 'frm-test-outdated/frm-test-outdated.php', '2.0', 'Outdated Add-On' ),
+							102 => $addon( 'frm-test-current/frm-test-current.php', '1.0', 'Current Add-On' ),
+							103 => $addon( 'frm-test-missing/frm-test-missing.php', '9.0', 'Missing Add-On' ),
+							104 => $addon( 'frm-test-second/frm-test-second.php', '3.1', 'Second Outdated Add-On' ),
+						)
+					),
+				);
+			},
+			10,
+			3
+		);
+
+		// get_plugins() returns this cached list instead of reading the plugins directory.
+		wp_cache_set(
+			'plugins',
+			array(
+				'' => array(
+					'frm-test-outdated/frm-test-outdated.php' => array( 'Version' => '1.0' ),
+					'frm-test-current/frm-test-current.php'   => array( 'Version' => '1.0' ),
+					'frm-test-second/frm-test-second.php' => array( 'Version' => '3.0' ),
+				),
+			),
+			'plugins'
+		);
+
+		$plugins = FrmEmailSummaryHelper::get_out_of_date_plugins();
+
+		wp_cache_delete( 'plugins', 'plugins' );
+		delete_option( $api->get_cache_key() );
+
+		$this->assertSame( array( 'Outdated Add-On', 'Second Outdated Add-On' ), $plugins );
+	}
+
+	/**
+	 * Lite on its own never reports add-on updates.
+	 *
+	 * @return void
+	 */
+	public function test_get_out_of_date_plugins_is_empty_without_pro() {
+		add_filter( 'frm_pro_installed', '__return_false', 99 );
+		$this->assertSame( array(), FrmEmailSummaryHelper::get_out_of_date_plugins() );
+	}
 }

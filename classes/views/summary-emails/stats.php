@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<div style="line-height: 1.5; margin-bottom: 0.375em;"><?php echo esc_html( $stat['label'] ); ?></div>
 						<div>
 							<strong style="font-size: 1.5em; line-height: 1; vertical-align: text-top;">
-								<?php echo isset( $stat['display'] ) ? esc_html( $stat['display'] ) : intval( $stat['count'] ); ?>
+								<?php echo isset( $stat['display'] ) ? esc_html( $stat['display'] ) : (int) $stat['count']; ?>
 							</strong>
 							<?php FrmEmailSummaryHelper::show_comparison( $stat['compare'] ); ?>
 						</div>
@@ -71,8 +71,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 				foreach ( $args['top_forms'] as $index => $top_form ) {
 					?>
 					<tr>
-						<td align="left" style="padding: 1em 0.33em 0.28em 0"><?php echo intval( $index + 1 ); ?>. <?php echo esc_html( $top_form->form_name ); ?></td>
-						<td align="right" style="padding: 1em 0 0.28em;"><?php echo intval( $top_form->items_count ); ?></td>
+						<td align="left" style="padding: 1em 0.33em 0.28em 0"><?php echo (int) ( $index + 1 ); ?>. <?php echo esc_html( $top_form->form_name ); ?></td>
+						<td align="right" style="padding: 1em 0 0.28em;"><?php echo (int) $top_form->items_count; ?></td>
 					</tr>
 					<?php
 				}

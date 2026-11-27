@@ -20,7 +20,7 @@ $classname = 'frm-counter-card-wrapper frm-flex-box';
 		<?php foreach ( $template['counters'] as $counter ) : ?>
 			<div class="frm-counter-card frm-dashboard-widget frm-card-item">
 				<h4><?php echo esc_html( $counter['heading'] ); ?></h4>
-				<?php if ( isset( $counter['cta'] ) && isset( $counter['cta']['display'] ) && true === $counter['cta']['display'] ) : ?>
+				<?php if ( isset( $counter['cta']['display'] ) && true === $counter['cta']['display'] ) : ?>
 					<a href="<?php echo esc_url( $counter['cta']['link'] ); ?>"><?php echo esc_html( $counter['cta']['title'] ); ?></a>
 				<?php else : ?>
 					<?php if ( 'currency' === $counter['type'] ) : ?>
