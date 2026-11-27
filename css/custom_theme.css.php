@@ -42,6 +42,12 @@ $use_chosen_js = FrmStylesHelper::use_chosen_js();
 	display:none;
 }
 
+/* Not !important, so an inline display from jQuery .show() still wins. */
+.frm_wrap [hidden],
+.with_frm_style [hidden]{
+	display:none;
+}
+
 .with_frm_style,
 .with_frm_style form,
 .with_frm_style .frm-show-form div.frm_description p{

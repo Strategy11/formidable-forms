@@ -21,10 +21,17 @@ async function getStripeColor( color, backgrounds = [] ) {
 	const form = { querySelector: () => ( { value: '1' } ) };
 	const document = {
 		getElementsByClassName: () => [ card ],
-		querySelector: selector => '.frm-card-element' === selector ? card : form
+		querySelector: selector => {
+			if ( '.frm-card-element' === selector ) {
+				return card;
+			}
+			// No Payment Element is mounted yet, so loadElements() goes on to create the Stripe elements.
+			return selector.includes( '.frm-payment-element' ) ? null : form;
+		}
 	};
 	const selection = {
 		ready: callback => callback(),
+		on: () => selection,
 		find: () => selection,
 		not: () => selection,
 		attr: () => selection

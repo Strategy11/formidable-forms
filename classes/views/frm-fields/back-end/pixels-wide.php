@@ -29,13 +29,22 @@ if ( $display_max ) {
 	</label>
 
 	<?php
+	$field_size_attrs = array(
+		'id'   => 'field_options_size_' . $field['id'],
+		'name' => 'field_options[size_' . $field['id'] . ']',
+	);
+
+	if ( 'textarea' === $field['type'] ) {
+		// Size the textarea preview as the setting changes. A number gets px, like FrmFieldTextarea::show_on_form_builder.
+		// Single line fields stay unsized in the builder on purpose.
+		$field_size_attrs['data-frmpreview']      = '#field_' . $field['id'] . '_inner_container .frm_form_fields textarea';
+		$field_size_attrs['data-frmpreview-mode'] = 'style:width:px';
+	}
+
 	FrmHtmlHelper::echo_unit_input(
 		array(
 			'value'       => $field['size'],
-			'field_attrs' => array(
-				'id'   => 'field_options_size_' . $field['id'],
-				'name' => 'field_options[size_' . $field['id'] . ']',
-			),
+			'field_attrs' => $field_size_attrs,
 		)
 	);
 	?>
