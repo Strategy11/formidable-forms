@@ -589,7 +589,7 @@ class FrmFormEmbedsHelper {
 	 *
 	 * @since 6.35
 	 *
-	 * @param int|string $post_id Post ID.
+	 * @param int|string $post_id Post ID. Hook callbacks may pass it as a numeric string.
 	 *
 	 * @return array
 	 */
