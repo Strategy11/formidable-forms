@@ -86,6 +86,7 @@
 
 	<!-- PHPUnit -->
 	<rule ref="Formidable.PHPUnit.PreferAssertIsArray" />
+	<rule ref="Formidable.PHPUnit.PreferFactoryCreate" />
 
 	<!-- Commenting -->
 	<rule ref="Formidable.Commenting.AddBoolReturnTag" />
