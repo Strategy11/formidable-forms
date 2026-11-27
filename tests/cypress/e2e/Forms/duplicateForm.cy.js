@@ -25,7 +25,7 @@ describe( 'Duplicating a form from the form list page', () => {
 					.click();
 			} );
 
-			cy.get( "a[aria-label='Close']", { timeout: 5000 } ).click();
+			cy.closeFullScreen();
 
 			cy.log( 'Locate rows containing the text - Test Form and count them' );
 			cy.get( '#the-list tr:contains("Test Form")' ).then( $rows => {

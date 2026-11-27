@@ -67,7 +67,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * @return array
 	 */
 	protected function get_posted_fields() {
-		if ( is_null( $this->posted_fields ) ) {
+		if ( null === $this->posted_fields ) {
 			$this->posted_fields = FrmField::get_all_for_form( $this->values['form_id'] );
 		}
 		return $this->posted_fields;
@@ -473,7 +473,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 				continue;
 			}
 
-			$field_ids_to_check[] = intval( $field->id );
+			$field_ids_to_check[] = (int) $field->id;
 		}
 
 		return $field_ids_to_check;
@@ -499,8 +499,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		foreach ( $this->values['item_meta'] as $key => $value ) {
 			if ( is_array( $value ) && isset( $value['form'] ) ) {
 				// This is a repeater value, loop through sub values.
-				unset( $value['form'] );
-				unset( $value['row_ids'] );
+				unset( $value['form'], $value['row_ids'] );
 
 				foreach ( $value as $sub_key => $sub_value ) {
 					if ( $this->should_check_this_field( $sub_key, $field_ids_to_check ) ) {
@@ -687,7 +686,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		list( $net, $mask ) = explode( '/', $cidr_ip );
 
 		$ip_net  = ip2long( $net );
-		$ip_mask = ~( ( 1 << ( 32 - intval( $mask ) ) ) - 1 ); // phpcs:ignore Formidable.CodeAnalysis.RemoveUselessParentheses.UselessParentheses
+		$ip_mask = ~( ( 1 << ( 32 - (int) $mask ) ) - 1 ); // phpcs:ignore Formidable.CodeAnalysis.RemoveUselessParentheses.UselessParentheses
 
 		$ip_ip = ip2long( $ip );
 
