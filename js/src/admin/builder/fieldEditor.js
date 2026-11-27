@@ -510,7 +510,7 @@ module.exports = function createFieldEditor( {
 		}
 
 		wp.hooks.doAction( 'frmShowedFieldSettings', obj, singleField );
-		maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField );
+		maybeAddShortcodesModalTriggerIcon( fieldType, singleField );
 
 		showFieldOptionsTab( obj, singleField, editorReady );
 	}
@@ -554,7 +554,7 @@ module.exports = function createFieldEditor( {
 		);
 	}
 
-	function maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField ) {
+	function maybeAddShortcodesModalTriggerIcon( fieldType, singleField ) {
 		if ( ! shouldAddShortcodesModalTriggerIcon( fieldType ) ) {
 			return;
 		}
