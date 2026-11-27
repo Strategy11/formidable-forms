@@ -280,7 +280,7 @@ class FrmAbilitiesFormsController {
 				'fields'         => array(
 					'type'        => 'array',
 					'description' => __(
-						'Fields to create, in display order. Fields after a section or repeater and before its end_divider go inside it.',
+						'Array of field objects to create in the form. Each field represents a form input like text, dropdown, checkbox, etc.',
 						'formidable'
 					),
 					'items'       => self::get_inline_field_schema(),
@@ -603,11 +603,41 @@ class FrmAbilitiesFormsController {
 			FrmFormsController::create_default_email_action( $new_form );
 		}
 
-		if ( ! empty( $input['fields'] ) && is_array( $input['fields'] ) ) {
-			$created = ( new FrmAbilitiesInlineFieldsHelper( $new_form ) )->create( $input['fields'] );
+		$fields = ! empty( $input['fields'] ) && is_array( $input['fields'] ) ? $input['fields'] : array();
 
-			if ( is_wp_error( $created ) ) {
-				return FrmAbilitiesHelper::flatten_error( $created );
+		/**
+		 * Short-circuits creating the inline fields of a create-form ability call.
+		 *
+		 * Pro uses it to put the fields listed between a section and its end_divider
+		 * inside that section. Return true when the fields were created, a WP_Error to
+		 * stop, or null to create them one at a time here.
+		 *
+		 * @since x.x
+		 *
+		 * @param null|true|WP_Error $created Null to let Formidable create the fields.
+		 * @param array              $fields  The inline field input, in order.
+		 * @param stdClass           $form    The new form.
+		 */
+		$created = $fields ? apply_filters( 'frm_ability_create_inline_fields', null, $fields, $new_form ) : true;
+
+		if ( is_wp_error( $created ) ) {
+			return FrmAbilitiesHelper::flatten_error( $created );
+		}
+
+		if ( null === $created ) {
+			foreach ( $fields as $field ) {
+				// Share create-field's pipeline so inline fields get the same
+				// separate-value detection, repeater child form, and validation.
+				$prepared = FrmAbilitiesFieldsController::prepare_new_field( $field, $new_form );
+
+				if ( is_wp_error( $prepared ) ) {
+					return FrmAbilitiesHelper::flatten_error( $prepared );
+				}
+
+				$prepared['form_id'] = $form_id;
+
+				FrmField::create( $prepared );
+				unset( $prepared, $field );
 			}
 		}
 

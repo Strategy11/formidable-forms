@@ -193,7 +193,6 @@ class FrmHooksController {
 		add_action( 'frm_after_field_options', 'FrmFormsController::logic_tip' );
 		add_action( 'frm_field_code_tab', 'FrmFormsController::field_part_shortcodes' );
 		add_filter( 'frm_fields_in_form_builder', 'FrmFormsController::update_form_builder_fields' );
-		add_filter( 'frm_fields_in_form_builder', 'FrmFieldPlacementHelper::sort_for_builder', 5, 2 );
 
 		add_filter( 'set-screen-option', 'FrmFormsController::save_per_page', 10, 3 );
 		add_action( 'admin_footer', 'FrmFormsController::insert_form_popup' );
