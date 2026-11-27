@@ -351,6 +351,13 @@ namespace {
 		public static function create_repeat_form( $field_id, $args = array() ) {
 		}
 	}
+	class FrmProBuilderContainersHelper {
+		/**
+		 * @return array<string, array{end: string, parents: array<string>}> Closing field and permitted parent types, keyed by container type.
+		 */
+		public static function get_containers() {
+		}
+	}
 	class FrmProEntriesHelper {
 		public static function get_search_str( $where_clause, $search_str, $form_id = 0, $fid = '' ) {
 		}

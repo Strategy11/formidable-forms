@@ -280,7 +280,7 @@ class FrmAbilitiesFormsController {
 				'fields'         => array(
 					'type'        => 'array',
 					'description' => __(
-						'Array of field objects to create in the form. Each field represents a form input like text, dropdown, checkbox, etc.',
+						'Fields to create, in display order. Fields after a section or repeater and before its end_divider go inside it.',
 						'formidable'
 					),
 					'items'       => self::get_inline_field_schema(),
@@ -604,19 +604,10 @@ class FrmAbilitiesFormsController {
 		}
 
 		if ( ! empty( $input['fields'] ) && is_array( $input['fields'] ) ) {
-			foreach ( $input['fields'] as $field ) {
-				// Share create-field's pipeline so inline fields get the same
-				// separate-value detection, repeater child form, and validation.
-				$prepared = FrmAbilitiesFieldsController::prepare_new_field( $field, $new_form );
+			$created = ( new FrmAbilitiesInlineFieldsHelper( $new_form ) )->create( $input['fields'] );
 
-				if ( is_wp_error( $prepared ) ) {
-					return FrmAbilitiesHelper::flatten_error( $prepared );
-				}
-
-				$prepared['form_id'] = $form_id;
-
-				FrmField::create( $prepared );
-				unset( $prepared, $field );
+			if ( is_wp_error( $created ) ) {
+				return FrmAbilitiesHelper::flatten_error( $created );
 			}
 		}
 
