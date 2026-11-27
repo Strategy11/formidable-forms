@@ -89,7 +89,6 @@ const sharedConfig = {
     minimizer: [
       // Keep i18n function names and translator comments so translate.wordpress.org can extract strings from the built files.
       new TerserPlugin( {
-        extractComments: false,
         terserOptions: {
           compress: {
             // Prevents folding `a ? __( x ) : __( y )` into `__( a ? x : y )`, which make-pot cannot read.
