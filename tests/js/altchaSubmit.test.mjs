@@ -133,3 +133,35 @@ test( 'in click-only mode, the browser\'s required checkbox check shows the erro
 	assert.equal( container.querySelector( '.frm_error' )?.textContent, MESSAGE );
 	assert.ok( form );
 } );
+
+test( 'the form shows Formidable\'s loading state while the widget finishes verifying', async () => {
+	const { form, widget, calls } = captchaForm( 'onsubmit' );
+	let loadingWhenSubmitted = null;
+
+	form.requestSubmit = () => {
+		loadingWhenSubmitted = form.classList.contains( 'frm_loading_form' );
+		calls.submit.push( true );
+	};
+
+	verifyBeforeSubmit( submitEvent( form ) );
+	assert.equal( form.classList.contains( 'frm_loading_form' ), true, 'A slow High difficulty proof should show the submit button as loading.' );
+
+	widget.state = 'verified';
+	widget.dispatch( 'statechange' );
+	await new Promise( resolve => setTimeout( resolve, 0 ) );
+
+	assert.equal( calls.submit.length, 1 );
+	assert.equal( loadingWhenSubmitted, false, 'Formidable adds its own loading state when the form is submitted again.' );
+} );
+
+test( 'the loading state is removed when verification fails', async () => {
+	const { form, widget, calls } = captchaForm( 'onsubmit' );
+
+	verifyBeforeSubmit( submitEvent( form ) );
+	widget.state = 'error';
+	widget.dispatch( 'statechange' );
+	await new Promise( resolve => setTimeout( resolve, 0 ) );
+
+	assert.equal( calls.submit.length, 0 );
+	assert.equal( form.classList.contains( 'frm_loading_form' ), false );
+} );

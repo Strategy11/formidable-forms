@@ -115,9 +115,13 @@ const verifyThenSubmit = ( form, widgets, submitter ) => {
 	}
 
 	waitingForms.add( form );
+	// Formidable's loading state, so the visitor sees the submit is in progress while a slow proof finishes.
+	form.classList.add( 'frm_loading_form' );
 
 	Promise.all( widgets.map( finishVerification ) ).then( results => {
 		waitingForms.delete( form );
+		// Removed before submitting again, so Formidable starts its own loading state and events.
+		form.classList.remove( 'frm_loading_form' );
 
 		if ( results.every( Boolean ) ) {
 			form.requestSubmit( submitter );
