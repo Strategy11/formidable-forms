@@ -61,6 +61,7 @@ class test_FrmAltchaAssets extends WP_UnitTestCase {
 
 			$this->assertSame( $dependencies, $scripts->registered['captcha-api']->deps );
 			$this->assertSame( FrmAppHelper::plugin_version(), $scripts->registered['captcha-api']->ver );
+			$this->assertNull( wp_parse_url( $scripts->registered['captcha-api']->src, PHP_URL_QUERY ), 'WordPress adds the version, so the URL should not carry a second one.' );
 			$this->assertStringContainsString( '/js/altcha.js', $url );
 			$this->assertTrue( $scripts->all_deps( array( 'captcha-api' ) ) );
 

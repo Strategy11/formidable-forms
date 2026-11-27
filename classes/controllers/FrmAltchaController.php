@@ -204,14 +204,15 @@ class FrmAltchaController {
 	}
 
 	/**
-	 * The widget script, versioned so a new build is never served from cache.
+	 * The widget script URL. WordPress adds the plugin version when it prints the tag, so a new
+	 * build is never served from cache.
 	 *
 	 * @since x.x
 	 *
 	 * @return string
 	 */
 	private static function script_url() {
-		$url          = add_query_arg( 'v', FrmAppHelper::$plug_version, FrmAppHelper::plugin_url() . '/js/altcha.js' );
+		$url          = FrmAppHelper::plugin_url() . '/js/altcha.js';
 		$dependencies = array( 'formidable' );
 		$language     = self::translation_language();
 
