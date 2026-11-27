@@ -1,0 +1,185 @@
+/**
+ * Components - Builder section cards
+ * Editor only. Scoped to the builder so published forms keep their styles.
+ */
+
+#frm-show-fields.frm-builder-sections .frm-builder-section {
+	margin: 0 0 var(--gap-md);
+	padding: 0;
+	background: #fff;
+	border: 1px solid var(--grey-300);
+	border-radius: var(--small-radius);
+	transition: border-color 0.15s ease-out;
+}
+
+#frm-show-fields.frm-builder-sections .frm-builder-section > .divider_section_only {
+	position: relative;
+	margin: 0;
+	padding: var(--gap-xs) var(--gap-sm);
+	background: var(--grey-100);
+	border: 0;
+	border-bottom: 1px solid var(--grey-200);
+	border-radius: var(--small-radius) var(--small-radius) 0 0;
+	transition: background-color 0.15s ease-out;
+	container-type: inline-size;
+}
+
+#frm-show-fields.frm-builder-sections .frm-builder-section > .divider_section_only::before,
+#frm-show-fields.frm-builder-sections .frm-builder-section > .divider_section_only::after,
+#frm-show-fields.frm-builder-sections .frm-builder-section > .frm-divider-icon,
+#frm-show-fields.frm-builder-sections .frm-builder-section > ul.start_divider > .frm-divider-icon {
+	display: none;
+}
+
+/* Hover: the header tints and the card border darkens, so the header reads as clickable. */
+#frm-show-fields.frm-builder-sections .frm-builder-section:has(> .divider_section_only:hover) {
+	border-color: var(--primary-300);
+}
+
+#frm-show-fields.frm-builder-sections .frm-builder-section > .divider_section_only:hover {
+	background: var(--primary-25);
+}
+
+/* Selected: the section, or any field inside it, outlines the whole card. */
+#frm-show-fields.frm-builder-sections .frm-builder-section.selected,
+#frm-show-fields.frm-builder-sections .frm-builder-section:has(.selected) {
+	border-color: var(--primary-500);
+	box-shadow: 0 0 0 1px var(--primary-200);
+}
+
+#frm-show-fields.frm-builder-sections .frm-builder-section.selected > .divider_section_only,
+#frm-show-fields.frm-builder-sections .frm-builder-section:has(.selected) > .divider_section_only {
+	background: var(--primary-50);
+}
+
+#frm-show-fields.frm-builder-sections .frm-builder-section > .divider_section_only > .frm_inner_field_container {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0 var(--gap-xs);
+	max-width: none; /* The action icons overlay the header, so hover no longer needs to reserve room for them. */
+}
+
+/* The name, collapsed note and count flow as one line of text and wrap between words in narrow columns. */
+#frm-show-fields.frm-builder-sections .frm-builder-section > .divider_section_only .frm_primary_label {
+	display: block;
+	flex: 1 1 0;
+	min-width: 0;
+	margin: 0;
+	text-align: start;
+	white-space: normal;
+	overflow-wrap: break-word;
+}
+
+#frm-show-fields.frm-builder-sections .frm-builder-section > .divider_section_only .frm_builder_field_name {
+	display: inline;
+}
+
+#frm-show-fields.frm-builder-sections .frm-builder-section > .divider_section_only .frm_description {
+	flex: 0 0 100%;
+	order: 3;
+	margin: 0;
+	padding-inline-start: 36px; /* Collapse button 28px + gap 8px. */
+}
+
+/*
+ * The ID, move and menu icons keep the builder's hover-only behavior. They sit over the end of the header
+ * instead of taking a row of their own, so narrow layout columns keep the title on one line.
+ */
+#frm-show-fields.frm-builder-sections .frm-builder-section > .divider_section_only .frm-field-action-icons {
+	position: absolute;
+	top: var(--gap-xs);
+	inset-inline-end: var(--gap-sm);
+	padding-inline-start: var(--gap-xs);
+	background: inherit;
+}
+
+/* In narrow layout columns the overlay shows only the icons. The ID is still in the Field Options header. */
+@container (max-width: 320px) {
+
+	#frm-show-fields.frm-builder-sections .frm-builder-section > .divider_section_only .frm-field-id {
+		display: none;
+	}
+}
+
+#frm-show-fields.frm-builder-sections .frm-builder-section > .divider_section_only:hover .frm-field-action-icons,
+#frm-show-fields.frm-builder-sections .frm-builder-section.selected > .divider_section_only .frm-field-action-icons {
+	background: var(--primary-50);
+}
+
+.frm-builder-section-count {
+	display: inline-block;
+	margin-inline-start: var(--gap-xs);
+	padding: 2px var(--gap-xs);
+	vertical-align: middle;
+	font-size: var(--text-xs);
+	font-weight: 400;
+	line-height: 1.5;
+	color: var(--grey-600);
+	white-space: nowrap;
+	background: #fff;
+	border: 1px solid var(--grey-200);
+	border-radius: var(--small-radius);
+}
+
+#frm-show-fields.frm-builder-sections .frm-collapse-section.js-frm-builder-collapse {
+	display: inline-flex;
+	flex: 0 0 28px;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	color: var(--grey-600);
+	background: transparent;
+	border: 0;
+	border-radius: var(--x-small-radius);
+	cursor: pointer;
+}
+
+#frm-show-fields.frm-builder-sections .frm-collapse-section.js-frm-builder-collapse:hover {
+	color: var(--grey-900);
+	background: var(--grey-200);
+}
+
+#frm-show-fields.frm-builder-sections .frm-collapse-section.js-frm-builder-collapse:focus-visible {
+	outline: 2px solid var(--primary-700);
+	outline-offset: 2px;
+}
+
+#frm-show-fields.frm-builder-sections .frm-collapse-section.js-frm-builder-collapse svg {
+	width: 16px;
+	height: 16px;
+	fill: currentColor;
+}
+
+#frm-show-fields.frm-builder-sections ul.start_divider {
+	padding: var(--gap-xs);
+	transition: none;
+}
+
+#frm-show-fields.frm-builder-sections ul.start_divider[hidden] {
+	display: none;
+}
+
+/* Collapsed: only the header shows, including for containers such as tabs that add their own rows. */
+#frm-show-fields.frm-builder-sections .frm-builder-section.frm-section-collapsed {
+	align-self: start;
+}
+
+#frm-show-fields.frm-builder-sections .frm-builder-section.frm-section-collapsed > .divider_section_only {
+	border-bottom: 0;
+	border-radius: var(--small-radius);
+}
+
+#frm-show-fields.frm-builder-sections .frm-builder-section.frm-section-collapsed > :not(.divider_section_only) {
+	display: none;
+}
+
+#frm-show-fields.frm-builder-sections .frm_sorting:has(> .frm-builder-section) {
+	margin-bottom: var(--gap-md);
+}
+
+#frm-show-fields.frm-builder-sections .frm_sorting > .frm-builder-section {
+	margin-bottom: 0;
+}

@@ -3,7 +3,7 @@
  *
  * @since x.x
  */
-import { __, _n, sprintf } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 
 const FIELD_DETAILS_STORAGE_KEY = 'frm-builder-field-details';
 const FIELD_SELECTOR = 'li.form-field[data-fid]';
@@ -16,10 +16,11 @@ const OPTION_KEYS = [ 'hide_field', 'hide_field_cond', 'hide_opt', 'hide_group',
  * Initialize builder feedback without changing saved form settings or field markup order.
  *
  * @since x.x
- * @param {HTMLElement} canvas The builder field list.
+ * @param {HTMLElement} canvas       The builder field list.
+ * @param {Object}      sectionCards Helpers from initBuilderSections, used to expand or collapse section cards.
  * @return {void}
  */
-export function initBuilderContext( canvas ) {
+export function initBuilderContext( canvas, sectionCards ) {
 	if ( ! canvas || canvas.classList.contains( 'frm-builder-context' ) ) {
 		return;
 	}
@@ -28,9 +29,6 @@ export function initBuilderContext( canvas ) {
 	const manifest = document.getElementById( 'frm-builder-context' );
 	const context = manifest ? JSON.parse( manifest.textContent ) : {};
 	manifest?.remove();
-	const storageKey = `frm-builder-sections-${ document.getElementById( 'form_id' ).value }`;
-	const collapsed = new Set( readPreference( storageKey ) );
-	const initialized = new WeakSet();
 	const badgeSignatures = new WeakMap();
 	const panel = document.getElementById( 'frm-options-panel' );
 	const location = tag( 'nav', { className: 'frm-builder-location' } );
@@ -63,8 +61,9 @@ export function initBuilderContext( canvas ) {
 			div( { className: 'frm-builder-layout-actions', children: [ collapseAll, expandAll, fieldDetailsOption ] } ),
 		],
 	} );
-	const publishing = document.getElementById( 'frm-publishing' );
-	publishing.prepend( layoutMenu );
+	// The menu sits above the canvas, not in the top bar, so it never crowds the form navigation tabs.
+	const displayBar = div( { className: 'frm-builder-display-bar', child: layoutMenu } );
+	canvas.before( displayBar );
 	const rootline = document.getElementById( 'frm-backend-rootline-wrapper' );
 	const rootlineSetup = document.querySelector( '.frm-show-rootline-wrapper' );
 	let displayArea;
@@ -102,70 +101,7 @@ export function initBuilderContext( canvas ) {
 	}
 
 	function setCollapsed( section, shouldCollapse ) {
-		section.classList.toggle( 'frm-section-collapsed', shouldCollapse );
-		const children = section.querySelector( ':scope > ul.start_divider' );
-		const control = section.querySelector( '.js-frm-builder-collapse' );
-		if ( children && control ) {
-			children.hidden = shouldCollapse;
-			control.setAttribute( 'aria-expanded', String( ! shouldCollapse ) );
-			const label = shouldCollapse ? sprintf(
-				/* translators: %s: Section name. */
-				__( 'Expand %s in builder', 'formidable' ), getName( section )
-			) : sprintf(
-				/* translators: %s: Section name. */
-				__( 'Collapse %s in builder', 'formidable' ), getName( section )
-			);
-			control.setAttribute( 'aria-label', label );
-		}
-		if ( shouldCollapse ) {
-			collapsed.add( section.dataset.fid );
-		} else {
-			collapsed.delete( section.dataset.fid );
-		}
-		writePreference( storageKey, [ ...collapsed ] );
-	}
-
-	function prepareSection( section ) {
-		const children = section.querySelector( ':scope > ul.start_divider' );
-		const label = section.querySelector( ':scope > .divider_section_only .frm_primary_label' );
-		if ( ! children || ! label ) {
-			return;
-		}
-		if ( ! initialized.has( section ) ) {
-			section.classList.add( 'frm-builder-section' );
-			const oldControl = section.querySelector( '.frm-collapse-section' );
-			if ( oldControl ) {
-				const control = tag( 'button', {
-					type: 'button',
-					className: 'frm-collapse-section js-frm-builder-collapse',
-					child: frmDom.svg( { href: '#frm_arrowdown6_icon' } ),
-				} );
-				control.type = 'button';
-				children.id = `frm-builder-section-${ section.dataset.fid }`;
-				control.setAttribute( 'aria-controls', children.id );
-				oldControl.remove();
-				label.before( control );
-			}
-			label.append( span( { className: 'frm-builder-section-count' } ) );
-			initialized.add( section );
-			setCollapsed( section, collapsed.has( section.dataset.fid ) );
-		}
-		const isCollapsed = section.classList.contains( 'frm-section-collapsed' );
-		if ( children.hidden !== isCollapsed || collapsed.has( section.dataset.fid ) !== isCollapsed ) {
-			setCollapsed( section, isCollapsed );
-		}
-		const count = [ ...children.querySelectorAll( FIELD_SELECTOR ) ].filter(
-			field => ! SKIPPED_TYPES.has( field.dataset.type )
-		).length;
-		let countElement = label.querySelector( '.frm-builder-section-count' );
-		if ( ! countElement ) {
-			countElement = span( { className: 'frm-builder-section-count' } );
-			label.append( countElement );
-		}
-		countElement.textContent = sprintf(
-			/* translators: %d: Number of fields in this section. */
-			_n( '%d field', '%d fields', count, 'formidable' ), count
-		);
+		sectionCards?.setCollapsed( section, shouldCollapse );
 	}
 
 	function updateBadges( field ) {
@@ -278,7 +214,6 @@ export function initBuilderContext( canvas ) {
 		observer.disconnect();
 		const fields = [ ...canvas.querySelectorAll( FIELD_SELECTOR ) ];
 		const sections = fields.filter( field => field.matches( SECTION_SELECTOR ) );
-		sections.forEach( prepareSection );
 		fields.forEach( field => {
 			const id = field.dataset.fid;
 			context[ id ] = { ...context[ id ], name: getName( field ) };
@@ -292,10 +227,11 @@ export function initBuilderContext( canvas ) {
 		collapseAll.hidden = ! hasStructure;
 		expandAll.hidden = ! hasStructure;
 		fieldDetailsOption.hidden = ! hasFieldDetails;
-		const menuParent = pages.length && displayArea ? displayArea : publishing;
+		const menuParent = pages.length && displayArea ? displayArea : displayBar;
 		if ( layoutMenu.parentElement !== menuParent ) {
 			menuParent.append( layoutMenu );
 		}
+		displayBar.hidden = layoutMenu.hidden || layoutMenu.parentElement !== displayBar;
 		if ( layoutMenu.hidden ) {
 			layoutMenu.open = false;
 		}
@@ -333,14 +269,7 @@ export function initBuilderContext( canvas ) {
 	collapseAll.addEventListener( 'click', () => toggleAll( true ) );
 	expandAll.addEventListener( 'click', () => toggleAll( false ) );
 	canvas.addEventListener( 'click', event => {
-		const control = event.target.closest( '.js-frm-builder-collapse' );
-		if ( control ) {
-			event.preventDefault();
-			event.stopPropagation();
-			const section = control.closest( SECTION_SELECTOR );
-			setCollapsed( section, ! section.classList.contains( 'frm-section-collapsed' ) );
-			scheduleRefresh();
-		} else if ( event.target.closest( '.frm-builder-badges' ) ) {
+		if ( event.target.closest( '.frm-builder-badges' ) ) {
 			event.stopPropagation();
 		}
 	}, true );
