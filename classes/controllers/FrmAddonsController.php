@@ -1661,8 +1661,7 @@ class FrmAddonsController {
 			return;
 		}
 
-		echo json_encode( true );
-		wp_die();
+		wp_send_json( true );
 	}
 
 	/**
@@ -1940,12 +1939,10 @@ class FrmAddonsController {
 		$result = self::download_and_activate();
 
 		if ( isset( $result['success'] ) && ! $result['success'] ) {
-			echo json_encode( $result );
-			wp_die();
+			wp_send_json( $result );
 		}
 
-		echo json_encode( self::get_addon_activation_response() );
-		wp_die();
+		wp_send_json( self::get_addon_activation_response() );
 	}
 
 	/**

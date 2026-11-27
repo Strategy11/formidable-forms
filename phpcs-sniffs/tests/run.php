@@ -180,9 +180,27 @@ try {
 		fwrite( STDOUT, $name . ': passed' . PHP_EOL );
 	}
 
-	// Both standards must enforce every fixture as fixable errors without opt-in overrides.
+	// A rule the shared standard lands with severity 0 is dormant there until every plugin is clean.
+	$dormant = array();
+	$shared  = simplexml_load_file( $root . '/phpcs-sniffs/Formidable/ruleset.xml' );
+
+	if ( false === $shared ) {
+		throw new RuntimeException( 'Cannot read the shared ruleset.' );
+	}
+
+	foreach ( $shared->rule as $rule ) {
+		if ( isset( $rule->severity ) && '0' === trim( (string) $rule->severity ) ) {
+			$dormant[] = (string) $rule['ref'];
+		}
+	}
+
+	// Both standards must enforce every fixture as fixable errors. A dormant rule must stay silent in the shared standard and be enforced by phpcs.xml.
 	foreach ( array( 'phpcs-sniffs/Formidable/ruleset.xml', 'phpcs.xml' ) as $standard ) {
 		foreach ( $expected as $name => $lines ) {
+			if ( 'phpcs.xml' !== $standard && in_array( 'Formidable.CodeAnalysis.' . $name, $dormant, true ) ) {
+				$lines = array();
+			}
+
 			$fixturePath = $scratch . '/' . $name . '.php';
 			copy( $fixtures . '/' . $name . '.inc', $fixturePath );
 			$result = run_sniff_command( array( PHP_BINARY, $root . '/vendor/bin/phpcs', '--standard=' . $root . '/' . $standard, '-q', '--report=json', $fixturePath ) );

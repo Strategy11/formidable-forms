@@ -1222,7 +1222,16 @@ function frmFrontFormJS() {
 		const fieldsets = object.querySelectorAll( '.frm_form_field' );
 		fieldsets.forEach( field => field.classList.add( 'frm_doing_ajax' ) );
 
-		const data = `${ jQuery( object ).serialize() }&action=frm_entries_${ action }&nonce=${ frm_js.nonce }`; // eslint-disable-line no-jquery/no-serialize
+		const data = new URLSearchParams();
+		for ( const [ name, value ] of new FormData( object ) ) {
+			// Keep uploads out of this URL-encoded request and preserve textarea line endings.
+			if ( typeof value === 'string' ) {
+				data.append( name, value.replace( /\r?\n/g, '\r\n' ) );
+			}
+		}
+		data.append( 'action', `frm_entries_${ action }` );
+		data.append( 'nonce', frm_js.nonce );
+
 		const shouldTriggerEvent = object.classList.contains( 'frm_trigger_event_on_submit' );
 
 		const doRedirect = response => {
@@ -1242,24 +1251,7 @@ function frmFrontFormJS() {
 		};
 
 		const success = function( response ) {
-			const defaultResponse = {
-				content: '',
-				errors: {},
-				pass: false
-			};
-
-			if ( response === null ) {
-				response = defaultResponse;
-			} else {
-				// Response is a string. Convert it to an object.
-				// eslint-disable-next-line sonarjs/super-linear-regex -- regex kept as-is, not refactored
-				response = response.replace( /^\s+|\s+$/g, '' );
-				if ( response.indexOf( '{' ) === 0 ) {
-					response = JSON.parse( response );
-				} else {
-					response = defaultResponse;
-				}
-			}
+			response = response || {};
 
 			let willRedirect = false;
 
@@ -1460,7 +1452,7 @@ function frmFrontFormJS() {
 		} );
 	}
 
-	function postToAjaxUrl( form, data, success, error ) {
+	async function postToAjaxUrl( form, data, success, error ) {
 		let ajaxUrl = frm_js.ajax_url;
 		const action = form.getAttribute( 'action' );
 
@@ -1468,18 +1460,24 @@ function frmFrontFormJS() {
 			ajaxUrl = action.split( '?action=frm_forms_preview' )[ 0 ];
 		}
 
-		const ajaxParams = {
-			type: 'POST',
-			url: ajaxUrl,
-			data,
-			success
-		};
+		let result;
+		try {
+			const headers = { Accept: 'application/json' };
+			if ( new URL( ajaxUrl, document.baseURI ).origin === window.location.origin ) {
+				headers[ 'X-Requested-With' ] = 'XMLHttpRequest';
+			}
 
-		if ( 'function' === typeof error ) {
-			ajaxParams.error = error;
+			const response = await fetch( ajaxUrl, { method: 'POST', headers, body: data } );
+			if ( ! response.ok ) {
+				throw new Error( `HTTP ${ response.status }` );
+			}
+			result = await response.json();
+		} catch {
+			error();
+			return;
 		}
 
-		jQuery.ajax( ajaxParams ); // eslint-disable-line no-jquery/no-ajax
+		success( result );
 	}
 
 	/**

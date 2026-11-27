@@ -1272,6 +1272,7 @@
 	function resetStyleOnEditPage( styleId ) {
 		jQuery.ajax( {
 			type: 'POST',
+			dataType: 'json',
 			url: ajaxurl,
 			data: {
 				action: 'frm_settings_reset',
@@ -1288,16 +1289,10 @@
 	 *
 	 * @todo Stop triggering change events with jQuery. And remove the other jQuery as well.
 	 *
-	 * @param {Object} response
+	 * @param {Object} defaultValues
 	 * @return {void}
 	 */
-	function syncEditPageAfterResetAction( response ) {
-		// eslint-disable-next-line sonarjs/super-linear-regex -- regex kept as-is, not refactored
-		let defaultValues = response.replace( /^\s+|\s+$/g, '' );
-		if ( defaultValues.indexOf( '{' ) === 0 ) {
-			defaultValues = JSON.parse( defaultValues );
-		}
-
+	function syncEditPageAfterResetAction( defaultValues ) {
 		for ( const key in defaultValues ) {
 			let targetInput = document.querySelector( `input[name$="[${ key }]"], select[name$="[${ key }]"]` );
 			if ( ! targetInput ) {

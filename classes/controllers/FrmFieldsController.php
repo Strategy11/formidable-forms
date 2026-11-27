@@ -82,9 +82,7 @@ class FrmFieldsController {
 		$field_html['tooltips']      = self::get_missing_builder_definitions( FrmAppHelper::get_deferred_tooltips(), 'known_tooltips' );
 		$field_html['selectOptions'] = self::get_missing_builder_definitions( FrmBuilderSelectHelper::get_templates(), 'known_select_options' );
 
-		echo json_encode( $field_html );
-
-		wp_die();
+		wp_send_json( $field_html );
 	}
 
 	/**

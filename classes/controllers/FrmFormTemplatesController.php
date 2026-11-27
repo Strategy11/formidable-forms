@@ -392,8 +392,7 @@ class FrmFormTemplatesController {
 		}
 
 		// Send response.
-		echo wp_json_encode( $response );
-		wp_die();
+		wp_send_json( $response );
 	}
 
 	/**

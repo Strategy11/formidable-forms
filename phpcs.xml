@@ -138,4 +138,8 @@
 		<exclude-pattern>FrmUnitTest.php</exclude-pattern>
 	</rule>
 
+	<!-- Off in the shared ruleset because its fix can break JS consumers. Lite's consumers are checked. -->
+	<rule ref="Formidable.CodeAnalysis.PreferWpSendJson">
+		<severity>5</severity>
+	</rule>
 </ruleset>
