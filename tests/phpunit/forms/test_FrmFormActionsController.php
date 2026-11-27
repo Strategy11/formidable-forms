@@ -36,4 +36,45 @@ class test_FrmFormActionsController extends FrmUnitTest {
 			'The visible anchor text should be the translated title, not the raw URL'
 		);
 	}
+
+	/**
+	 * Installed actions show as their own link, never also as a locked upgrade card,
+	 * in both the sectioned My Actions group and a regular group.
+	 *
+	 * @return void
+	 */
+	public function test_email_settings_skips_upgrade_cards_for_installed_actions() {
+		$this->set_current_user_to_1();
+		$form_id = $this->factory->form->create();
+
+		$set_groups = static function () {
+			return array(
+				'my_actions' => array(
+					'name'     => 'My Actions',
+					'sections' => array(
+						'active' => array(
+							'name'    => '',
+							'actions' => array( 'email', 'frm_test_locked_in_section' ),
+						),
+					),
+				),
+				'misc'       => array(
+					'name'    => 'Misc',
+					'actions' => array( 'email', 'frm_test_locked_in_group' ),
+				),
+			);
+		};
+		add_filter( 'frm_action_groups', $set_groups );
+
+		ob_start();
+		FrmFormActionsController::email_settings( array( 'id' => $form_id ) );
+		$output = ob_get_clean();
+
+		remove_filter( 'frm_action_groups', $set_groups );
+
+		$this->assertStringContainsString( 'data-actiontype="frm_test_locked_in_section"', $output );
+		$this->assertStringContainsString( 'data-actiontype="frm_test_locked_in_group"', $output );
+		$this->assertSame( 2, substr_count( $output, 'data-actiontype="email"' ), 'The installed email action should render once per group, as its own link only.' );
+		$this->assertStringNotContainsString( 'data-medium="settings-email"', $output, 'An installed action should not also get a locked upgrade card.' );
+	}
 }

@@ -67,6 +67,11 @@ Cypress.Commands.add( 'dismissInboxBanners', ( remainingAttempts = 5 ) => {
 	} );
 } );
 
+// Sale banners have their own Close link while the full-screen header is open.
+Cypress.Commands.add( 'closeFullScreen', () => {
+	cy.get( ".frm-full-close a[aria-label='Close']", { timeout: 10000 } ).should( 'be.visible' ).click();
+} );
+
 Cypress.Commands.add( 'createNewForm', ( { deleteExisting = true } = {} ) => {
 	cy.get( '#the-list' ).then( list => {
 		const hasTestForm = [ ...list[ 0 ].querySelectorAll( '.row-title' ) ]
@@ -88,7 +93,7 @@ Cypress.Commands.add( 'createNewForm', ( { deleteExisting = true } = {} ) => {
 		cy.intercept( 'POST', '**/wp-admin/admin.php*' ).as( 'saveNewForm' );
 		cy.get( '#frm-save-form-name-button' ).should( 'contain', 'Save' ).click();
 		cy.wait( '@saveNewForm' );
-		cy.get( "a[aria-label='Close']", { timeout: 7000 } ).click();
+		cy.closeFullScreen();
 	} );
 } );
 

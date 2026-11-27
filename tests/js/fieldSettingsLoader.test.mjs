@@ -73,3 +73,33 @@ test( 'retryFailedFieldSettings reports a field that fails again', async () => {
 	assert.equal( requestedFieldIds.length, requestsBefore + 1 );
 	assert.equal( isFieldSettingsPending( '11' ), true );
 } );
+
+test( 'only nearby panels prefetch and distant panels can be requested immediately', async () => {
+	const loader = await import( '../../js/src/admin/fieldSettingsLoader.js?background' );
+	let intersect;
+	globalThis.IntersectionObserver = class {
+		constructor( callback ) {
+			intersect = callback;
+		}
+		observe() {}
+		unobserve() {}
+	};
+	const start = requestedFieldIds.length;
+	const ids = [ '101', '102', '103' ];
+	loader.queueFieldSettings( { formId: '1', fieldIds: ids, onLoaded() {} } );
+	const entries = ids.map( fid => ( { target: { dataset: { fid } }, isIntersecting: true } ) );
+	entries.forEach( entry => loader.observeFieldSettings( entry.target ) );
+	intersect( entries.slice( 0, 2 ) );
+	intersect( [ { ...entries[ 1 ], isIntersecting: false } ] );
+	responses.push( { settings: { 101: '<div></div>' } } );
+	loader.startFieldSettingsQueue();
+	await loader.waitForFieldSettings( ids );
+	assert.deepEqual( requestedFieldIds.slice( start ), [ [ '101' ] ] );
+	responses.push( { settings: { 103: '<div></div>' } } );
+	loader.requestFieldSettingsNow( '103' );
+	await Promise.resolve();
+	await loader.waitForFieldSettings( ids );
+	assert.deepEqual( requestedFieldIds.slice( start ), [ [ '101' ], [ '103' ] ] );
+	assert.equal( loader.isFieldSettingsPending( '102' ), true );
+	delete globalThis.IntersectionObserver;
+} );

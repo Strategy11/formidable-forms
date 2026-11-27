@@ -288,7 +288,7 @@ class test_FrmAbilitiesFormActionsController extends FrmUnitTest {
 		$this->assertNotWPError( $page_two );
 		$this->assertCount( 1, $page_one, 'page_size should limit the results returned.' );
 		$this->assertCount( 1, $page_two, 'page_size should limit the results returned.' );
-		$this->assertNotEquals(
+		$this->assertNotSame(
 			array_keys( $page_one ),
 			array_keys( $page_two ),
 			'page 2 should return a different action than page 1, not repeat it.'

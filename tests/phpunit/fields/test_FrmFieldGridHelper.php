@@ -502,7 +502,7 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 			$helper->set_field( $field );
 			$helper->maybe_begin_field_wrapper();
 			// Stands in for the FrmFieldsController::load_single_field call the builder makes here.
-			echo '<i>' . intval( $position ) . '</i>';
+			echo '<i>' . $position . '</i>';
 			$helper->sync_list_size();
 		}
 
