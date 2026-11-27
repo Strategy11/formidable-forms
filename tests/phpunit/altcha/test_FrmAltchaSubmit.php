@@ -141,6 +141,38 @@ class test_FrmAltchaSubmit extends FrmUnitTest {
 	}
 
 	/**
+	 * The builder preview shows the inline checkbox only for the inline layout.
+	 *
+	 * @covers FrmAltchaController::builder_image_url
+	 */
+	public function test_builder_preview_follows_display_mode() {
+		update_option( FrmAltchaHelper::SETTINGS_OPTION, array( 'display' => 'standard' ) );
+		$standard = $this->render_builder_preview();
+
+		$this->assertStringContainsString( 'images/altcha.svg', $standard, 'The inline layout should preview the checkbox.' );
+		$this->assertStringNotContainsString( 'frm-altcha-floating-preview', $standard );
+
+		update_option( FrmAltchaHelper::SETTINGS_OPTION, array( 'display' => 'floating' ) );
+		$floating = $this->render_builder_preview();
+
+		$this->assertStringNotContainsString( 'images/altcha.svg', $floating, 'The floating layout is not shown in the field, so the inline checkbox should not be previewed.' );
+		$this->assertStringContainsString( 'frm-altcha-floating-preview', $floating );
+		$this->assertStringContainsString( 'name="field_options[test]"', $floating, 'The hidden builder input should still be printed.' );
+	}
+
+	/**
+	 * Render the Captcha field's form builder view.
+	 *
+	 * @return string
+	 */
+	private function render_builder_preview() {
+		$field_name = 'field_options[test]';
+		ob_start();
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-captcha.php';
+		return (string) ob_get_clean();
+	}
+
+	/**
 	 * Other captcha types are unchanged, and an unknown type still falls back to reCAPTCHA.
 	 *
 	 * @covers FrmCaptchaFactory::get_settings_object

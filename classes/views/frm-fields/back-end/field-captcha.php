@@ -22,8 +22,20 @@ if ( ! FrmFieldCaptcha::should_show_captcha() ) {
 }
 
 $image_name = FrmFieldCaptcha::get_captcha_image_name();
-$extension  = 'turnstile' === $image_name ? 'gif' : 'png';
-$image_url  = FrmAppHelper::plugin_url() . '/images/' . $image_name . '.' . $extension;
+
+if ( 'altcha' === $image_name && 'floating' === FrmAltchaHelper::get_settings()['display'] ) {
+	// The floating layout is not shown in the field, so describe it instead of previewing a checkbox.
+	?>
+<span class="frm-altcha-floating-preview frm_note_style">
+	<?php esc_html_e( 'ALTCHA is not shown in the form. It appears next to the Submit button while it checks the visitor.', 'formidable' ); ?>
+</span>
+<input type="hidden" name="<?php echo esc_attr( $field_name ); ?>" value="1" />
+	<?php
+	return;
+}
+
+$extension = 'turnstile' === $image_name ? 'gif' : 'png';
+$image_url = FrmAppHelper::plugin_url() . '/images/' . $image_name . '.' . $extension;
 
 if ( 'altcha' === $image_name ) {
 	$image_url = FrmAltchaController::builder_image_url( $image_url, $image_name );
