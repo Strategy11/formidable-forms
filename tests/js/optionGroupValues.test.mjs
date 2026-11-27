@@ -5,6 +5,8 @@ import fs from 'node:fs';
 import { test } from 'node:test';
 import vm from 'node:vm';
 
+import { formatBulkOptionLabel } from '../../js/src/admin/optionGroups.js';
+
 const builder = fs.readFileSync( new URL( '../../js/src/admin/admin.js', import.meta.url ), 'utf8' );
 
 test( 'duplicate-value checks exclude group headings and still catch repeated options', () => {
@@ -39,4 +41,15 @@ test( 'duplicate-value checks exclude group headings and still catch repeated op
 	inputs.push( { ...option, id: 'duplicate' } );
 	check( target );
 	assert.deepEqual( notices, [ 'Duplicate option value "Fruit" detected' ] );
+} );
+
+test( 'bulk edit preserves literal headings, blank choices and group transitions', () => {
+	const state = { previous: '' };
+	const format = ( label, group ) => formatBulkOptionLabel( { querySelector: () => ( { value: group } ) }, label, state );
+	assert.equal( format( '', '' ), '' );
+	assert.equal( format( '##123', '' ), '##123' );
+	assert.equal( format( '##', 'Fruit' ), '## Fruit\r\n\\##' );
+	assert.equal( format( '\\## Citrus', 'Fruit' ), '\\\\## Citrus' );
+	assert.equal( format( '## Citrus', '' ), '##\r\n\\## Citrus' );
+	assert.equal( formatBulkOptionLabel( { querySelector: () => null }, '## Citrus', state ), '## Citrus' );
 } );

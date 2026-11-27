@@ -8,7 +8,7 @@ const { syncFieldOrder, confirmFieldOrderSaved } = require( './fieldOrder' );
 const { allowContainerDrop } = require( './fieldPlacement' );
 const { getRangeSettingsDefaults, validateNumberRangeSetting, validateStepSetting, validateRangeSettings } = require( './settings/validateRangeSettings' );
 const { initFieldListHoverPill } = require( './fieldListHoverPill' );
-const { setupOptionGroups, initOptionGroupLists, refreshOptionGroups, addGroupLineToBulkEdit } = require( './optionGroups' );
+const { setupOptionGroups, initOptionGroupLists, refreshOptionGroups, formatBulkOptionLabel } = require( './optionGroups' );
 const { initShowBoxIconSwap } = require( './showBoxIconSwap' );
 const { initFieldSizePreview } = require( './fieldSizePreview' );
 const { hydrateBuilderSelect, hydrateBuilderSelectsIn } = require( './sharedSelectOptions' );
@@ -4849,6 +4849,7 @@ window.frmAdminBuildJS = function() {
 				return;
 			}
 			let content = '';
+			const groupState = { previous: '' };
 			const fieldId = jQuery( this ).closest( '[data-fid]' ).data( 'fid' );
 			const separate = usingSeparateValues( fieldId );
 			const product = isProductField( fieldId );
@@ -4867,8 +4868,7 @@ window.frmAdminBuildJS = function() {
 				if ( key !== '000' ) {
 					const label = document.getElementsByName( `field_options[options_${ fieldId }][${ key }][label]` )[ 0 ];
 					if ( label !== undefined ) {
-						content += addGroupLineToBulkEdit( '', { optionEl: opts[ i ] } );
-						content += label.value;
+						content += formatBulkOptionLabel( opts[ i ], label.value, groupState );
 						if ( separate ) {
 							content += `|${ document.getElementsByName( `field_options[options_${ fieldId }][${ key }][value]` )[ 0 ].value }`;
 						}
@@ -4878,11 +4878,9 @@ window.frmAdminBuildJS = function() {
 						content += '\r\n';
 					}
 				}
-
-				if ( i >= opts.length - 1 ) {
-					document.getElementById( 'frm_bulk_options' ).value = content;
-				}
 			}
+
+			document.getElementById( 'frm_bulk_options' ).value = content;
 
 			$info.dialog( 'open' );
 

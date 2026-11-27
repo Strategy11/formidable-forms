@@ -553,27 +553,27 @@ export function initOptionGroupLists( container ) {
 /**
  * Adds a "## Group name" line to the Bulk Edit Options text each time the group changes.
  *
- * @param {string}      prefix        Text to add before the option line. It is kept as is, so it should already end with `\r\n` when it holds a whole line.
- * @param {Object}      args          Details about the option line.
- * @param {HTMLElement} args.optionEl The option's list item.
- * @return {string} The prefix, with a group line ending in `\r\n` when needed.
+ * @param {HTMLElement} row        The option row.
+ * @param {string}      label      The option label.
+ * @param {Object}      groupState Holds the previous exported group name.
+ * @return {string} The escaped label with any required group heading.
  */
-export function addGroupLineToBulkEdit( prefix, { optionEl } ) {
-	if ( ! optionEl || ! getGroupInput( optionEl ) ) {
-		return prefix;
+export function formatBulkOptionLabel( row, label, groupState ) {
+	const input = getGroupInput( row );
+	if ( ! input ) {
+		return label;
 	}
 
-	const rows = getRows( optionEl.parentElement );
-	const index = rows.indexOf( optionEl );
-	const group = getGroup( optionEl );
-	const previousGroup = index > 0 ? getGroup( rows[ index - 1 ] ) : '';
-
-	if ( group === previousGroup ) {
-		return prefix;
+	// The importer trims option lines before recognizing group markers.
+	const escaped = label.replace( /^(\s*)(\\*##(?=[ \t]|$))/, '$1\\$2' );
+	const group = input.value.trim();
+	if ( group === groupState.previous ) {
+		return escaped;
 	}
 
+	groupState.previous = group;
 	const line = '' === group ? BULK_EDIT_MARKER : `${ BULK_EDIT_MARKER } ${ group }`;
-	return `${ prefix }${ line }\r\n`;
+	return `${ line }\r\n${ escaped }`;
 }
 
 /**
@@ -598,7 +598,7 @@ function maybeShowBulkEditHint( event ) {
 		hint = frmDom.tag( 'p', {
 			id: 'frm-option-groups-bulk-hint',
 			className: 'howto',
-			text: __( 'To group options, add a line like "## Fruits" before them. A line with only "##" ends the group.', 'formidable' ),
+			text: __( 'To group options, add a line like "## Fruits" before them. A line with only "##" ends the group. To use a group heading as an option label, prefix it with a backslash.', 'formidable' ),
 		} );
 		textarea.after( hint );
 	}

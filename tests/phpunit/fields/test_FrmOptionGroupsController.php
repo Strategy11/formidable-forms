@@ -10,6 +10,7 @@ class test_FrmOptionGroupsController extends FrmUnitTest {
 	public function test_bulk_edit_preserves_values_and_ends_groups() {
 		$options = array(
 			'Plain',
+			'\\## Literal',
 			'## Fruit',
 			array(
 				'label' => 'Apple',
@@ -24,6 +25,7 @@ class test_FrmOptionGroupsController extends FrmUnitTest {
 		$this->assertSame(
 			array(
 				'Plain',
+				'## Literal',
 				array(
 					'label' => 'Apple',
 					'value' => 'a',
@@ -133,7 +135,7 @@ class test_FrmOptionGroupsController extends FrmUnitTest {
 		$this->assertFalse( FrmOptionGroupsController::is_bulk_edit_group_line( '## Fruit|Veg', array( 'type' => 'radio' ) ), 'Radio options should keep literal group markers.' );
 	}
 
-	public function test_import_options_keeps_divider_in_group_name() {
+	public function test_import_options_preserves_literal_labels_values_and_groups() {
 		$this->set_user_by_role( 'administrator' );
 		wp_get_current_user()->add_cap( 'frm_edit_forms' );
 		set_current_screen( 'dashboard' );
@@ -147,7 +149,7 @@ class test_FrmOptionGroupsController extends FrmUnitTest {
 
 		$_POST    = array(
 			'field_id' => $field->id,
-			'opts'     => "## Fruit|Veg\nApple|a",
+			'opts'     => wp_slash( "|\n##123|sku-123\n## Fruit|Veg\n\\##|a\n\\\\## Citrus|b\n##\n\\## Citrus|c" ),
 			'separate' => 'true',
 			'nonce'    => wp_create_nonce( 'frm_ajax' ),
 		);
@@ -162,6 +164,7 @@ class test_FrmOptionGroupsController extends FrmUnitTest {
 		add_filter( 'wp_die_handler', $die );
 
 		ob_start();
+
 		try {
 			FrmFieldsController::import_options();
 		} catch ( Exception $e ) {
@@ -175,7 +178,26 @@ class test_FrmOptionGroupsController extends FrmUnitTest {
 			set_current_screen( 'front' );
 		}
 
-		$this->assertStringContainsString( 'name="field_options[options_' . $field->id . '][0][group]" value="Fruit|Veg"', $html );
+		$this->assertStringContainsString( 'name="field_options[options_' . $field->id . '][2][group]" value="Fruit|Veg"', $html );
+		$document = new DOMDocument();
+		$document->loadHTML( $html, LIBXML_NOERROR | LIBXML_NOWARNING );
+		$xpath = new DOMXPath( $document );
+		$rows  = array(
+			array( '', '', '' ),
+			array( '##123', 'sku-123', '' ),
+			array( '##', 'a', 'Fruit|Veg' ),
+			array( '\\## Citrus', 'b', 'Fruit|Veg' ),
+			array( '## Citrus', 'c', '' ),
+		);
+
+		foreach ( $rows as $index => $row ) {
+			foreach ( array_combine( array( 'label', 'value', 'group' ), $row ) as $key => $expected ) {
+				$name  = 'field_options[options_' . $field->id . '][' . $index . '][' . $key . ']';
+				$input = $xpath->query( '//input[@name="' . $name . '"]' )->item( 0 );
+				$this->assertNotNull( $input );
+				$this->assertSame( $expected, $input->getAttribute( 'value' ) );
+			}
+		}
 	}
 
 	public function test_group_name_is_not_a_valid_value() {
