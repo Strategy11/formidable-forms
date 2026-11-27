@@ -133,7 +133,8 @@ class FrmFormState {
 	private static function get_state_from_request() {
 		$encrypted_state = FrmAppHelper::get_post_param( 'frm_state', '', 'sanitize_text_field' );
 
-		if ( ! $encrypted_state ) {
+		if ( ! $encrypted_state || ! is_string( $encrypted_state ) ) {
+			// An array value (frm_state[]=x) would be a TypeError in openssl_decrypt.
 			return false;
 		}
 

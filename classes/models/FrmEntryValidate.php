@@ -640,10 +640,10 @@ class FrmEntryValidate {
 	}
 
 	/**
-	 * @param array  $errors
-	 * @param object $field
-	 * @param string $value
-	 * @param array  $args
+	 * @param array        $errors
+	 * @param object       $field
+	 * @param array|string $value
+	 * @param array        $args
 	 *
 	 * @return void
 	 */
@@ -656,7 +656,7 @@ class FrmEntryValidate {
 
 		$pattern = self::phone_format( $field );
 
-		if ( ! preg_match( $pattern, $value ) ) {
+		if ( is_array( $value ) || ! preg_match( $pattern, $value ) ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
 		}
 	}
