@@ -65,11 +65,17 @@ function count_standard_violations( $root, $path ) {
 }
 
 try {
-	$rules = '<ruleset name="FormidableFixtures">';
+	$rules      = '<ruleset name="FormidableFixtures">';
+	$categories = array();
 
 	foreach ( $expected as $name => $lines ) {
-		$fixturePath = $root . '/phpcs-sniffs/Formidable/Sniffs/CodeAnalysis/' . $name . 'Sniff.php';
-		$rules      .= '<rule ref="' . htmlspecialchars( $fixturePath, ENT_QUOTES, 'UTF-8' ) . '" />';
+		$matches = glob( $root . '/phpcs-sniffs/Formidable/Sniffs/*/' . $name . 'Sniff.php' );
+
+		if ( ! $matches || count( $matches ) !== 1 ) {
+			throw new RuntimeException( $name . ': cannot find a unique sniff file.' );
+		}
+		$categories[ $name ] = basename( dirname( $matches[0] ) );
+		$rules              .= '<rule ref="' . htmlspecialchars( $matches[0], ENT_QUOTES, 'UTF-8' ) . '" />';
 	}
 	$rules .= '</ruleset>';
 	file_put_contents( $scratch . '/ruleset.xml', $rules );
@@ -139,6 +145,19 @@ try {
 			}
 		}
 
+		if ( 'SimplifyRedundantFalsyCheck' === $name ) {
+			// Truthy strings such as '0.00' and objects that convert to '' must keep their original result.
+			foreach ( array( 'null', 'false', 'true', '0', '1', '-1', '0.0', "'0'", "''", "'0.0'", "'0.00'", "' 0'", "'00'", "'abc'", "'1abc'", 'array()', 'array( 0 )', 'new class() { public function __toString() { return ""; } }' ) as $value ) {
+				$code   = 'error_reporting( E_ALL & ~E_NOTICE ); $a = $b = $c = $d = $e = $f = $g = $h = $i = $j = $k = $l = $m = $n = $o = $p = $q = false; $x = ' . $value . '; $y = false; include $argv[1]; echo serialize( array( $a, $b, $c, $d, $e, $f, $g, $h, $i, $j, $k, $l, $m, $n, $o, $p, $q ) );';
+				$before = run_sniff_command( array( PHP_BINARY, '-r', $code, $fixtures . '/' . $name . '.inc' ) );
+				$after  = run_sniff_command( array( PHP_BINARY, '-r', $code, $fixturePath ) );
+
+				if ( 0 !== $before[0] || $before !== $after ) {
+					throw new RuntimeException( $name . ': runtime values changed for ' . $value );
+				}
+			}
+		}
+
 		if ( 'PreferWpAttributeHelpers' === $name ) {
 			$runtimeBefore = $scratch . '/attributes-before.php';
 			$runtimeAfter  = $scratch . '/attributes-after.php';
@@ -195,7 +214,7 @@ try {
 			foreach ( $report['files'][ $fixturePath ]['messages'] as $message ) {
 				$sourceParts = explode( '.', $message['source'] );
 
-				if ( array_slice( $sourceParts, 0, 3 ) !== array( 'Formidable', 'CodeAnalysis', (string) $name ) ) {
+				if ( array_slice( $sourceParts, 0, 3 ) !== array( 'Formidable', $categories[ $name ], (string) $name ) ) {
 					continue;
 				}
 

@@ -37,6 +37,11 @@ $rules  = array(
 	'phpdoc_types_order'                   => array(
 		'null_adjustment' => 'always_last',
 	),
+	'modernize_types_casting'              => true,
+	'is_null'                              => true,
+	'combine_consecutive_issets'           => true,
+	'combine_consecutive_unsets'           => true,
+	'php_unit_strict'                      => true,
 	PhpCsFixerCustomFixers\Fixer\PhpUnitAssertArgumentsOrderFixer::name() => true,
 	PhpCsFixerCustomFixers\Fixer\PhpUnitDedicatedAssertFixer::name() => true,
 	PhpCsFixerCustomFixers\Fixer\NoUselessStrlenFixer::name() => true,
