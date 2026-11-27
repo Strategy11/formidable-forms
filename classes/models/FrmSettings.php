@@ -564,7 +564,10 @@ class FrmSettings {
 	}
 
 	/**
-	 * Use ALTCHA for older settings whose active provider has no configured keys.
+	 * Pick a provider for older settings whose active provider has no keys.
+	 *
+	 * Another provider with both keys is used first, so a site that set up a different provider
+	 * keeps it. ALTCHA is used when no provider has keys.
 	 *
 	 * @since x.x
 	 *
@@ -581,8 +584,17 @@ class FrmSettings {
 		$pubkey  = $prefix . 'pubkey';
 		$privkey = $prefix . 'privkey';
 
-		if ( empty( $this->$pubkey ) && empty( $this->$privkey ) ) {
-			$this->active_captcha = 'altcha';
+		if ( ! empty( $this->$pubkey ) || ! empty( $this->$privkey ) ) {
+			return;
+		}
+
+		$this->active_captcha = 'altcha';
+
+		foreach ( $prefixes as $type => $type_prefix ) {
+			if ( ! empty( $this->{ $type_prefix . 'pubkey' } ) && ! empty( $this->{ $type_prefix . 'privkey' } ) ) {
+				$this->active_captcha = $type;
+				return;
+			}
 		}
 	}
 

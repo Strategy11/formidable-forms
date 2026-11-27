@@ -37,6 +37,38 @@ class test_FrmAltchaDefaults extends FrmUnitTest {
 	}
 
 	/**
+	 * A legacy provider without keys switches to another provider that has both keys, not to ALTCHA.
+	 */
+	public function test_legacy_provider_without_keys_uses_configured_provider() {
+		$prefixes = array(
+			'recaptcha' => '',
+			'hcaptcha'  => 'hcaptcha_',
+			'turnstile' => 'turnstile_',
+		);
+
+		foreach ( $prefixes as $active => $active_prefix ) {
+			foreach ( $prefixes as $configured => $prefix ) {
+				if ( $active === $configured ) {
+					continue;
+				}
+
+				update_option(
+					'frm_options',
+					(object) array(
+						'active_captcha'    => $active,
+						'pubkey'            => '',
+						'privkey'           => '',
+						$prefix . 'pubkey'  => 'test-site-key',
+						$prefix . 'privkey' => 'test-secret-key',
+					)
+				);
+				$settings = new FrmSettings();
+				$this->assertSame( $configured, $settings->active_captcha, 'A legacy ' . $active . ' selection without keys should use the configured ' . $configured . ' keys.' );
+			}
+		}
+	}
+
+	/**
 	 * Existing keys, including partially configured providers, preserve the selection.
 	 */
 	public function test_existing_provider_keys_preserve_selection() {
