@@ -26,6 +26,26 @@ class FrmField {
 	public static $transient_size = 200;
 
 	/**
+	 * Cached field lists already loaded in this request, keyed by form ID.
+	 *
+	 * Each list includes repeater and embedded fields. Reading the transient again would unserialize it again.
+	 *
+	 * @since x.x
+	 *
+	 * @var array<int, array{fields: array, sources: array<int, int>}>
+	 */
+	private static $request_cache = array();
+
+	/**
+	 * Form IDs whose cached field list is being built, so an embed loop falls back to a direct query.
+	 *
+	 * @since x.x
+	 *
+	 * @var array<int, bool>
+	 */
+	private static $building_cache = array();
+
+	/**
 	 * Set by create_copy() so the next create() keeps the source placement.
 	 *
 	 * @since 7.1
@@ -950,11 +970,15 @@ class FrmField {
 			delete_transient( 'frm_form_fields_' . $form_id . 'includeinclude' );
 			delete_transient( 'frm_form_fields_' . $form_id . 'includeexclude' );
 			delete_transient( 'frm_form_fields_' . $form_id . 'excludeexclude' );
+			delete_transient( 'frm_form_fields_' . $form_id . 'includesources' );
 		}
 
 		if ( ! wp_using_ext_object_cache() ) {
 			self::delete_chunked_form_transients( $form_id );
 		}
+
+		// Another form may embed this one, so its cached list can include these fields too.
+		self::$request_cache = array();
 
 		FrmDb::cache_delete_group( 'frm_field' );
 
@@ -1113,17 +1137,12 @@ class FrmField {
 			return array();
 		}
 
-		$results = self::get_fields_from_transients(
-			$form_id,
-			array(
-				'inc_embed'  => $inc_sub,
-				'inc_repeat' => $inc_sub,
-			)
-		);
+		$cache = self::get_cached_fields( (int) $form_id, false );
 
-		if ( $results ) {
-			$fields = array();
-			$count  = 0;
+		if ( false !== $cache ) {
+			$results = self::filter_cached_fields( $cache, $inc_sub, $inc_sub );
+			$fields  = array();
+			$count   = 0;
 
 			foreach ( $results as $result ) {
 				if ( $type !== $result->type ) {
@@ -1176,9 +1195,12 @@ class FrmField {
 			return array();
 		}
 
-		$results = self::get_fields_from_transients( $form_id, compact( 'inc_embed', 'inc_repeat' ) );
+		// A limited query is cheaper than building the full cache, so only an unlimited one builds it.
+		$cache = self::get_cached_fields( (int) $form_id, ! $limit );
 
-		if ( $results ) {
+		if ( false !== $cache ) {
+			$results = self::filter_cached_fields( $cache, $inc_embed, $inc_repeat );
+
 			if ( ! $limit ) {
 				return $results;
 			}
@@ -1196,7 +1218,7 @@ class FrmField {
 			}
 
 			return $fields;
-		}
+		}//end if
 
 		self::$use_cache = false;
 
@@ -1207,10 +1229,6 @@ class FrmField {
 		self::$use_cache = true;
 
 		self::include_sub_fields( $results, $inc_embed, 'all', $form_id );
-
-		if ( ! $limit ) {
-			self::set_field_transient( $results, $form_id, 0, compact( 'inc_embed', 'inc_repeat' ) );
-		}
 
 		return $results;
 	}
@@ -1421,26 +1439,154 @@ class FrmField {
 	}
 
 	/**
-	 * If a form has too many fields, they won't all save into a single transient.
-	 * We'll break them into groups of 200
+	 * Get the cached list of every field in a form, including repeater and embedded fields.
 	 *
-	 * @since 2.0.1
+	 * One list serves every combination of the embed and repeater options, and it is only read
+	 * from the transient once per request.
 	 *
-	 * @param int|string $form_id Form ID.
-	 * @param array      $args    Additional arguments.
+	 * @since x.x
 	 *
-	 * @return array
+	 * @param int  $form_id Form ID.
+	 * @param bool $build   True to query and cache the fields when no cached list exists.
+	 *
+	 * @return array{fields: array, sources: array<int, int>}|false False when there is no cached list and it was not built.
 	 */
-	private static function get_fields_from_transients( $form_id, $args ) {
-		$fields   = array();
-		$complete = self::get_next_transient( $fields, 'frm_form_fields_' . $form_id . $args['inc_embed'] . $args['inc_repeat'] );
+	private static function get_cached_fields( $form_id, $build ) {
+		if ( isset( self::$request_cache[ $form_id ] ) ) {
+			return self::$request_cache[ $form_id ];
+		}
 
-		// A missing chunk is a cache miss. Never return part of the form.
-		return $complete ? $fields : array();
+		$base_name = 'frm_form_fields_' . $form_id . 'includeinclude';
+		$fields    = array();
+		$complete  = self::get_next_transient( $fields, $base_name );
+		$sources   = $complete && $fields ? get_transient( 'frm_form_fields_' . $form_id . 'includesources' ) : false;
+
+		if ( is_array( $sources ) ) {
+			self::$request_cache[ $form_id ] = compact( 'fields', 'sources' );
+			return self::$request_cache[ $form_id ];
+		}
+
+		if ( ! $build || isset( self::$building_cache[ $form_id ] ) ) {
+			return false;
+		}
+
+		self::$building_cache[ $form_id ] = true;
+		$cache                            = self::query_fields_for_cache( $form_id );
+		unset( self::$building_cache[ $form_id ] );
+
+		if ( $cache['fields'] ) {
+			// Save the sources first. The list is only read once its first chunk exists.
+			set_transient( 'frm_form_fields_' . $form_id . 'includesources', $cache['sources'], 60 * 60 * 6 );
+			self::set_field_transient(
+				$cache['fields'],
+				$form_id,
+				0,
+				array(
+					'inc_embed'  => 'include',
+					'inc_repeat' => 'include',
+				)
+			);
+		}
+
+		self::$request_cache[ $form_id ] = $cache;
+
+		return $cache;
 	}
 
 	/**
-	 * Called by get_fields_from_transients
+	 * Query every field in a form and note where each one comes from.
+	 *
+	 * A source of 1 marks a field in a repeater. A source of 2 marks a field from an embedded form,
+	 * plus 1 when the embed field itself is in a repeater.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $form_id Form ID.
+	 *
+	 * @return array{fields: array, sources: array<int, int>} Sources are keyed by position and skip fields from the form itself.
+	 */
+	private static function query_fields_for_cache( $form_id ) {
+		self::$use_cache = false;
+
+		$where = array( 'fi.form_id' => $form_id );
+		self::maybe_include_repeating_fields( 'include', $where );
+		$fields = (array) self::getAll( $where, 'field_order' );
+
+		self::$use_cache = true;
+
+		$own_sources = array();
+
+		foreach ( $fields as $field ) {
+			$own_sources[ spl_object_hash( $field ) ] = (int) $field->form_id === $form_id ? 0 : 1;
+		}
+
+		self::include_sub_fields( $fields, 'include', 'all', $form_id );
+
+		$fields       = array_values( $fields );
+		$sources      = array();
+		$embed_source = 0;
+
+		foreach ( $fields as $position => $field ) {
+			$hash = spl_object_hash( $field );
+
+			if ( isset( $own_sources[ $hash ] ) ) {
+				// Embedded fields are added right after their embed field, so this is their parent when they follow.
+				$embed_source = $own_sources[ $hash ];
+				$source       = $embed_source;
+			} else {
+				$source = 2 | $embed_source;
+			}
+
+			if ( $source ) {
+				$sources[ $position ] = $source;
+			}
+		}
+
+		return compact( 'fields', 'sources' );
+	}
+
+	/**
+	 * Pick the fields a caller asked for from the cached list of every field.
+	 *
+	 * Each field is a copy, so a caller that changes one does not change the cached list.
+	 *
+	 * @since x.x
+	 *
+	 * @param array{fields: array, sources: array<int, int>} $cache      The cached list.
+	 * @param string                                         $inc_embed  'include' to keep fields from embedded forms.
+	 * @param string                                         $inc_repeat 'include' to keep fields in repeaters.
+	 *
+	 * @return array
+	 */
+	private static function filter_cached_fields( $cache, $inc_embed, $inc_repeat ) {
+		$skip = 0;
+
+		if ( 'include' !== $inc_repeat ) {
+			$skip |= 1;
+		}
+
+		if ( 'include' !== $inc_embed ) {
+			$skip |= 2;
+		}
+
+		$fields = array();
+
+		foreach ( $cache['fields'] as $position => $field ) {
+			$source = $cache['sources'][ $position ] ?? 0;
+
+			if ( $source & $skip ) {
+				continue;
+			}
+
+			$fields[] = clone $field;
+		}
+
+		return $fields;
+	}
+
+	/**
+	 * Read the cached field list one chunk at a time. If a form has too many fields,
+	 * they won't all save into a single transient, so they are saved in groups of 200.
 	 *
 	 * @since 2.0.1
 	 *
