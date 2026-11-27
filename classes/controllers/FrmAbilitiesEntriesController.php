@@ -678,14 +678,9 @@ class FrmAbilitiesEntriesController {
 
 		$child_form_id = isset( $field->field_options['form_select'] ) ? (int) $field->field_options['form_select'] : 0;
 		$child_fields  = $child_form_id ? FrmField::get_all_for_form( $child_form_id ) : array();
-		$ids_by_key    = array();
-
-		foreach ( $child_fields as $child_field ) {
-			$ids_by_key[ $child_field->field_key ] = $child_field->id;
-		}
-
-		$normalized = array();
-		$next_index = 0;
+		$ids_by_key    = wp_list_pluck( $child_fields, 'id', 'field_key' );
+		$normalized    = array();
+		$next_index    = 0;
 
 		foreach ( $rows as $row_key => $row ) {
 			if ( ! is_array( $row ) || in_array( $row_key, array( 'form', 'row_ids' ), true ) ) {

@@ -99,35 +99,35 @@ class test_FrmFieldCombo extends FrmUnitTest {
 			)
 		);
 
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				'first'  => array(
-					'name'            => 'first',
-					'label'           => 'first label',
 					'type'            => 'text',
+					'label'           => 'first label',
 					'classes'         => '',
 					'wrapper_classes' => '',
-					'optional'        => false,
 					'options'         => array(
 						'default_value',
 						'placeholder',
 						'desc',
 					),
+					'optional'        => false,
 					'atts'            => array(),
+					'name'            => 'first',
 				),
 				'second' => array(
-					'name'            => 'second',
-					'label'           => 'second label',
 					'type'            => 'text',
+					'label'           => 'second label',
 					'classes'         => '',
 					'wrapper_classes' => '',
-					'optional'        => false,
 					'options'         => array(
 						'default_value',
 						'placeholder',
 						'desc',
 					),
+					'optional'        => false,
 					'atts'            => array(),
+					'name'            => 'second',
 				),
 			),
 			$this->get_private_property( $combo_field, 'sub_fields' )
@@ -150,31 +150,31 @@ class test_FrmFieldCombo extends FrmUnitTest {
 			)
 		);
 
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				'second' => array(
-					'name'            => 'second',
-					'label'           => 'second label',
 					'type'            => 'text',
+					'label'           => 'second label',
 					'classes'         => '',
 					'wrapper_classes' => '',
-					'optional'        => false,
 					'options'         => array(
 						'default_value',
 						'placeholder',
 						'desc',
 					),
+					'optional'        => false,
 					'atts'            => array(),
+					'name'            => 'second',
 				),
 				'third'  => array(
-					'name'            => 'third',
-					'label'           => '',
 					'type'            => 'text',
+					'label'           => '',
 					'classes'         => '',
 					'wrapper_classes' => '',
-					'optional'        => false,
 					'options'         => array(),
+					'optional'        => false,
 					'atts'            => array(),
+					'name'            => 'third',
 				),
 			),
 			$this->get_private_property( $combo_field, 'sub_fields' )

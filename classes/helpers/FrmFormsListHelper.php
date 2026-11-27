@@ -361,7 +361,7 @@ class FrmFormsListHelper extends FrmListHelper {
 			);
 		}
 
-		$text = intval( FrmEntry::getRecordCount( $item->id ) );
+		$text = (int) FrmEntry::getRecordCount( $item->id );
 		return current_user_can( 'frm_view_entries' ) ? '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-entries&form=' . $item->id ) ) . '">' . $text . '</a>' : (string) $text; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
@@ -458,7 +458,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		return '<a ' . FrmAppHelper::array_to_html_params( $attributes ) . '>
-					' . intval( $view_count ) .
+					' . absint( $view_count ) .
 				'</a>';
 		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
@@ -514,7 +514,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	private function get_form_name( $item, $actions, $edit_link, $mode = 'list' ) {
 		$form_name = $item->name;
 
-		if ( is_null( $form_name ) || trim( $form_name ) === '' ) {
+		if ( null === $form_name || trim( $form_name ) === '' ) {
 			$form_name = FrmFormsHelper::get_no_title_text();
 		}
 
@@ -561,7 +561,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	private function add_form_description( $item, &$val ) {
 		global $mode;
 
-		if ( 'excerpt' === $mode && ! is_null( $item->description ) ) {
+		if ( 'excerpt' === $mode && null !== $item->description ) {
 			$val .= FrmAppHelper::truncate( strip_tags( $item->description ), 50 );
 		}
 	}
@@ -596,7 +596,7 @@ class FrmFormsListHelper extends FrmListHelper {
 				<a href="#" class="frm-forms-list-embeds-btn" data-posts="<?php echo esc_attr( wp_json_encode( $posts ) ); ?>">
 					<?php
 					FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon' );
-					echo intval( count( $posts ) );
+					echo absint( count( $posts ) );
 					?>
 				</a>
 				<?php

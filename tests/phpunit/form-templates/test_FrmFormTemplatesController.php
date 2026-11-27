@@ -127,8 +127,9 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 			$this->assertIsArray( $favorites, 'Favorite templates should be an array.' );
 			$this->assertArrayHasKey( 'default', $favorites, 'Missing default in favorites.' );
 
-			$expected = array_merge( $test_favorite, $default );
-			$this->assertEquals( $expected, $favorites, 'Favorite templates should match the example data.' );
+			// Keep the key order the controller returns.
+			$expected = array_replace( $default, array_merge( $test_favorite, $default ) );
+			$this->assertSame( $expected, $favorites, 'Favorite templates should match the example data.' );
 		}
 	}
 

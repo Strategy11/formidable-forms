@@ -1,0 +1,144 @@
+<?xml version="1.0"?>
+<ruleset name="FormidableQuality">
+	<description>Lite's shared coding standard for Formidable plugins. Set testVersion, translation domains and plugin-specific exceptions in the consuming phpcs.xml.</description>
+
+	<rule ref="PHPCompatibilityWP">
+		<exclude-pattern>/tests/*</exclude-pattern>
+	</rule>
+
+	<rule ref="WordPress">
+		<exclude name="Squiz.Commenting.FunctionCommentThrowTag.Missing" />
+		<exclude name="Squiz.Commenting.FunctionComment.MissingParamComment" />
+		<exclude name="Squiz.Commenting.FileComment.Missing" />
+		<exclude name="Squiz.Commenting.FunctionComment.Missing" />
+		<exclude name="Squiz.Commenting.VariableComment.Missing" />
+		<exclude name="Squiz.Commenting.ClassComment.Missing" />
+		<exclude name="Squiz.Commenting.InlineComment.InvalidEndChar" />
+		<exclude name="Generic.Commenting.DocComment.MissingShort" />
+
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
+		<exclude name="WordPress.PHP.YodaConditions" />
+
+		<!-- These rules are new. Work on fixing these. -->
+		<exclude name="WordPress.WP.Capabilities.RoleFound" />
+		<exclude name="Generic.Files.OneObjectStructurePerFile.MultipleFound" />
+		<exclude name="Generic.CodeAnalysis.RequireExplicitBooleanOperatorPrecedence.MissingParentheses" />
+	</rule>
+
+	<rule ref="Squiz.Scope.StaticThisUsage" />
+
+	<rule ref="Squiz.WhiteSpace.FunctionOpeningBraceSpace" />
+
+	<rule ref="Generic.Metrics.CyclomaticComplexity">
+		<properties>
+			<property name="complexity" value="10"/>
+			<property name="absoluteComplexity" value="20"/>
+		</properties>
+	</rule>
+
+	<!-- Use the Formidable wrapper for Slevomat's parentheses check to preserve ternary conditions when fixing. -->
+	<rule ref="Formidable.CodeAnalysis.RemoveUselessParentheses" />
+
+	<rule ref="SlevomatCodingStandard.Variables.UselessVariable" />
+
+	<rule ref="SlevomatCodingStandard.Files.LineLength">
+		<properties>
+			<property name="lineLengthLimit" value="180" />
+			<property name="ignoreComments" value="true"/>
+		</properties>
+		<exclude-pattern>/views/*</exclude-pattern>
+		<exclude-pattern>/css/*</exclude-pattern>
+	</rule>
+
+	<rule ref="SlevomatCodingStandard.Functions.FunctionLength">
+		<properties>
+			<property name="maxLinesLength" value="100" />
+		</properties>
+	</rule>
+
+	<rule ref="SlevomatCodingStandard.Files.FileLength">
+		<properties>
+			<property name="includeComments" value="true" />
+			<property name="includeWhitespace" value="true" />
+			<property name="maxLinesLength" value="1000" />
+		</properties>
+	</rule>
+
+	<rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit">
+		<properties>
+			<property name="ignoreOneLineTrailingIf" value="true" />
+			<property name="ignoreTrailingIfWithOneInstruction" value="true" />
+		</properties>
+	</rule>
+
+	<rule ref="SlevomatCodingStandard.Complexity.Cognitive">
+		<properties>
+			<property name="warningThreshold" value="30" />
+			<property name="errorThreshold" value="10" />
+		</properties>
+	</rule>
+
+	<rule ref="WordPressVIPMinimum">
+		<exclude name="Generic.PHP.NoSilencedErrors.Forbidden" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.chmod_chmod" />
+		<exclude name="WordPressVIPMinimum.Files.IncludingFile.NotAbsolutePath" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.flush_rewrite_rules_flush_rewrite_rules" />
+		<exclude name="WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.term_exists_term_exists" />
+		<exclude name="WordPressVIPMinimum.Variables.ServerVariables.UserControlledHeaders" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.wp_is_mobile_wp_is_mobile" />
+		<exclude name="WordPressVIPMinimum.UserExperience.AdminBarRemoval.HidingDetected" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_fputs" />
+		<exclude name="WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_fwrite" />
+	</rule>
+
+	<!-- Report these warnings as errors even when the consuming plugin runs PHPCS with -n. -->
+	<rule ref="Generic.Formatting.MultipleStatementAlignment.NotSameWarning">
+		<severity>8</severity>
+		<type>error</type>
+	</rule>
+
+	<rule ref="WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned">
+		<severity>8</severity>
+		<type>error</type>
+	</rule>
+
+	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EndLine">
+		<severity>8</severity>
+		<type>error</type>
+	</rule>
+
+	<rule ref="Generic.Formatting.MultipleStatementAlignment.IncorrectWarning">
+		<severity>8</severity>
+		<type>error</type>
+	</rule>
+
+	<rule ref="WordPress.PHP.StrictInArray.MissingTrueStrict">
+		<severity>8</severity>
+		<type>error</type>
+	</rule>
+
+	<rule ref="Universal.Operators.StrictComparisons">
+		<severity>8</severity>
+		<type>error</type>
+	</rule>
+
+	<rule ref="Generic.CodeAnalysis.UselessOverridingMethod.Found">
+		<severity>8</severity>
+		<type>error</type>
+	</rule>
+
+	<rule ref="Generic.WhiteSpace.ScopeIndent">
+		<properties>
+			<property name="exact" value="true" />
+			<property name="ignoreIndentationTokens" type="array">
+				<element value="T_COMMENT" />
+				<element value="T_DOC_COMMENT_OPEN_TAG" />
+			</property>
+		</properties>
+		<exclude-pattern>/views/*</exclude-pattern>
+	</rule>
+
+	<rule ref="Formidable" />
+</ruleset>

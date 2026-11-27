@@ -414,7 +414,7 @@ class FrmSquareLiteConnectHelper {
 	 * @return string
 	 */
 	private static function get_url_for_square_settings( $connected ) {
-		return admin_url( 'admin.php?page=formidable-settings&t=square_settings&connected=' . intval( $connected ) );
+		return admin_url( 'admin.php?page=formidable-settings&t=square_settings&connected=' . (int) $connected );
 	}
 
 	/**

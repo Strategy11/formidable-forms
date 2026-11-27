@@ -78,11 +78,7 @@ $single_action_attrs = array(
 								}
 
 								// Build array of installed action IDs to skip in second loop
-								$installed_action_ids = array();
-
-								foreach ( $action_controls as $action_control ) {
-									$installed_action_ids[] = $action_control->id_base;
-								}
+								$installed_action_ids = array_column( $action_controls, 'id_base' );
 
 								foreach ( $section['actions'] as $action ) {
 									// Skip if action is already installed (shown in first loop)
@@ -187,11 +183,7 @@ $single_action_attrs = array(
 					}
 
 					// Build array of installed action IDs to skip in second loop
-					$installed_action_ids = array();
-
-					foreach ( $action_controls as $action_control ) {
-						$installed_action_ids[] = $action_control->id_base;
-					}
+					$installed_action_ids = array_column( $action_controls, 'id_base' );
 
 					foreach ( $group['actions'] as $action ) {
 						// Skip if action is already installed (shown in first loop)
