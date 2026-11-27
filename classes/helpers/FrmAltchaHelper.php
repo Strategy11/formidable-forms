@@ -190,9 +190,17 @@ class FrmAltchaHelper {
 	 *
 	 * @since x.x
 	 *
+	 * @param string $scope What the proof is for, FrmAltchaChallengeHelper::SCOPE_FORM or SCOPE_UPLOAD.
+	 *
 	 * @return string
 	 */
-	public static function challenge_url() {
-		return add_query_arg( 'action', 'frm_altcha_challenge', admin_url( 'admin-ajax.php' ) );
+	public static function challenge_url( $scope = FrmAltchaChallengeHelper::SCOPE_FORM ) {
+		$args = array( 'action' => 'frm_altcha_challenge' );
+
+		if ( FrmAltchaChallengeHelper::SCOPE_FORM !== $scope ) {
+			$args['scope'] = $scope;
+		}
+
+		return add_query_arg( $args, admin_url( 'admin-ajax.php' ) );
 	}
 }

@@ -325,6 +325,16 @@ class test_FrmAltchaSubmit extends FrmUnitTest {
 	}
 
 	/**
+	 * A proof solved for a file upload cannot be used to submit an entry.
+	 *
+	 * @covers FrmAltchaController::verify_response
+	 */
+	public function test_upload_proof_cannot_submit_an_entry() {
+		$payload = FrmAltchaTestHelper::solve( FrmAltchaTestHelper::challenge( array( 'scope' => FrmAltchaChallengeHelper::SCOPE_UPLOAD ) ) );
+		$this->assertArrayHasKey( 'field' . $this->altcha_id, $this->submit( $payload ) );
+	}
+
+	/**
 	 * The field's own invalid message is used when the check fails.
 	 *
 	 * @covers FrmAltchaController::verify_response

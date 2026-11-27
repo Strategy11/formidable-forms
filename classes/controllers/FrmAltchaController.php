@@ -207,8 +207,12 @@ class FrmAltchaController {
 	 */
 	public static function send_challenge() {
 		nocache_headers();
-		header( 'Cache-Control: no-store, no-cache, must-revalidate, max-age=0', true );
-		wp_send_json( FrmAltchaChallengeHelper::create() );
+		if ( ! headers_sent() ) {
+			header( 'Cache-Control: no-store, no-cache, must-revalidate, max-age=0', true );
+		}
+		// An unknown scope gets a form challenge.
+		$scope = FrmAppHelper::get_param( 'scope', FrmAltchaChallengeHelper::SCOPE_FORM, 'get', 'sanitize_key' );
+		wp_send_json( FrmAltchaChallengeHelper::create( array( 'scope' => $scope ) ) );
 	}
 
 	/**

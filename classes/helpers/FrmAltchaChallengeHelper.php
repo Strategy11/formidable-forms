@@ -22,6 +22,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * of the full derived key, so a solution is verified with two HMACs instead of repeating
  * the PBKDF2 derivation.
  *
+ * Each challenge is for one scope, such as a form submission or a file upload, and is signed
+ * with a key for that scope. A proof solved for one scope is never accepted for another, while
+ * the widget gets the same parameters for every scope.
+ *
  * @since x.x
  */
 class FrmAltchaChallengeHelper {
@@ -81,6 +85,24 @@ class FrmAltchaChallengeHelper {
 	const SECRET_OPTION = 'frm_altcha_secret';
 
 	/**
+	 * Scope of challenges for form submissions, the default.
+	 *
+	 * @since x.x
+	 *
+	 * @var string
+	 */
+	const SCOPE_FORM = 'form';
+
+	/**
+	 * Scope of challenges for file uploads that are verified before the form is submitted.
+	 *
+	 * @since x.x
+	 *
+	 * @var string
+	 */
+	const SCOPE_UPLOAD = 'upload';
+
+	/**
 	 * Create a signed challenge for the widget.
 	 *
 	 * @since x.x
@@ -88,10 +110,11 @@ class FrmAltchaChallengeHelper {
 	 * @param array $args {
 	 *     Optional overrides, mainly for tests.
 	 *
-	 *     @type int $max_number Largest secret counter.
-	 *     @type int $expires    Lifetime in seconds.
-	 *     @type int $cost       PBKDF2 iterations per guess.
-	 *     @type int $counter    A fixed counter instead of a random one.
+	 *     @type int    $max_number Largest secret counter.
+	 *     @type int    $expires    Lifetime in seconds.
+	 *     @type int    $cost       PBKDF2 iterations per guess.
+	 *     @type int    $counter    A fixed counter instead of a random one.
+	 *     @type string $scope      What the proof is for, SCOPE_FORM or SCOPE_UPLOAD. Anything else is SCOPE_FORM.
 	 * }
 	 *
 	 * @return array{parameters: array<string, int|string>, signature: string}
@@ -112,9 +135,10 @@ class FrmAltchaChallengeHelper {
 		 *
 		 * @param array $args {
 		 *
-		 *     @type int $max_number Largest secret counter. Visitors try about half of this on average.
-		 *     @type int $expires    Seconds before the challenge expires.
-		 *     @type int $cost       PBKDF2 iterations per guess.
+		 *     @type int    $max_number Largest secret counter. Visitors try about half of this on average.
+		 *     @type int    $expires    Seconds before the challenge expires.
+		 *     @type int    $cost       PBKDF2 iterations per guess.
+		 *     @type string $scope      What the proof is for, when given.
 		 * }
 		 */
 		$args = apply_filters( 'frm_altcha_challenge_args', array_merge( $defaults, $args ) );
@@ -122,6 +146,7 @@ class FrmAltchaChallengeHelper {
 		$max_number = max( 1, min( self::MAX_COUNTER, (int) $args['max_number'] ) );
 		$cost       = max( 1, (int) $args['cost'] );
 		$counter    = isset( $args['counter'] ) ? (int) $args['counter'] : random_int( (int) ceil( $max_number / 2 ), $max_number );
+		$scope      = isset( $args['scope'] ) && self::signature_purpose( $args['scope'] ) ? $args['scope'] : self::SCOPE_FORM;
 		$nonce      = random_bytes( 16 );
 		$salt       = random_bytes( 16 );
 		$key        = self::derive_key( $nonce, $salt, $counter, $cost );
@@ -139,7 +164,7 @@ class FrmAltchaChallengeHelper {
 
 		return array(
 			'parameters' => $parameters,
-			'signature'  => self::hmac( self::canonical_json( $parameters ), 'signature' ),
+			'signature'  => self::hmac( self::canonical_json( $parameters ), self::signature_purpose( $scope ) ),
 		);
 	}
 
@@ -151,11 +176,12 @@ class FrmAltchaChallengeHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param mixed $payload Base64 encoded JSON from the widget's hidden input.
+	 * @param mixed  $payload Base64 encoded JSON from the widget's hidden input.
+	 * @param string $scope   What the proof must be for. A proof for another scope fails like a changed challenge.
 	 *
 	 * @return array{verified: bool, reason: string, id: string, expires: int}
 	 */
-	public static function verify( $payload ) {
+	public static function verify( $payload, $scope = self::SCOPE_FORM ) {
 		$result = array(
 			'verified' => false,
 			'reason'   => 'malformed',
@@ -182,7 +208,9 @@ class FrmAltchaChallengeHelper {
 		$result['id']      = hash( 'sha256', $signature );
 		$result['expires'] = (int) $parameters['expiresAt'];
 
-		if ( ! hash_equals( self::hmac( self::canonical_json( $parameters ), 'signature' ), $signature ) ) {
+		$purpose = self::signature_purpose( $scope );
+
+		if ( ! $purpose || ! hash_equals( self::hmac( self::canonical_json( $parameters ), $purpose ), $signature ) ) {
 			$result['reason'] = 'invalid-signature';
 			return $result;
 		}
@@ -204,6 +232,26 @@ class FrmAltchaChallengeHelper {
 		$result['reason']   = '';
 
 		return $result;
+	}
+
+	/**
+	 * The HMAC purpose that signs the parameters of a scope's challenges.
+	 *
+	 * Form challenges keep the original purpose, so challenges issued before scopes existed still verify.
+	 *
+	 * @since x.x
+	 *
+	 * @param mixed $scope SCOPE_FORM or SCOPE_UPLOAD.
+	 *
+	 * @return string Empty for an unknown scope.
+	 */
+	private static function signature_purpose( $scope ) {
+		$purposes = array(
+			self::SCOPE_FORM   => 'signature',
+			self::SCOPE_UPLOAD => 'signature-upload',
+		);
+
+		return is_string( $scope ) && isset( $purposes[ $scope ] ) ? $purposes[ $scope ] : '';
 	}
 
 	/**
@@ -336,7 +384,7 @@ class FrmAltchaChallengeHelper {
 	 * @since x.x
 	 *
 	 * @param string $data    Data to sign.
-	 * @param string $purpose Either 'signature' or 'key'.
+	 * @param string $purpose 'signature' or 'signature-upload' for the parameters, or 'key'.
 	 *
 	 * @return string
 	 */

@@ -56,6 +56,55 @@ class test_FrmAltchaChallengeHelper extends FrmUnitTest {
 	}
 
 	/**
+	 * A proof solved for one purpose, for example a file upload, is never accepted for another,
+	 * for example an entry, because both widgets get their challenges from the same endpoint.
+	 *
+	 * @covers FrmAltchaChallengeHelper::create
+	 * @covers FrmAltchaChallengeHelper::verify
+	 */
+	public function test_proofs_only_verify_for_their_own_scope() {
+		$upload = FrmAltchaTestHelper::solve( FrmAltchaTestHelper::challenge( array( 'scope' => FrmAltchaChallengeHelper::SCOPE_UPLOAD ) ) );
+		$form   = FrmAltchaTestHelper::solve( FrmAltchaTestHelper::challenge() );
+
+		$this->assertTrue( FrmAltchaChallengeHelper::verify( $upload, FrmAltchaChallengeHelper::SCOPE_UPLOAD )['verified'] );
+		$this->assertTrue( FrmAltchaChallengeHelper::verify( $form )['verified'], 'Challenges are for forms unless a scope is given.' );
+		$this->assertTrue( FrmAltchaChallengeHelper::verify( $form, FrmAltchaChallengeHelper::SCOPE_FORM )['verified'] );
+
+		$result = FrmAltchaChallengeHelper::verify( $upload );
+		$this->assertFalse( $result['verified'], 'An upload proof must not verify an entry.' );
+		$this->assertSame( 'invalid-signature', $result['reason'] );
+
+		$result = FrmAltchaChallengeHelper::verify( $form, FrmAltchaChallengeHelper::SCOPE_UPLOAD );
+		$this->assertFalse( $result['verified'], 'A form proof must not verify an upload.' );
+		$this->assertSame( 'invalid-signature', $result['reason'] );
+
+		$this->assertFalse( FrmAltchaChallengeHelper::verify( $form, 'unknown' )['verified'], 'An unknown scope verifies nothing.' );
+	}
+
+	/**
+	 * A challenge for an unknown scope is a form challenge, and the widget gets the same parameters for every scope.
+	 *
+	 * @covers FrmAltchaChallengeHelper::create
+	 */
+	public function test_unknown_scope_creates_a_form_challenge() {
+		$challenge = FrmAltchaTestHelper::challenge( array( 'scope' => 'unknown' ) );
+
+		$this->assertTrue( FrmAltchaChallengeHelper::verify( FrmAltchaTestHelper::solve( $challenge ) )['verified'] );
+		$this->assertSame(
+			array_keys( FrmAltchaTestHelper::challenge()['parameters'] ),
+			array_keys( FrmAltchaTestHelper::challenge( array( 'scope' => FrmAltchaChallengeHelper::SCOPE_UPLOAD ) )['parameters'] )
+		);
+	}
+
+	/**
+	 * @covers FrmAltchaHelper::challenge_url
+	 */
+	public function test_challenge_url_names_the_scope() {
+		$this->assertStringNotContainsString( 'scope=', FrmAltchaHelper::challenge_url(), 'Form challenges keep their URL.' );
+		$this->assertStringContainsString( 'scope=upload', FrmAltchaHelper::challenge_url( FrmAltchaChallengeHelper::SCOPE_UPLOAD ) );
+	}
+
+	/**
 	 * The key prefix is the first half of the derived key, so a search finds the counter.
 	 *
 	 * @covers FrmAltchaChallengeHelper::create
