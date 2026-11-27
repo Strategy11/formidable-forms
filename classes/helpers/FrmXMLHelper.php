@@ -146,7 +146,7 @@ class FrmXMLHelper {
 
 		if ( empty( $imported['form_status'] ) ) {
 			// Check for an error message in the XML.
-			if ( isset( $xml->Code ) && isset( $xml->Message ) ) { // phpcs:ignore WordPress.NamingConventions
+			if ( isset( $xml->Code, $xml->Message ) ) { // phpcs:ignore WordPress.NamingConventions
 				$imported['error'] = (string) $xml->Message; // phpcs:ignore WordPress.NamingConventions
 			}
 		}
@@ -544,11 +544,8 @@ class FrmXMLHelper {
 
 					self::do_after_field_imported_action( $f, $form_fields, $old_field_id );
 
-					// Unset old field id.
-					unset( $form_fields[ $form_fields[ $f['field_key'] ] ] );
-
-					// Unset old field key.
-					unset( $form_fields[ $f['field_key'] ] );
+					// Unset the old field id, then the old field key. The id lookup reads the key, so it goes first.
+					unset( $form_fields[ $form_fields[ $f['field_key'] ] ], $form_fields[ $f['field_key'] ] );
 				} else {
 					// If no matching field id or key in this form, create the field.
 					self::create_imported_field( $f, $imported );
@@ -980,7 +977,7 @@ class FrmXMLHelper {
 			return;
 		}
 
-		if ( is_numeric( $form['options']['custom_style'] ) && 1 === intval( $form['options']['custom_style'] ) ) {
+		if ( is_numeric( $form['options']['custom_style'] ) && 1 === (int) $form['options']['custom_style'] ) {
 			// Set to default
 			$form['options']['custom_style'] = 1;
 
@@ -1307,7 +1304,7 @@ class FrmXMLHelper {
 	private static function maybe_prepare_json_view_content( $content ) {
 		$maybe_decoded = FrmAppHelper::maybe_json_decode( $content );
 
-		if ( is_array( $maybe_decoded ) && isset( $maybe_decoded[0] ) && isset( $maybe_decoded[0]['box'] ) ) {
+		if ( is_array( $maybe_decoded ) && isset( $maybe_decoded[0]['box'] ) ) {
 			return FrmAppHelper::prepare_and_encode( $maybe_decoded );
 		}
 

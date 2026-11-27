@@ -103,7 +103,7 @@ class FrmStrpLiteAppController {
 	 * @return array
 	 */
 	public static function maybe_add_payment_error( $errors, $params ) {
-		if ( intval( $params['posted_form_id'] ) !== intval( $params['form_id'] ) ) {
+		if ( (int) $params['posted_form_id'] !== (int) $params['form_id'] ) {
 			return self::maybe_add_payment_error_on_redirect( $errors, (int) $params['form_id'] );
 		}
 		return $errors;
