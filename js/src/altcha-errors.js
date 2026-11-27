@@ -141,3 +141,20 @@ export const resetAfterError = ( widget, error ) => {
 
 	widget.addEventListener( 'statechange', clear );
 };
+
+/**
+ * Connect an error that was printed with the page to the widget's checkbox, once the widget renders.
+ *
+ * Without AJAX, the server's error is in the field before the widget exists, so Formidable never
+ * connected it to the checkbox for screen readers.
+ *
+ * @param {HTMLElement} widget The altcha-widget element.
+ * @return {void}
+ */
+export const connectRenderedError = widget => {
+	const error = getFieldContainer( widget )?.querySelector( ERROR_SELECTOR );
+
+	if ( error ) {
+		resetAfterError( widget, error );
+	}
+};

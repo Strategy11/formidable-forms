@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { clearError, resetAfterError } from '../../js/src/altcha-errors.js';
+import { clearError, connectRenderedError, resetAfterError } from '../../js/src/altcha-errors.js';
 
 /**
  * A minimal element stand-in: attributes, classes, children, closest() and querySelector().
@@ -170,4 +170,23 @@ test( 'a floating widget with an error is shown inline next to its error, not hi
 
 	assert.equal( calls.configure.at( -1 ).display, 'standard' );
 	assert.equal( checkbox.getAttribute( 'aria-describedby' ), 'frm_error_field_7' );
+} );
+
+test( 'an error printed with the page is connected to the checkbox once the widget renders', () => {
+	const { widget, checkbox, calls } = captchaField( 'unverified' );
+
+	connectRenderedError( widget );
+
+	assert.equal( checkbox.getAttribute( 'aria-invalid' ), 'true' );
+	assert.equal( checkbox.getAttribute( 'aria-describedby' ), 'frm_error_field_7' );
+	assert.equal( calls.configure.at( -1 ).auto, 'off', 'A widget set to verify on load must not show Verified next to the error.' );
+} );
+
+test( 'a widget without an error printed with the page is left alone', () => {
+	const { widget, checkbox, calls } = captchaField( 'unverified', false );
+
+	connectRenderedError( widget );
+
+	assert.equal( checkbox.getAttribute( 'aria-invalid' ), null );
+	assert.equal( calls.configure.length, 0 );
 } );

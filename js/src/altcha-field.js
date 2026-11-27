@@ -7,7 +7,7 @@
  */
 import 'altcha';
 import { skipsVerification } from './altcha-skip-verification';
-import { resetAfterError } from './altcha-errors';
+import { connectRenderedError, resetAfterError } from './altcha-errors';
 
 const WIDGET_SELECTOR = 'altcha-widget.frm-altcha-widget';
 const CAPTCHA_SELECTOR = '.frm-altcha';
@@ -177,6 +177,7 @@ const addWidgets = root => {
 		const widget = document.createElement( 'altcha-widget' );
 		widget.className = 'frm-altcha-widget';
 		widget.addEventListener( 'statechange', syncWidgetDisplay );
+		widget.addEventListener( 'load', () => connectRenderedError( widget ), { once: true } );
 
 		WIDGET_ATTRIBUTES.forEach( attribute => {
 			const value = captcha.dataset[ attribute ];
