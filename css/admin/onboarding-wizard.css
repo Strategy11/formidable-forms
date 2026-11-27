@@ -1,0 +1,152 @@
+/**
+ * Onboardin Wizard Page Styles
+ *
+ * This file includes all CSS rules specifically for the Onboarding Wizard page.
+ */
+
+/**
+ * Page General Styles
+ *
+ * Defines the basic typography and layout styles for the Onboarding Wizard page.
+ */
+html.wp-toolbar {
+	padding: 0;
+}
+
+#frm-onboarding-wizard-page {
+	position: relative;
+	background-color: var(--grey-50);
+	overflow: hidden;
+}
+
+#frm-onboarding-wizard-page * {
+	box-sizing: border-box;
+}
+
+#frm-onboarding-container {
+	position: relative;
+	min-height: 100vh;
+	padding: var(--gap-xl);
+	opacity: 0;
+	z-index: 2;
+}
+
+#frm-onboarding-return-dashboard {
+	color: var(--grey-400);
+	font-weight: 500;
+	margin-top: var(--gap-lg);
+}
+
+#frm-onboarding-return-dashboard:hover {
+	color: var(--grey-500);
+}
+
+#frm-onboarding-wizard-page[data-current-step="success"] #frm-onboarding-return-dashboard {
+	display: none;
+}
+
+#frm-onboarding-wizard-page .frm-onboarding-logo {
+	width: 60px;
+	height: auto;
+}
+
+#frm-onboarding-wizard-page .frm-dropdown-menu {
+	position: static !important;
+	transform: none !important;
+	border: 0;
+	box-shadow: none;
+	width: 100%;
+	max-height: unset;
+}
+
+.dropdown.show .frm-dropdown-toggle .frmsvg {
+	transform: rotate(180deg);
+}
+
+/* NOTE: The changes below were implemented to align with the distinct tooltip style observed in the "Install Formidable Add-ons" step */
+.tooltip-inner {
+	max-width: 295px;
+	background-color: #545f6e;
+	padding: var(--gap-xs) var(--gap-sm);
+	border-radius: var(--small-radius);
+}
+
+.bs-tooltip-top .arrow::before {
+	border-top-color: #545f6e;
+}
+
+.bs-tooltip-bottom .arrow::before {
+	border-bottom-color: #545f6e;
+}
+
+/* Rootline */
+.frm-rootline {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: calc(3 * var(--gap-xl));
+	padding: 0;
+	margin: 0 0  var(--gap-lg);
+}
+
+.frm-rootline::before {
+	content: "";
+	position: absolute;
+	width: calc(100% - 32px);
+	border: 1px solid var(--grey-300);
+	z-index: 1;
+}
+
+.frm-rootline-item {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 16px;
+	height: 16px;
+	background-color: var(--grey-50);
+	border: 2px solid var(--grey-300);
+	outline: 4px solid var(--grey-50);
+	border-radius: 100%;
+	padding: 0;
+	margin: 0;
+	z-index: 2;
+}
+
+.frm-rootline-item.frm-completed-step {
+	background-color: var(--grey-500);
+	border-color: var(--grey-500);
+}
+
+.frm-rootline-item.frm-current {
+	background-color: #fff;
+	border-color: var(--primary-500);
+}
+
+.frm-rootline-item .frmsvg {
+	color: #fff;
+}
+
+.frm-rootline-item:not(.frm-completed-step) .frmsvg {
+	display: none;
+}
+
+/**
+ * Install Formidable Add-ons Step Styles
+ *
+ * Provides styles for when the Onboarding Wizard page is displayed Install Formidable Add-ons step.
+ */
+.frm-cta-green .frm-banner-title {
+	color: var(--success-900);
+}
+
+.frm-cta-green .frm-banner-text,
+.frm-cta-green .frm-banner-text a {
+	color: var(--success-800);
+}
+
+.frm-cta-green .frm-banner-text a {
+	text-decoration: underline;
+}
+

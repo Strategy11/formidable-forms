@@ -5,19 +5,53 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmCreateFile {
 
+	/**
+	 * @var string
+	 */
 	public $folder_name;
+
+	/**
+	 * @var string
+	 */
 	public $file_name;
+
+	/**
+	 * @var string
+	 */
 	public $error_message;
+
+	/**
+	 * @var array
+	 */
 	public $uploads;
+
+	/**
+	 * @var string
+	 */
 	private $new_file_path;
+
+	/**
+	 * @var int
+	 */
 	public $chmod_dir = 0755;
+
+	/**
+	 * @var int
+	 */
 	public $chmod_file = 0644;
+
+	/**
+	 * @var bool
+	 */
 	private $has_permission = false;
 
+	/**
+	 * @param array $atts
+	 */
 	public function __construct( $atts ) {
-		$this->folder_name   = isset( $atts['folder_name'] ) ? $atts['folder_name'] : '';
+		$this->folder_name   = $atts['folder_name'] ?? '';
 		$this->file_name     = $atts['file_name'];
-		$this->error_message = isset( $atts['error_message'] ) ? $atts['error_message'] : '';
+		$this->error_message = $atts['error_message'] ?? '';
 		$this->uploads       = wp_upload_dir();
 		$this->set_new_file_path( $atts );
 		$this->chmod_dir  = defined( 'FS_CHMOD_DIR' ) ? FS_CHMOD_DIR : ( fileperms( ABSPATH ) & 0777 | 0755 );
@@ -28,6 +62,8 @@ class FrmCreateFile {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array $atts Attributes.
 	 *
 	 * @return void
 	 */
@@ -45,36 +81,42 @@ class FrmCreateFile {
 	 * @return void
 	 */
 	public function create_file( $file_content ) {
-		if ( $this->has_permission ) {
-			$dirs_exist = true;
-
-			// Create the directories if need be
-			$this->create_directories( $dirs_exist );
-
-			// only write the file if the folders exist
-			if ( $dirs_exist ) {
-				global $wp_filesystem;
-				$wp_filesystem->put_contents( $this->new_file_path, $file_content, $this->chmod_file );
-			}
+		if ( ! $this->has_permission ) {
+			return;
 		}
+
+		$dirs_exist = true;
+
+		// Create the directories if need be.
+		$this->create_directories( $dirs_exist );
+
+		// Only write the file if the folders exist.
+		if ( ! $dirs_exist ) {
+			return;
+		}
+
+		global $wp_filesystem;
+		$wp_filesystem->put_contents( $this->new_file_path, $file_content, $this->chmod_file );
 	}
 
 	/**
 	 * @since 3.0
 	 *
+	 * @param string $file_content File content.
+	 *
 	 * @return void
 	 */
 	public function append_file( $file_content ) {
-		if ( $this->has_permission ) {
-
-			if ( file_exists( $this->new_file_path ) ) {
-
-				$existing_content = $this->get_contents();
-				$file_content     = $existing_content . $file_content;
-			}
-
-			$this->create_file( $file_content );
+		if ( ! $this->has_permission ) {
+			return;
 		}
+
+		if ( file_exists( $this->new_file_path ) ) {
+			$existing_content = $this->get_contents();
+			$file_content     = $existing_content . $file_content;
+		}
+
+		$this->create_file( $file_content );
 	}
 
 	/**
@@ -82,39 +124,43 @@ class FrmCreateFile {
 	 *
 	 * @since 3.0
 	 *
-	 * @param array $file_names And array of file paths
+	 * @param array $file_names And array of file paths.
 	 *
 	 * @return void
 	 */
 	public function combine_files( $file_names ) {
-		if ( $this->has_permission ) {
-			$content = '';
-			foreach ( $file_names as $file_name ) {
-				$content .= $this->get_contents( $file_name ) . "\n";
-			}
-			$this->create_file( $content );
+		if ( ! $this->has_permission ) {
+			return;
 		}
-	}
 
-	/**
-	 * @since 3.0
-	 */
-	public function get_file_contents() {
 		$content = '';
 
-		if ( $this->has_permission ) {
-			$content = $this->get_contents();
+		foreach ( $file_names as $file_name ) {
+			$content .= $this->get_contents( $file_name ) . "\n";
 		}
-
-		return $content;
+		$this->create_file( $content );
 	}
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return string
+	 */
+	public function get_file_contents() {
+		return $this->has_permission ? $this->get_contents() : '';
+	}
+
+	/**
+	 * @since 3.0
+	 *
+	 * @param string $file File.
+	 *
+	 * @return string
 	 */
 	private function get_contents( $file = '' ) {
 		global $wp_filesystem;
-		if ( empty( $file ) ) {
+
+		if ( ! $file ) {
 			$file = $this->new_file_path;
 		}
 
@@ -130,11 +176,14 @@ class FrmCreateFile {
 		$creds = $this->get_creds();
 
 		$this->has_permission = true;
-		if ( empty( $creds ) || ! WP_Filesystem( $creds ) ) {
-			// initialize the API - any problems and we exit
-			$this->show_error_message();
-			$this->has_permission = false;
+
+		if ( $creds && WP_Filesystem( $creds ) ) {
+			return;
 		}
+
+		// Initialize the API - any problems and we exit
+		$this->show_error_message();
+		$this->has_permission = false;
 	}
 
 	/**
@@ -145,8 +194,7 @@ class FrmCreateFile {
 	private function create_directories( &$dirs_exist ) {
 		global $wp_filesystem;
 
-		$needed_dirs = $this->get_needed_dirs();
-		foreach ( $needed_dirs as $_dir ) {
+		foreach ( $this->get_needed_dirs() as $_dir ) {
 			// Only check to see if the Dir exists upon creation failure. Less I/O this way.
 			if ( $wp_filesystem->mkdir( $_dir, $this->chmod_dir ) ) {
 				$index_path = $_dir . '/index.php';
@@ -163,33 +211,37 @@ class FrmCreateFile {
 	private function get_needed_dirs() {
 		$dir_names   = explode( '/', $this->folder_name );
 		$needed_dirs = array();
+		$next_dir    = '';
 
-		$next_dir = '';
 		foreach ( $dir_names as $dir ) {
-			$next_dir      .= '/' . $dir;
+			$next_dir     .= '/' . $dir;
 			$needed_dirs[] = $this->uploads['basedir'] . $next_dir;
 		}
 
 		return $needed_dirs;
 	}
 
+	/**
+	 * @return array|bool
+	 */
 	private function get_creds() {
 		if ( ! function_exists( 'get_filesystem_method' ) ) {
-			include_once( ABSPATH . 'wp-admin/includes/file.php' );
+			include_once ABSPATH . 'wp-admin/includes/file.php';
 		}
 
 		$access_type = get_filesystem_method();
+
 		if ( $access_type === 'direct' ) {
-			$creds = request_filesystem_credentials( site_url() . '/wp-admin/', '', false, false, array() );
-		} else {
-			$creds = $this->get_ftp_creds( $access_type );
+			return request_filesystem_credentials( site_url() . '/wp-admin/', '', false, false, array() );
 		}
 
-		return $creds;
+		return $this->get_ftp_creds( $access_type );
 	}
 
 	/**
 	 * @param string $type
+	 *
+	 * @return array|false
 	 */
 	private function get_ftp_creds( $type ) {
 		$credentials = get_option(
@@ -204,15 +256,17 @@ class FrmCreateFile {
 		$credentials['username'] = defined( 'FTP_USER' ) ? FTP_USER : $credentials['username'];
 		$credentials['password'] = defined( 'FTP_PASS' ) ? FTP_PASS : '';
 
-		// Check to see if we are setting the public/private keys for ssh
+		// Check to see if we are setting the public/private keys for ssh.
 		$credentials['public_key']  = defined( 'FTP_PUBKEY' ) ? FTP_PUBKEY : '';
 		$credentials['private_key'] = defined( 'FTP_PRIKEY' ) ? FTP_PRIKEY : '';
 
-		// Sanitize the hostname, Some people might pass in odd-data:
-		$credentials['hostname'] = preg_replace( '|\w+://|', '', $credentials['hostname'] ); //Strip any schemes off
+		// Sanitize the hostname, Some people might pass in odd-data.
+		// Strip any schemes off.
+		$credentials['hostname'] = preg_replace( '|\w+://|', '', $credentials['hostname'] );
 
-		if ( strpos( $credentials['hostname'], ':' ) ) {
+		if ( str_contains( $credentials['hostname'], ':' ) ) {
 			list( $credentials['hostname'], $credentials['port'] ) = explode( ':', $credentials['hostname'], 2 );
+
 			if ( ! is_numeric( $credentials['port'] ) ) {
 				unset( $credentials['port'] );
 			}
@@ -220,22 +274,24 @@ class FrmCreateFile {
 			unset( $credentials['port'] );
 		}
 
-		if ( ( defined( 'FTP_SSH' ) && FTP_SSH ) || ( defined( 'FS_METHOD' ) && 'ssh2' == FS_METHOD ) ) {
+		if ( ( defined( 'FTP_SSH' ) && FTP_SSH ) || ( defined( 'FS_METHOD' ) && 'ssh2' === FS_METHOD ) ) {
 			$credentials['connection_type'] = 'ssh';
-		} elseif ( ( defined( 'FTP_SSL' ) && FTP_SSL ) && 'ftpext' == $type ) {
-			//Only the FTP Extension understands SSL
+		} elseif ( ( defined( 'FTP_SSL' ) && FTP_SSL ) && 'ftpext' === $type ) {
+			// Only the FTP Extension understands SSL.
 			$credentials['connection_type'] = 'ftps';
 		} elseif ( ! isset( $credentials['connection_type'] ) ) {
-			//All else fails (And it's not defaulted to something else saved), Default to FTP
+			// All else fails (And it's not defaulted to something else saved), Default to FTP.
 			$credentials['connection_type'] = 'ftp';
 		}
 
-		$has_creds = ( ! empty( $credentials['password'] ) && ! empty( $credentials['username'] ) && ! empty( $credentials['hostname'] ) );
-		$can_ssh   = ( 'ssh' == $credentials['connection_type'] && ! empty( $credentials['public_key'] ) && ! empty( $credentials['private_key'] ) );
+		$has_creds = ! empty( $credentials['password'] ) && ! empty( $credentials['username'] ) && ! empty( $credentials['hostname'] );
+		$can_ssh   = 'ssh' === $credentials['connection_type'] && ! empty( $credentials['public_key'] ) && ! empty( $credentials['private_key'] );
+
 		if ( $has_creds || $can_ssh ) {
 			$stored_credentials = $credentials;
+
 			if ( ! empty( $stored_credentials['port'] ) ) {
-				//save port as part of hostname to simplify above code.
+				// Save port as part of hostname to simplify above code.
 				$stored_credentials['hostname'] .= ':' . $stored_credentials['port'];
 			}
 
@@ -251,7 +307,7 @@ class FrmCreateFile {
 	 * @return void
 	 */
 	private function show_error_message() {
-		if ( ! empty( $this->error_message ) ) {
+		if ( $this->error_message ) {
 			echo '<div class="message">' . esc_html( $this->error_message ) . '</div>';
 		}
 	}

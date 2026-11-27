@@ -1,0 +1,25 @@
+/**
+ * Component: Subform Section
+ */
+
+.subform_section {
+	margin: 25px;
+}
+
+.subform_section,
+.subform_section label,
+.subform_section input {
+	opacity: 80;
+}
+
+.subform_section .frm_sortable_field_opts {
+	display: none;
+}
+
+#frm_form_editor_container .subform_section .frm_primary_label {
+	display: block;
+}
+
+.subform_section.subform_break {
+	border-top: 1px dashed #ccc;
+}

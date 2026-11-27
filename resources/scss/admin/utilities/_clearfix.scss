@@ -1,0 +1,39 @@
+/**
+ * Component: Clearfix
+ */
+
+span.clear {
+	display: block;
+}
+
+.clearfix::after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+.clearfix {
+	display: inline-block;
+}
+
+/*Override styling from other plugins*/
+.frm_form_fields .clear {
+	height: auto;
+}
+
+/* Hides from IE-mac \*/
+* html .clearfix {
+	height: 1%;
+}
+
+.clearfix {
+	display: block;
+}
+
+#frm_small_device_message_container {
+	display: none;
+}
+
+/* End hide from IE-mac */

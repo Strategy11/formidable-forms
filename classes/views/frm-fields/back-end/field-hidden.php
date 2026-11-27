@@ -1,4 +1,14 @@
 <?php
+/**
+ * Hidden field form builder view.
+ *
+ * @package Formidable
+ *
+ * @var string $html_id    HTML id attribute for the input.
+ * @var string $field_name HTML name attribute for the input.
+ * @var array  $field      Field data including 'default_value'.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

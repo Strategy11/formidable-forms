@@ -56,6 +56,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 									</tr>
 								<?php } ?>
 
+								<?php if ( isset( $subscription->test ) ) { ?>
+								<tr valign="top">
+									<th scope="row"><?php esc_html_e( 'Mode', 'formidable' ); ?>:</th>
+									<td><?php echo esc_html( FrmTransLiteAppHelper::get_test_mode_display_string( $subscription ) ); ?></td>
+								</tr>
+								<?php } ?>
+
 								<tr>
 									<th scope="row"><?php esc_html_e( 'Billing Cycle', 'formidable' ); ?>:</th>
 									<td><?php echo esc_html( FrmTransLiteAppHelper::format_billing_cycle( $subscription ) ); ?></td>
@@ -78,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 									<th scope="row"><?php esc_html_e( 'Payment Status Updates', 'formidable' ); ?>:</th>
 									<td>
 
-									<?php foreach ( $subscription->meta_value as $k => $metas ) { ?>
+									<?php foreach ( $subscription->meta_value as $metas ) { ?>
 										<table class="widefat" style="border:none;">
 										<?php
 
@@ -98,7 +105,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 									</td>
 								</tr>
 									<?php
-								}
+								}//end if
 								?>
 							</tbody>
 						</table>
@@ -119,8 +126,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</div>
 
 							<div id="misc-pub-section">
-								<a class="submitdelete deletion" href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'frm_action', 'destroy' ) ) ); ?>" data-frmverify="<?php echo esc_attr__( 'Permanently delete this subscription?', 'formidable' ); ?>" data-frmverify-btn="frm-button-red" title="<?php esc_attr_e( 'Delete', 'formidable' ); ?>">
-									<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_delete_icon' ); ?>
+								<a class="submitdelete deletion" href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'frm_action', 'destroy' ) ) ); ?>" data-frmverify="<?php esc_attr_e( 'Permanently delete this subscription?', 'formidable' ); ?>" data-frmverify-btn="frm-button-red" title="<?php esc_attr_e( 'Delete', 'formidable' ); ?>">
+									<?php FrmAppHelper::icon_by_class( 'frmfont frm_delete_icon' ); ?>
 									<span class="frm_link_label">
 										<?php esc_html_e( 'Delete Subscription', 'formidable' ); ?>
 									</span>

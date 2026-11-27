@@ -13,20 +13,40 @@ class FrmTransLiteCRUDController {
 	 * Show a table of either payments for subscriptions.
 	 *
 	 * @param int $id
+	 *
 	 * @return void
 	 */
 	public static function show( $id = 0 ) {
 		if ( ! $id ) {
 			$id = FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
+
 			if ( ! $id ) {
 				wp_die( esc_html__( 'Please select a payment to view', 'formidable' ) );
 			}
 		}
 
-		$payment     = self::get_payment_row( $id );
+		FrmAppHelper::include_svg();
+
+		$table_name = self::table_name();
+		$payment    = self::get_payment_row( $id );
+
+		if ( ! $payment ) {
+			$trans_type = $table_name === 'subscriptions' ? __( 'Subscription', 'formidable' ) : __( 'Payment', 'formidable' );
+			FrmAppController::show_error_modal(
+				array(
+					/* translators: %s: Transaction type */
+					'title'      => sprintf( __( 'You can\'t view the %s', 'formidable' ), $trans_type ),
+					/* translators: %s: Transaction type */
+					'body'       => sprintf( __( 'You are trying to view a %s that does not exist', 'formidable' ), $trans_type ),
+					/* translators: %s: Transaction table name */
+					'cancel_url' => sprintf( admin_url( 'admin.php?page=formidable-payments&trans_type=%s' ), $table_name ),
+				)
+			);
+			return;
+		}
+
 		$date_format = get_option( 'date_format' );
 		$user_name   = FrmTransLiteAppHelper::get_user_link( $payment->user_id );
-		$table_name  = self::table_name();
 		$entry       = FrmEntry::getOne( $payment->item_id );
 		$form_id     = $entry ? $entry->form_id : false;
 
@@ -34,12 +54,12 @@ class FrmTransLiteCRUDController {
 			$subscription = $payment;
 		}
 
-		FrmAppHelper::include_svg();
 		include FrmTransLiteAppHelper::plugin_path() . '/views/' . $table_name . '/show.php';
 	}
 
 	/**
 	 * @param int $id
+	 *
 	 * @return object|null
 	 */
 	private static function get_payment_row( $id ) {
@@ -48,7 +68,7 @@ class FrmTransLiteCRUDController {
 		$table_name = self::table_name();
 
 		// @codingStandardsIgnoreStart
-		$payment = $wpdb->get_row(
+		return $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT
 					p.*, e.user_id
@@ -59,8 +79,6 @@ class FrmTransLiteCRUDController {
 			)
 		);
 		// @codingStandardsIgnoreEnd
-
-		return $payment;
 	}
 
 	/**
@@ -97,18 +115,17 @@ class FrmTransLiteCRUDController {
 		$default = reset( $allowed );
 		$name    = FrmAppHelper::get_param( 'type', $default, 'get', 'sanitize_text_field' );
 
-		if ( ! in_array( $name, $allowed, true ) ) {
-			$name = $default;
-		}
-
-		return $name;
+		return in_array( $name, $allowed, true ) ? $name : $default;
 	}
 
 	/**
-	 * @return FrmTransLiteSubscription|FrmTransLitePayment
+	 * @return FrmTransLitePayment|FrmTransLiteSubscription
 	 */
 	private static function the_class() {
-		$class_name = self::table_name() === 'subscriptions' ? 'FrmTransLiteSubscription' : 'FrmTransLitePayment';
-		return new $class_name();
+		if ( self::table_name() === 'subscriptions' ) {
+			return new FrmTransLiteSubscription();
+		}
+
+		return new FrmTransLitePayment();
 	}
 }

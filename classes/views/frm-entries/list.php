@@ -15,12 +15,12 @@ $should_show_add_new_button = $form && $pro_is_installed && current_user_can( 'f
 				'form'        => $form,
 				'close'       => $form ? admin_url( 'admin.php?page=formidable-entries&form=' . $form->id ) : '',
 				'import_link' => $pro_is_installed,
-				'publish'     => ! $should_show_add_new_button ? true : array(
+				'publish'     => $should_show_add_new_button ? array(
 					'FrmAppHelper::add_new_item_link',
 					array(
 						'new_link' => admin_url( 'admin.php?page=formidable-entries&frm_action=new&form=' . $form->id ),
 					),
-				),
+				) : true,
 			)
 		);
 		?>
@@ -35,10 +35,15 @@ $should_show_add_new_button = $form && $pro_is_installed && current_user_can( 'f
 				<?php } ?>
 			<?php } ?>
 
+			<?php FrmSpamEntriesController::show_tabs( $form ); ?>
+
 			<form id="posts-filter" method="get">
 				<input type="hidden" name="page" value="formidable-entries" />
 				<input type="hidden" name="form" value="<?php echo esc_attr( $form ? $form->id : '' ); ?>" />
 				<input type="hidden" name="frm_action" value="list" />
+				<?php if ( FrmSpamEntriesController::is_spam_tab() ) { ?>
+					<input type="hidden" name="<?php echo esc_attr( FrmSpamEntriesController::TAB_PARAM ); ?>" value="<?php echo esc_attr( FrmSpamEntriesController::TAB_VALUE ); ?>" />
+				<?php } ?>
 				<?php do_action( 'frm_entry_inside_h2', $form ); ?>
 				<?php $wp_list_table->search_box( __( 'Search', 'formidable' ), 'entry' ); ?>
 

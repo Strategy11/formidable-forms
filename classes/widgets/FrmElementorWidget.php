@@ -6,22 +6,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( class_exists( '\Elementor\Widget_Base' ) ) {
 	class FrmElementorWidget extends \Elementor\Widget_Base {
 
+		/**
+		 * @return string
+		 */
 		public function get_name() {
 			return 'formidable';
 		}
 
+		/**
+		 * @return string
+		 */
 		public function get_title() {
 			return FrmAppHelper::get_menu_name() . ' ' . __( 'Forms', 'formidable' );
 		}
 
+		/**
+		 * @return string
+		 */
 		public function get_icon() {
 			return FrmAppHelper::get_menu_icon_class();
 		}
 
+		/**
+		 * @return array
+		 */
 		public function get_categories() {
 			return array( 'general' );
 		}
 
+		/**
+		 * @return void
+		 */
 		protected function register_controls() {
 			$this->start_controls_section(
 				'section_form_dropdown',
@@ -57,6 +72,12 @@ if ( class_exists( '\Elementor\Widget_Base' ) ) {
 			$this->end_controls_section();
 		}
 
+		/**
+		 * @param string $key
+		 * @param string $title
+		 *
+		 * @return void
+		 */
 		private function add_basic_switcher_control( $key, $title ) {
 			$this->add_control(
 				$key,
@@ -67,6 +88,9 @@ if ( class_exists( '\Elementor\Widget_Base' ) ) {
 			);
 		}
 
+		/**
+		 * @return array
+		 */
 		private function get_form_options() {
 			$query   = array();
 			$where   = apply_filters( 'frm_forms_dropdown', $query, 'form' );
@@ -74,13 +98,16 @@ if ( class_exists( '\Elementor\Widget_Base' ) ) {
 			$options = array( '' => '' );
 
 			foreach ( $forms as $form ) {
-				$form_title           = '' === $form->name ? __( '(no title)', 'formidable' ) : FrmAppHelper::truncate( $form->name, 50 );
+				$form_title           = '' === $form->name ? FrmFormsHelper::get_no_title_text() : FrmAppHelper::truncate( $form->name, 50 );
 				$options[ $form->id ] = esc_html( $form_title );
 			}
 
 			return $options;
 		}
 
+		/**
+		 * @return void
+		 */
 		protected function render() {
 			$settings    = $this->get_settings_for_display();
 			$form_id     = isset( $settings['form_id'] ) ? absint( $settings['form_id'] ) : 0;
@@ -91,12 +118,12 @@ if ( class_exists( '\Elementor\Widget_Base' ) ) {
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo FrmFormsController::get_form_shortcode(
 				array(
-					'id'          => $form_id,
-					'title'       => $title,
-					'description' => $description,
-					'minimize'    => $minimize,
+					'id'          => $form_id, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					'title'       => $title, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					'description' => $description, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					'minimize'    => $minimize, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				)
 			);
 		}
 	}
-}
+}//end if

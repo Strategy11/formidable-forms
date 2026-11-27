@@ -1,0 +1,72 @@
+<?php
+
+/**
+ * @covers FrmAntiSpamController
+ * @covers FrmEntryValidate
+ */
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmAntiSpamController::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmEntryValidate::class )]
+class test_FrmSpamCheckWPDisallowedWords extends FrmUnitTest {
+
+	public function test_check() {
+		$values = array(
+			'item_meta'      => array(
+				'25' => '23.342.33',
+				'36' => 'email@example.com',
+				'37' => array( 'value1', 'value2' ),
+			),
+			'name_field_ids' => array(),
+			'form_id'        => 1,
+		);
+
+		$option_name = 'disallowed_keys';
+
+		update_option( $option_name, '' );
+		$spam_check = new FrmSpamCheckWPDisallowedWords( $values );
+		$this->assertFalse( $spam_check->is_spam() );
+
+		$blocked   = '23.343.12332';
+		$new_block = $blocked . "\nspamemail@example.com";
+		update_option( $option_name, $new_block );
+		$this->assertSame( $new_block, get_option( $option_name ) );
+
+		$wp_test = wp_check_comment_disallowed_list(
+			'Author',
+			'author@gmail.com',
+			'',
+			'No spam here',
+			FrmAppHelper::get_ip_address(),
+			FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' )
+		);
+		$this->assertFalse( $wp_test );
+
+		$ip      = FrmAppHelper::get_ip_address();
+		$wp_test = wp_check_comment_disallowed_list(
+			'Author',
+			'author@gmail.com',
+			'',
+			$blocked,
+			$ip,
+			FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' )
+		);
+
+		if ( ! $wp_test ) {
+			$this->markTestSkipped( 'WordPress blacklist check is failing in some cases' );
+		}
+		$this->assertTrue( $wp_test, 'WordPress missing spam for IP ' . $ip . ' agent ' . FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) );
+
+		$this->assertFalse( $spam_check->is_spam() );
+
+		$spam_msg = $this->run_private_method( array( $spam_check, 'get_spam_message' ) );
+		$is_spam  = FrmAntiSpamController::contains_wp_disallowed_words( array( 'item_meta' => array( '', '' ) ) );
+		$this->assertFalse( $is_spam );
+
+		$values['item_meta']['25'] = $blocked;
+		$is_spam                   = FrmAntiSpamController::contains_wp_disallowed_words( $values );
+		$this->assertSame( $is_spam, $spam_msg, 'Exact match for spam missed' );
+
+		$values['item_meta']['25'] = $blocked . '23.343.1233234323';
+		$is_spam                   = FrmAntiSpamController::contains_wp_disallowed_words( $values );
+		$this->assertSame( $is_spam, $spam_msg );
+	}
+}

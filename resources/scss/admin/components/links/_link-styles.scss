@@ -1,0 +1,28 @@
+/**
+ * Component: Link Styles
+ */
+
+a.frm-link-secondary {
+	color: #c4c4c4;
+	font-size: var(--text-sm);
+	text-decoration: underline;
+}
+
+// Underline small links so they don't rely on color alone (WCAG 1.4.1).
+.frm-text-xs a:not(.frm-link-with-external-icon),
+a.frm-text-xs:not(.frm-link-with-external-icon) {
+	text-decoration: underline;
+}
+
+.field_type_list li.button.frm_noallow,
+.field_type_list li.button.frm_noallow:hover,
+.button.frm_noallow,
+.button.frm_noallow:hover {
+	color: inherit;
+	border-color: #ccc;
+	background: inherit;
+}
+
+iframe#dyncontent_ifr {
+	min-height: 150px;
+}

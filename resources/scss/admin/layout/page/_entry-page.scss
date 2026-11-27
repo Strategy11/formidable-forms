@@ -1,0 +1,80 @@
+/**
+ * Component: Entry Page
+ */
+
+body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) .frm_image_options .frm_image_option_container {
+	--field-border-width: 1px;
+	--border-color: var(--grey-300);
+	--border-color-active: var(--primary-500);
+	--border-radius: var(--small-radius);
+}
+
+#form_show_entry_page .frm_file_link,
+#form_show_entry_page .frm_image_option_container {
+	display: inline-flex;
+	flex-wrap: nowrap;
+	flex-direction: column;
+	text-align: center;
+	align-items: center;
+	width: 150px;
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
+
+#form_show_entry_page .frm_image_option_container img {
+	width: 150px;
+	height: 150px;
+	object-fit: cover;
+}
+
+#form_show_entry_page .frm_file_link img {
+	max-width: 150px;
+	height: auto;
+}
+
+#form_show_entry_page .frm_file_link ~ br {
+	display: none;
+}
+
+#form_show_entry_page .frm_upload_label {
+	padding: 10px;
+}
+
+#form_show_entry_page.frm_wrap .postbox {
+	overflow: hidden;
+}
+
+.frm_image_option_container .frm_image_placeholder_icon svg {
+	height: 150px;
+}
+
+.frm_list_entry_page .frm_file_link,
+.frm_list_entry_page .frm_image_option_container.frm_label_with_image {
+	display: block;
+	text-align: center;
+}
+
+.frm_list_entry_page .frm_image_option_container img {
+	width: 75px;
+	height: 75px;
+	object-fit: cover;
+}
+
+.frm_list_entry_page img {
+	max-width: 100%;
+	height: auto;
+}
+
+.frm_image_option_container .frm_empty_url {
+	background-color: var(--sidebar-color);
+}
+
+.frm_list_entry_page .frm_image_option_container .frm_text_label_for_image {
+	display: block;
+	padding: 5px 0 10px;
+}
+
+.frm_list_entry_page .frm_upload_label,
+.frm-summary-page-wrapper .frm_text_label_for_image {
+	display: block;
+}

@@ -3,6 +3,7 @@
  * Combo field - Field contains sub fields
  *
  * @package Formidable
+ *
  * @since 4.11
  */
 
@@ -16,6 +17,7 @@ class FrmFieldCombo extends FrmFieldType {
 	 * Does the html for this field label need to include "for"?
 	 *
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $has_for_label = false;
@@ -54,7 +56,7 @@ class FrmFieldCombo extends FrmFieldType {
 		$defaults = $this->get_default_sub_field();
 
 		foreach ( $sub_fields as $name => $sub_field ) {
-			if ( empty( $sub_field ) ) {
+			if ( ! $sub_field ) {
 				continue;
 			}
 
@@ -74,6 +76,24 @@ class FrmFieldCombo extends FrmFieldType {
 					$defaults
 				);
 			}
+		}//end foreach
+	}
+
+	/**
+	 * Set the aria-invalid attribute for subfields.
+	 *
+	 * @since 6.16.3
+	 *
+	 * @param array $shortcode_atts
+	 * @param array $args
+	 *
+	 * @return void
+	 */
+	public function set_aria_invalid_error( &$shortcode_atts, $args ) {
+		$error_key_id = $this->get_error_key_id( $args );
+
+		foreach ( $this->get_sub_fields() as $sub_field ) {
+			$shortcode_atts[ 'aria-invalid-' . $sub_field['name'] ] = isset( $args['errors'][ 'field' . $error_key_id . '-' . $sub_field['name'] ] ) ? 'true' : 'false';
 		}
 	}
 
@@ -113,7 +133,8 @@ class FrmFieldCombo extends FrmFieldType {
 			}
 
 			foreach ( $sub_field['options'] as $option ) {
-				if ( 'default_value' === $option ) { // We parse default value from field column.
+				if ( 'default_value' === $option ) {
+					// We parse default value from field column.
 					continue;
 				}
 
@@ -146,6 +167,7 @@ class FrmFieldCombo extends FrmFieldType {
 		foreach ( $this->sub_fields as $name => $sub_field ) {
 			$sub_field['name'] = $name;
 			$wrapper_classes   = 'frm_grid_container frm_sub_field_options frm_sub_field_options-' . $sub_field['name'];
+
 			if ( ! isset( $processed_sub_fields[ $name ] ) ) {
 				// Options for this subfield should be hidden.
 				$wrapper_classes .= ' frm_hidden';
@@ -182,7 +204,8 @@ class FrmFieldCombo extends FrmFieldType {
 			return $default_value;
 		}
 
-		return json_decode( $default_value, true ); // We store default value as JSON string in db.
+		// We store default value as JSON string in db.
+		return json_decode( $default_value, true );
 	}
 
 	/**
@@ -204,15 +227,14 @@ class FrmFieldCombo extends FrmFieldType {
 	 * @return array
 	 */
 	protected function field_settings_for_type() {
-		$settings = array(
+		return array(
 			'description'    => false,
 			'default'        => false,
-			'clear_on_focus' => false, // Don't use the regular placeholder option.
+			// Don't use the regular placeholder option.
+			'clear_on_focus' => false,
 			'logic'          => true,
 			'visibility'     => true,
 		);
-
-		return $settings;
 	}
 
 	/**
@@ -230,7 +252,13 @@ class FrmFieldCombo extends FrmFieldType {
 
 		$field_name = $this->html_name( $name );
 
-		$this->load_field_output( compact( 'field', 'field_name' ) );
+		$this->load_field_output(
+			array(
+				'field'           => $field,
+				'field_name'      => $field_name,
+				'builder_preview' => true,
+			)
+		);
 	}
 
 	/**
@@ -248,12 +276,14 @@ class FrmFieldCombo extends FrmFieldType {
 	 *
 	 * @param array $args           Arguments.
 	 * @param array $shortcode_atts Shortcode attributes.
+	 *
 	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
 		$field = (array) $this->field;
 
 		$field['default_value'] = $this->get_default_value();
+
 		if ( empty( $field['value'] ) ) {
 			$field['value'] = $field['default_value'];
 		}
@@ -263,9 +293,8 @@ class FrmFieldCombo extends FrmFieldType {
 
 		ob_start();
 		$this->load_field_output( $args );
-		$input_html = ob_get_clean();
 
-		return $input_html;
+		return ob_get_clean();
 	}
 
 	/**
@@ -356,13 +385,15 @@ class FrmFieldCombo extends FrmFieldType {
 		// Placeholder.
 		if ( in_array( 'placeholder', $sub_field['options'], true ) ) {
 			$placeholders = FrmField::get_option( $field, 'placeholder' );
+
 			if ( ! empty( $placeholders[ $sub_field['name'] ] ) ) {
 				$field['placeholder'] = $placeholders[ $sub_field['name'] ];
 			}
 		}
 
 		// Add optional class.
-		$classes = isset( $sub_field['classes'] ) ? $sub_field['classes'] : '';
+		$classes = $sub_field['classes'] ?? '';
+
 		if ( is_array( $classes ) ) {
 			$classes = implode( ' ', $classes );
 		}
@@ -375,15 +406,23 @@ class FrmFieldCombo extends FrmFieldType {
 			$field['input_class'] = esc_attr( $classes );
 		}
 
-		$field['default_value'] = ''; // fake it to avoid printing frm-val attribute.
+		// Fake it to avoid printing frm-val attribute.
+		$field['default_value'] = '';
+
+		if ( ! empty( $sub_field['name'] ) ) {
+			$field['subfield_name']  = $sub_field['name'];
+			$field['subfield_label'] = $this->get_sub_field_label( $sub_field['name'] );
+		}
 
 		do_action( 'frm_field_input_html', $field );
 
 		// Print custom attributes.
-		if ( ! empty( $sub_field['atts'] ) && is_array( $sub_field['atts'] ) ) {
-			foreach ( $sub_field['atts'] as $att_name => $att_value ) {
-				echo esc_attr( trim( $att_name ) ) . '="' . esc_attr( trim( $att_value ) ) . '" ';
-			}
+		if ( empty( $sub_field['atts'] ) || ! is_array( $sub_field['atts'] ) ) {
+			return;
+		}
+
+		foreach ( $sub_field['atts'] as $att_name => $att_value ) {
+			echo esc_attr( trim( $att_name ) ) . '="' . esc_attr( trim( $att_value ) ) . '" ';
 		}
 	}
 
@@ -391,10 +430,11 @@ class FrmFieldCombo extends FrmFieldType {
 	 * Validate field.
 	 *
 	 * @param array $args Arguments. Includes `errors`, `value`.
+	 *
 	 * @return array Errors array.
 	 */
 	public function validate( $args ) {
-		$errors = isset( $args['errors'] ) ? $args['errors'] : array();
+		$errors = $args['errors'] ?? array();
 
 		if ( ! $this->field->required ) {
 			return $errors;
@@ -404,23 +444,102 @@ class FrmFieldCombo extends FrmFieldType {
 			return $errors;
 		}
 
-		if ( class_exists( 'FrmProFieldsHelper' ) && ! FrmProFieldsHelper::is_field_visible_to_user( $this->field ) ) {
-			return $errors;
-		}
+		$required_count = 0;
+		$missing        = array();
 
-		$blank_msg = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
+		foreach ( $this->get_processed_sub_fields() as $name => $sub_field ) {
+			if ( ! empty( $sub_field['optional'] ) ) {
+				continue;
+			}
 
-		$sub_fields = $this->get_processed_sub_fields();
+			++$required_count;
 
-		// Validate not empty.
-		foreach ( $sub_fields as $name => $sub_field ) {
-			if ( empty( $sub_field['optional'] ) && empty( $args['value'][ $name ] ) ) {
-				$errors[ 'field' . $args['id'] . '-' . $name ] = '';
-				$errors[ 'field' . $args['id'] ]               = $blank_msg;
+			if ( empty( $args['value'][ $name ] ) ) {
+				$missing[] = $name;
 			}
 		}
 
+		if ( ! $missing ) {
+			return $errors;
+		}
+
+		if ( count( $missing ) === $required_count ) {
+			// Nothing was filled in, so show one error for the whole field. The empty sub field
+			// errors flag each required input without repeating the message under every one.
+			foreach ( $missing as $name ) {
+				$errors[ 'field' . $args['id'] . '-' . $name ] = '';
+			}
+
+			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
+
+			return $errors;
+		}
+
+		// Only some sub fields are missing, so name each one in its own error.
+		foreach ( $missing as $name ) {
+			$errors[ 'field' . $args['id'] . '-' . $name ] = $this->get_sub_field_error_msg( $name, 'blank' );
+		}
+
 		return $errors;
+	}
+
+	/**
+	 * Gets the label a sub field is referred to by in its error messages.
+	 *
+	 * The sub field description is used when it is a short phrase, since that is the label shown
+	 * under the input. Otherwise the sub field label is combined with the field label, like "Address Line 1".
+	 *
+	 * @since 7.0
+	 *
+	 * @param string $name Sub field name, like 'first' or 'line1'.
+	 *
+	 * @return string
+	 */
+	public function get_sub_field_label( $name ) {
+		$desc = FrmField::get_option( $this->field, $name . '_desc' );
+
+		if ( is_string( $desc ) && $this->is_short_phrase( $desc ) ) {
+			return $desc;
+		}
+
+		$label = $this->sub_fields[ $name ]['label'] ?? '';
+
+		if ( ! $label ) {
+			return (string) $this->get_field_column( 'name' );
+		}
+
+		/* translators: 1: Field label, 2: Sub field label */
+		return sprintf( __( '%1$s %2$s', 'formidable' ), $this->get_field_column( 'name' ), $label );
+	}
+
+	/**
+	 * Checks if text reads as a label, so it can be the subject of an error message. A sentence
+	 * would not.
+	 *
+	 * @since 7.0
+	 *
+	 * @param string $text
+	 *
+	 * @return bool
+	 */
+	private function is_short_phrase( $text ) {
+		$text = trim( $text );
+		return '' !== $text && count( (array) preg_split( '/\s+/', $text ) ) <= 4 && ! preg_match( '/[.!?:;]$/', $text );
+	}
+
+	/**
+	 * Gets an error message for a single sub field, with the sub field label in place of the
+	 * field label.
+	 *
+	 * @since 7.0
+	 *
+	 * @param string $name  Sub field name, like 'first' or 'line1'.
+	 * @param string $error Error type, like 'blank'.
+	 *
+	 * @return string
+	 */
+	public function get_sub_field_error_msg( $name, $error ) {
+		return FrmFieldsHelper::get_error_msg_for_name( $this->field, $error, $this->get_sub_field_label( $name ) );
 	}
 
 	/**
@@ -430,19 +549,19 @@ class FrmFieldCombo extends FrmFieldType {
 	 */
 	public function get_export_headings() {
 		$headings   = array();
-		$field_id   = isset( $this->field->id ) ? $this->field->id : $this->field['id'];
-		$field_name = isset( $this->field->name ) ? $this->field->name : $this->field['name'];
-		$field_key  = isset( $this->field->field_key ) ? $this->field->field_key : $this->field['field_key'];
+		$field_id   = is_object( $this->field ) ? $this->field->id : $this->field['id'];
+		$field_name = is_object( $this->field ) ? $this->field->name : $this->field['name'];
 		$sub_fields = $this->get_processed_sub_fields();
+
+		// Include sub-field headings.
 		foreach ( $sub_fields as $name => $sub_field ) {
-			$headings[ $field_id . '_' . $name ] = $field_name . ' (' . $field_key . ') - ' . $sub_field['label'];
+			$headings[ $field_id . '_' . $name ] = $field_name . ' - ' . $sub_field['label'];
 		}
 
 		return $headings;
 	}
 
 	/**
-	 *
 	 * Get a list of all field settings that should be translated
 	 * on a multilingual site.
 	 *
@@ -476,10 +595,46 @@ class FrmFieldCombo extends FrmFieldType {
 	 *
 	 * @return array
 	 */
-	protected function get_inputs_container_attrs() {
-		return array(
+	public function get_inputs_container_attrs() {
+		$attrs = array(
 			'class' => 'frm_combo_inputs_container',
 			'id'    => 'frm_combo_inputs_container_' . $this->field_id,
 		);
+
+		if ( $this->field && $this->get_field_column( 'required' ) ) {
+			// JS validation shows this for the whole field when every required sub field is empty.
+			$attrs['data-reqmsg'] = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
+		}
+
+		return $attrs;
+	}
+
+	/**
+	 * Gets subfield input attributes.
+	 *
+	 * @since 6.26
+	 *
+	 * @param array $sub_field Subfield data.
+	 * @param array $args      Field output args. See {@see FrmFieldCombo::load_field_output()}.
+	 *
+	 * @return array
+	 */
+	protected function get_sub_field_input_attrs( $sub_field, $args ) {
+		$attrs = array(
+			'type'  => $sub_field['type'],
+			'id'    => $args['html_id'] . '_' . $sub_field['name'],
+			'value' => '',
+		);
+
+		if ( ! empty( $args['field']['value'][ $sub_field['name'] ] ) ) {
+			$attrs['value']       = $args['field']['value'][ $sub_field['name'] ];
+			$attrs['data-frmval'] = $args['field']['value'][ $sub_field['name'] ];
+		}
+
+		if ( empty( $args['remove_names'] ) ) {
+			$attrs['name'] = $args['field_name'] . '[' . $sub_field['name'] . ']';
+		}
+
+		return $attrs;
 	}
 }

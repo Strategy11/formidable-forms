@@ -3,7 +3,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-if ( empty( $values ) || ! isset( $values['fields'] ) || empty( $values['fields'] ) ) { ?>
+// Temporarily remove the [input] shortcode if it exists to avoid conflicts.
+// This includes the Payment form by Paystack plugin.
+global $shortcode_tags;
+
+// Store the current callbacks for the shortcode
+$original_input_shortcode_callback = $shortcode_tags['input'] ?? false;
+
+// Remove the shortcode
+remove_shortcode( 'input' );
+
+$only_contain_submit = isset( $values['fields'] ) && FrmSubmitHelper::only_contains_submit_field( $values['fields'] );
+
+if ( empty( $values ) || empty( $values['fields'] ) || $only_contain_submit ) { ?>
 <div class="frm_forms <?php echo esc_attr( FrmFormsHelper::get_form_style_class( $form ) ); ?>" id="frm_form_<?php echo esc_attr( $form->id ); ?>_container">
 	<div class="frm_error_style">
 		<strong><?php esc_html_e( 'Oops!', 'formidable' ); ?></strong>
@@ -44,12 +56,16 @@ echo FrmAppHelper::maybe_kses( FrmFormsHelper::replace_shortcodes( $values['befo
 <input type="hidden" name="frm_hide_fields_<?php echo esc_attr( $form->id ); ?>" id="frm_hide_fields_<?php echo esc_attr( $form->id ); ?>" value="<?php echo esc_attr( $frm_hide_fields ); ?>" />
 <input type="hidden" name="form_key" value="<?php echo esc_attr( $form->form_key ); ?>" />
 <input type="hidden" name="item_meta[0]" value="" />
-<?php wp_nonce_field( 'frm_submit_entry_nonce', 'frm_submit_entry_' . $form->id ); ?>
-<?php if ( isset( $id ) ) { ?>
+<?php
+wp_nonce_field( 'frm_submit_entry_nonce', 'frm_submit_entry_' . $form->id );
+FrmFormsController::maybe_add_draft_preview_nonce( $form );
+
+if ( isset( $id ) ) {
+?>
 <input type="hidden" name="id" value="<?php echo esc_attr( $id ); ?>" />
 <?php } ?>
 <?php
-if ( $values['fields'] ) {
+if ( ! $only_contain_submit ) {
 	/**
 	 * Allows modifying the list of fields in the frontend form.
 	 *
@@ -59,11 +75,16 @@ if ( $values['fields'] ) {
 	 * @param array $args   The arguments. Contains `form`.
 	 */
 	$fields_to_show = apply_filters( 'frm_fields_in_form', $values['fields'], compact( 'form' ) );
-	FrmFieldsHelper::show_fields( $fields_to_show, $errors, $form, $form_action );
-}
 
-$frm_settings = FrmAppHelper::get_settings();
-if ( FrmAppHelper::is_admin() ) {
+	if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
+		// Remove submit field when add or edit entry in backend.
+		FrmSubmitHelper::remove_submit_field_from_list( $fields_to_show );
+	}
+
+	FrmFieldsHelper::show_fields( $fields_to_show, $errors, $form, $form_action );
+}//end if
+
+if ( FrmAppHelper::is_admin() && ( ! isset( $_GET['action'] ) || 'elementor' !== $_GET['action'] ) ) {
 	?>
 	<div class="frm_form_field form-field">
 	<label class="frm_primary_label"><?php esc_html_e( 'Entry Key', 'formidable' ); ?></label>
@@ -81,21 +102,22 @@ if ( FrmAppHelper::is_admin() ) {
 do_action( 'frm_entry_form', $form, $form_action, $errors );
 
 global $frm_vars;
-// close open section div
-if ( isset( $frm_vars['div'] ) && $frm_vars['div'] ) {
+
+// Close open section div
+if ( ! empty( $frm_vars['div'] ) ) {
 	echo "</div>\n";
 	unset( $frm_vars['div'] );
 }
 
-// close open collapsible toggle div
-if ( isset( $frm_vars['collapse_div'] ) && $frm_vars['collapse_div'] ) {
+// Close open collapsible toggle div
+if ( ! empty( $frm_vars['collapse_div'] ) ) {
 	echo "</div>\n";
 	unset( $frm_vars['collapse_div'] );
 }
 
 echo FrmAppHelper::maybe_kses( FrmFormsHelper::replace_shortcodes( $values['after_html'], $form ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-if ( FrmForm::show_submit( $form ) ) {
+if ( FrmForm::show_submit( $form ) && ! FrmSubmitHelper::has_submit_field_on_current_page( $values ) ) {
 	/**
 	 * @since 5.5.1
 	 */
@@ -104,7 +126,7 @@ if ( FrmForm::show_submit( $form ) ) {
 	$copy_values = $values;
 	unset( $copy_values['fields'] );
 
-	if ( isset( $form->options['form_class'] ) && strpos( $form->options['form_class'], 'frm_inline_success' ) !== false ) {
+	if ( isset( $form->options['form_class'] ) && str_contains( $form->options['form_class'], 'frm_inline_success' ) ) {
 		ob_start();
 		ob_implicit_flush( false );
 		FrmFormsHelper::get_custom_submit( $copy_values['submit_html'], $form, $submit, $form_action, $copy_values );
@@ -124,7 +146,7 @@ if ( FrmForm::show_submit( $form ) ) {
 	 * @since 5.5.1
 	 */
 	do_action( 'frm_after_submit_btn', compact( 'form' ) );
-}
+}//end if
 ?>
 </div>
 </fieldset>
@@ -132,3 +154,9 @@ if ( FrmForm::show_submit( $form ) ) {
 <?php if ( has_action( 'frm_entries_footer_scripts' ) ) { ?>
 <script type="text/javascript"><?php do_action( 'frm_entries_footer_scripts', $values['fields'], $form ); ?></script>
 <?php } ?>
+
+<?php
+// Add the shortcode back with the original callbacks
+if ( $original_input_shortcode_callback ) {
+	add_shortcode( 'input', $original_input_shortcode_callback );
+}

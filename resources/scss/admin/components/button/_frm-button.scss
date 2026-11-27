@@ -1,0 +1,27 @@
+/**
+ * Frm Button
+ */
+
+.frm_button {
+	text-decoration: none;
+	border: 1px solid #eee;
+	padding: 5px;
+	color: #444;
+	vertical-align: middle;
+	box-shadow: none !important;
+}
+
+a.frm_button:hover {
+	text-decoration: none !important;
+}
+
+.frm_button,
+.frm_button .frm_icon_font::before {
+	font-size: 13px;
+	vertical-align: middle;
+}
+
+.frm_button .frmsvg {
+	width: 13px;
+	height: 13px;
+}

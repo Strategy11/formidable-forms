@@ -6,19 +6,27 @@ on:
 name: 🚀 Deploy website on push
 jobs:
   web-deploy:
-    if: contains(github.event.pull_request.labels.*.name, 'deploy')
+    if: >-
+      contains(github.event.pull_request.labels.*.name, 'deploy')
+      && (github.event.action != 'labeled' || github.event.label.name == 'deploy')
     name: 🎉 Deploy
     runs-on: ubuntu-latest
     steps:
     - name: 🚚 Get latest code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v6
+
+    - name: 🔄 Sanitize branch name
+      id: sanitize
+      run: |
+        BRANCH="${{ github.event.pull_request.head.ref }}"
+        SANITIZED_BRANCH="${BRANCH//\//-}"
+        echo "sanitized_branch=$SANITIZED_BRANCH" >> $GITHUB_OUTPUT
 
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.1
       with:
-        server: ftp.gyj.ilw.mybluehost.me
-        protocol: ftps
-        server-dir: ${{ github.event.repository.name }}-${{ github.event.pull_request.head.ref }}/
+        server: ${{ secrets.FRM_FTP_HOST }}
+        server-dir: ${{ github.event.repository.name }}-${{ steps.sanitize.outputs.sanitized_branch }}/
         username: ${{ secrets.FRM_FTP_USERNAME }}
         password: ${{ secrets.FRM_FTP_PASSWORD }}
         exclude: |
@@ -35,18 +43,19 @@ jobs:
           phpcs.xml
           phpunit.xml
   beta-deploy:
-    if: contains(github.event.pull_request.labels.*.name, 'beta deploy')
+    if: >-
+      contains(github.event.pull_request.labels.*.name, 'beta deploy')
+      && (github.event.action != 'labeled' || github.event.label.name == 'beta deploy')
     name: 🎉 Beta Deploy
     runs-on: ubuntu-latest
     steps:
     - name: 🚚 Get latest code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v6
 
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.1
       with:
-        server: ftp.gyj.ilw.mybluehost.me
-        protocol: ftps
+        server: ${{ secrets.FRM_FTP_HOST }}
         server-dir: ${{ github.event.repository.name }}-beta/
         username: ${{ secrets.FRM_FTP_USERNAME }}
         password: ${{ secrets.FRM_FTP_PASSWORD }}

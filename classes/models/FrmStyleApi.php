@@ -9,14 +9,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmStyleApi extends FrmFormApi {
 
 	/**
-	 * @var string $base_api_url
+	 * @var string
 	 */
 	private static $base_api_url = 'https://formidableforms.com/wp-json/style-templates/v1/list';
 
 	/**
-	 * @var int $new_days
+	 * @var int
 	 */
 	protected $new_days = 30;
+
+	/**
+	 * @var string
+	 */
+	protected $cache_timeout = '+12 hours';
 
 	/**
 	 * @return string
@@ -29,17 +34,16 @@ class FrmStyleApi extends FrmFormApi {
 	 * @return void
 	 */
 	protected function set_cache_key() {
-		$this->cache_key = 'frm_style_templates_l' . ( empty( $this->license ) ? '' : md5( $this->license ) );
+		$this->cache_key = 'frm_style_templates_l' . ( ! empty( $this->license ) ? md5( $this->license ) : '' );
 	}
 
 	public function get_api_info() {
-		$api_info = parent::get_api_info();
-		$api_info = $this->fill_missing_style_settings( $api_info );
-		return $api_info;
+		return $this->fill_missing_style_settings( parent::get_api_info() );
 	}
 
 	/**
 	 * @param array $api_info
+	 *
 	 * @return array
 	 */
 	private function fill_missing_style_settings( $api_info ) {

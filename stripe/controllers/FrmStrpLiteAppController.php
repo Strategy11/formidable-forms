@@ -18,6 +18,7 @@ class FrmStrpLiteAppController {
 	 * Install required tables.
 	 *
 	 * @param mixed $old_db_version
+	 *
 	 * @return void
 	 */
 	public static function install( $old_db_version = false ) {
@@ -44,6 +45,7 @@ class FrmStrpLiteAppController {
 
 		$modes            = array( 'test', 'live' );
 		$option_name_keys = array( 'account_id', 'client_password', 'server_password', 'details_submitted' );
+
 		foreach ( $modes as $mode ) {
 			foreach ( $option_name_keys as $key ) {
 				$options_to_delete[] = 'frm_strp_connect_' . $key . '_' . $mode;
@@ -56,18 +58,14 @@ class FrmStrpLiteAppController {
 	}
 
 	/**
-	 * Redirect to Stripe settings when payments are not yet installed
-	 * and the payments page is accessed by its URL.
+	 * Gets payments settings URL.
 	 *
-	 * @return void
+	 * @since 6.30
+	 *
+	 * @return string
 	 */
-	public static function maybe_redirect_to_stripe_settings() {
-		if ( ! FrmAppHelper::is_admin_page( 'formidable-payments' ) || FrmTransLiteAppHelper::payments_table_exists() ) {
-			return;
-		}
-
-		wp_safe_redirect( admin_url( 'admin.php?page=formidable-settings&t=stripe_settings' ) );
-		die();
+	public static function get_payments_settings_url() {
+		return admin_url( 'admin.php?page=formidable-settings&t=stripe_settings' );
 	}
 
 	/**
@@ -75,6 +73,7 @@ class FrmStrpLiteAppController {
 	 * This adds the Stripe checkbox option to the list of gateways.
 	 *
 	 * @param array $gateways
+	 *
 	 * @return array
 	 */
 	public static function add_gateway( $gateways ) {
@@ -100,10 +99,11 @@ class FrmStrpLiteAppController {
 	 *
 	 * @param array $errors Errors data. Is empty array if no errors found.
 	 * @param array $params Form params. See {@FrmForm::get_params()}.
+	 *
 	 * @return array
 	 */
 	public static function maybe_add_payment_error( $errors, $params ) {
-		if ( ! $params['posted_form_id'] ) {
+		if ( (int) $params['posted_form_id'] !== (int) $params['form_id'] ) {
 			return self::maybe_add_payment_error_on_redirect( $errors, (int) $params['form_id'] );
 		}
 		return $errors;
@@ -117,20 +117,23 @@ class FrmStrpLiteAppController {
 	 *
 	 * @param array $errors
 	 * @param int   $form_id
+	 *
 	 * @return array
 	 */
 	private static function maybe_add_payment_error_on_redirect( $errors, $form_id ) {
 		$details = FrmStrpLiteUrlParamHelper::get_details_for_form( $form_id );
+
 		if ( ! is_array( $details ) ) {
 			return $errors;
 		}
 
-		$entry   = $details['entry'];
-		$intent  = $details['intent'];
-		$payment = $details['payment'];
+		$entry          = $details['entry'];
+		$intent         = $details['intent'];
+		$payment        = $details['payment'];
+		$payment_failed = FrmStrpLiteAuth::payment_failed( $payment, $intent );
 
 		// Only add the payment error if the intent is incomplete.
-		if ( ! in_array( $intent->status, array( 'requires_source', 'requires_payment_method', 'canceled' ), true ) ) {
+		if ( ! $payment_failed ) {
 			return $errors;
 		}
 
@@ -141,15 +144,21 @@ class FrmStrpLiteAppController {
 				'form_id' => $entry->form_id,
 			)
 		);
+
 		if ( ! $cc_field_id ) {
 			return $errors;
 		}
 
-		$is_setup_intent = 0 === strpos( $intent->id, 'seti_' );
+		$is_setup_intent = str_starts_with( $intent->id, 'seti_' );
+
 		if ( $is_setup_intent ) {
-			$errors[ 'field' . $cc_field_id ] = $intent->last_setup_error->message;
+			$errors[ 'field' . $cc_field_id ] = is_object( $intent->last_setup_error ) ? $intent->last_setup_error->message : '';
 		} else {
-			$errors[ 'field' . $cc_field_id ] = $intent->last_payment_error->message;
+			$errors[ 'field' . $cc_field_id ] = is_object( $intent->last_payment_error ) ? $intent->last_payment_error->message : '';
+		}
+
+		if ( ! $errors[ 'field' . $cc_field_id ] ) {
+			$errors[ 'field' . $cc_field_id ] = 'Payment was not successfully processed.';
 		}
 
 		global $frm_vars;
@@ -170,6 +179,7 @@ class FrmStrpLiteAppController {
 	 * @param int                  $form_id
 	 * @param int                  $entry_id
 	 * @param array<string,string> $errors
+	 *
 	 * @return void
 	 */
 	private static function setup_form_after_payment_error( $form_id, $entry_id, $errors ) {
@@ -179,7 +189,8 @@ class FrmStrpLiteAppController {
 		global $frm_vars;
 		$frm_vars['created_entries'][ $form_id ]['errors'] = $errors;
 
-		$_POST[ 'frm_page_order_' . $form_id ] = true; // Set to true to get FrmProFieldsHelper::get_page_with_error() run
+		// Set to true to get FrmProFieldsHelper::get_page_with_error() run.
+		$_POST[ 'frm_page_order_' . $form_id ] = true;
 
 		if ( ! $save_draft ) {
 			// If draft saving is not on, delete the entry.
@@ -196,9 +207,10 @@ class FrmStrpLiteAppController {
 			 *
 			 * @param string $html
 			 * @param int    $entry_id
+			 *
 			 * @return string
 			 */
-			function( $html ) use ( $entry_id ) {
+			function ( $html ) use ( $entry_id ) {
 				global $wpdb;
 				$wpdb->update( $wpdb->prefix . 'frm_items', array( 'is_draft' => 1 ), array( 'id' => $entry_id ) );
 				return $html;
@@ -213,6 +225,7 @@ class FrmStrpLiteAppController {
 	 *
 	 * @param array  $values Entry edit values.
 	 * @param object $field  Field object.
+	 *
 	 * @return array
 	 */
 	public static function maybe_delete_pay_entry( $values, $field ) {
@@ -221,5 +234,17 @@ class FrmStrpLiteAppController {
 			return FrmTransLiteActionsController::fill_entry_from_previous( $values, $field );
 		}
 		return $values;
+	}
+
+	/**
+	 * Redirect to Stripe settings when payments are not yet installed
+	 * and the payments page is accessed by its URL.
+	 *
+	 * @deprecated 6.33
+	 *
+	 * @return void
+	 */
+	public static function maybe_redirect_to_stripe_settings() {
+		_deprecated_function( __METHOD__, '6.33' );
 	}
 }

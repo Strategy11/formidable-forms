@@ -1,4 +1,15 @@
 <?php
+/**
+ * Shared entry sidebar.
+ *
+ * @package Formidable
+ *
+ * @var string       $id      Entry ID.
+ * @var stdClass     $entry   Entry object.
+ * @var string|null  $browser Browser info string if available.
+ * @var array|null   $data    Additional entry meta data (referrer, user_journey, etc.).
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -28,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php esc_html_e( 'Entry Details', 'formidable' ); ?>
 	</h3>
 	<div class="inside">
-		<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/_sidebar-shared-pub.php' ); ?>
+		<?php require FrmAppHelper::plugin_path() . '/classes/views/frm-entries/_sidebar-shared-pub.php'; ?>
 
 		<?php if ( $entry->post_id ) { ?>
 			<div class="misc-pub-section frm_no_print">
@@ -53,7 +64,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 
 		<div class="misc-pub-section">
-			<?php FrmAppHelper::icon_by_class( 'frmfont frm_keyalt_icon', array( 'aria-hidden' => 'true' ) ); ?>
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_key_icon', array( 'aria-hidden' => 'true' ) ); ?>
 			<?php esc_html_e( 'Entry Key', 'formidable' ); ?>:
 			<b><?php echo esc_html( $entry->item_key ); ?></b>
 		</div>
@@ -89,6 +100,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 		<?php } ?>
 
+		<?php // phpcs:ignore Universal.Operators.StrictComparisons ?>
 		<?php if ( $entry->updated_by && $entry->updated_by != $entry->user_id ) { ?>
 			<div class="misc-pub-section">
 				<?php
@@ -115,32 +127,50 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="misc-pub-section">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_browser_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				<?php esc_html_e( 'Browser/OS:', 'formidable' ); ?>
-				<b><?php echo wp_kses_post( $browser ); ?></b>
+				<b><?php echo esc_html( $browser ); ?></b>
 			</div>
 		<?php } ?>
 
-		<?php if ( isset( $data['referrer'] ) ) { ?>
+		<?php if ( ! empty( $data['referrer'] ) ) { ?>
 			<div class="misc-pub-section frm_force_wrap">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_history_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				<?php esc_html_e( 'Referrer:', 'formidable' ); ?>
-				<?php echo wp_kses_post( str_replace( "\r\n", '<br/>', $data['referrer'] ) ); ?>
+				<?php echo wp_kses( nl2br( esc_html( $data['referrer'] ) ), array( 'br' => array() ) ); ?>
 			</div>
 		<?php } ?>
 
 		<?php
 		foreach ( (array) $data as $k => $d ) {
-			if ( in_array( $k, array( 'browser', 'referrer' ) ) ) {
+			if ( in_array( $k, array( 'browser', 'referrer', 'user_journey', 'test_sample', 'spam_reason', 'spam_marked_at' ), true ) ) {
 				continue;
+			}
+
+			// An entry marked as not spam keeps its spam details, but they no longer apply.
+			if ( 'spam_source' === $k && ! FrmSpamEntriesHelper::is_spam( $entry ) ) {
+				continue;
+			}
+
+			$label = ucfirst( str_replace( '-', ' ', $k ) );
+			$icon  = 'frmfont frm_attach_file_icon';
+
+			if ( 'spam_source' === $k ) {
+				$label = __( 'Spam reason', 'formidable' );
+				$icon  = 'frmfont frm_alert_icon';
+				$d     = FrmSpamEntriesHelper::get_source_label( (object) array( 'description' => $data ) );
+
+				if ( '' === $d ) {
+					$d = __( 'Not recorded', 'formidable' );
+				}
 			}
 			?>
 			<div class="misc-pub-section">
-				<?php FrmAppHelper::icon_by_class( 'frmfont frm_attach_file_icon', array( 'aria-hidden' => 'true' ) ); ?>
-				<?php echo esc_html( ucfirst( str_replace( '-', ' ', $k ) ) ); ?>:
-				<b><?php echo wp_kses_post( implode( ', ', (array) $d ) ); ?></b>
+				<?php FrmAppHelper::icon_by_class( $icon, array( 'aria-hidden' => 'true' ) ); ?>
+				<?php echo esc_html( $label ); ?>:
+				<b><?php echo esc_html( implode( ', ', (array) $d ) ); ?></b>
 			</div>
 			<?php
 			unset( $k, $d );
-		}
+		}//end foreach
 		?>
 	</div>
 </div>

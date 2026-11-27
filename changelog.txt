@@ -1,4 +1,716 @@
 == Changelog ==
+= 7.1.1 =
+* Fix: Invisible reCAPTCHA v2 no longer blocks form submission when "Allow multiple reCAPTCHAs" is off.
+* Fix: Clicking "Click here to set up progress indicator" in the form builder no longer causes an error, and the Rootline settings now open.
+
+= 7.1 =
+* Security: Additional protection has been added to prevent unauthenticated shortcode execution.
+* Security: Additional validation has been added to PayPal Commerce orders and subscriptions to help prevent payment tampering.
+* New: The form builder now loads long forms with AJAX automatically. The "Load and save form builder page with AJAX" setting has been removed.
+* New: Large forms now load previews and field settings in smaller batches. Previews below the screen wait until you scroll near them.
+* New: The builder now blocks fields that don't work in a Repeater or Section, such as CAPTCHA, Submit, GDPR, Summary, Page Break, and embedded forms.
+* New: The style editor now uses a new color picker. Colors save in the format you pick: RGB, HSL, or Hex.
+* New: Style changes in the visual styler now show in the preview right away, without waiting for the server.
+* New: Phone fields now have an Autocomplete setting.
+* New: A new CAPTCHA service unavailable spam setting saves a submission as a spam entry when the CAPTCHA can't be verified because the service is down or its response can't be read.
+* New: Boosts now show in their own section on the Add-Ons page.
+* New: Stripe Link elements now share additional form styling to closer match other inputs.
+* New: Formidable AI has a new get-ai-status ability so AI tools can see how to turn on access, and a new mark-entry-spam ability.
+* New: Forms created with the create-form ability now start with anti-spam on and an email action, like forms made in the builder.
+* New: The list-entries ability can now list spam entries, and the update-form ability can turn entry editing on or off.
+* New: New frm_no_save_fields, frm_embed_modal_options, frm_field_created, frm_field_updated, frm_field_destroyed, and frm_field_order_updated hooks, plus a new hook that runs before a form is destroyed.
+* New: The frm_add_entry_meta filter now receives the original value as a second argument.
+* Performance: Moving a field in a large form now saves only the new field order. The builder uses fewer database queries when creating, updating, or reordering many fields.
+* Performance: Form dropdowns, the next-field-order lookup, and form field cache clearing now use faster queries.
+* Performance: The Stripe Link check no longer runs a query on admin pages.
+* Fix: PayPal Commerce now checks the capture status before marking an order as paid. Declined cards no longer create a payment, and pending captures create a pending payment.
+* Fix: PayPal Commerce card fields could stay empty on multi-page forms when the script loaded late.
+* Fix: PayPal Commerce validation failed for products inside repeaters.
+* Fix: PayPal Commerce Apple Pay failed when the page title had a non-ASCII character.
+* Fix: PayPal Commerce rejected cards when the Address field was on an earlier page, because the billing country code was missing.
+* Fix: Going to the previous page on a multi-page PayPal Commerce form no longer tries to submit the empty card.
+* Fix: Square rejected a different card entered after a declined card.
+* Fix: Deleting a multisite site now also removes the payments, subscriptions, and gated tokens tables.
+* Fix: The Denylist check no longer marks accented text, like "Máster", as spam.
+* Fix: The submit button could ignore the first click after fixing a field error.
+* Fix: The "Disable submit button styling" toggle always loaded as off.
+* Fix: A form lost its styling when the style it used was deleted. It now falls back to the default style.
+* Fix: The inline Submit button sat below the inputs when using the default submit HTML.
+* Fix: Primary labels did not line up with inputs in themes that set a label line height, like Hello Elementor.
+* Fix: Long style names could push the dropdown out of the style card.
+* Fix: Test mode controls now look the same in any theme.
+* Fix: Admin dropdowns and tooltips broke when another plugin loaded Popper 1.
+* Fix: Field Size now shows in the builder preview.
+* Fix: Builder previews kept the field label markup and the required indicator when drawn in the browser.
+* Fix: Errors with deferred field settings panels in the builder. A dropdown posted the wrong type, and a failed load could silently drop settings on save.
+* Fix: Duplicating a field no longer fails on forms saved with the older field placement format.
+* Fix: Dragging a Repeater into a Section was allowed in the builder.
+* Fix: Form and field keys longer than 60 characters could collide when duplicated.
+* Fix: An empty Number Step rendered step="any" instead of step="1" and rejected decimals.
+* Fix: Dropdown, radio, and checkbox fields filled by setup hooks could reject valid values.
+* Fix: Hex colors like #ffffff caused a PHP deprecation notice when brightness was calculated.
+* Fix: Style Reset and the live preview now keep the # on hex colors, and an invalid typed hex no longer becomes #000000.
+* Fix: The Entry Key typed on an earlier page was lost on multi-page Entries > Add New forms.
+* Fix: Form Templates > Create Template opened a copy of the new template instead of the template itself.
+* Fix: Inserting Default HTML in the Message editor's Code tab added escaped markup.
+* Fix: JS-built search boxes, like Applications > Search Templates, showed no magnifier icon.
+* Fix: Payment status hooks ran on the wrong payment because trigger_payment_status_change ignored the payment passed in.
+* Fix: Duplicate-entry errors now show in the error summary when submitting with AJAX.
+* Fix: The Square script no longer shows a Missing Dependencies warning in the visual styler.
+* Fix: The list-entries, list-forms, list-fields, list-payments, and list-subscriptions abilities now return correct defaults and no longer error on star rating or scale fields, spam entries, or a missing payments table.
+* Fix: The create-field and update-field abilities skipped the settings clean-up that the builder runs.
+
+= 7.0 =
+* Security: Additional permission checks have been added to prevent unauthorized plugin installations.
+* Security: Download URL validation has been hardened to prevent downloads from untrusted sources.
+* New: Built-in MCP support now lets AI assistants manage forms, entries, styles, actions, payments, and subscriptions.
+* New: Suspected spam can now be saved for review instead of blocking submissions.
+* New: Entries can now be marked as spam or not spam, with details about failed spam checks.
+* New: Autocomplete settings are now available in Lite.
+* New: Validation errors now include a clickable summary that focuses the input needing correction.
+* New: Default validation messages now provide guidance for email addresses, URLs, phone numbers, and numbers.
+* New: Name and Address inputs now display more specific validation errors for missing parts.
+* New: Form settings now include a GDPR section.
+* New: Style classes can now be renamed in the visual styler.
+* New: Global Settings now warns before leaving with unsaved changes.
+* New: PayPal Commerce actions now support conditional logic.
+* New: Website/URL inputs now include an option to accept international domain names.
+* New: Clicking a section header in the builder now selects the whole section.
+* New: Keyboard navigation, screen reader support, and color contrast have been improved across admin pages.
+* New: Payment connection errors now explain when the selected gateway or mode needs to be connected.
+* New: A new frm_show_clickable_field_errors filter has been added for disabling the validation error summary.
+* New: New frm_before_entry_meta_change, frm_after_entry_meta_change, and frm_entry_meta_write_failed hooks have been added for tracking entry data changes.
+* New: New frm_prepare_other_input and frm_include_other_input hooks have been added for customizing Other option text boxes.
+* New: A form can now have more than one Stripe Link action. A one-time and a recurring action each get their own Stripe intent, and each payment keeps the action that created it.
+* New: On multi-page forms, a Stripe intent is now only created when the buyer reaches the page with the payment field, so skipped pages don't leave unused intents.
+* New: Shipping details are now sent to Stripe for one-time payments when the billing name and address are filled in.
+* New: A clear error now shows when live Stripe payments are used on a page that isn't HTTPS.
+* New: The Stripe card and Link inputs now use the form style's input font, and fall back to defaults when a form has no style.
+* Performance: The builder now loads faster and uses less memory when editing large forms.
+* Performance: The form switcher, form templates page, and forms list now use faster database queries.
+* Fix: Stripe Link payments could not be retried after a failed payment.
+* Fix: Stripe Link payment descriptions could remain blank when buyers did not return after paying.
+* Fix: Stripe subscriptions could fail with a No such price error.
+* Fix: Stripe payment amounts would not refresh correctly after pricing changes.
+* Fix: The license status shown while connecting would be wrong.
+* Fix: Resetting styles would use the wrong defaults and leave Quick Settings colors unchanged.
+* Fix: Spam and form errors would reload the page instead of showing on the form when submitting with AJAX.
+* Fix: In Pro, custom validation errors would remain visible after correcting a value.
+* Fix: Single Product names and prices would not update immediately in the builder preview.
+* Fix: Selecting groups inside a section could unexpectedly clear other selections in the builder.
+* Fix: AJAX submission success messages would not receive focus for screen reader users.
+* Fix: In Pro, validation errors in repeaters would not correctly set aria-invalid.
+* Fix: Stripe Link payments can now be retried after a failure. The failed payment is marked failed, its entry is removed, and the submit button stays disabled until cleanup finishes.
+* Fix: A payment left pending by an earlier failed attempt no longer blocks a retry on the same intent.
+* Fix: Stripe Link payment descriptions are now filled in by the webhook when the buyer never returns to the site.
+* Fix: Stripe subscriptions no longer fail with a No such price error when the plan needs to be created.
+* Fix: The Stripe amount now refreshes after a conditional pricing change, and Stripe is only called when the amount actually changed.
+* Fix: A returning Stripe Link payment now uses the action saved on the payment, even if the form's settings changed after the buyer submitted.
+* Fix: Stripe webhook events that belong to another site or plugin are now ignored instead of returning errors and being passed on as handled.
+* Fix: A subscription cancel event for a subscription that isn't on this site no longer causes an error.
+* Fix: Posted Stripe client secrets are now checked against Stripe before they're trusted.
+
+= 6.35 =
+* Security: More strict sanitizing is now applied to entry key values before it gets used in the HTML of a form.
+* Security: The value that records who last saved an entry is now always set from the current user, not allowing for any custom values unless importing.
+* New: The shortcodes list now offers show options for more types, and long names are truncated so the list stays readable.
+* New: The Processor column on the Payments list page can now be sorted.
+* New: A message is now shown on the Payments list page after bulk deleting.
+* New: The required email input used for Stripe Link payments will now display a required asterisk like other required inputs.
+* New: A new frm_builder_after_field_label hook has been added for adding content after a label in the builder.
+* New: A new frm_payment_user_id filter has been added for setting which user a payment belongs to.
+* Performance: The builder now loads much faster when there are a lot of fields. Fields loaded with AJAX are now loaded in asynchronous batches.
+* Performance: The way the denylist is checked has been optimized, so spam checks are much faster when a large amount of text is submitted.
+* Performance: Pricing updates for Stripe payments are now debounced, and are skipped on pages with no payment intents.
+* Fix: A subscription would not get cancelled after it reached its Recurring Payment Limit.
+* Fix: Payment status actions could run twice for the same Stripe Link payment.
+* Fix: Multiple customer objects would get created for Stripe Link recurring payments.
+* Fix: Subscription plan details would not update after changing the trial period.
+* Fix: A Stripe Link redirect would use the URL from Form settings instead of the URL in the confirmation action that ran.
+* Fix: Square payments would not correctly follow conditional logic when two Square actions were used.
+* Fix: The wrong amount would get used when verifying a buyer with Square.
+* Fix: Connecting and disconnecting Square would go by whichever mode was active instead of the mode that was selected.
+* Fix: In Pro, the dropdown on a style card would not populate, leaving no way to delete a style or set one as the default.
+* Fix: In Pro, a section added after a partially sized field would move into the previous row after a reload.
+* Fix: Adding the frm_first layout class would not start a new row for a group.
+* Fix: A field id used in a description would not get switched when a form was duplicated or imported.
+* Fix: Creating a field with a missing or invalid options value would raise a PHP warning and store null.
+* Fix: The Embeds column would only update when a post was inserted, so it went stale when a page was updated or deleted.
+* The old hard coded widths for the frm_grid_2 through frm_grid_10 classes have been removed from the generated stylesheets, helping to reduce the file size of styles used on the front end.
+
+= 6.34 =
+* Security: Additional validation has been added to guarantee that submitted HTML in form data by untrusted users cannot be used for XSS.
+* New: Address fields are now included in Lite!
+* New: Address field data is included in PayPal Commerce credit card payments when defined in payment action settings to help prevent entries from incorrectly getting flagged as fraudulent.
+* New: Buttons on admin pages will now shrink slightly when clicked, to give a more tactile response.
+* Fix: Additional checks have been added to make sure that pages will not result in 404 errors when Gated Content actions are not actually defined for the page. In addition, when a custom permission is used for handling access to a private page, the custom permission is properly checked for.
+* Fix: Captcha field labels no longer use labels to prevent orphaned label issues since the label cannot reference the input in an iframe.
+* Fix: A JS error would occur when removing the last layout class from a field.
+* Fix: The JS spam token would get added to a form multiple times when multiple forms were on a page.
+
+= 6.33.1 =
+* Fix: Public taxonomy pages could result in 404 errors, caused by a missing check in the new Gated Content actions.
+
+= 6.33 =
+* New: A new Gated Content form action type has been added. Now you can easily give access to restricted pages, views, pdfs, and files!
+* New: A new Spam settings section has been added to Form settings. Several spam settings have been moved here. In addition this section includes a summary of Global Spam settings, and a new Include Captcha in this form setting to easily add and remove Captcha fields.
+* New: PayPal Commerce front end error messages have been improved.
+* New: A Payment Settings button has been added to the Payments list page.
+* Fix: Google Pay would use the test environment incorrectly when using PayPal Commerce.
+* Fix: A Using null as an array offset is deprecated, use an empty string instead PHP deprecated message has been fixed.
+
+= 6.32.1 =
+* Security: An issue has been fixed where requests could be manipulated to attempt form submissions using test payments instead of live payments, for Stripe, Square, and PayPal Commerce.
+* Security: An incorrect status check would allow forms to submit without errors when using PayPal Commerce to handle subscriptions in a pending approval status. Credit to Yaswanth Reddy Sunkara and WPScan for reporting the issue.
+* Security: Additional validation has been added to guarantee a PayPal Commerce Apple Pay payment has the correct status.
+* Fix: A cron job for handling overdue subscriptions would not properly get unscheduled after disconnecting Square and PayPal.
+* Fix: The PayPal Commerce test mode option would not properly update on save when the PayPal add-on was also active.
+* Fix: Email settings in payment actions would incorrectly display autofill options in Safari.
+* Options to use credit cards in PayPal Commerce subscriptions has been removed as it did not properly work.
+
+= 6.32 =
+* New: The form listing table now includes new Embeds and List Settings columns, for displaying every post and page where a form is embedded, and an added gear icon for controlling screen options.
+* New: The generated Formidable CSS file can now work from the uploads directory instead of the plugin directory. This will automatically work based on the DISALLOW_FILE_MODS constant, and can additionally be controlled using a new frm_add_css_to_uploads_dir filter.
+* New: Field errors will now get removed automatically on change events regardless of the JS validation setting.
+* Fix: The aria-describedby attribute would not update properly when a form was submitted with errors for fields with multiple inputs.
+* Fix: A small styling rule has been added to prevent HTML fields from overflowing past their container when using long strings.
+* Fix: Color pickers used on the styler page have been updated to help maintain the active color format, preventing automatic conversions from rgb to hex.
+* Fix: Validation for Square has been modified to prevent the submit button from remaining disabled when the Square inputs do not include a postal code input, which happens in some countries including Japan and Australia.
+* Fix: A cannot modify header information - headers already sent by FrmTransLiteHooksController.php:108 warning has been fixed.
+* Fix: Custom CSS saved in styles would not appear as expected after duplicating, showing additional CSS selectors for the original style.
+* Fix: A possible TypeError when calling wp_is_valid_utf8 with a null value has been fixed.
+* Fix: A new style would not properly rename when it did not yet have a style ID.
+* Fix: PayPal Commerce has been updated to prevent issues where Google Pay and Apple Pay options would not appear if the SDKs had not loaded in time.
+* Fix: PayPal Commerce orders and products were not including the payment action description setting.
+* The overdue subscription cron message will no longer get logged when there are no active subscriptions.
+
+= 6.31 =
+* New: Formidable now supports PayPal Commerce. This is built into the Lite plugin. To get started, go to Global Settings > Payments > PayPal to connect your business account.
+* New: Form action settings have been redesigned.
+* New: Payment actions now use buttons to toggle the selected gateway, and gateway is the top action setting. Note that when custom gateways or Authorize.Net are active, gateways will still revert to the old settings.
+* New: The Collect a Payment action icon is now hidden by default, replaced by individual icons for Stripe, Square, and PayPal Commerce. If other gateways are active, Collect a Payment is still included.
+* New: Border styling rules have been added so autofill fields in Chrome and Safari will appear more consistent with other fields.
+* New: A new frm_after_import_forms action has been added for handling an imported XML after all forms have been imported.
+* Fix: A form would incorrectly try to submit a second time when redirecting and submitting with AJAX.
+
+= 6.30 =
+* New: Product, Quantity, and Total fields are now available in Lite! These are all included in the Pricing Fields section, now located above the Advanced Fields section.
+* New: Global custom CSS is now scoped to only style form previews on admin pages to prevent custom CSS from changing the appearance of other elements on the page.
+* New: New frm_after_create_entry_{form_key} and frm_after_update_entry_{form_key} actions have been added.
+* Fix: When editing an entry, the Other option would not correctly appear selected.
+* Fix: Entries would fail to save in some cases where entry names would exceed 255 characters with special unicode characters.
+* Fix: Custom style CSS would not properly prefix selectors when ::before or ::after were used.
+* Fix: Attempting to refund a Square payment would result in a fatal error when the Stripe or Authorize.Net add-ons were also active.
+* Fix: A check has been added to prevent a possible Cannot access offset of type string on string fatal PHP error issue.
+
+= 6.29 =
+* New: Additional validation has been added to prevent people from manipulating amount values when making Stripe payments.
+* Fix: When updating the Stripe processing message global setting with strings contained backslashes, extra backslashes would get added with each time the global settings were updated.
+* Fix: Usage tracking code would trigger a str_contains(): Argument 1 must be string, stdClass given warning.
+* Fix: Credit card fields would appear blank in some previews, like when previewing a Gutenberg block.
+* Fix: The field options dropdown for the far left field would render underneath the field settings sidebar in rows with a lot of fields.
+* Fix: An Undefined array key "slug" PHP Warning has been fixed.
+* Fix: When a missing payment field is automatically added to a form with a payment action, the new field would incorrectly appear below the submit button.
+* Breaking: The deprecated FrmDb constructor method has been removed.
+
+= 6.28 =
+* New: Required changes to support the new option limits settings in Pro and the new redesigned fields in Views settings.
+* Performance: The cached license data has been reduced significantly, omitting change log data and data for invalid plugins. The size of the auto-loaded option should be about 40% of its previous size.
+
+= 6.27 =
+* New: Displaying payments is now handled by this plugin, instead of falling back to Stripe, Authorize.Net, and PayPal. In cases where these add-ons were active, the payments table should now appear more modern.
+* New: A new coupons tab is available on the payments page.
+* New: Required updates to support a new View-Specific CSS setting in the Visual Views add-on.
+* New: The submit button will now be enabled when a Square postal code is successfully completed. This fixes issues where the submit button would never get enabled when a Square card field was auto-filled.
+* New: Many references to old font icons have been removed, removing about 10KB of data from admin CSS.
+* New: Several styles have been optimized in the generated formidableforms.css file when Pro is not active, helping to reduce file size by removing references to features that only exist in Pro.
+* Fix: Global custom CSS would incorrectly get added to the formidableforms.css more than once on some sites with multiple styles.
+* Fix: The style-specific custom CSS setting would incorrectly get output in the formidableforms.css file as CSS variable data.
+* Fix: The htaccess file included in this plugin is now automatically deleted when migrating to a new plugin version if a request to load CSS is blocked, fixing a conflict on some servers that are not configured to allow overwriting file permissions.
+* Fix: A PHP warning would get logged when checking data for a ranking field as spam.
+* Fix: Add-on category counts were not always correct.
+* Breaking: Many modern PHP functions are now being used including str_contains, str_starts_with, str_ends_with, array_key_last, and array_key_first. If you are using both a WordPress version older than 5.9, and a PHP version lower than 8.0, this will introduce fatal errors. Note that the minimum required WordPress version is already set to 6.3.
+* Breaking: The deprecated functions FrmFieldCaptcha::captcha_size, FrmFormsHelper::should_use_pro_for_ajax_submit, FrmFormsController::add_form_style_tab_options, and FrmFieldType::get_select_atributes have been removed.
+* Breaking: The deprecated FrmFormsHelper::actions_dropdown function and actions-dropdown.php view file have been removed.
+* An unused FrmTransLiteSubscriptionsController::list_subscriptions_shortcode function and its related view file have been deprecated.
+
+= 6.26.1 =
+* New: The cached data for license checks is now set to autoload to help reduce calls to the database, and an option check for a request lock has been moved so it only happens when the option data has expired. These changes should help with performance.
+* New: SVG icon updates have been made to avoid use of the deprecated xlink:href attribute.
+* Fix: Field step settings were changed to only accept numbers in last release, causing issues with "any" as a value.
+* Fix: Bootstrap dropdowns would not properly initialize for fields loaded with AJAX in long forms, preventing access to the more options dropdown, hiding the option to delete a field.
+* Breaking: Old logic that would trigger blur events for inputs with no value set with the onblur attribute has been removed.
+
+= 6.26 =
+* New: Gutenberg blocks now use API version 3. As of WordPress 6.9, a deprecated message would appear for older block API versions.
+* New: Styles now include a Custom CSS setting in Quick Settings that can be exported and imported to other sites. The custom CSS is automatically prefixed with the style's class name to prevent conflicts.
+* New: Admin pages now use Bootstrap 5 and Popper 2, updated from Bootstrap 4 and Popper 1.
+* New: 12 Fields can now be added to a row in the form builder, up from the previous limit of 6.
+* New: An htaccess file is now included that prevents access to text files included in this plugin on Apache servers.
+* New: The first name field in a form will now automatically include the given-name and family-name autocomplete attributes to improve accessibility and user experience.
+* Fix: Field errors were using the input text error color setting incorrectly. This has been reverted to use the error border color setting like it did in older versions.
+* Fix: Square would throw a styling error when using a style with comma separated font family options. To prevent this error, the first font is used only.
+* Fix: The mobile responsiveness of email styles has been improved.
+* Breaking: The minimum required WordPress version is now 6.3. This is because older versions do not support Gutenberg's API version 3.
+* Breaking: The deprecated FrmEDD_SL_Plugin_Updater class has been removed.
+* Breaking: The deprecated frmFrontForm.visible and frmFrontForm.invisible functions have been removed.
+
+= 6.25.1 =
+* New: The frm_email_message filter now includes email_key in the passed attribute data.
+* New: Entries list sort preferences are now saved individually for every form, preventing issues with sort preferences overwriting existing sort preferences in another form.
+* New: The entries columns for fields with options that have separate values will now include (value) and (label) so they are easier to tell apart.
+* Fix: Turnstile captcha widgets now use a prefixed class name to prevent conflicts with other Turnstile integrations that add a second captcha widget to a form.
+* Fix: Actions that trigger based on a Square payment would trigger twice when the Stripe or Authorize.Net add-ons were active.
+* Fix: Large email header images used in emails would extend beyond the image container boundaries.
+* Fix: The payments list would not properly sort in descending order.
+* Fix: Some icons used in the form builder would appear in the incorrect position in Firefox.
+* Fix: Captcha labels would incorrectly use the same for attribute when multiple captchas were rendered, causing accessibility issues.
+* Fix: In some cases, new fields would get inserted below the submit button unexpectedly after saving and reloading.
+
+= 6.25 =
+* New: Style settings have been added to Email actions.
+* New: reCAPTCHA and Turnstile now support a new frm_captcha_lang filter for modifying the captcha language.
+* New: Square forms will now automatically enforce JavaScript validation before attempting to make the Square payment.
+* New: Payment hooks like frm_payment_status_complete are now called even when no payments add-ons (Stripe or Authorize.Net) are active.
+* Fix: An empty address will no longer be sent to Square when verifying the buyer to help reduce buyer verification issues.
+* Fix: Square location IDs could be incorrectly set when connecting when another mode was active.
+* Fix: Calculation settings would not properly load if the field was loaded using AJAX.
+* Fix: Checkbox and radio button fields no longer include the aria-invalid attribute. Instead, this is applied to the group for better accessibility.
+* Fix: Buttons could be cut off in an application pop-up when there was a lot of content in the description.
+* Fix: Field unit dropdowns would lose its unit value.
+* Fix: An Undefined property: stdClass::$item_key PHP warning when making Square payments has been fixed.
+* Fix: The country code would not properly get sent to Square when using US as the address type.
+* Fix: A Cannot access offset of type string on string fatal error that occurs when field options data is in an unexpected format has been fixed.
+* Fix: Font sizes would not scale as expected after changing the base font size style setting for a second time.
+
+= 6.24.1 =
+* Fix: Importing entries with a CSV file stopped working with v6.24.
+
+= 6.24 =
+* New: Field settings have been redesigned.
+* Fix: A section ID would not properly get set when dragging a field into a field group within a section or repeater. This could cause issues with fields unexpectedly appearing outside of a repeater.
+* Fix: Conditional logic field IDs would not properly update after importing an XML.
+* Fix: Line breaks used in Quiz Outcome actions would not properly import.
+* Fix: In some cases, a field group would not be draggable after a field was added beside another field.
+* Fix: In some cases, field shape settings would not work if another setting was blank or matched the default.
+* Fix: JS errors would occur in some cases after deleting a field group or section.
+* Fix: The line height style setting is no longer applied to the label in the visual styler preview.
+
+= 6.23 =
+* New: The GDPR field agreement text can now be translated using the WPML or Polylang add-ons.
+* New: GDPR agreement text will no longer strip a few additional HTML tag types including b, br, div, em, i, p, span, and strong.
+* New: Message spacing on the front end has been updated to improve consistency. Margins for paragraph tags in messages have been reduced, and single line success messages will no longer have paragraph tags automatically added. A new frm_wpautop_success_message filter has been added to modify this behavior.
+* New: URL fields will now automatically add https:// instead of http:// to the beginning of the URL if it is missing.
+* New: One time Stripe payments will now include a Statement Descriptor matching the active Site name by default. A new frm_stripe_statement_descriptor filter has been added to modify the value sent to Stripe.
+* New: Generated table data row labels will now include scope="row" to help with accessibility.
+* Fix: Option validation would fail in rare cases when a field that does not support options incorrectly has option data defined.
+* Fix: In some cases, calculation settings using < and > characters would only partially save.
+* Fix: The auto width setting for dropdowns would not properly appear enabled.
+* Fix: The deactivation pop-up has been updated to help prevent issues where the confirmation buttons were not visible because of an overflow issue.
+* Fix: Denylist terms using forward slashes would not match spam data as expected.
+* Fix: Square buyer tokens are now re-used when nothing has changed to prevent an "An unexpected error occurred verifying buyer" error from Square.
+* Fix: Captcha validation would fail when trying to submit a Square payment.
+* Fix: Stripe payment fields would not appear correctly when using a version of Pro older than 6.21.
+* Fix: Previous attempts to delete a field would re-trigger when deleting a field group, causing unexpected JS errors and issues with deleting a field unintentionally.
+* The deprecated filter frm_email_value has been removed.
+
+= 6.22.3 =
+* Fix: Additional cached data issues have been fixed, including fatal errors and issues with data incorrectly appearing as empty.
+
+= 6.22.2 =
+* Fix: A fatal error on some websites would occur because of an issue with incorrect cached data types.
+
+= 6.22.1 =
+* New: Stripe, Square, PayPal, and Authorize.Net settings have now been moved to a new Payments section in Global Settings.
+* Fix: The honeypot field would appear incorrectly when editing in-place.
+* Fix: Field IDs would not properly update when importing a Timeline view.
+* Fix: Database queries would not use cached query data when the query resulted in no results.
+* Fix: Name fields would not work correctly when using the minimize=1 option.
+* Form previews are now automatically restricted to privileged users for the contact-us form key to help prevent spam.
+
+= 6.22 =
+* New: Support for Square payments has been added.
+* Fix: Option validation would fail in some cases where shortcodes were used in options.
+* Fix: Option validation would fail in cases where option data included unexpected additional whitespace.
+* Fix: Option validation would fail in cases where field data have separate values defined for label and value, but where the separate values setting was since disabled.
+* Fix: Option validation would fail in cases where the option data was modified using the_content filter.
+* Fix: The global setting to check denylist data for spam would incorrectly remain checked after trying to disable it.
+* Fix: The first input with an error would not focus properly when the input was a radio button or checkbox field.
+* Fix: Users with access to forms but not global settings would see inbox messages but not have the proper permissions to dismiss the messages.
+* Fix: Honeypot fields would not properly get hidden for forms loaded in the footer.
+* Fix: An extra empty set of columns would appear for comments when exporting as CSV.
+* Fix: A JavaScript error would occur for inline modals in the form builder after deleting a field.
+* Fix: Too many hidden inputs would get added to the page when using the opt option in input shortcodes for a readonly checkbox field.
+* Fix: Multiple forms would appear in the in-theme preview when using some WordPress themes.
+
+= 6.21.1 =
+* New: A new setting, Check denylist data to validate for spam, has been added to Global spam settings. This new spam check was causing too many false positives, so it is now disabled by default.
+* New: When a denylist check is enabled, spam keywords that are detected are now stored in a transient and displayed in Global spam settings, under Custom allowed words. This makes it easier to detect and add exceptions when spam is detected.
+* New: Denylist checks will no longer check radio buttons, checkboxes, dropdowns, signature, password, and CAPTCHA fields to help avoid issues with false positive matches. Fields with options will still validate "Other" input values.
+* New: All spam checks are now disabled when importing forms.
+* Fix: The way the honeypot field ID is determined has been updated to avoid conflicts with other forms.
+* Fix: User defined product fields would fail validation.
+
+= 6.21 =
+* New: Honeypot field settings have been moved from form settings to global settings. The new settings can now be found in the Captcha/Spam section. The honeypot implementation has also been updated to make the honeypot more difficult to tell apart from other fields, and the strict option has been removed to help prevent issues with false positives for iOS users.
+* New: A new setting to validate form entries for spam against the stopforumspam API have been added to form settings. When this is enabled, IPs and email addresses will be validated against a spam database.
+* New: Field data is now compared to a comprehensive denylist during field validation. This significantly helps to block form data that looks like spam. New settings for Custom allowed words and Custom disallowed words have also been added.
+* New: The option to compare submitted form entry data to WordPress spam comments has been added to global settings.
+* New: Option values are now validated by default. If this causes issues with custom logic, this can be reverted using add_filter( 'frm_option_is_valid', '__return_true' );.
+* New: Stripe payment fields will now apply border radius styles to match styling better.
+* New: Stripe payment field label styling has been updated to better reflect label padding style settings.
+* New: Stripe payment fields will now use the input weight style setting to look more consistent with other fields.
+* New: Stripe payment fields now support the font family style setting.
+* New: A new layout setting has been added to Stripe settings that adds support for the accordion layout.
+* Fix: Paragraph fields would not properly display placeholders on the builder page.
+* Fix: A fatal error that could happen on form submit when unexpected data was sent when checking for spam has been fixed.
+* Fix: A Cannot set properties of null JavaScript error when duplicating a field has been fixed.
+* Fix: Sorting entries by a number field value would sort as strings instead of numbers.
+* Fix: Stripe payment fields would incorrectly use the wrong style settings in some cases.
+* The small device message can now be dismissed, allowing people to still edit forms while using a phone.
+
+= 6.20 =
+* Security: Shortcodes in emails would process more than once.
+* New: Over 30 free form templates are now available automatically for all users that would previously require a code sent through email.
+* New: Admin pages have been modified to work better on smaller screen sizes.
+* New: The GDPR field agreement text now supports links.
+* Fix: Additional checks have been added to ensure that a GDPR field is always required.
+* Fix: A Passing null to parameter deprecated message when viewing GDPR field settings has been fixed.
+* Fix: A conflict with WPML would cause querying issues resulting in empty results when checking for form actions. This would cause the fallback confirmation action to appear even when there were valid confirmation actions in a form.
+* Additional validation has been checked when outputting CSS variables when generating a stylesheet to help make sure the generated CSS is valid.
+* Some additional validation has been added to help prevent issues where invalid serialized data would cause partial serialized strings to appear in setting values.
+* The preview page for the contact form that gets installed automatically on every site is now automatically blocked from anyone without access to view the forms list. In addition, the preview page will no longer display a form when an incorrect key is used. This is to help prevent spam that targets the default form. A new frm_block_preview filter has been added which can be used to unblock the default form, and to block additional forms.
+
+= 6.19 =
+* New: A new Enable GDPR related features and enhancements setting has been added to Global Settings. When enabled, a new GDPR field is available in the form builder. The GDPR field is a special required checkbox field that must be checked in order for the form to be submitted.
+* New: Sorting preferences are now remembered on the Forms and Entries list admin pages. Forms are now also automatically sorted with the newest forms at the top.
+* New: A quick link to the views tab is now available on the form list admin page.
+* New: A new setting to disable cookies has been added to Global Settings in the GDPR section.
+* New: The enter key will now quickly jump between inputs when setting options for Radio Button, Checkbox, and Dropdown fields.
+* Fix: The accordions on the visual styler page looked incorrect when using WordPress v6.7.2.
+* Fix: After updating an entry, empty user ID values would convert to 0, causing issues when trying to filter a view with an empty user ID.
+* Fix: Turnstile captcha fields would not properly reset on an error when submitting with AJAX.
+* Fix: A Javascript error would occur when triggering a change event on a hidden field with custom code.
+
+= 6.18 =
+* New: Invalid checkbox fields will now properly show a red outline to improve user experience.
+* Fix: Additional CSS classes defined in Formidable block settings were not being applied to the Forms containers.
+* Fix: Automatic width would not work for dropdown fields with a field label positioned to the left or right.
+* Fix: Float values used in style settings would lose the decimal places, only allowing whole number values.
+* Fix: Some style setting values would result in invalid undefined or NaN values.
+* Text will no longer be selected when multi-selecting fields while holding the shift key.
+* The setting to not include Formidable in the admin bar has been moved to miscellaneous settings.
+* The deprecated file stripe/views/payments/entry_sidebar.php has been removed.
+
+= 6.17.1 =
+* Fix: The payments table admin page would appear empty when there were unread inbox notices.
+
+= 6.17 =
+* New: New redirect delay duration and delay message settings have been added to confirmation actions.
+* New: A new UTF-8 with BOM format option has been added when exporting entries as CSV.
+* New: A new database index has been added to the fields table to significantly improve the performance of some field queries. In addition, some database queries have been optimized to improve performance.
+* New: A database query has been optimized when exporting entries as CSV when Pro is not active.
+* New: A new frm_csv_export_batch_size filter has been added to fine tune the performance of CSV exporting.
+* New: Additional validation has been added for email fields to prevent email addresses that use periods incorrectly.
+* Fix: The check for name values sent to Akismet has been updated to help reduce the possibility of false positive name values.
+* Fix: Additional checks have been added to allow some HTML tags that would normally get stripped from form data input when the submitted value matches a valid option value exactly.
+* Fix: In some cases, the bottom margin value for centered submit buttons would output an incorrect value.
+* The global JS function frmFrontForm.escapeHtml has been deprecated.
+
+= 6.16.3 =
+* New: Additional duplicate entry check validation has been added. Now, when a form is resubmitted when loading the browser on iOS devices, these requests will trigger a duplicate entry error for a month instead of the default 60 seconds.
+* New: When viewing an entry, the timestamp in the sidebar will now use the WordPress format settings.
+* New: A new database index has been added to the form entries table. This significantly improves performance for entry count queries.
+* Fix: Invalid name field inputs did not always load with a proper aria-invalid value, and error auto-focusing wouldn't work as expected for name fields.
+* Fix: An unsupported operand types: array + string fatal error has been fixed.
+* Fix: The hook used to load translations has been updated to improve compatibility with WordPress 6.7+.
+* Fix: A strpos(): Passing null to parameter PHP Deprecated message has been fixed.
+* Fix: Some additional validation has been added when attempting to view a payment or subscription that does not exist.
+* Fix: Form titles and descriptions would sometimes still appear when the show title and description toggles for Gutenberg Form blocks were disabled.
+* Fix: A cannot access offset of type string on string PHP fatal error has been fixed.
+* The section for form button settings has been removed as all of the settings had been moved.
+* Some old deprecated CSS has been removed, helping to reduce the file size of styles used on the front end.
+* The global JS functions frmFrontForm.invisible and frmFrontForm.visible are now officially deprecated.
+* The s11-fp.svg asset file has been removed, helping to reduce the file size of this plugin.
+
+= 6.16.2 =
+* Security: Additional context checks and filtering have been added to prevent posted script data from appearing inside of fields.
+* Fix: JSON default values are no longer decoded for field types that expect string values only.
+
+= 6.16.1 =
+* New: Database queries for entry ID data have been optimized, removing a JOIN in cases where it is not required. This should significantly improve performance when searching for entries in a View.
+* Fix: Collapsible sections in the styler settings would no longer open after the recent WordPress 6.7 update.
+* Fix: The label position setting and CSS layout classes for summary fields were not working. Since None is also the default value for Summary field label positions, this means that Summary field labels that previously were visible likely are no longer visible.
+* Fix: The slider to set field margin for section fields wouldn't properly save.
+* Fix: Checkbox selection would not work on iPhones when using frm_grid classes.
+* Fix: An automatic conversion of false to array deprecated message that would occur when loading the visual styler with the Authorize.Net add-on active has been fixed.
+* Fix: A str_replace(): Passing null to parameter #3 deprecated message has been fixed.
+* Fix: Stripe payments using the action included in this plugin would fail to initialize when using shortcode amount values for many currency types including Mexican Pesos.
+* Fix: An array to string conversion PHP warning has been fixed.
+* Fix: The center form styling toggle would not properly save.
+* Fix: Form fields would appear broken when the Payment forms by Paystack plugin was active due to a shortcode conflict.
+* Several deprecated functions have been removed including FrmAppController::page_route, FrmFieldType::default_invalid_msg, FrmFieldType::default_unique_msg, FrmStylesHelper::maybe_include_font_icon_css, FrmFormsHelper::ignore_template_categories, FrmFormActionsHelper::default_action_opts, and FrmAppHelper::maybe_full_screen_link.
+* The unused FrmEDD_SL_Plugin_Updater class has been deprecated and is no longer functional.
+
+= 6.16 =
+* New: The sanitizing for layout classes has been updated to allow `[` and `]` characters, enabling the use of basic shortcodes.
+* Fix: JavaScript validation would get skipped when a form included an invisible reCAPTCHA field.
+* Fix: Submit buttons would appear out of place after saving a form.
+* Fix: Nothing would copy when trying to click the icon to copy a style class name.
+* Fix: A white element would appear at the bottom of the plugins page.
+* Fix: A Cannot read properties of undefined at removeFieldError error has been fixed.
+* Fix: Captcha fields would fail to validate in forms with conditional logic that fade in on page load in some cases.
+* Fix: Some JavaScript strings were not configured for translations, and a text domain was missing in one case.
+* Fix: The font size setting for form descriptions has been added back.
+* Fix: Missing for attributes have been added to labels in the visual styler to improve accessibility and user experience.
+* Some old browser specific CSS and deprecated CSS has been removed.
+* New name fields will now use more descriptive "First Name" and "Last Name" descriptions by default instead of "First" and "Last". This is to help improve accessibility.
+* The way assigned style updates are sent when updating global settings has been modified to help avoid conflicts with server input variable limits.
+* The function FrmInboxController::dismiss_all_button has been deprecated. In addition, the functions FrmInboxController::menu and FrmInboxController::inbox have been removed.
+
+= 6.15 =
+* New: The add-ons page has been redesigned. Now plugins are enabled and disabled using toggles instead of buttons, and plugins can be filtered by category.
+* New: Confirmation fields will no longer validate immediately when the main field loses focus, validating now only on form submit and and when the confirmation field is changed.
+* New: New email actions will now use new [default-email] and [default-from-email] shortcodes that use email settings defined during onboarding. When these are unavailable, the admin email is used by default.
+* Fix: Confirmation fields would not validate with JavaScript when empty, allowing a form to submit with a blank confirmation when the main field had a value set.
+* Fix: Backslashes in field format setting would get stripped in some cases when using the setting to Load and save form builder page with AJAX. This would cause regex statements to break.
+* Fix: A Trying to access array offset on value of type bool PHP warning when loading the Gutenberg editor with no API data available has been fixed.
+
+= 6.14.1 =
+* Security: Extra escaping and sanitizing has been put in place to prevent an XSS vulnerability when setting layout classes for fields in the form builder. This is only an issue if you allow untrusted users to create forms on your website.
+* New: When a Name field is mapped to a Stripe action included in this plugin, the (First) and (Last) descriptions are now included in the dropdown option label to make it more clear how the values are mapped.
+* New: Redirects have been added to detect dead URLs resulting in permission errors after activating or deactivating the Formidable Views add-on.
+* New: Visual styler unit dropdowns now include a blank option. This helps improve support for using CSS variables as input values like var(--font-size-base), where appending additional unit to the value introduces CSS errors.
+* Fix: Checkbox styling was not properly getting applied on the edit entry admin page, causing checkboxes to always appear unchecked.
+* Fix: A check for invisible fields before rendering CAPTCHA elements added in last update introduced issues in conversational forms. This check has been updated now to check for hidden forms instead of hidden fields to improve compatibility with conversational forms.
+* Fix: A flex styling rule would cause HTML code used in checkbox options to appear in a way that doesn't look good.
+* Fix: Base font size calculations were occurring too frequently, causing text to become smaller than intended.
+* Fix: The box shadow styling value would flip to the opposite of the intended setting on load.
+
+= 6.14 =
+* New: The visual styler has gotten a major update. Many components have been redesigned, and a new quick settings page has been added.
+* New: The code for moving fields in the builder has been optimized for large forms.
+* New: Field keys will now work in place of field ids when creating or updating repeater entries using API actions or when calling FrmEntryMeta::update_entry_metas directly.
+* Fix: In some cases it was possible for non-customizable fields such as radio buttons and dropdowns to be used for Akismet guest info.
+* Fix: Forms would not duplicate as expected when one of the fields had "description" as a field key value.
+* Fix: A fatal error would occur when failing to search for plugins due to internet connection problems.
+* Fix: A JavaScript error would occur when trying to validate a read only time field.
+* Fix: A Trying to access array offset on value of type bool PHP Warning that could happen in rare edge cases when working in th Gutenberg editor has been fixed.
+* Fix: A layering issue would show section fields on top of the pop up for merging fields into groups.
+* Fix: Turnstile elements are now only rendered when the field is visible.
+* Fix: Some new checkbox and radio button styles were being overwritten by certain themes, resulting in various styling issues.
+
+= 6.13 =
+* Fix: A JavaScript error triggered after detecting an error with a form field before processing the payment would cause the form to stop responding.
+* Fix: A Call to undefined method FrmProAppHelper::use_chosen_js fatal error would happen when using versions of Formidable Pro older than version 6.8.
+
+= 6.12 =
+* New: Many default form style settings have been updated. Existing sites will continue to use their existing default settings. To experience the new default style settings, access the list of styles from the style tab in form settings and select Reset to Defaults from the dropdown menu for a target style.
+* New: Hidden screen reader labels have been added to the entries list admin pages bulk checkboxes to improve accessibility.
+* Fix: Turnstile captcha widgets were rendering twice.
+* Fix: An extra check has been added to improve compatibility with older versions of WordPress before version 6.5.
+* Fix: The submit button would appear as an entry table row on the entry view admin page.
+* Fix: When validating field length limits, some characters including types with accents were not getting counted as expected and could fail validation.
+* Checks have been added to no longer include fields with form state on servers where open SSL is not installed. This is to improve compatibility.
+* Some updates have been made to improve the syncing of field option updates and conditional logic settings.
+* The option to use HTML5 has been removed. HTML5 is now enforced for all sites.
+* Some old deprecated PHP functions have been removed including FrmAppController::include_embed_form_icons and FrmAppController::get_form_shortcode.
+* The deprecated JavaScript function frmFrontForm.savingDraft has been removed.
+
+= 6.11.2 =
+* Security: Additional checks have been added to prevent unsafe HTML when using [input] shortcodes. A new frm_input_key_is_safe filter has been added to allow or disallow additional options when required.
+* New: Some small accessibility improvements were made on the Import/Export admin page.
+* Fix: A width limit has been removed from admin page h1 tags to help avoid issues with translated page titles that overflow their expected space.
+* Fix: The prompt to name your form will no longer pop up on save if the form already has a name set.
+* Fix: Additional checks have been added to prevent warnings while onboarding when using a Plus license.
+* Fix: Save draft buttons would remain disabled after a look up was completed, or after a file was uploaded.
+* Fix: Scripts were not loading properly on a few pages, causing issues with editing an Application and with some features in the Legacy Views editor.
+* Fix: HTML entities are now decoded when used for phone format validation to prevent issues where & is converted to &amp; for the regex check.
+* Fix: Email summaries would include repeater forms in the top 10 list.
+* Fix: Some entries lists would appear empty in some cases where item meta is stored using 0 as a field ID value.
+* Fix: The wrong variable was sent to the frm_trigger_create_action filter, preventing access to some expected data.
+* Fix: Several incorrect text domains and untranslatable strings have been corrected.
+* The function FrmFieldType::get_select_atributes has been deprecated because of a typo in its name.
+* Several old deprecated view files have been removed.
+
+= 6.11.1 =
+* New: Screen reader text has been updated on some admin pages to improve accessibility.
+* New: Hover styling has been updated for modal close icons to improve user experience.
+* Fix: The way Popper scripts are registered have been updated to help avoid a new conflict introduced in a recent WP Bakery update.
+* Fix: The reCaptcha settings name was missing in a global settings string.
+* The minimum supported version of Formidable Pro has been bumped to version 6.0.
+* The function FrmAddonsController::is_license_expiring has been deprecated.
+
+= 6.11 =
+* New: Field errors added when validating with JavaScript would use field IDs instead of field keys. This has been updated to use field keys for consistency.
+* New: When a layout class option is selected, any previous layout classes that would cause a conflict will now be automatically removed.
+* New: An optimization has been added to help reduce form builder load times for forms with many HTML or Rich Text fields.
+* New: A styling update has been made to make field placeholder font sizes more consistent.
+* New: Stripe actions included in this plugin now support a Recurring Payment Limit setting. When this setting is defined, and the number of payments has been reached, the subscription will be cancelled automatically.
+* Fix: References to JavaScript map files have been removed from bootstrap and popper scripts to prevent 404 error messages that appear when using Safari.
+* Fix: An Undefined array key PHP Warning would get logged when trying to remove fields using the frm_available_fields or frm_pro_available_fields filters.
+* Fix: Form previews would include two conflicting title tags in the source HTML.
+* Fix: A small update has been made to properly support sending data for repeated API actions.
+* Some old CSS styles have been removed, helping to reduce file size.
+* An old TTF file used for icon fonts has been removed as it was only required for supporting Internet Explorer and is no longer required, helping to reduce overall file size.
+
+= 6.10 =
+* New: Field data for shortcodes is now stored in memory and reused on the settings page and form builder page for a significant page load speed improvement for forms with a lot of fields.
+* New: XML import has been updated to support mapping field ID changes when importing a map view and new calendar view settings.
+* Fix: Payments using a currency that uses a comma as the decimal separator would have an incorrect amount value when the amount value had a single decimal point like 11,5.
+* Fix: Field error elements would inconsistently use either IDs or field keys in their ID values. An update has been made to use always use field keys.
+* Fix: In some cases, a Stripe redirect would happen after failing to create an entry, resulting in an unexpected redirect to stripe.com.
+* The minimum supported PHP version has been updated to 7.0, ending official support for PHP 5.6.
+* The frm_summary_email_content_args hook has been moved to where it is now filtered for all types of email summaries.
+* Several deprecated PHP functions have been removed including FrmFormsHelper::template_install_html, FrmFormsHelper::available_count, FrmFormsHelper::builder_submit_button, FrmFieldsHelper::get_shortcode_tag, FrmFieldsController::include_single_field, and FrmFormsController::new_form.
+* Several deprecated front end JavaScript functions have been removed including frmFrontForm.goingToPreviousPage, frmFrontForm.hideOrShowFields, frmFrontForm.hidePreviouslyHiddenFields, frmFrontForm.checkDependentDynamicFields, frmFrontForm.checkDependentLookupFields, and frmFrontForm.loadGoogle.
+* Some front end JavaScript code for supporting Internet Explorer has been dropped, helping to reduce the size of JavaScript required on the front end.
+
+= 6.9.1 =
+* New: Some data used for field settings is now stored in memory and reused in order to significantly improve performance in the form builder for forms with a lot of fields.
+* Fix: Rootline and progress bar elements would not appear when using some position settings with the new submit button field.
+* Fix: An invalid argument supplied for foreach() error has been fixed when truncating unexpected values.
+* Fix: Submit button fields were appearing by mistake in WooCommerce products.
+* The parser for serialized string data has been optimized to be approximately 30% faster than before.
+* Some old deprecated code has been removed including the FrmPointers and FrmDbDeprecated classes, FrmAppHelper::sanitize_array, FrmAppHelper::expiring_message, and several methods in FrmEntryValidate.php.
+* Old polyfill code for supporting old versions of Internet Explorer have been removed from front end JS, reducing file size.
+
+= 6.9 =
+* New: A new onboarding wizard has been added to help improve the initial set up process.
+* New: Submit buttons can now be dragged in the form builder like a field. The submit button may be dragged into the last row beside fields.
+* New: data-invmsg and data-reqmsg HTML attributes used for JS error validation are no longer included for hidden fields by default to help reduce the amount of HTML required for a form. A new frm_field_validation_include_data_attributes filter has been added to modify the default behaviour.
+* Fix: A fatal error would occur on the visual styler page if the API request for style templates had failed.
+* Fix: The shortcode list has been updated for calculation field options so field IDs are now still visible for fields with long names.
+* Fix: The sortable indicators were missing for the forms and entries list pages. The accessibility of the sorting indicators has also been improved.
+* Fix: A confirmation field wouldn't validate with JS when left empty.
+* Fix: Tooltips will be deleted now after an action is deleted to fix an issue with old floating tooltips.
+
+= 6.8.4 =
+* New: Cloudflare Turnstile has been added as a new Captcha option type in Global settings.
+* New: A new filter has been added to enable support for bulk editing options for a Ranking field.
+* New: The trigger to save draft entries has been updated to a button in new forms.
+* New: A new frm_after_generate_csv action has been added. This can be used to track which entries have already been exported as CSV to avoid exporting an entry more than once.
+* Fix: hCaptcha was not properly resetting after clicking the previous button and returning to the page with the hCaptcha field.
+* Fix: A trim(): Passing null to parameter #1 PHP Deprecated message has been fixed.
+* Fix: Checks have been added to avoid fatal errors when trying to extend the time limit when the function is disabled.
+* Fix: A Creation of dynamic property FrmProEddController::$save_status is deprecated PHP Deprecated message has been fixed.
+* Fix: Icons were missing for collapsible sections in the visual views builder.
+* Monthly summary emails will not longer get sent when there are no new entries to report on.
+* The global JS function frm_add_logic_row used on admin pages has been removed.
+
+= 6.8.3 =
+* New: HTML field descriptions now support the shortcode pop up used in email actions.
+* New: Exported posts from entries will now include <term_parent> tags when applicable.
+* New: The collapsible sections used in the visual styler are now more accessible, including new aria-expanded attributes.
+* New: Error messages should now be more descriptive. "This field" and "This value" strings will now be dynamically replaced with the name of the field. To partially revert this, a new frm_error_substrings_to_replace_with_field_name filter has been added as well.
+* Fix: Form objects with missing option data would trigger fatal errors during various actions, including when deleting the form.
+* Fix: HTML tags would get stripped of most HTML when displayed in a summary for a unprivileged or logged out user.
+* Fix: A Uncaught TypeError: Cannot access offset of type string on string error has been fixed when checking for add-on data.
+* Fix: License expired emails would get incorrectly sent for rate limited API requests.
+* Fix: Some color style settings would output invalid RGB values when using a RGB color as the style setting value.
+* API requests sent for retrieving add-on and template data will now happen less frequently.
+* A few old deprecated global JavaScript functions have been removed including frm_resend_email, frmOnSubmit, and frmDeleteEntry.
+* Some old CSS rules using -webkit- and -moz- prefixes have been removed, helping to reduce CSS file size.
+
+= 6.8.2 =
+* Fix: The process of connecting an account to formidableforms.com would fail in some web browsers.
+
+= 6.8.1 =
+* Security: A nonce check was missing on an action for dismissing a call to action on the global settings page.
+* New: Bulk action checkboxes on the form list now include screen reader text for improved accessibility.
+* Fix: Some undefined property PHP warnings when displaying Summary fields were fixed.
+* Fix: Two search buttons would appear on the Entries list page on some websites because of a styling issue.
+* Fix: The action limit error message would always show the action limit as one.
+
+= 6.8 =
+* Security: Nonce validation was missing when saving changes on the form settings page.
+* New: A new dashboard landing page has been added with a list of recent entries, access to your inbox, and a payment summary, all in one place.
+* New: New fields will no longer appear on the front end until the form builder is saved. This way a form can be used without partial incomplete changes while a form is being worked on.
+* New: An HSL color value can now be used in the visual styler. Previously these values would be prepended by # and PHP warnings would cause styles to break.
+* New: Stripe subscriptions will now cancel at period end by default instead of cancelling immediately. This can be reverted to the previous behaviour using add_filter( 'frm_stripe_cancel_subscription_at_period_end', '__return_false' );.
+* New: Summary emails will no longer send by default on multisite for sites that are not the main site.
+* New: Summary emails can now be disabled from your profile on your Formidable Forms account for Pro users.
+* Fix: On some sites, while using Google Chrome, some style card menu options would be missing. This includes the option to Delete a style or to Set a style as default.
+* Fix: Long forms loaded with AJAX were loading in smaller batches than intended, usually pulling only a few fields at a time. This has been restored to the intended batch size of 15 fields at a time.
+* Fix: A styling issue in some search search inputs has been fixed.
+* Fix: The view payment page was appearing blank, and table column options were missing when editing a table view.
+* Fix: An error message wouldn't properly appear when using a 3D secure card and failing the payment.
+* Fix: A subscription with a failed payment would incorrectly redirect like a confirmed payment.
+* Fix: The toggle to disable form styling would still appear active when disabled through the Manage Styling global setting.
+* Fix: Encoded characters would appear in plain text summary emails.
+* List tag types include ul, ol, and li are now allowed in form input HTML by default.
+* Form input HTML will no longer be filtered to strip most HTML on display if the entry was created by or edited by a privileged user.
+* Summary emails are no longer sent when there are no new entries.
+
+= 6.7.2 =
+* Fix: The setting to disable Formidable styling on a form was not working and the Formidable styling would still get applied.
+
+= 6.7.1 =
+* Security: Form input from unprivileged users will now be sanitized more with strict rules and filtered more on display, allowing only a few basic HTML tags (p, i, b, strong and br) with no support for attributes. The allowed tags can be modified using a new frm_allowed_form_input_html filter.
+* Security: Additional sanitizing has been added when making live form builder updates to avoid malicious changes from privileged users.
+* New: Formidable branding has been removed on the import page when white labelling is enabled.
+* New: The permission to view forms has been renamed to "View Forms List" to remove ambiguity.
+* Fix: A failed to open stream warning would get logged when calling include(modal.php) on some admin pages.
+* Fix: A styling issue has been fixed with checkboxes in the screen options panel for responsive mobile widths.
+* Fix: A redirect will now happen after emptying form trash to avoid emptying form trash again when refreshing the page.
+* Fix: Fewer requests will now be made at once when checking for license status in add ons.
+* Fix: Repeater forms are no longer included in the deleted form count when emptying form trash.
+* Fix: A cannot read properties of null JavaScript TypeError would get logged when switching between Product field types.
+* Fix: A passing null to parameter #3 deprecated warning would get logged when previewing a form in-theme.
+* Fix: File theme without header.php and footer.php deprecated messages were getting logged when previewing in-theme using the Twenty Twenty Three theme.
+* Fix: A payments table does not exist database error would get logged when creating email summaries for sites without payments configured.
+* Fix: Required credit card fields were failing validation when using for Stripe actions included with this plugin.
+
+= 6.7 =
+* New: The new form modal pop up has been replaced with a new form templates page. Now form templates can be flagged as favourite.
+* New: The option to send monthly and yearly summary emails with form and payment stats has been added to global settings.
+* New: Error handling has been improved when trying to edit a form in trash or a form that does not exist.
+* New: The query for getting entry count has been optimized, significantly reducing the time it takes to count entries.
+* New: Default submit button HTML has been updated for new forms. Forms with the previous HTML would trigger the Previous button when the Enter key was pressed. Forms with the new layout have corrected this and will trigger the Next button instead when the Enter key is pressed.
+* New: Dropdown fields will now pass a different type value in POST requests to avoid conflicts with security tools that block requests containing the word "select".
+* Fix: Zebra stripe styling on the View Entry page would sometimes repeat the same background color when hidden empty rows were hidden.
+* Fix: The default maximum value of 5 used for row count in a Paragraph field would carry to other field type settings after changing field type, acting as a 5 character limit. This is now cleared when changing field types from Paragraph to another field.
+* Fix: A styling issue has been fixed that was causing the WordPress sidebar to overlap on top of admin page content when using specific user preferences.
+* Fix: The form search was broken on some databases when comparing a datetime value to a non-date value.
+* Fix: The pirate forms importer style has been updated to look better.
+* Fix: A fatal error on the welcome page has been fixed.
+
+= 6.6 =
+* New: Database indexes have been added to entry and entry meta tables to help significantly optimize some database queries, including queries used for reports.
+* New: Honeypot field containers will no longer include an aria-hidden attribute. This was causing issues with Accessibility testing tools including Google PageSight.
+* New: [frm-entry-links] shortcodes now support a new drafts=all option, and drafts=2 and drafts=3 options for filtering for in-progress and abandoned entries. It also now supports comma separated values like drafts="2,3" to include both in-progress and abandoned entries.
+* New: Checkbox groups will no longer use an aria-required attribute on the group element. This was causing accessibility errors in axe DevTools and Google PageSpeed.
+* New: The more options icon in the form builder now has screen reader text for improved accessibility.
+* New: A new test flag column has been added for payments for more accurate payment tracking.
+* Fix: A fix has been added to help avoid warnings and error messages when form data is sent in an unexpected format.
+* Fix: Name fields would not properly reset to their default values when using a start over button or when the field was conditionally shown.
+* Fix: Using drafts=both with an [frm-entry-links] shortcode would include abandoned and in-progress entries when it is intended to only include draft and submitted entries.
+* Fix: The checkbox was in the wrong position on the edit entry admin page for checkbox options displayed as images.
+* Fix: The submit button would be disabled and spin after pressing the back button and reloading a form.
+* Fix: The Other option text input would be hidden on load when a checkbox field had an Other option as its default value.
+* Fix: User journeys would display as Array, Array and trigger Array to string conversion warnings after deactivating the User Flow add on.
+
+= 6.5.4 =
+* New: A database query has been optimized when checking for entries in a timeframe.
+* New: The honeypot class name will no longer change as often to help prevent issues with visible honeypot fields.
+* New: The placement of dropdown arrows has been updated for better theme compatibility.
+* Fix: Really long strings with no spaces were not being made short enough during truncation. This would result in really large text previews for HTML fields when using base 64 image data.
+* Fix: An element is undefined JavaScript error has been fixed.
+* Fix: The "Add fields here" placeholder would not always appear after deleting every field.
+* Fix: The "Add fields here" placeholder would sometimes overlap the form updated message.
+
+= 6.5.3 =
+* New: A new "Refunded Payment" action trigger type has been added for Stripe payments.
+* New: Additional validation checks have been added when JavaScript validation is enabled that prevent a form from submitting with invalid values like an a number with an invalid step.
+* New: The in-theme preview has been updated to look better with block themes.
+* New: The way icons are loaded has been modified for improved compatibility with the Snuffleupagus security module.
+* Fix: An add entry button would appear for users without the permission to create entries on the admin page.
+* Fix: Field controls would appear in the incorrect place for fields with no label.
+* Fix: Connecting an account would fail because of a permission check issue.
+* Fix: Dropdown arrows would disappear when overriding theme styling was enabled.
+* The payments page will now fallback to the PayPal add on when Stripe is not configured. This helps to prevent a wp_frm_subscriptions does not exist database error when viewing payments.
+* An extra check has been added to prevent an FrmOverlayController not found error when upgrading.
+
 = 6.5.2 =
 * Fix: Field validation errors were accidentally getting removed. Instead of validation errors, it would show an incorrect It looks like you've already submitted that error message.
 * Fix: The honeypot field would cause inline submit buttons to break to the next line.
@@ -45,7 +757,7 @@
 * New: A floating button has been added to some admin pages with links for documentation and support.
 * New: When importing, if a matching trashed form is found based on a key match, it will be deleted before the import begins. This prevents conflicts that cause field shortcodes and conditional logic not to update as expected when imported.
 * New: The field search has been improved. Inactive fields will no longer appear when there is no match, and categories will no longer appear when no children fields are visible.
-* New: Captcha key settings will now be trimmed on save to avoid unecessary whitespace characters reported to cause issues in some cases.
+* New: Captcha key settings will now be trimmed on save to avoid unnecessary whitespace characters reported to cause issues in some cases.
 * New: Form previews inside of Gutenberg blocks are no longer interactive and can no longer be submitted when clicking the submit button in the preview.
 * Fix: Rapidly clicking the preview button before the page has loaded would cause a JavaScript error preventing the preview button from working.
 
@@ -253,7 +965,7 @@
 * Removed a restriction that was preventing a second summary field from being added after adding the first.
 
 = 5.4.4 =
-* New: Option icons are now be added dynamically when a field is selected to reduce the HTML required on load. This signficantly improves form builder performance for fields with many options.
+* New: Option icons are now be added dynamically when a field is selected to reduce the HTML required on load. This significantly improves form builder performance for fields with many options.
 * New: Added a new frm_before_duplicate_entry_values filter for customizing the data of a duplicated entry before it is saved.
 * New: Maximum character length is now validated server side on form submit.
 * Fix: The duplicate option pop up was triggering incorrectly when dragging new options in Chrome.
@@ -624,7 +1336,7 @@
 = 4.06 =
 * New: Better accessibility for honeypot field and message after submit.
 * New: Add a Dismiss all button in the inbox.
-* New: Add 'frm_user_id_display' hook for showing something other than the dispay name by default in user ID fields.
+* New: Add 'frm_user_id_display' hook for showing something other than the display name by default in user ID fields.
 * Set the default styling to use grids since most browsers support it now.
 * Fix: On some sites, permissions were preventing a form from being created from a template.
 * Fix: The button colors were overriding eachother with some settings.
@@ -684,7 +1396,7 @@
 * Fix: In some cases, a PHP warning was shown when redirecting after submit.
 
 = 4.04 =
-* New: Show a warning if a WordPress parameter is used in the redirect URL to prevent unintented results.
+* New: Show a warning if a WordPress parameter is used in the redirect URL to prevent unintended results.
 * New: Added frm_is_field_type hook to set if an individual field is shown as radio or checkbox
 * New: Show the new pricing fields in the builder for product education.
 
@@ -885,7 +1597,7 @@
 = 3.06 =
 * New: Add one-click form creation from a form template and adjust the way a new form is created
 * New: Add a new process for creating a custom form template
-* Tweak: Create smaller XML fiels when exporting forms
+* Tweak: Create smaller XML fields when exporting forms
 * Tweak: Use the name of the form for XML exports when a single form is exported
 * Tweak: Don't limit the width of the color picker in the form styler to avoid conflicts with some color picker plugins
 * Fix: Prevent the 'Advanced' section from hiding on non-Formidable blocks
@@ -1034,7 +1746,7 @@
 * **Pro Version Forms**
 * New: Show a generated screenshot of the embedded form in the form builder rather than the first few fields
 * Fix: Auto updates with the nested version going from 3.0 were failing and updating to lite
-* Fix: Some default values were overiding non defaults when the form was displayed. This included user ID fields and other ifelds with separate values.
+* Fix: Some default values were overriding non defaults when the form was displayed. This included user ID fields and other ifelds with separate values.
 * Fix: Recompile the combined javascript file any time the pro version number changes
 * Fix: Embedded forms were being changed when the parent form was saved
 * Fix: Dynamic fields showing the entry key were blank with [25 show=key].
@@ -1183,7 +1895,7 @@
 = 2.05.04 =
 * Tweak: Remove recaptcha and website fields from sample Contact us form template since most people don't need them
 * Fix: Updates for WP 4.9 compatibility. This includes preventing double filtering on contact form widgets and using the WordPress Codemirror scripts for the form CSS page.
-* Fix: Prevent "are you sure" message that has started occuring from WordPress when saving a WordPress form
+* Fix: Prevent "are you sure" message that has started occurring from WordPress when saving a WordPress form
 * Fix: Correctly validate form fields with an Inside field label when HTML5 forms are not enabled
 * Fix: Set the background color on loading form submit button. Depending on the hover button covers, the loading spinner may have been the same color as the button
 * Fix: Additional security checks when getting POST or GET values in some places
@@ -1219,7 +1931,7 @@
 * Fix: Prevent endless loops in conditional logic when fields are dependent on each other
 * Fix: Searching number field values with LIKE was causing issues
 * Fix: Use secure cookies on SSL sites
-* Fix: Convert dates in certain formats more realibly before save
+* Fix: Convert dates in certain formats more reliably before save
 * Fix: Correctly duplicate fields inside a repeating section
 
 = 2.05.01 =
@@ -2190,7 +2902,7 @@
 * **Pro Forms Features:**
 * Views can now be filtered by fields in the repeating sections.
 * Added [parent_id] shortcode for use in views. This shortcode will only have a value when the displaying entries in repeating sections.
-* Allow views to be created using the repeated entries. Since each repeating row is an entry in a hidden form, we can allow views to be created using those repeating rows for more flexability.
+* Allow views to be created using the repeated entries. Since each repeating row is an entry in a hidden form, we can allow views to be created using those repeating rows for more flexibility.
 * Added order parameter to frm-entry-links
 * Allow options in a post status field to come from the form builder. The options should have separate values and the saved values can include 'publish', 'draft', 'private', 'scheduled'.
 * Remove the option to lock field and form keys. This is more of a hassle than a feature.
@@ -2264,7 +2976,7 @@
 = 2.0.09 =
 * Add frm_time_to_check duplicate entries filter
 * Allow custom JavaScript validation
-* Add frm_do_html_shortcodes fiter
+* Add frm_do_html_shortcodes filter
 * Fix the duplicate entry check
 * Include get_columns function in list tables for 4.3
 * Use relative URLs in the stylesheet
@@ -2311,7 +3023,7 @@
 * Fix timezones for searching by entry creation and updated dates in a view
 
 = 2.0.08 =
-* Fix security vulnerability allowing shortcodes to be excuted inside a form https://research.g0blin.co.uk/?p=618&d=i4ziyggqao0oz0L0vpUTd8KZwrO2P9Mw
+* Fix security vulnerability allowing shortcodes to be executed inside a form https://research.g0blin.co.uk/?p=618&d=i4ziyggqao0oz0L0vpUTd8KZwrO2P9Mw
 * Added frm_filter_final_form hook. This will need to be used to cover shortcodes that span multiple blocks of field HTML since we can't do a general shortcode replacement on the rendered form
 * Revert change that prevented scripts from firing in the form success message
 * Fix timestamp timezone on view/edit entry page
@@ -2386,7 +3098,7 @@
 * Styling enhancements for left and right label settings
 * Deactivate plugin after uninstall to prevent tables from being added back
 * Add frm_text_block class to Layout tab
-* Fix migration of email settigns that haven't been updated in over two years
+* Fix migration of email settings that haven't been updated in over two years
 * Fix emailing from only a multiple word name with no email
 * Send emails for WordPress default if trying to send from Yahoo
 * Pro: Trigger calculation update each time a row is added or removed from repeating section
@@ -2398,7 +3110,7 @@
 * Pro: Fix exporting multiple entries with the bulk CSV export option
 * Pro: Fix Entry ID filter in views when using a comma separated list of ids
 * Pro: Fix 3+ level dynamic fields to hide the last field when the first is changed
-* Pro: Fix apostraphes in form action logic
+* Pro: Fix apostrophes in form action logic
 
 = 2.0.03 =
 * Use frm_clear instead of clear to minimize conflicts
@@ -2408,7 +3120,7 @@
 * Pro: If a comma separated list of dates is sent for formatting, explode it before formatting
 * Pro: Increase the backtrack limit when needed when replacing shortcodes in the view content if server has the limit below default
 * Pro: Fix issue causing csv export error
-* Pro: Fix the issue cuasing new posts to not be linked to a view if a field is selected for the post content
+* Pro: Fix the issue causing new posts to not be linked to a view if a field is selected for the post content
 * Pro: Fix issue some users are having with blank date fields
 * Pro: Fix ending collapsible sections at the end of a section instead of waiting for the next section
 * Pro: Fix firing calculations on page load when there are multiple calculations
@@ -2421,7 +3133,7 @@
 * Add a fallback if dbDelta is missing
 * Remove inline js from the draft button in the default HTML to prevent 404/403 errors on some servers. This change only applies to new forms
 * Move the legend tag into the customizable HTML, but without a migration so it won't be added to existing forms
-* Move the "before fields" HTML into the fieldset to it will be parallell with the "After fields" HTML
+* Move the "before fields" HTML into the fieldset to it will be parallel with the "After fields" HTML
 * Make sure partial form transients aren't saved for long forms. Make sure it's all or nothing.
 * Make sure the parent_form_id column was added, and try to add it again if it's not there
 * Pro: Allow [25 show=count]. This shortcode will return a count of items instead of the items themselves. Intended for use with a repeating section field, but would work with anything.
@@ -2539,7 +3251,7 @@
 * Added a few ajax nonce checks but don't require valid nonce for logged-out users for caching reasons
 * Allow data-something="value" inside the [input] short code
 * Pro: Allow [default-message] to have short code parameters to set rtl (direction=rtl), font size (font_size="14px"), and styling (text_color="000" border_width="1px" border_color="000" bg_color="fff" alt_bg_color="eee").
-* Pro: Added frm_html_scoll_box class for scrolling content in an HTML field
+* Pro: Added frm_html_scroll_box class for scrolling content in an HTML field
 * Pro: Allow recurring entries using values like "Third Wednesday of [frmcal-date]"
 * Pro: Allow comma separated view filters for entry key and id
 * Pro: Allow drafts=both in view short code and form results short code
@@ -2626,7 +3338,7 @@
 * PRO: Added drafts parameter to view shortcode to show draft entries. [display-frm-data id=40 drafts=1]
 * PRO: Switched star ratings to icon font
 * PRO: Added multiple="multiple" into multiple file upload fields
-* PRO: Allow field keys in the exlude_fields shortcode option
+* PRO: Allow field keys in the exclude_fields shortcode option
 * PRO: Allow updated-at, created-at, updated-by to by used in conditional statements
 * PRO: Added update message and button to global default messages
 * PRO: Added progress bar to csv import
@@ -2723,7 +3435,7 @@
 * PRO: Updated file uploading progress bar with frm_uploading_files hook added to text
 * PRO: Only show "create entry in form" box if user has permission to create entries
 * PRO: Removed icons from error message
-* PRO: Fixed collapsable entry list bullets
+* PRO: Fixed collapsible entry list bullets
 * PRO: Fixed dependent multi-select data from entries fields on edit
 * PRO: Added frm_back_button_class hook
 * PRO: Fixed quotation marks in conditional logic

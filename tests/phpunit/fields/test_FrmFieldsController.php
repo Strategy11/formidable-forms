@@ -1,0 +1,467 @@
+<?php
+
+/**
+ * @group fields
+ *
+ * @covers FrmFieldsController
+ */
+#[\PHPUnit\Framework\Attributes\Group( 'fields' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmFieldsController::class )]
+class test_FrmFieldsController extends FrmUnitTest {
+
+	/**
+	 * @var array<int,int> Preparation calls for each field in the current test.
+	 */
+	private $builder_setup_counts = array();
+
+	/**
+	 * @var object The original field object whose preparation is being counted.
+	 */
+	private $builder_test_field;
+
+	public function setUp(): void {
+		parent::setUp();
+		FrmHooksController::trigger_load_hook( 'load_form_hooks' );
+	}
+
+	public function test_builder_prepares_each_field_once() {
+		$form_id = $this->factory->form->create();
+		$types   = array( 'text', 'textarea', 'select', 'radio', 'checkbox', 'name', 'address' );
+
+		if ( FrmAppHelper::pro_is_installed() ) {
+			$types = array_merge( $types, array( 'time', 'date', 'lookup' ) );
+		}
+
+		add_filter( 'frm_setup_edit_fields_vars', array( $this, 'track_builder_field_setup' ), 10, 2 );
+
+		try {
+			foreach ( $types as $type ) {
+				$field = $this->factory->field->create_and_get(
+					array(
+						'form_id' => $form_id,
+						'type'    => $type,
+					)
+				);
+
+				$this->builder_test_field = $field;
+
+				for ( $render = 1; $render <= 2; ++$render ) {
+					ob_start();
+					FrmFieldsController::load_single_field(
+						$field,
+						array(
+							'id'         => $form_id,
+							'doing_ajax' => true,
+						)
+					);
+					$html = ob_get_clean();
+
+					$this->assertSame( $render, $this->builder_setup_counts[ $field->id ], $type . ' should be prepared once per render.' );
+					$this->assertStringContainsString( '<span class="frm_builder_field_name">Prepared field ' . $field->id . ' pass ' . $render . '</span>', $html );
+					$this->assertStringContainsString( 'value="Prepared field ' . $field->id . ' pass ' . $render . '"', $html );
+				}
+
+				FrmFieldsHelper::setup_edit_vars( $field );
+				$this->assertSame( 3, $this->builder_setup_counts[ $field->id ], 'Preparation outside the render must run its filters again.' );
+			}
+		} finally {
+			remove_filter( 'frm_setup_edit_fields_vars', array( $this, 'track_builder_field_setup' ) );
+		}
+	}
+
+	public function test_builder_clears_prepared_values_after_render_exception() {
+		$field                    = $this->factory->field->create_and_get( array( 'form_id' => $this->factory->form->create() ) );
+		$this->builder_test_field = $field;
+		add_filter( 'frm_setup_edit_fields_vars', array( $this, 'track_builder_field_setup' ), 10, 2 );
+		add_action( 'frm_extra_field_actions', array( $this, 'throw_builder_render_exception' ) );
+		ob_start();
+
+		try {
+			FrmFieldsController::load_single_field( $field, array( 'doing_ajax' => true ) );
+			$this->fail( 'The render should have thrown an exception.' );
+		} catch ( RuntimeException $exception ) {
+			$this->assertSame( 'Builder render interrupted.', $exception->getMessage() );
+		} finally {
+			ob_end_clean();
+			remove_action( 'frm_extra_field_actions', array( $this, 'throw_builder_render_exception' ) );
+			remove_filter( 'frm_setup_edit_fields_vars', array( $this, 'track_builder_field_setup' ) );
+		}
+
+		$this->assertSame( 1, $this->builder_setup_counts[ $field->id ] );
+		$prepared = FrmFieldsHelper::setup_edit_vars( $field );
+		$this->assertSame( $field->name, $prepared['name'], 'The interrupted render must not leave filtered values cached.' );
+	}
+
+	public function test_builder_cache_keeps_objects_and_ajax_contexts_separate() {
+		$field                    = $this->factory->field->create_and_get( array( 'form_id' => $this->factory->form->create() ) );
+		$this->builder_test_field = $field;
+		add_filter( 'frm_setup_edit_fields_vars', array( $this, 'track_builder_field_setup' ), 10, 2 );
+		$prepared = FrmFieldsHelper::setup_edit_vars( $field );
+		$previous = FrmFieldsHelper::set_builder_field_vars( $field, $prepared );
+
+		try {
+			$clone       = clone $field;
+			$clone->name = 'Independent preview';
+			$this->assertSame( 'Independent preview', FrmFieldsHelper::setup_edit_vars( $clone )['name'] );
+			$this->assertSame( $prepared, FrmFieldsHelper::setup_edit_vars( $field ) );
+			$ajax_values = FrmFieldsHelper::setup_edit_vars( $field, true );
+			$this->assertSame( 'Prepared field ' . $field->id . ' pass 2', $ajax_values['name'] );
+			$this->assertSame( $prepared, FrmFieldsHelper::setup_edit_vars( $field ), 'A different context must not replace the shared builder values.' );
+		} finally {
+			FrmFieldsHelper::set_builder_field_vars( $field, $previous );
+			remove_filter( 'frm_setup_edit_fields_vars', array( $this, 'track_builder_field_setup' ) );
+		}
+	}
+
+	/**
+	 * Count preparation passes and return a label that identifies the pass used by the markup.
+	 *
+	 * @param array  $values Prepared field values.
+	 * @param object $field  The source field object.
+	 *
+	 * @return array
+	 */
+	public function track_builder_field_setup( $values, $field ) {
+		if ( $field !== $this->builder_test_field ) {
+			return $values;
+		}
+
+		$id                                = (int) $values['id'];
+		$this->builder_setup_counts[ $id ] = ( $this->builder_setup_counts[ $id ] ?? 0 ) + 1;
+		$values['name']                    = 'Prepared field ' . $id . ' pass ' . $this->builder_setup_counts[ $id ];
+		return $values;
+	}
+
+	/**
+	 * Interrupt rendering after the builder starts sharing its prepared values.
+	 *
+	 * @return void
+	 */
+	public function throw_builder_render_exception() {
+		throw new RuntimeException( 'Builder render interrupted.' );
+	}
+
+	public function test_deferred_builder_settings_keep_preview_and_layout_inputs_available() {
+		$form_id = $this->factory->form->create();
+
+		foreach ( array( 'text', 'number', 'radio', 'select' ) as $type ) {
+			$field    = $this->factory->field->create_and_get(
+				array(
+					'form_id'       => $form_id,
+					'type'          => $type,
+					'field_order'   => 12,
+					'field_options' => array( 'classes' => 'frm_half custom_class' ),
+				)
+			);
+			$settings = (object) array( 'html' => '' );
+			ob_start();
+			FrmFieldsController::load_single_field(
+				$field,
+				array(
+					'id'                => $form_id,
+					'doing_ajax'        => true,
+					'deferred_settings' => $settings,
+				)
+			);
+			$preview = ob_get_clean();
+
+			$this->assertStringContainsString( 'id="frm_field_id_' . $field->id . '"', $preview );
+			$this->assertStringNotContainsString( 'id="frm-single-settings-', $preview );
+			$this->assertStringNotContainsString( 'frm-deferred-settings-meta', $preview );
+			$this->assertSame( 12, (int) $settings->meta['order'] );
+			$this->assertSame( 'frm_half custom_class', $settings->meta['classes'] );
+			$this->assertSame( $field->name, $settings->meta['name'] );
+			$this->assertSame( $type, $settings->meta['type'] );
+			$this->assertSame( $field->field_key, $settings->meta['key'] );
+			$this->assertStringContainsString( 'id="frm-single-settings-' . $field->id . '"', $settings->html );
+			$this->assertStringContainsString( 'name="frm_fields_submitted[]"', $settings->html );
+			$this->assertStringContainsString( 'name="field_options[type_' . $field->id . ']"', $settings->html );
+		}
+	}
+
+	public function test_settings_only_match_deferred_builder_settings() {
+		$form_id = $this->factory->form->create();
+		// Print the HTML editor's one-time styles before comparing repeated settings renders.
+		ob_start();
+		wp_editor( '', 'frm_settings_parity', array( 'media_buttons' => false ) );
+		ob_end_clean();
+
+		foreach ( array( 'text', 'textarea', 'hidden', 'html' ) as $type ) {
+			$field    = $this->factory->field->create_and_get(
+				array(
+					'form_id' => $form_id,
+					'type'    => $type,
+				)
+			);
+			$settings = (object) array( 'html' => '' );
+			$values   = array(
+				'id'         => $form_id,
+				'doing_ajax' => true,
+			);
+			ob_start();
+			FrmFieldsController::load_single_field( $field, $values + array( 'deferred_settings' => $settings ) );
+			ob_end_clean();
+
+			ob_start();
+			FrmFieldsController::load_single_field( $field, $values + array( 'settings_only' => true ) );
+			$html = ob_get_clean();
+
+			$this->assertNotSame( '', $html, 'Settings should be rendered for ' . $type . '.' );
+			$this->assertSame( $settings->html, $html, 'Both rendering paths should produce the same settings for ' . $type . '.' );
+			$this->assertStringNotContainsString( 'id="frm_field_id_', $html, 'A settings request should not render the preview.' );
+			$this->assertSame( $form_id, $field->parent_form_id, 'The shared setup should preserve the parent form ID.' );
+		}
+	}
+
+	public function test_builder_settings_remain_inline_without_deferred_collector() {
+		$form_id = $this->factory->form->create();
+		$field   = $this->factory->field->create_and_get( array( 'form_id' => $form_id ) );
+		ob_start();
+		FrmFieldsController::load_single_field( $field, array( 'doing_ajax' => true ) );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'id="frm-single-settings-' . $field->id . '"', $html );
+		$this->assertStringNotContainsString( 'frm-deferred-settings-meta', $html );
+	}
+
+	public function test_builder_placeholder_manifest_preserves_attributes_and_order() {
+		$form_id = $this->factory->form->create();
+
+		/**
+		 * Filled in by FrmFieldsController::load_single_field() as each placeholder renders.
+		 *
+		 * @var stdClass $manifest
+		 */
+		$manifest = (object) array(
+			'definitions' => array(),
+			'fields'      => array(),
+		);
+		$expected = array();
+
+		foreach ( array( 'text', 'text', 'html' ) as $type ) {
+			$field = $this->factory->field->create_and_get(
+				array(
+					'form_id' => $form_id,
+					'type'    => $type,
+				)
+			);
+			ob_start();
+			FrmFieldsController::load_single_field(
+				$field,
+				array(
+					'ajax_load' => true,
+					'count'     => 11,
+				)
+			);
+			$legacy_html = ob_get_clean();
+
+			ob_start();
+			FrmFieldsController::load_single_field(
+				$field,
+				array(
+					'ajax_load'            => true,
+					'count'                => 11,
+					'placeholder_manifest' => $manifest,
+				)
+			);
+			$placeholder = ob_get_clean();
+			$index       = count( $expected );
+			$tag         = new WP_HTML_Tag_Processor( $placeholder );
+			$this->assertTrue( $tag->next_tag( 'li' ), 'The AJAX placeholder should be a list item.' );
+			$this->assertSame( (string) $index, $tag->get_attribute( 'data-frm-placeholder' ), 'The AJAX placeholder should preserve its manifest index.' );
+			$this->assertTrue( $tag->has_class( 'frm-preview-placeholder' ), 'The AJAX placeholder should reserve space before loading.' );
+			$height = 'html' === $type ? 194 : 89;
+			$this->assertSame( '--frm-preview-height:' . $height . 'px', $tag->get_attribute( 'style' ), 'The AJAX placeholder should reserve the expected card height.' );
+			$this->assertSame( (int) $field->id, $manifest->fields[ $index ][0] );
+			$definition = $manifest->definitions[ $manifest->fields[ $index ][1] ];
+			$this->assertStringContainsString( 'class="' . esc_attr( $definition[0] ) . '"', $legacy_html );
+			$this->assertStringContainsString( 'data-formid="' . esc_attr( $definition[1] ) . '"', $legacy_html );
+			$this->assertStringContainsString( 'data-ftype="' . esc_attr( $definition[2] ) . '"', $legacy_html );
+			$expected[] = (int) $field->id;
+		}
+
+		$this->assertCount( 2, $manifest->definitions );
+		$this->assertSame( $expected, array_column( $manifest->fields, 0 ) );
+		$this->assertSame( $manifest->fields[0][1], $manifest->fields[1][1] );
+	}
+
+	public function test_builder_placeholder_manifest_keeps_initial_and_non_ajax_fields_rendered() {
+		$form_id  = $this->factory->form->create();
+		$field    = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $form_id,
+				'type'    => 'text',
+			)
+		);
+		$manifest = (object) array(
+			'definitions' => array(),
+			'fields'      => array(),
+		);
+
+		foreach ( array( array( true, 10 ), array( false, 11 ) ) as $settings ) {
+			ob_start();
+			FrmFieldsController::load_single_field(
+				$field,
+				array(
+					'ajax_load'            => $settings[0],
+					'count'                => $settings[1],
+					'placeholder_manifest' => $manifest,
+				)
+			);
+			$html = ob_get_clean();
+			$this->assertStringContainsString( 'id="frm_field_id_' . $field->id . '"', $html );
+			$this->assertStringNotContainsString( 'data-frm-placeholder=', $html );
+		}
+		$this->assertSame( array(), $manifest->fields );
+	}
+
+	public function test_builder_batches_omit_only_received_definitions() {
+		$definitions                   = array(
+			'known' => array( 'value' => 'Saved option' ),
+			'new'   => array( 'value' => 'New option' ),
+		);
+		$_POST['known_select_options'] = 'known,unknown,known';
+		$_POST['known_tooltips']       = 'new';
+
+		try {
+			$this->assertSame(
+				array( 'new' => $definitions['new'] ),
+				$this->run_private_method( array( 'FrmFieldsController', 'get_missing_builder_definitions' ), array( $definitions, 'known_select_options' ) )
+			);
+			$this->assertSame(
+				array( 'known' => $definitions['known'] ),
+				$this->run_private_method( array( 'FrmFieldsController', 'get_missing_builder_definitions' ), array( $definitions, 'known_tooltips' ) )
+			);
+		} finally {
+			unset( $_POST['known_select_options'], $_POST['known_tooltips'] );
+		}
+	}
+
+	public function test_builder_batches_keep_definitions_for_older_or_malformed_requests() {
+		$definitions = array( 'known' => 'Tooltip text' );
+		unset( $_POST['known_tooltips'] );
+
+		try {
+			foreach ( array( null, '', array( 'known' ) ) as $known_keys ) {
+				if ( null !== $known_keys ) {
+					$_POST['known_tooltips'] = $known_keys;
+				}
+				$this->assertSame(
+					$definitions,
+					$this->run_private_method( array( 'FrmFieldsController', 'get_missing_builder_definitions' ), array( $definitions, 'known_tooltips' ) )
+				);
+			}
+
+			$_POST['known_tooltips'] = 'known';
+			$this->assertSame(
+				array(),
+				$this->run_private_method( array( 'FrmFieldsController', 'get_missing_builder_definitions' ), array( $definitions, 'known_tooltips' ) )
+			);
+		} finally {
+			unset( $_POST['known_tooltips'] );
+		}
+	}
+
+	public function test_prepare_placeholder() {
+		$name        = 'Number';
+		$field       = array(
+			'type'        => 'number',
+			'placeholder' => '',
+			'label'       => 'inside',
+			'name'        => $name,
+			'required'    => 0,
+		);
+		$placeholder = $this->prepare_placeholder( $field );
+
+		// Since Floating labels, placeholder is not replaced by field name anymore.
+		$this->assertSame( '', $placeholder );
+
+		$field['placeholder'] = '0';
+		$placeholder          = $this->prepare_placeholder( $field );
+		$this->assertSame( '0', $placeholder, '0 is a valid placeholder value.' );
+
+		$field['placeholder'] = '';
+		$field['type']        = 'hidden';
+		$placeholder          = $this->prepare_placeholder( $field );
+		$this->assertSame( '', $placeholder, 'some types of fields are not "is_placeholder_field_type" and should be left empty.' );
+	}
+
+	private function prepare_placeholder( $field ) {
+		return $this->run_private_method( array( 'FrmFieldsController', 'prepare_placeholder' ), array( $field ) );
+	}
+
+	public function test_pull_custom_error_body_from_custom_html() {
+		$form       = $this->factory->form->create_and_get();
+		$field      = $this->factory->field->create_and_get(
+			array(
+				'form_id'       => $form->id,
+				'type'          => 'text',
+				'field_options' => array(
+					'custom_html' => '
+						<div id="frm_field_[id]_container" class="frm_form_field form-field [required_class][error_class]">
+						<label for="field_[key]" id="field_[key]_label" class="frm_primary_label">[field_name]
+							<span class="frm_required" aria-hidden="true">[required_label]</span>
+						</label>
+						[input]
+						[if description]<div class="frm_description" id="frm_desc_field_[key]">[description]</div>[/if description]
+						[if error]<div class="frm_error my_custom_error_class" id="frm_error_field_[key]">My custom error label: [error]</div>[/if error]
+					</div>
+					',
+				),
+			)
+		);
+		$field      = FrmFieldsHelper::setup_edit_vars( $field );
+		$error_body = FrmFieldsController::pull_custom_error_body_from_custom_html( $form, $field );
+
+		$this->assertSame(
+			'<div class="frm_error my_custom_error_class" id="frm_error_field_[key]">My custom error label: [error]</div>',
+			$error_body
+		);
+	}
+
+	public function test_include_new_field() {
+		$form_id = $this->factory->form->create();
+		ob_start();
+		$new_field    = FrmFieldsController::include_new_field( 'text', $form_id );
+		$field_output = ob_get_clean();
+
+		$this->assertSame( 0, strpos( trim( $field_output ), '<li id="frm_field_id_' . $new_field['id'] . '"' ) );
+
+		// Confirm field is an array with type and form id keys.
+		$this->assertIsArray( $new_field );
+		$this->assertArrayHasKey( 'type', $new_field );
+		$this->assertSame( 'text', $new_field['type'] );
+		$this->assertArrayHasKey( 'form_id', $new_field );
+		$this->assertSame( (string) $form_id, $new_field['form_id'] );
+
+		// Confirm new fields are flagged as "draft".
+		$this->assertArrayHasKey( 'draft', $new_field );
+		$this->assertSame( 1, $new_field['draft'] );
+	}
+
+	public function test_add_validation_messages() {
+		$form_id  = $this->factory->form->create();
+		$field    = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $form_id,
+				'type'    => 'email',
+			)
+		);
+		$field    = FrmFieldsHelper::setup_edit_vars( $field );
+		$add_html = array();
+		$this->run_private_method( array( 'FrmFieldsController', 'add_validation_messages' ), array( $field, &$add_html ) );
+		$this->assertArrayHasKey( 'data-invmsg', $add_html );
+		$this->assertArrayNotHasKey( 'data-reqmsg', $add_html );
+
+		$field['required'] = '1';
+		$add_html          = array();
+		$this->run_private_method( array( 'FrmFieldsController', 'add_validation_messages' ), array( $field, &$add_html ) );
+		$this->assertArrayHasKey( 'data-reqmsg', $add_html );
+
+		$field['type'] = 'hidden';
+		$add_html      = array();
+		$this->run_private_method( array( 'FrmFieldsController', 'add_validation_messages' ), array( $field, &$add_html ) );
+		$this->assertArrayNotHasKey( 'data-invmsg', $add_html );
+		$this->assertArrayNotHasKey( 'data-reqmsg', $add_html );
+	}
+}

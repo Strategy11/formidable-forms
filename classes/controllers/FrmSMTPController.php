@@ -48,10 +48,10 @@ class FrmSMTPController {
 	 * @return void
 	 */
 	public static function load_hooks() {
-
 		add_filter( 'wp_mail_smtp_is_white_labeled', '__return_true' );
 
 		$self = new self();
+
 		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_frm_smtp_page_check_plugin_status', array( $self, 'ajax_check_plugin_status' ) );
 		}
@@ -74,23 +74,37 @@ class FrmSMTPController {
 	/**
 	 * Customize the upgrade link.
 	 *
+	 * @param string $link
+	 *
 	 * @return string
 	 */
 	public function link( $link ) {
+		// wp-mail-smtp-pro's own Core::get_upgrade_link() already tags $link with its own
+		// utm_* params before this filter runs, so maybe_add_missing_utm()'s fill-the-gaps
+		// behavior would leave those in place instead of applying our own attribution. Strip
+		// and retag before splicing in the hand-obfuscated `urllink` value below — running
+		// that value itself through add_query_arg() (inside maybe_add_missing_utm()) would
+		// url-decode/re-encode it and undo the obfuscation.
+		$link = remove_query_arg( array( 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_locale' ), $link );
+		$link = FrmAppHelper::maybe_add_missing_utm( $link, array( 'campaign' => 'wp-mail-smtp-upsell' ) );
+
 		$new_link = 'formidableforms.com/go-wp-mail-smtp/?urllink=wpmailsmtp%2Ecom%2Flite%2Dupgrade&';
-		$link     = str_replace( 'wpmailsmtp.com/lite-upgrade/?', $new_link, $link );
-		return $link;
+		return str_replace( 'wpmailsmtp.com/lite-upgrade/?', $new_link, $link );
 	}
 
 	/**
 	 * Don't nag people to install WPForms
 	 *
 	 * @since 4.04.04
+	 *
+	 * @param array $upsell
+	 *
+	 * @return array
 	 */
 	public static function remove_wpforms_nag( $upsell ) {
 		if ( is_array( $upsell ) ) {
 			foreach ( $upsell as $k => $plugin ) {
-				if ( strpos( $plugin['slug'], 'wpforms' ) !== false ) {
+				if ( str_contains( $plugin['slug'], 'wpforms' ) ) {
 					unset( $upsell[ $k ] );
 				}
 			}
@@ -143,6 +157,7 @@ class FrmSMTPController {
 		);
 
 		// Heading section.
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<section class="top">
 			<div class="frm-smtp-logos">
@@ -160,9 +175,10 @@ class FrmSMTPController {
 			?>
 			</div>
 			<h1><?php esc_html_e( 'Making Email Deliverability Easy for WordPress', 'formidable' ); ?></h1>
-			<p><?php esc_html_e( 'WP Mail SMTP allows you to easily set up WordPress to use a trusted provider to reliably send emails, including form notifications.', 'formidable' ); ?></p>
+			<p><?php esc_html_e( 'WP Mail SMTP allows you to easily set up WordPress to use a trusted provider to reliably send emails, including form notifications.', 'formidable' ); ?></p><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 		</section>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -173,7 +189,6 @@ class FrmSMTPController {
 	 * @return void
 	 */
 	protected function output_section_screenshot() {
-
 		printf(
 			'<section class="screenshot">
 				<div class="cont">
@@ -188,7 +203,7 @@ class FrmSMTPController {
 			</section>',
 			esc_url( FrmAppHelper::plugin_url() . '/images/smtp-screenshot-tnail.png' ),
 			esc_attr__( 'WP Mail SMTP screenshot', 'formidable' ),
-			'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 492 492" width="14" height="14"><path d="M484 227L306 49a27 27 0 00-38 0l-16 16a27 27 0 000 38l104 105H27c-15 0-27 11-27 26v23c0 15 12 27 27 27h330L252 389a27 27 0 000 38l16 16a27 27 0 0038 0l178-178a27 27 0 000-38z" fill="#5bbfa5"/></svg> &nbsp;',
+			'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 492 492" width="14" height="14"><path d="M484 227L306 49a27 27 0 00-38 0l-16 16a27 27 0 000 38l104 105H27c-15 0-27 11-27 26v23c0 15 12 27 27 27h330L252 389a27 27 0 000 38l16 16a27 27 0 0038 0l178-178a27 27 0 000-38z" fill="#5bbfa5"/></svg> &nbsp;', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			esc_html__( 'Over 1,000,000 websites use WP Mail SMTP.', 'formidable' ),
 			esc_html__( 'Send emails authenticated via trusted parties.', 'formidable' ),
 			esc_html__( 'Transactional Mailers: Pepipost, SendinBlue, Mailgun, SendGrid, Amazon SES.', 'formidable' ),
@@ -204,10 +219,9 @@ class FrmSMTPController {
 	 * @return void
 	 */
 	protected function output_section_step_install() {
-
 		$step = $this->get_data_step_install();
 
-		if ( empty( $step ) ) {
+		if ( ! $step ) {
 			return;
 		}
 
@@ -225,22 +239,22 @@ class FrmSMTPController {
 
 		printf(
 			'<section class="step step-install">
-				<aside class="num">
-					%1$s
+				<aside class="num" aria-label="%1$s">
+					%2$s
 					<i class="loader hidden"></i>
 				</aside>
 				<div>
-					<h2>%2$s</h2>
-					<p>%3$s</p>
-					<span><a rel="%4$s" class="button button-primary frm-button-primary %5$s" aria-label="%6$s">%7$s</a></span>
-				</div>		
+					<h2>%3$s</h2>
+					<p>%4$s</p>
+					<span><a rel="%5$s" class="button button-primary frm-button-primary %6$s">%7$s</a></span>
+				</div>
 			</section>',
+			esc_attr__( 'Step 1', 'formidable' ),
 			FrmAppHelper::kses( $icon, array( 'a', 'i', 'span', 'use', 'svg' ) ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			esc_html( $label ),
 			esc_html__( 'Install WP Mail SMTP from the WordPress.org plugin repository.', 'formidable' ),
 			esc_attr( $step['plugin'] ),
 			esc_attr( $step['button_class'] ),
-			esc_attr( $step['button_action'] ),
 			esc_html( $step['button_text'] )
 		);
 	}
@@ -253,10 +267,9 @@ class FrmSMTPController {
 	 * @return void
 	 */
 	protected function output_section_step_setup() {
-
 		$step = $this->get_data_step_setup();
 
-		if ( empty( $step ) ) {
+		if ( ! $step ) {
 			return;
 		}
 
@@ -271,17 +284,18 @@ class FrmSMTPController {
 
 		printf(
 			'<section class="step step-setup %1$s">
-				<aside class="num">
-					%2$s
+				<aside class="num" aria-label="%2$s">
+					%3$s
 					<i class="loader hidden"></i>
 				</aside>
 				<div>
-					<h2>%3$s</h2>
-					<p>%4$s</p>
-					<span><a href="%5$s" class="button button-primary frm-button-primary %6$s">%7$s</a></span>
-				</div>		
+					<h2>%4$s</h2>
+					<p>%5$s</p>
+					<span><a href="%6$s" class="button button-primary frm-button-primary %7$s">%8$s</a></span>
+				</div>
 			</section>',
 			esc_attr( $step['section_class'] ),
+			esc_attr__( 'Step 2', 'formidable' ),
 			FrmAppHelper::kses( $icon, array( 'a', 'i', 'span', 'use', 'svg' ) ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			esc_html__( 'Set Up WP Mail SMTP', 'formidable' ),
 			esc_html__( 'Select and configure your mailer.', 'formidable' ),
@@ -299,7 +313,6 @@ class FrmSMTPController {
 	 * @return array Step data.
 	 */
 	protected function get_data_step_install() {
-
 		$lite_plugin = new FrmInstallPlugin( array( 'plugin_file' => $this->config['lite_plugin'] ) );
 		$pro_plugin  = new FrmInstallPlugin( array( 'plugin_file' => $this->config['pro_plugin'] ) );
 
@@ -309,17 +322,16 @@ class FrmSMTPController {
 		$this->output_data['plugin_setup']         = false;
 
 		$step = array(
-			'icon'          => 'frm_step1_icon',
-			'button_action' => '',
+			'icon' => 'frm_step1_icon',
 		);
 
 		$is_installed = $this->output_data['plugin_installed'] || $this->output_data['pro_plugin_installed'];
+
 		if ( ! $is_installed ) {
 			// Return the download url.
-			$step['button_text']   = __( 'Install WP Mail SMTP', 'formidable' );
-			$step['button_class']  = 'frm-install-addon';
-			$step['button_action'] = __( 'Install', 'formidable' );
-			$step['plugin']        = $this->config['lite_download_url'];
+			$step['button_text']  = __( 'Install WP Mail SMTP', 'formidable' );
+			$step['button_class'] = 'frm-install-addon';
+			$step['plugin']       = $this->config['lite_download_url'];
 			return $step;
 		}
 
@@ -329,13 +341,12 @@ class FrmSMTPController {
 		$step['plugin'] = $this->output_data['pro_plugin_installed'] ? $this->config['pro_plugin'] : $this->config['lite_plugin'];
 
 		if ( $this->output_data['plugin_activated'] ) {
-			$step['icon']          = 'frm_step_complete_icon';
-			$step['button_text']   = __( 'WP Mail SMTP Installed & Activated', 'formidable' );
-			$step['button_class']  = 'grey disabled';
+			$step['icon']         = 'frm_step_complete_icon';
+			$step['button_text']  = __( 'WP Mail SMTP Installed & Activated', 'formidable' );
+			$step['button_class'] = 'grey disabled';
 		} else {
-			$step['button_text']   = __( 'Activate WP Mail SMTP', 'formidable' );
-			$step['button_class']  = 'frm-activate-addon';
-			$step['button_action'] = __( 'Activate', 'formidable' );
+			$step['button_text']  = __( 'Activate WP Mail SMTP', 'formidable' );
+			$step['button_class'] = 'frm-activate-addon';
 		}
 
 		return $step;
@@ -349,7 +360,6 @@ class FrmSMTPController {
 	 * @return array Step data.
 	 */
 	protected function get_data_step_setup() {
-
 		$step = array();
 
 		$step['icon']          = 'frm_step2_icon';
@@ -376,15 +386,12 @@ class FrmSMTPController {
 	 * @return bool True if some mailer is selected and configured properly.
 	 */
 	protected function is_smtp_configured() {
-
 		if ( ! $this->is_smtp_activated() ) {
 			return false;
 		}
 
-		$phpmailer = $this->get_phpmailer();
-
 		$mailer             = WPMailSMTP\Options::init()->get( 'mail', 'mailer' );
-		$is_mailer_complete = wp_mail_smtp()->get_providers()->get_mailer( $mailer, $phpmailer )->is_mailer_complete();
+		$is_mailer_complete = wp_mail_smtp()->get_providers()->get_mailer( $mailer, $this->get_phpmailer() )->is_mailer_complete();
 
 		return 'mail' !== $mailer && $is_mailer_complete;
 	}
@@ -405,18 +412,20 @@ class FrmSMTPController {
 	 *
 	 * @since 4.04.04
 	 *
-	 * @return \WPMailSMTP\Providers\MailCatcherInterface|PHPMailer Instance of PHPMailer.
+	 * @return PHPMailer|\WPMailSMTP\Providers\MailCatcherInterface Instance of PHPMailer.
 	 */
 	protected function get_phpmailer() {
 		global $phpmailer;
 
-		if ( ! is_object( $phpmailer ) || ! is_a( $phpmailer, 'PHPMailer' ) ) {
-			if ( is_callable( array( wp_mail_smtp(), 'generate_mail_catcher' ) ) ) {
-				$phpmailer = wp_mail_smtp()->generate_mail_catcher( true ); // phpcs:ignore
-			} else {
-				require_once ABSPATH . WPINC . '/class-phpmailer.php';
-				$phpmailer = new PHPMailer( true ); // phpcs:ignore
-			}
+		if ( is_object( $phpmailer ) && is_a( $phpmailer, 'PHPMailer' ) ) {
+			return $phpmailer;
+		}
+
+		if ( is_callable( array( wp_mail_smtp(), 'generate_mail_catcher' ) ) ) {
+            $phpmailer = wp_mail_smtp()->generate_mail_catcher( true ); // phpcs:ignore
+		} else {
+			require_once ABSPATH . WPINC . '/class-phpmailer.php';
+            $phpmailer = new PHPMailer( true ); // phpcs:ignore
 		}
 
 		return $phpmailer;
@@ -440,20 +449,21 @@ class FrmSMTPController {
 	 * @return void
 	 */
 	private function stmp_logo() {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
-		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" height="90" width="90"><defs><style>.cls-11,.cls-12{fill-rule:evenodd}.cls-4{fill:none}.cls-11{fill:#86a196}.cls-12{fill:#fff}</style></defs><path class="cls-4" d="M-6.3 0h60v60h-60z"/><path d="M16.7 8.1a15.4 15.4 0 00-8 10.2 23.5 23.5 0 1030 0 15.4 15.4 0 00-9.3-10.8 3.4 3.4 0 00-2.1-2.7A4.6 4.6 0 0018.4 3a24.4 24.4 0 00-1.7 5z" fill="#395360" fill-rule="evenodd"/><path fill="#fbaa6f" d="M18 26h12v14H18z"/><path d="M25.9 33.2l-.1-.1a1.4 1.4 0 111.6-2.3 1.9 1.9 0 00-1.2.8 1.9 1.9 0 00-.3 1.6zm-4.5 0a1.8 1.8 0 00-.4-1.6 2 2 0 00-1.2-.8 1.4 1.4 0 011.6 2.3zm7.2-3.2h.5l-1 4.8-2.2 6.5h-4.3l-3.2-5.4 1.1-3.2 2.1 2.7c.6.5 2.7.5 3.8-.6a26.2 26.2 0 003.2-4.8z" fill="#dc7f3c" fill-rule="evenodd"/><path d="M9.7 29H15v-9h-4a13 13 0 017.4-10q1.2-5 2.8-6.8l.1-.1.1-.1a2.3 2.3 0 011.1-.5 2.3 2.3 0 012.2 3.8 1.6 1.6 0 01-.4.3A15 15 0 0023 8a5 5 0 013-1.5 1.4 1.4 0 01.7.2 1.3 1.3 0 01.5 1.8 1.3 1.3 0 01-.6.6 13 13 0 0110.1 11l.1.8H33v8h4.8l1.8 13.4q-6.3 4-15.8 4T8 42.4zM25 38.4q3.8-6.4 3.8-7.6c0-2.2-3.2-4-4.8-4s-4.9 1.7-4.9 4q0 1.2 3.8 7.6a1.2 1.2 0 001 .6 1 1 0 001-.6z" fill="#bdcfc8" fill-rule="evenodd"/><path class="cls-4" d="M19 31h9.6L27 47.2h-6.4l-1.6-16z"/><path d="M39.8 48.8a20 20 0 01-32 0l.8-6a2.7 2.7 0 001 .1 2.8 2.8 0 002.8-2.4v1.2a2.8 2.8 0 005.6 0v1.6a2.9 2.9 0 005.7 0 2.8 2.8 0 005.7 0v-1.6a2.8 2.8 0 105.7 0v-1.2A2.8 2.8 0 0038 43a2.9 2.9 0 001-.2l.8 6z" fill="#809eb0" fill-rule="evenodd"/><path d="M8.3 44.6l.3-1.8a2.7 2.7 0 001 .2 2.8 2.8 0 002.8-2.5v1.2a2.8 2.8 0 005.7 0v1.7a2.9 2.9 0 005.6 0 2.8 2.8 0 005.7 0v-1.7a2.8 2.8 0 105.7 0v-1.2A2.8 2.8 0 0038 43a2.9 2.9 0 001-.2l.3 2a2.9 2.9 0 01-4.1-2.2v1.2a2.8 2.8 0 11-5.7 0v1.6a2.8 2.8 0 01-5.7 0 2.9 2.9 0 01-5.7 0v-1.7a2.8 2.8 0 01-5.7 0v-1.2A2.8 2.8 0 019.6 45a2.9 2.9 0 01-1.3-.3z" fill="#738e9e" fill-rule="evenodd"/><path class="cls-11" d="M37.8 22.4c-1-2.9-3-4.7-4.7-4.5-2.2.2-2.8 3.7-2.3 8s1.7 7.5 3.9 7.3 4-3.9 3.6-8c0 1.2-.5 2.3-1.3 2.4-1.2 0-1.5-1.2-1.6-2.9s-.2-3 1-3a1.5 1.5 0 011.4.7z"/><path class="cls-12" d="M37 21.8c-.6-1.3-1.5-2-2.4-1.9-1.5.1-1.9 2.6-1.6 5.5s1.2 5.1 2.7 5c1.1-.2 2-1.5 2.2-3.4a1.2 1.2 0 01-1 .6c-1 0-1.4-1.2-1.5-2.9s-.1-3 1-3a1.6 1.6 0 01.6 0z"/><path class="cls-11" d="M9.6 22.4c1-2.9 3-4.7 4.7-4.5 2.2.2 2.8 3.7 2.3 8s-1.7 7.5-3.9 7.3-4-3.9-3.7-8c.1 1.2.5 2.3 1.4 2.4 1.1 0 1.5-1.2 1.6-2.9s.1-3-1-3a1.5 1.5 0 00-1.4.7z"/><path class="cls-12" d="M10.4 21.8c.6-1.3 1.5-2 2.4-1.9 1.5.1 1.8 2.6 1.5 5.5s-1.1 5.1-2.6 5c-1.1-.2-2-1.5-2.2-3.4a1.2 1.2 0 00.9.6c1.1 0 1.4-1.2 1.6-2.9s.1-3-1-3a1.7 1.7 0 00-.7 0z"/><path d="M19 28.6a5.3 5.3 0 010-.7c0-2.4 1.2-5.2 4.9-5.2s4.8 2.8 4.8 5.2a4.4 4.4 0 010 1c-.9-1.3-2.4-2.1-4.9-2.1-2.4 0-3.9.7-4.8 1.8z" fill="#f4f8ff" fill-rule="evenodd"/><path class="cls-11" d="M26.5 9.2L23.3 9l4-1.2a1.4 1.4 0 01-.8 1.4zm-3.5-1l-1.3 1a16.8 16.8 0 002-3.8 6.6 6.6 0 00.3-2.7A2.4 2.4 0 0125.2 5a2.4 2.4 0 01-.7 1.5A15 15 0 0023 8.1z"/></svg>
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" height="90" width="90"><defs><style>.cls-11,.cls-12{fill-rule:evenodd}.cls-4{fill:none}.cls-11{fill:#86a196}.cls-12{fill:#fff}</style></defs><path class="cls-4" d="M-6.3 0h60v60h-60z"/><path d="M16.7 8.1a15.4 15.4 0 00-8 10.2 23.5 23.5 0 1030 0 15.4 15.4 0 00-9.3-10.8 3.4 3.4 0 00-2.1-2.7A4.6 4.6 0 0018.4 3a24.4 24.4 0 00-1.7 5z" fill="#395360" fill-rule="evenodd"/><path fill="#fbaa6f" d="M18 26h12v14H18z"/><path d="M25.9 33.2l-.1-.1a1.4 1.4 0 111.6-2.3 1.9 1.9 0 00-1.2.8 1.9 1.9 0 00-.3 1.6zm-4.5 0a1.8 1.8 0 00-.4-1.6 2 2 0 00-1.2-.8 1.4 1.4 0 011.6 2.3zm7.2-3.2h.5l-1 4.8-2.2 6.5h-4.3l-3.2-5.4 1.1-3.2 2.1 2.7c.6.5 2.7.5 3.8-.6a26.2 26.2 0 003.2-4.8z" fill="#dc7f3c" fill-rule="evenodd"/><path d="M9.7 29H15v-9h-4a13 13 0 017.4-10q1.2-5 2.8-6.8l.1-.1.1-.1a2.3 2.3 0 011.1-.5 2.3 2.3 0 012.2 3.8 1.6 1.6 0 01-.4.3A15 15 0 0023 8a5 5 0 013-1.5 1.4 1.4 0 01.7.2 1.3 1.3 0 01.5 1.8 1.3 1.3 0 01-.6.6 13 13 0 0110.1 11l.1.8H33v8h4.8l1.8 13.4q-6.3 4-15.8 4T8 42.4zM25 38.4q3.8-6.4 3.8-7.6c0-2.2-3.2-4-4.8-4s-4.9 1.7-4.9 4q0 1.2 3.8 7.6a1.2 1.2 0 001 .6 1 1 0 001-.6z" fill="#bdcfc8" fill-rule="evenodd"/><path class="cls-4" d="M19 31h9.6L27 47.2h-6.4l-1.6-16z"/><path d="M39.8 48.8a20 20 0 01-32 0l.8-6a2.7 2.7 0 001 .1 2.8 2.8 0 002.8-2.4v1.2a2.8 2.8 0 005.6 0v1.6a2.9 2.9 0 005.7 0 2.8 2.8 0 005.7 0v-1.6a2.8 2.8 0 105.7 0v-1.2A2.8 2.8 0 0038 43a2.9 2.9 0 001-.2l.8 6z" fill="#809eb0" fill-rule="evenodd"/><path d="M8.3 44.6l.3-1.8a2.7 2.7 0 001 .2 2.8 2.8 0 002.8-2.5v1.2a2.8 2.8 0 005.7 0v1.7a2.9 2.9 0 005.6 0 2.8 2.8 0 005.7 0v-1.7a2.8 2.8 0 105.7 0v-1.2A2.8 2.8 0 0038 43a2.9 2.9 0 001-.2l.3 2a2.9 2.9 0 01-4.1-2.2v1.2a2.8 2.8 0 11-5.7 0v1.6a2.8 2.8 0 01-5.7 0 2.9 2.9 0 01-5.7 0v-1.7a2.8 2.8 0 01-5.7 0v-1.2A2.8 2.8 0 019.6 45a2.9 2.9 0 01-1.3-.3z" fill="#738e9e" fill-rule="evenodd"/><path class="cls-11" d="M37.8 22.4c-1-2.9-3-4.7-4.7-4.5-2.2.2-2.8 3.7-2.3 8s1.7 7.5 3.9 7.3 4-3.9 3.6-8c0 1.2-.5 2.3-1.3 2.4-1.2 0-1.5-1.2-1.6-2.9s-.2-3 1-3a1.5 1.5 0 011.4.7z"/><path class="cls-12" d="M37 21.8c-.6-1.3-1.5-2-2.4-1.9-1.5.1-1.9 2.6-1.6 5.5s1.2 5.1 2.7 5c1.1-.2 2-1.5 2.2-3.4a1.2 1.2 0 01-1 .6c-1 0-1.4-1.2-1.5-2.9s-.1-3 1-3a1.6 1.6 0 01.6 0z"/><path class="cls-11" d="M9.6 22.4c1-2.9 3-4.7 4.7-4.5 2.2.2 2.8 3.7 2.3 8s-1.7 7.5-3.9 7.3-4-3.9-3.7-8c.1 1.2.5 2.3 1.4 2.4 1.1 0 1.5-1.2 1.6-2.9s.1-3-1-3a1.5 1.5 0 00-1.4.7z"/><path class="cls-12" d="M10.4 21.8c.6-1.3 1.5-2 2.4-1.9 1.5.1 1.8 2.6 1.5 5.5s-1.1 5.1-2.6 5c-1.1-.2-2-1.5-2.2-3.4a1.2 1.2 0 00.9.6c1.1 0 1.4-1.2 1.6-2.9s.1-3-1-3a1.7 1.7 0 00-.7 0z"/><path d="M19 28.6a5.3 5.3 0 010-.7c0-2.4 1.2-5.2 4.9-5.2s4.8 2.8 4.8 5.2a4.4 4.4 0 010 1c-.9-1.3-2.4-2.1-4.9-2.1-2.4 0-3.9.7-4.8 1.8z" fill="#f4f8ff" fill-rule="evenodd"/><path class="cls-11" d="M26.5 9.2L23.3 9l4-1.2a1.4 1.4 0 01-.8 1.4zm-3.5-1l-1.3 1a16.8 16.8 0 002-3.8 6.6 6.6 0 00.3-2.7A2.4 2.4 0 0125.2 5a2.4 2.4 0 01-.7 1.5A15 15 0 0023 8.1z"/></svg><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
 	 * @return void
 	 */
 	private function css() {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 <style>
 #frm-admin-smtp *, #frm-admin-smtp *::before, #frm-admin-smtpp *::after {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
 #frm-admin-smtp{
@@ -514,8 +524,6 @@ class FrmSMTPController {
 }
 #frm-admin-smtp .step,
 #frm-admin-smtp .screenshot .cont {
-	-webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.05);
-	-moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.05);
 	box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.05);
 }
 #frm-admin-smtp .step {
@@ -562,5 +570,6 @@ class FrmSMTPController {
 }
 </style>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 }

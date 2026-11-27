@@ -10,16 +10,22 @@ class FrmInbox extends FrmFormApi {
 
 	protected $cache_key;
 
+	/**
+	 * @var string
+	 */
 	private $option = 'frm_inbox';
 
+	/**
+	 * @var array|false
+	 */
 	private static $messages = false;
 
 	/**
-	 * @param array
+	 * @var array
 	 */
 	private static $banner_messages;
 
-	public function __construct( $for_parent = null ) {
+	public function __construct() {
 		$this->set_cache_key();
 
 		if ( false === self::$messages ) {
@@ -49,12 +55,16 @@ class FrmInbox extends FrmFormApi {
 	 * @since 4.05
 	 *
 	 * @param false|string $filter
+	 *
+	 * @return array
 	 */
 	public function get_messages( $filter = false ) {
 		$messages = self::$messages;
+
 		if ( $filter === 'filter' ) {
 			$this->filter_messages( $messages );
 		}
+
 		return $messages;
 	}
 
@@ -65,6 +75,7 @@ class FrmInbox extends FrmFormApi {
 	 */
 	public function set_messages() {
 		self::$messages = get_option( $this->option );
+
 		if ( ! is_array( self::$messages ) ) {
 			self::$messages = array();
 		}
@@ -84,7 +95,8 @@ class FrmInbox extends FrmFormApi {
 	 */
 	private function add_api_messages() {
 		$api = $this->get_api_info();
-		if ( empty( $api ) ) {
+
+		if ( ! $api ) {
 			return;
 		}
 
@@ -100,8 +112,8 @@ class FrmInbox extends FrmFormApi {
 	 */
 	public function add_message( $message ) {
 		if ( ! is_array( $message ) || ! isset( $message['key'] ) ) {
-			// if the API response is invalid, $message may not be an array.
-			// if there are no messages from the API, it is returning a "No Entries Found" item with no key, so check for a key as well.
+			// If the API response is invalid, $message may not be an array.
+			// If there are no messages from the API, it is returning a "No Entries Found" item with no key, so check for a key as well.
 			return;
 		}
 
@@ -110,7 +122,7 @@ class FrmInbox extends FrmFormApi {
 			return;
 		}
 
-		if ( $this->is_expired( $message ) ) {
+		if ( ! $this->within_valid_timeframe( $message ) ) {
 			return;
 		}
 
@@ -140,7 +152,8 @@ class FrmInbox extends FrmFormApi {
 			'icon'    => 'frm_tooltip_icon',
 			'cta'     => '',
 			'expires' => false,
-			'who'     => 'all', // use 'free', 'personal', 'business', 'elite', 'grandfathered'
+			// Use 'free', 'personal', 'business', 'elite', 'grandfathered'.
+			'who'     => 'all',
 			'type'    => '',
 		);
 
@@ -155,14 +168,17 @@ class FrmInbox extends FrmFormApi {
 	 */
 	private function clean_messages() {
 		$removed = false;
+
 		foreach ( self::$messages as $t => $message ) {
-			$read      = isset( $message['read'] ) && ! empty( $message['read'] ) && isset( $message['read'][ get_current_user_id() ] ) && $message['read'][ get_current_user_id() ] < strtotime( '-1 month' );
-			$dismissed = isset( $message['dismissed'] ) && ! empty( $message['dismissed'] ) && isset( $message['dismissed'][ get_current_user_id() ] ) && $message['dismissed'][ get_current_user_id() ] < strtotime( '-1 week' );
-			$expired   = $this->is_expired( $message );
-			if ( $read || $expired || $dismissed ) {
-				unset( self::$messages[ $t ] );
-				$removed = true;
+			$read      = ! empty( $message['read'] ) && isset( $message['read'][ get_current_user_id() ] ) && $message['read'][ get_current_user_id() ] < strtotime( '-1 month' );
+			$dismissed = ! empty( $message['dismissed'] ) && isset( $message['dismissed'][ get_current_user_id() ] ) && $message['dismissed'][ get_current_user_id() ] < strtotime( '-1 week' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+
+			if ( ! $read && ! $dismissed && $this->within_valid_timeframe( $message ) ) {
+				continue;
 			}
+
+			unset( self::$messages[ $t ] );
+			$removed = true;
 		}
 
 		if ( $removed ) {
@@ -171,19 +187,51 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	/**
+	 * @param array  $messages
+	 * @param string $type
+	 *
 	 * @return void
 	 */
-	private function filter_messages( &$messages ) {
+	public function filter_messages( &$messages, $type = 'unread' ) {
 		$user_id = get_current_user_id();
+
 		foreach ( $messages as $k => $message ) {
-			$dismissed = isset( $message['dismissed'] ) && isset( $message['dismissed'][ $user_id ] );
-			if ( empty( $k ) || $this->is_expired( $message ) || $dismissed ) {
+			$dismissed = isset( $message['dismissed'], $message['dismissed'][ $user_id ] );
+
+			if ( ! $k || ! $this->within_valid_timeframe( $message ) || ( $type === 'dismissed' ) !== $dismissed ) {
 				unset( $messages[ $k ] );
 			} elseif ( ! $this->is_for_user( $message ) ) {
 				unset( $messages[ $k ] );
 			}
 		}
+
 		$messages = apply_filters( 'frm_filter_inbox', $messages );
+	}
+
+	/**
+	 * Check if a message has started and is not expired.
+	 *
+	 * @since 6.25
+	 *
+	 * @param array $message
+	 *
+	 * @return bool
+	 */
+	private function within_valid_timeframe( $message ) {
+		return $this->has_started( $message ) && ! $this->is_expired( $message );
+	}
+
+	/**
+	 * Check if a message has actually started, so we can prevent showing something that is queued up early.
+	 *
+	 * @since 6.25
+	 *
+	 * @param array $message
+	 *
+	 * @return bool
+	 */
+	private function has_started( $message ) {
+		return ! empty( $message['starts'] ) ? $message['starts'] <= time() : true;
 	}
 
 	/**
@@ -192,32 +240,33 @@ class FrmInbox extends FrmFormApi {
 	 * @return bool
 	 */
 	private function is_expired( $message ) {
-		return isset( $message['expires'] ) && ! empty( $message['expires'] ) && $message['expires'] < time();
+		return ! empty( $message['expires'] ) && $message['expires'] < time();
 	}
 
 	/**
 	 * Show different messages for different accounts.
 	 *
 	 * @param array $message
+	 *
 	 * @return bool
 	 */
 	private function is_for_user( $message ) {
-		if ( ! isset( $message['who'] ) || $message['who'] === 'all' ) {
+		if ( FrmApiHelper::is_for_user( $message ) ) {
 			return true;
 		}
+
 		$who = (array) $message['who'];
-		if ( in_array( 'all', $who, true ) || in_array( 'everyone', $who, true ) ) {
-			return true;
-		}
-		return in_array( $this->get_user_type(), $who, true );
-	}
 
-	private function get_user_type() {
-		if ( ! FrmAppHelper::pro_is_installed() ) {
-			return 'free';
-		}
-
-		return FrmAddonsController::license_type();
+		/**
+		 * Allow for other special inbox cases in other add-ons.
+		 *
+		 * @since 6.8.1
+		 *
+		 * @param bool  $is_for_user
+		 * @param array $who
+		 * @param array $message
+		 */
+		return (bool) apply_filters( 'frm_inbox_message_is_for_user', false, $who, $message );
 	}
 
 	/**
@@ -239,18 +288,21 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	/**
-	 * @param string $key
-	 *
 	 * @since 4.05.02
+	 *
+	 * @param string $key
 	 *
 	 * @return void
 	 */
 	public function mark_unread( $key ) {
-		$is_read = isset( self::$messages[ $key ] ) && isset( self::$messages[ $key ]['read'] ) && isset( self::$messages[ $key ]['read'][ get_current_user_id() ] );
-		if ( $is_read ) {
-			unset( self::$messages[ $key ]['read'][ get_current_user_id() ] );
-			$this->update_list();
+		$is_read = isset( self::$messages[ $key ], self::$messages[ $key ]['read'], self::$messages[ $key ]['read'][ get_current_user_id() ] );
+
+		if ( ! $is_read ) {
+			return;
 		}
+
+		unset( self::$messages[ $key ]['read'][ get_current_user_id() ] );
+		$this->update_list();
 	}
 
 	/**
@@ -283,6 +335,7 @@ class FrmInbox extends FrmFormApi {
 	 */
 	private function dismiss_all() {
 		$user_id = get_current_user_id();
+
 		foreach ( self::$messages as $key => $message ) {
 			if ( ! isset( $message['dismissed'] ) ) {
 				self::$messages[ $key ]['dismissed'] = array();
@@ -295,29 +348,48 @@ class FrmInbox extends FrmFormApi {
 		$this->update_list();
 	}
 
+	/**
+	 * @return array
+	 */
 	public function unread() {
 		$messages = $this->get_messages( 'filter' );
 		$user_id  = get_current_user_id();
+
 		foreach ( $messages as $t => $message ) {
-			if ( isset( $message['read'] ) && isset( $message['read'][ $user_id ] ) ) {
+			if ( isset( $message['read'], $message['read'][ $user_id ] ) ) {
 				unset( $messages[ $t ] );
 			}
 		}
+
 		return $messages;
 	}
 
-	public function unread_html() {
-		$html = '';
+	/**
+	 * @since 6.8.4 The $filtered parameter was added.
+	 *
+	 * @param bool $filtered
+	 *
+	 * @return string
+	 */
+	public function unread_html( $filtered = true ) {
 		$count = count( $this->unread() );
-		if ( $count ) {
-			$html = ' <span class="update-plugins frm_inbox_count"><span class="plugin-count">' . absint( $count ) . '</span></span>';
 
-			/**
-			 * @since 4.06.01
-			 */
-			$html = apply_filters( 'frm_inbox_badge', $html );
+		if ( ! $count ) {
+			return '';
 		}
-		return $html;
+
+		$html = ' <span class="update-plugins frm_inbox_count"><span class="plugin-count">' . absint( $count ) . '</span></span>';
+
+		if ( ! $filtered ) {
+			return $html;
+		}
+
+		/**
+		 * @since 4.06.01
+		 *
+		 * @param string $html
+		 */
+		return (string) apply_filters( 'frm_inbox_badge', $html );
 	}
 
 	/**
@@ -328,17 +400,19 @@ class FrmInbox extends FrmFormApi {
 	 * @return void
 	 */
 	public function remove( $key ) {
-		if ( isset( self::$messages[ $key ] ) ) {
-			unset( self::$messages[ $key ] );
-			$this->update_list();
+		if ( ! isset( self::$messages[ $key ] ) ) {
+			return;
 		}
+
+		unset( self::$messages[ $key ] );
+		$this->update_list();
 	}
 
 	/**
 	 * @return void
 	 */
 	private function update_list() {
-		update_option( $this->option, self::$messages, 'no' );
+		update_option( $this->option, self::$messages, false );
 	}
 
 	/**
@@ -347,12 +421,57 @@ class FrmInbox extends FrmFormApi {
 	 * @return bool True if a banner is available and shown.
 	 */
 	public static function maybe_show_banner() {
-		if ( empty( self::$banner_messages ) ) {
+		if ( ! self::$banner_messages ) {
 			return false;
 		}
+
 		$message = end( self::$banner_messages );
+		$cta     = self::get_prepared_banner_cta( $message['cta'] );
+
 		require FrmAppHelper::plugin_path() . '/classes/views/inbox/banner.php';
 		return true;
+	}
+
+	/**
+	 * Make sure that the CTA uses utm_medium=banner.
+	 *
+	 * @since 6.8.4
+	 *
+	 * @param string $cta
+	 *
+	 * @return string
+	 */
+	private static function get_prepared_banner_cta( $cta ) {
+		$cta = str_replace( 'button-secondary', 'button-primary', $cta );
+		return preg_replace_callback(
+			'/href=("|\')(.*?)("|\')/',
+			/**
+			 * Replace a single href attribute in the CTA.
+			 *
+			 * @param array $matches The regex results for a single match.
+			 *
+			 * @return string
+			 */
+			function ( $matches ) {
+				$url = $matches[2];
+
+				if ( '#' === $url ) {
+					return 'href="#"';
+				}
+
+				$parts = parse_url( $url );
+				$query = array();
+
+				if ( isset( $parts['query'] ) ) {
+					parse_str( $parts['query'], $query );
+				}
+
+				$query['utm_medium'] = 'banner';
+				$parts['query']      = http_build_query( $query );
+				return 'href="' . esc_url( $parts['scheme'] . '://' . $parts['host'] . $parts['path'] . '?' . $parts['query'] ) . '"';
+			},
+			$cta
+		);
 	}
 
 	/**
@@ -360,22 +479,130 @@ class FrmInbox extends FrmFormApi {
 	 */
 	public static function maybe_disable_screen_options() {
 		self::$banner_messages = self::get_banner_messages();
+
 		if ( self::$banner_messages ) {
-			// disable screen options tab when displaying banner messages because it gets in the way of the banner.
+			// Disable screen options tab when displaying banner messages because it gets in the way of the banner.
 			add_filter( 'screen_options_show_screen', '__return_false' );
 		}
 	}
 
 	/**
+	 * Get all message with a "banner" message key defined.
+	 *
 	 * @return array
 	 */
 	private static function get_banner_messages() {
+		return self::get_messages_with_key( 'banner' );
+	}
+
+	/**
+	 * Get all messages with a "slidein" message key defined.
+	 *
+	 * @since 6.8.4
+	 *
+	 * @return array
+	 */
+	private static function get_slidein_messages() {
+		return self::get_messages_with_key( 'slidein' );
+	}
+
+	/**
+	 * Get all messages with a $key message key defined.
+	 *
+	 * @since 6.8.4
+	 *
+	 * @param string $key The key we are checking for (ie. banner or slidein).
+	 *
+	 * @return array
+	 */
+	private static function get_messages_with_key( $key ) {
 		$inbox = new self();
 		return array_filter(
 			$inbox->get_messages( 'filter' ),
-			function( $message ) {
-				return ! empty( $message['banner'] );
+			function ( $message ) use ( $key ) {
+				return ! empty( $message[ $key ] );
 			}
 		);
+	}
+
+	/**
+	 * Check if there is at least one slidein message.
+	 *
+	 * @since 6.8.4
+	 *
+	 * @return bool
+	 */
+	public static function has_a_slidein_message() {
+		return (bool) self::get_slidein_messages();
+	}
+
+	/**
+	 * Get the array used for frmGlobal.inboxSlideIn
+	 *
+	 * @since 6.8.4
+	 *
+	 * @return array|false
+	 */
+	public static function get_inbox_slide_in_value_for_js() {
+		$messages = self::get_slidein_messages();
+
+		if ( ! $messages ) {
+			return false;
+		}
+
+		$message = reset( $messages );
+
+		/**
+		 * Extend the keys in the global JS object.
+		 * This is used in Pro to include images.
+		 *
+		 * @since 6.8.4
+		 *
+		 * @param array $keys
+		 */
+		$keys_to_return = apply_filters(
+			'frm_inbox_slidein_js_vars',
+			array( 'key', 'slidein', 'subject', 'cta' )
+		);
+
+		return array_reduce(
+			$keys_to_return,
+			function ( $total, $key ) use ( $message ) {
+				$total[ $key ] = $message[ $key ] ?? '';
+				return $total;
+			},
+			array()
+		);
+	}
+
+	/**
+	 * Clear the inbox cache by deleting the associated option from the database.
+	 *
+	 * @since 6.17
+	 *
+	 * @return void
+	 */
+	public static function clear_cache() {
+		delete_option( 'frm_inbox' );
+	}
+
+	/**
+	 * Check inbox for an "error" type. This is displayed on the form list page if one exists.
+	 *
+	 * @since 6.19
+	 *
+	 * @return array|false
+	 */
+	public static function check_for_error() {
+		$inbox    = new self();
+		$messages = $inbox->get_messages( 'filter' );
+
+		foreach ( $messages as $message ) {
+			if ( is_array( $message ) && isset( $message['type'] ) && 'error' === $message['type'] ) {
+				return $message;
+			}
+		}
+
+		return false;
 	}
 }

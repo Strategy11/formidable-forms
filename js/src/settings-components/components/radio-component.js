@@ -1,0 +1,315 @@
+/**
+ * Internal dependencies
+ */
+import { HIDDEN_CLASS, HOOKS } from 'core/constants';
+import { show, hide } from 'core/utils';
+
+/**
+ * Represents a radio component.
+ *
+ * @class
+ */
+export default class frmRadioComponent {
+	constructor() {
+		this.radioElements = Array.from( document.querySelectorAll( '.frm-style-component.frm-radio-component' ) )
+			.filter( element => ! element.closest( '.frm-single-settings' ) );
+		this.observers = new Map();
+		this.initializedRadios = new WeakSet();
+		this.activeFieldSettings = null;
+		if ( 0 < this.radioElements.length ) {
+			this.init();
+		}
+
+		// Field settings, including newly added and batch-loaded fields, initialize on first use.
+		wp.hooks.addAction( HOOKS.SHOW_FIELD_SETTINGS, 'formidable-radio-component', ( obj, fieldSettingsEl ) =>
+			this.discoverAndInitFieldRadios( fieldSettingsEl.dataset.fid )
+		);
+
+		// Cleanup observers when page unloads to prevent memory leaks
+		window.addEventListener( 'beforeunload', () => this.cleanupObservers() );
+
+		// Handle window resize with throttling
+		this.resizeTimeout = null;
+		window.addEventListener( 'resize', () => this.throttledUpdateAllTrackers() );
+	}
+
+	/**
+	 * Initializes the radio component.
+	 */
+	init() {
+		this.initRadio();
+		this.initTrackerOnAccordionClick();
+	}
+
+	/**
+	 * Discovers and initializes radio components for a specific field.
+	 *
+	 * @param {string|number} fieldId The unique identifier of the field whose radio components should be discovered and initialized
+	 * @throws {Error} Throws an error if the field container is not found in the DOM
+	 */
+	discoverAndInitFieldRadios( fieldId ) {
+		const fieldContainer = document.getElementById( `frm-single-settings-${ fieldId }` );
+
+		if ( ! fieldContainer ) {
+			throw new Error( `Field container not found for field ID: ${ fieldId }` );
+		}
+
+		// Keep style-editor observers, but stop observing the previous field's settings.
+		this.observers.forEach( ( observer, element ) => {
+			if ( this.activeFieldSettings?.contains( element ) ) {
+				observer.disconnect();
+				this.observers.delete( element );
+			}
+		} );
+		this.activeFieldSettings = fieldContainer;
+		this.radioElements = fieldContainer.querySelectorAll( '.frm-style-component.frm-radio-component' );
+		this.initRadio();
+	}
+
+	/**
+	 * Initializes the radio component.
+	 */
+	initRadio() {
+		this.radioElements.forEach( element => {
+			this.initOnRadioChange( element );
+			this.initVisibilityObserver( element );
+		} );
+	}
+
+	initTrackerOnAccordionClick() {
+		const accordionitems = document.querySelectorAll( '#frm_style_sidebar .accordion-section h3' );
+
+		accordionitems.forEach( accordionitem => {
+			accordionitem.addEventListener( 'click', event => {
+				const wrapper = event.target.closest( '.accordion-section' );
+				const radioButtons = wrapper.querySelectorAll( '.frm-style-component.frm-radio-component input[type="radio"]:checked' );
+
+				radioButtons.forEach( radio => {
+					setTimeout( () => this.onRadioChange( radio ), 200 );
+				} );
+			} );
+		} );
+	}
+
+	/**
+	 * Initializes the onRadioChange event for the given wrapper.
+	 *
+	 * @param {HTMLElement} radioElement - The radio element.
+	 */
+	initOnRadioChange( radioElement ) {
+		radioElement.querySelectorAll( 'input[type="radio"]' ).forEach( radio => {
+			if ( radio.checked ) {
+				this.onRadioChange( radio );
+			}
+			if ( this.initializedRadios.has( radio ) ) {
+				return;
+			}
+			this.initializedRadios.add( radio );
+			radio.addEventListener( 'change', event => {
+				this.onRadioChange( event.target );
+			} );
+
+			const span = this.getRadioSpan( radio );
+			if ( span ) {
+				span.addEventListener( 'keydown', event => this.onSpanKeydown( event, radio ) );
+			}
+		} );
+	}
+
+	/**
+	 * Gets the ARIA `role="radio"` span associated with a native radio input, if the input's label wraps one.
+	 *
+	 * @param {HTMLInputElement} radio - The native radio input.
+	 * @return {HTMLElement|null} The associated span, or null if the label doesn't wrap one.
+	 */
+	getRadioSpan( radio ) {
+		const next = radio.nextElementSibling;
+		// Component labels follow their inputs. Avoid resolving labels across the whole form.
+		const label = next?.tagName === 'LABEL' && next.htmlFor === radio.id
+			? next : radio.labels?.[ 0 ];
+		return label ? label.querySelector( '[role="radio"]' ) : null;
+	}
+
+	/**
+	 * Forwards Enter/Space activation on an ARIA radio span to its native input — the span itself isn't a native
+	 * form control, so it needs its own keyboard handling to match what its role="radio" announces.
+	 *
+	 * @param {KeyboardEvent}    event - The keydown event.
+	 * @param {HTMLInputElement} radio - The native radio input to activate.
+	 */
+	onSpanKeydown( event, radio ) {
+		if ( 'Enter' !== event.key && ' ' !== event.key && 'Spacebar' !== event.key ) {
+			return;
+		}
+		event.preventDefault();
+		if ( ! radio.checked ) {
+			radio.checked = true;
+			radio.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+		}
+	}
+
+	/**
+	 * Handles the onRadioChange event for the given wrapper.
+	 *
+	 * @param {HTMLElement} target - The active radio button.
+	 */
+	onRadioChange( target ) {
+		const wrapper = target.closest( '.frm-style-component.frm-radio-component' );
+		const activeItem = wrapper.querySelector( 'input[type="radio"]:checked + label' );
+
+		if ( null === activeItem ) {
+			return;
+		}
+
+		if ( wrapper.getClientRects().length ) {
+			this.moveTracker( activeItem, wrapper );
+		}
+		this.hideExtraElements( target );
+		this.maybeShowExtraElements( target );
+		this.syncAriaChecked( wrapper );
+	}
+
+	/**
+	 * Keeps each radio span's `aria-checked` in sync with its input's checked state — the value is only ever
+	 * rendered once at PHP render time, so it goes stale the moment the user picks a different option.
+	 *
+	 * @param {HTMLElement} wrapper - The radio component wrapper.
+	 */
+	syncAriaChecked( wrapper ) {
+		wrapper.querySelectorAll( 'input[type="radio"]' ).forEach( radio => {
+			const span = this.getRadioSpan( radio );
+			if ( span ) {
+				span.setAttribute( 'aria-checked', radio.checked ? 'true' : 'false' );
+			}
+		} );
+	}
+
+	/**
+	 * Display additional elements related to the selected radio option.
+	 *
+	 * @param {HTMLElement} radio - The radio button element.
+	 */
+	maybeShowExtraElements( radio ) {
+		const elementAttr = radio.getAttribute( 'data-frm-show-element' );
+		if ( null === elementAttr ) {
+			return;
+		}
+
+		const container = radio.closest( '.frm-single-settings' ) || document;
+		const elements = container.querySelectorAll( `div[data-frm-element="${ elementAttr }"]` );
+
+		if ( 0 === elements.length ) {
+			return;
+		}
+
+		elements.forEach( element => {
+			show( element );
+			element.classList.add( 'frm-element-is-visible' );
+		} );
+	}
+
+	/**
+	 * Throttled update of all radio trackers on window resize.
+	 *
+	 * @return {void}
+	 */
+	throttledUpdateAllTrackers() {
+		if ( this.resizeTimeout ) {
+			return;
+		}
+		this.resizeTimeout = requestAnimationFrame( () => {
+			this.resizeTimeout = null;
+			this.observers.forEach( ( observer, wrapper ) => {
+				const radio = wrapper.querySelector( 'input[type="radio"]:checked' );
+				if ( radio && wrapper.getClientRects().length ) {
+					this.onRadioChange( radio );
+				}
+			} );
+		} );
+	}
+
+	/**
+	 * Initializes visibility observer for the radio component. This handles cases when components are conditionally shown.
+	 *
+	 * @param {HTMLElement} element The radio component element
+	 * @return {void}
+	 */
+	initVisibilityObserver( element ) {
+		if ( this.observers.has( element ) ) {
+			this.observers.get( element ).disconnect();
+		}
+
+		const observer = new MutationObserver( () => {
+			// Check if element is now visible
+			if ( element.getClientRects().length ) {
+				const radio = element.querySelector( 'input[type="radio"]:checked' );
+				if ( radio ) {
+					this.onRadioChange( radio );
+				}
+			}
+		} );
+
+		this.observers.set( element, observer );
+
+		// Observe for attribute changes on the component and its ancestors
+		observer.observe( element, {
+			attributes: true,
+			attributeFilter: [ 'class', 'style' ]
+		} );
+
+		// Also observe parent elements up to a reasonable depth
+		let parent = element.parentElement;
+		for ( let i = 0; i < 7 && parent; i++ ) {
+			observer.observe( parent, {
+				attributes: true,
+				attributeFilter: [ 'class', 'style' ]
+			} );
+			parent = parent.parentElement;
+		}
+	}
+
+	/**
+	 * Cleanup all observers to prevent memory leaks.
+	 */
+	cleanupObservers() {
+		this.observers.forEach( observer => {
+			observer.disconnect();
+		} );
+
+		this.observers.clear();
+	}
+
+	/**
+	 * Hide the possible opepend extra elements.
+	 *
+	 * @param {HTMLElement} [target] The radio whose related settings are being updated.
+	 */
+	hideExtraElements( target ) {
+		const container = target?.closest( '.frm-single-settings' ) || document;
+		const elements = container.querySelectorAll( '.frm-element-is-visible' );
+		if ( 0 === elements.length ) {
+			return;
+		}
+		elements.forEach( element => {
+			element.classList.remove( 'frm-element-is-visible' );
+			element.classList.add( HIDDEN_CLASS );
+			hide( element );
+		} );
+	}
+
+	/**
+	 * Moves the tracker to the active item.
+	 *
+	 * @param {HTMLElement} activeItem - The active item element.
+	 * @param {HTMLElement} wrapper    - The wrapper element.
+	 */
+	moveTracker( activeItem, wrapper ) {
+		const offset = activeItem.offsetLeft;
+		const width = activeItem.offsetWidth;
+		const tracker = wrapper.querySelector( '.frm-radio-active-tracker' );
+
+		tracker.style.left = 0;
+		tracker.style.width = `${ width }px`;
+		tracker.style.transform = `translateX(${ offset }px)`;
+	}
+}

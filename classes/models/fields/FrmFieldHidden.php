@@ -10,24 +10,28 @@ class FrmFieldHidden extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'hidden';
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $has_input = false;
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $has_html = false;
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $holds_email_values = true;
@@ -37,9 +41,12 @@ class FrmFieldHidden extends FrmFieldType {
 	 */
 	protected $array_allowed = false;
 
+	/**
+	 * @return array
+	 */
 	protected function field_settings_for_type() {
-		$settings        = parent::field_settings_for_type();
-		$settings['css'] = false;
+		$settings            = parent::field_settings_for_type();
+		$settings['css']     = false;
 		$settings['default'] = true;
 
 		return $settings;

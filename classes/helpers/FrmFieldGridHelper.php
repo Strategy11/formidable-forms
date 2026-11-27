@@ -5,6 +5,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFieldGridHelper {
 
+	/**
+	 * Get the builder grid provider, with the original helper as a fallback.
+	 *
+	 * @since 7.1
+	 *
+	 * @return FrmFieldGridHelper
+	 */
+	public static function get_instance() {
+		/**
+		 * Filters the helper used to arrange fields in the builder.
+		 *
+		 * @since 7.1
+		 *
+		 * @param FrmFieldGridHelper|null $helper The optional helper supplied by a field provider.
+		 */
+		$helper = apply_filters( 'frm_builder_grid_helper', null );
+		return $helper instanceof self ? $helper : new self();
+	}
+
+	/**
+	 * @var bool
+	 */
 	private $parent_li;
 
 	/**
@@ -28,32 +50,38 @@ class FrmFieldGridHelper {
 	private $active_field_size;
 
 	/**
-	 * @var bool $is_frm_first flagged while calling get_field_layout_class, true if classes contain frm_first class.
+	 * @var bool flagged while calling get_field_layout_class, true if classes contain frm_first class.
 	 */
 	private $is_frm_first;
 
 	/**
-	 * @var stdClass
+	 * @var stdClass|null
 	 */
 	private $field;
 
 	/**
-	 * @var FrmFieldGridHelper $section_helper
+	 * @var FrmFieldGridHelper|null
 	 */
 	private $section_helper;
 
 	/**
-	 * @var bool $nested
+	 * @var bool
 	 */
 	private $nested;
 
 	/**
-	 * @var int $section_size
+	 * @var int
 	 */
 	private $section_size;
 
+	/**
+	 * @var bool
+	 */
 	private $section_is_open = false;
 
+	/**
+	 * @param bool $nested
+	 */
 	public function __construct( $nested = false ) {
 		$this->parent_li           = false;
 		$this->current_list_size   = 0;
@@ -69,7 +97,7 @@ class FrmFieldGridHelper {
 	public function set_field( $field ) {
 		$this->field = $field;
 
-		if ( ! empty( $this->section_helper ) && 'end_divider' !== $field->type ) {
+		if ( $this->section_helper && 'end_divider' !== $field->type ) {
 			$this->section_helper->set_field( $field );
 			return;
 		}
@@ -81,21 +109,23 @@ class FrmFieldGridHelper {
 			$this->maybe_close_section_helper();
 		} else {
 			$this->field_layout_class = $this->get_field_layout_class();
-			$this->active_field_size  = $this->get_size_of_class( $this->field_layout_class );
+			$this->active_field_size  = self::get_size_of_class( $this->field_layout_class );
 		}
 
-		if ( 'divider' === $field->type && empty( $this->nested ) ) {
-			$this->section_size      = $this->active_field_size;
-			$this->active_field_size = 0;
-			$this->section_helper    = new self( true );
+		if ( 'divider' !== $field->type || $this->nested ) {
+			return;
 		}
+
+		$this->section_size      = $this->active_field_size;
+		$this->active_field_size = 0;
+		$this->section_helper    = new self( true );
 	}
 
 	/**
 	 * @return void
 	 */
 	private function maybe_close_section_helper() {
-		if ( empty( $this->section_helper ) ) {
+		if ( ! $this->section_helper ) {
 			return;
 		}
 		$this->section_helper->force_close_field_wrapper();
@@ -114,9 +144,8 @@ class FrmFieldGridHelper {
 
 		$split              = explode( ' ', $field['classes'] );
 		$this->is_frm_first = in_array( 'frm_first', $split, true );
-		$classes            = self::get_grid_classes();
 
-		foreach ( $classes as $class ) {
+		foreach ( self::get_grid_classes() as $class ) {
 			if ( in_array( $class, $split, true ) ) {
 				return $class;
 			}
@@ -137,7 +166,7 @@ class FrmFieldGridHelper {
 			$this->begin_field_wrapper();
 		}
 
-		if ( ! empty( $this->section_helper ) && $this->section_is_open ) {
+		if ( $this->section_helper && $this->section_is_open ) {
 			$this->section_helper->maybe_begin_field_wrapper();
 		}
 	}
@@ -146,12 +175,27 @@ class FrmFieldGridHelper {
 	 * @return bool
 	 */
 	private function should_first_close_the_active_field_wrapper() {
-		if ( false === $this->parent_li || ! empty( $this->section_helper ) ) {
+		if ( false === $this->parent_li ) {
 			return false;
 		}
+
+		/**
+		 * Fields that sit inside an open section are wrapped by that section's own helper, so the
+		 * row here is not theirs to close. set_field() opens the section helper for the section
+		 * field itself, one step ahead of this check, and section_is_open is not set until
+		 * sync_list_size() runs afterwards. Testing both is what keeps the section field subject to
+		 * the width check below rather than being treated as though it were already inside itself.
+		 *
+		 * @see https://github.com/Strategy11/formidable-pro/issues/3820
+		 */
+		if ( $this->section_helper && $this->section_is_open ) {
+			return false;
+		}
+
 		if ( 'end_divider' === $this->field->type ) {
 			return false;
 		}
+
 		return ! $this->can_support_current_layout() || $this->is_frm_first;
 	}
 
@@ -167,6 +211,7 @@ class FrmFieldGridHelper {
 
 	/**
 	 * @param string $class
+	 *
 	 * @return int
 	 */
 	private static function get_size_of_class( $class ) {
@@ -185,8 +230,9 @@ class FrmFieldGridHelper {
 				return 2;
 		}
 
-		if ( 0 === strpos( $class, 'frm' ) ) {
+		if ( str_starts_with( $class, 'frm' ) ) {
 			$substr = substr( $class, 3 );
+
 			if ( is_numeric( $substr ) ) {
 				return (int) $substr;
 			}
@@ -200,7 +246,7 @@ class FrmFieldGridHelper {
 	 * @return void
 	 */
 	public function sync_list_size() {
-		if ( ! isset( $this->field ) ) {
+		if ( ! $this->field ) {
 			return;
 		}
 
@@ -208,20 +254,25 @@ class FrmFieldGridHelper {
 			$this->section_is_open = true;
 		}
 
-		if ( ! empty( $this->section_helper ) ) {
+		if ( $this->section_helper ) {
 			$this->section_helper->sync_list_size();
+
 			if ( 'end_divider' === $this->field->type ) {
 				$this->maybe_close_section_helper();
 			}
+
 			return;
 		}
 
-		if ( false !== $this->parent_li ) {
-			$this->current_field_count ++;
-			$this->current_list_size += $this->active_field_size;
-			if ( 12 === $this->current_list_size ) {
-				$this->close_field_wrapper();
-			}
+		if ( false === $this->parent_li ) {
+			return;
+		}
+
+		++$this->current_field_count;
+		$this->current_list_size += $this->active_field_size;
+
+		if ( 12 === $this->current_list_size ) {
+			$this->close_field_wrapper();
 		}
 	}
 
@@ -241,7 +292,12 @@ class FrmFieldGridHelper {
 	 * @return void
 	 */
 	private function close_field_wrapper() {
-		$this->maybe_close_section_helper();
+		// Only an open section has a nested wrapper to close. A section helper that set_field() has
+		// just created belongs to the section about to start, so closing this row must leave it alone.
+		if ( $this->section_is_open ) {
+			$this->maybe_close_section_helper();
+		}
+
 		echo '</ul></li>';
 		$this->parent_li           = false;
 		$this->current_list_size   = 0;
@@ -260,10 +316,11 @@ class FrmFieldGridHelper {
 
 	/**
 	 * @param string $class
+	 *
 	 * @return bool
 	 */
 	private function can_support_an_additional_layout( $class ) {
-		$size = $this->get_size_of_class( $class );
+		$size = self::get_size_of_class( $class );
 		return $this->current_list_size + $size <= 12;
 	}
 

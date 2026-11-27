@@ -19,6 +19,7 @@ class FrmStrpLitePaymentTypeHandler {
 	 * @since 6.5, introduced in v3.1 of the Stripe add on.
 	 *
 	 * @param WP_Post $action
+	 *
 	 * @return bool
 	 */
 	public static function should_use_automatic_payment_methods( $action ) {
@@ -31,6 +32,7 @@ class FrmStrpLitePaymentTypeHandler {
 	 * @since 6.5, introduced in v3.1 of the Stripe add on.
 	 *
 	 * @param WP_Post $action
+	 *
 	 * @return string[] An empty array is treated as automatic.
 	 */
 	public static function get_payment_method_types( $action ) {
@@ -44,6 +46,7 @@ class FrmStrpLitePaymentTypeHandler {
 	 * @since 6.5, introduced in v3.1 of the Stripe add on.
 	 *
 	 * @param WP_Post $action
+	 *
 	 * @return string[]
 	 */
 	private static function get_filtered_payment_method_types( $action ) {
@@ -55,6 +58,7 @@ class FrmStrpLitePaymentTypeHandler {
 		 *
 		 * @param array<string> $payment_method_types
 		 * @param array $args {
+		 *
 		 *     @type WP_Post $action
 		 * }
 		 */
@@ -68,8 +72,9 @@ class FrmStrpLitePaymentTypeHandler {
 		);
 
 		if ( ! is_array( $payment_method_types ) ) {
-			_doing_it_wrong( __FUNCTION__, 'Payment method types should be an array or the string "automatic". All other values are invalid.', '3.1' );
-			$payment_method_types = array(); // Fallback to automatic when an invalid value is used.
+			_doing_it_wrong( __METHOD__, 'Payment method types should always be an array. All other values are invalid.', '3.1' );
+			// Fallback to automatic when an invalid value is used.
+			$payment_method_types = array();
 		}
 
 		return $payment_method_types;

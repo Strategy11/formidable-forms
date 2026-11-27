@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-FrmStrpLiteAppHelper::fee_education( 'settings' );
+FrmStrpLiteAppHelper::fee_education( 'stripe-global-settings-tip' );
 ?>
 <table class="form-table">
 	<tr class="form-field">
@@ -11,7 +11,7 @@ FrmStrpLiteAppHelper::fee_education( 'settings' );
 			<?php esc_html_e( 'Test Mode', 'formidable' ); ?>
 		</td>
 		<td>
-			<label for="frm_strp_test_mode">
+			<label>
 				<input type="checkbox" name="frm_strp_test_mode" id="frm_strp_test_mode" value="1" <?php checked( $settings->settings->test_mode, 1 ); ?> />
 				<?php esc_html_e( 'Use the Stripe test mode', 'formidable' ); ?>
 			</label>

@@ -1,4 +1,15 @@
 <?php
+/**
+ * Form errors and success message wrapper.
+ *
+ * @package Formidable
+ *
+ * @var stdClass|null $form                    Form object when available.
+ * @var string|null   $message                 Success message HTML.
+ * @var array|null    $errors                  Field errors keyed by field id.
+ * @var string|null   $include_extra_container Optional CSS class for a wrapping container.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -7,6 +18,8 @@ if ( isset( $include_extra_container ) ) { ?>
 <div class="<?php echo esc_attr( $include_extra_container ); ?>" id="frm_form_<?php echo esc_attr( $form->id ); ?>_container">
 	<?php
 }
+
+// phpcs:ignore Universal.Operators.StrictComparisons
 if ( isset( $message ) && $message != '' ) {
 	if ( FrmAppHelper::is_admin() ) {
 		?>
@@ -15,33 +28,41 @@ if ( isset( $message ) && $message != '' ) {
 	} else {
 		FrmFormsHelper::maybe_get_scroll_js( $form->id );
 
-		// we need to allow scripts here for javascript in the success message
+		// We need to allow scripts here for javascript in the success message
 		echo FrmAppHelper::maybe_kses( $message ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }
 
-if ( isset( $errors ) && is_array( $errors ) && ! empty( $errors ) ) {
-
+if ( ! empty( $errors ) && is_array( $errors ) ) {
 	if ( isset( $form ) && is_object( $form ) ) {
 		FrmFormsHelper::get_scroll_js( $form->id );
 	}
 	?>
-<div class="<?php echo esc_attr( FrmFormsHelper::form_error_class() ); ?>" role="alert">
+<div class="<?php echo esc_attr( FrmFormsHelper::form_error_class() ); ?>" role="alert" tabindex="-1" data-frm-error-summary="1">
 	<?php
 	$img = '';
+
 	if ( ! FrmAppHelper::is_admin() ) {
 		$img = apply_filters( 'frm_error_icon', $img );
-		if ( $img && ! empty( $img ) ) {
+
+		if ( $img ) {
 			echo '<img src="' . esc_url( $img ) . '" alt="" />';
 		}
 	}
 
-	FrmFormsHelper::show_errors( compact( 'img', 'errors', 'form' ) );
+	$error_args = compact( 'img', 'errors', 'form' );
+
+	if ( isset( $values['fields'] ) ) {
+		// Reuse the fields already prepared for this form so the summary needs no extra query.
+		$error_args['fields'] = $values['fields'];
+	}
+
+	FrmFormsHelper::show_errors( $error_args );
 
 	?>
 </div>
 	<?php
-}
+}//end if
 
 if ( isset( $include_extra_container ) ) {
 	?>

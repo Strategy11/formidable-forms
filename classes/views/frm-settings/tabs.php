@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				?>
 				>
 				<?php FrmAppHelper::icon_by_class( $section['icon'], array( 'aria-hidden' => 'true' ) ); ?>
-				<?php echo FrmAppHelper::kses( $section['name'], array( 'span' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				<span class="frm-font-medium"><?php FrmAppHelper::kses_echo( $section['name'], array( 'span' ) ); ?></span>
 			</a>
 		</li>
 	<?php } ?>

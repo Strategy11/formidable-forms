@@ -10,14 +10,10 @@ class FrmFieldNumber extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'number';
-
-	/**
-	 * @var string
-	 */
-	protected $display_type = 'text';
 
 	/**
 	 * @var bool
@@ -33,14 +29,21 @@ class FrmFieldNumber extends FrmFieldType {
 			'clear_on_focus' => true,
 			'invalid'        => true,
 			'range'          => true,
+			'autocomplete'   => true,
 		);
 
-		$frm_settings = FrmAppHelper::get_settings();
-		if ( $frm_settings->use_html ) {
-			$settings['max'] = false;
-		}
+		$settings['max'] = false;
 
 		return $settings;
+	}
+
+	/**
+	 * @since 7.0
+	 *
+	 * @return array<string>
+	 */
+	protected function get_autocomplete_filter_keys() {
+		return array( 'on', 'off', 'bday-day', 'bday-year', 'postal-code', 'transaction-amount', 'tel-extension' );
 	}
 
 	/**
@@ -57,39 +60,43 @@ class FrmFieldNumber extends FrmFieldType {
 	/**
 	 * @since 3.01.03
 	 *
+	 * @param array  $args
+	 * @param string $input_html
+	 *
 	 * @return void
 	 */
 	protected function add_extra_html_atts( $args, &$input_html ) {
 		$this->add_min_max( $args, $input_html );
 	}
 
+	/**
+	 * @param array $args
+	 */
 	public function validate( $args ) {
 		$errors = array();
 
 		$this->remove_commas_from_number( $args );
 
-		//validate the number format
+		// Validate the number format.
 		if ( ! is_numeric( $args['value'] ) && '' !== $args['value'] ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
 		}
 
-		// validate number settings
-		if ( $args['value'] != '' ) {
-			$frm_settings = FrmAppHelper::get_settings();
-			// only check if options are available in settings
-			$minnum = FrmField::get_option( $this->field, 'minnum' );
-			$maxnum = FrmField::get_option( $this->field, 'maxnum' );
-			if ( $frm_settings->use_html && $maxnum !== '' && $minnum !== '' ) {
-				$value = (float) $args['value'];
-				if ( $value < $minnum ) {
-					$errors[ 'field' . $args['id'] ] = __( 'Please select a higher number', 'formidable' );
-				} elseif ( $value > $maxnum ) {
-					$errors[ 'field' . $args['id'] ] = __( 'Please select a lower number', 'formidable' );
-				}
-			}
-
-			$this->validate_step( $errors, $args );
+		if ( $args['value'] === '' ) {
+			return $errors;
 		}
+
+		$value  = (float) $args['value'];
+		$minnum = FrmField::get_option( $this->field, 'minnum' );
+		$maxnum = FrmField::get_option( $this->field, 'maxnum' );
+
+		if ( $minnum !== '' && $value < $minnum ) {
+			$errors[ 'field' . $args['id'] ] = __( 'Please select a higher number', 'formidable' );
+		} elseif ( $maxnum !== '' && $value > $maxnum ) {
+			$errors[ 'field' . $args['id'] ] = __( 'Please select a lower number', 'formidable' );
+		}
+
+		$this->validate_step( $errors, $args );
 
 		return $errors;
 	}
@@ -104,17 +111,20 @@ class FrmFieldNumber extends FrmFieldType {
 	 *
 	 * @return void
 	 */
-	private function validate_step( &$errors, $args ) {
+	protected function validate_step( &$errors, $args ) {
 		if ( isset( $errors[ 'field' . $args['id'] ] ) ) {
-			return; // Don't need to check if value is invalid before.
+			// Don't need to check if value is invalid before.
+			return;
 		}
 
 		$step = FrmField::get_option( $this->field, 'step' );
+
 		if ( ! $step || ! is_numeric( $step ) ) {
 			return;
 		}
 
 		$result = $this->check_value_is_valid_with_step( $args['value'], $step );
+
 		if ( ! $result ) {
 			return;
 		}
@@ -122,8 +132,8 @@ class FrmFieldNumber extends FrmFieldType {
 		$errors[ 'field' . $args['id'] ] = sprintf(
 			// Translators: %1$s: the first nearest value; %2$s: the second nearest value.
 			__( 'Please enter a valid value. Two nearest valid values are %1$s and %2$s', 'formidable' ),
-			floatval( $result[0] ),
-			floatval( $result[1] )
+			is_numeric( $result[0] ) ? (float) $result[0] : $result[0],
+			is_numeric( $result[1] ) ? (float) $result[1] : $result[1]
 		);
 	}
 
@@ -134,17 +144,19 @@ class FrmFieldNumber extends FrmFieldType {
 	 *
 	 * @param numeric $value The value.
 	 * @param numeric $step  The step.
-	 * @return int|array     Return `0` if valid. Otherwise, return an array contains two nearest values.
+	 *
+	 * @return array|int     Return `0` if valid. Otherwise, return an array contains two nearest values.
 	 */
-	private function check_value_is_valid_with_step( $value, $step ) {
+	protected function check_value_is_valid_with_step( $value, $step ) {
 		// Count the number of decimals.
-		$decimals = max( FrmAppHelper::count_decimals( $value ), FrmAppHelper::count_decimals( $step ) );
+		$decimals = (int) max( FrmAppHelper::count_decimals( $value ), FrmAppHelper::count_decimals( $step ) );
 
 		// Convert value and step to int to prevent precision problem.
-		$pow   = pow( 10, $decimals );
-		$value = intval( $pow * $value );
-		$step  = intval( $pow * $step );
+		$pow   = 10 ** $decimals;
+		$value = (int) ( $pow * $value );
+		$step  = (int) ( $pow * $step );
 		$div   = $value / $step;
+
 		if ( is_int( $div ) ) {
 			return 0;
 		}
@@ -164,25 +176,29 @@ class FrmFieldNumber extends FrmFieldType {
 	 * @return void
 	 */
 	private function remove_commas_from_number( &$args ) {
-		if ( strpos( $args['value'], ',' ) ) {
-			$args['value'] = str_replace( ',', '', $args['value'] );
-			FrmEntriesHelper::set_posted_value( $this->field, $args['value'], $args );
+		if ( ! str_contains( $args['value'], ',' ) ) {
+			return;
 		}
+
+		$args['value'] = str_replace( ',', '', $args['value'] );
+		FrmEntriesHelper::set_posted_value( $this->field, $args['value'], $args );
 	}
 
 	/**
 	 * Force the value to be numeric before it's saved in the DB
+	 *
+	 * @param array|string $value
+	 *
+	 * @return float
 	 */
 	public function set_value_before_save( $value ) {
-		if ( ! is_numeric( $value ) ) {
-			$value = (float) $value;
-		}
-
-		return $value;
+		return is_numeric( $value ) ? $value : (float) $value;
 	}
 
 	/**
 	 * @since 4.0.04
+	 *
+	 * @param array|string $value
 	 *
 	 * @return void
 	 */

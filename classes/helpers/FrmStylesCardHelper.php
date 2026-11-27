@@ -48,7 +48,7 @@ class FrmStylesCardHelper {
 	/**
 	 * @param stdClass|WP_Post $active_style
 	 * @param WP_Post          $default_style
-	 * @param string|int       $form_id
+	 * @param int|string       $form_id
 	 * @param bool             $enabled
 	 */
 	public function __construct( $active_style, $default_style, $form_id, $enabled ) {
@@ -68,6 +68,7 @@ class FrmStylesCardHelper {
 	 *
 	 * @param stdClass|WP_Post $style
 	 * @param bool             $hidden Used for pagination.
+	 *
 	 * @return void
 	 */
 	private function echo_style_card( $style, $hidden = false ) {
@@ -86,6 +87,7 @@ class FrmStylesCardHelper {
 	 *
 	 * @param stdClass|WP_Post $style
 	 * @param bool             $hidden
+	 *
 	 * @return array
 	 */
 	private function get_params_for_style_card( $style, $hidden = false ) {
@@ -93,8 +95,7 @@ class FrmStylesCardHelper {
 			$label_position = $style->post_content['position'];
 		} else {
 			$frm_style      = new FrmStyle();
-			$defaults       = $frm_style->get_defaults();
-			$label_position = $defaults['position'];
+			$label_position = $frm_style->get_defaults()['position'];
 		}
 
 		$class_name = 'frm_style_' . $style->post_name;
@@ -108,12 +109,15 @@ class FrmStylesCardHelper {
 		);
 
 		$is_active_style = $style->ID === $this->active_style->ID;
+
 		if ( $is_active_style ) {
 			$params['class'] .= ' frm-active-style-card frm-currently-set-style-card';
 		}
+
 		if ( $hidden ) {
 			$params['class'] .= ' frm_hidden';
 		}
+
 		if ( self::has_dark_background( $style ) ) {
 			$params['class'] .= ' frm-dark-style';
 		}
@@ -125,6 +129,7 @@ class FrmStylesCardHelper {
 		 *
 		 * @param array $params
 		 * @param array $args {
+		 *
 		 *     @type WP_Post $style
 		 * }
 		 */
@@ -132,7 +137,8 @@ class FrmStylesCardHelper {
 	}
 
 	/**
-	 * @param WP_Post|stdClass $style
+	 * @param stdClass|WP_Post $style
+	 *
 	 * @return bool
 	 */
 	private static function has_dark_background( $style ) {
@@ -144,16 +150,9 @@ class FrmStylesCardHelper {
 
 		$color = $style->post_content[ $key ];
 
-		if ( 0 === strpos( $color, 'rgba' ) ) {
-			preg_match_all( '/([\\d.]+)/', $color, $matches );
-
-			if ( isset( $matches[1][3] ) && is_numeric( $matches[1][3] ) ) {
-				// Consider a faded out rgba value as light even when the color is dark.
-				$color_opacity = floatval( $matches[1][3] );
-				if ( $color_opacity < 0.5 ) {
-					return false;
-				}
-			}
+		// A faded background appears light regardless of the color format.
+		if ( FrmStylesHelper::get_color_alpha( $color ) < 0.5 ) {
+			return false;
 		}
 
 		$brightness = FrmStylesHelper::get_color_brightness( $color );
@@ -163,12 +162,16 @@ class FrmStylesCardHelper {
 	/**
 	 * @since 6.0
 	 *
-	 * @param array $style API style data {
+	 * @param array $style {
+	 *     API style data.
+	 *
 	 *     @type array  $settings
 	 *     @type string $name
 	 *     @type string $slug
 	 * }
+	 *
 	 * @param bool  $hidden
+	 *
 	 * @return bool True if the template was valid and echoed.
 	 */
 	private function echo_card_template( $style, $hidden = false ) {
@@ -194,12 +197,14 @@ class FrmStylesCardHelper {
 			 *
 			 * @param array $params
 			 * @param array $args {
-			 *     @type WP_Post|stdClass $style
+			 *
+			 *     @type stdClass|WP_Post $style
 			 * }
+			 *
 			 * @param stdClass $style_object
 			 * @param array    $style
 			 */
-			$param_filter = function( $params, $args ) use ( $style_object, $style ) {
+			$param_filter = function ( $params, $args ) use ( $style_object, $style ) {
 				if ( $args['style'] !== $style_object ) {
 					return $params;
 				}
@@ -221,13 +226,14 @@ class FrmStylesCardHelper {
 			 *
 			 * @param array $params
 			 * @param array $style
+			 *
 			 * @return array
 			 */
-			$param_filter = function( $params ) use ( $style ) {
+			$param_filter = function ( $params ) use ( $style ) {
 				$params['data-template-key'] = $style['slug'];
 				return $params;
 			};
-		}
+		}//end if
 
 		$this->is_new_template = ! empty( $style['is_new'] );
 
@@ -244,8 +250,9 @@ class FrmStylesCardHelper {
 	 *
 	 * @since 6.0
 	 *
-	 * @param WP_Post|stdClass $style A new style (including duplicated styles) is not a WP_Post object.
+	 * @param stdClass|WP_Post $style A new style (including duplicated styles) is not a WP_Post object.
 	 *                                Template cards also use an stdClss instead of a WP_Post object.
+	 *
 	 * @return string
 	 */
 	public static function get_style_param_for_card( $style ) {
@@ -255,8 +262,9 @@ class FrmStylesCardHelper {
 		if ( empty( $style->post_content['fieldset_bg_color'] ) ) {
 			$background_color = '#fff';
 		} else {
-			$background_color = ( 0 === strpos( $style->post_content['fieldset_bg_color'], 'rgb' ) ? $style->post_content['fieldset_bg_color'] : '#' . $style->post_content['fieldset_bg_color'] );
+			$background_color = FrmStylesHelper::add_color_hash_if_needed( $style->post_content['fieldset_bg_color'] );
 		}
+
 		$styles[] = '--preview-background-color: ' . $background_color;
 
 		if ( empty( $style->post_content['submit_border_color'] ) ) {
@@ -265,7 +273,6 @@ class FrmStylesCardHelper {
 
 		// Apply additional styles from the style.
 		$rules_to_apply = self::get_style_keys_for_card();
-
 		$frm_style      = new FrmStyle();
 		$color_settings = $frm_style->get_color_settings();
 
@@ -277,9 +284,8 @@ class FrmStylesCardHelper {
 
 			$value = $style->post_content[ $key ];
 
-			$is_hex = in_array( $key, $color_settings, true ) && $value && '#' !== $value[0] && false === strpos( $value, 'rgb' ) && $value !== 'transparent';
-			if ( $is_hex ) {
-				$value = '#' . $value;
+			if ( in_array( $key, $color_settings, true ) ) {
+				$value = FrmStylesHelper::add_color_hash_if_needed( $value );
 			}
 
 			$styles[] = '--' . str_replace( '_', '-', $key ) . ':' . $value;
@@ -333,12 +339,14 @@ class FrmStylesCardHelper {
 			'class' => 'frm-style-card-wrapper with_frm_style',
 			'style' => $wrapper_style,
 		);
+
 		if ( $this->enabled ) {
 			$card_wrapper_params['class'] .= ' frm-styles-enabled';
 		}
 
 		$first_style         = reset( $styles );
 		$is_template_wrapper = is_array( $first_style );
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div <?php FrmAppHelper::array_to_html_params( $card_wrapper_params, true ); ?>>
 			<?php
@@ -350,6 +358,7 @@ class FrmStylesCardHelper {
 			?>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -381,6 +390,7 @@ class FrmStylesCardHelper {
 	 * @since 6.0
 	 *
 	 * @param array<array> $styles
+	 *
 	 * @return void
 	 */
 	private function echo_template_cards( $styles ) {
@@ -392,9 +402,10 @@ class FrmStylesCardHelper {
 			 * @param array|string $style
 			 * @param string       $key   The key for the API data. It may be a numeric ID, or a key like "active_sub" or "expires".
 			 * @param int          $count Used for pagination.
+			 *
 			 * @return void
 			 */
-			function( $style, $key ) use ( &$count ) {
+			function ( $style, $key ) {
 				if ( ! is_numeric( $key ) ) {
 					// Skip active_sub/expires keys.
 					return;
@@ -407,6 +418,7 @@ class FrmStylesCardHelper {
 
 	/**
 	 * @param array<WP_Post> $styles
+	 *
 	 * @return void
 	 */
 	private function echo_custom_cards( $styles ) {
@@ -415,14 +427,15 @@ class FrmStylesCardHelper {
 		array_walk(
 			$styles,
 			/**
-			* Echo a style card for a single style in the $styles array.
-			*
-			* @param WP_Post $style
-			* @param int     $count Used for pagination.
-			* @return void
-			*/
-			function( $style ) use ( &$count ) {
-				$hidden = $count > ( self::PAGE_SIZE - 1 );
+			 * Echo a style card for a single style in the $styles array.
+			 *
+			 * @param WP_Post $style
+			 * @param int     $count Used for pagination.
+			 *
+			 * @return void
+			 */
+			function ( $style ) use ( &$count ) {
+				$hidden = $count > self::PAGE_SIZE - 1;
 				$this->echo_style_card( $style, $hidden );
 				++$count;
 			}
@@ -435,6 +448,7 @@ class FrmStylesCardHelper {
 	 * @since 6.0
 	 *
 	 * @param int $count
+	 *
 	 * @return void
 	 */
 	private function maybe_echo_card_pagination( $count ) {
@@ -442,6 +456,7 @@ class FrmStylesCardHelper {
 			// Not enough cards to require pagination.
 			return;
 		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="frm-style-card-pagination frm_wrap">
 			<a href="#" class="frm-show-all-styles">
@@ -455,6 +470,7 @@ class FrmStylesCardHelper {
 			</a>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -473,6 +489,7 @@ class FrmStylesCardHelper {
 	 * Remove the default style from an array of styles.
 	 *
 	 * @param array $styles
+	 *
 	 * @return array
 	 */
 	public function filter_custom_styles( $styles ) {
@@ -480,9 +497,10 @@ class FrmStylesCardHelper {
 			$styles,
 			/**
 			 * @param WP_Post $style
+			 *
 			 * @return bool
 			 */
-			function( $style ) {
+			function ( $style ) {
 				return $this->default_style->ID !== $style->ID;
 			}
 		);

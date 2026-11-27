@@ -8,6 +8,7 @@ FrmAppHelper::print_admin_banner( ! $has_nav && empty( $atts['switcher'] ) );
 <div id="frm_top_bar" class="<?php echo esc_attr( 'frm_nav_bar' ); ?>">
 	<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable' ) ); ?>" class="frm-header-logo">
 		<?php FrmAppHelper::show_header_logo(); ?>
+		<span class="screen-reader-text"><?php esc_html_e( 'View Forms', 'formidable' ); ?></span>
 	</a>
 
 	<?php
@@ -37,15 +38,17 @@ FrmAppHelper::print_admin_banner( ! $has_nav && empty( $atts['switcher'] ) );
 	</div>
 	<ul class="frm_form_nav"></ul>
 		<?php
-	}
+	}//end if
 
 	if ( isset( $atts['nav'] ) ) {
-		echo FrmAppHelper::kses( $atts['nav'], 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		FrmAppHelper::kses_echo( $atts['nav'], 'all' );
 	}
 
 	echo '<div id="frm-publishing">';
+
 	if ( ! empty( $atts['publish'] ) || ! empty( $atts['import_link'] ) ) {
 		$btn_type = 'primary';
+
 		if ( isset( $atts['publish'] ) && is_array( $atts['publish'] ) ) {
 			call_user_func( $atts['publish'][0], $atts['publish'][1] );
 			$btn_type = 'secondary';
@@ -57,7 +60,7 @@ FrmAppHelper::print_admin_banner( ! $has_nav && empty( $atts['switcher'] ) );
 		}
 	} elseif ( ! FrmAppHelper::pro_is_installed() ) {
 		?>
-			<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'header' ) ); ?>" class="button button-secondary frm-button-secondary">
+			<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'header' ) ); ?>" class="button button-secondary frm-button-secondary" target="_blank" rel="noopener">
 				<?php esc_html_e( 'Upgrade', 'formidable' ); ?>
 			</a>
 		<?php
@@ -67,7 +70,7 @@ FrmAppHelper::print_admin_banner( ! $has_nav && empty( $atts['switcher'] ) );
 	if ( FrmAppHelper::is_full_screen() ) {
 		?>
 		<div class="frm-full-close">
-			<a href="<?php echo esc_attr( $atts['close'] ); ?>" aria-label="<?php esc_attr_e( 'Close', 'formidable' ); ?>">
+			<a href="<?php echo esc_url( $atts['close'] ); ?>" aria-label="<?php esc_attr_e( 'Close', 'formidable' ); ?>">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon', array( 'aria-label' => 'Dismiss' ) ); ?>
 			</a>
 		</div>

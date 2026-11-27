@@ -5,11 +5,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmSettingsController {
 
+	/**
+	 * Icon for the API section, used whether the add-on is active or only a placeholder.
+	 *
+	 * @since 6.35
+	 *
+	 * @var string
+	 */
+	private static $api_section_icon = 'frmfont frm_cloud_icon';
+
+	/**
+	 * Payments sections are removed from the top level and added to a payments section.
+	 *
+	 * @since 6.22.1
+	 *
+	 * @var array
+	 */
+	private static $removed_payments_sections = array();
+
+	/**
+	 * @return void
+	 */
 	public static function menu() {
 		// Make sure admins can see the menu items
 		FrmAppHelper::force_capability( 'frm_change_settings' );
 
-		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Global Settings', 'formidable' ), __( 'Global Settings', 'formidable' ), 'frm_change_settings', 'formidable-settings', 'FrmSettingsController::route' );
+		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Global Settings', 'formidable' ), __( 'Global Settings', 'formidable' ), 'frm_change_settings', 'formidable-settings', 'FrmSettingsController::route' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
@@ -21,21 +42,27 @@ class FrmSettingsController {
 		if ( ! current_user_can( 'activate_plugins' ) ) {
 			return;
 		}
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/license_box.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/license_box.php';
 	}
 
+	/**
+	 * @param array  $errors
+	 * @param string $message
+	 *
+	 * @return void
+	 */
 	public static function display_form( $errors = array(), $message = '' ) {
 		global $frm_vars;
 
 		$frm_settings = FrmAppHelper::get_settings();
+		$sections     = self::get_settings_tabs();
+		$current      = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
 
-		$uploads     = wp_upload_dir();
-		$target_path = $uploads['basedir'] . '/formidable/css';
+		if ( in_array( $current, array( 'stripe_settings', 'square_settings', 'authorize_net_settings', 'paypal_settings' ), true ) ) {
+			$current = 'payments_settings';
+		}
 
-		$sections = self::get_settings_tabs();
-		$current  = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
-
-		require( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/form.php' );
+		require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/form.php';
 	}
 
 	/**
@@ -45,60 +72,74 @@ class FrmSettingsController {
 	 */
 	private static function get_settings_tabs() {
 		$sections = array(
-			'general' => array(
-				'class'    => __CLASS__,
+			'general'       => array(
+				'class'    => self::class,
 				'function' => 'general_settings',
 				'name'     => __( 'General Settings', 'formidable' ),
-				'icon'     => 'frm_icon_font frm_settings_icon',
+				'icon'     => 'frmfont frm_settings_icon',
 			),
-			'messages' => array(
-				'class'    => __CLASS__,
+			'messages'      => array(
+				'class'    => self::class,
 				'function' => 'message_settings',
 				'name'     => __( 'Message Defaults', 'formidable' ),
-				'icon'     => 'frm_icon_font frm_stamp_icon',
+				'icon'     => 'frmfont frm_stamp_icon',
 			),
-			'permissions' => array(
-				'class'    => __CLASS__,
+			'permissions'   => array(
+				'class'    => self::class,
 				'function' => 'permission_settings',
 				'name'     => __( 'Permissions', 'formidable' ),
-				'icon'     => 'frm_icon_font frm_lock_icon',
+				'icon'     => 'frmfont frm_lock_icon',
 			),
-			'custom_css' => array(
+			'payments'      => array(
+				'name'     => __( 'Payments', 'formidable' ),
+				'icon'     => 'frmfont frm_simple_cc_icon',
+				'class'    => self::class,
+				'function' => 'payments_settings',
+			),
+			'custom_css'    => array(
 				'class'    => 'FrmStylesController',
 				'function' => 'custom_css',
 				'name'     => __( 'Custom CSS', 'formidable' ),
-				'icon'     => 'frm_icon_font frm_code_icon',
+				'icon'     => 'frmfont frm_code_icon',
 			),
 			'manage_styles' => array(
 				'class'    => 'FrmStylesController',
 				'function' => 'manage',
 				'name'     => __( 'Manage Styles', 'formidable' ),
-				'icon'     => 'frm_icon_font frm_pallet_icon',
+				'icon'     => 'frmfont frm_pallet_icon',
 			),
-			'captcha' => array(
-				'class'    => __CLASS__,
+			'captcha'       => array(
+				'class'    => self::class,
 				'function' => 'captcha_settings',
-				'name'     => __( 'Captcha', 'formidable' ),
-				'icon'     => 'frm_icon_font frm_shield_check_icon',
+				'name'     => __( 'Captcha/Spam', 'formidable' ),
+				'icon'     => 'frmfont frm_shield_check_icon',
 			),
-			'white_label' => array(
+			'email'         => array(
+				'class'    => self::class,
+				'function' => 'email_settings',
+				'name'     => __( 'Email', 'formidable' ),
+				'icon'     => 'frmfont frm_email_icon',
+			),
+			'white_label'   => array(
 				'name'       => __( 'White Labeling', 'formidable' ),
-				'icon'       => 'frm_icon_font frm_ghost_icon',
+				'icon'       => 'frmfont frm_ghost_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => array(
 					'medium'     => 'white-label',
 					'upgrade'    => __( 'White labeling options', 'formidable' ),
 					'screenshot' => 'white-label.png',
+					'learn-more' => FrmAppHelper::get_doc_url( 'features/white-label-form-builder-wordpress', 'white-labeling-global-settings', false ),
 				),
 			),
-			'inbox' => array(
+			'inbox'         => array(
 				'name'       => __( 'Inbox', 'formidable' ),
-				'icon'       => 'frm_icon_font frm_email_icon',
+				'icon'       => 'frmfont frm_email_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => array(
 					'medium'     => 'inbox-settings',
 					'upgrade'    => __( 'Inbox settings', 'formidable' ),
 					'screenshot' => 'inbox.png',
+					'learn-more' => FrmAppHelper::get_doc_url( 'global-settings-overview/#kb-inbox', 'inbox-global-settings' ),
 				),
 			),
 		);
@@ -107,8 +148,9 @@ class FrmSettingsController {
 			// If no addons need a license, skip this page
 			$show_licenses    = false;
 			$installed_addons = apply_filters( 'frm_installed_addons', array() );
+
 			foreach ( $installed_addons as $installed_addon ) {
-				if ( ! $installed_addon->is_parent_licence && $installed_addon->plugin_name != 'Formidable Pro' && $installed_addon->needs_license ) {
+				if ( ! $installed_addon->is_parent_licence && $installed_addon->plugin_name !== 'Formidable Pro' && $installed_addon->needs_license ) {
 					$show_licenses = true;
 					break;
 				}
@@ -119,21 +161,23 @@ class FrmSettingsController {
 					'class'    => 'FrmAddonsController',
 					'function' => 'license_settings',
 					'name'     => __( 'Plugin Licenses', 'formidable' ),
-					'icon'     => 'frm_icon_font frm_keyalt_icon',
+					'icon'     => 'frmfont frm_key_icon',
 					'ajax'     => true,
 				);
 			}
-		}
+		}//end if
 
 		/**
 		 * @param array<array> $sections
 		 */
 		$sections = apply_filters( 'frm_add_settings_section', $sections );
+		self::add_inactive_addon_sections( $sections );
+		self::remove_payments_sections( $sections );
 
 		$sections['misc'] = array(
 			'name'     => __( 'Miscellaneous', 'formidable' ),
-			'icon'     => 'frm_icon_font frm_shuffle_icon',
-			'class'    => __CLASS__,
+			'icon'     => 'frmfont frm_shuffle_icon',
+			'class'    => self::class,
 			'function' => 'misc_settings',
 		);
 
@@ -142,7 +186,7 @@ class FrmSettingsController {
 			$defaults = array(
 				'html_class' => '',
 				'name'       => ucfirst( $key ),
-				'icon'       => 'frm_icon_font frm_settings_icon',
+				'icon'       => 'frmfont frm_settings_icon',
 				'anchor'     => $key . '_settings',
 				'data'       => array(),
 			);
@@ -159,9 +203,155 @@ class FrmSettingsController {
 			}
 
 			$sections[ $key ] = $section;
-		}
+		}//end foreach
 
 		return $sections;
+	}
+
+	/**
+	 * Add a placeholder section for each add-on that owns a Global Settings
+	 * section but is not active.
+	 *
+	 * A placeholder reads as disabled and opens a page offering to activate the
+	 * add-on or to upgrade, depending on what the license allows. It goes at the
+	 * head of the add-on sections, right after Inbox, so it sits with the rest of
+	 * the add-on settings instead of trailing them. A section already claimed by
+	 * an active plugin is left alone, so nothing stands in for a section that is
+	 * really there.
+	 *
+	 * @since 6.35
+	 *
+	 * @param array<array> $sections Sections registered for the Global Settings page so far.
+	 *
+	 * @return void
+	 */
+	private static function add_inactive_addon_sections( &$sections ) {
+		if ( isset( $sections['api'] ) ) {
+			// The add-on is active, so it owns the section. Only the icon is taken over,
+			// so the tab looks the same whether or not the add-on is installed.
+			$sections['api']['icon'] = self::$api_section_icon;
+			return;
+		}
+
+		self::insert_section_after( $sections, 'inbox', 'api', self::get_api_placeholder_section() );
+	}
+
+	/**
+	 * Insert a section directly after another one, leaving the rest of the order alone.
+	 *
+	 * Assigning a new key lands the section at the end of the array, so the array
+	 * is rebuilt to put it where it belongs.
+	 *
+	 * @since 6.35
+	 *
+	 * @param array<array> $sections Sections registered for the Global Settings page so far.
+	 * @param string       $after    Key of the section the new one follows. The new section goes last when this key is not there.
+	 * @param string       $key      Key for the new section.
+	 * @param array        $section  The section to insert.
+	 *
+	 * @return void
+	 */
+	private static function insert_section_after( &$sections, $after, $key, $section ) {
+		if ( ! isset( $sections[ $after ] ) ) {
+			$sections[ $key ] = $section;
+			return;
+		}
+
+		$ordered = array();
+
+		foreach ( $sections as $section_key => $existing_section ) {
+			$ordered[ $section_key ] = $existing_section;
+
+			if ( $section_key === $after ) {
+				$ordered[ $key ] = $section;
+			}
+		}
+
+		$sections = $ordered;
+	}
+
+	/**
+	 * Get the placeholder that stands in for the API add-on's section.
+	 *
+	 * The upgrade data decides which call to action the page shows. When the
+	 * license covers the add-on, it carries the one click install or activate
+	 * link. Otherwise it carries the plan the add-on needs, and the page asks
+	 * the user to upgrade to it, on a gradient button that sets the upgrade
+	 * apart from a one click install.
+	 *
+	 * @since 6.35
+	 *
+	 * @return array
+	 */
+	private static function get_api_placeholder_section() {
+		$data = FrmAppHelper::get_upgrade_data_params(
+			'api',
+			array(
+				'medium'        => 'api-settings',
+				'upgrade'       => __( 'API settings', 'formidable' ),
+				'message'       => __( 'Send entries to other sites, connect external services, and embed your forms with the API add-on.', 'formidable' ),
+				'learn-more'    => FrmAppHelper::get_doc_url( 'formidable-api', 'api-global-settings' ),
+				'upsell-images' => 'api-settings-2.png,api-settings-3.png',
+			)
+		);
+
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			$data['gradient-upgrade'] = 1;
+		}
+
+		return array(
+			'name'       => __( 'API', 'formidable' ),
+			'icon'       => self::$api_section_icon,
+			'html_class' => 'frm_show_upgrade_tab frm_noallow',
+			'data'       => $data,
+		);
+	}
+
+	/**
+	 * Remove the payments sections (PayPal, Square, Stripe, Authorize.Net)
+	 * and show them all on the payments section in separate tabs.
+	 *
+	 * @since 6.22.1
+	 *
+	 * @param array $sections
+	 *
+	 * @return void
+	 */
+	private static function remove_payments_sections( &$sections ) {
+		$payment_section_keys = array( 'paypal', 'square', 'stripe', 'authorize_net' );
+
+		foreach ( $sections as $key => $section ) {
+			if ( ! in_array( $key, $payment_section_keys, true ) ) {
+				continue;
+			}
+
+			self::$removed_payments_sections[ $key ] = $section;
+			unset( $sections[ $key ] );
+		}
+
+		uksort( self::$removed_payments_sections, array( self::class, 'payment_sections_sort_callback' ) );
+	}
+
+	/**
+	 * Sort the payments sections (PayPal, Square, Stripe, Authorize.Net)
+	 *
+	 * @since 6.22.1
+	 *
+	 * @param string $a
+	 * @param string $b
+	 *
+	 * @return int
+	 */
+	private static function payment_sections_sort_callback( $a, $b ) {
+		$order      = array( 'stripe', 'square', 'paypal', 'authorize_net' );
+		$first_key  = array_search( $a, $order, true );
+		$second_key = array_search( $b, $order, true );
+
+		if ( false === $first_key || false === $second_key ) {
+			return 0;
+		}
+
+		return $first_key - $second_key;
 	}
 
 	public static function load_settings_tab() {
@@ -170,6 +360,7 @@ class FrmSettingsController {
 
 		$section  = FrmAppHelper::get_post_param( 'tab', '', 'sanitize_text_field' );
 		$sections = self::get_settings_tabs();
+
 		if ( ! isset( $sections[ $section ] ) ) {
 			wp_die();
 		}
@@ -179,8 +370,9 @@ class FrmSettingsController {
 		if ( isset( $section['class'] ) ) {
 			call_user_func( array( $section['class'], $section['function'] ) );
 		} else {
-			call_user_func( ( isset( $section['function'] ) ? $section['function'] : $section ) );
+			call_user_func( $section['function'] ?? $section );
 		}
+
 		wp_die();
 	}
 
@@ -193,9 +385,6 @@ class FrmSettingsController {
 	 */
 	public static function general_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
-		$uploads      = wp_upload_dir();
-		$target_path  = $uploads['basedir'] . '/formidable/css';
-
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/general.php';
 	}
 
@@ -203,13 +392,12 @@ class FrmSettingsController {
 	 * Render the global currency selector if Pro is up to date.
 	 *
 	 * @param FrmSettings $frm_settings
-	 * @param string $more_html
+	 *
 	 * @return void
 	 */
-	public static function maybe_render_currency_selector( $frm_settings, $more_html ) {
-		if ( false !== strpos( $more_html, 'id="frm_currency"' ) ) {
-			// Avoid rendering the Currency setting if it gets rendered from the frm_settings_form hook.
-			// This is for backward compatibility. If Pro is outdated there won't be two currency dropdowns.
+	public static function maybe_render_currency_selector( $frm_settings ) {
+		if ( is_callable( 'FrmProSettingsController::add_currency_settings' ) ) {
+			FrmProSettingsController::add_currency_settings();
 			return;
 		}
 
@@ -219,46 +407,79 @@ class FrmSettingsController {
 
 	/**
 	 * @since 4.0
+	 *
+	 * @return void
 	 */
 	public static function message_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
-
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/messages.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/messages.php';
 	}
 
 	/**
 	 * @since 4.0
+	 *
+	 * @return void
 	 */
 	public static function captcha_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
 		$captcha_lang = FrmAppHelper::locales( 'captcha' );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha.php';
+	}
+
+	/**
+	 * Shows email settings.
+	 *
+	 * @since 6.25
+	 *
+	 * @return void
+	 */
+	public static function email_settings() {
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/email/email-styles.php';
 	}
 
 	/**
 	 * @since 4.0
+	 *
+	 * @return void
 	 */
 	public static function permission_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
 		$frm_roles    = FrmAppHelper::frm_capabilities();
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/permissions.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/permissions.php';
+	}
+
+	/**
+	 * @return void
+	 */
+	public static function payments_settings() {
+		$payment_sections = self::$removed_payments_sections;
+		$tab              = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
+
+		if ( $tab && in_array( $tab, array( 'stripe_settings', 'square_settings', 'authorize_net_settings', 'paypal_settings' ), true ) ) {
+			$tab = str_replace( '_settings', '', $tab );
+		} else {
+			$tab = 'stripe';
+		}
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/payments.php';
 	}
 
 	/**
 	 * @since 4.0
+	 *
+	 * @return void
 	 */
 	public static function misc_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
-
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/misc.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/misc.php';
 	}
 
 	/**
 	 * Save form data submitted from the Global settings page.
 	 *
-	 * @param string|bool $stop_load
+	 * @param bool|string $stop_load
 	 *
 	 * @return void
 	 */
@@ -269,7 +490,13 @@ class FrmSettingsController {
 		$process_form = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
 
 		if ( ! wp_verify_nonce( $process_form, 'process_form_nonce' ) ) {
-			wp_die( esc_html( $frm_settings->admin_permission ) );
+			$error_args = array(
+				'title'       => __( 'Verification failed', 'formidable' ),
+				'body'        => $frm_settings->admin_permission,
+				'cancel_text' => __( 'Cancel', 'formidable' ),
+			);
+			FrmAppController::show_error_modal( $error_args );
+			return;
 		}
 
 		$errors  = array();
@@ -300,20 +527,27 @@ class FrmSettingsController {
 	 * Include the Update button on the global settings page.
 	 *
 	 * @since 4.0.02
+	 *
+	 * @return void
 	 */
 	public static function save_button() {
 		echo '<input class="button-primary frm-button-primary" type="submit"
 			value="' . esc_attr__( 'Update', 'formidable' ) . '"/>';
 	}
 
+	/**
+	 * @param bool|string $stop_load
+	 *
+	 * @return void
+	 */
 	public static function route( $stop_load = false ) {
 		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
 		$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
 		FrmAppHelper::include_svg();
 
-		if ( $action == 'process-form' ) {
+		if ( $action === 'process-form' ) {
 			self::process_form( $stop_load );
-		} elseif ( $stop_load != 'stop_load' ) {
+		} elseif ( $stop_load !== 'stop_load' ) {
 			self::display_form();
 		}
 	}
@@ -322,32 +556,15 @@ class FrmSettingsController {
 	 * Add CTA to the bottom on the plugin settings pages.
 	 *
 	 * @since 3.04.02
+	 *
+	 * @return void
 	 */
-	public static function settings_cta( $view ) {
-
+	public static function settings_cta() {
 		if ( get_option( 'frm_lite_settings_upgrade', false ) ) {
 			return;
 		}
 
-		$features = array(
-			__( 'Extra form features like file uploads, pagination, etc', 'formidable' ),
-			__( 'Repeaters & cascading fields for advanced forms', 'formidable' ),
-			__( 'Flexibly view, search, edit, and delete entries anywhere', 'formidable' ),
-			__( 'Display entries with virtually limitless Formidable views', 'formidable' ),
-			__( 'Create surveys & polls', 'formidable' ),
-			__( 'WordPress user registration and login forms', 'formidable' ),
-			__( 'Create Stripe, PayPal or Authorize.net payment forms', 'formidable' ),
-			__( 'Powerful conditional logic for smart forms', 'formidable' ),
-			__( 'Integrations with 1000+ marketing & payment services', 'formidable' ),
-			__( 'Collect digital signatures', 'formidable' ),
-			__( 'Accept user-submitted content with Post submissions', 'formidable' ),
-			__( 'Email routing', 'formidable' ),
-			__( 'Create calculator forms', 'formidable' ),
-			__( 'Save draft entries and return later', 'formidable' ),
-			__( 'Analyze form data with graphs & stats', 'formidable' ),
-		);
-
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/settings_cta.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/settings_cta.php';
 	}
 
 	/**
@@ -356,9 +573,10 @@ class FrmSettingsController {
 	 * @since 3.04.02
 	 */
 	public static function settings_cta_dismiss() {
+		check_ajax_referer( 'frm_ajax', 'nonce' );
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 
-		update_option( 'frm_lite_settings_upgrade', time(), 'no' );
+		update_option( 'frm_lite_settings_upgrade', time(), false );
 
 		wp_send_json_success();
 	}
@@ -372,40 +590,78 @@ class FrmSettingsController {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		global $wpdb;
-
-		$term = FrmAppHelper::get_param( 'term', '', 'get', 'sanitize_text_field' );
+		$term      = FrmAppHelper::get_param( 'term', '', 'get', 'sanitize_text_field' );
 		$post_type = FrmAppHelper::get_param( 'post_type', 'page', 'get', 'sanitize_text_field' );
 
+		wp_send_json( self::get_page_search_results( $term, $post_type ) );
+	}
+
+	/**
+	 * Find published posts for the page autocomplete by title or ID.
+	 *
+	 * A trailing " (ID: n)" is removed from the term so a prefilled label can be
+	 * edited, and an all-digit term also matches the post ID.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $term      Search term typed in the autocomplete input.
+	 * @param string $post_type Post type to search.
+	 *
+	 * @return array[] Autocomplete results with value and label keys.
+	 */
+	public static function get_page_search_results( $term, $post_type ) {
+		global $wpdb;
+
+		$term  = trim( (string) preg_replace( '/\s+\((?:I(?:D(?::\s*\d*)?)?)?\)?\s*$/', '', $term ) );
 		$where = array(
-			'post_status'     => 'publish',
-			'post_type'       => $post_type,
-			'post_title LIKE' => $term,
+			'post_status' => 'publish',
+			'post_type'   => $post_type,
 		);
+
+		if ( preg_match( '/^\d+$/', $term ) ) {
+			$where[] = array(
+				'or'              => 1,
+				'post_title LIKE' => $term,
+				'ID'              => (int) $term,
+			);
+		} else {
+			$where['post_title LIKE'] = $term;
+		}
 
 		$atts = array(
 			'limit'    => 25,
 			'order_by' => 'post_title',
 		);
 
-		$pages = FrmDb::get_results( $wpdb->posts, $where, 'ID, post_title', $atts );
-
+		$pages   = FrmDb::get_results( $wpdb->posts, $where, 'ID, post_title', $atts );
 		$results = array();
+
 		foreach ( $pages as $page ) {
 			$results[] = array(
 				'value' => $page->ID,
-				'label' => $page->post_title,
+				'label' => FrmAppHelper::get_post_dropdown_label( $page ),
 			);
 		}
 
-		wp_send_json( $results );
+		return $results;
 	}
 
 	/**
-	 * @deprecated 6.0 use FrmSettingsController::captcha_settings().
+	 * Shows a fake color picker.
+	 *
+	 * @since 6.25
+	 *
+	 * @param string $color Color value.
+	 *
+	 * @return void
 	 */
-	public static function recaptcha_settings() {
-		_deprecated_function( __FUNCTION__, '6.0', 'FrmSettingsController::captcha_settings()' );
-		self::captcha_settings();
+	public static function fake_color_picker( $color ) {
+		?>
+		<div class="wp-picker-container">
+			<button type="button" class="button wp-color-result" aria-expanded="false" aria-disabled="true" tabindex="-1" style="background-color:<?php echo esc_attr( $color ); ?>;"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
+				<span class="wp-color-result-text" style="color:#a7aaad;"><?php esc_html_e( 'Select Color', 'formidable' ); ?></span>
+			</button>
+		</div>
+		<?php
 	}
 }

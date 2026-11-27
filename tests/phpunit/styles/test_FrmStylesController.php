@@ -1,0 +1,241 @@
+<?php
+/**
+ * @group styles
+ *
+ * @covers FrmStyle
+ * @covers FrmStylesController
+ */
+#[\PHPUnit\Framework\Attributes\Group( 'styles' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmStyle::class )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmStylesController::class )]
+class test_FrmStylesController extends FrmUnitTest {
+
+	/**
+	 * Make sure the stylesheet is loaded at the right times
+	 */
+	public function test_front_head() {
+		$this->set_front_end();
+
+		// Reset if the style was loaded in another test
+		global $frm_vars, $wp_styles;
+		$frm_vars['css_loaded'] = false;
+
+		if ( in_array( 'formidable', $wp_styles->done, true ) ) {
+			$k = array_search( 'formidable', $wp_styles->done, true );
+			unset( $wp_styles->done[ $k ] );
+		}
+
+		ob_start();
+		wp_head();
+		$styles = ob_get_clean();
+		$this->assertNotEmpty( $styles );
+
+		$frm_settings    = FrmAppHelper::get_settings();
+		$stylesheet_urls = $this->get_custom_stylesheet();
+		$css_html        = "<link rel='stylesheet' id='formidable-css'";
+
+		if ( $frm_settings->load_style === 'all' ) {
+			$this->assertStringContainsString( $css_html, $styles, 'The formidablepro stylesheet is missing' );
+			// $this->assertContains( $stylesheet_urls['formidable'], $styles, 'The formidablepro stylesheet is missing' );
+		} else {
+			$this->assertStringNotContainsString( $css_html, $styles, 'The formidablepro stylesheet is missing' );
+			$this->assertStringNotContainsString( $stylesheet_urls['formidable'], $styles, 'The formidablepro stylesheet is included when it should not be' );
+		}
+	}
+
+	private function get_custom_stylesheet() {
+		global $frm_vars;
+		$frm_vars['css_loaded'] = false;
+		$stylesheet_urls        = FrmStylesController::custom_stylesheet();
+		$this->assertArrayHasKey( 'formidable', $stylesheet_urls, 'The stylesheet array is empty' );
+		return $stylesheet_urls;
+	}
+
+	/**
+	 * The styler edit page's "Quick Settings" panel and its "Advanced Settings"
+	 * accordion sections both render into the DOM unconditionally (only one is
+	 * shown at a time via CSS), so an id reused between a quick-settings control
+	 * and its advanced-settings equivalent collides and breaks any ARIA property
+	 * that references it (aria_id_unique).
+	 *
+	 * @see FrmStylesController::render_style_page
+	 */
+	public function test_render_style_page_has_no_duplicate_ids() {
+		$this->set_current_user_to_1();
+
+		// render_style_page() reads $_GET to decide the view ('edit' vs 'list'); a leftover
+		// 'form'/'style_id' from another test would silently switch this to the list view.
+		$_GET = array();
+
+		$form_id      = $this->factory->form->create();
+		$form         = FrmForm::getOne( $form_id );
+		$frm_style    = new FrmStyle( 'default' );
+		$active_style = $frm_style->get_one();
+
+		ob_start();
+		$this->run_private_method(
+			array( 'FrmStylesController', 'render_style_page' ),
+			array( $active_style, $form, $active_style )
+		);
+		$html = ob_get_clean();
+
+		$this->assert_no_duplicate_element_ids(
+			$html,
+			array(
+				'frm_field_pad',
+				'frm_field_margin',
+				'frm_border_radius',
+				'frm_fieldset_color',
+				// The renamed quick-settings/form-title ids themselves, so a future edit that
+				// deletes one of these elements (instead of just re-duplicating its id) still
+				// fails loudly here.
+				'frm_style_qsettings_field_pad',
+				'frm_style_qsettings_field_margin',
+				'frm_style_qsettings_border_radius',
+				'frm_title_color',
+			)
+		);
+	}
+
+	/**
+	 * The styler edit view renders two <form> elements on the same page: the style
+	 * settings sidebar form, and the live form preview. Both need distinct
+	 * accessible names or they violate the aria_landmark_name_unique a11y rule.
+	 *
+	 * @see FrmStylesController::render_style_page
+	 */
+	public function test_render_style_page_has_unique_landmark_names_for_both_forms() {
+		$this->set_current_user_to_1();
+
+		// render_style_page() reads $_GET to decide the view ('edit' vs 'list'); a leftover
+		// 'form'/'style_id' from another test would silently switch this to the list view.
+		$_GET = array();
+
+		$form_id      = $this->factory->form->create();
+		$form         = FrmForm::getOne( $form_id );
+		$frm_style    = new FrmStyle( 'default' );
+		$active_style = $frm_style->get_one();
+
+		ob_start();
+		$this->run_private_method(
+			array( 'FrmStylesController', 'render_style_page' ),
+			array( $active_style, $form, $active_style )
+		);
+		$html = ob_get_clean();
+
+		$this->assert_form_landmarks_have_unique_names( $html, 2 );
+	}
+
+	/**
+	 * The styler list view (reached whenever a 'form'/'style_id' param is present without
+	 * 'frm_action') renders two <form> elements as well: the style-assign form, and the live
+	 * form preview. Both need distinct accessible names or they violate the
+	 * aria_landmark_name_unique a11y rule the same way the edit view does above.
+	 *
+	 * @see FrmStylesController::render_style_page
+	 */
+	public function test_render_style_page_has_unique_landmark_names_for_list_view() {
+		$this->set_current_user_to_1();
+
+		$form_id = $this->factory->form->create();
+
+		// A 'form' param with no 'frm_action' is what forces the list view (see comment above).
+		$_GET = array( 'form' => $form_id );
+
+		$form         = FrmForm::getOne( $form_id );
+		$frm_style    = new FrmStyle( 'default' );
+		$active_style = $frm_style->get_one();
+
+		ob_start();
+		$this->run_private_method(
+			array( 'FrmStylesController', 'render_style_page' ),
+			array( $active_style, $form, $active_style )
+		);
+		$html = ob_get_clean();
+		$_GET = array();
+
+		$this->assert_form_landmarks_have_unique_names( $html, 2 );
+	}
+
+	public function test_save() {
+		$this->set_current_user_to_1();
+
+		$frm_style = new FrmStyle( 'default' );
+		$style     = $frm_style->get_one();
+
+		$_POST = array(
+			'ID'                => $style->ID,
+			'style_name'        => $style->post_name,
+			'frm_style'         => wp_create_nonce( 'frm_style_nonce' ),
+			'frm_action'        => 'save',
+			'frm_style_setting' => array(
+				'post_title'   => $style->post_title . ' Updated',
+				'post_content' => $style->post_content,
+			),
+		);
+
+		FrmStylesController::save_style();
+
+		ob_start();
+		FrmStylesController::save();
+		$returned = ob_get_clean();
+
+		$this->assertStringContainsString( 'Your styling settings have been saved.', $returned );
+		$frm_style     = new FrmStyle( $style->ID );
+		$updated_style = $frm_style->get_one();
+		$this->assertSame( $style->post_title . ' Updated', $updated_style->post_title );
+	}
+
+	public function test_get_form_style_class_falls_back_to_default_style_when_style_is_deleted() {
+		$default_style = ( new FrmStyle( 'default' ) )->get_one();
+		$this->assertNotEmpty( $default_style );
+
+		$deleted_style_id = $default_style->ID + 100000;
+		$this->assertNull( ( new FrmStyle( $deleted_style_id ) )->get_one() );
+
+		$class = FrmStylesController::get_form_style_class( ' with_frm_style', $deleted_style_id );
+
+		$this->assertSame( ' with_frm_style frm_style_' . $default_style->post_name, $class );
+	}
+
+	/**
+	 * The "Disable submit button styling" toggle must show the saved value. It used to read the
+	 * field name (always a non-empty string), so it always rendered unchecked and the next save
+	 * reset the setting.
+	 *
+	 * @dataProvider submit_style_toggle_provider
+	 *
+	 * @param int  $saved_value Saved submit_style value.
+	 * @param bool $expected    Whether the toggle should render checked.
+	 */
+	#[\PHPUnit\Framework\Attributes\DataProvider( 'submit_style_toggle_provider' )]
+	public function test_buttons_section_submit_style_toggle_reflects_saved_value( $saved_value, $expected ) {
+		$frm_style = new FrmStyle( 'default' );
+		$style     = $frm_style->get_one();
+
+		$style->post_content['submit_style'] = $saved_value;
+
+		ob_start();
+		FrmStylesController::include_style_section(
+			array(
+				'style'     => $style,
+				'frm_style' => $frm_style,
+			),
+			array( 'args' => 'buttons' )
+		);
+		$html = ob_get_clean();
+
+		$this->assertSame( 1, preg_match( '/<input[^>]*id="frm_submit_style"[^>]*>/s', $html, $matches ), 'The toggle input is missing.' );
+		$this->assertSame( $expected, str_contains( $matches[0], 'checked' ) );
+	}
+
+	/**
+	 * @return array
+	 */
+	public static function submit_style_toggle_provider() {
+		return array(
+			'saved as on'  => array( 1, true ),
+			'saved as off' => array( 0, false ),
+		);
+	}
+}

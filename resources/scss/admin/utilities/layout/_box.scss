@@ -1,0 +1,9 @@
+/**
+ * Utility: Box
+ */
+
+.frm-box {
+	padding: var(--gap-sm);
+	border: 1px solid var(--grey-200);
+	border-radius: var(--small-radius);
+}

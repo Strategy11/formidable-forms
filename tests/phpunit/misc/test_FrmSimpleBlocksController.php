@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @covers FrmSimpleBlocksController
+ */
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmSimpleBlocksController::class )]
+class test_FrmSimpleBlocksController extends FrmUnitTest {
+
+	public function test_maybe_remove_fade_on_load_for_block_preview() {
+		$form = '<form enctype="multipart/form-data" method="post" class="frm-show-form  frm_pro_form  frm_logic_form  frm-admin-viewing ">';
+
+		$_SERVER['HTTP_ACCEPT']  = 'application/json';
+		$_SERVER['CONTENT_TYPE'] = 'application/json';
+
+		if ( is_callable( 'wp_is_json_request' ) ) {
+			$this->assertStringNotContainsString( 'frm_logic_form', $this->maybe_remove_fade_on_load_for_block_preview( $form ) );
+		}
+
+		unset( $_SERVER['HTTP_ACCEPT'], $_SERVER['CONTENT_TYPE'] );
+		$this->assertStringContainsString( 'frm_logic_form', $this->maybe_remove_fade_on_load_for_block_preview( $form ) );
+	}
+
+	private function maybe_remove_fade_on_load_for_block_preview( $form ) {
+		return $this->run_private_method( array( 'FrmSimpleBlocksController', 'maybe_remove_fade_on_load_for_block_preview' ), array( $form ) );
+	}
+}

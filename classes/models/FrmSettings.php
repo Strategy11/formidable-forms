@@ -5,59 +5,276 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 #[\AllowDynamicProperties]
 class FrmSettings {
+
+	/**
+	 * @var string
+	 */
 	public $option_name = 'frm_options';
+
+	/**
+	 * @var int
+	 */
 	public $menu;
+
+	/**
+	 * @var int
+	 */
 	public $mu_menu;
-	public $use_html;
-	public $jquery_css;
-	public $accordion_js;
+
+	/**
+	 * @var int
+	 */
 	public $fade_form;
-	public $old_css;
+
+	/**
+	 * @var bool
+	 */
 	public $admin_bar;
 
+	/**
+	 * @var string
+	 */
 	public $success_msg;
+
+	/**
+	 * @var string
+	 */
 	public $blank_msg;
+
+	/**
+	 * @var string
+	 */
 	public $unique_msg;
+
+	/**
+	 * @var string
+	 */
 	public $invalid_msg;
+
+	/**
+	 * @var string
+	 */
 	public $failed_msg;
+
+	/**
+	 * @var string
+	 */
 	public $submit_value;
+
+	/**
+	 * @var string
+	 */
 	public $login_msg;
+
+	/**
+	 * @var string
+	 */
 	public $admin_permission;
 
+	/**
+	 * @var string
+	 */
 	public $email_to;
+
+	/**
+	 * @var string|null
+	 */
 	public $load_style;
+
+	/**
+	 * @var bool|int|null
+	 */
 	public $custom_style;
 
+	/**
+	 * @var string|null
+	 */
 	public $active_captcha;
-	public $hcaptcha_pubkey;
-	public $hcaptcha_privkey;
+
+	/**
+	 * Settings for reCAPTCHA.
+	 */
+
+	/**
+	 * @var string|null
+	 */
 	public $pubkey;
+
+	/**
+	 * @var string|null
+	 */
 	public $privkey;
+
+	/**
+	 * @var string|null
+	 */
 	public $re_lang;
+
+	/**
+	 * @var string|null
+	 */
 	public $re_type;
+
+	/**
+	 * @var string
+	 */
 	public $re_msg;
+
+	/**
+	 * @var bool
+	 */
 	public $re_multi;
 
+	/**
+	 * @var float|string|null
+	 */
+	public $re_threshold;
+
+	/**
+	 * Settings for hCaptcha.
+	 */
+
+	/**
+	 * @var string
+	 */
+	public $hcaptcha_pubkey;
+
+	/**
+	 * @var string|null
+	 */
+	public $hcaptcha_privkey;
+
+	/**
+	 * Settings for Turnstile.
+	 */
+
+	/**
+	 * @var string
+	 */
+	public $turnstile_pubkey;
+
+	/**
+	 * @var string|null
+	 */
+	public $turnstile_privkey;
+
+	/**
+	 * @var bool
+	 */
 	public $no_ips;
+
+	/**
+	 * @var string
+	 */
 	public $custom_header_ip;
+
+	/**
+	 * @var int
+	 */
 	public $current_form = 0;
+
+	/**
+	 * @var bool|int
+	 */
 	public $tracking;
 
+	/**
+	 * @var bool
+	 */
+	public $summary_emails;
+
+	/**
+	 * @var string
+	 */
+	public $summary_emails_recipients;
+
+	/**
+	 * @var string|null
+	 */
+	public $default_email;
+
+	/**
+	 * @var string
+	 */
+	public $from_email;
+
+	/**
+	 * @var string|null
+	 */
 	public $currency;
 
 	/**
 	 * @since 6.0
 	 *
-	 * @var string|false|null
+	 * @var false|string|null
 	 */
 	public $custom_css;
 
+	/**
+	 * @var int
+	 */
+	public $honeypot;
+
+	/**
+	 * @var bool
+	 */
+	public $wp_spam_check;
+
+	/**
+	 * @var bool
+	 */
+	public $denylist_check;
+
+	/**
+	 * Whether submissions flagged by each spam check are saved as spam entries or rejected.
+	 *
+	 * @since 7.0
+	 *
+	 * @var array<string, string>
+	 */
+	public $spam_handling;
+
+	/**
+	 * @since 6.25.1
+	 *
+	 * @var int|null 1 if installed after welcome tour update, null otherwise.
+	 */
+	public $installed_after_welcome_tour_update;
+
+	/**
+	 * @var string
+	 */
+	public $disallowed_words;
+
+	/**
+	 * @var string
+	 */
+	public $allowed_words;
+
+	/**
+	 * Whether the Formidable MCP server and the Formidable abilities are registered.
+	 *
+	 * Deliberately absent from default_options(), because "off" and "never set"
+	 * have to stay distinguishable. Until the MCP section is saved once this
+	 * stays null, and FrmMcpController::is_enabled() falls back to the API
+	 * add-on's own toggle so a site that already turned MCP on there keeps it
+	 * on. With no add-on setting to inherit either, MCP is off.
+	 *
+	 * @since 7.0
+	 *
+	 * @var int|null 1 for enabled, 0 for disabled, null when never saved.
+	 */
+	public $mcp;
+
+	/**
+	 * @param array $args
+	 */
 	public function __construct( $args = array() ) {
 		if ( ! defined( 'ABSPATH' ) ) {
 			die( 'You are not allowed to call this page directly.' );
 		}
 
-		$settings = get_transient( $this->option_name );
+		$settings = get_option( $this->option_name );
 
 		if ( ! is_object( $settings ) ) {
 			$settings = $this->translate_settings( $settings );
@@ -73,27 +290,21 @@ class FrmSettings {
 		$this->maybe_filter_for_form( $args );
 	}
 
+	/**
+	 * @param false|object $settings
+	 *
+	 * @return object
+	 */
 	private function translate_settings( $settings ) {
-		if ( $settings ) { //workaround for W3 total cache conflict
+		if ( $settings ) {
+			// Workaround for W3 total cache conflict.
 			return unserialize( serialize( $settings ) );
 		}
 
-		$settings = get_option( $this->option_name );
-		if ( is_object( $settings ) ) {
-			set_transient( $this->option_name, $settings );
+		// If unserializing didn't work.
+		$settings = $this;
 
-			return $settings;
-		}
-
-		// If unserializing didn't work
-		if ( $settings ) { //workaround for W3 total cache conflict
-			$settings = unserialize( serialize( $settings ) );
-		} else {
-			$settings = $this;
-		}
-
-		update_option( $this->option_name, $settings );
-		set_transient( $this->option_name, $settings );
+		update_option( $this->option_name, $settings, true );
 
 		return $settings;
 	}
@@ -103,35 +314,45 @@ class FrmSettings {
 	 */
 	public function default_options() {
 		return array(
-			'menu'         => apply_filters( 'frm_default_menu', 'Formidable' ),
-			'mu_menu'      => 0,
-			'use_html'     => true,
-			'jquery_css'   => false,
-			'accordion_js' => false,
-			'fade_form'    => false,
-			'old_css'      => false,
-			'admin_bar'    => false,
+			'menu'                      => apply_filters( 'frm_default_menu', 'Formidable' ),
+			'mu_menu'                   => 0,
+			'fade_form'                 => false,
+			'admin_bar'                 => false,
 
-			're_multi' => 1,
+			're_multi'                  => 1,
 
-			'success_msg'      => __( 'Your responses were successfully submitted. Thank you!', 'formidable' ),
-			'blank_msg'        => __( 'This field cannot be blank.', 'formidable' ),
-			'unique_msg'       => __( 'This value must be unique.', 'formidable' ),
-			'invalid_msg'      => __( 'There was a problem with your submission. Errors are marked below.', 'formidable' ),
-			'failed_msg'       => __( 'We\'re sorry. It looks like you\'ve already submitted that.', 'formidable' ),
-			'submit_value'     => __( 'Submit', 'formidable' ),
-			'login_msg'        => __( 'You do not have permission to view this form.', 'formidable' ),
-			'admin_permission' => __( 'You do not have permission to do that', 'formidable' ),
-			'new_tab_msg'      => __( 'The page has been opened in a new tab.', 'formidable' ),
+			'success_msg'               => __( 'Your responses were successfully submitted. Thank you!', 'formidable' ),
+			// translators: %s: [field_name] shortcode.
+			'blank_msg'                 => sprintf( __( '%s cannot be blank.', 'formidable' ), '[field_name]' ),
+			// translators: %s: [field_name] shortcode.
+			'unique_msg'                => sprintf( __( '%s must be unique.', 'formidable' ), '[field_name]' ),
+			'invalid_msg'               => __( 'There was a problem with your submission. Errors are marked below.', 'formidable' ),
+			'failed_msg'                => __( 'We\'re sorry. It looks like you\'ve already submitted that.', 'formidable' ),
+			'submit_value'              => __( 'Submit', 'formidable' ),
+			'login_msg'                 => __( 'You do not have permission to view this form.', 'formidable' ),
+			'admin_permission'          => __( 'You do not have permission to do that', 'formidable' ),
+			'new_tab_msg'               => __( 'The page has been opened in a new tab.', 'formidable' ),
 
-			'email_to'         => '[admin_email]',
-			'no_ips'           => 0,
-			'custom_header_ip' => false, // Use false by default. We show a warning when this is unset. Once global settings have been saved, this gets saved
-			'tracking'         => FrmAppHelper::pro_is_installed(),
+			'email_to'                  => '[admin_email]',
+			'enable_gdpr'               => 0,
+			'no_gdpr_cookies'           => 0,
+			'no_ips'                    => 0,
+			'custom_header_ip'          => 0,
+			'tracking'                  => FrmAppHelper::pro_is_installed(),
+			// Only enable this by default for the main site.
+			'summary_emails'            => get_current_blog_id() === get_main_site_id(),
+			'summary_emails_recipients' => '[admin_email]',
 
 			// Normally custom CSS is a string. A false value is used when nothing has been set.
 			// When it is false, we try to use the old custom_key value from the default style's post_content array.
-			'custom_css' => false,
+			'custom_css'                => false,
+			'honeypot'                  => 1,
+			'wp_spam_check'             => 0,
+			'denylist_check'            => 0,
+			'spam_handling'             => FrmSpamEntriesHelper::get_default_handling(),
+			'disallowed_words'          => '',
+			'allowed_words'             => '',
+			'email_style'               => 'classic',
 		);
 	}
 
@@ -153,17 +374,23 @@ class FrmSettings {
 
 		if ( is_multisite() && is_admin() ) {
 			$mu_menu = get_site_option( 'frm_admin_menu_name' );
-			if ( $mu_menu && ! empty( $mu_menu ) ) {
+
+			if ( $mu_menu && $mu_menu ) {
 				$this->menu    = $mu_menu;
 				$this->mu_menu = 1;
 			}
 		}
 
 		$frm_roles = FrmAppHelper::frm_capabilities( 'pro' );
+
 		foreach ( $frm_roles as $frm_role => $frm_role_description ) {
 			if ( ! isset( $this->$frm_role ) ) {
 				$this->$frm_role = 'administrator';
 			}
+		}
+
+		if ( ! isset( $this->default_email ) ) {
+			$this->default_email = get_option( 'admin_email' );
 		}
 
 		if ( ! isset( $this->currency ) ) {
@@ -173,6 +400,7 @@ class FrmSettings {
 
 	/**
 	 * @param array $params
+	 *
 	 * @return void
 	 */
 	public function fill_with_defaults( $params = array() ) {
@@ -181,6 +409,7 @@ class FrmSettings {
 
 		if ( $filter_html ) {
 			$filter_keys = array( 'failed_msg', 'blank_msg', 'invalid_msg', 'admin_permission', 'unique_msg', 'success_msg', 'submit_value', 'login_msg', 'menu' );
+
 			if ( ! empty( $params['additional_filter_keys'] ) ) {
 				$filter_keys = array_merge( $filter_keys, $params['additional_filter_keys'] );
 			}
@@ -212,6 +441,7 @@ class FrmSettings {
 	 * @param mixed  $value       The unsanitized global setting value.
 	 * @param string $key         The key of the global setting being saved.
 	 * @param array  $filter_keys These keys that are filtered with kses.
+	 *
 	 * @return mixed
 	 */
 	private function maybe_sanitize_global_setting( $value, $key, $filter_keys ) {
@@ -220,6 +450,7 @@ class FrmSettings {
 				// Avoid changing the false default value to an empty string.
 				return $value;
 			}
+
 			return sanitize_textarea_field( $value );
 		}
 
@@ -234,26 +465,26 @@ class FrmSettings {
 	 * @return void
 	 */
 	private function fill_captcha_settings() {
-		if ( ! isset( $this->active_captcha ) ) {
-			$this->active_captcha = 'recaptcha';
-		}
-
-		$privkey          = '';
-		$re_lang          = '';
+		$privkey = '';
+		$re_lang = '';
 
 		if ( ! isset( $this->hcaptcha_privkey ) ) {
 			$this->hcaptcha_privkey = '';
 		}
 
-		if ( ! isset( $this->pubkey ) ) {
-			// get the options from the database
-			$recaptcha_opt = is_multisite() ? get_site_option( 'recaptcha' ) : get_option( 'recaptcha' );
-			$this->pubkey  = isset( $recaptcha_opt['pubkey'] ) ? $recaptcha_opt['pubkey'] : '';
-			$privkey       = isset( $recaptcha_opt['privkey'] ) ? $recaptcha_opt['privkey'] : $privkey;
-			$re_lang       = isset( $recaptcha_opt['re_lang'] ) ? $recaptcha_opt['re_lang'] : $re_lang;
+		if ( ! isset( $this->turnstile_privkey ) ) {
+			$this->turnstile_privkey = '';
 		}
 
-		if ( ! isset( $this->re_msg ) || empty( $this->re_msg ) ) {
+		if ( ! isset( $this->pubkey ) ) {
+			// Get the options from the database.
+			$recaptcha_opt = is_multisite() ? get_site_option( 'recaptcha' ) : get_option( 'recaptcha' );
+			$this->pubkey  = $recaptcha_opt['pubkey'] ?? '';
+			$privkey       = $recaptcha_opt['privkey'] ?? $privkey;
+			$re_lang       = $recaptcha_opt['re_lang'] ?? $re_lang;
+		}
+
+		if ( ! $this->re_msg ) {
 			$this->re_msg = __( 'The CAPTCHA was not entered correctly', 'formidable' );
 		}
 
@@ -271,6 +502,36 @@ class FrmSettings {
 
 		if ( ! isset( $this->re_threshold ) ) {
 			$this->re_threshold = .5;
+		}
+
+		$this->set_supported_captcha();
+	}
+
+	/**
+	 * Use a configured provider when the saved CAPTCHA type is unsupported.
+	 *
+	 * @since 7.1
+	 *
+	 * @return void
+	 */
+	private function set_supported_captcha() {
+		$prefixes = array(
+			'recaptcha' => '',
+			'hcaptcha'  => 'hcaptcha_',
+			'turnstile' => 'turnstile_',
+		);
+
+		if ( array_key_exists( $this->active_captcha, $prefixes ) ) {
+			return;
+		}
+
+		$this->active_captcha = 'recaptcha';
+
+		foreach ( $prefixes as $type => $prefix ) {
+			if ( ! empty( $this->{ $prefix . 'pubkey' } ) && ! empty( $this->{ $prefix . 'privkey' } ) ) {
+				$this->active_captcha = $type;
+				return;
+			}
 		}
 	}
 
@@ -295,21 +556,28 @@ class FrmSettings {
 	 *
 	 * @since 3.06.01
 	 *
+	 * @param array $args
+	 *
 	 * @return void
 	 */
 	public function maybe_filter_for_form( $args ) {
-		if ( isset( $args['current_form'] ) && is_numeric( $args['current_form'] ) ) {
-			$this->current_form = $args['current_form'];
-			foreach ( $this->translatable_strings() as $string ) {
-				$this->{$string} = apply_filters( 'frm_global_setting', $this->{$string}, $string, $this );
-				$this->{$string} = apply_filters( 'frm_global_' . $string, $this->{$string}, $this );
-			}
+		if ( ! isset( $args['current_form'] ) || ! is_numeric( $args['current_form'] ) ) {
+			return;
+		}
+
+		$this->current_form = $args['current_form'];
+
+		foreach ( $this->translatable_strings() as $string ) {
+			$this->{$string} = apply_filters( 'frm_global_setting', $this->{$string}, $string, $this );
+			$this->{$string} = apply_filters( 'frm_global_' . $string, $this->{$string}, $this );
 		}
 	}
 
 	/**
 	 * @param array $params
 	 * @param array $errors
+	 *
+	 * @return array
 	 */
 	public function validate( $params, $errors ) {
 		return apply_filters( 'frm_validate_settings', $errors, $params );
@@ -321,6 +589,7 @@ class FrmSettings {
 	 * @return void
 	 */
 	public function update( $params ) {
+		$params = $this->keep_unposted_spam_handling( $params );
 		$this->fill_with_defaults( $params );
 		$this->update_settings( $params );
 
@@ -334,36 +603,95 @@ class FrmSettings {
 
 		do_action( 'frm_update_settings', $params );
 
-		if ( function_exists( 'get_filesystem_method' ) ) {
-			// Save styling settings in case fallback setting changes.
-			$frm_style = new FrmStyle();
-			$frm_style->update( 'default' );
+		if ( ! function_exists( 'get_filesystem_method' ) ) {
+			return;
 		}
+
+		// Save styling settings in case fallback setting changes.
+		$frm_style = new FrmStyle();
+		$frm_style->update( 'default' );
 	}
 
 	/**
+	 * A check that is turned off has a disabled select that is not submitted, so keep its saved handling.
+	 * This runs before fill_with_defaults() replaces the saved handling with the posted values.
+	 *
+	 * @since 7.0
+	 *
+	 * @param array $params The posted settings.
+	 *
+	 * @return array
+	 */
+	private function keep_unposted_spam_handling( $params ) {
+		if ( ! isset( $params['frm_spam_handling'] ) || ! is_array( $params['frm_spam_handling'] ) || ! is_array( $this->spam_handling ) ) {
+			return $params;
+		}
+
+		$params['frm_spam_handling'] = array_merge( $this->spam_handling, $params['frm_spam_handling'] );
+
+		return $params;
+	}
+
+	/**
+	 * @param array $params
+	 *
 	 * @return void
 	 */
 	private function update_settings( $params ) {
-		$this->active_captcha   = $params['frm_active_captcha'];
-		$this->hcaptcha_pubkey  = trim( $params['frm_hcaptcha_pubkey'] );
-		$this->hcaptcha_privkey = trim( $params['frm_hcaptcha_privkey'] );
-		$this->pubkey           = trim( $params['frm_pubkey'] );
-		$this->privkey          = trim( $params['frm_privkey'] );
-		$this->re_type          = $params['frm_re_type'];
-		$this->re_lang          = $params['frm_re_lang'];
-		$this->re_threshold     = floatval( $params['frm_re_threshold'] );
-		$this->load_style       = $params['frm_load_style'];
-		$this->custom_css       = $params['frm_custom_css'];
-		$this->currency         = $params['frm_currency'];
+		$this->active_captcha    = $params['frm_active_captcha'];
+		$this->pubkey            = trim( $params['frm_pubkey'] );
+		$this->privkey           = trim( $params['frm_privkey'] );
+		$this->re_type           = $params['frm_re_type'];
+		$this->re_lang           = $params['frm_re_lang'];
+		$this->re_threshold      = (float) $params['frm_re_threshold'];
+		$this->hcaptcha_pubkey   = trim( $params['frm_hcaptcha_pubkey'] );
+		$this->hcaptcha_privkey  = trim( $params['frm_hcaptcha_privkey'] );
+		$this->turnstile_pubkey  = trim( $params['frm_turnstile_pubkey'] );
+		$this->turnstile_privkey = trim( $params['frm_turnstile_privkey'] );
+		$this->load_style        = $params['frm_load_style'];
+		$this->custom_css        = $params['frm_custom_css'];
+		$this->default_email     = $params['frm_default_email'];
+		$this->from_email        = $params['frm_from_email'];
+		$this->currency          = $params['frm_currency'];
 
-		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'no_ips', 'custom_header_ip', 'tracking', 'admin_bar' );
+		if ( isset( $params['frm_spam_handling'] ) ) {
+			$this->spam_handling = FrmSpamEntriesHelper::sanitize_handling( $params['frm_spam_handling'] );
+		}
+
+		$checkboxes = array(
+			'mu_menu',
+			're_multi',
+			'fade_form',
+			'no_ips',
+			'no_gdpr_cookies',
+			'enable_gdpr',
+			'custom_header_ip',
+			'tracking',
+			'admin_bar',
+			'summary_emails',
+			'honeypot',
+			'wp_spam_check',
+			'denylist_check',
+		);
+
 		foreach ( $checkboxes as $set ) {
 			$this->$set = isset( $params[ 'frm_' . $set ] ) ? absint( $params[ 'frm_' . $set ] ) : 0;
+		}
+
+		// The MCP toggle is kept out of the loop above on purpose. That loop turns
+		// every checkbox it does not find in $params off, and the MCP section is
+		// not always on screen: it is hidden entirely while the API add-on still
+		// owns the toggle. Saving any other section would switch MCP off. The
+		// section renders a marker field, so the value only moves when the toggle
+		// was really there to move it.
+		if ( ! empty( $params['frm_mcp_settings_shown'] ) ) {
+			$this->mcp = empty( $params['frm_mcp'] ) ? 0 : 1;
 		}
 	}
 
 	/**
+	 * @param array $params
+	 *
 	 * @return void
 	 */
 	private function update_roles( $params ) {
@@ -371,22 +699,47 @@ class FrmSettings {
 
 		$frm_roles = FrmAppHelper::frm_capabilities();
 		$roles     = get_editable_roles();
+
 		foreach ( $frm_roles as $frm_role => $frm_role_description ) {
-			$this->$frm_role = (array) ( isset( $params[ $frm_role ] ) ? $params[ $frm_role ] : 'administrator' );
+			$this->$frm_role = (array) ( $params[ $frm_role ] ?? 'administrator' );
 
 			// Make sure administrators always have permissions
-			if ( ! in_array( 'administrator', $this->$frm_role ) ) {
+			if ( ! in_array( 'administrator', $this->$frm_role, true ) ) {
 				array_push( $this->$frm_role, 'administrator' );
 			}
 
 			foreach ( $roles as $role => $details ) {
-				if ( in_array( $role, $this->$frm_role ) ) {
+				if ( in_array( $role, $this->$frm_role, true ) ) {
 					$wp_roles->add_cap( $role, $frm_role );
 				} else {
 					$wp_roles->remove_cap( $role, $frm_role );
 				}
 			}
 		}
+	}
+
+	/**
+	 * Updates a single setting with specified sanitization.
+	 *
+	 * @since 6.9
+	 *
+	 * @param string $key The setting key to update.
+	 * @param mixed  $value The new value for the setting.
+	 * @param string $sanitize The name of the sanitization function to apply to the new value.
+	 *
+	 * @return bool True on success, false on failure.
+	 */
+	public function update_setting( $key, $value, $sanitize ) {
+		if ( ! property_exists( $this, $key ) || ! is_callable( $sanitize ) ) {
+			// Setting does not exist or sanitization function name is not callable.
+			return false;
+		}
+
+		// Update the property value.
+		FrmAppHelper::sanitize_value( $sanitize, $value );
+		$this->{$key} = $value;
+
+		return true;
 	}
 
 	/**

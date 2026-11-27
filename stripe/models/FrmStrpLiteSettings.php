@@ -34,6 +34,7 @@ class FrmStrpLiteSettings {
 
 	/**
 	 * @param mixed $settings
+	 *
 	 * @return void
 	 */
 	public function set_default_options( $settings = false ) {
@@ -60,6 +61,9 @@ class FrmStrpLiteSettings {
 		}
 	}
 
+	/**
+	 * @return object
+	 */
 	public function get_options() {
 		$settings = get_option( 'frm_' . $this->param() . '_options' );
 
@@ -78,15 +82,26 @@ class FrmStrpLiteSettings {
 
 	/**
 	 * @param array $params
+	 *
 	 * @return void
 	 */
 	public function update( $params ) {
 		$settings = $this->default_options();
 
 		foreach ( $settings as $setting => $default ) {
-			if ( isset( $params[ 'frm_' . $this->param() . '_' . $setting ] ) ) {
-				$this->settings->{$setting} = trim( sanitize_text_field( $params[ 'frm_' . $this->param() . '_' . $setting ] ) );
+			if ( ! isset( $params[ 'frm_' . $this->param() . '_' . $setting ] ) ) {
+				continue;
 			}
+
+			$value = $params[ 'frm_' . $this->param() . '_' . $setting ];
+
+			// Clean up any accumulated backslashes from previous bug.
+			// @see https://github.com/Strategy11/formidable-pro/issues/6294
+			if ( 'processing_message' === $setting ) {
+				$value = str_replace( '\\', '', $value );
+			}
+
+			$this->settings->{$setting} = sanitize_text_field( $value );
 		}
 
 		$this->settings->test_mode = isset( $params['frm_strp_test_mode'] ) ? absint( $params['frm_strp_test_mode'] ) : 0;
@@ -96,15 +111,18 @@ class FrmStrpLiteSettings {
 	 * @return void
 	 */
 	public function store() {
-		// Save the posted value in the database
+		// Save the posted value in the database.
 		update_option( 'frm_' . $this->param() . '_options', $this->settings );
 	}
 
 	/**
+	 * @param string $mode 'auto', 'live', or 'test'.
+	 *
 	 * @return string
 	 */
-	public function get_active_publishable_key() {
-		return $this->settings->test_mode ? $this->get_frm_publishable_test_key() : $this->get_frm_publishable_live_key();
+	public function get_active_publishable_key( $mode = 'auto' ) {
+		$resolved_mode = 'auto' === $mode ? FrmStrpLiteAppHelper::active_mode() : $mode;
+		return 'test' === $resolved_mode ? $this->get_frm_publishable_test_key() : $this->get_frm_publishable_live_key();
 	}
 
 	/**

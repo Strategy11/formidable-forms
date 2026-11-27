@@ -7,7 +7,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 // This includes a basic preview (text field and submit button only).
 // It also includes the title of the style and possibly some basic tags if "selected" or "default".
 
-$is_template  = 0 === $style->ID;
 $include_info = $is_active_style;
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $params, true ); ?>>
@@ -17,11 +16,14 @@ $include_info = $is_active_style;
 			if ( $is_active_style ) {
 				FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_circle_icon' );
 			}
+
 			if ( ! empty( $is_locked ) ) {
 				FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon' );
 			}
 			?>
-			<?php // The rename option uses the text content of .frm-style-card-title so don't leave any additional whitespace here. ?>
+			<?php
+			// The rename option uses the text content of .frm-style-card-title so don't leave any additional whitespace here.
+			?>
 			<span class="frm-style-card-title"><?php echo esc_html( $style->post_title ); ?></span>
 			<?php if ( $include_info ) { ?>
 				<span class="frm-style-card-info">
@@ -32,7 +34,7 @@ $include_info = $is_active_style;
 				</span>
 			<?php } ?>
 			<?php if ( ! empty( $is_new_template ) ) { ?>
-				<span class="frm-new-pill"><?php esc_html_e( 'NEW', 'formidable' ); ?></span>
+				<span class="frm-meta-tag frm-new-pill"><?php esc_html_e( 'NEW', 'formidable' ); ?></span>
 			<?php } ?>
 		</div>
 		<div class="frm-style-card-preview">
@@ -44,8 +46,9 @@ $include_info = $is_active_style;
 				'submit-bg-color' => $style->post_content['submit_bg_color'],
 			);
 			$index  = 0;
+
 			foreach ( $colors as $css_var_name => $color ) {
-				if ( 0 !== strpos( $color, 'rgb' ) ) {
+				if ( ! str_starts_with( $color, 'rgb' ) ) {
 					$color = '#' . $color;
 				}
 

@@ -6,8 +6,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEntryValidate {
 
 	/**
+	 * @since 6.17
+	 *
+	 * @var array|null
+	 */
+	private static $name_text_fields;
+
+	/**
 	 * @param array         $values
-	 * @param string[]|bool $exclude
+	 * @param bool|string[] $exclude
+	 *
 	 * @return array
 	 */
 	public static function validate( $values, $exclude = false ) {
@@ -16,28 +24,48 @@ class FrmEntryValidate {
 
 		if ( ! isset( $values['form_id'] ) || ! isset( $values['item_meta'] ) ) {
 			$errors['form'] = __( 'There was a problem with your submission. Please try again.', 'formidable' );
-
 			return $errors;
 		}
 
-		if ( FrmAppHelper::is_admin() && is_user_logged_in() && ( ! isset( $values[ 'frm_submit_entry_' . $values['form_id'] ] ) || ! wp_verify_nonce( $values[ 'frm_submit_entry_' . $values['form_id'] ], 'frm_submit_entry_nonce' ) ) ) {
+		/**
+		 * Filters the entry values before required, type and visibility validation begins.
+		 *
+		 * Only the values that are validated change. A filtered array without "form_id" and
+		 * "item_meta" is ignored, and changed values are sanitized again.
+		 *
+		 * @since 7.0
+		 *
+		 * @param array $values Submitted entry values, including "form_id" and "item_meta".
+		 */
+		$filtered_values = apply_filters( 'frm_pre_validate_entry', $values );
+
+		if ( is_array( $filtered_values ) && $values !== $filtered_values && isset( $filtered_values['form_id'], $filtered_values['item_meta'] ) ) {
+			$values = $filtered_values;
+			FrmEntry::sanitize_entry_post( $values );
+		}
+
+		if ( FrmAppHelper::is_admin() && is_user_logged_in() && ( ! isset( $values[ 'frm_submit_entry_' . $values['form_id'] ] ) || ! wp_verify_nonce( $values[ 'frm_submit_entry_' . $values['form_id'] ], 'frm_submit_entry_nonce' ) ) ) { // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			$frm_settings   = FrmAppHelper::get_settings();
 			$errors['form'] = $frm_settings->admin_permission;
 		}
 
+		self::maybe_fix_item_meta();
 		self::set_item_key( $values );
 
 		$posted_fields = self::get_fields_to_validate( $values, $exclude );
 
 		// Pass exclude value to validate_field function so it can be used for repeating sections
-		$args = array( 'exclude' => $exclude );
+		$args = array(
+			'exclude'  => $exclude,
+			'entry_id' => self::is_new_submission( $values ) ? 0 : absint( $values['id'] ?? 0 ),
+		);
 
 		foreach ( $posted_fields as $posted_field ) {
 			self::validate_field( $posted_field, $errors, $values, $args );
 			unset( $posted_field );
 		}
 
-		if ( empty( $errors ) ) {
+		if ( ! $errors ) {
 			self::spam_check( $exclude, $values, $errors );
 		}
 
@@ -55,20 +83,49 @@ class FrmEntryValidate {
 		if ( is_array( $filtered_errors ) ) {
 			$errors = $filtered_errors;
 		} else {
-			_doing_it_wrong( __FUNCTION__, 'Only arrays should be returned when using the frm_validate_entry filter.', '6.3' );
+			_doing_it_wrong( __METHOD__, 'Only arrays should be returned when using the frm_validate_entry filter.', '6.3' );
 		}
 
 		return $errors;
 	}
 
-	private static function set_item_key( &$values ) {
-		if ( ! isset( $values['item_key'] ) || $values['item_key'] == '' ) {
-			global $wpdb;
-			$values['item_key'] = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_items', 'item_key' );
-			$_POST['item_key']  = $values['item_key'];
+	/**
+	 * In case $_POST['item_meta'] is not an array, change it to an empty array.
+	 * This helps to avoid some warnings and errors when $_POST['item_meta'] is updated.
+	 *
+	 * @since 6.6
+	 *
+	 * @return void
+	 */
+	private static function maybe_fix_item_meta() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		if ( ! isset( $_POST['item_meta'] ) || ! is_array( $_POST['item_meta'] ) ) {
+			$_POST['item_meta'] = array();
 		}
 	}
 
+	/**
+	 * @param array $values
+	 *
+	 * @return void
+	 */
+	private static function set_item_key( &$values ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( isset( $values['item_key'] ) && $values['item_key'] != '' ) {
+			return;
+		}
+
+		global $wpdb;
+		$values['item_key'] = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_items', 'item_key' );
+		$_POST['item_key']  = $values['item_key'];
+	}
+
+	/**
+	 * @param array        $values
+	 * @param array|string $exclude
+	 *
+	 * @return array
+	 */
 	private static function get_fields_to_validate( $values, $exclude ) {
 		$where = apply_filters( 'frm_posted_field_ids', array( 'fi.form_id' => $values['form_id'] ) );
 
@@ -76,7 +133,7 @@ class FrmEntryValidate {
 		$where['fr.parent_form_id'] = array( null, 0 );
 
 		// Don't get excluded fields (like file upload fields in the ajax validation)
-		if ( ! empty( $exclude ) ) {
+		if ( $exclude ) {
 			$where['fi.type not'] = $exclude;
 		}
 
@@ -93,28 +150,36 @@ class FrmEntryValidate {
 		return apply_filters( 'frm_fields_to_validate', $fields, compact( 'values', 'exclude', 'where' ) );
 	}
 
+	/**
+	 * @param object $posted_field
+	 * @param array  $errors
+	 * @param array  $values
+	 * @param array  $args
+	 *
+	 * @return void
+	 */
 	public static function validate_field( $posted_field, &$errors, $values, $args = array() ) {
 		$defaults = array(
 			'id'              => $posted_field->id,
-			'parent_field_id' => '', // the id of the repeat or embed form
-			'key_pointer'     => '', // the pointer in the posted array
-			'exclude'         => array(), // exclude these field types from validation
+			// The id of the repeat or embed form.
+			'parent_field_id' => '',
+			// The pointer in the posted array.
+			'key_pointer'     => '',
+			// Exclude these field types from validation.
+			'exclude'         => array(),
+			// The entry being edited, or 0 for a new entry.
+			'entry_id'        => 0,
 		);
-		$args     = wp_parse_args( $args, $defaults );
-
-		if ( empty( $args['parent_field_id'] ) ) {
-			$value = isset( $values['item_meta'][ $args['id'] ] ) ? $values['item_meta'][ $args['id'] ] : '';
-		} else {
-			// value is from a nested form
-			$value = $values;
-		}
+		$args  = wp_parse_args( $args, $defaults );
+		$value = ! empty( $args['parent_field_id'] ) ? $values : ( $values['item_meta'][ $args['id'] ] ?? '' );
 
 		// Check for values in "Other" fields
 		FrmEntriesHelper::maybe_set_other_validation( $posted_field, $value, $args );
 
 		self::maybe_clear_value_for_default_blank_setting( $posted_field, $value );
 
-		$should_trim = is_array( $value ) && count( $value ) == 1 && isset( $value[0] ) && $posted_field->type !== 'checkbox';
+		$should_trim = is_array( $value ) && count( $value ) === 1 && isset( $value[0] ) && $posted_field->type !== 'checkbox';
+
 		if ( $should_trim ) {
 			$value = reset( $value );
 		}
@@ -123,6 +188,7 @@ class FrmEntryValidate {
 			$value = trim( $value );
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $posted_field->required == '1' && FrmAppHelper::is_empty_value( $value ) ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $posted_field, 'blank' );
 		} elseif ( ! isset( $_POST['item_name'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -131,18 +197,367 @@ class FrmEntryValidate {
 
 		FrmEntriesHelper::set_posted_value( $posted_field, $value, $args );
 
-		self::validate_field_types( $errors, $posted_field, $value, $args );
+		self::validate_options( $errors, $posted_field, $value, $args );
+		self::validate_field_types( $errors, $posted_field, $value, array_merge( $args, array( 'is_new_submission' => self::is_new_submission( $values ) ) ) );
 
 		// Field might want to modify value before other parts of the system
 		// e.g. trim off excess values like in the case of fields with limit.
 		$value = apply_filters( 'frm_modify_posted_field_value', $value, $errors, $posted_field, $args );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $value != '' ) {
 			self::validate_phone_field( $errors, $posted_field, $value, $args );
 		}
 
 		$errors = apply_filters( 'frm_validate_' . $posted_field->type . '_field_entry', $errors, $posted_field, $value, $args );
 		$errors = apply_filters( 'frm_validate_field_entry', $errors, $posted_field, $value, $args );
+
+		if ( ! FrmAppHelper::pro_is_installed() && empty( $args['other'] ) ) {
+			FrmEntriesHelper::get_posted_value( $posted_field, $value, $args );
+		}
+	}
+
+	/**
+	 * @since 6.21
+	 *
+	 * @param array        $errors
+	 * @param object       $posted_field
+	 * @param array|string $value
+	 * @param array        $args
+	 *
+	 * @return void
+	 */
+	private static function validate_options( &$errors, $posted_field, $value, $args ) {
+		if ( empty( $posted_field->options ) ) {
+			return;
+		}
+
+		$option_is_valid = self::option_is_valid( $posted_field, $value, $posted_field->options, (int) $args['entry_id'] );
+
+		/**
+		 * @since 6.21
+		 *
+		 * @param bool         $option_is_valid
+		 * @param array|string $value
+		 * @param object       $field
+		 */
+		$option_is_valid = (bool) apply_filters( 'frm_option_is_valid', $option_is_valid, $value, $posted_field );
+
+		if ( ! $option_is_valid ) {
+			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $posted_field, 'invalid' );
+		}
+	}
+
+	/**
+	 * Validate that value matches one of the options for the field.
+	 *
+	 * @since 6.21
+	 * @since 7.1 Added the $entry_id parameter.
+	 *
+	 * @param stdClass     $field
+	 * @param array|string $value
+	 * @param array        $options
+	 * @param int          $entry_id The entry being edited, or 0 for a new entry.
+	 *
+	 * @return bool
+	 */
+	private static function option_is_valid( $field, $value, $options, $entry_id = 0 ) {
+		if ( '' === $value ) {
+			return true;
+		}
+
+		$field_object = FrmFieldFactory::get_field_type( $field->type, $field );
+
+		if ( ! $field_object->field_type_has_options_settings() ) {
+			return true;
+		}
+
+		if ( in_array( $field->type, array( 'likert', 'ranking' ), true ) ) {
+			// Ignore these field types automatically.
+			return true;
+		}
+
+		if ( 'product' === $field->type && 'user_def' === FrmField::get_option( $field, 'data_type' ) ) {
+			return true;
+		}
+
+		if ( ! empty( $field->field_options['post_field'] ) ) {
+			return true;
+		}
+
+		$value = (array) $value;
+
+		foreach ( $value as $current_value ) {
+			$match = false;
+
+			foreach ( $options as $key => $option ) {
+				if ( str_starts_with( $key, 'other_' ) ) {
+					// Always return true if an other option is found.
+					return true;
+				}
+
+				if ( is_array( $option ) ) {
+					$separate_value = FrmField::get_option( $field, 'separate_value' );
+					$option_value   = $separate_value ? $option['value'] : $option['label'];
+				} else {
+					$option_value = $option;
+				}
+
+				// Preserve the numeric comparison used for saved options before setup hook validation.
+				$match = self::value_matches_option( $current_value, $option_value )
+				|| ( is_numeric( $current_value ) && (int) $current_value === (int) $option_value );
+
+				if ( $match ) {
+					break;
+				}
+			}//end foreach
+
+			if ( ! $match ) {
+				return self::setup_hooks_allow_value( $field, $value, $entry_id );
+			}
+		}//end foreach
+
+		return true;
+	}
+
+	/**
+	 * Check a value that is missing from the saved options against the setup hooks.
+	 *
+	 * @since 7.1
+	 *
+	 * @param stdClass     $field    The field being validated.
+	 * @param array|string $value    The value to validate.
+	 * @param int          $entry_id The entry being edited, or 0 for a new entry.
+	 *
+	 * @return bool
+	 */
+	private static function setup_hooks_allow_value( $field, $value, $entry_id ) {
+		if ( self::hook_options_allow_value( $field, $value, $entry_id ) ) {
+			return true;
+		}
+
+		// Older snippets may only register the new-entry hook, which also ran on edits before.
+		return $entry_id && self::has_new_entry_only_setup_callbacks() && self::hook_options_allow_value( $field, $value );
+	}
+
+	/**
+	 * Check if a posted value matches a single option value.
+	 *
+	 * @since 7.1
+	 *
+	 * @param string $current_value The posted value.
+	 * @param string $option_value  The option value to compare against.
+	 *
+	 * @return bool
+	 */
+	private static function value_matches_option( $current_value, $option_value ) {
+		if ( trim( $current_value ) === trim( $option_value ) ) {
+			return true;
+		}
+
+		if ( trim( $current_value ) === trim( do_shortcode( $option_value ) ) ) {
+			return true;
+		}
+
+		if ( self::is_filtered_match( $current_value, $option_value ) ) {
+			return true;
+		}
+
+		return self::is_same_integer( $current_value, $option_value );
+	}
+
+	/**
+	 * Compare two values as integers only when both are whole numbers, so "01" matches "1"
+	 * but a decimal like "101.9" does not match "101".
+	 *
+	 * @since 7.1
+	 *
+	 * @param string $current_value The posted value.
+	 * @param string $option_value  The option value to compare against.
+	 *
+	 * @return bool
+	 */
+	private static function is_same_integer( $current_value, $option_value ) {
+		$current_value = trim( $current_value );
+		$option_value  = trim( $option_value );
+
+		if ( ! preg_match( '/^\d+$/', $current_value ) || ! preg_match( '/^\d+$/', $option_value ) ) {
+			return false;
+		}
+
+		return (int) $current_value === (int) $option_value;
+	}
+
+	/**
+	 * Make an extra check after passing $option_value through the_content filter.
+	 * This is to help catch cases where the option's formatting has been modified using
+	 * the_content filter.
+	 *
+	 * @since 6.22
+	 *
+	 * @param string $value
+	 * @param string $option_value
+	 *
+	 * @return bool
+	 */
+	private static function is_filtered_match( $value, $option_value ) {
+		// First remove the wpautop filter so it doesn't add extra tags to $option_value.
+		$filter_priority = has_filter( 'the_content', 'wpautop' );
+
+		if ( is_numeric( $filter_priority ) ) {
+			remove_filter( 'the_content', 'wpautop', $filter_priority );
+		}
+
+		$filtered_option = apply_filters( 'the_content', $option_value );
+
+		if ( is_numeric( $filter_priority ) ) {
+			add_filter( 'the_content', 'wpautop', $filter_priority );
+		}
+
+		return trim( $value ) === trim( $filtered_option );
+	}
+
+	/**
+	 * Accept options produced by setup hooks and preserve the bypass for changed option lists.
+	 *
+	 * @since 6.21
+	 * @since 7.1 Added the $entry_id parameter and renamed from options_are_dynamic_based_on_hook.
+	 *
+	 * @param object       $field_object The field object.
+	 * @param array|string $value        The value to validate.
+	 * @param int          $entry_id     The entry being edited, or 0 for a new entry.
+	 *
+	 * @return bool
+	 */
+	private static function hook_options_allow_value( $field_object, $value, $entry_id = 0 ) {
+		$values          = (array) $field_object;
+		$values['value'] = $value;
+
+		if ( $entry_id ) {
+			FrmFieldsHelper::prepare_edit_front_field( $values, $field_object, $entry_id );
+		} else {
+			FrmFieldsHelper::prepare_new_front_field( $values, $field_object );
+		}
+
+		if ( self::value_matches_prepared_options( $value, $values ) ) {
+			return true;
+		}
+
+		$separate_value = FrmField::get_option( $field_object, 'separate_value' );
+
+		$map_callback = static function ( $option ) use ( $separate_value ) {
+			if ( is_array( $option ) ) {
+				$option = $separate_value ? $option['value'] : $option['label'];
+			}
+			return do_shortcode( $option );
+		};
+
+		$values_options = array_map( $map_callback, $values['options'] );
+		$saved_options  = array_map( $map_callback, $field_object->options );
+
+		if ( $values_options === $saved_options ) {
+			return false;
+		}
+
+		/**
+		 * Setup options can depend on render-time URL parameters, time, or other custom context,
+		 * so a changed list cannot reliably validate what was offered when the form rendered.
+		 * By default any value is accepted for that field. Return false to require the posted
+		 * value to match one of the options the setup hooks return at submission time.
+		 *
+		 * @since 7.1
+		 *
+		 * @param bool     $skip_validation Whether to accept any value for this field.
+		 * @param stdClass $field           The field being validated.
+		 * @param array    $values          The field array after the setup hooks run.
+		 * @param int      $entry_id        The entry being edited, or 0 for a new entry.
+		 */
+		return (bool) apply_filters( 'frm_skip_changed_option_validation', true, $field_object, $values, $entry_id );
+	}
+
+	/**
+	 * Check if the new-entry setup hook has a callback that did not already run through
+	 * the edit setup hook. Only those callbacks can make a value valid on the fallback check.
+	 *
+	 * @since 7.1
+	 *
+	 * @return bool
+	 */
+	private static function has_new_entry_only_setup_callbacks() {
+		global $wp_filter;
+
+		if ( empty( $wp_filter['frm_setup_new_fields_vars']->callbacks ) ) {
+			return false;
+		}
+
+		$edit_callbacks = array();
+
+		if ( ! empty( $wp_filter['frm_setup_edit_fields_vars']->callbacks ) ) {
+			foreach ( $wp_filter['frm_setup_edit_fields_vars']->callbacks as $callbacks ) {
+				$edit_callbacks = array_merge( $edit_callbacks, array_keys( $callbacks ) );
+			}
+		}
+
+		// Pro prepares new and edited fields with separate callbacks that apply the same options.
+		$edit_callbacks[] = 'FrmProFieldsHelper::setup_new_vars';
+
+		foreach ( $wp_filter['frm_setup_new_fields_vars']->callbacks as $callbacks ) {
+			if ( array_diff( array_keys( $callbacks ), $edit_callbacks ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check the posted value against the options after the setup hooks run, using the
+	 * same option values the field renders with. This includes the option key when a
+	 * hook sets use_key, which does not change the option list itself.
+	 *
+	 * @since 7.1
+	 *
+	 * @param array|string $value  The value to validate.
+	 * @param array        $values The field array after the setup hooks run.
+	 *
+	 * @return bool
+	 */
+	private static function value_matches_prepared_options( $value, $values ) {
+		if ( empty( $values['options'] ) || ! is_array( $values['options'] ) ) {
+			return false;
+		}
+
+		foreach ( (array) $value as $current_value ) {
+			if ( ! self::value_matches_prepared_option( $current_value, $values ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * @since 7.1
+	 *
+	 * @param string $current_value The posted value.
+	 * @param array  $values        The field array after the setup hooks run.
+	 *
+	 * @return bool
+	 */
+	private static function value_matches_prepared_option( $current_value, $values ) {
+		foreach ( $values['options'] as $opt_key => $opt ) {
+			if ( str_starts_with( (string) $opt_key, 'other_' ) ) {
+				return true;
+			}
+
+			$option_value = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $values );
+
+			if ( is_scalar( $option_value ) && self::value_matches_option( $current_value, (string) $option_value ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -150,10 +565,14 @@ class FrmEntryValidate {
 	 *
 	 * @since 5.2.02
 	 *
-	 * @param object $field Field object.
+	 * @param array|string $value Field value.
+	 * @param object       $field Field object.
+	 *
+	 * @return void
 	 */
 	private static function maybe_add_item_name( $value, $field ) {
 		$item_name = false;
+
 		if ( 'name' === $field->type ) {
 			$field_obj = FrmFieldFactory::get_field_object( $field );
 			$item_name = $field_obj->get_display_value( $value );
@@ -163,7 +582,7 @@ class FrmEntryValidate {
 
 		if ( false !== $item_name ) {
 			// Item name has a max length of 255 characters so truncate it so it doesn't fail to save in the database.
-			$_POST['item_name'] = substr( $item_name, 0, 255 );
+			$_POST['item_name'] = FrmAppHelper::truncate( $item_name, 255, 1, '', true );
 		}
 	}
 
@@ -172,9 +591,12 @@ class FrmEntryValidate {
 	 *
 	 * @param object $field
 	 * @param string $value
+	 *
+	 * @return void
 	 */
 	private static function maybe_clear_value_for_default_blank_setting( $field, &$value ) {
 		$position = FrmField::get_option( $field, 'label' );
+
 		if ( ! $position ) {
 			$position = FrmStylesController::get_style_val( 'position', $field->form_id );
 		}
@@ -184,28 +606,66 @@ class FrmEntryValidate {
 		}
 	}
 
+	/**
+	 * @param array  $errors
+	 * @param object $posted_field
+	 * @param mixed  $value
+	 * @param array  $args
+	 *
+	 * @return void
+	 */
 	public static function validate_field_types( &$errors, $posted_field, $value, $args ) {
 		$field_obj      = FrmFieldFactory::get_field_object( $posted_field );
 		$args['value']  = $value;
 		$args['errors'] = $errors;
 
 		$new_errors = $field_obj->validate( $args );
-		if ( ! empty( $new_errors ) ) {
+
+		if ( $new_errors && $field_obj instanceof FrmFieldCaptcha && ! empty( $args['is_new_submission'] ) ) {
+			$error_key = 'field' . $args['id'];
+			$reason    = $field_obj->get_validation_failure_reason();
+
+			if ( '' === $reason ) {
+				$reason = $new_errors[ $error_key ] ?? '';
+			}
+
+			if ( isset( $new_errors[ $error_key ] ) && FrmSpamEntriesHelper::maybe_flag_submission( $posted_field->form_id, $field_obj->get_spam_source(), $reason ) ) {
+				unset( $new_errors[ $error_key ] );
+			}
+		}
+
+		if ( $new_errors ) {
 			$errors = array_merge( $errors, $new_errors );
 		}
 	}
 
+	/**
+	 * @param array  $errors
+	 * @param object $field
+	 * @param string $value
+	 * @param array  $args
+	 *
+	 * @return void
+	 */
 	public static function validate_phone_field( &$errors, $field, $value, $args ) {
-		if ( $field->type == 'phone' || ( $field->type == 'text' && FrmField::is_option_true_in_object( $field, 'format' ) ) ) {
+		$format_value = FrmField::get_option( $field, 'format' );
 
-			$pattern = self::phone_format( $field );
+		if ( $field->type !== 'phone' && ( $field->type !== 'text' || ! $format_value || FrmCurrencyHelper::is_currency_format( $format_value ) ) ) {
+			return;
+		}
 
-			if ( ! preg_match( $pattern, $value ) ) {
-				$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
-			}
+		$pattern = self::phone_format( $field );
+
+		if ( ! preg_match( $pattern, $value ) ) {
+			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
 		}
 	}
 
+	/**
+	 * @param object $field
+	 *
+	 * @return string
+	 */
 	public static function phone_format( $field ) {
 		if ( FrmField::is_option_empty( $field, 'format' ) ) {
 			$pattern = self::default_phone_format();
@@ -213,20 +673,23 @@ class FrmEntryValidate {
 			$pattern = FrmField::get_option( $field, 'format' );
 		}
 
+		// Ampersands are saved as &amp;.
+		// Reverse it here so we are checking for the correct character.
+		$pattern = html_entity_decode( $pattern );
 		$pattern = apply_filters( 'frm_phone_pattern', $pattern, $field );
 
 		// Create a regexp if format is not already a regexp
-		if ( strpos( $pattern, '^' ) !== 0 ) {
+		if ( ! str_starts_with( $pattern, '^' ) ) {
 			$pattern = self::create_regular_expression_from_format( $pattern );
 		}
 
-		$pattern = '/' . $pattern . '/';
-
-		return $pattern;
+		return '/' . $pattern . '/';
 	}
 
 	/**
 	 * @since 3.01
+	 *
+	 * @return string
 	 */
 	private static function default_phone_format() {
 		return '^((\+\d{1,3}(-|.| )?\(?\d\)?(-| |.)?\d{1,5})|(\(?\d{2,6}\)?))(-|.| )?(\d{3,4})(-|.| )?(\d{4})(( x| ext)\d{1,5}){0,1}$';
@@ -254,51 +717,97 @@ class FrmEntryValidate {
 		$pattern = str_replace( '*', 'w', $pattern );
 		$pattern = str_replace( '/', '\/', $pattern );
 
-		if ( strpos( $pattern, '\?' ) !== false ) {
+		if ( str_contains( $pattern, '\?' ) ) {
 			$parts   = explode( '\?', $pattern );
 			$pattern = '';
+
 			foreach ( $parts as $part ) {
-				if ( empty( $pattern ) ) {
-					$pattern .= $part;
-				} else {
+				if ( $pattern ) {
 					$pattern .= '(' . $part . ')?';
+				} else {
+					$pattern .= $part;
 				}
 			}
 		}
-		$pattern = '^' . $pattern . '$';
 
-		return $pattern;
+		return '^' . $pattern . '$';
 	}
 
 	/**
-	 * Check for spam
+	 * Check for spam.
 	 *
-	 * @param boolean $exclude
+	 * @param bool  $exclude
 	 * @param array $values
-	 * @param array $errors by reference
+	 * @param array $errors By reference.
+	 *
+	 * @return void
 	 */
 	public static function spam_check( $exclude, $values, &$errors ) {
-		if ( ! empty( $exclude ) || ! isset( $values['item_meta'] ) || empty( $values['item_meta'] ) || ! empty( $errors ) ) {
-			// only check spam if there are no other errors
+		if ( defined( 'WP_IMPORTING' ) && WP_IMPORTING ) {
+			// Do not check spam on importing.
+			return;
+		}
+
+		if ( $exclude || empty( $values['item_meta'] ) || $errors ) {
+			// Only check spam if there are no other errors
 			return;
 		}
 
 		$antispam_check = self::is_antispam_check( $values['form_id'] );
+		$spam_msg       = FrmAntiSpamController::get_default_spam_message();
+		$spam_source    = '';
+
 		if ( is_string( $antispam_check ) ) {
 			$errors['spam'] = $antispam_check;
-		} elseif ( self::is_honeypot_spam( $values ) || self::is_spam_bot() ) {
-			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
-		} elseif ( self::blacklist_check( $values ) ) {
-			$errors['spam'] = __( 'Your entry appears to be blocked spam!', 'formidable' );
+			$spam_source    = 'antispam';
+		} elseif ( self::is_honeypot_spam( $values ) ) {
+			$errors['spam'] = $spam_msg;
+			$spam_source    = 'honeypot';
+		} elseif ( self::is_spam_bot() ) {
+			$errors['spam'] = $spam_msg;
+			$spam_source    = 'no_ip';
+		} else {
+			$detected = FrmAntiSpamController::detect_spam( $values );
+
+			if ( $detected ) {
+				$errors['spam'] = $detected['message'];
+				$spam_source    = $detected['source'];
+			}
 		}
 
-		if ( isset( $errors['spam'] ) || self::form_is_in_progress( $values ) ) {
+		if (
+			! isset( $errors['spam'] ) && ! self::form_is_in_progress( $values ) &&
+			self::is_akismet_enabled_for_user( $values['form_id'] ) && self::is_akismet_spam( $values, $spam_source )
+		) {
+			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
+		}
+
+		if ( ! $spam_source || ! self::is_new_submission( $values ) || ! FrmSpamEntriesHelper::maybe_flag_submission( $values['form_id'], $spam_source ) ) {
 			return;
 		}
 
-		if ( self::is_akismet_enabled_for_user( $values['form_id'] ) && self::is_akismet_spam( $values ) ) {
-			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
+		// Save the entry as spam instead of showing an error, so the submitter sees the normal success response.
+		unset( $errors['spam'] );
+
+		if ( 'honeypot' !== $spam_source ) {
+			return;
 		}
+
+		$honeypot = new FrmHoneypot( $values['form_id'] );
+		$honeypot->remove_posted_value();
+	}
+
+	/**
+	 * Spam is only saved as a spam entry when an entry is created. Edits keep showing the spam error.
+	 *
+	 * @since 7.0
+	 *
+	 * @param array $values The submitted values.
+	 *
+	 * @return bool
+	 */
+	private static function is_new_submission( $values ) {
+		return empty( $values['id'] ) && 'update' !== ( $values['frm_action'] ?? '' );
 	}
 
 	/**
@@ -307,12 +816,15 @@ class FrmEntryValidate {
 	 * @since 5.0.13
 	 *
 	 * @param array $values The values.
+	 *
 	 * @return bool
 	 */
 	private static function form_is_in_progress( $values ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		return FrmAppHelper::pro_is_installed() &&
 			( isset( $values[ 'frm_page_order_' . $values['form_id'] ] ) || FrmAppHelper::get_post_param( 'frm_next_page' ) ) &&
 			FrmField::get_all_types_in_form( $values['form_id'], 'break' );
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -327,7 +839,8 @@ class FrmEntryValidate {
 
 	/**
 	 * @param array $values
-	 * @return boolean
+	 *
+	 * @return bool
 	 */
 	private static function is_honeypot_spam( $values ) {
 		$honeypot = new FrmHoneypot( $values['form_id'] );
@@ -335,89 +848,74 @@ class FrmEntryValidate {
 	}
 
 	/**
-	 * @return boolean
+	 * @return bool
 	 */
 	private static function is_spam_bot() {
-		$ip = FrmAppHelper::get_ip_address();
-
-		return empty( $ip );
+		return ! FrmAppHelper::get_ip_address();
 	}
 
 	/**
-	 * @param array $values
-	 * @return boolean
+	 * @param array  $values Entry values.
+	 * @param string $source The detected Akismet spam source.
+	 *
+	 * @return bool
 	 */
-	private static function is_akismet_spam( $values ) {
+	private static function is_akismet_spam( $values, &$source = '' ) {
 		global $wpcom_api_key;
+		$akismet_enabled = is_callable( 'Akismet::http_post' ) && ( get_option( 'wordpress_api_key' ) || $wpcom_api_key );
 
-		return ( is_callable( 'Akismet::http_post' ) && ( get_option( 'wordpress_api_key' ) || $wpcom_api_key ) && self::akismet( $values ) );
+		if ( ! $akismet_enabled ) {
+			return false;
+		}
+
+		$source = self::get_akismet_spam_source( $values );
+		return '' !== $source;
 	}
 
 	/**
 	 * @param int $form_id
+	 *
 	 * @return bool
 	 */
 	private static function is_akismet_enabled_for_user( $form_id ) {
 		$form = FrmForm::getOne( $form_id );
-
-		return ( ! empty( $form->options['akismet'] ) && ( $form->options['akismet'] !== 'logged' || ! is_user_logged_in() ) );
+		return ! empty( $form->options['akismet'] ) && ( $form->options['akismet'] !== 'logged' || ! is_user_logged_in() );
 	}
 
+	/**
+	 * Checks spam using WordPress disallowed words and Frm denylist.
+	 *
+	 * @param array $values Entry values.
+	 *
+	 * @return bool
+	 */
 	public static function blacklist_check( $values ) {
-		if ( ! apply_filters( 'frm_check_blacklist', true, $values ) ) {
-			return false;
-		}
-
-		$mod_keys = trim( self::get_disallowed_words() );
-		if ( empty( $mod_keys ) ) {
-			return false;
-		}
-
-		$content = FrmEntriesHelper::entry_array_to_string( $values );
-
-		self::prepare_values_for_spam_check( $values );
-		$ip         = FrmAppHelper::get_ip_address();
-		$user_agent = FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' );
-		$user_info  = self::get_spam_check_user_info( $values );
-
-		return self::check_disallowed_words( $user_info['comment_author'], $user_info['comment_author_email'], $user_info['comment_author_url'], $content, $ip, $user_agent );
-	}
-
-	/**
-	 * For WP 5.5 compatibility.
-	 *
-	 * @since 4.06.02
-	 */
-	private static function check_disallowed_words( $author, $email, $url, $content, $ip, $user_agent ) {
-		if ( function_exists( 'wp_check_comment_disallowed_list' ) ) {
-			return wp_check_comment_disallowed_list( $author, $email, $url, $content, $ip, $user_agent );
-		} else {
-			return wp_blacklist_check( $author, $email, $url, $content, $ip, $user_agent );
-		}
-	}
-
-	/**
-	 * For WP 5.5 compatibility.
-	 *
-	 * @since 4.06.02
-	 */
-	private static function get_disallowed_words() {
-		$keys = get_option( 'disallowed_keys' );
-		if ( false === $keys ) {
-			// Fallback for WP < 5.5.
-			$keys = get_option( 'blacklist_keys' );
-		}
-		return $keys;
+		return FrmAntiSpamController::contains_wp_disallowed_words( $values ) || FrmAntiSpamController::is_denylist_spam( $values );
 	}
 
 	/**
 	 * Check entries for Akismet spam
 	 *
-	 * @return boolean true if is spam
+	 * @param array $values Entry values.
+	 *
+	 * @return bool true if is spam
 	 */
 	public static function akismet( $values ) {
+		return '' !== self::get_akismet_spam_source( $values );
+	}
+
+	/**
+	 * Check Akismet and identify regular or blatant spam.
+	 *
+	 * @since 7.0
+	 *
+	 * @param array $values Entry values.
+	 *
+	 * @return string The spam source, or an empty string for a non-spam response.
+	 */
+	private static function get_akismet_spam_source( $values ) {
 		if ( empty( $values['item_meta'] ) ) {
-			return false;
+			return '';
 		}
 
 		$datas = array(
@@ -437,22 +935,60 @@ class FrmEntryValidate {
 		$query_string = _http_build_query( $datas, '', '&' );
 		$response     = Akismet::http_post( $query_string, 'comment-check' );
 
-		return ( is_array( $response ) && $response[1] == 'true' );
+		return self::get_akismet_response_source( $response );
+	}
+
+	/**
+	 * Identify the spam source from an Akismet response.
+	 *
+	 * @since 7.0
+	 *
+	 * @param mixed $response Response headers and body returned by Akismet.
+	 *
+	 * @return string The spam source, or an empty string when Akismet did not flag spam.
+	 */
+	private static function get_akismet_response_source( $response ) {
+		if ( ! is_array( $response ) || 'true' !== ( $response[1] ?? '' ) ) {
+			return '';
+		}
+
+		$headers = $response[0] ?? array();
+
+		if ( is_array( $headers ) ) {
+			$headers = array_change_key_case( $headers, CASE_LOWER );
+		}
+
+		if ( ( is_array( $headers ) || $headers instanceof ArrayAccess ) && 'discard' === ( $headers['x-akismet-pro-tip'] ?? '' ) ) {
+			return 'akismet_discard';
+		}
+
+		return 'akismet';
 	}
 
 	/**
 	 * @since 2.0
+	 *
+	 * @param array $datas The array of values being sent to Akismet.
+	 * @param array $values Entry values.
+	 *
+	 * @return void
 	 */
 	private static function parse_akismet_array( &$datas, $values ) {
 		self::add_site_info_to_akismet( $datas );
 		self::add_server_values_to_akismet( $datas );
 
 		self::prepare_values_for_spam_check( $values );
+		self::skip_adding_values_to_akismet( $values );
 
 		self::add_user_info_to_akismet( $datas, $values );
 		self::add_comment_content_to_akismet( $datas, $values );
 	}
 
+	/**
+	 * @param array $datas
+	 *
+	 * @return void
+	 */
 	private static function add_site_info_to_akismet( &$datas ) {
 		$datas['blog']         = FrmAppHelper::site_url();
 		$datas['user_ip']      = preg_replace( '/[^0-9., ]/', '', FrmAppHelper::get_ip_address() );
@@ -466,6 +1002,12 @@ class FrmEntryValidate {
 		}
 	}
 
+	/**
+	 * @param array $datas
+	 * @param array $values
+	 *
+	 * @return void
+	 */
 	private static function add_user_info_to_akismet( &$datas, $values ) {
 		$user_info = self::get_spam_check_user_info( $values );
 		$datas     = $datas + $user_info;
@@ -479,11 +1021,13 @@ class FrmEntryValidate {
 	 * Gets user info for Akismet spam check.
 	 *
 	 * @since 5.0.13 Separate code for guest. Handle value of embedded|repeater.
+	 * @since 6.21 This changed from private to public.
 	 *
 	 * @param array $values Entry values after running through {@see FrmEntryValidate::prepare_values_for_spam_check()}.
+	 *
 	 * @return array
 	 */
-	private static function get_spam_check_user_info( $values ) {
+	public static function get_spam_check_user_info( $values ) {
 		if ( ! is_user_logged_in() ) {
 			return self::get_spam_check_user_info_for_guest( $values );
 		}
@@ -505,6 +1049,7 @@ class FrmEntryValidate {
 	 * @since 5.0.13
 	 *
 	 * @param array $values Entry values after flattened.
+	 *
 	 * @return array
 	 */
 	private static function get_spam_check_user_info_for_guest( $values ) {
@@ -524,8 +1069,7 @@ class FrmEntryValidate {
 		$values = array_filter( $values );
 
 		self::recursive_add_akismet_guest_info( $datas, $values );
-		unset( $datas['name_field_ids'] );
-		unset( $datas['missing_keys'] );
+		unset( $datas['name_field_ids'], $datas['missing_keys'] );
 
 		return $datas;
 	}
@@ -538,11 +1082,14 @@ class FrmEntryValidate {
 	 * @param array    $datas        Guest data.
 	 * @param array    $values       The values.
 	 * @param int|null $custom_index Custom index (or field ID).
+	 *
+	 * @return void
 	 */
 	private static function recursive_add_akismet_guest_info( &$datas, $values, $custom_index = null ) {
 		foreach ( $values as $index => $value ) {
 			if ( ! $datas['missing_keys'] ) {
-				return; // Found all info.
+				// Found all info.
+				return;
 			}
 
 			if ( is_array( $value ) ) {
@@ -550,16 +1097,20 @@ class FrmEntryValidate {
 				continue;
 			}
 
-			$field_id = ! is_null( $custom_index ) ? $custom_index : $index;
+			$field_id = $custom_index ?? $index;
+
 			foreach ( $datas['missing_keys'] as $key_index => $key ) {
-				$found = self::is_akismet_guest_info_value( $key, $value, $field_id, $datas['name_field_ids'] );
-				if ( $found ) {
-					$datas[ $key ]             = $value;
-					$datas['frm_duplicated'][] = $field_id;
-					unset( $datas['missing_keys'][ $key_index ] );
+				$found = self::is_akismet_guest_info_value( $key, $value, $field_id, $datas['name_field_ids'], $values );
+
+				if ( ! $found ) {
+					continue;
 				}
+
+				$datas[ $key ]             = $value;
+				$datas['frm_duplicated'][] = $field_id;
+				unset( $datas['missing_keys'][ $key_index ] );
 			}
-		}
+		}//end foreach
 	}
 
 	/**
@@ -571,31 +1122,88 @@ class FrmEntryValidate {
 	 * @param string $value          Value to check.
 	 * @param int    $field_id       Field ID.
 	 * @param array  $name_field_ids Name field IDs.
+	 * @param array  $values         Array of posted values.
+	 *
 	 * @return bool
 	 */
-	private static function is_akismet_guest_info_value( $key, $value, $field_id, $name_field_ids ) {
+	private static function is_akismet_guest_info_value( $key, &$value, $field_id, $name_field_ids, $values ) {
 		if ( ! $value || is_numeric( $value ) ) {
 			return false;
 		}
 
 		switch ( $key ) {
 			case 'comment_author_email':
-				return strpos( $value, '@' ) && is_email( $value );
+				return str_contains( $value, '@' ) && is_email( $value );
 
 			case 'comment_author_url':
-				return 0 === strpos( $value, 'http' );
+				return str_starts_with( $value, 'http' );
 
 			case 'comment_author':
-				if ( $name_field_ids ) {
+				if ( $name_field_ids && in_array( $field_id, $name_field_ids, true ) ) {
 					// If there is name field in the form, we should always use it as author name.
-					return in_array( $field_id, $name_field_ids, true );
+					return true;
 				}
-				return strlen( $value ) < 200;
-		}
+
+				$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
+				$fields  = self::get_name_text_fields( $form_id );
+
+				foreach ( $fields as $index => $field ) {
+					if ( 'Name' !== $field->name ) {
+						continue;
+					}
+
+					if ( isset( $fields[ $index + 1 ] ) && 'Last' === $fields[ $index + 1 ]->name ) {
+						if ( empty( $values[ absint( $fields[ $index + 1 ]->id ) ] ) ) {
+							continue;
+						}
+
+						$value .= ' ' . $values[ $fields[ $index + 1 ]->id ];
+						return true;
+					}
+				}
+		}//end switch
 
 		return false;
 	}
 
+	/**
+	 * Returns fields that have 'Name' and 'Last' as their name.
+	 *
+	 * @since 6.17
+	 *
+	 * @param int $form_id
+	 *
+	 * @return array
+	 */
+	private static function get_name_text_fields( $form_id ) {
+		$name_text_fields_is_initialized = is_array( self::$name_text_fields );
+
+		if ( $name_text_fields_is_initialized && isset( self::$name_text_fields[ $form_id ] ) ) {
+			return self::$name_text_fields[ $form_id ];
+		}
+
+		if ( ! $name_text_fields_is_initialized ) {
+			self::$name_text_fields = array();
+		}
+		self::$name_text_fields[ $form_id ] = FrmDb::get_results(
+			'frm_fields',
+			array(
+				'form_id' => $form_id,
+				'type'    => 'text',
+				'name'    => array( 'Name', 'Last' ),
+			),
+			'id,name',
+			array( 'order_by' => 'field_order ASC' )
+		);
+
+		return self::$name_text_fields[ $form_id ];
+	}
+
+	/**
+	 * @param array $datas
+	 *
+	 * @return void
+	 */
 	private static function add_server_values_to_akismet( &$datas ) {
 		foreach ( $_SERVER as $key => $value ) {
 			$include_value = is_string( $value ) && ! preg_match( '/^HTTP_COOKIE/', $key ) && preg_match( '/^(HTTP_|REMOTE_ADDR|REQUEST_URI|DOCUMENT_URI)/', $key );
@@ -615,6 +1223,8 @@ class FrmEntryValidate {
 	 *
 	 * @param array $datas  The array of values being sent to Akismet.
 	 * @param array $values Entry values.
+	 *
+	 * @return void
 	 */
 	private static function add_comment_content_to_akismet( &$datas, $values ) {
 		if ( isset( $datas['frm_duplicated'] ) ) {
@@ -628,8 +1238,6 @@ class FrmEntryValidate {
 			unset( $datas['frm_duplicated'] );
 		}
 
-		self::skip_adding_values_to_akismet( $values );
-
 		$datas['comment_content'] = FrmEntriesHelper::entry_array_to_string( $values );
 	}
 
@@ -639,19 +1247,25 @@ class FrmEntryValidate {
 	 * @since 5.0.09
 	 *
 	 * @param array $values Entry values.
+	 *
+	 * @return void
 	 */
 	private static function skip_adding_values_to_akismet( &$values ) {
 		$skipped_fields = self::get_akismet_skipped_field_ids( $values );
+
 		foreach ( $skipped_fields as $skipped_field ) {
 			if ( ! isset( $values['item_meta'][ $skipped_field->id ] ) ) {
 				continue;
 			}
 
-			if ( self::should_really_skip_field( $skipped_field, $values ) ) {
-				unset( $values['item_meta'][ $skipped_field->id ] );
-				if ( isset( $values['item_meta']['other'][ $skipped_field->id ] ) ) {
-					unset( $values['item_meta']['other'][ $skipped_field->id ] );
-				}
+			if ( ! self::should_really_skip_field( $skipped_field, $values ) ) {
+				continue;
+			}
+
+			unset( $values['item_meta'][ $skipped_field->id ] );
+
+			if ( isset( $values['item_meta']['other'][ $skipped_field->id ] ) ) {
+				unset( $values['item_meta']['other'][ $skipped_field->id ] );
 			}
 		}
 	}
@@ -663,23 +1277,26 @@ class FrmEntryValidate {
 	 *
 	 * @param object $field_data Object contains `id` and `options`.
 	 * @param array  $values     Entry values.
+	 *
 	 * @return bool
 	 */
 	private static function should_really_skip_field( $field_data, $values ) {
-		if ( empty( $field_data->options ) ) { // This is skipped field types.
+		if ( empty( $field_data->options ) ) {
+			// This is skipped field types.
 			return true;
 		}
 
 		FrmAppHelper::unserialize_or_decode( $field_data->options );
-		if ( ! $field_data->options ) { // Check if an error happens when unserializing, or empty options.
+
+		if ( ! $field_data->options ) {
+			// Check if an error happens when unserializing, or empty options.
 			return true;
 		}
 
-		end( $field_data->options );
-		$last_key = key( $field_data->options );
+		$last_key = array_key_last( $field_data->options );
 
 		// If a choice field has no Other option.
-		if ( is_numeric( $last_key ) || 0 !== strpos( $last_key, 'other_' ) ) {
+		if ( is_numeric( $last_key ) || ! str_starts_with( $last_key, 'other_' ) ) {
 			return true;
 		}
 
@@ -690,7 +1307,8 @@ class FrmEntryValidate {
 
 		// Check if submitted value is same as one of field option.
 		foreach ( $field_data->options as $option ) {
-			$option_value = ! is_array( $option ) ? $option : ( isset( $option['value'] ) ? $option['value'] : '' );
+			$option_value = is_array( $option ) ? ( $option['value'] ?? '' ) : $option;
+
 			if ( $values['item_meta']['other'][ $field_data->id ] === $option_value ) {
 				return true;
 			}
@@ -707,6 +1325,7 @@ class FrmEntryValidate {
 	 * @since 5.2.04 This method returns array of object contains `id` and `options` instead of array of `id` only.
 	 *
 	 * @param array $values Entry values after running through {@see FrmEntryValidate::prepare_values_for_spam_check()}.
+	 *
 	 * @return array
 	 */
 	private static function get_akismet_skipped_field_ids( $values ) {
@@ -731,12 +1350,14 @@ class FrmEntryValidate {
 	 * Prepares values array for spam check.
 	 *
 	 * @since 5.0.13
+	 * @since 6.21 This changed from private to public.
 	 *
 	 * @param array $values Entry values.
+	 *
+	 * @return void
 	 */
-	private static function prepare_values_for_spam_check( &$values ) {
-		$form_ids           = self::get_all_form_ids_and_flatten_meta( $values );
-		$values['form_ids'] = $form_ids;
+	public static function prepare_values_for_spam_check( &$values ) {
+		$values['form_ids'] = self::get_all_form_ids_and_flatten_meta( $values );
 	}
 
 	/**
@@ -747,20 +1368,23 @@ class FrmEntryValidate {
 	 * @since 5.0.13 Convert name field value to string.
 	 *
 	 * @param array $values Entry values.
+	 *
 	 * @return array Form IDs.
 	 */
-	private static function get_all_form_ids_and_flatten_meta( &$values ) {
+	private static function get_all_form_ids_and_flatten_meta( &$values ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		$values['name_field_ids'] = array();
 
 		// Blacklist check for File field in the old version doesn't contain `form_id`.
 		$form_ids = isset( $values['form_id'] ) ? array( absint( $values['form_id'] ) ) : array();
+
 		foreach ( $values['item_meta'] as $field_id => $value ) {
-			if ( ! is_numeric( $field_id ) ) { // Maybe `other`.
+			if ( ! is_numeric( $field_id ) ) {
+				// Maybe `other`.
 				continue;
 			}
 
 			// Convert name array to string.
-			if ( isset( $value['first'] ) && isset( $value['last'] ) ) {
+			if ( isset( $value['first'], $value['last'] ) ) {
 				$values['item_meta'][ $field_id ] = trim( implode( ' ', $value ) );
 				$values['name_field_ids'][]       = $field_id;
 				continue;
@@ -787,51 +1411,20 @@ class FrmEntryValidate {
 					}
 
 					// Convert name array to string.
-					if ( isset( $subsubvalue['first'] ) && isset( $subsubvalue['last'] ) ) {
-						$subsubvalue = trim( implode( ' ', $subsubvalue ) );
-
+					if ( isset( $subsubvalue['first'], $subsubvalue['last'] ) ) {
+						$subsubvalue                = trim( implode( ' ', $subsubvalue ) );
 						$values['name_field_ids'][] = $subsubindex;
 					}
 
-					$values['item_meta'][ $subsubindex ][] = $subsubvalue;
+					if ( is_array( $values['item_meta'][ $subsubindex ] ) ) {
+						$values['item_meta'][ $subsubindex ][] = $subsubvalue;
+					}
 				}
-			}
+			}//end foreach
 
 			unset( $values['item_meta'][ $field_id ] );
-		}
+		}//end foreach
 
 		return $form_ids;
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function validate_url_field( &$errors, $field, $value, $args ) {
-		FrmDeprecated::validate_url_field( $errors, $field, $value, $args );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function validate_email_field( &$errors, $field, $value, $args ) {
-		FrmDeprecated::validate_email_field( $errors, $field, $value, $args );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function validate_number_field( &$errors, $field, $value, $args ) {
-		FrmDeprecated::validate_number_field( $errors, $field, $value, $args );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function validate_recaptcha( &$errors, $field, $args ) {
-		FrmDeprecated::validate_recaptcha( $errors, $field, $args );
 	}
 }

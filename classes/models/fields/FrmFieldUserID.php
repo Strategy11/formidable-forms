@@ -10,24 +10,28 @@ class FrmFieldUserID extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'user_id';
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $has_input = false;
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $has_html = false;
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $holds_email_values = true;
@@ -37,7 +41,6 @@ class FrmFieldUserID extends FrmFieldType {
 	 */
 	protected $array_allowed = false;
 
-
 	/**
 	 * @return string
 	 */
@@ -45,51 +48,114 @@ class FrmFieldUserID extends FrmFieldType {
 		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-user-id.php';
 	}
 
+	/**
+	 * @param array $args
+	 */
 	public function prepare_field_html( $args ) {
 		$args  = $this->fill_display_field_values( $args );
 		$value = $this->get_field_value( $args );
 
-		echo '<input type="hidden" name="' . esc_attr( $args['field_name'] ) . '" id="' . esc_attr( $args['html_id'] ) . '" value="' . esc_attr( $value ) . '" data-frmval="' . esc_attr( $value ) . '"/>' . "\n";
+		echo '<input type="hidden" name="' . esc_attr( $args['field_name'] ) . '" id="' . esc_attr( $args['html_id'] ) . '" value="' . esc_attr( $value ) . '" data-frmval="' . esc_attr( $value ) . '"/>' . "\n"; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
 	 * @since 4.03.06
+	 *
+	 * @param array $args Field display arguments.
+	 *
+	 * @return int|string
 	 */
 	protected function get_field_value( $args ) {
 		$user_ID      = get_current_user_id();
-		$user_ID      = ( $user_ID ? $user_ID : '' );
-		$posted_value = ( FrmAppHelper::is_admin() && $_POST && isset( $_POST['item_meta'][ $this->field['id'] ] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$action       = ( isset( $args['action'] ) ? $args['action'] : ( isset( $args['form_action'] ) ? $args['form_action'] : '' ) );
-		$updating     = $action == 'update';
-		return ( is_numeric( $this->field['value'] ) || $posted_value || $updating ) ? $this->field['value'] : $user_ID;
+		$user_ID      = $user_ID ? $user_ID : '';
+		$posted_value = FrmAppHelper::is_admin() && $_POST && isset( $_POST['item_meta'][ $this->field['id'] ] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$action       = $args['action'] ?? $args['form_action'] ?? '';
+		$updating     = $action === 'update';
+		return is_numeric( $this->field['value'] ) || $posted_value || $updating ? $this->field['value'] : $user_ID;
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return array
+	 */
 	public function validate( $args ) {
+		// A blank value can't point at another user. Registration posts one when a logged-in user creates a new user.
+		if ( ! empty( $args['value'] ) && ! self::can_set_other_user_id() ) {
+			$value = $this->get_value_for_current_submitter( (int) ( $args['entry_id'] ?? 0 ) );
+
+			if ( (string) $value !== (string) $args['value'] ) {
+				$args['value'] = $value;
+				FrmEntriesHelper::set_posted_value( $this->field, $args['value'], $args );
+			}
+		}
+
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( '' == $args['value'] ) {
 			return array();
 		}
 
-		// make sure we have a user ID
+		// Make sure we have a user ID.
 		if ( ! is_numeric( $args['value'] ) ) {
 			$args['value'] = FrmAppHelper::get_user_id_param( $args['value'] );
 			FrmEntriesHelper::set_posted_value( $this->field, $args['value'], $args );
 		}
 
-		//add user id to post variables to be saved with entry
+		// Add user id to post variables to be saved with entry.
 		$_POST['frm_user_id'] = $args['value'];
 
 		return array();
 	}
 
 	/**
-	 * @param $value
-	 * @param $atts array
+	 * Whether the current user may save another user's ID in this field.
 	 *
-	 * @return false|mixed|string
+	 * Matches the check FrmEntry uses before it accepts a submitted entry owner.
+	 *
+	 * @since 7.1
+	 *
+	 * @return bool
+	 */
+	private static function can_set_other_user_id() {
+		return current_user_can( 'frm_edit_entries' ) || current_user_can( 'administrator' );
+	}
+
+	/**
+	 * Gets the value to save for a user without entry management access.
+	 *
+	 * @since 7.1
+	 *
+	 * @param int $entry_id The entry being edited, or 0 for a new entry.
+	 *
+	 * @return int|string
+	 */
+	private function get_value_for_current_submitter( $entry_id ) {
+		if ( $entry_id ) {
+			$saved_value = FrmEntryMeta::get_entry_meta_by_field( $entry_id, $this->get_field_column( 'id' ) );
+
+			if ( is_numeric( $saved_value ) ) {
+				return (int) $saved_value;
+			}
+
+			$entry = FrmEntry::getOne( $entry_id );
+
+			if ( $entry && $entry->user_id ) {
+				return (int) $entry->user_id;
+			}
+		}
+
+		$user_id = get_current_user_id();
+		return $user_id ? $user_id : '';
+	}
+
+	/**
+	 * @param array|string $value
+	 * @param array        $atts
+	 *
+	 * @return array|string A string is returned, but the return signature should match FrmFieldType.
 	 */
 	protected function prepare_display_value( $value, $atts ) {
 		$user_info = $this->prepare_user_info_attribute( $atts );
-
 		return FrmFieldsHelper::get_user_display_name( $value, $user_info, $atts );
 	}
 
@@ -100,27 +166,21 @@ class FrmFieldUserID extends FrmFieldType {
 	 *
 	 * @since 3.0
 	 *
-	 * @param $atts
+	 * @param array $atts
 	 *
 	 * @return string
 	 */
 	private function prepare_user_info_attribute( $atts ) {
 		if ( isset( $atts['show'] ) ) {
-			if ( $atts['show'] === 'id' ) {
-				$user_info = 'ID';
-			} else {
-				$user_info = $atts['show'];
-			}
-		} else {
-			$user_info = apply_filters( 'frm_user_id_display', 'display_name' );
+			return $atts['show'] === 'id' ? 'ID' : $atts['show'];
 		}
 
-		return $user_info;
+		return apply_filters( 'frm_user_id_display', 'display_name' );
 	}
 
 	/**
-	 * @param $value
-	 * @param $atts
+	 * @param string $value
+	 * @param array  $atts
 	 *
 	 * @return int
 	 */
@@ -131,9 +191,15 @@ class FrmFieldUserID extends FrmFieldType {
 	/**
 	 * @since 4.0.04
 	 *
+	 * @param mixed $value Field value passed by reference.
+	 *
 	 * @return void
 	 */
 	public function sanitize_value( &$value ) {
+		if ( '' === $value ) {
+			// Allow for an empty User ID. Return early to prevent it from getting set to 0.
+			return;
+		}
 		FrmAppHelper::sanitize_value( 'intval', $value );
 	}
 }

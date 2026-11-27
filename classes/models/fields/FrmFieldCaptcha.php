@@ -10,9 +10,52 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'captcha';
+
+	/**
+	 * Details of the most recent CAPTCHA validation failure.
+	 *
+	 * @since 7.0
+	 *
+	 * @var string
+	 */
+	private $validation_failure_reason = '';
+
+	/**
+	 * The spam source for the most recent CAPTCHA validation failure.
+	 *
+	 * @since 7.1
+	 *
+	 * @var string
+	 */
+	private $spam_source = 'captcha';
+
+	/**
+	 * Get the service explanation and error codes for the validation failure.
+	 *
+	 * @since 7.0
+	 *
+	 * @return string
+	 */
+	public function get_validation_failure_reason() {
+		return $this->validation_failure_reason;
+	}
+
+	/**
+	 * Get the spam source that decides how the most recent validation failure is handled.
+	 * A CAPTCHA that could not be verified because of the service is handled separately
+	 * from a CAPTCHA the visitor failed.
+	 *
+	 * @since 7.1
+	 *
+	 * @return string
+	 */
+	public function get_spam_source() {
+		return $this->spam_source;
+	}
 
 	/**
 	 * @return string
@@ -29,24 +72,22 @@ class FrmFieldCaptcha extends FrmFieldType {
 	public static function get_captcha_image_name() {
 		$frm_settings   = FrmAppHelper::get_settings();
 		$active_captcha = $frm_settings->active_captcha;
-		if ( $active_captcha === 'recaptcha' && $frm_settings->re_type === 'v3' ) {
-			$image_name = 'recaptcha_v3';
-		} else {
-			$image_name = $active_captcha;
-		}
 
-		return $image_name;
+		return $active_captcha === 'recaptcha' && $frm_settings->re_type === 'v3' ? 'recaptcha_v3' : $active_captcha;
 	}
 
 	/**
 	 * @return array
 	 */
 	protected function field_settings_for_type() {
+		$settings = FrmCaptchaFactory::get_settings_object();
 		return array(
-			'required'     => false,
-			'invalid'      => true,
-			'captcha_size' => true,
-			'default'      => false,
+			'required'                  => false,
+			'invalid'                   => true,
+			'captcha_size'              => $settings->should_show_captcha_size(),
+			'captcha_theme'             => $settings->should_show_captcha_theme(),
+			'captcha_theme_auto_option' => $settings->should_show_captcha_theme_auto_option(),
+			'default'                   => false,
 		);
 	}
 
@@ -73,94 +114,160 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
-	 * Remove the "for" attribute for captcha
+	 * Modify the captcha field label so it is not orphaned.
 	 *
-	 * @param array $args
+	 * The label is omitted when the label position is set to "none".
+	 * When the label is visible it is rendered as a <span> instead of a <label>,
+	 * since the captcha response input is inside an iframe and cannot be referenced.
+	 *
+	 * @param array  $args
 	 * @param string $html
 	 *
 	 * @return string
 	 */
 	protected function before_replace_html_shortcodes( $args, $html ) {
-		$frm_settings     = FrmAppHelper::get_settings();
-		$replace_response = $frm_settings->active_captcha === 'recaptcha' ? 'g-recaptcha-response' : 'h-captcha-response';
-		$replaced_for     = str_replace( ' for="field_[key]"', ' for="' . $replace_response . '"', $html );
+		if ( 'none' === FrmField::get_option( $this->field, 'label' ) ) {
+			// Fully strip the label for a CAPTCHA if it is set to hidden.
+			return preg_replace( '~\s*<label\b[^>]*for="field_\[key\]"[^>]*>.*?</label>\s*~s', '', $html );
+		}
 
-		return $replaced_for;
+		// Convert a CAPTCHA label to a span to prevent an orphaned label issue in WAVE.
+		return preg_replace(
+			'~<label\b([^>]*?)\s*for="field_\[key\]"([^>]*?)>(.*?)</label>~s',
+			'<span$1$2>$3</span>',
+			$html
+		);
 	}
 
 	/**
+	 * @param array $args
+	 * @param array $shortcode_atts
+	 *
 	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
-		$frm_settings = FrmAppHelper::get_settings();
 		if ( ! self::should_show_captcha() ) {
 			return '';
 		}
 
-		$class_prefix  = $this->class_prefix( $frm_settings );
-		$captcha_class = $this->captcha_class( $frm_settings );
-		$captcha_size  = $this->captcha_size( $frm_settings );
-		$allow_mutiple = $frm_settings->re_multi;
+		$frm_settings   = FrmAppHelper::get_settings();
+		$settings       = FrmCaptchaFactory::get_settings_object();
+		$div_attributes = array(
+			'id'           => $args['html_id'],
+			'class'        => $this->class_prefix( $frm_settings ) . $this->captcha_class( $frm_settings ),
+			'data-sitekey' => $settings->get_pubkey(),
+		);
 
-		if ( $frm_settings->active_captcha === 'recaptcha' ) {
-			$site_key          = $frm_settings->pubkey;
-			$recaptcha_options = ' data-size="' . esc_attr( $captcha_size ) . '" data-theme="' . esc_attr( $this->field['captcha_theme'] ) . '"';
-		} else {
-			$site_key = $frm_settings->hcaptcha_pubkey;
+		if ( FrmSpamEntriesHelper::should_save( 'captcha' ) ) {
+			$div_attributes['data-save-as-spam'] = '1';
 		}
 
-		$html = '<div id="' . esc_attr( $args['html_id'] ) . '" class="' . esc_attr( $class_prefix ) . $captcha_class . '" data-sitekey="' . esc_attr( $site_key ) . '"';
-		$html .= ! empty( $recaptcha_options ) ? $recaptcha_options : '';
-		if ( $captcha_size === 'invisible' && ! $allow_mutiple ) {
-			$html .= ' data-callback="frmAfterRecaptcha"';
-		}
-		$html .= '></div>';
+		if ( 'turnstile' === $frm_settings->active_captcha ) {
+			$captcha_language = $this->get_captcha_language();
 
-		return $html;
+			if ( $captcha_language ) {
+				$div_attributes['data-language'] = $captcha_language;
+			}
+		}
+
+		$div_attributes = $settings->add_front_end_element_attributes( $div_attributes, $this->field );
+
+		return '<div ' . FrmAppHelper::array_to_html_params( $div_attributes ) . '></div>';
 	}
 
 	/**
+	 * @since 6.25
+	 *
+	 * @return string
+	 */
+	private function get_captcha_language() {
+		/**
+		 * Allows updating the captcha language.
+		 *
+		 * @since 6.25
+		 *
+		 * @param string $lang
+		 * @param array $field
+		 */
+		return apply_filters( 'frm_captcha_lang', get_bloginfo( 'language' ), $this->field );
+	}
+
+	/**
+	 * Load the captcha script.
+	 *
+	 * @param array $args
+	 *
 	 * @return void
 	 */
 	protected function load_field_scripts( $args ) {
-		$api_js_url = $this->api_url();
-
-		wp_register_script( 'captcha-api', $api_js_url, array( 'formidable' ), '3', true );
+		wp_register_script( 'captcha-api', $this->api_url(), array( 'formidable' ), '3', true );
 		wp_enqueue_script( 'captcha-api' );
 	}
 
+	/**
+	 * Get the URL for the script JS that is loaded on the front end.
+	 *
+	 * @return string
+	 */
 	protected function api_url() {
 		$frm_settings = FrmAppHelper::get_settings();
-		if ( $frm_settings->active_captcha === 'recaptcha' ) {
+		$active_mode  = $frm_settings->active_captcha;
+
+		if ( 'recaptcha' === $active_mode ) {
 			return $this->recaptcha_api_url( $frm_settings );
 		}
 
-		return $this->hcaptcha_api_url();
+		if ( 'hcaptcha' === $active_mode ) {
+			return $this->hcaptcha_api_url();
+		}
+
+		return $this->turnstile_api_url();
 	}
 
 	/**
 	 * @param FrmSettings $frm_settings
+	 *
+	 * @return string
 	 */
 	protected function recaptcha_api_url( $frm_settings ) {
 		$api_js_url = 'https://www.google.com/recaptcha/api.js?';
 
-		$allow_mutiple = $frm_settings->re_multi;
-		if ( $allow_mutiple ) {
+		if ( $this->allow_multiple( $frm_settings ) ) {
 			$api_js_url .= '&onload=frmRecaptcha&render=explicit';
 		}
 
 		$lang = apply_filters( 'frm_recaptcha_lang', $frm_settings->re_lang, $this->field );
-		if ( ! empty( $lang ) ) {
+
+		if ( $lang ) {
 			$api_js_url .= '&hl=' . $lang;
 		}
 
-		$api_js_url = apply_filters( 'frm_recaptcha_js_url', $api_js_url );
+		// Since this URL initially ends with ? and we never use add_query_arg, remove the extra
+		// & that appears immediately after the ?
+		$api_js_url = str_replace( '?&', '?', $api_js_url );
 
-		return $api_js_url;
+		/**
+		 * @param string $api_js_url
+		 */
+		return apply_filters( 'frm_recaptcha_js_url', $api_js_url );
 	}
 
+	/**
+	 * @since 6.0
+	 *
+	 * @return string
+	 */
 	protected function hcaptcha_api_url() {
 		$api_js_url = 'https://js.hcaptcha.com/1/api.js';
+		$lang       = $this->get_captcha_language();
+
+		if ( $lang ) {
+			// Language might be in the format of en-US, fr-FR, etc. In that case, we need to extract the first part to comply with the hcaptcha api request format.
+			$lang_parts  = explode( '-', $lang );
+			$api_js_url .= '?hl=' . $lang_parts[0];
+		}
+
+		$api_js_url = add_query_arg( 'onload', 'frmHcaptcha', $api_js_url );
 
 		/**
 		 * Allows updating hcaptcha js api url.
@@ -169,9 +276,33 @@ class FrmFieldCaptcha extends FrmFieldType {
 		 *
 		 * @param string $api_js_url
 		 */
-		$api_js_url = apply_filters( 'frm_hcaptcha_js_url', $api_js_url );
+		return apply_filters( 'frm_hcaptcha_js_url', $api_js_url );
+	}
 
-		return $api_js_url;
+	/**
+	 * @since 6.8.4
+	 *
+	 * @return string
+	 */
+	protected function turnstile_api_url() {
+		$api_js_url = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=frmTurnstile&render=explicit';
+
+		/**
+		 * Allows updating hcaptcha js api url.
+		 *
+		 * @since 6.8.4
+		 *
+		 * @param string $api_js_url
+		 */
+		$api_js_url = apply_filters( 'frm_turnstile_js_url', $api_js_url );
+
+		// Prevent render=explicit from happening twice in case someone patched
+		// The double rendering issue using the frm_turnstile_js_url hook.
+		return str_replace(
+			'&render=explicit&render=explicit',
+			'&render=explicit',
+			$api_js_url
+		);
 	}
 
 	/**
@@ -182,100 +313,272 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @psalm-return ''|'frm-'
 	 */
 	protected function class_prefix( $frm_settings ) {
-		if ( $this->allow_multiple( $frm_settings ) && $frm_settings->active_captcha === 'recaptcha' ) {
-			$class_prefix = 'frm-';
-		} else {
-			$class_prefix = '';
-		}
-
-		return $class_prefix;
+		return FrmCaptchaFactory::get_settings_object()->get_class_prefix( $this->allow_multiple( $frm_settings ) );
 	}
 
 	/**
-	 * @param FrmSettings $frm_settings
+	 * @param FrmSettings $frm_settings This isn't used anymore. It's only there for backwards compatibility.
 	 *
 	 * @return string
 	 *
 	 * @psalm-return 'g-recaptcha'|'h-captcha'
 	 */
 	protected function captcha_class( $frm_settings ) {
-		return $frm_settings->active_captcha === 'recaptcha' ? 'g-recaptcha' : 'h-captcha';
+		$settings = FrmCaptchaFactory::get_settings_object();
+		return $settings->get_element_class_name();
 	}
 
+	/**
+	 * @param FrmSettings $frm_settings
+	 *
+	 * @return bool
+	 */
 	protected function allow_multiple( $frm_settings ) {
 		return $frm_settings->re_multi;
 	}
 
 	/**
-	 * @return string
-	 *
-	 * @param FrmSettings $frm_settings
-	 */
-	protected function captcha_size( $frm_settings ) {
-		if ( in_array( $frm_settings->re_type, array( 'invisible', 'v3' ), true ) ) {
-			return 'invisible';
-		}
-		// for reverse compatibility
-		return $this->field['captcha_size'] === 'default' ? 'normal' : $this->field['captcha_size'];
-	}
-
-	/**
 	 * @since 4.07
+	 *
 	 * @param array $args
+	 *
 	 * @return array
 	 */
 	protected function validate_against_api( $args ) {
 		$errors       = array();
 		$frm_settings = FrmAppHelper::get_settings();
-		$resp         = $this->send_api_check( $frm_settings );
+		$resp         = $this->send_api_check();
 		$response     = json_decode( wp_remote_retrieve_body( $resp ), true );
 
+		$this->spam_source = 'captcha';
+
 		if ( is_wp_error( $resp ) ) {
+			$this->spam_source                = 'captcha_unavailable';
 			$error_string                     = $resp->get_error_message();
 			$errors[ 'field' . $args['id'] ]  = __( 'There was a problem verifying your captcha', 'formidable' );
 			$errors[ 'field' . $args['id'] ] .= ' ' . $error_string;
+
+			$this->record_validation_failure( $error_string, array() );
+
 			return $errors;
 		}
 
-		if ( ! is_array( $response ) ) {
+		if ( ! is_array( $response ) || ! array_key_exists( 'success', $response ) ) {
+			$reason            = __( 'The CAPTCHA service response could not be read, so the CAPTCHA could not be verified.', 'formidable' );
+			$this->spam_source = 'captcha_unavailable';
+
+			$this->record_validation_failure( $reason, array() );
+
+			$errors[ 'field' . $args['id'] ] = $this->get_invalid_message( array(), $reason );
+
 			return $errors;
 		}
 
-		if ( $frm_settings->active_captcha === 'recaptcha' ) {
-			if ( 'v3' === $frm_settings->re_type && array_key_exists( 'score', $response ) ) {
-				$threshold = floatval( $frm_settings->re_threshold );
-				$score     = floatval( $response['score'] );
+		$reason          = '';
+		$is_recaptcha_v3 = $frm_settings->active_captcha === 'recaptcha' && 'v3' === $frm_settings->re_type;
 
-				$this->set_score( $score );
+		if ( $is_recaptcha_v3 && array_key_exists( 'score', $response ) ) {
+			$threshold = (float) $frm_settings->re_threshold;
+			$score     = (float) $response['score'];
 
-				if ( $score < $threshold ) {
-					$response['success'] = false;
-				}
+			$this->set_score( $score );
+
+			if ( $score < $threshold ) {
+				$response['success'] = false;
+				$reason              = sprintf(
+					/* translators: %1$s: the score returned by reCAPTCHA, %2$s: the score threshold from global settings */
+					__( 'The reCAPTCHA v3 score of %1$s is below the threshold of %2$s.', 'formidable' ),
+					$score,
+					$threshold
+				);
 			}
 		}
 
-		if ( isset( $response['success'] ) && ! $response['success'] ) {
-			// What happens when the CAPTCHA was entered incorrectly
-			$invalid_message = FrmField::get_option( $this->field, 'invalid' );
-			if ( $invalid_message === __( 'The reCAPTCHA was not entered correctly', 'formidable' ) ) {
-				$invalid_message = '';
-			}
-			$errors[ 'field' . $args['id'] ] = ( $invalid_message === '' ? $frm_settings->re_msg : $invalid_message );
+		if ( true === $response['success'] ) {
+			return $errors;
 		}
+
+		$error_codes = $this->get_error_codes( $response );
+
+		if ( '' === $reason ) {
+			$reason = $this->get_failure_reason( $error_codes );
+		}
+
+		$this->record_validation_failure( $reason, $error_codes );
+
+		$errors[ 'field' . $args['id'] ] = $this->get_invalid_message( $error_codes, $reason );
 
 		return $errors;
 	}
 
 	/**
+	 * Pull the "error-codes" array out of a siteverify response.
+	 * Every service we support uses this key, but it is left out when the service does not
+	 * explain the failure, so an empty array is a normal result.
+	 *
+	 * @since 7.0
+	 *
+	 * @param array $response The decoded siteverify response.
+	 *
+	 * @return array<int,string>
+	 */
+	private function get_error_codes( $response ) {
+		if ( empty( $response['error-codes'] ) || ! is_array( $response['error-codes'] ) ) {
+			return array();
+		}
+
+		$error_codes = array();
+
+		foreach ( $response['error-codes'] as $error_code ) {
+			$error_codes[] = sanitize_text_field( (string) $error_code );
+		}
+
+		return $error_codes;
+	}
+
+	/**
+	 * Turn the error codes from the CAPTCHA service into a readable explanation.
+	 * Codes we do not have a translation for are passed through as is so the raw code
+	 * is preserved in stored spam entries instead of being dropped.
+	 *
+	 * @since 7.0
+	 *
+	 * @param array $error_codes The error codes returned by the CAPTCHA service.
+	 *
+	 * @return string
+	 */
+	private function get_failure_reason( $error_codes ) {
+		if ( ! $error_codes ) {
+			return __( 'The CAPTCHA service rejected the response without giving a reason.', 'formidable' );
+		}
+
+		$messages     = FrmCaptchaFactory::get_settings_object()->get_error_code_messages();
+		$explanations = array();
+
+		foreach ( $error_codes as $error_code ) {
+			$explanations[] = $messages[ $error_code ] ?? $error_code;
+		}
+
+		return implode( ' ', $explanations );
+	}
+
+	/**
+	 * Check if the failure was caused by the site's own CAPTCHA settings rather than by
+	 * the person filling out the form.
+	 *
+	 * @since 7.0
+	 *
+	 * @param array $error_codes The error codes returned by the CAPTCHA service.
+	 *
+	 * @return bool
+	 */
+	private function is_configuration_error( $error_codes ) {
+		$configuration_codes = FrmCaptchaFactory::get_settings_object()->get_configuration_error_codes();
+		return array() !== array_intersect( $error_codes, $configuration_codes );
+	}
+
+	/**
+	 * Get the message to show on the front end when a CAPTCHA fails.
+	 *
+	 * The reason is deliberately left out of the default message. Telling a bot exactly why
+	 * it was rejected helps it get past the next attempt, so the detail goes to stored spam
+	 * entries and to the frm_captcha_error_message filter instead. The one exception is a site
+	 * misconfiguration, where retrying cannot help and a real visitor needs to know that.
+	 *
+	 * @since 7.0
+	 *
+	 * @param array  $error_codes The error codes returned by the CAPTCHA service.
+	 * @param string $reason      The readable explanation for the failure.
+	 *
+	 * @return string
+	 */
+	private function get_invalid_message( $error_codes, $reason ) {
+		if ( $this->is_configuration_error( $error_codes ) ) {
+			$message = __( 'The CAPTCHA on this form is not set up correctly. Please contact the site administrator.', 'formidable' );
+		} else {
+			// What happens when the CAPTCHA was entered incorrectly
+			$frm_settings    = FrmAppHelper::get_settings();
+			$invalid_message = FrmField::get_option( $this->field, 'invalid' );
+
+			if ( __( 'The reCAPTCHA was not entered correctly', 'formidable' ) === $invalid_message ) {
+				$invalid_message = '';
+			}
+
+			$message = '' === $invalid_message ? $frm_settings->re_msg : $invalid_message;
+		}
+
+		/**
+		 * Filter the message shown when a CAPTCHA fails validation.
+		 * Use this to show the reason on the front end, keeping in mind that the reason is
+		 * also useful to whatever is trying to get past the CAPTCHA.
+		 *
+		 * @since 7.0
+		 *
+		 * @param string $message     The message shown to the person submitting the form.
+		 * @param string $reason      The readable explanation for the failure.
+		 * @param array  $error_codes The error codes returned by the CAPTCHA service.
+		 * @param array  $field       The CAPTCHA field.
+		 */
+		return apply_filters( 'frm_captcha_error_message', $message, $reason, $error_codes, $this->field );
+	}
+
+	/**
+	 * Record why a CAPTCHA failed for inclusion in a stored spam entry.
+	 * The reason never reaches the front end by default. The validation action lets
+	 * integrations respond to the failure without requiring the logging add-on.
+	 *
+	 * @since 7.0
+	 *
+	 * @param string $reason      The readable explanation for the failure.
+	 * @param array  $error_codes The error codes returned by the CAPTCHA service.
+	 *
+	 * @return void
+	 */
+	private function record_validation_failure( $reason, $error_codes ) {
+		$this->validation_failure_reason = sanitize_text_field( $reason );
+
+		if ( $error_codes ) {
+			$this->validation_failure_reason .= ' (' . implode( ', ', $error_codes ) . ')';
+		}
+
+		/**
+		 * Fires when a CAPTCHA fails validation, with the reason the service gave.
+		 *
+		 * @since 7.0
+		 *
+		 * @param string $reason      The readable explanation for the failure.
+		 * @param array  $error_codes The error codes returned by the CAPTCHA service.
+		 * @param int    $form_id     The ID of the form being submitted.
+		 * @param array  $field       The CAPTCHA field.
+		 */
+		do_action( 'frm_captcha_validation_failed', $reason, $error_codes, $this->get_form_id(), $this->field );
+	}
+
+	/**
+	 * Get the ID of the form the CAPTCHA field belongs to.
+	 *
+	 * @since 7.0
+	 *
+	 * @return int
+	 */
+	private function get_form_id() {
+		return (int) ( is_object( $this->field ) ? $this->field->form_id : $this->field['form_id'] );
+	}
+
+	/**
 	 * @param float $score
+	 *
 	 * @return void
 	 */
 	private function set_score( $score ) {
 		global $frm_vars;
+
 		if ( ! isset( $frm_vars['captcha_scores'] ) ) {
 			$frm_vars['captcha_scores'] = array();
 		}
-		$form_id = is_object( $this->field ) ? $this->field->form_id : $this->field['form_id'];
+
+		$form_id = $this->get_form_id();
+
 		if ( ! isset( $frm_vars['captcha_scores'][ $form_id ] ) ) {
 			$frm_vars['captcha_scores'][ $form_id ] = $score;
 		}
@@ -283,6 +586,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 	/**
 	 * @param array $args
+	 *
 	 * @return array
 	 */
 	public function validate( $args ) {
@@ -290,9 +594,10 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return array();
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		if ( ! isset( $_POST['g-recaptcha-response'] ) && ! isset( $_POST['h-captcha-response'] ) ) {
-			// There was no captcha submitted.
+		$missing_token = ! self::post_data_includes_token();
+
+		if ( $missing_token ) {
+			$this->report_missing_token();
 			return array( 'field' . $args['id'] => __( 'The captcha is missing from this form', 'formidable' ) );
 		}
 
@@ -300,16 +605,46 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
+	 * Report a submission that arrived without a CAPTCHA token.
+	 *
+	 * Nothing was sent to the service, so there is no response to explain this one. The
+	 * services use missing-input-response for the same situation, so that code is reused.
+	 *
+	 * Pro overrides validate() and does not call the version above, so it calls this
+	 * directly. Keeping it here keeps the reason string in one place and one text domain.
+	 *
+	 * @since 7.0
+	 *
+	 * @return void
+	 */
+	protected function report_missing_token() {
+		$this->record_validation_failure(
+			__( 'No CAPTCHA response was submitted. The form may have been submitted before the CAPTCHA loaded, or it failed to load.', 'formidable' ),
+			array( 'missing-input-response' )
+		);
+	}
+
+	/**
+	 * @since 6.8.4
+	 *
+	 * @return bool
+	 */
+	protected static function post_data_includes_token() {
+		$settings = FrmCaptchaFactory::get_settings_object();
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		return ! empty( $_POST[ $settings->token_field ] );
+	}
+
+	/**
+	 * Check if the active captcha type's public key is set.
+	 *
 	 * @since 4.07
+	 *
 	 * @return bool
 	 */
 	public static function should_show_captcha() {
-		$frm_settings = FrmAppHelper::get_settings();
-		if ( $frm_settings->active_captcha === 'recaptcha' ) {
-			return ! empty( $frm_settings->pubkey );
-		}
-
-		return ! empty( $frm_settings->hcaptcha_pubkey );
+		$settings = FrmCaptchaFactory::get_settings_object();
+		return $settings->has_pubkey();
 	}
 
 	/**
@@ -317,21 +652,21 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 */
 	protected function should_validate() {
 		$is_hidden_field = apply_filters( 'frm_is_field_hidden', false, $this->field, wp_unslash( $_POST ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
 		if ( FrmAppHelper::is_admin() || $is_hidden_field ) {
 			return false;
 		}
 
-		// don't require the captcha if it shouldn't be shown
+		// Don't require the captcha if it shouldn't be shown
 		return self::should_show_captcha();
 	}
 
 	/**
-	 * @param FrmSettings $frm_settings
+	 * @return array|WP_Error
 	 */
-	protected function send_api_check( $frm_settings ) {
-		$captcha_settings = new FrmFieldCaptchaSettings( $frm_settings );
-
-		$arg_array = array(
+	protected function send_api_check() {
+		$captcha_settings = FrmCaptchaFactory::get_settings_object();
+		$arg_array        = array(
 			'body' => array(
 				'secret'   => $captcha_settings->secret,
 				'response' => FrmAppHelper::get_param( $captcha_settings->token_field, '', 'post', 'sanitize_text_field' ),
@@ -349,11 +684,12 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 *
 	 * @param array $values
 	 *
-	 * @return array $values
+	 * @return array Values.
 	 */
 	public static function update_field_name( $values ) {
 		if ( $values['type'] === 'captcha' ) {
 			$name = $values['name'];
+
 			if ( in_array( $name, array( __( 'reCAPTCHA', 'formidable' ), __( 'hCaptcha', 'formidable' ) ), true ) ) {
 				$values['name'] = __( 'Captcha', 'formidable' );
 			}

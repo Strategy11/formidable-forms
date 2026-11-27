@@ -1,0 +1,162 @@
+/**
+ * Components - Card
+ */
+
+.frm-card {
+	width: 100%;
+	border-radius: 10px;
+	border: 1px solid var(--grey-300);
+	opacity: 1;
+	transition: opacity 1s;
+}
+
+.frm-card-box {
+	max-width: 524px;
+	background-color: #fff;
+	border-radius: var(--medium-radius);
+	padding: var(--gap-xl);
+	border: 1px solid var(--grey-200);
+	box-shadow: var(--box-shadow-md);
+}
+
+.frm-card-box.frm-has-progress-bar {
+	position: relative;
+	overflow: hidden;
+	border-radius: var(--medium-radius);
+}
+
+.frm-card-box-progress-bar {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: var(--gap-xs);
+	background-color: var(--primary-25);
+}
+
+.frm-card-box-progress-bar > span {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: 33%;
+	background-color: var(--primary-500);
+}
+
+.frm-card-box-header {
+	display: flex;
+	justify-content: center;
+	margin-bottom: var(--gap-sm);
+}
+
+.frm-card-box.frm-has-progress-bar .frm-card-box-header {
+	margin-top: var(--gap-xs);
+}
+
+.frm-card-box-content > :last-child {
+	margin-bottom: 0;
+}
+
+.frm-card-box-footer {
+	display: flex;
+	justify-content: end;
+	gap: var(--gap-sm);
+	margin-top: var(--gap-lg);
+}
+
+.frm-card-box-title {
+	font-size: var(--text-xl) !important;
+	font-weight: 600 !important;
+	margin-bottom: var(--gap-xs);
+}
+
+.frm-card-box-text {
+	font-size: var(--text-md) !important;
+	color: var(--grey-600) !important;
+	margin-top: 0 !important;
+}
+
+/**
+ * Style card menu
+ *
+ * The ⋮ had no hover state and an 18x17 target. Matches the action icons on the
+ * builder's field cards so the same control behaves the same way wherever it appears.
+ *
+ * Covers both style options triggers: getHamburgerMenu() in style.js builds this
+ * wrapper for the card menus and for the one beside the style name on the edit
+ * page, and .dropdown.frm_wrap is created nowhere else.
+ */
+.dropdown.frm_wrap .frm-dropdown-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	border-radius: 4px;
+	transition:
+		0.12s background-color ease,
+		0.12s transform ease;
+
+	@include focus-outline($radius: 4px);
+
+	.frmsvg {
+		width: 16px;
+		height: 16px;
+	}
+
+	&:hover {
+		background-color: var(--surface-hover-compact);
+
+		.frmsvg {
+			color: var(--grey-900);
+		}
+	}
+
+	&:active {
+		background-color: var(--surface-active-compact);
+		transform: scale(0.96);
+	}
+}
+
+/*
+ * Style cards paint in the style's own colours, so an opaque grey chip reads as a
+ * white square on a dark card. A translucent wash darkens or lightens whatever is
+ * behind it instead of assuming a light surface.
+ */
+.frm-style-card .dropdown.frm_wrap .frm-dropdown-toggle {
+
+	&:hover {
+		background-color: rgba(16, 24, 40, 0.08);
+	}
+
+	&:active {
+		background-color: rgba(16, 24, 40, 0.14);
+	}
+}
+
+.frm-style-card.frm-dark-style .dropdown.frm_wrap .frm-dropdown-toggle {
+
+	&:hover {
+		background-color: rgba(255, 255, 255, 0.16);
+
+		/* The glyph is already white on these cards, so it must not darken. */
+		.frmsvg {
+			color: #fff;
+		}
+	}
+
+	&:active {
+		background-color: rgba(255, 255, 255, 0.24);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.dropdown.frm_wrap .frm-dropdown-toggle {
+		transition: none;
+
+		&:active {
+			transform: none;
+		}
+	}
+}

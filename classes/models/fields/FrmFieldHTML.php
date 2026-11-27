@@ -10,12 +10,14 @@ class FrmFieldHTML extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'html';
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $has_input = false;
@@ -23,7 +25,7 @@ class FrmFieldHTML extends FrmFieldType {
 	/**
 	 * @since 4.0
 	 *
-	 * @param array $args - Includes 'field', 'display', and 'values'
+	 * @param array $args Includes 'field', 'display', and 'values'.
 	 *
 	 * @return void
 	 */
@@ -43,16 +45,18 @@ class FrmFieldHTML extends FrmFieldType {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array  $args
+	 * @param string $html
+	 *
+	 * @return string
 	 */
 	protected function after_replace_html_shortcodes( $args, $html ) {
 		FrmFieldsHelper::run_wpautop( array( 'wpautop' => true ), $html );
 		$pre_filter = $html;
 		$html       = apply_filters( 'frm_get_default_value', $html, (object) $this->field, false );
-		if ( $pre_filter === $html ) {
-			$html = do_shortcode( $html );
-		}
 
-		return $html;
+		return $pre_filter === $html ? do_shortcode( $html ) : $html;
 	}
 
 	/**
@@ -67,5 +71,20 @@ class FrmFieldHTML extends FrmFieldType {
 	 */
 	protected function include_form_builder_file() {
 		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-html.php';
+	}
+
+	/**
+	 * Overwrite FrmFieldType::should_strip_most_html_before_preparing_display_value.
+	 * An HTML field is not populated from user input.
+	 * It does not need to be passed through FrmAppHelper::strip_most_html.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @param array $atts
+	 *
+	 * @return bool
+	 */
+	protected function should_strip_most_html_before_preparing_display_value( $atts ) {
+		return false;
 	}
 }

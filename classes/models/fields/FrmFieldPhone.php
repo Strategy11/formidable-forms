@@ -10,17 +10,14 @@ class FrmFieldPhone extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'phone';
 
 	/**
-	 * @var string
-	 */
-	protected $display_type = 'text';
-
-	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $holds_email_values = true;
@@ -38,21 +35,86 @@ class FrmFieldPhone extends FrmFieldType {
 			'size'           => true,
 			'clear_on_focus' => true,
 			'invalid'        => true,
-			'format'         => true,
+			'autocomplete'   => true,
 		);
+	}
+
+	/**
+	 * @since 7.1
+	 *
+	 * @return array<string>
+	 */
+	protected function get_autocomplete_filter_keys() {
+		return array( 'on', 'off', 'tel' );
+	}
+
+	/**
+	 * Default new phone fields to tel autocomplete. Saved fields without the
+	 * setting keep the empty parent default so their output does not change.
+	 *
+	 * @since 7.1
+	 *
+	 * @return array
+	 */
+	protected function extra_field_opts() {
+		if ( $this->field ) {
+			return array();
+		}
+
+		return array(
+			'autocomplete' => 'tel',
+		);
+	}
+
+	/**
+	 * @since 6.9
+	 *
+	 * @param array $args Includes 'field', 'display', and 'values'.
+	 *
+	 * @return void
+	 */
+	public function show_primary_options( $args ) {
+		$field = $args['field'];
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/phone/phone-type.php';
+		FrmFieldsController::show_format_option( $field, true );
+
+		parent::show_primary_options( $args );
+	}
+
+	/**
+	 * Retrieves the HTML for an 'International' option in a dropdown.
+	 *
+	 * @since 6.9
+	 *
+	 * @return void Outputs the HTML option tag directly.
+	 */
+	protected function print_international_option() {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
+		?>
+		<option
+			value=""
+			class="frm_show_upgrade frm_noallow"
+			data-upgrade="<?php esc_attr_e( 'International phone field', 'formidable' ); ?>"
+			data-medium="international-phone-field"
+		>
+			<?php esc_html_e( 'International', 'formidable' ); ?>
+		</option>
+		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
 	 * @return string
 	 */
 	protected function html5_input_type() {
-		$frm_settings = FrmAppHelper::get_settings();
-
-		return $frm_settings->use_html ? 'tel' : 'text';
+		return 'tel';
 	}
 
 	/**
 	 * @since 4.0.04
+	 *
+	 * @param array|string $value
 	 *
 	 * @return void
 	 */

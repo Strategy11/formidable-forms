@@ -8,7 +8,7 @@ class FrmTransLiteDb {
 	/**
 	 * @var int
 	 */
-	public $db_version = 5;
+	public $db_version = 6;
 
 	/**
 	 * @var string
@@ -27,6 +27,7 @@ class FrmTransLiteDb {
 
 	/**
 	 * @param mixed $old_db_version
+	 *
 	 * @return void
 	 */
 	public function upgrade( $old_db_version = false ) {
@@ -34,7 +35,7 @@ class FrmTransLiteDb {
 			$old_db_version = get_option( $this->db_opt_name );
 		}
 
-		if ( $this->db_version == $old_db_version ) {
+		if ( $this->db_version === (int) $old_db_version ) {
 			return;
 		}
 
@@ -60,6 +61,7 @@ class FrmTransLiteDb {
 				expire_date date default NULL,
 				paysys varchar(100) default NULL,
 				created_at datetime NOT NULL,
+				test TINYINT(1) NULL DEFAULT NULL,
 				PRIMARY KEY  (id),
 				KEY item_id (item_id)
 			) {$charset_collate};";
@@ -83,13 +85,14 @@ class FrmTransLiteDb {
 				status varchar(100) default NULL,
 				paysys varchar(100) default NULL,
 				created_at datetime NOT NULL,
+				test TINYINT(1) NULL DEFAULT NULL,
 				PRIMARY KEY  (id),
 				KEY item_id (item_id)
 			) {$charset_collate};";
 
 		dbDelta( $sql );
 
-		/***** SAVE DB VERSION *****/
+		// SAVE DB VERSION.
 		update_option( $this->db_opt_name, $this->db_version );
 
 		$this->migrate_data( $old_db_version );
@@ -97,13 +100,14 @@ class FrmTransLiteDb {
 
 	/**
 	 * @param array $values
+	 *
 	 * @return int
 	 */
 	public function create( $values ) {
 		global $wpdb;
 
 		$values['action'] = 'create';
-		$new_values = array();
+		$new_values       = array();
 		$this->fill_values( $values, $new_values );
 
 		$wpdb->insert( $wpdb->prefix . $this->table_name, $new_values );
@@ -112,9 +116,10 @@ class FrmTransLiteDb {
 	}
 
 	/**
-	 * @param string|int $id
+	 * @param int|string $id
 	 * @param array      $values
-	 * @return int|false
+	 *
+	 * @return false|int
 	 */
 	public function update( $id, $values ) {
 		global $wpdb;
@@ -127,10 +132,11 @@ class FrmTransLiteDb {
 	}
 
 	/**
-	 * @param string|int $id
-	 * @return int|bool
+	 * @param int|string $id
+	 *
+	 * @return bool|int
 	 */
-	public function &destroy( $id ) {
+	public function destroy( $id ) {
 		FrmAppHelper::permission_check( 'administrator' );
 
 		global $wpdb;
@@ -142,23 +148,18 @@ class FrmTransLiteDb {
 		do_action( 'frm_before_destroy_' . $this->singular, $id );
 
 		// @codingStandardsIgnoreStart
-		$result = $wpdb->query(
-			$wpdb->prepare(
-				'DELETE FROM ' . $wpdb->prefix . $this->table_name . ' WHERE id=%d',
-				$id
-			)
-		);
+		return $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . $this->table_name . ' WHERE id=%d', $id ) );
 		// @codingStandardsIgnoreEnd
-
-		return $result;
 	}
 
 	/**
-	 * @param string|int $id
-	 * @return array|object|null|void
+	 * @param int|string $id
+	 *
+	 * @return object|null
 	 */
 	public function get_one( $id ) {
 		global $wpdb;
+
 		// @codingStandardsIgnoreStart
 		return $wpdb->get_row(
 			$wpdb->prepare(
@@ -170,13 +171,14 @@ class FrmTransLiteDb {
 	}
 
 	/**
-	 * @param string|int $id
+	 * @param int|string $id
 	 * @param string     $field
+	 *
 	 * @return object|null
 	 */
 	public function get_one_by( $id, $field = 'receipt_id' ) {
 		if ( ! in_array( $field, array( 'receipt_id', 'sub_id', 'item_id' ), true ) ) {
-			_doing_it_wrong( __FUNCTION__, 'Items can only be retrieved by receipt id or sub id.', 'x.x' );
+			_doing_it_wrong( __METHOD__, 'Items can only be retrieved by receipt id or sub id.', '6.5' );
 			return null;
 		}
 
@@ -194,6 +196,12 @@ class FrmTransLiteDb {
 		// @codingStandardsIgnoreEnd
 	}
 
+	/**
+	 * @param string $value
+	 * @param string $field
+	 *
+	 * @return array
+	 */
 	public function get_all_by( $value, $field = 'item_id' ) {
 		if ( ! FrmTransLiteAppHelper::payments_table_exists() ) {
 			// If no migrations have run yet return nothing.
@@ -203,7 +211,7 @@ class FrmTransLiteDb {
 		$field = sanitize_text_field( $field );
 
 		if ( ! in_array( $field, array( 'receipt_id', 'sub_id', 'item_id' ), true ) ) {
-			_doing_it_wrong( __FUNCTION__, 'Items can only be retrieved by item id or sub id.', 'x.x' );
+			_doing_it_wrong( __METHOD__, 'Items can only be retrieved by item id or sub id.', '6.5' );
 			return array();
 		}
 
@@ -219,6 +227,11 @@ class FrmTransLiteDb {
 		// @codingStandardsIgnoreEnd
 	}
 
+	/**
+	 * @param int $user_id
+	 *
+	 * @return array
+	 */
 	public function get_all_for_user( $user_id ) {
 		global $wpdb;
 		// @codingStandardsIgnoreStart
@@ -238,10 +251,18 @@ class FrmTransLiteDb {
 		// @codingStandardsIgnoreEnd
 	}
 
+	/**
+	 * @param int|string $id
+	 *
+	 * @return array
+	 */
 	public function get_all_for_entry( $id ) {
-		return $this->get_all_by( $id, $field = 'item_id' );
+		return $this->get_all_by( $id, 'item_id' );
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_count() {
 		global $wpdb;
 		// @codingStandardsIgnoreStart
@@ -261,11 +282,11 @@ class FrmTransLiteDb {
 	/**
 	 * @param array $values
 	 * @param array $new_values
+	 *
 	 * @return void
 	 */
 	private function fill_values( $values, &$new_values ) {
-		$defaults = $this->get_defaults();
-		foreach ( $defaults as $val => $default ) {
+		foreach ( $this->get_defaults() as $val => $default ) {
 			if ( isset( $values[ $val ] ) ) {
 				if ( $default['sanitize'] === 'float' ) {
 					$new_values[ $val ] = (float) $values[ $val ];
@@ -279,31 +300,42 @@ class FrmTransLiteDb {
 	}
 
 	/**
+	 * Run database migrations starting from a previous DB version.
+	 *
+	 * @param int $old_db_version Previous database version.
+	 *
 	 * @return void
 	 */
 	private function migrate_data( $old_db_version ) {
 		$migrations = array( 4 );
+
 		foreach ( $migrations as $migration ) {
-			if ( $this->db_version >= $migration && $old_db_version < $migration ) {
-				$function_name = 'migrate_to_' . $migration;
-				$this->$function_name();
+			if ( $this->db_version < $migration || $old_db_version >= $migration ) {
+				continue;
 			}
+
+			$function_name = 'migrate_to_' . $migration;
+			$this->$function_name();
 		}
 	}
 
 	/**
+	 * This migration checks for PayPal payments and sets a status value based on the completed status.
+	 *
 	 * @return void
 	 */
 	private function migrate_to_4() {
 		global $wpdb;
 		$result = $wpdb->get_results( $wpdb->prepare( 'SHOW COLUMNS FROM ' . $wpdb->prefix . 'frm_payments LIKE %s', 'completed' ) );
-		if ( empty( $result ) ) {
+
+		if ( ! $result ) {
 			return;
 		}
 
 		$payments = $wpdb->get_results(
 			"SELECT * FROM {$wpdb->prefix}frm_payments WHERE completed is NOT NULL AND status is NULL"
 		);
+
 		foreach ( $payments as $payment ) {
 			$status = $payment->completed ? 'complete' : 'failed';
 			$wpdb->update( $wpdb->prefix . 'frm_payments', compact( 'status' ), array( 'id' => $payment->id ) );

@@ -34,7 +34,7 @@ elif ! git diff --cached --exit-code > /dev/null; then
 	changed="file(s) staged"
 fi
 if [ ! -z "$changed" ]; then
-	echo "Commiting..."
+	echo "Committing..."
 	git commit -a -m "Prepare for v$version release"
 	git push
 fi

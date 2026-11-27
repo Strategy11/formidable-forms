@@ -1,4 +1,12 @@
 <?php
+/**
+ * HTML field form builder view.
+ *
+ * @package Formidable
+ *
+ * @var array $field Field data including 'description'.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

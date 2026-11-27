@@ -3,22 +3,23 @@
 
 	let __;
 
-	if ( 'undefined' === typeof wp || 'undefined' === typeof wp.i18n || 'function' !== typeof wp.i18n.__ ) {
+	if ( 'undefined' === typeof wp || wp.i18n === undefined || 'function' !== typeof wp.i18n.__ ) {
 		__ = text => text;
 	} else {
 		__ = wp.i18n.__;
 	}
 
 	const modal = {
-		maybeCreateModal: ( id, { title, content, footer, width } = {}) => {
+		maybeCreateModal: ( id, { title, content, footer, width, dialogClass } = {} ) => {
 			let modal = document.getElementById( id );
 
 			if ( ! modal ) {
 				modal = createEmptyModal( id );
 
-				const titleElement = div({
-					className: 'frm-modal-title'
-				});
+				const titleElement = div( {
+					className: 'frm-modal-title',
+					id: `${ id }-title`
+				} );
 
 				if ( 'string' === typeof title ) {
 					titleElement.textContent = title;
@@ -27,28 +28,28 @@
 				const a = tag(
 					'a',
 					{
-						child: svg({ href: '#frm_close_icon' }),
+						child: svg( { href: '#frm_close_icon' } ),
 						className: 'dismiss'
 					}
 				);
 				const postbox = modal.querySelector( '.postbox' );
 
-				postbox.appendChild(
-					div({
+				postbox.append(
+					div( {
 						className: 'frm_modal_top',
 						children: [
 							titleElement,
-							div({ child: a })
+							div( { child: a } )
 						]
-					})
+					} )
 				);
-				postbox.appendChild(
-					div({ className: 'frm_modal_content' })
+				postbox.append(
+					div( { className: 'frm_modal_content' } )
 				);
 
 				if ( footer ) {
-					postbox.appendChild(
-						div({ className: 'frm_modal_footer' })
+					postbox.append(
+						div( { className: 'frm_modal_footer' } )
 					);
 				}
 			} else if ( 'string' === typeof title ) {
@@ -57,7 +58,7 @@
 			}
 
 			if ( ! content && ! footer ) {
-				makeModalIntoADialogAndOpen( modal, { width });
+				makeModalIntoADialogAndOpen( modal, { width, dialogClass } );
 				return modal;
 			}
 
@@ -72,7 +73,7 @@
 				modalHelper( footer, 'frm_modal_footer' );
 			}
 
-			makeModalIntoADialogAndOpen( modal );
+			makeModalIntoADialogAndOpen( modal, { width, dialogClass } );
 			return modal;
 		},
 		footerButton: args => {
@@ -82,7 +83,7 @@
 			if ( args.buttonType ) {
 				output.classList.add( 'button' );
 
-				if ( ! args.noDismiss && -1 !== [ 'red', 'primary' ].indexOf( args.buttonType ) ) {
+				if ( ! args.noDismiss && [ 'red', 'primary' ].includes( args.buttonType ) ) {
 					// Primary and red buttons close modals by default on click.
 					// To disable this default behaviour you can use the noDismiss: 1 arg.
 					output.classList.add( 'dismiss' );
@@ -109,10 +110,10 @@
 	};
 
 	const ajax = {
-		doJsonFetch: async function( action ) {
-			let targetUrl = ajaxurl + '?action=frm_' + action;
-			if ( -1 === targetUrl.indexOf( 'nonce=' ) ) {
-				targetUrl += '&nonce=' + frmGlobal.nonce;
+		async doJsonFetch( action ) {
+			let targetUrl = `${ ajaxurl }?action=frm_${ action }`;
+			if ( ! targetUrl.includes( 'nonce=' ) ) {
+				targetUrl += `&nonce=${ frmGlobal.nonce }`;
 			}
 			const response = await fetch( targetUrl );
 			const json = await response.json();
@@ -121,7 +122,7 @@
 			}
 			return Promise.resolve( json.data );
 		},
-		doJsonPost: async function( action, formData, { signal } = {}) {
+		async doJsonPost( action, formData, { signal } = {} ) {
 			formData.append( 'nonce', frmGlobal.nonce );
 			const init = {
 				method: 'POST',
@@ -130,46 +131,53 @@
 			if ( signal ) {
 				init.signal = signal;
 			}
-			const response = await fetch( ajaxurl + '?action=frm_' + action, init );
-			const json     = await response.json();
+			const response = await fetch( `${ ajaxurl }?action=frm_${ action }`, init );
+			const json = await response.json();
 			if ( ! json.success ) {
 				return Promise.reject( json.data || 'JSON result is not successful' );
 			}
-			return Promise.resolve( 'undefined' !== typeof json.data ? json.data : json );
+			return Promise.resolve( json.data !== undefined ? json.data : json );
 		}
 	};
 
 	const multiselect = {
-		init: function() {
+		init() {
 			const $select = jQuery( this );
 			const id = $select.is( '[id]' ) ? $select.attr( 'id' ).replace( '[]', '' ) : false;
 
-			let labelledBy = id ? jQuery( '#for_' + id ) : false;
-			labelledBy     = id && labelledBy.length ? 'aria-labelledby="' + labelledBy.attr( 'id' ) + '"' : '';
+			let labelledBy = id ? jQuery( `#for_${ id }` ) : false;
+			labelledBy = id && labelledBy.length ? `aria-labelledby="${ labelledBy.attr( 'id' ) }"` : '';
 
-			$select.multiselect({
+			$select.multiselect( {
 				templates: {
-					popupContainer: '<div class="multiselect-container frm-dropdown-menu"></div>',
+					popupContainer: '<div class="multiselect-container frm-dropdown-menu dropdown-menu"></div>',
 					option: '<button type="button" class="multiselect-option dropdown-item frm_no_style_button"></button>',
-					button: '<button type="button" class="multiselect dropdown-toggle btn" data-toggle="dropdown" ' + labelledBy + '><span class="multiselect-selected-text"></span> <b class="caret"></b></button>'
+					button: `<button type="button" class="multiselect dropdown-toggle btn" data-bs-toggle="dropdown" ${ labelledBy }><span class="multiselect-selected-text"></span> <b class="caret"></b></button>`
 				},
 				buttonContainer: '<div class="btn-group frm-btn-group dropdown" />',
-				nonSelectedText: '',
-				onDropdownShown: function( event ) {
+				nonSelectedText: __( '— Select —', 'formidable' ),
+				// Prevent the dropdown from showing "All Selected" when every option is checked.
+				allSelectedText: '',
+				// This is 3 by default. We want to show more options before it starts showing a count.
+				numberDisplayed: 8,
+				onInitialized( _, $container ) {
+					$container.find( '.multiselect.dropdown-toggle,.multiselect-option.dropdown-item' ).removeAttr( 'title' );
+				},
+				onDropdownShown( event ) {
 					const action = jQuery( event.currentTarget.closest( '.frm_form_action_settings, #frm-show-fields' ) );
 					if ( action.length ) {
 						jQuery( '#wpcontent' ).on( 'click', function() {
 							if ( jQuery( '.multiselect-container.frm-dropdown-menu' ).is( ':visible' ) ) {
 								jQuery( event.currentTarget ).removeClass( 'open' );
 							}
-						});
+						} );
 					}
 
 					const $dropdown = $select.next( '.frm-btn-group.dropdown' );
 					$dropdown.find( '.dropdown-item' ).each(
 						function() {
-							const option         = this;
-							const dropdownInput  = option.querySelector( 'input[type="checkbox"], input[type="radio"]' );
+							const option = this;
+							const dropdownInput = option.querySelector( 'input[type="checkbox"], input[type="radio"]' );
 							if ( dropdownInput ) {
 								option.setAttribute( 'role', 'checkbox' );
 								option.setAttribute( 'aria-checked', dropdownInput.checked ? 'true' : 'false' );
@@ -177,12 +185,12 @@
 						}
 					);
 				},
-				onChange: function( $option, checked ) {
+				onChange( $option, checked ) {
 					$select.trigger( 'frm-multiselect-changed', $option, checked );
 
-					const $dropdown     = $select.next( '.frm-btn-group.dropdown' );
-					const optionValue   = $option.val();
-					const $dropdownItem = $dropdown.find( 'input[value="' + optionValue + '"]' ).closest( 'button.dropdown-item' );
+					const $dropdown = $select.next( '.frm-btn-group.dropdown' );
+					const optionValue = $option.val();
+					const $dropdownItem = $dropdown.find( `input[value="${ optionValue }"]` ).closest( 'button.dropdown-item' );
 					if ( $dropdownItem.length ) {
 						$dropdownItem.attr( 'aria-checked', checked ? 'true' : 'false' );
 
@@ -191,59 +199,24 @@
 						setTimeout( () => $dropdownItem.get( 0 ).focus(), 0 );
 					}
 				}
-			});
+			} );
 		}
 	};
 
 	const bootstrap = {
-		setupBootstrapDropdowns( callback ) {
-			if ( ! window.bootstrap || ! window.bootstrap.Dropdown ) {
-				return;
-			}
-
-			window.bootstrap.Dropdown._getParentFromElement = getParentFromElement;
-			window.bootstrap.Dropdown.prototype._getParentFromElement = getParentFromElement;
-
-			function getParentFromElement( element ) {
-				let parent;
-				const selector = window.bootstrap.Util.getSelectorFromElement( element );
-
-				if ( selector ) {
-					parent = document.querySelector( selector );
-				}
-
-				const result = parent || element.parentNode;
-				const frmDropdownMenu = result.querySelector( '.frm-dropdown-menu' );
-
-				if ( ! frmDropdownMenu ) {
-					// Not a formidable dropdown, treat like Bootstrap does normally.
-					return result;
-				}
-
-				// Temporarily add dropdown-menu class so bootstrap can initialize.
-				frmDropdownMenu.classList.add( 'dropdown-menu' );
-				setTimeout(
-					function() {
-						frmDropdownMenu.classList.remove( 'dropdown-menu' );
-					},
-					0
-				);
-
-				if ( 'function' === typeof callback ) {
-					callback( frmDropdownMenu );
-				}
-
-				return result;
-			}
+		setupBootstrapDropdowns() {
+			// This function is no longer necessary.
+			// It's call in Pro though, so keep it to avoid any errors for now.
 		},
 		multiselect
 	};
 
 	const autocomplete = {
-		initSelectionAutocomplete: function() {
+		initSelectionAutocomplete( container ) {
 			if ( jQuery.fn.autocomplete ) {
-				autocomplete.initAutocomplete( 'page' );
-				autocomplete.initAutocomplete( 'user' );
+				autocomplete.initAutocomplete( 'page', container );
+				autocomplete.initAutocomplete( 'user', container );
+				autocomplete.initAutocomplete( 'custom', container );
 			}
 		},
 		/**
@@ -251,12 +224,12 @@
 		 *
 		 * @since 4.10.01 Add container param to init autocomplete elements inside an element.
 		 *
-		 * @param {String} type Type of data. Accepts `page` or `user`.
-		 * @param {String|Object} container Container class or element. Default is null.
+		 * @param {string}        type      Type of data. Accepts `page` or `user`.
+		 * @param {string|Object} container Container class or element. Default is null.
 		 */
-		initAutocomplete: function( type, container ) {
-			const basedUrlParams = '?action=frm_' + type + '_search&nonce=' + frmGlobal.nonce;
-			const elements       = ! container ? jQuery( '.frm-' + type + '-search' ) : jQuery( container ).find( '.frm-' + type + '-search' );
+		initAutocomplete( type, container ) {
+			const basedUrlParams = `?action=frm_${ type }_search&nonce=${ frmGlobal.nonce }`;
+			const elements = ! container ? jQuery( `.frm-${ type }-search` ) : jQuery( container ).find( `.frm-${ type }-search` );
 
 			elements.each( initAutocompleteForElement );
 
@@ -266,13 +239,22 @@
 
 				// Check if a custom post type is specific.
 				if ( element.attr( 'data-post-type' ) ) {
-					urlParams += '&post_type=' + element.attr( 'data-post-type' );
+					urlParams += `&post_type=${ element.attr( 'data-post-type' ) }`;
 				}
 
-				element.autocomplete({
+				let source = ajaxurl + urlParams;
+
+				if ( this.dataset.source ) {
+					const sourceData = JSON.parse( this.dataset.source );
+					if ( sourceData ) {
+						source = sourceData;
+					}
+				}
+
+				element.autocomplete( {
 					delay: 100,
 					minLength: 0,
-					source: ajaxurl + urlParams,
+					source,
 					change: autocomplete.selectBlank,
 					select: autocomplete.completeSelectFromResults,
 					focus: () => false,
@@ -281,7 +263,7 @@
 						at: 'left bottom',
 						collision: 'flip'
 					},
-					response: function( event, ui ) {
+					response( event, ui ) {
 						if ( ! ui.content.length ) {
 							const noResult = {
 								value: '',
@@ -290,7 +272,7 @@
 							ui.content.push( noResult );
 						}
 					},
-					create: function() {
+					create() {
 						let $container = jQuery( this ).parent();
 
 						if ( $container.length === 0 ) {
@@ -299,32 +281,46 @@
 
 						jQuery( this ).autocomplete( 'option', 'appendTo', $container );
 					}
-				})
-				.on( 'focus', function() {
+				} )
+					.on( 'focus', function() {
 					// Show options on click to make it work more like a dropdown.
-					if ( this.value === '' || this.nextElementSibling.value < 1 ) {
-						jQuery( this ).autocomplete( 'search', this.value );
-					}
-				})
-				.data( 'ui-autocomplete' )._renderItem = function( ul, item ) {
-					return jQuery( '<li>' )
-					.attr( 'aria-label', item.label )
-					.append( jQuery( '<div>' ).text( item.label ) )
-					.appendTo( ul );
-				};
+						if ( this.value === '' || this.nextElementSibling.value < 1 ) {
+							jQuery( this ).autocomplete( 'search', this.value );
+						}
+					} )
+					.data( 'ui-autocomplete' )._renderItem = function( ul, item ) {
+						return jQuery( '<li>' )
+							.attr( 'aria-label', item.label )
+							.append( jQuery( '<div>' ).text( item.label ) )
+							.appendTo( ul );
+					};
 			}
 		},
 
-		selectBlank: function( e, ui ) {
+		selectBlank( e, ui ) {
 			if ( ui.item === null ) {
 				this.nextElementSibling.value = '';
+
+				/**
+				 * Fires when an autocomplete value is cleared.
+				 *
+				 * @since 6.21
+				 */
+				wp.hooks.doAction( 'frm_autocomplete_clear_value', e, ui, this );
 			}
 		},
 
-		completeSelectFromResults: function( e, ui ) {
+		completeSelectFromResults( e, ui ) {
 			e.preventDefault();
 			this.value = ui.item.value === '' ? '' : ui.item.label;
 			this.nextElementSibling.value = ui.item.value;
+
+			/**
+			 * Fires when an autocomplete item is selected.
+			 *
+			 * @since 6.21
+			 */
+			wp.hooks.doAction( 'frm_autocomplete_select', e, ui, this );
 		}
 	};
 
@@ -344,13 +340,13 @@
 					className: 'frm-search',
 					children: [
 						label,
-						span({ className: 'frmfont frm_search_icon' }),
+						svg( { href: '#frm_search_icon', classList: [ 'frm_search_icon', 'frm_svg20' ] } ),
 						searchInput
 					]
 				}
 			);
 		},
-		newSearchInput: ( id, placeholder, targetClassName, args = {}) => {
+		newSearchInput: ( id, placeholder, targetClassName, args = {} ) => {
 			const input = getAutoSearchInput( id, placeholder );
 			const wrappedSearch = search.wrapInput( input, placeholder );
 			search.init( input, targetClassName, args );
@@ -365,7 +361,7 @@
 
 			return wrappedSearch;
 		},
-		init: ( input, targetClassName, { handleSearchResult } = {}) => {
+		init: ( input, targetClassName, { handleSearchResult } = {} ) => {
 			input.setAttribute( 'type', 'search' );
 			input.setAttribute( 'autocomplete', 'off' );
 
@@ -373,7 +369,7 @@
 			input.addEventListener( 'search', handleSearch );
 			input.addEventListener( 'change', handleSearch );
 
-			function handleSearch() {
+			function handleSearch( event ) {
 				const searchText = input.value.toLowerCase();
 				const notEmptySearchText = searchText !== '';
 				const items = Array.from( document.getElementsByClassName( targetClassName ) );
@@ -381,7 +377,7 @@
 				let foundSomething = false;
 				items.forEach( toggleSearchClassesForItem );
 				if ( 'function' === typeof handleSearchResult ) {
-					handleSearchResult({ foundSomething, notEmptySearchText });
+					handleSearchResult( { foundSomething, notEmptySearchText }, event );
 				}
 
 				function toggleSearchClassesForItem( item ) {
@@ -394,7 +390,7 @@
 						item.setAttribute( 'frm-search-text', itemText );
 					}
 
-					const hide = notEmptySearchText && -1 === itemText.indexOf( searchText );
+					const hide = notEmptySearchText && ! itemText.includes( searchText );
 					item.classList.toggle( 'frm_hidden', hide );
 
 					const isSearchResult = ! hide && notEmptySearchText;
@@ -423,7 +419,7 @@
 				event.preventDefault();
 				callback( event );
 			};
-			element.addEventListener( 'click', listener );
+			element?.addEventListener( 'click', listener );
 		},
 
 		/**
@@ -431,13 +427,13 @@
 		 *
 		 * @since 6.0
 		 *
-		 * @param {String}         event    Event name.
-		 * @param {String}         selector Selector.
+		 * @param {string}         event    Event name.
+		 * @param {string}         selector Selector.
 		 * @param {Function}       handler  Handler.
-		 * @param {Boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
+		 * @param {boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
 		 */
 		documentOn: ( event, selector, handler, options ) => {
-			if ( 'undefined' === typeof options ) {
+			if ( options === undefined ) {
 				options = false;
 			}
 
@@ -446,51 +442,89 @@
 
 				// loop parent nodes from the target to the delegation node.
 				for ( target = e.target; target && target != this; target = target.parentNode ) {
-					if ( target && target.matches && target.matches( selector ) ) {
+					if ( target.matches && target.matches( selector ) ) {
 						handler.call( target, e );
 						break;
 					}
 				}
 			}, options );
+		},
+
+		/**
+		 * Retrieves the value of a cookie by its name.
+		 *
+		 * @param {string} name - The name of the cookie.
+		 * @return {string|null} The value of the cookie, or undefined if the cookie does not exist.
+		 */
+		getCookie: name => {
+			const cookie = document.cookie.split( '; ' ).find( cookie => cookie.startsWith( `${ name }=` ) );
+
+			if ( cookie ) {
+				return cookie.split( '=' )[ 1 ];
+			}
+			return null;
+		},
+
+		/**
+		 * Sets a cookie with the specified name, value, and expiration time.
+		 *
+		 * @param {string} name    - The name of the cookie.
+		 * @param {string} value   - The value of the cookie.
+		 * @param {number} minutes - The number of minutes until the cookie expires.
+		 */
+		setCookie: ( name, value, minutes ) => {
+			const expires = new Date();
+			expires.setTime( expires.getTime() + ( minutes * 60 * 1000 ) );
+			document.cookie = `${ name }=${ value };expires=${ expires.toUTCString() };path=/`;
 		}
 	};
 
 	const wysiwyg = {
-		init( editor, { setupCallback, height, addFocusEvents } = {}) {
+		/**
+		 * @param {HTMLElement} editor                 The editor textarea.
+		 * @param {Object}      options
+		 * @param {Function}    options.setupCallback  Called with the TinyMCE editor when it is set up.
+		 * @param {number}      options.height         The TinyMCE editor height.
+		 * @param {boolean}     options.addFocusEvents Whether to trigger focusin on the textarea when TinyMCE gets focus.
+		 * @return {Promise<void>} Resolves once TinyMCE has finished booting, or right away when the text tab is active.
+		 */
+		init( editor, { setupCallback, height, addFocusEvents } = {} ) {
+			let ready;
 			if ( isTinyMceActive() ) {
-				setTimeout( resetTinyMce, 0 );
+				ready = new Promise( resolve => setTimeout( () => resolve( resetTinyMce() ), 0 ) );
 			} else {
 				initQuickTagsButtons();
+				ready = Promise.resolve();
 			}
 
 			setUpTinyMceVisualButtonListener();
 			setUpTinyMceHtmlButtonListener();
 
 			function initQuickTagsButtons() {
-				if ( 'function' !== typeof window.quicktags || typeof window.QTags.instances[ editor.id ] !== 'undefined' ) {
+				if ( 'function' !== typeof window.quicktags || window.QTags.instances[ editor.id ] !== undefined ) {
 					return;
 				}
 
-				const id = editor.id;
-				window.quicktags({
-					name: 'qt_' + id,
-					id: id,
+				const { id } = editor;
+				window.quicktags( {
+					name: `qt_${ id }`,
+					id,
 					canvas: editor,
 					settings: { id },
-					toolbar: document.getElementById( 'qt_' + id + '_toolbar' ),
+					toolbar: document.getElementById( `qt_${ id }_toolbar` ),
 					theButtons: {}
-				});
+				} );
 			}
 
 			function initRichText() {
-				const key = Object.keys( tinyMCEPreInit.mceInit )[0];
+				const key = Object.keys( tinyMCEPreInit.mceInit )[ 0 ];
 				const orgSettings = tinyMCEPreInit.mceInit[ key ];
 
 				const settings = Object.assign(
 					{},
 					orgSettings,
 					{
-						selector: '#' + editor.id,
+						selector: `#${ editor.id }`,
 						body_class: orgSettings.body_class.replace( key, editor.id )
 					}
 				);
@@ -506,7 +540,7 @@
 
 						editor.on( 'focusout', function() {
 							editor.on( 'focusin', focusInCallback );
-						});
+						} );
 					}
 					if ( setupCallback ) {
 						setupCallback( editor );
@@ -517,7 +551,7 @@
 					settings.height = height;
 				}
 
-				tinymce.init( settings );
+				return tinymce.init( settings );
 			}
 
 			function removeRichText() {
@@ -526,27 +560,27 @@
 
 			function resetTinyMce() {
 				removeRichText();
-				initRichText();
+				return initRichText();
 			}
 
 			function isTinyMceActive() {
-				const id = editor.id;
-				const wrapper = document.getElementById( 'wp-' + id + '-wrap' );
-				return null !== wrapper && wrapper.classList.contains( 'tmce-active' );
+				const { id } = editor;
+				const wrapper = document.getElementById( `wp-${ id }-wrap` );
+				return wrapper && wrapper.classList.contains( 'tmce-active' );
 			}
 
 			function setUpTinyMceVisualButtonListener() {
 				jQuery( document ).on(
-					'click', '#' + editor.id + '-html',
+					'click', `#${ editor.id }-html`,
 					function() {
 						editor.style.visibility = 'visible';
-						initQuickTagsButtons( editor );
+						initQuickTagsButtons();
 					}
 				);
 			}
 
 			function setUpTinyMceHtmlButtonListener() {
-				jQuery( '#' + editor.id + '-tmce' ).on( 'click', handleTinyMceHtmlButtonClick );
+				jQuery( `#${ editor.id }-tmce` ).on( 'click', handleTinyMceHtmlButtonClick );
 			}
 
 			function handleTinyMceHtmlButtonClick() {
@@ -556,22 +590,24 @@
 					initRichText();
 				}
 
-				const wrap = document.getElementById( 'wp-' + editor.id + '-wrap' );
+				const wrap = document.getElementById( `wp-${ editor.id }-wrap` );
 				wrap.classList.add( 'tmce-active' );
 				wrap.classList.remove( 'html-active' );
 			}
+
+			return ready;
 		}
 	};
 
 	function getModalHelper( modal, appendTo ) {
 		return function( child, uniqueClassName ) {
-			let element = modal.querySelector( '.' + uniqueClassName );
+			let element = modal.querySelector( `.${ uniqueClassName }` );
 			if ( null === element ) {
-				element = div({
-					child: child,
+				element = div( {
+					child,
 					className: uniqueClassName
-				});
-				appendTo.appendChild( element );
+				} );
+				appendTo.append( element );
 			} else {
 				redraw( element, child );
 			}
@@ -579,28 +615,28 @@
 	}
 
 	function createEmptyModal( id ) {
-		const modal = div({ id, className: 'frm-modal' });
-		const postbox = div({ className: 'postbox' });
-		const metaboxHolder = div({ className: 'metabox-holder', child: postbox });
-		modal.appendChild( metaboxHolder );
-		document.body.appendChild( modal );
+		const modal = div( { id, className: 'frm-modal' } );
+		const postbox = div( { className: 'postbox' } );
+		const metaboxHolder = div( { className: 'metabox-holder', child: postbox } );
+		modal.append( metaboxHolder );
+		document.body.append( modal );
 		return modal;
 	}
 
-	function makeModalIntoADialogAndOpen( modal, { width } = {}) {
+	function makeModalIntoADialogAndOpen( modal, { width, dialogClass = '' } = {} ) {
 		const bodyWithModalClassName = 'frm-body-with-open-modal';
 
 		const $modal = jQuery( modal );
 		if ( ! $modal.hasClass( 'frm-dialog' ) ) {
-			$modal.dialog({
-				dialogClass: 'frm-dialog',
+			$modal.dialog( {
+				dialogClass: `frm-dialog ${ dialogClass }`,
 				modal: true,
 				autoOpen: false,
 				closeOnEscape: true,
 				width: width || '550px',
 				resizable: false,
 				draggable: false,
-				open: function() {
+				open() {
 					jQuery( '.ui-dialog-titlebar' ).addClass( 'frm_hidden' ).removeClass( 'ui-helper-clearfix' );
 					jQuery( '#wpwrap' ).addClass( 'frm_overlay' );
 					jQuery( '.frm-dialog' ).removeClass( 'ui-widget ui-widget-content ui-corner-all' );
@@ -610,7 +646,7 @@
 					$modal.on( 'click', 'a.dismiss', function( event ) {
 						event.preventDefault();
 						$modal.dialog( 'close' );
-					});
+					} );
 
 					const overlay = document.querySelector( '.ui-widget-overlay' );
 					if ( overlay ) {
@@ -623,12 +659,18 @@
 						);
 					}
 				},
-				close: function() {
+				close() {
 					document.body.classList.remove( bodyWithModalClassName );
 					jQuery( '#wpwrap' ).removeClass( 'frm_overlay' );
 					jQuery( '.spinner' ).css( 'visibility', 'hidden' );
 				}
-			});
+			} );
+
+			// jQuery UI points aria-labelledby at its own auto-generated .ui-dialog-title
+			// span by default, but that span is left empty since no `title` option is
+			// ever passed to .dialog(). Point it at the real visible title instead so
+			// the dialog has an accessible name.
+			$modal.dialog( 'widget' ).attr( 'aria-labelledby', `${ modal.id }-title` );
 		}
 
 		document.body.classList.add( bodyWithModalClassName );
@@ -645,7 +687,7 @@
 		return tag( 'span', args );
 	}
 
-	function a( args = {}) {
+	function a( args = {} ) {
 		const anchor = tag( 'a', args );
 		anchor.setAttribute( 'href', 'string' === typeof args.href ? args.href : '#' );
 		if ( 'string' === typeof args.target ) {
@@ -654,7 +696,7 @@
 		return anchor;
 	}
 
-	function img( args = {}) {
+	function img( args = {} ) {
 		const output = tag( 'img', args );
 		if ( 'string' === typeof args.src ) {
 			output.setAttribute( 'src', args.src );
@@ -670,10 +712,10 @@
 	 *
 	 * @since 6.0
 	 *
-	 * @param {String} inputId
-	 * @param {String} labelText
-	 * @param {String} inputName
-	 * @returns {Element}
+	 * @param {string} inputId
+	 * @param {string} labelText
+	 * @param {string} inputName
+	 * @return {Element} The div element containing the label and input.
 	 */
 	function labelledTextInput( inputId, labelText, inputName ) {
 		const label = tag( 'label', labelText );
@@ -689,7 +731,7 @@
 		input.type = 'text';
 		input.setAttribute( 'name', inputName );
 
-		return div({ children: [ label, input ] });
+		return div( { children: [ label, input ] } );
 	}
 
 	/**
@@ -697,11 +739,11 @@
 	 *
 	 * @since 6.4.1 Accept a string as one of `children` to append a text node inside the element.
 	 *
-	 * @param {String} type Element tag name.
+	 * @param {string} type Element tag name.
 	 * @param {Object} args The args.
-	 * @return {Object}
+	 * @return {Object} The created DOM element.
 	 */
-	function tag( type, args = {}) {
+	function tag( type, args = {} ) {
 		const output = document.createElement( type );
 
 		if ( 'string' === typeof args ) {
@@ -721,25 +763,25 @@
 		if ( children ) {
 			children.forEach( child => {
 				if ( 'string' === typeof child ) {
-					output.appendChild( document.createTextNode( child ) );
+					output.append( document.createTextNode( child ) );
 				} else {
-					output.appendChild( child )
+					output.append( child );
 				}
 			} );
 		} else if ( child ) {
-			output.appendChild( child );
+			output.append( child );
 		} else if ( text ) {
 			output.textContent = text;
 		}
 		if ( data ) {
 			Object.keys( data ).forEach( function( dataKey ) {
-				output.setAttribute( 'data-' + dataKey, data[dataKey] );
-			});
+				output.setAttribute( `data-${ dataKey }`, data[ dataKey ] );
+			} );
 		}
 		return output;
 	}
 
-	function svg({ href, classList } = {}) {
+	function svg( { href, classList } = {} ) {
 		const namespace = 'http://www.w3.org/2000/svg';
 		const output = document.createElementNS( namespace, 'svg' );
 		if ( classList ) {
@@ -749,7 +791,7 @@
 		if ( href ) {
 			const use = document.createElementNS( namespace, 'use' );
 			use.setAttribute( 'href', href );
-			output.appendChild( use );
+			output.append( use );
 			output.classList.add( 'frmsvg' );
 		}
 		return output;
@@ -759,19 +801,19 @@
 	 * Pop up a success message in the lower right corner.
 	 * It then fades out and gets deleted automatically.
 	 *
-	 * @param {HTMLElement|String} content
-	 * @returns {void}
+	 * @param {HTMLElement|string} content
+	 * @return {void}
 	 */
 	function success( content ) {
-		const container           = document.getElementById( 'wpbody' );
-		const notice              = div({
-			className: 'notice notice-info frm-review-notice frm_updated_message frm-floating-success-message',
-			child: div({
+		const container = document.getElementById( 'wpbody' );
+		const notice = div( {
+			className: 'frm_updated_message frm-floating-success-message',
+			child: div( {
 				className: 'frm-satisfied',
 				child: 'string' === typeof content ? document.createTextNode( content ) : content
-			})
-		});
-		container.appendChild( notice );
+			} )
+		} );
+		container.append( notice );
 
 		setTimeout(
 			() => jQuery( notice ).fadeOut( () => notice.remove() ),
@@ -781,13 +823,13 @@
 
 	function setAttributes( element, attrs ) {
 		Object.entries( attrs ).forEach(
-			([ key, value ]) => element.setAttribute( key, value )
+			( [ key, value ] ) => element.setAttribute( key, value )
 		);
 	}
 
 	function redraw( element, child ) {
 		element.innerHTML = '';
-		element.appendChild( child );
+		element.append( child );
 	}
 
 	const allowedHtml = {
@@ -798,11 +840,12 @@
 		span: [ 'class' ],
 		strong: [],
 		svg: [ 'class' ],
-		use: []
+		use: [],
+		a: [ 'href', 'class' ]
 	};
 
 	function cleanNode( node ) {
-		if ( 'undefined' === typeof node.tagName ) {
+		if ( node.tagName === undefined ) {
 			if ( '#text' === node.nodeName ) {
 				return document.createTextNode( node.textContent );
 			}
@@ -812,18 +855,22 @@
 		const tagType = node.tagName.toLowerCase();
 
 		if ( 'svg' === tagType ) {
-			return svg({
-				href: node.querySelector( 'use' ).getAttribute( 'xlink:href' ),
+			const svgArgs = {
 				classList: Array.from( node.classList )
-			});
+			};
+			const use = node.querySelector( 'use' );
+			if ( use ) {
+				svgArgs.href = use.getAttribute( 'href' ) || use.getAttribute( 'xlink:href' );
+			}
+			return svg( svgArgs );
 		}
 
-		const newNode = document.createElement( tagType );
-
-		if ( 'undefined' === typeof allowedHtml[ tagType ]) {
+		if ( allowedHtml[ tagType ] === undefined ) {
 			// Tag type is not allowed.
 			return document.createTextNode( '' );
 		}
+
+		const newNode = document.createElement( tagType );
 
 		allowedHtml[ tagType ].forEach(
 			allowedTag => {
@@ -833,7 +880,7 @@
 			}
 		);
 
-		node.childNodes.forEach( child => newNode.appendChild( cleanNode( child ) ) );
+		node.childNodes.forEach( child => newNode.append( cleanNode( child ) ) );
 		return newNode;
 	}
 

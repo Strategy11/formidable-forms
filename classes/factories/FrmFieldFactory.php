@@ -13,7 +13,7 @@ class FrmFieldFactory {
 	 *
 	 * @since 2.03.05
 	 *
-	 * @param int $field_id
+	 * @param int   $field_id
 	 * @param array $args
 	 *
 	 * @return FrmFieldValueSelector
@@ -26,7 +26,7 @@ class FrmFieldFactory {
 		}
 
 		if ( ! is_object( $selector ) ) {
-			$selector = new FrmFieldValueSelector( $field_id, $args );
+			return new FrmFieldValueSelector( $field_id, $args );
 		}
 
 		return $selector;
@@ -35,12 +35,14 @@ class FrmFieldFactory {
 	/**
 	 * @since 3.0
 	 *
-	 * @param object|array $field
+	 * @param array|object $field
+	 *
+	 * @return FrmFieldType
 	 */
 	public static function get_field_factory( $field ) {
 		if ( is_object( $field ) ) {
 			$field_info = self::get_field_object( $field );
-		} elseif ( isset( $field['id'] ) && $field['id'] ) {
+		} elseif ( ! empty( $field['id'] ) ) {
 			$field_info = self::get_field_object( $field['id'] );
 		} else {
 			$field_info = self::get_field_type( $field['type'], $field );
@@ -50,13 +52,17 @@ class FrmFieldFactory {
 	}
 
 	/**
-	 * @param int|string|object $field
+	 * @param int|object|string $field
 	 *
-	 * @return stdClass
+	 * @return FrmFieldType
 	 */
 	public static function get_field_object( $field ) {
 		if ( ! is_object( $field ) ) {
 			$field = FrmField::getOne( $field );
+		}
+
+		if ( ! is_object( $field ) ) {
+			return self::get_field_type( '', $field );
 		}
 
 		return self::get_field_type( $field->type, $field );
@@ -65,20 +71,14 @@ class FrmFieldFactory {
 	/**
 	 * @since 3.0
 	 *
-	 * @param string $field_type
-	 * @param int|array|object $field
+	 * @param string           $field_type
+	 * @param array|int|object $field
 	 *
-	 * @return stdClass
+	 * @return FrmFieldType
 	 */
 	public static function get_field_type( $field_type, $field = 0 ) {
 		$class = self::get_field_type_class( $field_type );
-		if ( empty( $class ) ) {
-			$field = new FrmFieldDefault( $field, $field_type );
-		} else {
-			$field = new $class( $field, $field_type );
-		}
-
-		return $field;
+		return $class ? new $class( $field, $field_type ) : new FrmFieldDefault( $field, $field_type );
 	}
 
 	/**
@@ -90,47 +90,60 @@ class FrmFieldFactory {
 	 */
 	private static function get_field_type_class( $field_type ) {
 		$type_classes = array(
-			'text'        => 'FrmFieldText',
-			'textarea'    => 'FrmFieldTextarea',
-			'select'      => 'FrmFieldSelect',
-			'radio'       => 'FrmFieldRadio',
-			'checkbox'    => 'FrmFieldCheckbox',
-			'number'      => 'FrmFieldNumber',
-			'phone'       => 'FrmFieldPhone',
-			'url'         => 'FrmFieldUrl',
-			'website'     => 'FrmFieldUrl',
-			'email'       => 'FrmFieldEmail',
-			'user_id'     => 'FrmFieldUserID',
-			'html'        => 'FrmFieldHTML',
-			'hidden'      => 'FrmFieldHidden',
-			'captcha'     => 'FrmFieldCaptcha',
-			'name'        => 'FrmFieldName',
-			'credit_card' => 'FrmFieldCreditCard',
+			'text'                         => 'FrmFieldText',
+			'textarea'                     => 'FrmFieldTextarea',
+			'select'                       => 'FrmFieldSelect',
+			'radio'                        => 'FrmFieldRadio',
+			'checkbox'                     => 'FrmFieldCheckbox',
+			'number'                       => 'FrmFieldNumber',
+			'phone'                        => 'FrmFieldPhone',
+			'url'                          => 'FrmFieldUrl',
+			'website'                      => 'FrmFieldUrl',
+			'email'                        => 'FrmFieldEmail',
+			'user_id'                      => 'FrmFieldUserID',
+			'html'                         => 'FrmFieldHTML',
+			'hidden'                       => 'FrmFieldHidden',
+			'captcha'                      => 'FrmFieldCaptcha',
+			'name'                         => 'FrmFieldName',
+			'credit_card'                  => 'FrmFieldCreditCard',
+			'address'                      => 'FrmFieldAddress',
+			// Submit button field.
+			FrmSubmitHelper::FIELD_TYPE    => 'FrmFieldSubmit',
+			FrmFieldGdprHelper::FIELD_TYPE => FrmFieldGdprHelper::get_gdpr_field_class( $field_type ),
+			'product'                      => 'FrmFieldProduct',
+			'quantity'                     => 'FrmFieldQuantity',
+			'total'                        => 'FrmFieldTotal',
 		);
 
-		$class = isset( $type_classes[ $field_type ] ) ? $type_classes[ $field_type ] : '';
+		$class = $type_classes[ $field_type ] ?? '';
 
 		return apply_filters( 'frm_get_field_type_class', $class, $field_type );
 	}
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param string $type
+	 *
+	 * @return mixed
 	 */
 	public static function field_has_html( $type ) {
 		$has_html = self::field_has_property( $type, 'has_html' );
 
-		// this hook is here for reverse compatibility since 3.0
+		// This hook is here for reverse compatibility since 3.0
 		return apply_filters( 'frm_show_custom_html', $has_html, $type );
 	}
 
 	/**
 	 * @since 3.0
 	 *
+	 * @param string $type
 	 * @param string $property
+	 *
+	 * @return mixed
 	 */
 	public static function field_has_property( $type, $property ) {
 		$field = self::get_field_type( $type );
-
 		return $field->{$property};
 	}
 }

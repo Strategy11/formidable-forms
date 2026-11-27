@@ -14,11 +14,10 @@ class FrmStrpLiteSubscriptionHelper {
 	 * Prepare a charge object for a Stripe subscription.
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
-	 * @todo I removed the $charge_object->paid = false; line from here is it isn't required for Stripe link.
-	 *       Make sure that if/when we re-use this in Stripe that we still include that.
 	 *
 	 * @param object $subscription A Stripe Subscription object.
 	 * @param string $amount
+	 *
 	 * @return stdClass
 	 */
 	public static function prepare_charge_object_for_subscription( $subscription, $amount ) {
@@ -37,7 +36,8 @@ class FrmStrpLiteSubscriptionHelper {
 	 * @since 6.5
 	 *
 	 * @param array $atts
-	 * @return string|int $sub_id
+	 *
+	 * @return int|string Sub ID.
 	 */
 	public static function create_new_subscription( $atts ) {
 		$atts['charge'] = (object) $atts['charge'];
@@ -47,16 +47,28 @@ class FrmStrpLiteSubscriptionHelper {
 			'paysys'         => 'stripe',
 			'item_id'        => $atts['entry']->id,
 			'action_id'      => $atts['action']->ID,
-			'sub_id'         => isset( $atts['charge']->sub_id ) ? $atts['charge']->sub_id : '',
+			'sub_id'         => $atts['charge']->sub_id ?? '',
 			'interval_count' => $atts['action']->post_content['interval_count'],
 			'time_interval'  => $atts['action']->post_content['interval'],
 			'status'         => 'active',
 			'next_bill_date' => gmdate( 'Y-m-d' ),
+			'test'           => 'test' === FrmStrpLiteAppHelper::active_mode() ? 1 : 0,
 		);
 
+		if ( ! empty( $atts['action']->post_content['payment_limit'] ) ) {
+			$end_count = self::prepare_payment_limit(
+				$atts['action']->post_content['payment_limit'],
+				(int) $atts['entry']->form_id,
+				(int) $atts['entry']->id
+			);
+
+			if ( is_int( $end_count ) ) {
+				$new_values['end_count'] = $end_count;
+			}
+		}
+
 		$frm_sub = new FrmTransLiteSubscription();
-		$sub_id  = $frm_sub->create( $new_values );
-		return $sub_id;
+		return $frm_sub->create( $new_values );
 	}
 
 	/**
@@ -65,10 +77,13 @@ class FrmStrpLiteSubscriptionHelper {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param array $atts {
+	 *    The plan details.
+	 *
 	 *    @type WP_Post $action
 	 *    @type string  $amount
 	 * }
-	 * @return string Plan id.
+	 *
+	 * @return false|string Plan id.
 	 */
 	public static function get_plan_from_atts( $atts ) {
 		$action                         = $atts['action'];
@@ -80,35 +95,39 @@ class FrmStrpLiteSubscriptionHelper {
 	 * @since 6.5
 	 *
 	 * @param WP_Post $action
-	 * @return string|false
+	 *
+	 * @return false|string
 	 */
 	private static function get_plan_for_action( $action ) {
 		$plan_id = $action->post_content['plan_id'];
-		if ( ! $plan_id ) {
-			// the amount has already been formatted, so add the decimal back in
-			$amount                         = $action->post_content['amount'];
-			$action->post_content['amount'] = number_format( ( $amount / 100 ), 2, '.', '' );
-			$plan_opts                      = self::prepare_plan_options( $action->post_content );
-			$plan_id                        = self::maybe_create_plan( $plan_opts );
+
+		if ( $plan_id ) {
+			return $plan_id;
 		}
-		return $plan_id;
+
+		// The amount has already been formatted, so add the decimal back in.
+		$amount                         = $action->post_content['amount'];
+		$action->post_content['amount'] = number_format( $amount / 100, 2, '.', '' );
+		$plan_opts                      = self::prepare_plan_options( $action->post_content );
+		return self::maybe_create_plan( $plan_opts );
 	}
 
 	/**
 	 * @since 6.5
 	 *
 	 * @param array $settings
+	 *
 	 * @return array
 	 */
 	public static function prepare_plan_options( $settings ) {
 		$amount              = FrmStrpLiteActionsController::prepare_amount( $settings['amount'], $settings );
-		$default_description = number_format( ( $amount / 100 ), 2 ) . '/' . $settings['interval'];
+		$default_description = number_format( $amount / 100, 2 ) . '/' . $settings['interval'];
 		$plan_opts           = array(
 			'amount'         => $amount,
 			'interval'       => $settings['interval'],
 			'interval_count' => $settings['interval_count'],
 			'currency'       => $settings['currency'],
-			'name'           => empty( $settings['description'] ) ? $default_description : $settings['description'],
+			'name'           => ! empty( $settings['description'] ) ? $settings['description'] : $default_description,
 		);
 
 		if ( ! empty( $settings['trial_interval_count'] ) ) {
@@ -124,10 +143,10 @@ class FrmStrpLiteSubscriptionHelper {
 	 * @since 3.0 This was moved from FrmStrpLiteActionsController.
 	 *
 	 * @param array $plan
+	 *
 	 * @return mixed
 	 */
 	public static function maybe_create_plan( $plan ) {
-		FrmStrpLiteAppHelper::call_stripe_helper_class( 'initialize_api' );
 		return FrmStrpLiteAppHelper::call_stripe_helper_class( 'maybe_create_plan', $plan );
 	}
 
@@ -139,11 +158,13 @@ class FrmStrpLiteSubscriptionHelper {
 	 * @since 6.5
 	 *
 	 * @param mixed $trial
+	 *
 	 * @return int
 	 */
 	private static function get_trial_with_default( $trial ) {
 		if ( ! is_numeric( $trial ) ) {
-			$trial = 1;
+			// Use 0 as this is only ever overwritten when it is non-zero.
+			$trial = 0;
 		}
 		return absint( $trial );
 	}
@@ -153,22 +174,104 @@ class FrmStrpLiteSubscriptionHelper {
 	 *
 	 * @since 6.5.1
 	 *
-	 * @param object|string|false $subscription
+	 * @param false|object|string $subscription
 	 * @param array               $charge_data
 	 * @param WP_Post             $action
 	 * @param int                 $amount
-	 * @return object|string|false
+	 *
+	 * @return false|object|string
 	 */
 	public static function maybe_create_missing_plan_and_create_subscription( $subscription, $charge_data, $action, $amount ) {
-		if ( ! is_string( $subscription ) || 0 !== strpos( $subscription, 'No such plan: ' ) ) {
-			// Only retry when there is a No such plan string error.
+		if ( ! is_string( $subscription ) || ! self::is_missing_plan_error( $subscription ) ) {
+			// Only retry when Stripe reports a missing plan or price.
 			return $subscription;
 		}
 
 		// The full error message looks like "No such plan: '_399_1month_usd".
 		$action->post_content['plan_id'] = '';
 		$charge_data['plan']             = self::get_plan_from_atts( compact( 'action', 'amount' ) );
-		$subscription                    = FrmStrpLiteAppHelper::call_stripe_helper_class( 'create_subscription', $charge_data );
-		return $subscription;
+		return FrmStrpLiteAppHelper::call_stripe_helper_class( 'create_subscription', $charge_data );
+	}
+
+	/**
+	 * When this is filtered and returns false, the subscription will be canceled immediately instead.
+	 *
+	 * @since 6.8
+	 *
+	 * @return bool
+	 */
+	public static function should_cancel_at_period_end() {
+		/**
+		 * @param bool $cancel_at_period_end
+		 */
+		return (bool) apply_filters( 'frm_stripe_cancel_subscription_at_period_end', true );
+	}
+
+	/**
+	 * Get an end_count value to use for our subscription.
+	 *
+	 * @since 6.11
+	 *
+	 * @param string $payment_limit The raw payment value string. It is not empty.
+	 * @param int    $form_id       Required for processing shortcodes.
+	 * @param int    $entry_id      Required for processing shortcodes.
+	 *
+	 * @return int|WP_Error
+	 */
+	public static function prepare_payment_limit( $payment_limit, $form_id, $entry_id ) {
+		if ( is_numeric( $payment_limit ) ) {
+			return (int) $payment_limit;
+		}
+
+		if ( ! str_contains( $payment_limit, '[' ) ) {
+			return self::get_invalid_payment_limit_error( $payment_limit );
+		}
+
+		$payment_limit = FrmTransLiteAppHelper::process_shortcodes(
+			array(
+				'value' => $payment_limit,
+				'form'  => $form_id,
+				'entry' => $entry_id,
+			)
+		);
+
+		if ( ! is_numeric( $payment_limit ) ) {
+			return self::get_invalid_payment_limit_error( $payment_limit );
+		}
+
+		return (int) $payment_limit;
+	}
+
+	/**
+	 * @since 6.11
+	 *
+	 * @param string $payment_limit
+	 *
+	 * @return WP_Error
+	 */
+	private static function get_invalid_payment_limit_error( $payment_limit ) {
+		return new WP_Error(
+			'invalid_payment_limit',
+			/* translators: %s: Invalid payment limit value title */
+			sprintf( __( 'Invalid payment limit value %s', 'formidable' ), $payment_limit )
+		);
+	}
+
+	/**
+	 * Check whether a Stripe error string means the plan used to create a subscription does not
+	 * exist yet.
+	 *
+	 * Stripe's error used to always read "No such plan: '...'". Newer API versions describe the
+	 * same missing legacy Plan as "No such price: '...'" instead, even though the request used the
+	 * `plan` parameter, so both forms have to be recognized.
+	 *
+	 * @since 7.0
+	 *
+	 * @param string $message
+	 *
+	 * @return bool
+	 */
+	private static function is_missing_plan_error( $message ) {
+		return str_starts_with( $message, 'No such plan: ' ) || str_starts_with( $message, 'No such price: ' );
 	}
 }

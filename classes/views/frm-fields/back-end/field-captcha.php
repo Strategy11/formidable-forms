@@ -1,4 +1,12 @@
 <?php
+/**
+ * CAPTCHA field form builder view.
+ *
+ * @package Formidable
+ *
+ * @var string $field_name HTML name attribute for the hidden input.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -6,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ! FrmFieldCaptcha::should_show_captcha() ) {
 	?>
 <span class="frm-with-icon frm-not-set frm_note_style">
-	<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_report_problem_solid_icon' ); ?>
+	<?php FrmAppHelper::icon_by_class( 'frmfont frm_report_problem_solid_icon' ); ?>
 	<?php esc_attr_e( 'This field is not set up yet.', 'formidable' ); ?>
 </span>
 	<?php
@@ -14,6 +22,7 @@ if ( ! FrmFieldCaptcha::should_show_captcha() ) {
 }
 
 $image_name = FrmFieldCaptcha::get_captcha_image_name();
+$extension  = 'turnstile' === $image_name ? 'gif' : 'png';
 ?>
-<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/' . $image_name . '.png' ); ?>" class="<?php echo esc_attr( $image_name ); ?>_placeholder" alt="<?php echo esc_attr( $image_name ); ?>"/>
+<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/' . $image_name . '.' . $extension ); ?>" class="<?php echo esc_attr( $image_name ); ?>_placeholder" alt="<?php echo esc_attr( $image_name ); ?>"/>
 <input type="hidden" name="<?php echo esc_attr( $field_name ); ?>" value="1" />

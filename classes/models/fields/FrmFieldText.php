@@ -10,12 +10,14 @@ class FrmFieldText extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'text';
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $holds_email_values = true;
@@ -34,14 +36,18 @@ class FrmFieldText extends FrmFieldType {
 			'clear_on_focus' => true,
 			'format'         => true,
 			'invalid'        => true,
+			'autocomplete'   => true,
 		);
 	}
 
+	/**
+	 * @param array $args
+	 */
 	public function validate( $args ) {
 		$errors     = parent::validate( $args );
-		$max_length = intval( FrmField::get_option( $this->field, 'max' ) );
+		$max_length = (int) FrmField::get_option( $this->field, 'max' );
 
-		if ( $max_length && strlen( $args['value'] ) > $max_length ) {
+		if ( $max_length && FrmAppHelper::mb_function( array( 'mb_strlen', 'strlen' ), array( $args['value'] ) ) > $max_length ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
 		}
 

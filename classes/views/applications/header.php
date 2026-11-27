@@ -1,4 +1,13 @@
 <?php
+/**
+ * Applications header.
+ *
+ * @package Formidable
+ *
+ * @var string $title   Header title text.
+ * @var string $context Current applications view context (e.g. 'index').
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -6,6 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div id="frm_top_bar">
 	<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable' ) ); ?>" class="frm-header-logo">
 		<?php FrmAppHelper::show_header_logo(); ?>
+		<span class="screen-reader-text"><?php esc_html_e( 'View Forms', 'formidable' ); ?></span>
 	</a>
 	<div id="frm_bs_dropdown">
 		<h1>
@@ -18,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php do_action( 'frm_applications_header_inside_title_after_span', $context ); ?>
 		<?php do_action( 'frm_applications_header_after_title', $context ); ?>
 		<?php if ( 'index' === $context && ! FrmAppHelper::pro_is_installed() ) { ?>
-			<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'header' ) ); ?>" class="button button-secondary frm-button-secondary">
+			<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'header' ) ); ?>" class="button button-secondary frm-button-secondary" target="_blank" rel="noopener">
 				<?php esc_html_e( 'Upgrade', 'formidable' ); ?>
 			</a>
 		<?php } ?>

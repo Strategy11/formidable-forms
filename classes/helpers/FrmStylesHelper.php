@@ -5,8 +5,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmStylesHelper {
 
+	/**
+	 * @return array
+	 */
 	public static function get_upload_base() {
 		$uploads = wp_upload_dir();
+
 		if ( is_ssl() && ! preg_match( '/^https:\/\/.*\..*$/', $uploads['baseurl'] ) ) {
 			$uploads['baseurl'] = str_replace( 'http://', 'https://', $uploads['baseurl'] );
 		}
@@ -18,15 +22,21 @@ class FrmStylesHelper {
 	 * Called from the admin header.
 	 *
 	 * @since 4.0
+	 *
+	 * @return void
 	 */
 	public static function save_button() {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<input type="submit" name="submit" class="button button-primary frm-button-primary" value="<?php esc_attr_e( 'Update', 'formidable' ); ?>" />
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
 	 * @since 2.05
+	 *
+	 * @return array
 	 */
 	public static function get_css_label_positions() {
 		return array(
@@ -38,8 +48,15 @@ class FrmStylesHelper {
 		);
 	}
 
-	public static function get_single_label_positions() {
-		return array(
+	/**
+	 * @since 6.11 Added $field param.
+	 *
+	 * @param array|object $field
+	 *
+	 * @return array
+	 */
+	public static function get_single_label_positions( $field = array() ) {
+		$label_positions = array(
 			'top'    => __( 'Top', 'formidable' ),
 			'left'   => __( 'Left', 'formidable' ),
 			'right'  => __( 'Right', 'formidable' ),
@@ -48,8 +65,21 @@ class FrmStylesHelper {
 			'hidden' => __( 'Hidden (but leave the space)', 'formidable' ),
 			'inside' => __( 'Placeholder inside the field', 'formidable' ),
 		);
+
+		/**
+		 * Allows updating label positions in field settings.
+		 *
+		 * @since 6.11
+		 *
+		 * @param array        $label_positions
+		 * @param array|object $field
+		 */
+		return apply_filters( 'frm_single_label_positions', $label_positions, $field );
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function minus_icons() {
 		return array(
 			0 => array(
@@ -75,6 +105,9 @@ class FrmStylesHelper {
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function arrow_icons() {
 		$minus_icons = self::minus_icons();
 
@@ -117,18 +150,23 @@ class FrmStylesHelper {
 
 	/**
 	 * @since 2.0
+	 *
+	 * @param int|string $key  Icon key.
+	 * @param string     $icon Icon state, `+` or `-`.
+	 * @param string     $type Icon type, such as `arrow`.
+	 *
 	 * @return string The class for this icon.
 	 */
 	public static function icon_key_to_class( $key, $icon = '+', $type = 'arrow' ) {
 		if ( 'arrow' === $type && is_numeric( $key ) ) {
-			//frm_arrowup6_icon
+			// frm_arrowup6_icon.
 			$arrow = array(
 				'-' => 'down',
 				'+' => 'up',
 			);
 			$class = 'frm_arrow' . $arrow[ $icon ];
 		} else {
-			//frm_minus1_icon
+			// frm_minus1_icon.
 			$key   = str_replace( 'p', '', $key );
 			$plus  = array(
 				'-' => 'minus',
@@ -140,15 +178,15 @@ class FrmStylesHelper {
 		if ( $key ) {
 			$class .= $key;
 		}
-		$class .= '_icon';
 
-		return $class;
+		return $class . '_icon';
 	}
 
 	/**
 	 * @param WP_Post  $style
 	 * @param FrmStyle $frm_style
 	 * @param string   $type
+	 *
 	 * @return void
 	 */
 	public static function bs_icon_select( $style, $frm_style, $type = 'arrow' ) {
@@ -157,19 +195,21 @@ class FrmStylesHelper {
 		unset( $function_name );
 
 		$name = 'arrow' === $type ? 'collapse_icon' : 'repeat_icon';
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="btn-group" id="frm_<?php echo esc_attr( $name ); ?>_select">
-			<button class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown" type="button">
+			<button id="frm_<?php echo esc_attr( $name ); ?>_button"
+				class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown" type="button">
 				<?php FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $style->post_content[ $name ], '+', $type ) ); ?>
 				<?php FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $style->post_content[ $name ], '-', $type ) ); ?>
 				<b class="caret"></b>
 			</button>
 			<ul class="multiselect-container frm-dropdown-menu">
 				<?php foreach ( $icons as $key => $icon ) { ?>
-					<li <?php echo ( $style->post_content['collapse_icon'] == $key ) ? 'class="active"' : ''; ?>>
+					<li <?php echo $style->post_content['collapse_icon'] == $key ? 'class="active"' : ''; // phpcs:ignore Universal.Operators.StrictComparisons ?>>
 						<a href="javascript:void(0);">
 							<label>
-								<input type="radio" value="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $frm_style->get_field_name( $name ) ); ?>" <?php checked( $style->post_content[ $name ], $key ); ?> />
+								<input type="radio" value="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $frm_style->get_field_name( $name ) ); ?>" <?php checked( $style->post_content[ $name ], $key ); ?> /><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 								<span>
 									<?php
 									FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $key, '+', $type ) );
@@ -183,112 +223,299 @@ class FrmStylesHelper {
 			</ul>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
-	public static function hex2rgb( $hex ) {
-		$hex = str_replace( '#', '', $hex );
+	/**
+	 * Convert a color setting to a RGB CSV (without the rgb()/rgba() wrapper).
+	 *
+	 * @since 2.0
+	 *
+	 * @param string $color Hex, RGB or HSL color setting value.
+	 *
+	 * @return string RGB value without the rgb() wrapper.
+	 */
+	public static function hex2rgb( $color ) {
+		$channels = self::get_color_channels( $color );
+		return $channels ? implode( ',', array_slice( $channels, 0, 3 ) ) : '0,0,0';
+	}
 
-		list( $r, $g, $b ) = sscanf( $hex, '%02x%02x%02x' );
+	/**
+	 * Parse the color formats supported by the styler.
+	 *
+	 * @since 7.1
+	 *
+	 * @param string $color Hex, RGB or HSL color value.
+	 *
+	 * @return array Numeric red, green, blue and alpha channels, or an empty array for invalid input.
+	 */
+	private static function get_color_channels( $color ) {
+		$color = strtolower( trim( $color ) );
 
-		$rgb = array( $r, $g, $b );
+		if ( 'transparent' === $color ) {
+			return array( 0, 0, 0, 0 );
+		}
 
-		return implode( ',', $rgb );
+		if ( preg_match( '/^#?(?:[a-f0-9]{3,4}|[a-f0-9]{6}|[a-f0-9]{8})$/D', $color ) ) {
+			return self::get_hex_color_channels( $color );
+		}
+
+		if ( ! preg_match( '/^(rgba?|hsla?)\(\s*([^()]+)\s*\)$/D', $color, $matches ) ) {
+			return array();
+		}
+
+		$separator       = str_contains( $matches[2], ',' ) ? '\s*,\s*' : '\s+';
+		$alpha_separator = str_contains( $matches[2], ',' ) ? '\s*,\s*' : '\s*\/\s*';
+		$component       = '[^,\/\s]+';
+
+		if ( ! preg_match( '/^' . $component . $separator . $component . $separator . $component . '(?:' . $alpha_separator . $component . ')?$/D', trim( $matches[2] ) ) ) {
+			return array();
+		}
+
+		$is_hsl = str_starts_with( $matches[1], 'hsl' );
+		$parts  = preg_split( '/\s*[,\/]\s*|\s+/', trim( $matches[2] ) );
+
+		if ( ! is_array( $parts ) || count( $parts ) < 3 || count( $parts ) > 4 ) {
+			return array();
+		}
+
+		foreach ( $parts as $index => $part ) {
+			$unit = $is_hsl && 0 === $index ? '(?:deg|grad|rad|turn)?' : '%?';
+
+			if ( ! preg_match( '/^[+-]?(?:[0-9]+(?:\.[0-9]+)?|\.[0-9]+)' . $unit . '$/D', $part ) ) {
+				return array();
+			}
+
+			if ( $is_hsl && ( 1 === $index || 2 === $index ) && ! str_ends_with( $part, '%' ) ) {
+				return array();
+			}
+		}
+
+		$alpha = isset( $parts[3] ) ? (float) $parts[3] : 1;
+
+		if ( isset( $parts[3] ) && str_ends_with( $parts[3], '%' ) ) {
+			$alpha /= 100;
+		}
+
+		$alpha = max( 0, min( 1, $alpha ) );
+
+		if ( $is_hsl ) {
+			$hex = self::hsl_to_hex( $color );
+			return array( hexdec( substr( $hex, 0, 2 ) ), hexdec( substr( $hex, 2, 2 ) ), hexdec( substr( $hex, 4, 2 ) ), $alpha );
+		}
+
+		$channels = array();
+
+		for ( $index = 0; $index < 3; $index++ ) {
+			$value = (float) $parts[ $index ];
+
+			if ( str_ends_with( $parts[ $index ], '%' ) ) {
+				$value = $value * 255 / 100;
+			}
+
+			$channels[] = (int) round( max( 0, min( 255, $value ) ) );
+		}
+
+		$channels[] = $alpha;
+		return $channels;
+	}
+
+	/**
+	 * Expand a validated hex color into numeric channels.
+	 *
+	 * @since 7.1
+	 *
+	 * @param string $color Hex color with an optional hash.
+	 *
+	 * @return array Red, green, blue and alpha channels.
+	 */
+	private static function get_hex_color_channels( $color ) {
+		$hex = ltrim( $color, '#' );
+
+		if ( strlen( $hex ) < 5 ) {
+			$hex = preg_replace( '/./', '$0$0', $hex );
+		}
+
+		$channels    = array_map( 'hexdec', str_split( $hex, 2 ) );
+		$channels[3] = isset( $channels[3] ) ? $channels[3] / 255 : 1;
+		return $channels;
+	}
+
+	/**
+	 * Check whether a value is a supported color without accepting CSS declarations.
+	 *
+	 * @since 7.1
+	 *
+	 * @param string $color Hex, RGB or HSL color value.
+	 *
+	 * @return bool
+	 */
+	public static function is_valid_color( $color ) {
+		return (bool) self::get_color_channels( $color );
+	}
+
+	/**
+	 * Read opacity consistently across the supported color formats.
+	 *
+	 * @since 7.1
+	 *
+	 * @param string $color Hex, RGB or HSL color value.
+	 *
+	 * @return float|int Opacity, defaulting to opaque for unsupported colors.
+	 */
+	public static function get_color_alpha( $color ) {
+		$channels = self::get_color_channels( $color );
+		return $channels ? $channels[3] : 1;
+	}
+
+	/**
+	 * Restore the hash only for a bare hexadecimal color setting.
+	 *
+	 * @since 7.1
+	 *
+	 * @param string $color Saved color value.
+	 *
+	 * @return string CSS color value.
+	 */
+	public static function add_color_hash_if_needed( $color ) {
+		$color = trim( $color );
+		return self::is_hex( $color ) ? '#' . $color : $color;
 	}
 
 	/**
 	 * @since 4.0
+	 *
+	 * @param string           $hex Hex color string.
+	 * @param float|int|string $a   Alpha channel value.
+	 *
+	 * @return string
 	 */
 	public static function hex2rgba( $hex, $a ) {
 		$rgb = self::hex2rgb( $hex );
-
 		return 'rgba(' . $rgb . ',' . $a . ')';
 	}
 
 	/**
-	 * @since 6.0
+	 * @since 6.8
 	 *
-	 * @param string $rgba
-	 * @return string
+	 * @param string $hsl
+	 *
+	 * @return string Hex value of a validated HSL color.
 	 */
-	private static function rgb_to_hex( $rgba ) {
-		if ( strpos( $rgba, '#' ) === 0 ) {
-			return $rgba;
+	private static function hsl_to_hex( $hsl ) {
+		$opening_brace = strpos( $hsl, '(' );
+
+		if ( false === $opening_brace ) {
+			return '';
 		}
-		preg_match( '/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i', $rgba, $by_color );
-		return sprintf( '%02x%02x%02x', $by_color[1], $by_color[2], $by_color[3] );
+
+		$parts = preg_split( '/\s*[,\/]\s*|\s+/', trim( substr( $hsl, $opening_brace + 1 ), " \t\n\r\0\x0B)" ) );
+		$h     = (float) $parts[0];
+
+		if ( str_ends_with( $parts[0], 'grad' ) ) {
+			$h *= 0.9;
+		} elseif ( str_ends_with( $parts[0], 'rad' ) ) {
+			$h = rad2deg( $h );
+		} elseif ( str_ends_with( $parts[0], 'turn' ) ) {
+			$h *= 360;
+		}
+
+		$h = fmod( fmod( $h, 360 ) + 360, 360 );
+		$s = max( 0, min( 100, (float) $parts[1] ) ) / 100;
+		$l = max( 0, min( 100, (float) $parts[2] ) ) / 100;
+
+		// Calculate RGB values.
+		$c = ( 1 - abs( 2 * $l - 1 ) ) * $s;
+		$x = $c * ( 1 - abs( fmod( $h / 60, 2 ) - 1 ) );
+		$m = $l - $c / 2;
+		$r = 0;
+		$g = 0;
+		$b = 0;
+
+		if ( $h >= 0 && $h < 60 ) {
+			$r = $c;
+			$g = $x;
+		} elseif ( $h >= 60 && $h < 120 ) {
+			$r = $x;
+			$g = $c;
+		} elseif ( $h >= 120 && $h < 180 ) {
+			$g = $c;
+			$b = $x;
+		} elseif ( $h >= 180 && $h < 240 ) {
+			$g = $x;
+			$b = $c;
+		} elseif ( $h >= 240 && $h < 300 ) {
+			$r = $x;
+			$b = $c;
+		} elseif ( $h >= 300 && $h < 360 ) {
+			$r = $c;
+			$b = $x;
+		}//end if
+
+		// Convert RGB to 8-bit values
+		$r = round( ( $r + $m ) * 255 );
+		$g = round( ( $g + $m ) * 255 );
+		$b = round( ( $b + $m ) * 255 );
+
+		// Convert RGB to hex
+		return sprintf( '%02x%02x%02x', $r, $g, $b );
 	}
 
 	/**
-	 * @param $hex string - The original color in hex format #ffffff
-	 * @param $steps integer - should be between -255 and 255. Negative = darker, positive = lighter
-	 *
 	 * @since 2.3
+	 *
+	 * @param string $hex   string  The original color in hex format #ffffff.
+	 * @param int    $steps integer Should be between -255 and 255. Negative = darker, positive = lighter.
+	 *
+	 * @return string
 	 */
 	public static function adjust_brightness( $hex, $steps ) {
-		$steps = max( - 255, min( 255, $steps ) );
+		$steps    = max( - 255, min( 255, $steps ) );
+		$channels = self::get_color_channels( $hex );
 
-		if ( 0 === strpos( $hex, 'rgba(' ) ) {
-			$rgba                   = str_replace( ')', '', str_replace( 'rgba(', '', $hex ) );
-			list ( $r, $g, $b, $a ) = array_map( 'trim', explode( ',', $rgba ) );
-			$r                      = max( 0, min( 255, $r + $steps ) );
-			$g                      = max( 0, min( 255, $g + $steps ) );
-			$b                      = max( 0, min( 255, $b + $steps ) );
-			return 'rgba(' . $r . ',' . $g . ',' . $b . ',' . $a . ')';
+		if ( ! $channels ) {
+			return $hex;
 		}
 
-		// Normalize into a six character long hex string
-		$hex = str_replace( '#', '', $hex );
-		self::fill_hex( $hex );
+		$alpha = array_pop( $channels );
 
-		// Split into three parts: R, G and B
-		$color_parts = str_split( $hex, 2 );
-		$return      = '#';
+		foreach ( $channels as &$channel ) {
+			$channel = max( 0, min( 255, $channel + $steps ) );
+		}
+		unset( $channel );
 
-		foreach ( $color_parts as $color ) {
-			$color  = hexdec( $color ); // Convert to decimal
-			$color  = max( 0, min( 255, $color + $steps ) ); // Adjust color
-			$return .= str_pad( dechex( $color ), 2, '0', STR_PAD_LEFT ); // Make two char hex code
+		if ( $alpha < 1 || preg_match( '/^rgba\(/i', trim( $hex ) ) ) {
+			return 'rgba(' . implode( ',', $channels ) . ',' . round( $alpha, 3 ) . ')';
 		}
 
-		return $return;
+		return '#' . sprintf( '%02x%02x%02x', $channels[0], $channels[1], $channels[2] );
 	}
 
 	/**
 	 * @since 6.0
 	 *
 	 * @param string $color
-	 * @return int
+	 *
+	 * @return float|int Color brightness, or 0 for invalid input.
 	 */
 	public static function get_color_brightness( $color ) {
-		if ( 0 === strpos( $color, 'rgb' ) ) {
-			$color = self::rgb_to_hex( $color );
+		$channels = self::get_color_channels( $color );
+
+		if ( ! $channels ) {
+			return 0;
 		}
 
-		self::fill_hex( $color );
+		list( $c_r, $c_g, $c_b ) = $channels;
 
-		$c_r        = hexdec( substr( $color, 0, 2 ) );
-		$c_g        = hexdec( substr( $color, 2, 2 ) );
-		$c_b        = hexdec( substr( $color, 4, 2 ) );
-		$brightness = ( ( $c_r * 299 ) + ( $c_g * 587 ) + ( $c_b * 114 ) ) / 1000;
-
-		return $brightness;
-	}
-
-	/**
-	 * Change a 3 character hex color to a 6 character one.
-	 *
-	 * @since 6.0
-	 *
-	 * @return array
-	 */
-	private static function fill_hex( &$color ) {
-		if ( 3 === strlen( $color ) ) {
-			$color = $color[0] . $color[0] . $color[1] . $color[1] . $color[2] . $color[2];
-		}
+		return ( ( $c_r * 299 ) + ( $c_g * 587 ) + ( $c_b * 114 ) ) / 1000;
 	}
 
 	/**
 	 * @since 4.05.02
+	 *
+	 * @param array $vars CSS variable keys.
+	 *
+	 * @return array
 	 */
 	public static function get_css_vars( $vars = array() ) {
 		$vars = apply_filters( 'frm_css_vars', $vars );
@@ -297,71 +524,257 @@ class FrmStylesHelper {
 
 	/**
 	 * @since 4.05.02
+	 *
+	 * @param array $settings Style settings.
+	 * @param array $defaults Default style settings.
+	 * @param array $vars     CSS variable keys to output.
+	 *
+	 * @return void
 	 */
 	public static function output_vars( $settings, $defaults = array(), $vars = array() ) {
-		if ( empty( $vars ) ) {
+		if ( ! $vars ) {
 			$vars = self::get_css_vars( array_keys( $settings ) );
 		}
-		$remove = array( 'remove_box_shadow', 'remove_box_shadow_active', 'theme_css', 'theme_name', 'theme_selector', 'important_style', 'submit_style', 'collapse_icon', 'center_form', 'custom_css', 'style_class', 'submit_bg_img', 'change_margin', 'repeat_icon' );
-		$vars   = array_diff( $vars, $remove );
+
+		$vars = array_diff( $vars, self::get_style_keys_to_remove_from_output_vars() );
 
 		foreach ( $vars as $var ) {
-			if ( ! isset( $settings[ $var ] ) ) {
+			if ( ! isset( $settings[ $var ] ) || ! self::css_key_is_valid( $var ) ) {
 				continue;
 			}
+
 			if ( ! isset( $defaults[ $var ] ) ) {
 				$defaults[ $var ] = '';
 			}
-			$show = empty( $defaults ) || ( $settings[ $var ] !== '' && $settings[ $var ] !== $defaults[ $var ] );
-			if ( $show ) {
-				echo '--' . esc_html( str_replace( '_', '-', $var ) ) . ':' . ( $var === 'font' ? FrmAppHelper::kses( $settings[ $var ] ) : esc_html( $settings[ $var ] ) ) . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+			$prepared_value = '';
+
+			if ( self::should_add_css_var( $settings, $defaults, $var, $prepared_value ) ) {
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo '--' . esc_html( self::clean_var_name( str_replace( '_', '-', $var ) ) ) . ':' . $prepared_value . ';';
 			}
 		}
+	}
+
+	/**
+	 * None of these style settings are used as CSS variables, so we want to exclude them to keep the CSS output clean.
+	 *
+	 * @since 6.26.1
+	 *
+	 * @return array<string>
+	 */
+	private static function get_style_keys_to_remove_from_output_vars() {
+		return array(
+			'remove_box_shadow',
+			'remove_box_shadow_active',
+			'theme_css',
+			'theme_name',
+			'theme_selector',
+			'important_style',
+			'submit_style',
+			'collapse_icon',
+			'center_form',
+			'custom_css',
+			'style_class',
+			'submit_bg_img',
+			'change_margin',
+			'repeat_icon',
+			'use_base_font_size',
+			'field_shape_type',
+			'bg_image_id',
+			'single_style_custom_css',
+			'enable_style_custom_css',
+		);
+	}
+
+	/**
+	 * Check if a CSS variable setting is not blank, doesn't match the default, and doesn't include invalid substrings.
+	 *
+	 * @since 6.24
+	 *
+	 * @param array  $settings       Array of setting values.
+	 * @param array  $defaults       Array of default values.
+	 * @param string $var            The setting key name.
+	 * @param string $prepared_value The value from calling css_var_prepare_value. This is set by reference so it can be used after this function is called.
+	 *
+	 * @return bool True if the CSS value should be printed.
+	 */
+	private static function should_add_css_var( $settings, $defaults, $var, &$prepared_value ) {
+		$prepared_value = self::css_var_prepare_value( $settings, $var );
+
+		if ( $prepared_value === '' ) {
+			return false;
+		}
+
+		if ( $defaults && $defaults[ $var ] === $prepared_value ) {
+			return false;
+		}
+
+		return self::css_value_is_valid( $prepared_value );
+	}
+
+	/**
+	 * Prevent invalid CSS keys from getting added to the generated CSS.
+	 *
+	 * @since 6.20
+	 *
+	 * @param string $key
+	 *
+	 * @return bool
+	 */
+	private static function css_key_is_valid( $key ) {
+		// Any key that is abnormally large is not valid.
+		// Any key that contains a '{' is not valid.
+		return strlen( $key ) < 100 && ! str_contains( $key, '{' );
+	}
+
+	/**
+	 * Confirm a CSS value is valid.
+	 * If it appears to contain JavaScript, it will not be added.
+	 *
+	 * @since 6.20
+	 *
+	 * @param string $var
+	 *
+	 * @return bool
+	 */
+	private static function css_value_is_valid( $var ) {
+		if ( is_numeric( $var ) ) {
+			return true;
+		}
+
+		// None of these substrings should be present in any CSS value.
+		$invalid_substrings = array(
+			'function(',
+			';userAgent',
+			';stopPropagation',
+			'{const',
+			'window[',
+			'navigator[',
+			'Array;',
+		);
+
+		foreach ( $invalid_substrings as $substring ) {
+			if ( str_contains( $var, $substring ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Remove anything that isn't used as a CSS variable name.
+	 *
+	 * @param string $var_name
+	 *
+	 * @return string
+	 */
+	private static function clean_var_name( $var_name ) {
+		return preg_replace( '/[^a-zA-Z0-9_-]/', '', $var_name );
+	}
+
+	/**
+	 * Prepare the value for a CSS variable.
+	 *
+	 * @since 6.14
+	 *
+	 * @param array  $settings An array of css style.
+	 * @param string $key
+	 *
+	 * @return string
+	 */
+	private static function css_var_prepare_value( $settings, $key ) {
+		$value = $settings[ $key ];
+
+		if ( ! is_string( $value ) && ! is_numeric( $value ) ) {
+			return '';
+		}
+
+		switch ( $key ) {
+			case 'font':
+				return safecss_filter_attr( $value );
+
+			case 'border_width_error':
+			case 'field_border_width':
+				if ( ! empty( $settings['field_shape_type'] ) && 'underline' === $settings['field_shape_type'] ) {
+					return safecss_filter_attr( '0px 0px ' . $value . ' 0px' );
+				}
+				break;
+
+			case 'box_shadow':
+				if ( ! empty( $settings['field_shape_type'] ) && 'underline' === $settings['field_shape_type'] ) {
+					return safecss_filter_attr( 'none' );
+				}
+				break;
+
+			case 'border_radius':
+				if ( ! empty( $settings['field_shape_type'] ) ) {
+					switch ( $settings['field_shape_type'] ) {
+						case 'underline':
+						case 'regular':
+							return safecss_filter_attr( '0px' );
+						case 'circle':
+							return safecss_filter_attr( '30px' );
+					}
+				}
+				break;
+		}//end switch
+
+		return esc_html( $value );
 	}
 
 	/**
 	 * @since 2.3
 	 *
 	 * @param WP_Post $style
+	 *
 	 * @return array
 	 */
 	public static function get_settings_for_output( $style ) {
 		if ( self::previewing_style() ) {
 			$frm_style = new FrmStyle();
+
 			if ( isset( $_POST['frm_style_setting'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 				// Sanitizing is done later.
-				$posted = wp_unslash( $_POST['frm_style_setting'] ); //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
-				if ( ! is_array( $posted ) ) {
+				//phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+				$posted = wp_unslash( $_POST['frm_style_setting'] );
+
+				if ( is_array( $posted ) ) {
+					$settings   = $frm_style->sanitize_post_content( $posted['post_content'] );
+					$style_name = FrmAppHelper::get_post_param( 'style_name', '', 'sanitize_title' );
+				} else {
 					$posted = json_decode( $posted, true );
 					FrmAppHelper::format_form_data( $posted );
 					$settings   = $frm_style->sanitize_post_content( $posted['frm_style_setting']['post_content'] );
 					$style_name = sanitize_title( $posted['style_name'] );
-				} else {
-					$settings   = $frm_style->sanitize_post_content( $posted['post_content'] );
-					$style_name = FrmAppHelper::get_post_param( 'style_name', '', 'sanitize_title' );
 				}
 			} else {
 				$settings   = $frm_style->sanitize_post_content( wp_unslash( $_GET ) );
 				$style_name = FrmAppHelper::get_param( 'style_name', '', 'get', 'sanitize_title' );
 			}
 
+			$settings = self::update_base_font_size( $settings, $frm_style->get_defaults() );
+
 			FrmAppHelper::sanitize_value( 'sanitize_text_field', $settings );
 
 			$settings['style_class'] = '';
+
 			if ( ! empty( $style_name ) ) {
 				$settings['style_class'] = $style_name . '.';
 			}
 		} else {
 			$settings                = $style->post_content;
 			$settings['style_class'] = 'frm_style_' . $style->post_name . '.';
-		}
+		}//end if
 
 		$settings['style_class']  .= 'with_frm_style';
 		$settings['font']          = stripslashes( $settings['font'] );
 		$settings['change_margin'] = self::description_margin_for_screensize( $settings['width'] );
 
 		$checkbox_opts = array( 'important_style', 'auto_width', 'submit_style', 'collapse_icon', 'center_form' );
+
 		foreach ( $checkbox_opts as $opt ) {
 			if ( ! isset( $settings[ $opt ] ) ) {
 				$settings[ $opt ] = 0;
@@ -373,7 +786,7 @@ class FrmStylesHelper {
 		$settings['field_height'] = $settings['field_height'] === '' ? 'auto' : $settings['field_height'];
 		$settings['field_width']  = $settings['field_width'] === '' ? 'auto' : $settings['field_width'];
 		$settings['auto_width']   = $settings['auto_width'] ? 'auto' : $settings['field_width'];
-		$settings['box_shadow']   = ! empty( $settings['remove_box_shadow'] ) ? 'none' : '0 1px 1px rgba(0, 0, 0, 0.075) inset';
+		$settings['box_shadow']   = ! empty( $settings['remove_box_shadow'] ) ? 'none' : '0 1px 2px 0 rgba(18, 18, 23, 0.05)';
 
 		if ( ! isset( $settings['repeat_icon'] ) ) {
 			$settings['repeat_icon'] = 1;
@@ -383,14 +796,175 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * Update the "Base Font Size" value from "Quick Settings across multiple settings values".
+	 *
+	 * @since 6.14
+	 *
+	 * @param array $settings An array of css style.
+	 * @param array $defaults Default style settings.
+	 *
+	 * @return array
+	 */
+	public static function update_base_font_size( $settings, $defaults ) {
+		if ( empty( $settings['base_font_size'] ) || empty( $settings['use_base_font_size'] ) || 'false' === $settings['use_base_font_size'] ) {
+			return $settings;
+		}
+
+		$base_font_size = (int) $settings['base_font_size'];
+		$font_size      = $defaults['font_size'];
+
+		array_map(
+			function ( $key ) use ( $defaults, $font_size, $base_font_size, &$settings ) {
+				if ( isset( $settings[ $key ] ) ) {
+					$settings[ $key ] = round( self::get_base_font_size_scale( $key, $font_size, $defaults ) * $base_font_size ) . 'px';
+				}
+			},
+			self::get_base_font_size_settings()
+		);
+
+		return $settings;
+	}
+
+	/**
+	 * Get the font size settings that are scaled from the "Base Font Size" value.
+	 *
+	 * @since 7.1
+	 *
+	 * @return array<string>
+	 */
+	public static function get_base_font_size_settings() {
+		return array(
+			'font_size',
+			'field_font_size',
+			'check_font_size',
+			'title_size',
+			'form_desc_size',
+			'description_font_size',
+			'section_font_size',
+			'submit_font_size',
+			'success_font_size',
+			'error_font_size',
+			'progress_size',
+		);
+	}
+
+	/**
+	 * Get the style settings that the styler preview can update with JavaScript, without requesting new CSS.
+	 * A setting only belongs here when its value is output as a CSS variable and nothing else.
+	 * Settings used directly in a CSS template (in a condition, a calculation, or a raw value) need the server.
+	 * This includes the templates from Pro versions that are still supported, so those settings are left out until Pro outputs them only as CSS variables.
+	 *
+	 * @since 7.1
+	 *
+	 * @return array<string>
+	 */
+	public static function get_live_preview_settings() {
+		$settings = array(
+			'form_width',
+			'form_align',
+			'fieldset',
+			'fieldset_color',
+			'fieldset_padding',
+			'fieldset_bg_color',
+			'title_size',
+			'title_color',
+			'title_margin_top',
+			'title_margin_bottom',
+			'form_desc_size',
+			'form_desc_color',
+			'form_desc_margin_top',
+			'form_desc_margin_bottom',
+			'form_desc_padding',
+			'weight',
+			'position',
+			'align',
+			'required_color',
+			'required_weight',
+			'label_padding',
+			'field_font_size',
+			'line_height',
+			'field_weight',
+			'field_border_style',
+			'bg_color',
+			'bg_color_active',
+			'text_color_error',
+			'bg_color_error',
+			'border_color_error',
+			'border_style_error',
+			'bg_color_disabled',
+			'border_color_disabled',
+			'text_color_disabled',
+			'section_font_size',
+			'section_color',
+			'section_weight',
+			'section_pad',
+			'section_bg_color',
+			'repeat_icon_color',
+			'submit_hover_bg_color',
+			'submit_hover_color',
+			'submit_hover_border_color',
+			'submit_active_bg_color',
+			'submit_active_color',
+			'submit_active_border_color',
+			'error_bg',
+			'error_border',
+			'error_font_size',
+			'success_bg_color',
+			'success_border_color',
+			'success_font_size',
+			'progress_border_size',
+		);
+
+		/**
+		 * Filter the style settings that the styler preview can update with JavaScript.
+		 * Remove any setting that a frm_output_single_style callback uses directly, so it still gets new CSS from the server.
+		 * Add a setting only when every template outputs it as a CSS variable and nothing else.
+		 *
+		 * @since 7.1
+		 *
+		 * @param array<string> $settings Style setting keys.
+		 */
+		$settings = apply_filters( 'frm_style_live_preview_settings', $settings );
+
+		// A callback may not return an array.
+		return is_array( $settings ) ? array_values( array_unique( array_filter( $settings, 'is_string' ) ) ) : array();
+	}
+
+	/**
+	 * Get style font size scale value.
+	 *
+	 * @since 6.14
+	 *
+	 * @param string     $key      Setting key.
+	 * @param int|string $value    Base font size value.
+	 * @param array      $defaults Default style settings.
+	 *
+	 * @return float
+	 */
+	private static function get_base_font_size_scale( $key, $value, $defaults ) {
+		if ( empty( $defaults[ $key ] ) || ! is_numeric( (int) $defaults[ $key ] ) || ! is_numeric( (int) $value ) || 0 === (int) $value ) {
+			return 1;
+		}
+
+		return round( (int) $defaults[ $key ] / (int) $value, 2 );
+	}
+
+	/**
 	 * @since 2.3
+	 *
+	 * @param array $settings          Style settings, passed by reference.
+	 * @param bool  $allow_transparent Whether transparent colors are allowed.
+	 *
+	 * @return void
 	 */
 	public static function prepare_color_output( &$settings, $allow_transparent = true ) {
 		$colors = self::allow_color_override();
+
 		foreach ( $colors as $css => $opts ) {
 			if ( $css === 'transparent' && ! $allow_transparent ) {
 				$css = '';
 			}
+
 			foreach ( $opts as $opt ) {
 				self::get_color_output( $css, $settings[ $opt ] );
 			}
@@ -432,17 +1006,29 @@ class FrmStylesHelper {
 
 	/**
 	 * @since 2.3
+	 *
+	 * @param string $default Default color value.
+	 * @param string $color   Color value, passed by reference.
+	 *
+	 * @return void
 	 */
 	private static function get_color_output( $default, &$color ) {
 		$color = trim( $color );
-		if ( empty( $color ) ) {
-			$color = $default;
-		} elseif ( false !== strpos( $color, 'rgb(' ) ) {
-			$color = str_replace( 'rgb(', 'rgba(', $color );
-			$color = str_replace( ')', ',1)', $color );
-		} elseif ( strpos( $color, '#' ) === false && false === strpos( $color, 'rgba(' ) ) {
-			$color = '#' . $color;
-		}
+		$color = $color ? self::add_color_hash_if_needed( $color ) : $default;
+	}
+
+	/**
+	 * If a color looks like a hex code without the #, prepend the #.
+	 * Only hexadecimal digits with a supported color length are considered hex.
+	 *
+	 * @since 6.8
+	 *
+	 * @param string $color
+	 *
+	 * @return bool
+	 */
+	private static function is_hex( $color ) {
+		return (bool) preg_match( '/^(?:[a-f0-9]{3,4}|[a-f0-9]{6}|[a-f0-9]{8})$/iD', $color );
 	}
 
 	/**
@@ -450,10 +1036,15 @@ class FrmStylesHelper {
 	 * adjust the field description margin at a different screen size
 	 *
 	 * @since 2.3
+	 *
+	 * @param string $width Label width value.
+	 *
+	 * @return false|string
 	 */
 	private static function description_margin_for_screensize( $width ) {
 		$temp_label_width = str_replace( 'px', '', $width );
 		$change_margin    = false;
+
 		if ( $temp_label_width >= 230 ) {
 			$change_margin = '800px';
 		} elseif ( $width >= 215 ) {
@@ -466,46 +1057,31 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * Get the raw alignment value stored in the active style for a radio or checkbox field.
+	 *
+	 * @since 6.32
+	 *
+	 * @param array|int $field The 'field' array.
+	 *
+	 * @return string
+	 */
+	public static function get_align_from_active_style( $field ) {
+		$field_type = FrmField::is_checkbox( $field ) ? 'checkbox' : 'radio';
+		$key        = FrmStylesController::get_align_key_for_style_settings( $field_type );
+
+		return FrmStylesController::get_active_style( $field )->post_content[ $key ] ?? '';
+	}
+
+	/**
 	 * @since 2.3
 	 *
 	 * @return bool
 	 */
 	public static function previewing_style() {
-		$ajax_change = isset( $_POST['action'] ) && $_POST['action'] === 'frm_change_styling' && isset( $_POST['frm_style_setting'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$ajax_change = isset( $_POST['action'] ) && $_POST['action'] === 'frm_change_styling' && isset( $_POST['frm_style_setting'] );
 
 		return $ajax_change || isset( $_GET['flat'] );
-	}
-
-	/**
-	 * @since 5.5.1
-	 * @return void
-	 */
-	public static function maybe_include_font_icon_css() {
-		$signature_add_on_is_active = class_exists( 'FrmSigAppHelper', false );
-
-		if ( ! FrmAppHelper::pro_is_installed() && ! $signature_add_on_is_active ) {
-			// If Pro and Signatures are both not active, there is no need to include the font icon CSS in lite.
-			return;
-		}
-
-		$pro_version_will_handle_loading = false;
-
-		if ( class_exists( 'FrmProDb', false ) ) {
-			$pro_version_that_includes_font_icons_css = '5.5.1';
-
-			// Include font icons in Lite for backward compatibility with older version of Pro.
-			$pro_version_will_handle_loading = version_compare( FrmProDb::$plug_version, $pro_version_that_includes_font_icons_css, '>=' );
-		}
-
-		$load_it_here = false;
-		if ( ! $pro_version_will_handle_loading ) {
-			// If Pro is not handling it, we still need to include it for the Signature add on.
-			$load_it_here = $signature_add_on_is_active;
-		}
-
-		if ( $load_it_here ) {
-			readfile( FrmAppHelper::plugin_path() . '/css/font_icons.css' );
-		}
 	}
 
 	/**
@@ -513,7 +1089,8 @@ class FrmStylesHelper {
 	 *
 	 * @since 6.0
 	 *
-	 * @param string|int $form_id
+	 * @param int|string $form_id
+	 *
 	 * @return string
 	 */
 	public static function get_list_url( $form_id ) {
@@ -521,17 +1098,43 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * Get the back button args from Style settings.
+	 *
+	 * @since 6.14
+	 *
+	 * @param stdClass|WP_Post $style
+	 * @param int              $form_id
+	 *
+	 * @return array
+	 */
+	public static function get_style_options_back_button_args( $style, $form_id ) {
+		if ( self::is_advanced_settings() ) {
+			return array(
+				'title' => __( 'Quick Settings', 'formidable' ),
+				'id'    => 'frm_style_back_to_quick_settings',
+			);
+		}
+		return array(
+			'href'  => self::get_list_url( $form_id ),
+			'title' => $style->post_title,
+		);
+	}
+
+	/**
 	 * Get a link to edit a target style post object in the visual styler.
 	 *
-	 * @param WP_Post|stdClass $style
-	 * @param string|int       $form_id Used for the back button and preview form target.
+	 * @param stdClass|WP_Post $style
+	 * @param int|string       $form_id Used for the back button and preview form target.
+	 * @param string           $section The url param section.
+	 *
 	 * @return string
 	 */
-	public static function get_edit_url( $style, $form_id = 0 ) {
+	public static function get_edit_url( $style, $form_id = 0, $section = '' ) {
 		$query_args = array(
 			'page'       => 'formidable-styles',
 			'frm_action' => 'edit',
 			'id'         => $style->ID,
+			'section'    => $section,
 		);
 
 		if ( $form_id ) {
@@ -548,13 +1151,15 @@ class FrmStylesHelper {
 	 *
 	 * @since 6.0
 	 *
-	 * @param string|int $style_id
+	 * @param int|string $style_id
 	 * @param bool       $is_default
+	 *
 	 * @return int
 	 */
 	public static function get_form_count_for_style( $style_id, $is_default ) {
-		$serialized      = serialize( array( 'custom_style' => (string) $style_id ) );
-		$substring       = substr( $serialized, 5, -1 ); // Chop off the "a:1:{" from the front and the "}" from the back.
+		$serialized = serialize( array( 'custom_style' => (string) $style_id ) );
+		// Chop off the "a:1:{" from the front and the "}" from the back.
+		$substring       = substr( $serialized, 5, -1 );
 		$number_of_forms = FrmDb::get_count(
 			'frm_forms',
 			array(
@@ -569,9 +1174,8 @@ class FrmStylesHelper {
 		}
 
 		$conversational_style_id = FrmDb::get_var( 'posts', array( 'post_name' => 'lines-no-boxes' ), 'ID' );
-		$number_of_forms        += self::get_default_style_count( $style_id, $conversational_style_id );
 
-		return $number_of_forms;
+		return $number_of_forms + self::get_default_style_count( $style_id, $conversational_style_id );
 	}
 
 	/**
@@ -579,19 +1183,20 @@ class FrmStylesHelper {
 	 *
 	 * @since 6.0
 	 *
-	 * @param string|int $style_id
+	 * @param int|string $style_id
 	 * @param mixed      $conversational_style_id
+	 *
 	 * @return int
 	 */
 	private static function get_default_style_count( $style_id, $conversational_style_id ) {
 		$substrings = array_map(
-			function( $value ) {
+			function ( $value ) {
 				$substring = serialize( array( 'custom_style' => $value ) );
 				return substr( $substring, 5, -1 );
 			},
 			array( '1', 1 )
 		);
-		$where = array(
+		$where      = array(
 			'status' => 'published',
 			0        => array(
 				'options NOT LIKE' => 'custom_style',
@@ -603,7 +1208,7 @@ class FrmStylesHelper {
 		if ( $conversational_style_id ) {
 			// When a conversational style is set, check for it in the query by wrapping the where and adding a conversational option check.
 			$is_conversational_style = (int) $style_id === (int) $conversational_style_id;
-			$where[0] = array(
+			$where[0]                = array(
 				// The chat option doesn't exist if it isn't on.
 				( $is_conversational_style ? 'options LIKE' : 'options NOT LIKE' ) => ';s:4:"chat";',
 				$where[0],
@@ -614,88 +1219,177 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * @deprecated 3.01
-	 * @codeCoverageIgnore
-	 */
-	public static function get_sigle_label_postitions() {
-		return FrmDeprecated::get_sigle_label_postitions();
-	}
-
-	/**
-	 * @deprecated 3.02.03
-	 * @codeCoverageIgnore
-	 */
-	public static function jquery_themes() {
-		return FrmDeprecated::jquery_themes();
-	}
-
-	/**
-	 * @deprecated 3.02.03
-	 * @codeCoverageIgnore
-	 */
-	public static function jquery_css_url( $theme_css ) {
-		return FrmDeprecated::jquery_css_url( $theme_css );
-	}
-
-	/**
-	 * @deprecated 3.02.03
-	 * @codeCoverageIgnore
-	 */
-	public static function enqueue_jquery_css() {
-		FrmDeprecated::enqueue_jquery_css();
-	}
-
-	/**
-	 * @deprecated 3.02.03
-	 * @codeCoverageIgnore
-	 */
-	public static function get_form_for_page() {
-		return FrmDeprecated::get_form_for_page();
-	}
-
-	/**
-	 * @since 4.0
-	 * @deprecated 6.0 The style menu is no longer used in the styler.
+	 * Check if the current page is the advanced settings page.
 	 *
-	 * @param string $active
+	 * @since 6.14
+	 *
+	 * @return bool True if is advanced settings, false otherwise.
+	 */
+	public static function is_advanced_settings() {
+		return FrmAppHelper::get_param( 'section' ) === 'advanced-settings' && FrmAppHelper::get_param( 'page' ) === 'formidable-styles';
+	}
+
+	/**
+	 * Get wrapper classname for style editor sections.
+	 *
+	 * @since 6.16
+	 *
+	 * @param string $section_type
+	 *
+	 * @return string The style editor wrapper classname.
+	 */
+	public static function style_editor_get_wrapper_classname( $section_type ) {
+		$is_quick_settings = 'quick-settings' === $section_type;
+		$classname         = 'frm-style-editor-form';
+		$classname        .= ( ! self::is_advanced_settings() xor $is_quick_settings ) ? ' frm_hidden' : '';
+
+		return $classname . ( FrmAppHelper::pro_is_installed() ? ' frm-pro' : '' );
+	}
+
+	/**
+	 * Retrieve the background image URL of the submit button.
+	 * It may be either a full URL string (used in versions prior to 6.14) or a numeric attachment ID (introduced in version 6.14).
+	 *
+	 * @since 6.14
+	 *
+	 * @param array $settings
+	 *
+	 * @return false|string Return image url or false.
+	 */
+	public static function get_submit_image_bg_url( $settings ) {
+		$background_image = $settings['submit_bg_img'];
+
+		if ( ! $background_image ) {
+			return false;
+		}
+
+		// Handle the case where the submit_bg_img is a full URL string. If the
+		// Settings were saved with the older styler version prior to 6.14, the
+		// submit_bg_img will be a full URL string.
+		if ( ! is_numeric( $background_image ) ) {
+			return $background_image;
+		}
+
+		return wp_get_attachment_url( (int) $background_image );
+	}
+
+	/**
+	 * Determines if the chosen JavaScript library should be used.
+	 *
+	 * @since 6.13
+	 *
+	 * @return bool
+	 */
+	public static function use_chosen_js() {
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			return false;
+		}
+
+		return is_callable( 'FrmProAppHelper::use_chosen_js' ) ? FrmProAppHelper::use_chosen_js() : true;
+	}
+
+	/**
+	 * Returns the bottom part from a margin/padding value.
+	 *
+	 * @since 6.17
+	 *
+	 * @param string $value The margin/padding value.
+	 *
 	 * @return string
 	 */
-	public static function get_style_menu( $active = '' ) {
-		_deprecated_function( __METHOD__, '6.0' );
-		return '';
+	public static function get_bottom_value( $value ) {
+		if ( ! $value ) {
+			return $value;
+		}
+
+		$parts = explode( ' ', $value );
+
+		return count( $parts ) < 3 ? $parts[0] : $parts[2];
 	}
 
 	/**
-	 * @deprecated 6.0 The style menu is no longer used in the styler.
+	 * Scope CSS to .frm_forms on admin pages to prevent style conflicts.
+	 * On front-end pages, the CSS is returned unchanged.
 	 *
-	 * @param string $active
-	 * @return void
+	 * @since 6.30
+	 *
+	 * @param string $css The CSS to scope.
+	 *
+	 * @return string
 	 */
-	public static function style_menu( $active = '' ) {
-		_deprecated_function( __METHOD__, '6.0' );
+	public static function maybe_scope_css_for_admin( $css ) {
+		if ( ! self::should_scope_custom_css() ) {
+			return $css;
+		}
+
+		/**
+		 * Filter the CSS selector used for @scope when scoping custom CSS on admin pages.
+		 *
+		 * @since 6.30
+		 *
+		 * @param string $selector The CSS selector to scope to. Default '.frm_forms'.
+		 */
+		$selector = apply_filters( 'frm_scope_custom_css_selector', '.frm_forms' );
+
+		return '@scope (' . $selector . ') {' . $css . '}';
 	}
 
 	/**
-	 * Either get the heading or the style switcher.
+	 * Scope only the custom CSS portion of the full cached stylesheet for admin pages.
+	 * Extracts the global custom CSS from the cached CSS, outputs the theme CSS unchanged,
+	 * and returns only the custom CSS portion scoped.
 	 *
-	 * @since 4.0
-	 * @deprecated 6.0 The style switcher was replaced with a form switcher and is no longer used.
+	 * @since 6.30
 	 *
-	 * @param array $atts
-	 * @return void
+	 * @param string $css The full cached CSS containing both theme and custom CSS.
+	 *
+	 * @return string The theme CSS with only the custom CSS portion scoped.
 	 */
-	public static function styler_switcher( $atts ) {
-		_deprecated_function( __METHOD__, '6.0' );
+	public static function maybe_scope_custom_css_in_cached_output( $css ) {
+		if ( ! self::should_scope_custom_css() ) {
+			return $css;
+		}
+
+		$custom_css = strip_tags( FrmStylesController::get_custom_css() );
+
+		if ( ! $custom_css ) {
+			return $css;
+		}
+
+		// The cached CSS is minified. Minify the custom CSS the same way to find it.
+		$minified_custom_css = self::minify_css( $custom_css );
+		$custom_css_pos      = strrpos( $css, $minified_custom_css );
+
+		if ( false !== $custom_css_pos ) {
+			$css = substr( $css, 0, $custom_css_pos );
+		}
+
+		return $css . self::maybe_scope_css_for_admin( $custom_css );
 	}
 
 	/**
-	 * @since 4.0
-	 * @deprecated 6.0 The styler now uses the Embed/Preview/Update header. It uses the same save button as other pages with Form tabs.
+	 * Minify CSS by stripping comments and whitespace.
+	 * Matches the minification used when saving the cached CSS file.
 	 *
-	 * @param array $atts
-	 * @return void
+	 * @since 6.30
+	 *
+	 * @param string $css The CSS to minify.
+	 *
+	 * @return string
 	 */
-	public static function styler_save_button( $atts ) {
-		_deprecated_function( __METHOD__, '6.0' );
+	private static function minify_css( $css ) {
+		return preg_replace( '/\/\*(.|\s)*?\*\//', '', str_replace( array( "\r\n", "\r", "\n", "\t", '    ' ), '', $css ) );
+	}
+
+	/**
+	 * Check if custom CSS should be scoped for admin context.
+	 *
+	 * @since 6.30
+	 *
+	 * @return bool
+	 */
+	private static function should_scope_custom_css() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only, used to scope CSS output for admin context.
+		return isset( $_GET['frm_scope_custom_css'] );
 	}
 }

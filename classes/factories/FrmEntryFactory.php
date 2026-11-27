@@ -38,22 +38,20 @@ class FrmEntryFactory {
 	}
 
 	/**
-	 * Create an intsance of the FrmEntryShortcodeFormatter class
+	 * Create an instance of the FrmEntryShortcodeFormatter class
 	 *
 	 * @since 2.04
 	 *
 	 * @param int|string $form_id
-	 * @param array $atts
+	 * @param array      $atts
 	 *
 	 * @return FrmEntryShortcodeFormatter|FrmProEntryShortcodeFormatter
 	 */
 	public static function entry_shortcode_formatter_instance( $form_id, $atts ) {
 		if ( FrmAppHelper::pro_is_installed() ) {
-			$shortcode_formatter = new FrmProEntryShortcodeFormatter( $form_id, $atts );
-		} else {
-			$shortcode_formatter = new FrmEntryShortcodeFormatter( $form_id, $atts );
+			return new FrmProEntryShortcodeFormatter( $form_id, $atts );
 		}
 
-		return $shortcode_formatter;
+		return new FrmEntryShortcodeFormatter( $form_id, $atts );
 	}
 }

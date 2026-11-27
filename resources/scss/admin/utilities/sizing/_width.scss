@@ -1,0 +1,27 @@
+/**
+ * Utilities - Width
+ */
+
+.frm-w-auto {
+	width: auto !important;
+}
+
+.frm-w-full {
+	width: 100% !important;
+}
+
+.frm-w-half {
+	width: 50% !important;
+}
+
+.frm-w-fit {
+	width: fit-content !important;
+}
+
+.frm-max-w-fit {
+	max-width: fit-content;
+}
+
+.frm-min-w-0 {
+	min-width: 0;
+}

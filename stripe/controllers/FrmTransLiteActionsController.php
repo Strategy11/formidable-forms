@@ -17,6 +17,7 @@ class FrmTransLiteActionsController {
 	 * Register payment action type.
 	 *
 	 * @param array $actions
+	 *
 	 * @return array
 	 */
 	public static function register_actions( $actions ) {
@@ -35,7 +36,7 @@ class FrmTransLiteActionsController {
 		wp_enqueue_script(
 			'frmtrans_admin',
 			FrmTransLiteAppHelper::plugin_url() . '/js/frmtrans_admin.js',
-			array( 'jquery' ),
+			array( 'jquery', 'wp-hooks' ),
 			FrmAppHelper::plugin_version()
 		);
 		wp_localize_script(
@@ -51,11 +52,13 @@ class FrmTransLiteActionsController {
 	 * Add event types for actions so an email can trigger on a successful payment.
 	 *
 	 * @param array $triggers
+	 *
 	 * @return array
 	 */
 	public static function add_payment_trigger( $triggers ) {
 		$triggers['payment-success']       = __( 'Successful Payment', 'formidable' );
 		$triggers['payment-failed']        = __( 'Failed Payment', 'formidable' );
+		$triggers['payment-refunded']      = __( 'Refunded Payment', 'formidable' );
 		$triggers['payment-processing']    = __( 'Processing Payment', 'formidable' );
 		$triggers['payment-future-cancel'] = __( 'Canceled Subscription', 'formidable' );
 		$triggers['payment-canceled']      = __( 'Subscription Canceled and Expired', 'formidable' );
@@ -64,6 +67,7 @@ class FrmTransLiteActionsController {
 
 	/**
 	 * @param array $options
+	 *
 	 * @return array
 	 */
 	public static function add_trigger_to_action( $options ) {
@@ -72,6 +76,7 @@ class FrmTransLiteActionsController {
 		$options['event'][] = 'payment-processing';
 		$options['event'][] = 'payment-future-cancel';
 		$options['event'][] = 'payment-canceled';
+		$options['event'][] = 'payment-refunded';
 		return $options;
 	}
 
@@ -79,17 +84,184 @@ class FrmTransLiteActionsController {
 	 * @param WP_Post  $action
 	 * @param stdClass $entry
 	 * @param mixed    $form
+	 *
 	 * @return void
 	 */
 	public static function trigger_action( $action, $entry, $form ) {
 		self::prepare_description( $action, compact( 'entry', 'form' ) );
-		FrmStrpLiteActionsController::trigger_gateway( $action, $entry, $form );
+
+		$gateway = self::get_gateway_for_action( $action );
+
+		if ( $gateway ) {
+			self::trigger_gateway_for_action( $action, $entry, $form, $gateway );
+		}
+	}
+
+	/**
+	 * Process a payment the Payments submodule would skip.
+	 *
+	 * When the Stripe add-on is active, its Payments submodule handles payment actions instead of Lite.
+	 * It only finds the gateway through a Gateway field, and returns without charging when a form has none.
+	 * That covers Square, PayPal and Stripe forms built while the add-on was inactive, and forms created
+	 * through MCP or imported. The entry would be saved and the success message shown with no payment.
+	 * Lite processes only those submissions, so the submodule and Lite never handle the same payment.
+	 * If the submodule starts falling back to the action's gateway, remove this or payments run twice.
+	 *
+	 * @since 7.1
+	 *
+	 * @param WP_Post $action The payment action.
+	 * @param object  $entry  The entry being submitted.
+	 * @param object  $form   The form being submitted.
+	 *
+	 * @return void
+	 */
+	public static function trigger_action_without_gateway_field( $action, $entry, $form ) {
+		if ( self::submodule_finds_gateway_field( $action ) ) {
+			return;
+		}
+
+		$gateway = self::get_gateway_for_action( $action );
+
+		if ( is_array( $gateway ) ) {
+			$gateway = reset( $gateway );
+		}
+
+		if ( ! $gateway || ! FrmTransLiteAppHelper::get_setting_for_gateway( $gateway, 'class' ) ) {
+			return;
+		}
+
+		self::prepare_description( $action, compact( 'entry', 'form' ) );
+
+		$response = self::trigger_gateway_for_action( $action, $entry, $form, $gateway );
+
+		if ( ! $response || ! $response['success'] || empty( $response['run_triggers'] ) ) {
+			return;
+		}
+
+		// The add-on's Stripe gateway expects its caller to run the triggers for a completed charge.
+		// The submodule's version also sets the After Payment fields, which Pro leaves to it for Stripe payments.
+		$status = 'complete';
+
+		if ( is_callable( array( 'FrmTransActionsController', 'trigger_payment_status_change' ) ) ) {
+			FrmTransActionsController::trigger_payment_status_change( compact( 'status', 'action', 'entry' ) );
+		} else {
+			self::trigger_payment_status_change( compact( 'status', 'entry' ) );
+		}
+	}
+
+	/**
+	 * Send a payment action to its gateway and show the error message when the payment fails.
+	 *
+	 * @since 7.1
+	 *
+	 * @param WP_Post $action  The payment action.
+	 * @param object  $entry   The entry being submitted.
+	 * @param object  $form    The form being submitted.
+	 * @param string  $gateway The gateway key, like stripe, square or paypal.
+	 *
+	 * @return array|false The gateway response, or false when the gateway has no controller.
+	 */
+	private static function trigger_gateway_for_action( $action, $entry, $form, $gateway ) {
+		$class_name = FrmTransLiteAppHelper::get_setting_for_gateway( $gateway, 'class' );
+
+		if ( ! $class_name ) {
+			return false;
+		}
+
+		$class_name = 'Frm' . $class_name . 'ActionsController';
+		$response   = $class_name::trigger_gateway( $action, $entry, $form );
+
+		if ( ! $response['success'] && $response['show_errors'] ) {
+			// The payment failed
+			self::show_failed_message( compact( 'action', 'entry', 'form', 'response' ) );
+		}
+
+		return $response;
+	}
+
+	/**
+	 * Check if the Payments submodule can find a gateway for this submission.
+	 * This matches FrmTransActionsController::get_gateway_for_entry() in the submodule.
+	 *
+	 * @since 7.1
+	 *
+	 * @param WP_Post $action The payment action.
+	 *
+	 * @return bool
+	 */
+	private static function submodule_finds_gateway_field( $action ) {
+		if ( FrmAppHelper::get_post_param( 'frm_gateway', '', 'absint' ) ) {
+			return true;
+		}
+
+		return (bool) FrmField::getAll(
+			array(
+				'fi.form_id' => $action->menu_order,
+				'type'       => 'gateway',
+			)
+		);
+	}
+
+	/**
+	 * @param WP_Post $action
+	 *
+	 * @return array|string
+	 */
+	private static function get_gateway_for_action( $action ) {
+		return $action->post_content['gateway'] ?? 'stripe';
+	}
+
+	/**
+	 * @since 6.10
+	 *
+	 * @param array $args
+	 *
+	 * @return void
+	 */
+	private static function show_failed_message( $args ) {
+		global $frm_vars;
+		$frm_vars['frm_trans'] = array(
+			'pay_entry' => $args['entry'],
+			'error'     => $args['response']['error'] ?? '',
+		);
+
+		add_filter( 'frm_success_filter', 'FrmTransLiteActionsController::force_message_after_create' );
+		add_filter( 'frm_pre_display_form', 'FrmTransLiteActionsController::include_form_with_success' );
+		add_filter( 'frm_main_feedback', 'FrmTransLiteActionsController::replace_success_message', 5 );
+		add_filter( 'frm_setup_new_fields_vars', 'FrmTransLiteActionsController::fill_entry_from_previous', 20, 2 );
+	}
+
+	/**
+	 * @since 6.10
+	 *
+	 * @param stdClass $form
+	 *
+	 * @return stdClass
+	 */
+	public static function include_form_with_success( $form ) {
+		$form->options['show_form'] = 1;
+		return $form;
+	}
+
+	/**
+	 * @return string
+	 */
+	public static function replace_success_message() {
+		global $frm_vars;
+		$message = $frm_vars['frm_trans']['error'] ?? '';
+
+		if ( ! $message ) {
+			$message = __( 'There was an error processing your payment.', 'formidable' );
+		}
+
+		return '<div class="frm_error_style">' . $message . '</div>';
 	}
 
 	/**
 	 * @param WP_Post  $action
 	 * @param stdClass $entry
 	 * @param mixed    $form
+	 *
 	 * @return array
 	 */
 	public static function trigger_gateway( $action, $entry, $form ) {
@@ -112,6 +284,7 @@ class FrmTransLiteActionsController {
 	 * @since 6.5, introduced in v1.12 of the Payments submodule.
 	 *
 	 * @param object $sub
+	 *
 	 * @return void
 	 */
 	public static function trigger_subscription_status_change( $sub ) {
@@ -130,19 +303,29 @@ class FrmTransLiteActionsController {
 
 	/**
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	public static function trigger_payment_status_change( $atts ) {
-		$action = isset( $atts['action'] ) ? $atts['action'] : $atts['payment']->action_id;
 		$entry_id = isset( $atts['entry'] ) ? $atts['entry']->id : $atts['payment']->item_id;
-		$atts = array(
+		$atts     = array(
 			'trigger'  => $atts['status'],
 			'entry_id' => $entry_id,
+			'payment'  => $atts['payment'] ?? null,
 		);
 
+		$frm_payment = new FrmTransLitePayment();
+
 		if ( ! isset( $atts['payment'] ) ) {
-			$frm_payment     = new FrmTransLitePayment();
 			$atts['payment'] = $frm_payment->get_one_by( $entry_id, 'item_id' );
+		} elseif ( ! empty( $atts['payment']->id ) ) {
+			// Callers pass the payment as it was loaded before they saved the new status.
+			// Load it again so the hooks and payment actions see the current status.
+			$current_payment = $frm_payment->get_one( $atts['payment']->id );
+
+			if ( $current_payment ) {
+				$atts['payment'] = $current_payment;
+			}
 		}
 
 		if ( ! isset( $atts['trigger'] ) ) {
@@ -151,6 +334,15 @@ class FrmTransLiteActionsController {
 
 		// Set future-cancel as trigger when applicable.
 		$atts['trigger'] = str_replace( '_', '-', $atts['trigger'] );
+
+		/**
+		 * Trigger various hooks including frm_payment_status_complete.
+		 *
+		 * @since 6.25 This was included in the payments submodule, but not included in Lite until 6.25.
+		 *
+		 * @param array $atts
+		 */
+		do_action( 'frm_payment_status_' . $atts['trigger'], $atts );
 
 		if ( $atts['payment'] ) {
 			self::trigger_actions_after_payment( $atts['payment'], $atts );
@@ -162,6 +354,7 @@ class FrmTransLiteActionsController {
 	 *
 	 * @param object $payment
 	 * @param array  $atts
+	 *
 	 * @return void
 	 */
 	public static function trigger_actions_after_payment( $payment, $atts = array() ) {
@@ -170,18 +363,14 @@ class FrmTransLiteActionsController {
 			return;
 		}
 
-		$entry = FrmEntry::getOne( $payment->item_id );
-
-		if ( isset( $atts['trigger'] ) ) {
-			$trigger_event = 'payment-' . $atts['trigger'];
-		} else {
-			$trigger_event = 'payment-' . $payment->status;
-		}
-
+		$entry            = FrmEntry::getOne( $payment->item_id );
+		$trigger_event    = isset( $atts['trigger'] ) ? 'payment-' . $atts['trigger'] : 'payment-' . $payment->status;
 		$allowed_triggers = array_keys( self::add_payment_trigger( array() ) );
+
 		if ( ! in_array( $trigger_event, $allowed_triggers, true ) ) {
-			$trigger_event = ( $payment->status === 'complete' ) ? 'payment-success' : 'payment-failed';
+			$trigger_event = $payment->status === 'complete' ? 'payment-success' : 'payment-failed';
 		}
+
 		FrmFormActionsController::trigger_actions( $trigger_event, $entry->form_id, $entry->id );
 	}
 
@@ -190,15 +379,19 @@ class FrmTransLiteActionsController {
 	 *
 	 * @param WP_Post $action
 	 * @param array   $atts
+	 *
 	 * @return void
 	 */
 	public static function prepare_description( &$action, $atts ) {
 		$description = $action->post_content['description'];
-		if ( ! empty( $description ) ) {
-			$atts['value']                       = $description;
-			$description                         = FrmTransLiteAppHelper::process_shortcodes( $atts );
-			$action->post_content['description'] = $description;
+
+		if ( ! $description ) {
+			return;
 		}
+
+		$atts['value']                       = $description;
+		$description                         = FrmTransLiteAppHelper::process_shortcodes( $atts );
+		$action->post_content['description'] = $description;
 	}
 
 	/**
@@ -206,22 +399,23 @@ class FrmTransLiteActionsController {
 	 *
 	 * @param mixed $amount
 	 * @param array $atts
+	 *
 	 * @return string
 	 */
 	public static function prepare_amount( $amount, $atts = array() ) {
 		if ( isset( $atts['form'] ) ) {
 			$atts['value'] = $amount;
-			$amount = FrmTransLiteAppHelper::process_shortcodes( $atts );
+			$amount        = FrmTransLiteAppHelper::process_shortcodes( $atts );
 		}
 
-		if ( is_string( $amount ) && strlen( $amount ) >= 2 && $amount[0] == '[' && substr( $amount, -1 ) == ']' ) {
-			// make sure we don't use a field id as the amount
+		if ( is_string( $amount ) && strlen( $amount ) >= 2 && $amount[0] === '[' && str_ends_with( $amount, ']' ) ) {
+			// Make sure we don't use a field id as the amount.
 			$amount = 0;
 		}
 
 		$currency = self::get_currency_for_action( $atts );
+		$total    = 0;
 
-		$total = 0;
 		foreach ( (array) $amount as $a ) {
 			$this_amount = self::get_amount_from_string( $a );
 			self::maybe_use_decimal( $this_amount, $currency );
@@ -238,10 +432,12 @@ class FrmTransLiteActionsController {
 	 * Get currency to use when preparing amount.
 	 *
 	 * @param array $atts
+	 *
 	 * @return array
 	 */
 	public static function get_currency_for_action( $atts ) {
 		$currency = 'usd';
+
 		if ( isset( $atts['form'] ) ) {
 			$currency = $atts['action']->post_content['currency'];
 		} elseif ( isset( $atts['currency'] ) ) {
@@ -260,13 +456,13 @@ class FrmTransLiteActionsController {
 		$amount = html_entity_decode( $amount );
 		$amount = trim( $amount );
 		preg_match_all( '/[0-9,.]*\.?\,?[0-9]+/', $amount, $matches );
-		$amount = $matches ? end( $matches[0] ) : 0;
-		return $amount;
+		return $matches ? end( $matches[0] ) : 0;
 	}
 
 	/**
 	 * @param string $amount
 	 * @param array  $currency
+	 *
 	 * @return void
 	 */
 	private static function maybe_use_decimal( &$amount, $currency ) {
@@ -274,8 +470,15 @@ class FrmTransLiteActionsController {
 			return;
 		}
 
-		$amount_parts     = explode( '.', $amount );
-		$used_for_decimal = count( $amount_parts ) === 2 && strlen( $amount_parts[1] ) === 2;
+		$amount_parts = explode( '.', $amount );
+
+		if ( 2 !== count( $amount_parts ) ) {
+			return;
+		}
+
+		$strlen           = strlen( $amount_parts[1] );
+		$used_for_decimal = $strlen === 1 || $strlen === 2;
+
 		if ( $used_for_decimal ) {
 			$amount = str_replace( '.', $currency['decimal_separator'], $amount );
 		}
@@ -284,6 +487,7 @@ class FrmTransLiteActionsController {
 	/**
 	 * @param string $amount
 	 * @param array  $currency
+	 *
 	 * @return void
 	 */
 	private static function normalize_number( &$amount, $currency ) {
@@ -296,20 +500,24 @@ class FrmTransLiteActionsController {
 	 * These settings are included in frm_stripe_vars.settings global JavaScript object on Stripe forms.
 	 *
 	 * @param int $form_id
+	 *
 	 * @return array
 	 */
 	public static function prepare_settings_for_js( $form_id ) {
 		$payment_actions = self::get_actions_for_form( $form_id );
 		$action_settings = array();
+
 		foreach ( $payment_actions as $payment_action ) {
 			$settings_for_action = array(
 				'id'         => $payment_action->ID,
 				'first_name' => $payment_action->post_content['billing_first_name'],
 				'last_name'  => $payment_action->post_content['billing_last_name'],
+				'address'    => $payment_action->post_content['billing_address'] ?? '',
 				'gateways'   => $payment_action->post_content['gateway'],
 				'fields'     => self::get_fields_for_price( $payment_action ),
 				'one'        => $payment_action->post_content['type'],
 				'email'      => $payment_action->post_content['email'],
+				'layout'     => $payment_action->post_content['layout'] ?? '',
 			);
 
 			/**
@@ -317,7 +525,7 @@ class FrmTransLiteActionsController {
 			 * @param WP_Post $payment_action
 			 */
 			$settings_for_action = apply_filters( 'frm_trans_settings_for_js', $settings_for_action, $payment_action );
-			$action_settings[] = $settings_for_action;
+			$action_settings[]   = $settings_for_action;
 		}
 
 		return $action_settings;
@@ -329,18 +537,20 @@ class FrmTransLiteActionsController {
 	 * @since 6.5, introduced in v2.0 of the Payments submodule.
 	 *
 	 * @param WP_Post $action
+	 *
 	 * @return array|int
 	 */
 	private static function get_fields_for_price( $action ) {
 		$amount     = $action->post_content['amount'];
 		$shortcodes = FrmFieldsHelper::get_shortcodes( $amount, $action->menu_order );
-		return isset( $shortcodes[2] ) ? $shortcodes[2] : -1;
+		return $shortcodes[2] ?? -1;
 	}
 
 	/**
 	 * Get all published payment actions.
 	 *
 	 * @param int|string $form_id
+	 *
 	 * @return array
 	 */
 	public static function get_actions_for_form( $form_id ) {
@@ -348,10 +558,8 @@ class FrmTransLiteActionsController {
 			'post_status' => 'publish',
 		);
 		$payment_actions = FrmFormAction::get_action_for_form( $form_id, 'payment', $action_status );
-		if ( ! $payment_actions ) {
-			$payment_actions = array();
-		}
-		return $payment_actions;
+
+		return $payment_actions ? $payment_actions : array();
 	}
 
 	/**
@@ -359,6 +567,7 @@ class FrmTransLiteActionsController {
 	 *
 	 * @param array    $values
 	 * @param stdClass $field
+	 *
 	 * @return array
 	 */
 	public static function hide_gateway_field_on_front_end( $values, $field ) {
@@ -366,10 +575,17 @@ class FrmTransLiteActionsController {
 			return $values;
 		}
 
+		if ( FrmAppHelper::is_form_builder_page() ) {
+			// The hooks this uses can get called in the form builder and settings pages.
+			// But we do not need the script in this case.
+			return $values;
+		}
+
 		// This is also called from the frm_enqueue_form_scripts hook.
 		// With this here, the value of frm_stripe_vars.settings[0].fields is -1
 		// This is because the amount value is processed and a shortcode is not found in '000'.
 		FrmStrpLiteActionsController::load_scripts( (int) $field->form_id );
+		FrmSquareLiteActionsController::load_scripts( (int) $field->form_id );
 
 		$values['type'] = 'hidden';
 		return $values;
@@ -382,12 +598,15 @@ class FrmTransLiteActionsController {
 	 *
 	 * @param array    $values
 	 * @param stdClass $field
+	 *
 	 * @return array
 	 */
 	public static function fill_entry_from_previous( $values, $field ) {
 		global $frm_vars;
-		$previous_entry = isset( $frm_vars['frm_trans']['pay_entry'] ) ? $frm_vars['frm_trans']['pay_entry'] : false;
-		if ( empty( $previous_entry ) || $previous_entry->form_id != $field->form_id ) {
+		$previous_entry = $frm_vars['frm_trans']['pay_entry'] ?? false;
+
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( ! $previous_entry || $previous_entry->form_id != $field->form_id ) {
 			return $values;
 		}
 
@@ -396,8 +615,7 @@ class FrmTransLiteActionsController {
 		}
 
 		$frm_vars['trans_filled'] = true;
-
-		$previous_entry_id = $previous_entry->id;
+		$previous_entry_id        = $previous_entry->id;
 		self::destroy_entry_later( $previous_entry_id );
 
 		return $values;
@@ -410,7 +628,8 @@ class FrmTransLiteActionsController {
 	 *
 	 * @since 6.5.1
 	 *
-	 * @param string|int $entry_id
+	 * @param int|string $entry_id
+	 *
 	 * @return void
 	 */
 	private static function destroy_entry_later( $entry_id ) {
@@ -423,16 +642,160 @@ class FrmTransLiteActionsController {
 			/**
 			 * Destroy an entry and remove this action so it only tries to destroy the entry once.
 			 *
-			 * @param string|int $entry_id
+			 * @param int|string $entry_id
 			 * @param Closure    $destroy_callback
+			 *
 			 * @return void
 			 */
-			function() use ( $entry_id, &$destroy_callback ) {
+			function () use ( $entry_id, &$destroy_callback ) {
 				FrmEntry::destroy( $entry_id );
-				remove_action( 'frm_entry_form', $destroy_callback ); // Only call this once.
+				// Only call this once.
+				remove_action( 'frm_entry_form', $destroy_callback );
 			};
 		add_action( 'frm_entry_form', $destroy_callback );
 
 		self::$entry_ids_to_destroy_later[] = (int) $entry_id;
+	}
+
+	/**
+	 * Filter payment action on save.
+	 *
+	 * @since 6.22
+	 *
+	 * @param array $settings
+	 * @param array $action
+	 *
+	 * @return array
+	 */
+	public static function before_save_settings( $settings, $action ) {
+		$settings['gateway'] = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array( 'stripe' );
+
+		if ( in_array( 'square', $settings['gateway'], true ) ) {
+			$currency             = FrmSquareLiteConnectHelper::get_merchant_currency();
+			$settings['currency'] = false !== $currency ? strtolower( $currency ) : 'usd';
+		} else {
+			$settings['currency'] = strtolower( $settings['currency'] );
+		}
+
+		$form_id = absint( $action['menu_order'] );
+
+		if ( empty( $settings['credit_card'] ) ) {
+			$credit_card_field_id = FrmDb::get_var(
+				'frm_fields',
+				array(
+					'type'    => 'credit_card',
+					'form_id' => $form_id,
+				)
+			);
+
+			if ( ! $credit_card_field_id ) {
+				$credit_card_field_id = self::add_a_credit_card_field( $form_id );
+			}
+
+			if ( $credit_card_field_id ) {
+				$settings['credit_card'] = $credit_card_field_id;
+			}
+		}
+
+		if ( ! in_array( 'stripe', $settings['gateway'], true ) ) {
+			// We only need a gateway field for Stripe add-on compatibility,
+			// so unless Stripe is selected, we can return early.
+			return $settings;
+		}
+
+		$gateway_field_id = FrmDb::get_var(
+			'frm_fields',
+			array(
+				'type'    => 'gateway',
+				'form_id' => $form_id,
+			)
+		);
+
+		if ( ! $gateway_field_id ) {
+			self::add_a_gateway_field( $form_id );
+		}
+
+		return $settings;
+	}
+
+	/**
+	 * A credit card field is added automatically if missing before a Stripe action is updated.
+	 *
+	 * @param int $form_id
+	 *
+	 * @return false|int
+	 */
+	protected static function add_a_credit_card_field( $form_id ) {
+		return self::add_a_field( $form_id, 'credit_card', __( 'Payment', 'formidable' ) );
+	}
+
+	/**
+	 * A gateway field is added automatically for compatibility with the Stripe add on.
+	 * The gateway field is not important for the Stripe Lite implementation.
+	 *
+	 * @param int $form_id
+	 *
+	 * @return false|int
+	 */
+	protected static function add_a_gateway_field( $form_id ) {
+		return self::add_a_field( $form_id, 'gateway', __( 'Payment Method', 'formidable' ) );
+	}
+
+	/**
+	 * @param int    $form_id
+	 * @param string $field_type
+	 * @param string $field_name
+	 *
+	 * @return false|int
+	 */
+	protected static function add_a_field( $form_id, $field_type, $field_name ) {
+		$new_values                = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
+		$new_values['name']        = $field_name;
+		$new_values['field_order'] = self::get_field_order_before_submit( $form_id, $new_values['field_order'] );
+		return FrmField::create( $new_values );
+	}
+
+	/**
+	 * When auto-injecting a field, ensure it is placed before the submit button.
+	 *
+	 * @since 6.29
+	 *
+	 * @param int $form_id
+	 * @param int $field_order
+	 *
+	 * @return int
+	 */
+	private static function get_field_order_before_submit( $form_id, $field_order ) {
+		$submit_field = FrmSubmitHelper::get_submit_field( $form_id );
+
+		if ( ! $submit_field || $field_order < (int) $submit_field->field_order ) {
+			return $field_order;
+		}
+
+		$submit_order = (int) $submit_field->field_order;
+		FrmField::update( $submit_field->id, array( 'field_order' => $submit_order + 1 ) );
+		return $submit_order;
+	}
+
+	/**
+	 * Remove credit card validation errors.
+	 *
+	 * @param array    $errors
+	 * @param stdClass $field
+	 *
+	 * @return array
+	 */
+	public static function remove_cc_errors( $errors, $field ) {
+		$field_id = $field->temp_id ?? $field->id;
+
+		if ( isset( $errors[ 'field' . $field_id . '-cc' ] ) ) {
+			unset( $errors[ 'field' . $field_id . '-cc' ] );
+		}
+
+		if ( isset( $errors[ 'field' . $field_id ] ) ) {
+			unset( $errors[ 'field' . $field_id ] );
+		}
+
+		return $errors;
 	}
 }

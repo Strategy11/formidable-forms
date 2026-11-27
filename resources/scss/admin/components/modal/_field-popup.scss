@@ -1,0 +1,35 @@
+/**
+ * Component: Field Options Popup
+ */
+
+.frm_field_opts_popup {
+	min-width: 300px;
+	background-color: #fff;
+}
+
+.frm_field_opts_popup #wpadminbar {
+	display: none;
+}
+
+.frm_prepop {
+	width: 100%;
+	list-style: none;
+	overflow: auto;
+	margin: 0;
+	max-height: 295px;
+}
+
+.frm_prepop li {
+	margin: 0;
+}
+
+.frm_prepop li a {
+	display: block;
+	text-decoration: none;
+	cursor: pointer;
+	padding: 5px 20px;
+}
+
+.frm_prepop li a:hover {
+	background: var(--sidebar-color);
+}

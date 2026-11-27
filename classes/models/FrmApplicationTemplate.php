@@ -9,29 +9,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmApplicationTemplate {
 
 	/**
-	 * @var array<string>|null $keys
+	 * @var array<string>|null
 	 */
 	private static $keys;
 
 	/**
-	 * @var array<string>|null $keys_with_images
+	 * @var array<string>|null
 	 */
 	private static $keys_with_images;
 
 	/**
-	 * @var array<string>|null $categories
+	 * @var array<string>|null
 	 */
 	private static $categories;
 
 	/**
-	 * @var array $api_data
+	 * @var array
 	 */
 	private $api_data;
 
 	/**
-	 * @param array<string> $keys
-	 * @param array<string> $keys_with_images
-	 *
 	 * @return void
 	 */
 	public static function init() {
@@ -42,10 +39,34 @@ class FrmApplicationTemplate {
 		 */
 		self::$keys             = apply_filters(
 			'frm_application_data_keys',
-			array( 'key', 'name', 'description', 'link', 'categories', 'views', 'forms' )
+			array( 'key', 'name', 'description', 'link', 'categories', 'views', 'forms', 'used_addons' )
 		);
-		self::$keys_with_images = self::get_template_keys_with_local_images();
+		self::$keys_with_images = array_merge(
+			self::get_template_keys_with_local_png_images(),
+			self::get_template_keys_with_local_webp_images()
+		);
 		self::$categories       = array();
+	}
+
+	/**
+	 * Newer templates now use .webp files instead of .png.
+	 *
+	 * @since 6.16
+	 *
+	 * @return array<string>
+	 */
+	private static function get_template_keys_with_local_webp_images() {
+		return array(
+			'member-directory',
+			'link-in-bio-instagram',
+			'letter-of-recommendation',
+			'invoice-pdf',
+			'freelance-invoice-generator',
+			'contract-agreement',
+			'charity-tracker',
+			'certificate',
+			'testimonials',
+		);
 	}
 
 	/**
@@ -53,7 +74,7 @@ class FrmApplicationTemplate {
 	 *
 	 * @return array<string>
 	 */
-	private static function get_template_keys_with_local_images() {
+	private static function get_template_keys_with_local_png_images() {
 		return array(
 			'business-hours',
 			'faq-template-wordpress',
@@ -61,11 +82,34 @@ class FrmApplicationTemplate {
 			'team-directory',
 			'product-review',
 			'real-estate-listings',
+			'business-directory',
+			'artist-gallery',
+			'classifieds',
+			'community-event-calendar',
+			'company-timeline',
+			'crowdfunding',
+			'job-board',
+			'logo-cloud',
+			'multi-property-booking-system',
+			'wedding-venue-booking',
+			'permission-slip',
+			'property-directory',
+			'radio-station',
+			'recipe',
+			'rsvp-invite',
+			'searchable-directory',
+			'shopping-cart',
+			'sports-league-calendar',
+			'staff-directory',
+			'tiered-pricing',
+			'trip-itinerary',
+			'twitterx',
 		);
 	}
 
 	/**
 	 * @param array $api_data
+	 *
 	 * @return void
 	 */
 	public function __construct( $api_data ) {
@@ -78,6 +122,7 @@ class FrmApplicationTemplate {
 
 	/**
 	 * @param array<string> $categories
+	 *
 	 * @return void
 	 */
 	private static function populate_category_information( $categories ) {
@@ -85,6 +130,7 @@ class FrmApplicationTemplate {
 			if ( self::category_matches_a_license_type( $category ) ) {
 				continue;
 			}
+
 			if ( in_array( $category, self::$categories, true ) ) {
 				continue;
 			}
@@ -96,27 +142,33 @@ class FrmApplicationTemplate {
 	 * @since 5.5.2
 	 *
 	 * @param string $category
+	 *
 	 * @return bool
 	 */
 	private static function category_matches_a_license_type( $category ) {
-		if ( false !== strpos( $category, '+Views' ) ) {
+		if ( str_contains( $category, '+Views' ) ) {
 			return true;
 		}
-		return in_array( $category, FrmFormsHelper::ignore_template_categories(), true );
+		return in_array( $category, FrmFormsHelper::get_license_types(), true );
 	}
 
 	/**
 	 * @return array<string>
 	 */
 	public static function get_categories() {
-		return isset( self::$categories ) ? self::$categories : array();
+		return self::$categories ?? array();
 	}
 
 	/**
 	 * @return array
 	 */
 	public function as_js_object() {
+		if ( ! is_array( self::$keys ) ) {
+			return array();
+		}
+
 		$application = array();
+
 		foreach ( self::$keys as $key ) {
 			if ( ! isset( $this->api_data[ $key ] ) ) {
 				continue;
@@ -131,8 +183,8 @@ class FrmApplicationTemplate {
 				$application[ $key ] = array_values(
 					array_filter(
 						$value,
-						function( $category ) {
-							return false === strpos( $category, '+Views' );
+						function ( $category ) {
+							return ! str_contains( $category, '+Views' );
 						}
 					)
 				);
@@ -143,27 +195,45 @@ class FrmApplicationTemplate {
 					$key = 'formCount';
 				}
 
-				if ( 'name' === $key && ' Template' === substr( $value, -9 ) ) {
+				if ( 'name' === $key && str_ends_with( $value, ' Template' ) ) {
 					// Strip off the " Template" text at the end of the name as it takes up space.
 					$value = substr( $value, 0, -9 );
 				}
+
 				$application[ $key ] = $value;
-			}
-		}
+			}//end if
+		}//end foreach
 
 		$application['hasLiteThumbnail'] = in_array( $application['key'], self::$keys_with_images, true );
+		$application['isWebp']           = in_array( $application['key'], self::get_template_keys_with_local_webp_images(), true );
 
 		if ( ! array_key_exists( 'url', $application ) ) {
+			$application['requires'] = FrmFormsHelper::get_plan_required( $application );
+
+			if ( false === $application['requires'] ) {
+				// Application is invalid if the URL is unavailable and there is no plan required.
+				return array();
+			}
+
 			$purchase_url = $this->is_available_for_purchase();
+
 			if ( false !== $purchase_url ) {
 				$application['forPurchase'] = true;
 			}
+
 			$application['upgradeUrl'] = $this->get_admin_upgrade_link();
-			$application['requires']   = FrmFormsHelper::get_plan_required( $application );
 			$application['link']       = $application['upgradeUrl'];
 		}
 
 		$application['isNew'] = $this->is_new();
+
+		$application['usedAddons'] = array();
+
+		if ( isset( $application['used_addons'] ) ) {
+			// Change key to camel case.
+			$application['usedAddons'] = $application['used_addons'];
+			unset( $application['used_addons'] );
+		}
 
 		return $application;
 	}
@@ -185,6 +255,7 @@ class FrmApplicationTemplate {
 		}
 
 		$pro = $addons[93790];
+
 		if ( ! array_key_exists( 'type', $pro ) ) {
 			return false;
 		}
@@ -194,11 +265,7 @@ class FrmApplicationTemplate {
 			'license_type'  => $license_type,
 			'plan_required' => $this->get_required_license(),
 		);
-		if ( ! FrmFormsHelper::plan_is_allowed( $args ) ) {
-			return false;
-		}
-
-		return true;
+		return FrmFormsHelper::plan_is_allowed( $args );
 	}
 
 	/**
@@ -217,10 +284,7 @@ class FrmApplicationTemplate {
 	 */
 	private function get_required_license() {
 		$required_license = strtolower( $this->api_data['min_plan'] );
-		if ( 'plus' === $required_license ) {
-			$required_license = 'personal';
-		}
-		return $required_license;
+		return 'plus' === $required_license ? 'personal' : $required_license;
 	}
 
 	/**
@@ -232,7 +296,7 @@ class FrmApplicationTemplate {
 				'content' => 'upgrade',
 				'medium'  => 'applications',
 			),
-			'/view-templates/' . $this->api_data['slug']
+			'view-templates/' . $this->api_data['slug']
 		);
 	}
 }

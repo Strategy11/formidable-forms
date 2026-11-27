@@ -1,0 +1,458 @@
+<?php
+
+/**
+ * @group entries
+ * @group free
+ *
+ * @covers FrmEntryValidate
+ */
+#[\PHPUnit\Framework\Attributes\Group( 'entries' )]
+#[\PHPUnit\Framework\Attributes\Group( 'free' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmEntryValidate::class )]
+class test_FrmEntryValidate extends FrmUnitTest {
+
+	public function test_validate() {
+		$add_a_custom_error = function ( $errors ) {
+			$errors['custom_error'] = 'Error message';
+			return $errors;
+		};
+
+		add_filter( 'frm_validate_entry', $add_a_custom_error );
+
+		$values = array(
+			'form_id'   => 1,
+			'item_meta' => array(),
+		);
+		$errors = FrmEntryValidate::validate( $values );
+		$this->assertIsArray( $errors );
+
+		$this->assertArrayHasKey( 'custom_error', $errors );
+		$this->assertSame( 'Error message', $errors['custom_error'] );
+
+		remove_filter( 'frm_validate_entry', $add_a_custom_error );
+	}
+
+	/**
+	 * @since 7.0
+	 *
+	 * @covers FrmEntryValidate::validate
+	 */
+	public function test_pre_validate_entry_filter() {
+		$form_id  = $this->factory->form->create();
+		$field_id = $this->factory->field->create(
+			array(
+				'type'     => 'text',
+				'form_id'  => $form_id,
+				'required' => '1',
+			)
+		);
+		$values   = array(
+			'form_id'   => $form_id,
+			'item_meta' => array( $field_id => '' ),
+		);
+
+		$this->assertArrayHasKey( 'field' . $field_id, FrmEntryValidate::validate( $values ), 'The blank required field fails without the filter.' );
+
+		$fill_value = function ( $filtered ) use ( $field_id ) {
+			$filtered['item_meta'][ $field_id ] = 'Filled before validation';
+			return $filtered;
+		};
+		add_filter( 'frm_pre_validate_entry', $fill_value );
+		$errors = FrmEntryValidate::validate( $values );
+		remove_filter( 'frm_pre_validate_entry', $fill_value );
+
+		$this->assertArrayNotHasKey( 'field' . $field_id, $errors, 'A value set by the filter is validated.' );
+
+		$drop_item_meta = function ( $filtered ) {
+			unset( $filtered['item_meta'] );
+			return $filtered;
+		};
+		add_filter( 'frm_pre_validate_entry', $drop_item_meta );
+		$errors = FrmEntryValidate::validate( $values );
+		remove_filter( 'frm_pre_validate_entry', $drop_item_meta );
+
+		$this->assertArrayHasKey( 'field' . $field_id, $errors, 'Filtered values without item_meta are ignored.' );
+
+		add_filter( 'frm_pre_validate_entry', '__return_false' );
+		$errors = FrmEntryValidate::validate( $values );
+		remove_filter( 'frm_pre_validate_entry', '__return_false' );
+
+		$this->assertArrayHasKey( 'field' . $field_id, $errors, 'A value that is not an array is ignored.' );
+		$this->assertArrayNotHasKey( 'form', $errors );
+	}
+
+	public function test_get_spam_check_user_info() {
+		$made_up_name_field_id  = 4;
+		$made_up_email_field_id = 12;
+		$made_up_url_field_id   = 16;
+		$test_name              = array(
+			'first' => 'Some',
+			'last'  => 'Guy',
+		);
+		$test_email             = 'amadeupemail@email.com';
+		$test_url               = 'http://madeupwebsite.com';
+		$values                 = array(
+			'item_meta'      => array(
+				0                       => '',
+				$made_up_name_field_id  => $test_name,
+				$made_up_email_field_id => $test_email,
+				$made_up_url_field_id   => $test_url,
+			),
+			'name_field_ids' => array(),
+		);
+
+		wp_set_current_user( null );
+		$this->run_private_method( array( 'FrmEntryValidate', 'prepare_values_for_spam_check' ), array( &$values ) );
+		$check = $this->get_spam_check_user_info( $values );
+		$this->assertArrayNotHasKey( 'user_ID', $check );
+		$this->assertArrayNotHasKey( 'user_id', $check );
+		$this->assertSame( 'Some Guy', $check['comment_author'] );
+		$this->assertSame( $test_email, $check['comment_author_email'] );
+		$this->assertSame( $test_url, $check['comment_author_url'] );
+
+		// Test "Name" + "Last" field name pattern to build the comment_author
+		$form_id       = $this->factory->form->create();
+		$first_name_id = $this->factory->field->create(
+			array(
+				'type'    => 'text',
+				'form_id' => $form_id,
+				'name'    => 'Name',
+			)
+		);
+		$last_name_id  = $this->factory->field->create(
+			array(
+				'type'    => 'text',
+				'form_id' => $form_id,
+				'name'    => 'Last',
+			)
+		);
+
+		$values           = array(
+			'item_meta'      => array(
+				0                       => '',
+				$first_name_id          => 'John',
+				$last_name_id           => 'Doe',
+				$made_up_email_field_id => $test_email,
+				$made_up_url_field_id   => $test_url,
+			),
+			'name_field_ids' => array(),
+		);
+		$_POST['form_id'] = $form_id;
+		$this->run_private_method( array( 'FrmEntryValidate', 'prepare_values_for_spam_check' ), array( &$values ) );
+		$check = $this->get_spam_check_user_info( $values );
+		$this->assertSame( 'John Doe', $check['comment_author'] );
+
+		// Test with repeater/embedded field.
+		$values['item_meta'][ $made_up_name_field_id ]  = array(
+			'John Doe',
+			'Some Guy',
+		);
+		$values['item_meta'][ $made_up_email_field_id ] = array(
+			'johndoe@gmail.com',
+			'someguy@gmail.com',
+		);
+		$values['item_meta'][ $made_up_url_field_id ]   = array(
+			'https://johndoe.com',
+			'https://someguy.com',
+		);
+
+		$check = $this->get_spam_check_user_info( $values );
+		$this->assertSame( 'John Doe', $check['comment_author'] );
+		$this->assertSame( 'johndoe@gmail.com', $check['comment_author_email'] );
+		$this->assertSame( 'https://johndoe.com', $check['comment_author_url'] );
+
+		wp_set_current_user( 1 );
+		$user  = wp_get_current_user();
+		$check = $this->get_spam_check_user_info( $values );
+		$this->assertSame( $user->ID, $check['user_ID'] );
+		$this->assertSame( $user->ID, $check['user_id'] );
+		$this->assertSame( $user->display_name, $check['comment_author'] );
+		$this->assertSame( $user->user_email, $check['comment_author_email'] );
+		$this->assertSame( $user->user_url, $check['comment_author_url'] );
+	}
+
+	private function get_spam_check_user_info( $values ) {
+		return $this->run_private_method(
+			array( 'FrmEntryValidate', 'get_spam_check_user_info' ),
+			array( $values )
+		);
+	}
+
+	public function test_get_all_form_ids_and_flatten_meta() {
+		$test_values = array(
+			'frm_action'         => 'create',
+			'form_id'            => 1,
+			'frm_hide_fields_1'  => '',
+			'form_key'           => 'contact-form',
+			'item_meta'          => array(
+				0       => null,
+				1       => array(
+					'first' => 'John',
+					'last'  => 'Doe',
+				),
+				2       => 'Doe',
+				3       => 'johndoe@gmail.com',
+				4       => 'Test',
+				5       => 'This is a test',
+				141     => 'Developer',
+				'other' => array( 141 => null ),
+				155     => null,
+				156     => null,
+				163     => array(
+					'form'    => 17,
+					'row_ids' => array(
+						0 => 0,
+						1 => 1,
+					),
+					0         => array(
+						0   => null,
+						162 => 'Option 2',
+					),
+					1         => array(
+						0   => null,
+						162 => 'Option 1',
+					),
+				),
+				165     => array(
+					'form'    => 11,
+					'row_ids' => array( 0 => 0 ),
+					0         => array(
+						0   => null,
+						118 => array(
+							'first' => 'John',
+							'last'  => 'Doe',
+						),
+					),
+				),
+			),
+			'frm_submit_entry_1' => '6e70504545',
+			'_wp_http_referer'   => '/wp-admin/admin-ajax.php?action=frm_forms_preview&form=contact-form',
+			'item_key'           => '8wl00',
+			'frm_state'          => 'gfMW/S4I1MCpqXn7OnjXQHLIibJNuRkLkCYpp7MWM7Y=',
+		);
+
+		$form_ids = $this->run_private_method(
+			array( 'FrmEntryValidate', 'get_all_form_ids_and_flatten_meta' ),
+			array( &$test_values )
+		);
+
+		$this->assertSame( array( 1, 17, 11 ), $form_ids );
+		$this->assertArrayNotHasKey( 163, $test_values['item_meta'] );
+		$this->assertArrayNotHasKey( 165, $test_values['item_meta'] );
+		$this->assertSame( array( 'Option 2', 'Option 1' ), $test_values['item_meta'][162] );
+		$this->assertSame( array( 'John Doe' ), $test_values['item_meta'][118] );
+		$this->assertSame( 'John Doe', $test_values['item_meta'][1] );
+	}
+
+	public function test_skip_adding_values_to_akismet() {
+		$form   = $this->factory->form->create_and_get();
+		$fields = array();
+
+		// These types are skipped.
+		foreach ( array( 'radio', 'checkbox', 'select', 'scale', 'star', 'range', 'toggle' ) as $field_type ) {
+			$fields[ $field_type ] = $this->factory->field->create_and_get(
+				array(
+					'form_id' => $form->id,
+					'type'    => $field_type,
+				)
+			);
+		}
+
+		// Radio field, has Other, but no options.
+		$fields['radio_2'] = $this->factory->field->create_and_get(
+			array(
+				'form_id'       => $form->id,
+				'type'          => 'radio',
+				'field_options' => array( 'other' => '1' ),
+			)
+		);
+
+		/*
+		 * Radio_3: has Other and options, value is one of option. Skip this from values.
+		 * Radio_4: has Other and options, value is Other and same as one of options. Skip this from values.
+		 * Radio_5: has Other and options, value is Other and different from one of option. Do not skip this.
+		 */
+		$options = array(
+			array(
+				'label' => 'Option 1',
+				'value' => 'option-1',
+			),
+			array(
+				'label' => 'Option 2',
+				'value' => 'option-2',
+			),
+			array(
+				'label' => 'Option 3',
+				'value' => 'option-3',
+			),
+			'other_3' => 'Other',
+		);
+
+		foreach ( array( 'radio_3', 'radio_4', 'radio_5' ) as $key ) {
+			$fields[ $key ] = $this->factory->field->create_and_get(
+				array(
+					'form_id'       => $form->id,
+					'type'          => 'radio',
+					'field_options' => array( 'other' => '1' ),
+					'options'       => $options,
+				)
+			);
+		}
+
+		$values = $this->factory->field->generate_entry_array( $form );
+
+		$values['item_meta'][ $fields['radio_3']->id ] = 'option-2';
+		$values['item_meta'][ $fields['radio_4']->id ] = 'Other';
+		$values['item_meta'][ $fields['radio_5']->id ] = 'Other';
+		$values['item_meta']['other']                  = array(
+			$fields['radio_4']->id => 'option-3',
+			$fields['radio_5']->id => 'another-value',
+		);
+
+		$values['form_ids'] = $this->run_private_method(
+			array( 'FrmEntryValidate', 'get_all_form_ids_and_flatten_meta' ),
+			array( &$values )
+		);
+
+		$this->run_private_method(
+			array( 'FrmEntryValidate', 'skip_adding_values_to_akismet' ),
+			array( &$values )
+		);
+
+		// Checkbox field shouldn't be skipped.
+		foreach ( array( 'radio', 'radio_2', 'radio_3', 'radio_4', 'checkbox', 'select', 'scale', 'star', 'range', 'toggle' ) as $key ) {
+			$this->assertArrayNotHasKey( $fields[ $key ]->id, $values['item_meta'] );
+		}
+
+		$this->assertArrayHasKey( $fields['radio_5']->id, $values['item_meta'] );
+	}
+
+	/**
+	 * A hook can fill a dropdown with the same options that are saved for the field, and
+	 * set use_key so the option key is submitted. The key should pass option validation.
+	 *
+	 * @covers FrmEntryValidate::validate_field
+	 */
+	public function test_option_validation_with_use_key_set_by_hook() {
+		$field = $this->create_field_with_keyed_options();
+
+		$set_use_key = function ( $values ) use ( $field ) {
+			if ( (int) $values['id'] === (int) $field->id ) {
+				$values['use_key'] = true;
+			}
+			return $values;
+		};
+
+		add_filter( 'frm_setup_new_fields_vars', $set_use_key, 20 );
+		add_filter( 'frm_field_value_saved', array( $this, 'use_option_key_as_value' ), 10, 3 );
+
+		$this->assertSame( array(), $this->get_option_errors( $field, '101' ) );
+		$this->assertArrayHasKey( 'field' . $field->id, $this->get_option_errors( $field, '999' ), 'A key that is not an option should still fail.' );
+		$this->assertArrayHasKey( 'field' . $field->id, $this->get_option_errors( $field, '101.9' ), 'A decimal should not match an integer key.' );
+		$this->assertSame( array(), $this->get_option_errors( $field, '0101' ), 'A zero padded key still matches.' );
+
+		remove_filter( 'frm_setup_new_fields_vars', $set_use_key, 20 );
+		remove_filter( 'frm_field_value_saved', array( $this, 'use_option_key_as_value' ) );
+
+		$this->assertArrayHasKey( 'field' . $field->id, $this->get_option_errors( $field, '101' ), 'Without the hook, the key is not an option value.' );
+	}
+
+	/**
+	 * When an entry is edited, the frm_setup_edit_fields_vars hook decides the options.
+	 *
+	 * @covers FrmEntryValidate::validate_field
+	 */
+	public function test_option_validation_uses_edit_hook_when_editing() {
+		$field = $this->create_field_with_keyed_options();
+
+		$add_option = function ( $values ) use ( $field ) {
+			if ( (int) $values['id'] === (int) $field->id ) {
+				$values['options']['103'] = 'Option 3';
+			}
+			return $values;
+		};
+
+		add_filter( 'frm_setup_edit_fields_vars', $add_option, 20 );
+
+		$this->assertArrayHasKey( 'field' . $field->id, $this->get_option_errors( $field, 'Option 3' ), 'The edit hook should not run for a new entry.' );
+		$this->assertSame( array(), $this->get_option_errors( $field, 'Option 3', 1 ) );
+		$this->assertSame( array(), $this->get_option_errors( $field, 'Not an option', 1 ), 'Changed edit options preserve the dynamic option bypass.' );
+
+		remove_filter( 'frm_setup_edit_fields_vars', $add_option, 20 );
+	}
+
+	/** @return void */
+	public function test_changed_setup_options_accept_render_time_values() {
+		$field          = $this->create_field_with_keyed_options();
+		$change_options = static function ( $values ) use ( $field ) {
+			if ( (int) $values['id'] === (int) $field->id ) {
+				$values['options'] = array( 'Hook option' );
+			}
+			return $values;
+		};
+		add_filter( 'frm_setup_new_fields_vars', $change_options, 20 );
+
+		try {
+			$this->assertSame( array(), $this->get_option_errors( $field, 'Hook option' ) );
+			$this->assertSame( array(), $this->get_option_errors( $field, 'Not an option' ), 'Changed setup options preserve the dynamic option bypass.' );
+		} finally {
+			remove_filter( 'frm_setup_new_fields_vars', $change_options, 20 );
+		}
+	}
+
+	/**
+	 * Mirrors the Pro frm_field_value_saved callback that renders the option key when use_key is on.
+	 *
+	 * @param array|string $opt     The option.
+	 * @param int|string   $opt_key The option key.
+	 * @param array        $field   The field array.
+	 *
+	 * @return array|int|string
+	 */
+	public function use_option_key_as_value( $opt, $opt_key, $field ) {
+		return FrmField::is_option_true( $field, 'use_key' ) ? $opt_key : $opt;
+	}
+
+	/**
+	 * @return stdClass
+	 */
+	private function create_field_with_keyed_options() {
+		$form = $this->factory->form->create_and_get();
+
+		return $this->factory->field->create_and_get(
+			array(
+				'form_id' => $form->id,
+				'type'    => 'select',
+				'options' => array(
+					'101' => array(
+						'label' => 'Option 1',
+						'value' => '101',
+					),
+					'102' => array(
+						'label' => 'Option 2',
+						'value' => '102',
+					),
+				),
+			)
+		);
+	}
+
+	/**
+	 * @param stdClass $field    The field to validate.
+	 * @param string   $value    The posted value.
+	 * @param int      $entry_id The entry being edited, or 0 for a new entry.
+	 *
+	 * @return array
+	 */
+	private function get_option_errors( $field, $value, $entry_id = 0 ) {
+		$errors = array();
+		$values = array(
+			'form_id'   => $field->form_id,
+			'item_meta' => array( $field->id => $value ),
+		);
+
+		FrmEntryValidate::validate_field( $field, $errors, $values, array( 'entry_id' => $entry_id ) );
+
+		return $errors;
+	}
+}

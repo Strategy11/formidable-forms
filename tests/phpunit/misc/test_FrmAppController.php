@@ -1,0 +1,198 @@
+<?php
+/**
+ * @group app
+ *
+ * @covers FrmAppController
+ */
+#[\PHPUnit\Framework\Attributes\Group( 'app' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmAppController::class )]
+class test_FrmAppController extends FrmUnitTest {
+
+	public function setUp(): void {
+		parent::setUp();
+		$this->create_users();
+	}
+
+	public function test_class_is_tested() {
+		$this->assertTrue( true );
+	}
+
+	/**
+	 * Back-end tests
+	 */
+	public function test_menu() {
+		$this->set_admin_screen();
+		$this->set_user_by_role( 'administrator' );
+
+		$this->markTestIncomplete( 'Needs work' );
+
+		ob_start();
+		require ABSPATH . 'wp-admin/menu.php';
+		$menu = ob_get_clean();
+		echo $menu;
+		$this->assertTrue( current_user_can( 'frm_view_forms' ), 'The user cannot frm_view_forms' );
+
+		$this->check_menu();
+	}
+
+	public function test_block_menu() {
+		$this->set_user_by_role( 'subscriber' );
+		$this->assertFalse( current_user_can( 'frm_view_forms' ) );
+
+		$this->check_menu( 'block' );
+	}
+
+	/**
+	 * @param string $allow
+	 */
+	private function check_menu( $allow = 'allow' ) {
+		$url = get_option( 'siteurl', true );
+		do_action( 'admin_menu' );
+
+		$expected = array(
+			'formidable' => $url . '/wp-admin/admin.php?page=formidable',
+		);
+
+		foreach ( $expected as $name => $value ) {
+			$menu_page = menu_page_url( $name, false );
+
+			if ( $allow === 'allow' ) {
+				$this->assertSame( $value, $menu_page );
+			} else {
+				$this->assertNotSame( $value, $menu_page );
+			}
+		}
+	}
+
+	public function test_add_admin_class() {
+		$this->set_admin_screen();
+		$class          = 'other-class';
+		$filtered_class = apply_filters( 'admin_body_class', $class );
+		$this->assertStringContainsString( $class, $filtered_class, '"' . $class . '" is missing from admin classes' );
+		$this->assertStringNotContainsString( 'frm-white-body', $filtered_class, '"frm-white-body" was added to admin classes' );
+
+		$this->set_admin_screen( 'admin.php?page=formidable' );
+		$class          = 'other-class';
+		$filtered_class = apply_filters( 'admin_body_class', $class );
+		$this->assertStringContainsString( $class, $filtered_class, '"' . $class . '" is missing from admin classes' );
+		$this->assertStringContainsString( ' frm-white-body', $filtered_class, '"frm-white-body" is missing from admin classes' );
+	}
+
+	public function test_load_wp_admin_style() {
+		$this->set_admin_screen();
+
+		ob_start();
+		do_action( 'admin_enqueue_scripts' );
+		do_action( 'admin_print_styles' );
+		$styles = ob_get_clean();
+
+		$this->assertNotEmpty( $styles );
+		$this->assertStringContainsString( FrmAppHelper::plugin_url() . '/css/frm_fonts.css', $styles, 'The frm_fonts stylesheet is missing' );
+	}
+
+	public function test_needs_update() {
+		update_option( 'frm_db_version', 1 );
+		$this->assertTrue( FrmAppController::needs_update(), 'The DB needs update but is skipping it' );
+	}
+
+	public function test_compare_for_update() {
+		$tests = array(
+			array(
+				'version'  => '',
+				'db'       => 74,
+				'expected' => true,
+			),
+			array(
+				'version'  => '',
+				'db'       => 50,
+				'expected' => true,
+			),
+			array(
+				'version'  => '2.05.09',
+				'db'       => 75,
+				'expected' => true,
+			),
+			array(
+				'version'  => '3.0',
+				'db'       => 51,
+				'expected' => true,
+			),
+			array(
+				'version'  => '5.0',
+				'db'       => 98,
+				'expected' => true,
+			),
+			array(
+				'version'  => '8.0', // This version should be later than the current version (Bump this to 9 when v8.0 is released).
+				'db'       => FrmAppHelper::$db_version + 1,
+				'expected' => false,
+			),
+			array(
+				'version'  => '7.01.10',
+				'db'       => 900,
+				'expected' => false,
+			),
+			array(
+				'version'  => FrmAppHelper::plugin_version(),
+				'db'       => FrmAppHelper::$db_version,
+				'expected' => false,
+			),
+			array(
+				'version'  => FrmAppHelper::plugin_version(),
+				'db'       => FrmAppHelper::$db_version - 1, // Previous version
+				'expected' => true,
+			),
+			array(
+				'version'  => FrmAppHelper::plugin_version(),
+				'db'       => FrmAppHelper::$db_version + 1, // Next version
+				'expected' => false,
+			),
+		);
+
+		foreach ( $tests as $test ) {
+			$current = $test['version'] . '-' . $test['db'];
+			update_option( 'frm_db_version', $current );
+			$option = get_option( 'frm_db_version' );
+			$this->assertSame( $current, $option );
+
+			$upgrade = FrmAppController::compare_for_update(
+				array(
+					'option'             => 'frm_db_version',
+					'new_db_version'     => FrmAppHelper::$db_version,
+					'new_plugin_version' => FrmAppHelper::plugin_version(),
+				)
+			);
+			$this->assertSame( $test['expected'], $upgrade, $test['version'] . ' db: ' . $test['db'] . ' => ' . $current . ( $upgrade ? ' needs no update ' : ' needs an update' ) . ' from ' . $option ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		}
+	}
+
+	public function test_api_install() {
+		delete_option( 'frm_install_running' );
+
+		if ( FrmAppHelper::doing_ajax() ) {
+			$this->markTestSkipped( 'Run without ajax' );
+		}
+
+		$current_db  = FrmAppHelper::plugin_version() . '-' . FrmAppHelper::$db_version;
+		$previous_db = FrmAppHelper::plugin_version() . '-' . ( absint( FrmAppHelper::$db_version ) - 1 );
+		update_option( 'frm_db_version', $previous_db );
+		FrmAppController::admin_init();
+		$new_db = get_option( 'frm_db_version' );
+		$this->assertSame( $current_db, $new_db, 'The DB did not update correctly' );
+	}
+
+	public function test_network_upgrade_site() {
+		FrmAppController::network_upgrade_site();
+		$this->addToAssertionCount( 1 );
+	}
+
+	public function test_drop_tables() {
+		global $wpdb;
+
+		$tables = FrmAppController::drop_tables( array() );
+
+		foreach ( array( 'frm_fields', 'frm_forms', 'frm_items', 'frm_item_metas', 'frm_payments', 'frm_subscriptions', 'frm_gated_tokens' ) as $table ) {
+			$this->assertContains( $wpdb->prefix . $table, $tables, $table . ' is not dropped with the site.' );
+		}
+	}
+}

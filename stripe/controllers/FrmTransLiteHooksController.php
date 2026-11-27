@@ -9,15 +9,16 @@ class FrmTransLiteHooksController {
 	 * @return void
 	 */
 	public static function load_hooks() {
+		// Exit early, let the Payments submodule handle everything.
 		if ( class_exists( 'FrmTransHooksController', false ) ) {
-			// Exit early, let the Payments submodule handle everything.
+			// Except forms without a Gateway field, which the submodule skips without charging.
+			add_action( 'frm_trigger_payment_action', 'FrmTransLiteActionsController::trigger_action_without_gateway_field', 10, 3 );
 			return;
 		}
 
 		// Actions.
 		add_action( 'frm_payment_cron', 'FrmTransLiteAppController::run_payment_cron' );
-		add_action( 'frm_registered_form_actions', 'FrmTransLiteActionsController::register_actions' );
-		add_action( 'frm_add_form_option_section', 'FrmTransLiteActionsController::actions_js' );
+		add_filter( 'frm_registered_form_actions', 'FrmTransLiteActionsController::register_actions' );
 		add_action( 'frm_trigger_payment_action', 'FrmTransLiteActionsController::trigger_action', 10, 3 );
 
 		// Filters.
@@ -34,24 +35,108 @@ class FrmTransLiteHooksController {
 	 * @return void
 	 */
 	public static function load_admin_hooks() {
+		add_action( 'frm_disconnected_gateway', 'FrmTransLiteAppController::maybe_remove_payment_cron', 10, 2 );
+
+		// frm_add_form_option_section only fires while rendering the form settings page, so these
+		// belong here rather than in load_hooks.
+		add_action( 'frm_add_form_option_section', 'FrmSquareLiteActionsController::actions_js' );
+
 		if ( class_exists( 'FrmTransHooksController', false ) ) {
-			// Exit early, let the Payments submodule handle everything.
+			add_action( 'frm_pay_show_square_options', 'FrmTransLiteAppController::add_repeat_cadence_value' );
+
+			add_action( 'frm_pay_show_stripe_options', 'FrmStrpLiteActionsController::add_action_options' );
+
+			remove_action( 'admin_head', 'FrmTransListsController::add_list_hooks' );
+			add_action( 'admin_head', 'FrmTransLiteListsController::add_list_hooks' );
+
+			self::maybe_set_admin_menu();
+
+			add_action(
+				'init',
+				function () {
+					if ( ! self::on_form_settings_page() ) {
+						return;
+					}
+
+					$gateways = array_keys( FrmTransLiteAppHelper::get_gateways() );
+
+					// If no additional gateways (Like Authorize.Net) are set, hide the Collect Payment action.
+					// Since we have icons for Stripe, Square, and PayPal, we don't need the Collect Payment action.
+					if ( ! array_diff( $gateways, array( 'stripe', 'square', 'paypal' ) ) ) {
+						add_action( 'admin_print_styles', array( self::class, 'hide_collect_payment_action' ) );
+					}
+				}
+			);
+
+			// Exit early, let the Payments submodule handle everything else.
 			return;
+		}//end if
+
+		if ( self::on_form_settings_page() ) {
+			add_action( 'admin_print_styles', array( self::class, 'hide_collect_payment_action' ) );
 		}
+
+		add_action( 'frm_add_form_option_section', 'FrmTransLiteActionsController::actions_js' );
 
 		// Actions.
 		add_action( 'admin_menu', 'FrmTransLitePaymentsController::menu', 25 );
 		add_action( 'admin_head', 'FrmTransLiteListsController::add_list_hooks' );
 		add_action( 'frm_show_entry_sidebar', 'FrmTransLiteEntriesController::sidebar_list', 9 );
+		add_action( 'frm_after_install', 'FrmTransLiteAppController::on_after_install' );
 
-		// Filters
+		// Filters.
 		add_filter( 'set-screen-option', 'FrmTransLiteListsController::save_per_page', 10, 3 );
+
+		// Use 9 to run before the Stripe Lite and Square Lite code.
+		add_filter( 'frm_before_save_payment_action', 'FrmTransLiteActionsController::before_save_settings', 9, 2 );
 
 		if ( defined( 'DOING_AJAX' ) ) {
 			self::load_ajax_hooks();
 		}
 	}
 
+	/**
+	 * @since 6.31
+	 *
+	 * @return bool
+	 */
+	private static function on_form_settings_page() {
+		return 'formidable' === FrmAppHelper::simple_get( 'page' ) && 'settings' === FrmAppHelper::simple_get( 'frm_action' );
+	}
+
+	/**
+	 * Hide the Collect Payment action if there are no additional gateways enabled (like Authorize.Net).
+	 *
+	 * @since 6.31
+	 *
+	 * @return void
+	 */
+	public static function hide_collect_payment_action() {
+		echo '
+		<style>
+			li.frm-action:has(.frm_payment_action) { display: none; }
+		</style>
+		';
+	}
+
+	/**
+	 * @since 6.27
+	 *
+	 * @return void
+	 */
+	private static function maybe_set_admin_menu() {
+		if ( in_array( FrmAppHelper::simple_get( 'action' ), array( 'edit', 'new', 'bulk_delete' ), true ) ) {
+			// We're still falling back to the Stripe, Authorize.Net, or PayPal add-on to handle these routes.
+			return;
+		}
+
+		remove_action( 'admin_menu', 'FrmTransPaymentsController::menu', 25 );
+		add_action( 'admin_menu', 'FrmTransLitePaymentsController::menu', 25 );
+	}
+
+	/**
+	 * @return void
+	 */
 	private static function load_ajax_hooks() {
 		add_action( 'wp_ajax_frm_trans_refund', 'FrmTransLitePaymentsController::refund_payment' );
 		add_action( 'wp_ajax_frm_trans_cancel', 'FrmTransLiteSubscriptionsController::cancel_subscription' );

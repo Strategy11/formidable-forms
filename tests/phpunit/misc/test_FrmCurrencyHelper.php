@@ -1,0 +1,71 @@
+<?php
+
+/**
+ * @covers FrmCurrencyHelper
+ */
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmCurrencyHelper::class )]
+class test_FrmCurrencyHelper extends FrmUnitTest {
+
+	public function test_get_currency() {
+		// Do a lower case check.
+		$usd = FrmCurrencyHelper::get_currency( 'usd' );
+		$this->assert_currency( $usd );
+		$this->assert_usd( $usd );
+
+		// Do an upper case check.
+		$usd = FrmCurrencyHelper::get_currency( 'USD' );
+		$this->assert_currency( $usd );
+		$this->assert_usd( $usd );
+
+		// Test another currency in lower case (euros).
+		$euro = FrmCurrencyHelper::get_currency( 'eur' );
+		$this->assert_currency( $euro );
+		$this->assert_euro( $euro );
+
+		// Test another currency in caps (canadian).
+		$cad = FrmCurrencyHelper::get_currency( 'CAD' );
+		$this->assert_currency( $cad );
+		$this->assert_cad( $cad );
+	}
+
+	/**
+	 * @param array $currency
+	 */
+	private function assert_currency( $currency ) {
+		$this->assertIsArray( $currency );
+		$this->assertIsString( $currency['name'] );
+	}
+
+	/**
+	 * @param array $currency
+	 *
+	 * @return void
+	 */
+	private function assert_usd( $currency ) {
+		$this->assertSame( 'U.S. Dollar', $currency['name'] );
+		$this->assertSame( '$', $currency['symbol_left'] );
+		$this->assertSame( '.', $currency['decimal_separator'] );
+	}
+
+	/**
+	 * @param array $currency
+	 *
+	 * @return void
+	 */
+	private function assert_euro( $currency ) {
+		$this->assertSame( 'Euro', $currency['name'] );
+		$this->assertSame( '&#8364;', $currency['symbol_right'] );
+		$this->assertSame( ',', $currency['decimal_separator'] );
+	}
+
+	/**
+	 * @param array $currency
+	 *
+	 * @return void
+	 */
+	private function assert_cad( $currency ) {
+		$this->assertSame( 'Canadian Dollar', $currency['name'] );
+		$this->assertSame( '$', $currency['symbol_left'] );
+		$this->assertSame( '.', $currency['decimal_separator'] );
+	}
+}

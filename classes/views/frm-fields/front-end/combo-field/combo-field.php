@@ -3,6 +3,7 @@
  * Frontend template for combo field
  *
  * @package Formidable
+ *
  * @since 4.10.02
  *
  * @var array         $args           Data passed to this view. See FrmFieldCombo::load_field_output().
@@ -21,6 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $field        = $args['field'];
 $field_id     = $field['id'];
+$error_key_id = $args['field_id'] ?? $field_id;
 $field_label  = $field['name'];
 $field_value  = $field['value'];
 $sub_fields   = $args['sub_fields'];
@@ -41,7 +43,7 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 			$sub_field_class   = "frm_form_field form-field frm_form_subfield-{$name} {$sub_field['wrapper_classes']}";
 			$sub_field_desc    = FrmField::get_option( $field, $name . '_desc' );
 
-			if ( isset( $errors[ 'field' . $field_id . '-' . $name ] ) ) {
+			if ( isset( $errors[ 'field' . $error_key_id . '-' . $name ] ) ) {
 				$sub_field_class .= ' frm_blank_field';
 			}
 			?>
@@ -57,32 +59,28 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 				<?php
 				switch ( $sub_field['type'] ) {
 					default:
-						?>
-						<input
-							type="<?php echo esc_attr( $sub_field['type'] ); ?>"
-							id="<?php echo esc_attr( $html_id . '_' . $name ); ?>"
-							value="<?php echo esc_attr( isset( $field_value[ $name ] ) ? $field_value[ $name ] : '' ); ?>"
-							<?php
-							if ( empty( $args['remove_names'] ) ) {
-								echo 'name="' . esc_attr( $field_name ) . '[' . esc_attr( $name ) . ']" ';
-							}
+						$attrs = $this->get_sub_field_input_attrs( $sub_field, $args );
 
-							$this->print_input_atts( compact( 'field', 'sub_field' ) );
-							?>
-						/>
-						<?php
+						echo '<input ';
+						FrmAppHelper::array_to_html_params( $attrs, true );
+						$this->print_input_atts( compact( 'field', 'sub_field' ) );
+						echo '/>';
 				}
 
 				if ( $sub_field['label'] && ( $sub_field_desc || $this->should_print_hidden_sub_fields() ) ) {
-					echo '<div class="frm_description" id="frm_field_' . esc_attr( $field_id . '_' . $sub_field['name'] ) . '_desc">' . FrmAppHelper::kses( $sub_field_desc ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					echo '<div class="frm_description" id="frm_field_' . esc_attr( $field_id . '_' . $sub_field['name'] ) . '_desc">';
+					FrmAppHelper::kses_echo( $sub_field_desc );
+					echo '</div>';
 				}
 
 				// Don't show individual field errors when there is a combo field error.
-				if ( ! empty( $errors ) && isset( $errors[ 'field' . $field_id . '-' . $name ] ) && ! isset( $errors[ 'field' . $field_id ] ) ) {
+				if ( $errors && isset( $errors[ 'field' . $error_key_id . '-' . $name ] ) && ! isset( $errors[ 'field' . $error_key_id ] ) ) {
 					?>
-					<div class="frm_error" role="alert"><?php echo esc_html( $errors[ 'field' . $field_id . '-' . $name ] ); ?></div>
+					<div class="frm_error" role="alert" id="frm_error_<?php echo esc_attr( $html_id . '_' . $name ); ?>"><?php echo esc_html( $errors[ 'field' . $error_key_id . '-' . $name ] ); ?></div>
 				<?php } ?>
 			</div>
-		<?php } ?>
+			<?php
+		}//end foreach
+		?>
 	</div>
 </fieldset>

@@ -1,0 +1,184 @@
+/**
+ * Add-Ons Page Styles
+ *
+ * This file includes all CSS rules specifically for the Add-Ons page.
+ */
+
+/**
+ * Page General Styles
+ *
+ * This section defines the basic typography and layout styles for the Form Templates page.
+ */
+#frm-addons-page .frm-upgrade-bar {
+	display: none;
+}
+
+.frm-list-grid-layout {
+	grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+}
+
+#post-body-content[data-category="active-addons"] .frm-addons-request-addon,
+#post-body-content[data-category="available-addons"] .frm-addons-request-addon {
+	display: none;
+}
+
+/* Card */
+
+/* A card with no excerpt sizes to its content instead of stretching to the row, so no gap opens above the divider. */
+#frm-addons-list .frm-card-item:not(:has(> p)) {
+	align-self: start;
+}
+
+.frm-border-icon > svg {
+	width: 24px;
+}
+
+.frm-card-lock-icon svg {
+	width: 13px;
+	height: 13px;
+	color: var(--grey-800);
+}
+
+.plugin-card-activecampaign-wordpress-plugin .frm-border-icon svg {
+	color: #004cff;
+}
+
+.plugin-card-aweber .frm-border-icon svg {
+	color: #246be8;
+}
+
+.plugin-card-campaign-monitor .frm-border-icon svg {
+	color: #7856ff;
+}
+
+.plugin-card-constant-contact .frm-border-icon svg {
+	color: #1856ed;
+}
+
+.plugin-card-getresponse-wordpress-plugin .frm-border-icon svg {
+	color: #00baff;
+}
+
+.plugin-card-google-sheets .frm-border-icon svg {
+	color: #34a853;
+}
+
+.plugin-card-hubspot-wordpress .frm-border-icon svg {
+	color: #ff7a59;
+}
+
+.plugin-card-mailchimp .frm-border-icon svg {
+	color: #000;
+}
+
+.plugin-card-mailpoet-newsletters .frm-border-icon svg {
+	color: #fe5301;
+}
+
+.plugin-card-paypal-standard .frm-border-icon svg {
+	color: #0070e0;
+}
+
+.plugin-card-zapier .frm-border-icon svg {
+	color: #ff4a00;
+}
+
+.plugin-card-twilio .frm-border-icon svg {
+	color: #f22f46;
+}
+
+.plugin-card-n8n .frm-border-icon svg {
+	color: #ea4b71;
+}
+
+.plugin-card-formidable-pro.frm-addon-active .frm_toggle_block {
+	pointer-events: none;
+}
+
+/* Boosts: sold separately, so the card carries an orange tag instead of a plan lock. */
+.frm-addon-boost {
+	--frm-boost-600: #d9481a;
+	--frm-boost-50: #fef3ee;
+}
+
+.frm-card-item--outlined.frm-addon-boost:hover {
+	background-color: #fff;
+}
+
+/* Match the icon size and color used by the other add-ons. */
+.frm-addon-boost .frm-border-icon svg {
+	width: 24px;
+	height: 24px;
+	color: var(--grey-600);
+}
+
+.frm-card-item--outlined h3 .frm-boost-pill {
+	margin-left: 0;
+	background-color: var(--frm-boost-50);
+	color: var(--frm-boost-600);
+	font-size: 11px;
+	line-height: 16px;
+	padding: 2px 6px;
+	align-self: center;
+}
+
+.frm-addon-boost h3 {
+	display: flex;
+	align-items: center;
+	gap: var(--gap-xs, 8px);
+	min-width: 0;
+}
+
+.frm-page-skeleton-cat[data-category="boosts"] .frm-page-skeleton-cat-text {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--gap-xs, 8px);
+}
+
+.frm-page-skeleton-cat[data-category="boosts"] .frm-new-pill {
+	margin: 0;
+
+	/* Center the pill on the category letters. */
+	transform: translateY(1px);
+}
+
+#frm-addons-page .frm-addon-button {
+	display: none;
+}
+
+.frm-addon-error {
+	border-radius: 0;
+	background-color: var(--error-100);
+	left: 0;
+	right: 0;
+}
+
+.frm-addon-error p {
+	color: var(--grey-900);
+}
+
+.frm_loading_button ~ .frm_toggle {
+	pointer-events: none;
+}
+
+.frm_loading_button ~ .frm_toggle .frm_toggle_slider {
+	opacity: 0.7;
+	background: linear-gradient(90deg, var(--grey-200) 25%, var(--grey-300) 50%, var(--grey-200) 75%);
+	background-size: 400% 100%;
+	animation: skeleton-animation 3s infinite ease-in-out;
+}
+
+@keyframes skeleton-animation {
+
+	0% {
+		background-position: 0% 0%;
+	}
+
+	50% {
+		background-position: 100% 100%;
+	}
+
+	100% {
+		background-position: 0% 0%;
+	}
+}

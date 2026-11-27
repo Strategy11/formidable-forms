@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div id="taxonomy-linkcategory" class="categorydiv <?php echo esc_attr( $class ); ?>">
 	<ul id="frm-nav-tabs" class="frm-nav-tabs <?php echo esc_attr( $settings_tab ? '' : 'frm-compact-nav' ); ?>">
 		<li class="frm-tabs">
-			<a href="#frm-insert-fields-box" id="frm_insert_fields_tab">
+			<a href="#frm-insert-fields-box" id="frm_insert_fields_box_tab">
 				<?php esc_html_e( 'Fields', 'formidable' ); ?>
 			</a>
 		</li>
@@ -47,7 +47,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 
 		<ul class="subsubsub">
-			<li><a href="javascript:void(0)" class="current frmids"><?php esc_html_e( 'IDs', 'formidable' ); ?></a> |</li>
+			<li>
+				<a href="javascript:void(0)" class="current frmids"><?php esc_html_e( 'IDs', 'formidable' ); ?></a>
+				<span class="frm-vertical-separator"></span>
+			</li>
 			<li><a href="javascript:void(0)" class="frmkeys"><?php esc_html_e( 'Keys', 'formidable' ); ?></a></li>
 		</ul>
 		<ul class="frm_code_list frm_customize_field_list frm-full-hover">
@@ -58,73 +61,79 @@ if ( ! defined( 'ABSPATH' ) ) {
 					continue;
 				}
 
-				if ( $f->type == 'data' && ( ! isset( $f->field_options['data_type'] ) || $f->field_options['data_type'] == 'data' || $f->field_options['data_type'] == '' ) ) {
+				// phpcs:ignore Universal.Operators.StrictComparisons
+				if ( $f->type === 'data' && ( ! isset( $f->field_options['data_type'] ) || $f->field_options['data_type'] === 'data' || $f->field_options['data_type'] == '' ) ) {
 					continue;
 				}
 
 				FrmFormsHelper::insert_opt_html(
 					array(
-						'id'   => $f->id,
-						'key'  => $f->field_key,
-						'name' => $f->name,
-						'type' => $f->type,
-						'class' => 'frm-customize-list dropdown-item',
+						'id'         => $f->id,
+						'key'        => $f->field_key,
+						'name'       => $f->name,
+						'type'       => $f->type,
+						'class'      => 'frm-customize-list dropdown-item',
+						'defer_icon' => $defer_icon,
 					)
 				);
 
-				do_action( 'frm_field_code_tab', array( 'field' => $f ) );
+				do_action(
+					'frm_field_code_tab',
+					array(
+						'field'      => $f,
+						'defer_icon' => $defer_icon,
+					)
+				);
 
-				if ( $f->type == 'user_id' ) {
+				if ( $f->type === 'user_id' ) {
 					$uid = $f->id;
 				}
 				unset( $f );
-			}
-		}
+			}//end foreach
+		}//end if
 		?>
 		</ul>
+		<?php FrmFormsHelper::print_deferred_code_list_icons(); ?>
 	</div>
 
 	<?php
 	$show_logic = ! empty( $cond_shortcodes ) && ! empty( $fields );
+
 	if ( $show_logic ) {
 		?>
-	<div id="frm-conditionals" class="tabs-panel">
-		<div class="frmcenter">
-			<?php
-			FrmHtmlHelper::toggle(
-				'frm-id-key-condition',
-				'',
-				array(
-					'checked'     => true,
-					'on_label'    => __( 'Use IDs', 'formidable' ),
-					'off_label'   => __( 'Use Keys', 'formidable' ),
-					'value'       => 'id',
-					'show_labels' => true,
-					'echo'        => true,
-				)
-			);
-			?>
+	<div id="frm-conditionals" class="tabs-panel frm-text-grey-700 frm-px-xs">
+		<div class="frm-h-stack-sm">
+			<label class="frm-h-stack-xs" for="frm-id-key-condition-key">
+				<input type="radio" id="frm-id-key-condition-key" name="frm-id-key-condition" value="key">
+				<span><?php esc_html_e( 'Use Keys', 'formidable' ); ?></span>
+			</label>
+			<label class="frm-h-stack-xs" for="frm-id-key-condition-id">
+				<input type="radio" id="frm-id-key-condition-id" name="frm-id-key-condition" value="id" checked>
+				<span><?php esc_html_e( 'Use IDs', 'formidable' ); ?></span>
+			</label>
 		</div>
 
-		<div class="frm_grid_container frm-fields frm-mx-sm">
-			<div class="frm1 frm_form_field frm-inline-select">
+		<div class="frm_grid_container frm-fields">
+			<div class="frm-pb-xs">
 				<label for="frm-id-condition">
 					<?php esc_html_e( 'IF', 'formidable' ); ?>
 				</label>
-				</div>
+			</div>
 
-			<div class="frm11 frm_form_field">
+			<div class="frm_form_field frm-mt-0">
 				<select id="frm-id-condition" class="frm-build-logic">
 					<option value="x">
 						<?php esc_html_e( 'Select a Field', 'formidable' ); ?>
 					</option>
 					<?php
 					foreach ( $fields as $f ) {
-						?>
-						<option value="<?php echo esc_attr( $f->id ); ?>">
-							<?php echo esc_html( $f->name ); ?>
-						</option>
-						<?php
+						FrmHtmlHelper::echo_dropdown_option(
+							$f->name,
+							false,
+							array(
+								'value' => $f->id,
+							)
+						);
 					}
 					?>
 				</select>
@@ -134,75 +143,83 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</option>
 					<?php
 					foreach ( $fields as $f ) {
-						?>
-						<option value="<?php echo esc_attr( $f->field_key ); ?>">
-							<?php echo esc_html( $f->name ); ?>
-						</option>
-						<?php
+						FrmHtmlHelper::echo_dropdown_option(
+							$f->name,
+							false,
+							array(
+								'value' => $f->field_key,
+							)
+						);
 					}
 					?>
 				</select>
 			</div>
 
-			<div class="frm1 frm_form_field"></div>
-			<div class="frm11 frm_form_field">
+			<div class="frm_form_field frm-mt-0">
 				<select id="frm-is-condition" class="frm-build-logic">
 					<?php
 					foreach ( $cond_shortcodes as $skey => $sname ) {
-						?>
-						<option value="<?php echo esc_attr( $skey ); ?>">
-							<?php echo esc_html( $sname ); ?>
-						</option>
-						<?php
+						FrmHtmlHelper::echo_dropdown_option(
+							$sname,
+							false,
+							array(
+								'value' => $skey,
+							)
+						);
 						unset( $skey, $sname );
 					}
 					?>
 				</select>
 			</div>
 
-			<div class="frm1 frm_form_field"></div>
-			<div class="frm11 frm_form_field">
+			<div class="frm_form_field frm-m-0">
 				<input id="frm-text-condition" type="text" value="" placeholder="<?php esc_attr_e( 'A blank value', 'formidable' ); ?>" class="frm-build-logic" />
 			</div>
 		</div>
-			<p class="frmcenter frm-mb-0">
-				<?php esc_html_e( 'Click to Insert', 'formidable' ); ?>:
-			</p>
-			<ul class="frm_code_list frm-full-hover frmcenter frm-m-0">
-				<li>
-					<a href="#" id="frm-insert-condition" class="frm_insert_code" data-code="if x equals='']<?php esc_attr_e( 'Conditional content here', 'formidable' ); ?>[/if x">
-						[if x equals=""][/if x]
-					</a>
-				</li>
-			</ul>
+
+		<p class="frm-m-0 frm-pb-xs"><?php esc_html_e( 'Click to Insert', 'formidable' ); ?>:</p>
+		<ul class="frm_code_list frm-full-hover frm-m-0">
+			<li>
+				<a href="#" id="frm-insert-condition" class="frm_insert_code" data-code="if x equals='']<?php esc_attr_e( 'Conditional content here', 'formidable' ); ?>[/if x">
+					[if x equals=""][/if x]
+				</a>
+			</li>
+		</ul>
 	</div>
 		<?php
-	}
+	}//end if
 	?>
 
 	<div id="frm-adv-info-tab" class="tabs-panel">
 		<div class="dropdown-item frm-with-search">
-		<?php
-		FrmAppHelper::show_search_box(
-			array(
-				'input_id'    => 'advanced',
-				'placeholder' => __( 'Search', 'formidable' ),
-				'tosearch'    => 'frm-advanced-list',
-			)
-		);
-		?>
+			<?php
+			FrmAppHelper::show_search_box(
+				array(
+					'input_id'    => 'advanced',
+					'placeholder' => __( 'Search', 'formidable' ),
+					'tosearch'    => 'frm-advanced-list',
+				)
+			);
+			?>
 		</div>
-		<ul class="frm_code_list frm-full-hover">
+
+		<ul class="frm_code_list frm-full-hover frm-mt-0">
 		<?php
+		$contextual_codes = FrmShortcodeHelper::get_contextual_codes();
+
 		foreach ( $entry_shortcodes as $skey => $sname ) {
-			if ( empty( $skey ) ) {
+			if ( ! $skey ) {
 				echo '<li class="clear frm_block"></li>';
 				continue;
 			}
 
-			$classes = 'frm-advanced-list';
-			$classes .= ( in_array( $skey, array( 'siteurl', 'sitename', 'entry_count' ) ) ) ? ' show_before_content show_after_content' : '';
-			$classes .= ( strpos( $skey, 'default-' ) === 0 ) ? ' hide_frm_not_email_subject' : '';
+			$classes  = 'frm-advanced-list';
+			$classes .= in_array( $skey, array( 'siteurl', 'sitename', 'entry_count' ), true ) ? ' show_before_content show_after_content' : '';
+			$classes .= str_starts_with( $skey, 'default-' ) ? ' hide_frm_not_email_subject' : '';
+
+			if ( array_key_exists( $skey, $contextual_codes ) ) {
+				$classes .= ' frm_hidden';
+			}
 
 			FrmFormsHelper::insert_code_html(
 				array(
@@ -213,14 +230,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 			);
 
 			unset( $skey, $sname, $classes );
-		}
+		}//end foreach
 
 		foreach ( $advanced_helpers as $helper_type => $helper ) {
 			if ( 'user_id' === $helper_type && ! isset( $uid ) ) {
 				continue;
 			}
 
-			if ( isset( $helper['heading'] ) && ! empty( $helper['heading'] ) ) {
+			if ( ! empty( $helper['heading'] ) ) {
 				?>
 				<li style="padding:0 25px;">
 					<p class="howto"><?php echo esc_html( $helper['heading'] ); ?></p>
@@ -229,11 +246,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 
 			foreach ( $helper['codes'] as $code => $code_label ) {
-				if ( isset( $uid ) ) {
-					$code = str_replace( '|user_id|', $uid, $code );
-				} else {
-					$code = str_replace( '|user_id|', 'x', $code );
-				}
+				$code      = isset( $uid ) ? str_replace( '|user_id|', $uid, $code ) : str_replace( '|user_id|', 'x', $code );
 				$include_x = strpos( $code, ' ' ) ? '' : 'x ';
 
 				if ( ! is_array( $code_label ) ) {
@@ -246,21 +259,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 					array(
 						'code'  => $include_x . $code,
 						'label' => $code_label['label'],
-						'title' => isset( $code_label['title'] ) ? $code_label['title'] : '',
+						'title' => $code_label['title'] ?? '',
 						'class' => 'frm-advanced-list',
 					)
 				);
 
 				unset( $code );
-			}
-		}
+			}//end foreach
+		}//end foreach
 		?>
 		</ul>
 	</div>
 
 	<?php
 	if ( $settings_tab ) {
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/mb_html_tab.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/mb_html_tab.php';
 	}
 	?>
 </div>

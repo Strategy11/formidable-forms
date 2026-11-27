@@ -5,7 +5,7 @@
 		return;
 	}
 
-	const __ = wp.i18n.__;
+	const { __, sprintf } = wp.i18n;
 	const { tag, div, span, a, svg, img } = frmDom;
 	const { maybeCreateModal, footerButton } = frmDom.modal;
 	const { newSearchInput } = frmDom.search;
@@ -39,8 +39,8 @@
 		getApplicationDataAndLoadPage();
 	}
 
-	function getUrlParamsAndMaybeOpenTemplateModal( _, { data } = {}) {
-		const url       = new URL( window.location.href );
+	function getUrlParamsAndMaybeOpenTemplateModal( _, { data } = {} ) {
+		const url = new URL( window.location.href );
 		const urlParams = url.searchParams;
 		if ( ! urlParams.get( 'triggerViewApplicationModal' ) ) {
 			return;
@@ -67,12 +67,12 @@
 
 		container.innerHTML = '';
 
-		const contentWrapper = div({ className: 'frm-applications-index-content' });
-		container.appendChild( contentWrapper );
+		const contentWrapper = div( { className: 'frm-applications-index-content' } );
+		container.append( contentWrapper );
 
 		const customTemplatesNav = getCustomTemplatesNav();
 
-		contentWrapper.appendChild( customTemplatesNav );
+		contentWrapper.append( customTemplatesNav );
 		renderFormidableTemplates( contentWrapper, data.templates );
 
 		const hookName = 'frm_application_render_templates';
@@ -85,62 +85,66 @@
 	}
 
 	function getCustomTemplatesNav() {
-		return div({
+		return div( {
 			className: 'frm-application-templates-nav wrap',
 			children: [
 				tag(
 					'h2',
 					{
-						child: span( __( 'My Applications', 'formidable-pro' ) ),
+						child: span( __( 'My Applications', 'formidable' ) ),
 						className: 'frm-h2'
 					}
 				)
 			]
-		});
+		} );
 	}
 
 	function addCustomApplicationsPlaceholder( customTemplatesNav ) {
-		const placeholder = div({
+		const placeholder = div( {
 			id: 'frm_custom_applications_placeholder',
 			className: 'frm_placeholder_block',
-			child: div({
-				child: img({ src: getUrlToApplicationsImages() + 'custom-applications.svg' })
-			})
-		});
-		placeholder.appendChild(
-			div({
+			child: div( {
+				className: 'frm_grid_container',
 				children: [
-					img({ src: getUrlToApplicationsImages() + 'folder.svg' }),
-					tag( 'h3', __( 'Improve your workflow with applications', 'formidable' ) ),
-					div( __( 'Applications help to organize your workspace by combining forms, Views, and pages into a full solution.', 'formidable' ) ),
-					a({
-						className: 'button button-primary frm-button-primary',
-						text: __( 'Upgrade to Pro', 'formidable' ),
-						href: frmApplicationsVars.proUpgradeUrl
-					})
+					div( {
+						className: 'frm10 frm_clearfix',
+						children: [
+							img( { src: `${ getUrlToApplicationsImages() }folder.svg`, alt: '' } ),
+							tag( 'h3', __( 'Improve your workflow with applications', 'formidable' ) ),
+							div( __( 'Applications help to organize your workspace by combining forms, Views, and pages into a full solution.', 'formidable' ) ),
+						]
+					} ),
+					div( {
+						className: 'frm2',
+						child: a( {
+							className: 'frm-button-primary frm-gradient',
+							text: __( 'Upgrade to Pro', 'formidable' ),
+							href: frmApplicationsVars.proUpgradeUrl
+						} )
+					} )
 				]
-			})
-		);
+			} )
+		} );
 		customTemplatesNav.parentNode.insertBefore( placeholder, customTemplatesNav.nextElementSibling );
 	}
 
 	function getUrlToApplicationsImages() {
-		return frmGlobal.url + '/images/applications/';
+		return `${ frmGlobal.url }/images/applications/`;
 	}
 
 	function renderFormidableTemplates( contentWrapper, templates ) {
-		elements.templatesGrid = div({
+		elements.templatesGrid = div( {
 			id: 'frm_application_templates_grid',
 			className: 'frm_grid_container frm-application-cards-grid'
-		});
+		} );
 		addTemplatesToGrid( templates );
-		contentWrapper.appendChild( getTemplatesNav() );
-		contentWrapper.appendChild( elements.templatesGrid );
+		contentWrapper.append( getTemplatesNav() );
+		contentWrapper.append( elements.templatesGrid );
 	}
 
 	function addTemplatesToGrid( templates ) {
 		templates.forEach(
-			application => elements.templatesGrid.appendChild( createApplicationCard( application ) )
+			application => elements.templatesGrid.append( createApplicationCard( application ) )
 		);
 		maybeTriggerSearch();
 	}
@@ -155,7 +159,7 @@
 	}
 
 	function getTemplatesNav() {
-		return div({
+		return div( {
 			className: 'frm-application-templates-nav wrap',
 			children: [
 				tag(
@@ -168,7 +172,7 @@
 				getCategoryOptions(),
 				getTemplateSearch()
 			]
-		});
+		} );
 	}
 
 	function getCategoryOptions() {
@@ -178,12 +182,12 @@
 		}
 
 		const categories = [ getAllItemsCategory() ].concat( state.categories );
-		const wrapper = div({ id: 'frm_application_category_filter', className: 'subsubsub' });
+		const wrapper = div( { id: 'frm_application_category_filter', className: 'subsubsub' } );
 
 		categories.forEach( addCategoryToWrapper );
 		function addCategoryToWrapper( category, index ) {
 			if ( 0 !== index ) {
-				wrapper.appendChild( document.createTextNode( '|' ) );
+				wrapper.append( document.createTextNode( '|' ) );
 			}
 			const anchor = a( category );
 			if ( 0 === index ) {
@@ -202,7 +206,7 @@
 					elements.activeCategoryAnchor = anchor;
 				}
 			);
-			wrapper.appendChild( anchor );
+			wrapper.append( anchor );
 		}
 
 		return wrapper;
@@ -210,7 +214,7 @@
 
 	function getAllItemsCategory() {
 		/* translators: %d: Number of application templates. */
-		return __( 'All Items (%d)', 'formidable' ).replace( '%d', state.templates.length );
+		return sprintf( __( 'All Items (%d)', 'formidable' ), state.templates.length );
 	}
 
 	function handleCategorySelect( category ) {
@@ -227,7 +231,7 @@
 
 		addTemplatesToGrid(
 			state.templates.filter(
-				template => -1 !== template.categories.indexOf( category )
+				template => template.categories.includes( category )
 			)
 		);
 	}
@@ -237,14 +241,13 @@
 		const placeholder = __( 'Search Templates', 'formidable' );
 		const targetClassName = 'frm-application-template-card';
 		const args = { handleSearchResult: handleTemplateSearch };
-		const wrappedInput = newSearchInput( id, placeholder, targetClassName, args );
-		return wrappedInput;
+		return newSearchInput( id, placeholder, targetClassName, args );
 	}
 
-	function handleTemplateSearch({ foundSomething, notEmptySearchText }) {
+	function handleTemplateSearch( { foundSomething, notEmptySearchText } ) {
 		if ( false === elements.noTemplateSearchResultsPlaceholder ) {
 			elements.noTemplateSearchResultsPlaceholder = getNoResultsPlaceholder();
-			elements.templatesGrid.appendChild( elements.noTemplateSearchResultsPlaceholder );
+			elements.templatesGrid.append( elements.noTemplateSearchResultsPlaceholder );
 		}
 		elements.noTemplateSearchResultsPlaceholder.classList.toggle( 'frm_hidden', ! notEmptySearchText || foundSomething );
 	}
@@ -259,19 +262,19 @@
 
 	function createApplicationCard( data ) {
 		const isTemplate = ! data.termId;
-		const card = div({
-			className: 'frm-application-card',
+		const card = div( {
+			className: 'frm-application-card frm-card-item',
 			children: [
 				getCardHeader(),
-				div({ className: 'frm-flex' })
+				div( { className: 'frm-flex' } )
 			]
-		});
+		} );
 
 		if ( isTemplate ) {
 			card.classList.add( 'frm-application-template-card' );
 			card.classList.add( 'frm-locked-application-template' );
-			card.appendChild( tag( 'hr' ) );
-			card.appendChild( getCardContent() );
+			card.append( tag( 'hr' ) );
+			card.append( getCardContent() );
 
 			card.addEventListener(
 				'click',
@@ -280,33 +283,38 @@
 		}
 
 		const hookName = 'frm_application_index_card';
-		const args     = { data };
+		const args = { data };
 		wp.hooks.doAction( hookName, card, args );
 
 		function getCardHeader() {
 			const titleWrapper = tag(
-				'h4',
+				'h3',
 				{
 					children: [
-						svg({ href: '#frm_lock_icon' }),
-						document.createTextNode( data.name )
+						svg( { href: '#frm_lock_icon' } ),
+						span( { className: 'frm-inner-text', text: data.name } )
 					]
 				}
 			);
-			const header = div({
+			const header = div( {
 				children: [
-					titleWrapper,
-					getUseThisTemplateControl( data )
+					titleWrapper
 				]
-			});
+			} );
 
+			const templateControl = getUseThisTemplateControl( data );
+			if ( templateControl.classList.contains( 'frm-delete-application-trigger' ) ) {
+				header.append( templateControl );
+			} else {
+				titleWrapper.append( templateControl );
+			}
 			if ( data.isNew ) {
-				titleWrapper.appendChild( span({ className: 'frm-new-pill', text: __( 'NEW', 'formidable' ) }) );
+				titleWrapper.append( span( { className: 'frm-new-pill frm-meta-tag frm-fadein', text: __( 'NEW', 'formidable' ) } ) );
 			}
 
 			const counter = getItemCounter();
 			if ( false !== counter ) {
-				header.appendChild( counter );
+				header.append( counter );
 			}
 
 			return header;
@@ -319,27 +327,27 @@
 		}
 
 		function getCardContent() {
-			const thumbnailFolderUrl = getUrlToApplicationsImages() + 'thumbnails/';
-			const filenameToUse = data.hasLiteThumbnail ? data.key + '.png' : 'placeholder.svg';
-			return div({
+			const thumbnailFolderUrl = `${ getUrlToApplicationsImages() }thumbnails/`;
+			const filenameToUse = data.hasLiteThumbnail ? data.key + ( data.isWebp ? '.webp' : '.png' ) : 'placeholder.svg';
+			return div( {
 				className: 'frm-application-card-image-wrapper',
-				child: img({ src: thumbnailFolderUrl + filenameToUse })
-			});
+				child: img( { src: thumbnailFolderUrl + filenameToUse, alt: data.name } )
+			} );
 		}
 
 		return card;
 	}
 
-	function filterItemCount( counter, { data }) {
-		const hasForms = 'undefined' !== typeof data.formCount && '0' !== data.formCount;
-		const hasViews = 'undefined' !== typeof data.viewCount && '0' !== data.viewCount;
-		const hasPages = 'undefined' !== typeof data.pageCount && '0' !== data.pageCount;
+	function filterItemCount( counter, { data } ) {
+		const hasForms = data.formCount !== undefined && '0' !== data.formCount;
+		const hasViews = data.viewCount !== undefined && '0' !== data.viewCount;
+		const hasPages = data.pageCount !== undefined && '0' !== data.pageCount;
 
 		if ( ! hasForms && ! hasViews && ! hasPages ) {
 			return counter;
 		}
 
-		counter = div({ className: 'frm-application-item-count' });
+		counter = div( { className: 'frm-application-item-count' } );
 
 		if ( hasForms ) {
 			addCount( data.formCount, __( 'Forms', 'formidable' ), __( 'Form', 'formidable' ) );
@@ -355,12 +363,12 @@
 
 		function addCount( countValue, pluralDescriptor, singularDescriptor ) {
 			if ( counter.children.length ) {
-				counter.appendChild( document.createTextNode( ' | ' ) );
+				counter.append( document.createTextNode( ' | ' ) );
 			}
 
 			const descriptor = '1' === countValue ? singularDescriptor : pluralDescriptor;
-			counter.appendChild(
-				span( countValue + ' ' + descriptor )
+			counter.append(
+				span( `${ countValue } ${ descriptor }` )
 			);
 		}
 
@@ -368,13 +376,13 @@
 	}
 
 	function getUseThisTemplateControl( data ) {
-		let control = a({
-			className: 'button frm-button-secondary frm-button-sm',
+		let control = a( {
+			className: 'button frm-button-secondary frm-button-sm frm-fadein',
 			text: __( 'Learn More', 'formidable' )
-		});
+		} );
 		control.setAttribute( 'role', 'button' );
 		/* translators: %s: Application Template Name */
-		const ariaDescription = __( '%s Template' ).replace( '%s', data.name );
+		const ariaDescription = sprintf( __( '%s Template', 'formidable' ), data.name );
 		control.setAttribute( 'aria-description', ariaDescription );
 		control.addEventListener(
 			'click',
@@ -414,54 +422,76 @@
 
 		if ( data.upgradeUrl ) {
 			children.push(
-				div({
-					className: 'frm_warning_style',
+				div( {
+					className: 'frm_note_style2',
 					children: [
 						span(
 							/* translators: %s: The required license type (ie. Plus, Business, or Elite) */
-							__( 'Access to this application requires the %s plan.', 'formidable' )
-								.replace( '%s', data.requires )
+							sprintf( __( 'Access to this application requires the %s plan.', 'formidable' ), data.requires )
 						),
-						a({
+						a( {
+							className: 'frm-gradient frm-button-primary frm-button-sm',
 							text: getUpgradeNowText(),
 							href: data.upgradeUrl
-						})
+						} )
 					]
-				})
+				} )
 			);
 		}
 
-		const placeholderImage = img({ src: getUrlToApplicationsImages() + 'placeholder.png' });
+		const placeholderImage = img( { src: `${ getUrlToApplicationsImages() }placeholder.png`, alt: '' } );
 		if ( placeholderImage.complete ) {
 			setTimeout( maybeCenterViewApplicationModal, 0 );
 		} else {
 			placeholderImage.addEventListener( 'load', maybeCenterViewApplicationModal );
 		}
 
+		const detailsChildren = [
+			div( {
+				className: 'frm-application-modal-label',
+				text: __( 'Description', 'formidable' )
+			} ),
+			div( data.description )
+		];
+
+		if ( data.usedAddons?.length ) {
+			detailsChildren.push(
+				div( {
+					className: 'frm-application-modal-label',
+					text: __( 'Required Add-ons', 'formidable-pro' )
+				} ),
+				getBasicList( data.usedAddons )
+			);
+		}
+
 		children.push(
-			div({
+			div( {
 				className: 'frm-application-image-wrapper',
 				child: placeholderImage
-			}),
-			div({
+			} ),
+			div( {
 				className: 'frm-application-modal-details',
-				children: [
-					div({
-						className: 'frm-application-modal-label',
-						text: __( 'Description', 'formidable' )
-					}),
-					div( data.description )
-				]
-			})
+				children: detailsChildren
+			} )
 		);
 
-		const output = div({ children });
+		const output = div( { children } );
 
 		const hookName = 'frm_view_application_modal_content';
-		const args     = { data };
+		const args = { data };
 		wp.hooks.doAction( hookName, output, args );
 
 		return output;
+	}
+
+	function getBasicList( data ) {
+		return tag(
+			'ul',
+			{
+				className: 'frm-application-item-list',
+				children: data.map( text => tag( 'li', text ) )
+			}
+		);
 	}
 
 	function maybeCenterViewApplicationModal() {
@@ -476,33 +506,35 @@
 			at: 'center',
 			of: window
 		};
-		jQuery( modal ).dialog({ position });
+		jQuery( modal ).dialog( { position } );
 	}
 
 	function getViewApplicationModalFooter( data ) {
-		const viewDemoSiteButton = footerButton({
+		const viewDemoSiteButton = footerButton( {
 			text: __( 'Learn More', 'formidable' ),
 			buttonType: 'secondary'
-		});
+		} );
 		viewDemoSiteButton.href = data.link;
 		viewDemoSiteButton.target = '_blank';
 
-		let primaryActionButton = footerButton({
+		let primaryActionButton = footerButton( {
 			text: getUpgradeNowText(),
 			buttonType: 'primary'
-		});
+		} );
 
 		if ( data.upgradeUrl ) {
 			primaryActionButton.classList.remove( 'dismiss' );
 			primaryActionButton.setAttribute( 'href', data.upgradeUrl );
+			primaryActionButton.target = '_blank';
+			primaryActionButton.rel = 'noopener';
 		}
 
 		const hookName = 'frm_view_application_modal_primary_action_button';
-		const args     = { data };
+		const args = { data };
 		primaryActionButton = wp.hooks.applyFilters( hookName, primaryActionButton, args );
 
-		return div({
+		return div( {
 			children: [ viewDemoSiteButton, primaryActionButton ]
-		});
+		} );
 	}
 }() );

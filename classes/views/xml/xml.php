@@ -17,7 +17,6 @@ the_generator( 'export' );
 do_action( 'frm_xml_export_before_types_loop' );
 
 foreach ( $type as $tb_type ) {
-
 	if ( ! isset( $tables[ $tb_type ] ) ) {
 		do_action( 'frm_xml_import_' . $tb_type, $args );
 		continue;
@@ -31,15 +30,15 @@ foreach ( $type as $tb_type ) {
 	$item_ids = $records[ $tb_type ];
 
 	if ( in_array( $tb_type, array( 'styles', 'actions' ), true ) ) {
-		include dirname( __FILE__ ) . '/posts_xml.php';
-	} elseif ( file_exists( dirname( __FILE__ ) . '/' . $tb_type . '_xml.php' ) ) {
-		include dirname( __FILE__ ) . '/' . $tb_type . '_xml.php';
+		include __DIR__ . '/posts_xml.php';
+	} elseif ( file_exists( __DIR__ . '/' . $tb_type . '_xml.php' ) ) {
+		include __DIR__ . '/' . $tb_type . '_xml.php';
 	} elseif ( FrmAppHelper::pro_is_installed() && file_exists( FrmProAppHelper::plugin_path() . '/classes/views/xml/' . $tb_type . '_xml.php' ) ) {
 		include FrmProAppHelper::plugin_path() . '/classes/views/xml/' . $tb_type . '_xml.php';
 	}
 
 	unset( $item_ids, $records[ $tb_type ], $tb_type );
-}
+}//end foreach
 
 /**
  * @since 5.3

@@ -1,0 +1,33 @@
+/**
+ * Components - Full Screen
+ */
+
+.frm-full-screen {
+	height: 100%;
+	overflow: hidden;
+}
+
+.frm-full-screen.frm-admin-page-reports,
+.frm-full-screen.frm-admin-page-entries,
+.frm-full-screen.post-type-frm_display {
+	overflow: auto;
+}
+
+.frm-full-screen #wpadminbar,
+.frm-full-screen #adminmenumain,
+.frm-full-screen .wp-header-end {
+	display: none;
+}
+
+body.frm-white-body:not(.frm-full-screen) .mce-fullscreen {
+	top: 32px;
+	left: 160px;
+}
+
+.frm-full-screen #wpbody-content,
+.frm-full-screen #wpbody,
+.frm-full-screen #wpcontent {
+	padding: 0;
+	overflow: hidden;
+	margin: 0 !important;
+}

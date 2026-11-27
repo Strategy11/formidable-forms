@@ -5,6 +5,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 FrmAppHelper::include_svg();
 ?>
 <div class="frm_wrap">
-	<?php self::render_applications_header( __( 'Applications', 'formidable' ), 'index' ); ?>
+	<?php FrmApplicationsController::render_applications_header( __( 'Applications', 'formidable' ), 'index' ); ?>
 	<div id="frm_applications_container" class="wrap"></div>
 </div>

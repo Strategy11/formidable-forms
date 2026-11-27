@@ -1,0 +1,29 @@
+/**
+ * Components - License
+ */
+
+.frm_pro_license_msg {
+	clear: left;
+	margin-top: 10px;
+}
+
+.frm-license-input {
+	position: relative;
+}
+
+.frm-license-input span {
+	font-size: var(--text-sm);
+}
+
+.frm-license-input .frmsvg {
+	width: 20px;
+	height: 20px;
+	margin-left: 5px;
+	vertical-align: text-top;
+}
+
+.frm-license-input .frmsvg,
+.frm-license-input span,
+.frm-license-input i {
+	color: rgb(0, 131, 26);
+}

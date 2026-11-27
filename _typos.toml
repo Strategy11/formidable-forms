@@ -1,0 +1,63 @@
+# Vendored third-party packages ship inside the plugin so the MCP adapter is
+# available in the release zip, but their spelling is not ours to correct and
+# editing them would be overwritten by the next composer install.
+[files]
+extend-exclude = ["lib/vendor/**"]
+
+[type.po]
+extend-glob = ["*.po"]
+check-file = false
+
+[type.map]
+extend-glob = ["*.map"]
+check-file = false
+
+[type.js]
+extend-glob = ["*/bootstrap-multiselect.js","*.min.js"]
+check-file = false
+
+[type.xml]
+extend-glob = ["*.xml"]
+check-file = false
+
+[type.txt]
+extend-glob = ["denylist/*.txt"]
+check-file = false
+
+[type.addons-api]
+extend-glob = ["*addons-api.json"]
+check-file = false
+
+[default]
+extend-ignore-re = [
+    "/mis'",
+    "5ths deprecated",
+    "7ths and 8ths",
+    "'ND' => 'North Dakota'",
+]
+
+[default.extend-words]
+datas = "datas"
+# This typo fix requires deprecating a method (get_select_atributes). There is an open issue to fix this.
+atributes = "atributes"
+# fo is used for the Faroese locale. It is not a typo.
+# fo is also used for a table alias in SQL queries.
+fo = "fo"
+# `Ags` should be `Ages`, `Tags` in sandbox token
+Ags = "Ags"
+# This is used as a class name, so changing it could introduce issues with backward compatibility.
+unmergable = "unmergable"
+# This is detected in our Stripe publishable key.
+iz = "iz"
+# `BA` is the ISO country code for Bosnia and Herzegovina in PayPal country lists.
+BA = "BA"
+# `PN` is the ISO country code for Pitcairn Islands in PayPal country lists.
+PN = "PN"
+# `Ot` is a substring in a PayPal sandbox token.
+Ot = "Ot"
+# This is used in a Sniff to reference a PHP function that does exist.
+writeable = "writeable"
+
+[default.extend-identifiers]
+66afe9 = "66afe9"
+

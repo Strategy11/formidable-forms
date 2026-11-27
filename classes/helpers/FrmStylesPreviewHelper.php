@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmStylesPreviewHelper {
 
 	/**
-	 * @param int $form_id
+	 * @var int
 	 */
 	private $form_id;
 
@@ -32,11 +32,12 @@ class FrmStylesPreviewHelper {
 	private $default_label_position_field_ids;
 
 	/**
-	 * @param string|int $form_id
+	 * @param int|string $form_id
+	 *
 	 * @return void
 	 */
 	public function __construct( $form_id ) {
-		$this->form_id = (int) $form_id;
+		$this->form_id                          = (int) $form_id;
 		$this->default_label_position_field_ids = array();
 	}
 
@@ -48,11 +49,55 @@ class FrmStylesPreviewHelper {
 	 * @return void
 	 */
 	public function adjust_form_for_preview() {
-		add_filter( 'frm_run_antispam', '__return_false', 99 ); // Don't bother including the antispam token in the preview as the form isn't submitted.
-		add_filter( 'frm_run_honeypot', '__return_false' ); // We don't need the honeypot in the preview so leave it out.
+		// Don't bother including the antispam token in the preview as the form isn't submitted.
+		add_filter( 'frm_run_antispam', '__return_false', 99 );
+
+		// We don't need the honeypot in the preview so leave it out.
+		add_filter( 'frm_run_honeypot', '__return_false' );
 		$this->hide_captcha_fields();
 		$this->disable_javascript_validation();
 		$this->add_a_div_class_for_default_label_positions();
+		$this->add_a_div_class_for_style_driven_alignment();
+	}
+
+	/**
+	 * Add a marker class to radio and checkbox fields that use the style's option
+	 * alignment setting rather than a field level override.
+	 *
+	 * Only fields with this class change when the radio or checkbox alignment style
+	 * setting is updated in the styler preview. Fields with their own alignment
+	 * override are left untouched.
+	 *
+	 * @since 6.32
+	 *
+	 * @return void
+	 */
+	private function add_a_div_class_for_style_driven_alignment() {
+		add_filter(
+			'frm_field_div_classes',
+			/**
+			 * @param string       $classes
+			 * @param array|object $field
+			 *
+			 * @return string
+			 */
+			function ( $classes, $field ) {
+				if ( ! FrmField::is_radio( $field ) && ! FrmField::is_checkbox( $field ) ) {
+					return $classes;
+				}
+
+				// Mirror FrmFieldType::get_container_class(): an override only exists in Pro.
+				$align = FrmAppHelper::pro_is_installed() ? FrmField::get_option( $field, 'align' ) : '';
+
+				if ( ! $align ) {
+					$classes .= ' frm-default-option-align';
+				}
+
+				return $classes;
+			},
+			10,
+			2
+		);
 	}
 
 	/**
@@ -60,6 +105,7 @@ class FrmStylesPreviewHelper {
 	 * A field with a custom label position shouldn't ever change in the styler preview.
 	 *
 	 * @since 6.0.1
+	 *
 	 * @return void
 	 */
 	private function add_a_div_class_for_default_label_positions() {
@@ -68,10 +114,11 @@ class FrmStylesPreviewHelper {
 			'frm_html_label_position',
 			/**
 			 * @param string $position
-			 * @param object|array $field
+			 * @param array|object $field
+			 *
 			 * @return string
 			 */
-			function( $position, $field ) {
+			function ( $position, $field ) {
 				if ( is_array( $field ) ) {
 					$this->default_label_position_field_ids[] = (int) $field['id'];
 				}
@@ -85,10 +132,11 @@ class FrmStylesPreviewHelper {
 			'frm_field_div_classes',
 			/**
 			 * @param string       $classes
-			 * @param object|array $field
+			 * @param array|object $field
+			 *
 			 * @return string
 			 */
-			function( $classes, $field ) {
+			function ( $classes, $field ) {
 				if ( is_array( $field ) && in_array( (int) $field['id'], $this->default_label_position_field_ids, true ) ) {
 					$classes .= ' frm-default-label-position';
 				}
@@ -113,13 +161,11 @@ class FrmStylesPreviewHelper {
 			 * @param bool   $show
 			 * @param string $field_type
 			 * @param string $target_field_type
+			 *
 			 * @return bool
 			 */
-			function( $show, $field_type ) {
-				if ( 'captcha' === $field_type ) {
-					$show = false;
-				}
-				return $show;
+			function ( $show, $field_type ) {
+				return 'captcha' === $field_type ? false : $show;
 			},
 			10,
 			2
@@ -138,8 +184,16 @@ class FrmStylesPreviewHelper {
 	private function disable_javascript_validation() {
 		add_filter(
 			'frm_form_object',
-			function( $form ) {
-				$form->options['js_validate'] = false;
+			/**
+			 * @param stdClass|null $form
+			 * @param int           $form_id
+			 *
+			 * @return stdClass|null
+			 */
+			function ( $form ) {
+				if ( is_object( $form ) && is_array( $form->options ) ) {
+					$form->options['js_validate'] = false;
+				}
 				return $form;
 			}
 		);
@@ -148,46 +202,64 @@ class FrmStylesPreviewHelper {
 	/**
 	 * @since 6.0
 	 *
-	 * @param string|int $form_id
 	 * @return string
 	 */
 	public function get_html_for_form_preview() {
 		// Force is_admin to false so the "Entry Key" field doesn't render in the preview.
 		add_filter( 'frm_is_admin', '__return_false' );
 
-		$target_form_preview_html = FrmFormsController::show_form( $this->form_id, '', 'auto', 'auto' );
+		// The styler edit page also renders its own settings form, so this preview's <form> landmark
+		// needs a distinct name to avoid tripping the aria_landmark_name_unique a11y rule.
+		add_filter( 'frm_form_attributes', array( $this, 'add_preview_landmark_label' ) );
 
-		$this->form_includes_captcha = wp_script_is( 'captcha-api', 'enqueued' );
-		if ( $this->form_includes_captcha ) {
-			// If a form includes a CAPTCHA field, don't try to load the CAPTCHA scripts for the visual styler preview.
-			wp_dequeue_script( 'captcha-api' );
+		try {
+			$target_form_preview_html = FrmFormsController::show_form( $this->form_id, '', 'auto', 'auto' );
+
+			$this->form_includes_captcha = wp_script_is( 'captcha-api', 'enqueued' );
+
+			if ( $this->form_includes_captcha ) {
+				// If a form includes a CAPTCHA field, don't try to load the CAPTCHA scripts for the visual styler preview.
+				wp_dequeue_script( 'captcha-api' );
+			}
+
+			return $target_form_preview_html;
+		} finally {
+			remove_filter( 'frm_form_attributes', array( $this, 'add_preview_landmark_label' ) );
+
+			// Return the is_admin status.
+			// Otherwise success messages won't use the proper mark up and will appear without the green background and padding.
+			remove_filter( 'frm_is_admin', '__return_false' );
 		}
+	}
 
-		// Return the is_admin status.
-		// Otherwise success messages won't use the proper mark up and will appear without the green background and padding.
-		remove_filter( 'frm_is_admin', '__return_false' );
-
-		return $target_form_preview_html;
+	/**
+	 * @since 7.0
+	 *
+	 * @param string $attributes
+	 *
+	 * @return string
+	 */
+	public function add_preview_landmark_label( $attributes ) {
+		return $attributes . ' aria-label="' . esc_attr__( 'Form preview', 'formidable' ) . '"';
 	}
 
 	/**
 	 * @since 6.0
 	 *
-	 * @todo Only show the note once for a form per user per month or something.
-	 *
 	 * @return array<string>
 	 */
 	public function get_notes_for_styler_preview() {
-		$notes = array();
-
+		$notes              = array();
 		$fallback_form_note = $this->get_fallback_form_note();
+
 		if ( is_string( $fallback_form_note ) ) {
 			$notes[] = $fallback_form_note;
 		}
 
 		$frm_settings = FrmAppHelper::get_settings();
+
 		if ( 'none' === $frm_settings->load_style ) {
-			$notes[] = function() {
+			$notes[] = function () {
 				printf(
 					// translators: %1$s: Anchor tag open, %2$s: Anchor tag close.
 					esc_html__( 'Formidable styles are disabled. This needs to be enabled in %1$sGlobal Settings%2$s.', 'formidable' ),
@@ -197,15 +269,12 @@ class FrmStylesPreviewHelper {
 			};
 		}
 
-		if ( class_exists( 'FrmProStylesController' ) && ! class_exists( 'FrmProStylesPreviewHelper' ) ) {
-			$notes[] = __( 'You are using an outdated version of Formidable Pro. Please update to version 6.0 to get access to all styler features.', 'formidable' );
-		}
-
 		if ( is_callable( 'FrmProStylesController::get_notes_for_styler_preview' ) ) {
 			$notes = array_merge( $notes, FrmProStylesController::get_notes_for_styler_preview() );
 		}
 
 		$disabled_features_note = $this->get_disabled_features_note();
+
 		if ( is_string( $disabled_features_note ) ) {
 			$notes[] = $disabled_features_note;
 		}
@@ -216,33 +285,16 @@ class FrmStylesPreviewHelper {
 	/**
 	 * @since 6.0
 	 *
-	 * @return string|false
+	 * @return string
 	 */
 	private function get_disabled_features_note() {
-		$disabled_features = array();
-
-		if ( $this->form_includes_captcha ) {
-			$disabled_features[] = __( 'Captcha fields are hidden.', 'formidable' );
-		}
-
-		if ( is_callable( 'FrmProStylesController::get_disabled_javascript_features' ) ) {
-			$disabled_pro_features = FrmProStylesController::get_disabled_javascript_features();
-			if ( is_string( $disabled_pro_features ) ) {
-				$disabled_features[] = $disabled_pro_features;
-			}
-		}
-
-		if ( $disabled_features ) {
-			return __( 'Not all JavaScript is loaded in this preview.', 'formidable' ) . ' ' . implode( ' ', $disabled_features );
-		}
-
-		return false;
+		return __( 'Not all JavaScript is loaded in this preview. Some features will appear differently on the front end.', 'formidable' );
 	}
 
 	/**
 	 * @since 6.0
 	 *
-	 * @return string|false
+	 * @return false|string
 	 */
 	private function get_fallback_form_note() {
 		if ( ! FrmAppHelper::simple_get( 'form', 'absint' ) ) {
@@ -256,9 +308,10 @@ class FrmStylesPreviewHelper {
 	 *
 	 * @since 6.0
 	 *
-	 * @param WP_Post|stdClass $style A new style is not a WP_Post object.
+	 * @param stdClass|WP_Post $style A new style is not a WP_Post object.
 	 * @param WP_Post          $default_style
 	 * @param string           $view Either 'list' or 'edit'.
+	 *
 	 * @return array<string>
 	 */
 	public function get_warnings_for_styler_preview( $style, $default_style, $view ) {
@@ -276,6 +329,7 @@ class FrmStylesPreviewHelper {
 	 *
 	 * @param int $style_id
 	 * @param int $default_style_id
+	 *
 	 * @return bool
 	 */
 	private function should_show_multiple_forms_warning( $style_id, $default_style_id ) {
@@ -284,6 +338,7 @@ class FrmStylesPreviewHelper {
 		if ( ! $is_default_style ) {
 			// Also check for the conversational default.
 			$conversational_style_id = FrmDb::get_var( 'posts', array( 'post_name' => 'lines-no-boxes' ), 'ID' );
+
 			if ( $conversational_style_id && (int) $conversational_style_id === $style_id ) {
 				$is_default_style = true;
 			}
@@ -312,6 +367,7 @@ class FrmStylesPreviewHelper {
 	 * @since 6.0
 	 *
 	 * @param WP_Styles $styles
+	 *
 	 * @return void
 	 */
 	public static function disable_conflicting_wp_admin_css( $styles ) {
@@ -322,7 +378,8 @@ class FrmStylesPreviewHelper {
 		$styles->remove( 'edit' );
 
 		$wp_admin_dependencies = $styles->registered['wp-admin']->deps;
-		$edit_key              = array_search( 'edit', $wp_admin_dependencies );
+		$edit_key              = array_search( 'edit', $wp_admin_dependencies, true );
+
 		if ( false === $edit_key ) {
 			return;
 		}
@@ -332,15 +389,65 @@ class FrmStylesPreviewHelper {
 	}
 
 	/**
+	 * Provides few fixes for style preview.
+	 * Fix the "Width" from Fields Settings to get reflected on each style preview ajax update.
+	 * Fix the Radio & Checkbox "Single Row" or "Multiple Row" to get reflected in style preview ajax update.
+	 *
+	 * @since 6.14
+	 *
+	 * @param array $settings The style options.
+	 * @param bool  $is_preview
+	 *
+	 * @return void
+	 */
+	public static function get_additional_preview_style( $settings, $is_preview = false ) {
+		if ( ! $is_preview ) {
+			return;
+		}
+
+		$radio_display_type = 'inline' === $settings['radio_align'] ? 'inline-block' : 'block';
+		$check_display_type = 'inline' === $settings['check_align'] ? 'inline-block' : 'block';
+
+		$style = '#frm_style_preview .with_frm_style input[type=text],
+				#frm_style_preview .with_frm_style input[type=password],
+				#frm_style_preview .with_frm_style input[type=email],
+				#frm_style_preview .with_frm_style input[type=number],
+				#frm_style_preview .with_frm_style input[type=url],
+				#frm_style_preview .with_frm_style input[type=tel],
+				#frm_style_preview .with_frm_style input[type=phone],
+				#frm_style_preview .with_frm_style input[type=search],
+				#frm_style_preview .with_frm_style textarea,
+				#frm_style_preview .frm_form_fields_style,
+				#frm_style_preview .with_frm_style .frm_scroll_box .frm_opt_container,
+				#frm_style_preview .frm_form_fields_active_style,
+				#frm_style_preview .frm_form_fields_error_style,
+				#frm_style_preview .with_frm_style .frm-card-element.StripeElement,
+				#frm_style_preview .with_frm_style .frm_slimselect.ss-main {
+					width: var(--field-width);
+				}
+				#frm_style_preview .with_frm_style .frm_radio {
+					display:' . $radio_display_type . ';
+				}
+				#frm_style_preview .with_frm_style .frm_checkbox {
+					display:' . $check_display_type . ';
+				}';
+
+		echo esc_html( $style );
+	}
+
+	/**
 	 * @since 6.0
 	 *
 	 * @param WP_Styles $styles
 	 * @param string    $key
+	 *
 	 * @return void
 	 */
 	private static function remove_wp_admin_dependency( $styles, $key ) {
 		$dependencies = $styles->registered['wp-admin']->deps;
-		$index        = array_search( $key, $dependencies );
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+		$index = array_search( $key, $dependencies );
+
 		if ( false === $index ) {
 			return;
 		}

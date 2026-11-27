@@ -1,0 +1,200 @@
+/**
+ * Sliders component styles
+ */
+
+.frm-style-component .frm-slider-container {
+	width: calc(100% - 91px);
+	display: flex;
+	align-items: center;
+	color: rgba(29, 41, 57, 1);
+
+	svg.frmsvg {
+		color: currentColor;
+		margin-right: 8px;
+		margin-left: -5px;
+		position: relative;
+		z-index: 15;
+	}
+}
+
+.frm-style-component .frm-group-sliders .frm-slider-container svg.frmsvg:hover {
+	color: var(--primary-500);
+	cursor: pointer;
+}
+
+.frm-style-component {
+
+	.frm-slider-value {
+		width: 86px;
+		height: 36px;
+		display: flex;
+		justify-content: center;
+		box-sizing: border-box;
+		background: white;
+		border-radius: var(--small-radius);
+		border: 1px solid var(--grey-300);
+
+		> * {
+			border: none;
+		}
+
+		input {
+			width: 40px;
+			height: 100%;
+			min-height: 34px; // Reduce the min-height, as other CSS might set this to 40px.
+			padding: 0;
+			font-size: var(--text-sm);
+			color: rgba(16, 24, 40, 1);
+			padding-left: 12px;
+			box-sizing: border-box;
+		}
+
+		select {
+			text-align: right;
+			min-height: 0;
+			padding: 0;
+			font-size: var(--text-sm);
+			color: rgba(102, 112, 133, 1);
+			width: 44px;
+			background: url("../../images/style/small-arrow.svg") no-repeat;
+			background-position: center right 12px;
+			padding-right: 24px !important;
+
+			&.frm-single-unit {
+				pointer-events: none;
+				background-image: none;
+				padding-right: 12px !important;
+			}
+		}
+	}
+
+	input[type="range"].frm-slider {
+
+		/* Ratio between 0 and 1, set from JS as the slider moves. */
+		--frm-fill: 0;
+		--frm-thumb-size: 16px;
+		--frm-track-size: 4px;
+
+		/* The thumb centre travels half a thumb in from each end, so the fill has to start and stop there too. */
+		--frm-fill-position: calc(var(--frm-thumb-size) / 2 + var(--frm-fill) * (100% - var(--frm-thumb-size)));
+		appearance: none;
+		-webkit-appearance: none;
+		display: block;
+		width: calc(100% - 5px);
+
+		/* Taller than the visible track so the whole control clears the 24px minimum pointer target. */
+		height: 24px;
+		margin: 0;
+		padding: 0;
+		cursor: pointer;
+		background-color: transparent;
+		background-image: linear-gradient(
+			to right,
+			var(--primary-500) var(--frm-fill-position),
+			var(--grey-200) var(--frm-fill-position)
+		);
+		background-repeat: no-repeat;
+		background-size: 100% var(--frm-track-size);
+		background-position: center;
+
+		&::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			appearance: none;
+			width: var(--frm-thumb-size);
+			height: var(--frm-thumb-size);
+			border-radius: 50%;
+			background: var(--primary-500);
+			cursor: grab;
+			box-shadow: 0 1.88px 4px -1px rgba(16, 24, 40, 0.03), 0 6px 8px -2px rgba(16, 24, 40, 0.08);
+		}
+
+		&::-moz-range-thumb {
+			width: var(--frm-thumb-size);
+			height: var(--frm-thumb-size);
+			border-radius: 50%;
+			background: var(--primary-500);
+			cursor: grab;
+			border: none;
+			box-shadow: 0 1.88px 4px -1px rgba(16, 24, 40, 0.03), 0 6px 8px -2px rgba(16, 24, 40, 0.08);
+		}
+
+		/* Firefox draws its own track and progress bar on top of the background, so hide both. */
+		&::-moz-range-track {
+			height: var(--frm-track-size);
+			background: transparent;
+		}
+
+		&::-moz-range-progress {
+			height: var(--frm-track-size);
+			background: transparent;
+		}
+
+		/* Keep the ring on the input itself. Outlines on the thumb pseudo elements are not supported everywhere. */
+		&:focus-visible {
+			outline: 2px solid var(--primary-500);
+			outline-offset: 2px;
+			border-radius: var(--small-radius);
+		}
+
+		&:disabled {
+			cursor: default;
+		}
+
+		/*
+		 * Forced colours drop the gradient that draws the track, so hand the slider back to the
+		 * browser and let it paint its own widget in the colours the user picked.
+		 */
+		@media (forced-colors: active) {
+			appearance: auto;
+			-webkit-appearance: auto;
+			background-image: none;
+
+			&::-webkit-slider-thumb {
+				-webkit-appearance: auto;
+				appearance: auto;
+			}
+		}
+	}
+}
+
+.frm-slider-component {
+
+	.frm-independent-slider-field {
+		margin-top: 10px;
+	}
+
+	&.frm-disabled {
+
+		.frm-slider-container {
+			pointer-events: none;
+			opacity: 0.5;
+		}
+
+		.frm-slider-value {
+
+			input[type="text"] {
+				width: 28px;
+				opacity: 0.5;
+			}
+
+			select {
+				width: 56px;
+			}
+		}
+
+		&.frm-empty {
+
+			.frm-slider-value input[type="text"] {
+				width: 56px;
+			}
+
+			.frm-slider-value select {
+				width: 28px;
+			}
+		}
+	}
+}
+
+.frm-style-component .frm-slider-component.frm-has-multiple-values {
+	margin-bottom: 10px;
+}

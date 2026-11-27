@@ -48,9 +48,9 @@ if ( ! empty( $opts ) ) {
 			</label>
 		</li>
 			<?php
-		}
-	}
+		}//end if
+	}//end foreach
 	?>
 	</ul>
 	<?php
-}
+}//end if

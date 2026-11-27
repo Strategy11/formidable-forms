@@ -18,37 +18,50 @@ class FrmUsage {
 			return;
 		}
 
-		$ep   = 'aHR0cHM6Ly9mcm0tdXNlci10cmFja2luZy5oZXJva3VhcHAuY29tL3NuYXBzaG90';
+		$snapshot = $this->snapshot();
+		$this->clean_before_send( $snapshot );
+
+		$ep = 'aHR0cHM6Ly91c2FnZTIuZm9ybWlkYWJsZWZvcm1zLmNvbS9zbmFwc2hvdA==';
 		// $ep = base64_encode( 'http://localhost:4567/snapshot' ); // Uncomment for testing
-		$body = json_encode( $this->snapshot() );
+		$body = json_encode( $snapshot );
 
 		// Setup variable for wp_remote_request.
 		$post = array(
-			'method'    => 'POST',
-			'headers'   => array(
+			'method'  => 'POST',
+			'headers' => array(
 				'Accept'         => 'application/json',
 				'Content-Type'   => 'application/json',
 				'Content-Length' => strlen( $body ),
 			),
-			'body'      => $body,
+			'body'    => $body,
+			// Without this, Debug Log catches the `http_request_failed` error.
+			'timeout' => 45,
 		);
+
+		// Remove time limit to execute this function.
+		if ( function_exists( 'set_time_limit' ) ) {
+			set_time_limit( 0 );
+		}
 
 		wp_remote_request( base64_decode( $ep ), $post );
 	}
 
 	/**
 	 * @since 3.06.04
+	 *
+	 * @param bool $regenerate
+	 *
 	 * @return string
 	 */
 	public function uuid( $regenerate = false ) {
 		$uuid_key = 'frm-usage-uuid';
 		$uuid     = get_option( $uuid_key );
 
-		if ( $regenerate || empty( $uuid ) ) {
+		if ( $regenerate || ! $uuid ) {
 			// Definitely not cryptographically secure but
-			// close enough to provide an unique id
+			// close enough to provide a unique id
 			$uuid = md5( uniqid() . site_url() );
-			update_option( $uuid_key, $uuid, 'no' );
+			update_option( $uuid_key, $uuid, false );
 		}
 
 		return $uuid;
@@ -56,6 +69,7 @@ class FrmUsage {
 
 	/**
 	 * @since 3.06.04
+	 *
 	 * @return array
 	 */
 	public function snapshot() {
@@ -65,46 +79,257 @@ class FrmUsage {
 		$form_counts = FrmForm::get_count();
 
 		$snap = array(
-			'uuid'           => $this->uuid(),
-			'admin_email'    => '', // Let's keep it anonymous.
-			'wp_version'     => $wp_version,
-			'php_version'    => phpversion(),
-			'mysql_version'  => $wpdb->db_version(),
-			'os'             => FrmAppHelper::get_server_os(),
-			'locale'         => get_locale(),
+			'uuid'              => $this->uuid(),
+			'wp_version'        => $wp_version,
+			'php_version'       => phpversion(),
+			'mysql_version'     => $wpdb->db_version(),
+			'os'                => FrmAppHelper::get_server_os(),
+			'locale'            => get_locale(),
 
-			'active_license' => FrmAppHelper::pro_is_installed(),
-			'form_count'     => $form_counts->published,
-			'entry_count'    => FrmEntry::getRecordCount(),
-			'timestamp'      => gmdate( 'c' ),
+			'active_license'    => FrmAppHelper::pro_is_installed(),
+			'form_count'        => $form_counts->published,
+			'entry_count'       => FrmEntry::getRecordCount(),
+			'timestamp'         => gmdate( 'c' ),
+			'misc'              => array(),
 
-			'theme_name'     => is_object( $theme_data ) ? $theme_data->Name : '', // phpcs:ignore WordPress.NamingConventions
-			'plugins'        => $this->plugins(),
-			'settings'       => array(
+			'theme_name'        => is_object( $theme_data ) ? $theme_data->Name : '', // phpcs:ignore WordPress.NamingConventions
+			'plugins'           => $this->plugins(),
+			'settings'          => array(
 				$this->settings(),
 			),
-			'forms'          => $this->forms(),
-			'fields'         => $this->fields(),
-			'actions'        => $this->actions(),
+			'forms'             => $this->forms(),
+			'fields'            => $this->fields(),
+			'actions'           => $this->actions(),
+
+			'onboarding-wizard' => $this->onboarding_wizard(),
+			'welcome-tour'      => FrmWelcomeTourController::get_usage_data(),
+			'flows'             => FrmUsageController::get_flows_data(),
+			'payments'          => $this->payments(),
+			'subscriptions'     => $this->payments( 'frm_subscriptions' ),
 		);
+
+		if ( method_exists( 'FrmProAddonsController', 'get_readable_license_type' ) ) {
+			$snap['active_license'] = FrmProAddonsController::get_readable_license_type();
+		}
 
 		return apply_filters( 'frm_usage_snapshot', $snap );
 	}
 
 	/**
+	 * Cleans the snapshot data before sending.
+	 *
+	 * @param array $data Snapshot data.
+	 *
+	 * @return void
+	 */
+	private function clean_before_send( &$data ) {
+		$skip_keys = array(
+			'plan_id',
+			'paypal_item_name',
+			'account_num',
+			'routing_num',
+			'bank_name',
+			'business_email',
+
+			// Form action settings.
+			'quiz',
+			'email_to',
+			'cc',
+			'bcc',
+			'from',
+			'email_subject',
+			'email_msg',
+			'email_message',
+			'success_msg',
+			'success_url',
+			'success_page_id',
+			'redirect_msg',
+			'conditions',
+			'list_id',
+			'api_key',
+			'url',
+			'data_fields',
+			'reg_email_msg',
+
+			// Form settings.
+			'form_id',
+			'description',
+			'submit_conditions-hide_field',
+			'submit_conditions-hide_field_cond',
+			'submit_conditions-hide_opt',
+			'submit_conditions-show_hide',
+			'submit_conditions-any_all',
+
+			// Field settings.
+			'show_hide',
+			'any_all',
+			'hide_field',
+			'hide_field_cond',
+			'hide_opt',
+			'custom_html',
+			'blank',
+			'required_indicator',
+			'invalid',
+			'unique_msg',
+			'edit_text',
+			'start_over_label',
+			'add_label',
+			'remove_label',
+			'draft',
+		);
+
+		/**
+		 * Filter the keys to skip when cleaning the snapshot data before sending.
+		 *
+		 * @since 6.28
+		 *
+		 * @param array $skip_keys Data keys.
+		 */
+		$skip_keys = apply_filters( 'frm_usage_skip_keys', $skip_keys );
+
+		$long_text_keys = array( 'description' );
+
+		/**
+		 * Filter the keys to replace with a long text placeholder before sending.
+		 *
+		 * @since 6.28
+		 *
+		 * @paramm array $long_text_keys Data keys.
+		 */
+		$long_text_keys = apply_filters( 'frm_usage_long_text_keys', $long_text_keys );
+
+		foreach ( $data as $key => &$value ) {
+			if ( ! $value ) {
+				continue;
+			}
+
+			if ( in_array( $key, $skip_keys, true ) || str_ends_with( $key, '_url' ) ) {
+				unset( $data[ $key ] );
+				continue;
+			}
+
+			if ( is_object( $value ) ) {
+				$value = '{{object}}';
+				continue;
+			}
+
+			if ( is_array( $value ) ) {
+				$this->clean_before_send( $value );
+				continue;
+			}
+
+			if ( in_array( $key, $long_text_keys, true ) || str_ends_with( $key, '_msg' ) ) {
+				// Replace it with a placeholder.
+				$value = '{{long_text}}';
+				continue;
+			}
+
+			// If key ends with `_email`, or value contains `@`, this might contain an email address.
+			if ( str_ends_with( $key, '_email' ) || ( is_string( $value ) && str_contains( $value, '@' ) ) ) {
+				// Replace it with a placeholder.
+				$value = '{{contain_email}}';
+			}
+		}//end foreach
+	}
+
+	/**
+	 * Gets onboarding wizard data.
+	 *
+	 * @since 6.16.1
+	 *
+	 * @return array
+	 */
+	private function onboarding_wizard() {
+		$data         = FrmOnboardingWizardController::get_usage_data();
+		$skipped_keys = array(
+			'default_email',
+			'is_subscribed',
+			'allows_tracking',
+			'summary_emails',
+			'installed_addons',
+		);
+
+		foreach ( $skipped_keys as $skipped_key ) {
+			unset( $data[ $skipped_key ] );
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Gets payments data.
+	 *
+	 * @since 6.16.1
+	 *
+	 * @param string $table Database table name.
+	 *
+	 * @return array
+	 */
+	private function payments( $table = 'frm_payments' ) {
+		$allowed_tables = array( 'frm_payments', 'frm_subscriptions' );
+
+		if ( ! in_array( $table, $allowed_tables, true ) || ! FrmTransLiteAppHelper::payments_table_exists() ) {
+			return array();
+		}
+
+		$rows     = $this->get_payment_db_rows( $table );
+		$payments = array();
+
+		foreach ( $rows as $row ) {
+			$payments[] = array(
+				'amount'     => (float) $row->amount,
+				'status'     => $row->status,
+				'gateway'    => $row->paysys,
+				'created_at' => $row->created_at,
+			);
+		}
+
+		return $payments;
+	}
+
+	/**
+	 * @since 6.30
+	 *
+	 * @param string $table
+	 *
+	 * @return array
+	 */
+	private function get_payment_db_rows( $table ) {
+		global $wpdb;
+
+		if ( FrmDb::db_column_exists( $table, 'test' ) ) {
+			return $wpdb->get_results(
+				$wpdb->prepare(
+					'SELECT amount, status, paysys, created_at FROM %i WHERE test IS NULL OR test != 1',
+					$wpdb->prefix . $table
+				)
+			);
+		}
+
+		// Fallback for PayPal add-on where this column does not exist.
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT amount, status, paysys, created_at FROM %i',
+				$wpdb->prefix . $table
+			)
+		);
+	}
+
+	/**
 	 * @since 3.06.04
+	 *
 	 * @return array
 	 */
 	private function plugins() {
 		$plugin_list = FrmAppHelper::get_plugins();
+		$plugins     = array();
 
-		$plugins = array();
 		foreach ( $plugin_list as $slug => $info ) {
 			$plugins[] = array(
-				'name'        => $info['Name'],
-				'slug'        => $slug,
-				'version'     => $info['Version'],
-				'active'      => is_plugin_active( $slug ),
+				'name'    => $info['Name'],
+				'slug'    => $slug,
+				'version' => $info['Version'],
+				'active'  => is_plugin_active( $slug ),
 			);
 		}
 
@@ -115,28 +340,36 @@ class FrmUsage {
 	 * Add global settings to tracking data.
 	 *
 	 * @since 3.06.04
+	 *
 	 * @return array
 	 */
 	private function settings() {
-		$settings_list  = FrmAppHelper::get_settings();
-		$settings       = array(
+		$settings_list = FrmAppHelper::get_settings();
+		$settings      = array(
 			'messages'    => $this->messages( $settings_list ),
 			'permissions' => $this->permissions( $settings_list ),
 		);
 		$pass_settings = array(
 			'load_style',
-			'use_html',
 			'fade_form',
-			'jquery_css',
 			're_type',
 			're_lang',
 			're_multi',
 			'menu',
 			'mu_menu',
 			'no_ips',
+			'custom_header_ip',
+			'enable_gdpr',
+			'no_gdpr_cookies',
 			'btsp_css',
-			'btsp_errors',
+			'btsp_version',
 			'admin_bar',
+			'summary_emails',
+			'active_captcha',
+			'honeypot',
+			'wp_spam_check',
+			'denylist_check',
+			'email_style',
 		);
 
 		foreach ( $pass_settings as $setting ) {
@@ -158,9 +391,8 @@ class FrmUsage {
 	 *
 	 * @since 3.06.04
 	 *
-	 * @return array
-	 *
 	 * @param FrmSettings $settings_list
+	 *
 	 * @return array
 	 */
 	private function messages( $settings_list ) {
@@ -175,9 +407,11 @@ class FrmUsage {
 			'admin_permission',
 		);
 
+		$default          = $settings_list->default_options();
 		$message_settings = array();
+
 		foreach ( $messages as $message ) {
-			$message_settings[ $message ] = $settings_list->$message;
+			$message_settings[ 'changed-' . $message ] = $settings_list->$message === $default[ $message ] ? 0 : 1;
 		}
 
 		return $message_settings;
@@ -189,6 +423,7 @@ class FrmUsage {
 	 * @since 3.06.04
 	 *
 	 * @param FrmSettings $settings_list
+	 *
 	 * @return array
 	 */
 	private function permissions( $settings_list ) {
@@ -206,13 +441,14 @@ class FrmUsage {
 
 	/**
 	 * @since 3.06.04
+	 *
 	 * @return array
 	 */
 	private function forms() {
 		$s_query = array(
 			array(
-				'or' => 1,
-				'parent_form_id' => null,
+				'or'               => 1,
+				'parent_form_id'   => null,
 				'parent_form_id <' => 1,
 			),
 		);
@@ -222,8 +458,8 @@ class FrmUsage {
 		$settings    = array(
 			'form_class',
 			'akismet',
-			'honeypot',
 			'antispam',
+			'stopforumspam',
 			'custom_style',
 			'success_action',
 			'show_form',
@@ -254,26 +490,46 @@ class FrmUsage {
 			'submit_conditions',
 		);
 
+		$style = new FrmStyle();
+
 		foreach ( $saved_forms as $form ) {
 			$new_form = array(
-				'form_id'     => $form->id,
-				'description' => $form->description,
-				'logged_in'   => $form->logged_in,
-				'editable'    => $form->editable,
-				'is_template' => $form->is_template,
-				'entry_count' => FrmEntry::getRecordCount( $form->id ),
-				'field_count' => $this->form_field_count( $form->id ),
+				'form_id'           => $form->id,
+				'description'       => $form->description,
+				'logged_in'         => $form->logged_in,
+				'editable'          => $form->editable,
+				'is_template'       => $form->is_template,
+				'entry_count'       => FrmEntry::getRecordCount( $form->id ),
+				'field_count'       => $this->form_field_count( $form->id ),
 				'form_action_count' => $this->form_action_count( $form->id ),
 			);
 
 			foreach ( $settings as $setting ) {
-				if ( isset( $form->options[ $setting ] ) ) {
-					$new_form[ $setting ] = $this->maybe_json( $form->options[ $setting ] );
+				if ( ! isset( $form->options[ $setting ] ) ) {
+					continue;
 				}
-			}
+
+				if ( 'custom_style' !== $setting ) {
+					$new_form[ $setting ] = $this->maybe_json( $form->options[ $setting ] );
+					continue;
+				}
+
+				$style->id = $form->options[ $setting ];
+
+				if ( ! $style->id ) {
+					$style_name = 0;
+				} elseif ( 1 === (int) $style->id ) {
+					$style_name = 'formidable-style';
+				} else {
+					$style_post = $style->get_one();
+					$style_name = $style_post ? $style_post->post_name : 'formidable-style';
+				}
+
+				$new_form[ $setting ] = $style_name;
+			}//end foreach
 
 			$forms[] = apply_filters( 'frm_usage_form', $new_form, compact( 'form' ) );
-		}
+		}//end foreach
 
 		// If the array uses numeric keys, reset them.
 		return $forms;
@@ -281,12 +537,15 @@ class FrmUsage {
 
 	/**
 	 * @since 3.06.04
+	 *
+	 * @param int|string $form_id Form ID.
+	 *
 	 * @return int
 	 */
 	private function form_field_count( $form_id ) {
 		global $wpdb;
 
-		$join = $wpdb->prefix . 'frm_fields fi LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_forms fo ON (fi.form_id=fo.id)';
+		$join = $wpdb->prefix . 'frm_fields fi JOIN ' . $wpdb->prefix . 'frm_forms fo ON (fi.form_id=fo.id)';
 
 		$field_query = array(
 			'or'             => 1,
@@ -299,6 +558,9 @@ class FrmUsage {
 
 	/**
 	 * @since 3.06.04
+	 *
+	 * @param int|string $form_id Form ID.
+	 *
 	 * @return int
 	 */
 	private function form_action_count( $form_id ) {
@@ -316,62 +578,89 @@ class FrmUsage {
 	 * Get the last 100 fields created.
 	 *
 	 * @since 3.06.04
+	 *
 	 * @return array
 	 */
 	private function fields() {
-		$args   = array(
+		$args = array(
 			'limit'    => 50,
 			'order_by' => 'id DESC',
 		);
 
-		$fields = FrmDb::get_results( 'frm_fields', array(), 'form_id, name, type, field_options', $args );
+		$fields = FrmDb::get_results( 'frm_fields', array(), 'id, form_id, name, type, field_options', $args );
+
 		foreach ( $fields as $k => $field ) {
-			FrmAppHelper::unserialize_or_decode( $field->field_options );
-			$fields[ $k ]->field_options = json_encode( $field->field_options );
+			$field = (array) $field;
+
+			FrmAppHelper::unserialize_or_decode( $field['field_options'] );
+			$fields[ $k ] = $field;
 		}
+
 		return $fields;
 	}
 
 	/**
 	 * @since 3.06.04
+	 *
 	 * @return array
 	 */
 	private function actions() {
-		$args = array(
-			'post_type'   => FrmFormActionsController::$action_post_type,
-			'numberposts' => 100,
-		);
+		$actions        = array();
+		$offset         = 0;
+		$limit          = 100;
+		$limit_plus_one = $limit + 1;
 
-		$actions = array();
-
-		$saved_actions = FrmDb::check_cache( json_encode( $args ), 'frm_actions', $args, 'get_posts' );
-		foreach ( $saved_actions as $action ) {
-			$actions[] = array(
-				'form_id'  => $action->menu_order,
-				'type'     => $action->post_excerpt,
-				'status'   => $action->post_status,
-				'settings' => $action->post_content,
+		do {
+			$args          = array(
+				'post_type'   => FrmFormActionsController::$action_post_type,
+				'numberposts' => $limit_plus_one,
+				'offset'      => $offset,
 			);
-		}
+			$saved_actions = get_posts( $args );
+			$has_more      = count( $saved_actions ) === $limit_plus_one;
+
+			if ( $has_more ) {
+				// Pop off the last item as it is only queried to determine if there are more results.
+				array_pop( $saved_actions );
+			}
+
+			foreach ( $saved_actions as $action ) {
+				$actions[] = array(
+					'form_id'  => $action->menu_order,
+					'type'     => $action->post_excerpt,
+					'status'   => $action->post_status,
+					'settings' => FrmAppHelper::maybe_json_decode( $action->post_content ),
+				);
+				unset( $action );
+			}
+
+			$offset += $limit;
+
+			unset( $saved_actions );
+
+			gc_collect_cycles();
+		} while ( $has_more );
 
 		return $actions;
 	}
 
 	/**
 	 * @since 3.06.04
+	 *
 	 * @return bool
 	 */
 	private function tracking_allowed() {
-		$settings = FrmAppHelper::get_settings();
-		return $settings->tracking;
+		return FrmUsageController::tracking_allowed();
 	}
 
 	/**
 	 * @since 3.06.04
+	 *
+	 * @param mixed $value Value.
+	 *
 	 * @return string
 	 */
 	private function maybe_json( $value ) {
 		return is_array( $value ) ? json_encode( $value ) : $value;
 	}
 }
-

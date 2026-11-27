@@ -9,9 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEntryValues {
 
 	/**
-	 * @var stdClass
+	 * @var false|stdClass|null
 	 */
-	protected $entry = null;
+	protected $entry;
 
 	/**
 	 * @var int
@@ -49,7 +49,7 @@ class FrmEntryValues {
 	 * @since 2.04
 	 *
 	 * @param int|string $entry_id
-	 * @param array $atts
+	 * @param array      $atts
 	 */
 	public function __construct( $entry_id, $atts = array() ) {
 		if ( isset( $atts['entry'] ) && is_object( $atts['entry'] ) && ! empty( $atts['entry']->metas ) ) {
@@ -87,6 +87,7 @@ class FrmEntryValues {
 	 * Gets entry property.
 	 *
 	 * @since 5.0.16
+	 *
 	 * @return stdClass
 	 */
 	public function get_entry() {
@@ -114,23 +115,18 @@ class FrmEntryValues {
 	 * @return void
 	 */
 	protected function init_include_fields( $atts ) {
+		// For reverse compatibility with the fields parameter.
+		if ( empty( $atts['include_fields'] ) && ! empty( $atts['fields'] ) ) {
+			if ( is_array( $atts['fields'] ) ) {
+				$atts['include_fields'] = '';
 
-		// For reverse compatibility with the fields parameter
-		if ( ! isset( $atts['include_fields'] ) || empty( $atts['include_fields'] ) ) {
-
-			if ( isset( $atts['fields'] ) && ! empty( $atts['fields'] ) ) {
-
-				if ( ! is_array( $atts['fields'] ) ) {
-					$atts['include_fields'] = $atts['fields'];
-				} else {
-					$atts['include_fields'] = '';
-
-					foreach ( $atts['fields'] as $included_field ) {
-						$atts['include_fields'] .= $included_field->id . ',';
-					}
-
-					$atts['include_fields'] = rtrim( $atts['include_fields'], ',' );
+				foreach ( $atts['fields'] as $included_field ) {
+					$atts['include_fields'] .= $included_field->id . ',';
 				}
+
+				$atts['include_fields'] = rtrim( $atts['include_fields'], ',' );
+			} else {
+				$atts['include_fields'] = $atts['fields'];
 			}
 		}
 
@@ -176,23 +172,16 @@ class FrmEntryValues {
 	 * @since 2.04
 	 *
 	 * @param string $index
-	 * @param array $atts
+	 * @param array  $atts
 	 *
 	 * @return array
 	 */
 	private function prepare_array_property( $index, $atts ) {
-		if ( isset( $atts[ $index ] ) && ! empty( $atts[ $index ] ) ) {
-
-			if ( is_array( $atts[ $index ] ) ) {
-				$property = $atts[ $index ];
-			} else {
-				$property = explode( ',', $atts[ $index ] );
-			}
-		} else {
-			$property = array();
+		if ( ! empty( $atts[ $index ] ) ) {
+			return is_array( $atts[ $index ] ) ? $atts[ $index ] : explode( ',', $atts[ $index ] );
 		}
 
-		return $property;
+		return array();
 	}
 
 	/**
@@ -266,17 +255,17 @@ class FrmEntryValues {
 			);
 		}
 
-		$ip      = array(
+		$ip       = array(
 			'label' => __( 'IP Address', 'formidable' ),
 			'value' => $this->entry->ip,
 		);
-		$browser = array(
+		$browser  = array(
 			'label' => __( 'User-Agent (Browser/OS)', 'formidable' ),
 			'value' => isset( $entry_description['browser'] ) ? FrmEntriesHelper::get_browser( $entry_description['browser'] ) : '',
 		);
 		$referrer = array(
 			'label' => __( 'Referrer', 'formidable' ),
-			'value' => isset( $entry_description['referrer'] ) ? $entry_description['referrer'] : '',
+			'value' => $entry_description['referrer'] ?? '',
 		);
 
 		/**
@@ -284,8 +273,9 @@ class FrmEntryValues {
 		 *
 		 * @since 5.5.1
 		 *
-		 * @param array $referrer
-		 * @param array @entry_description
+		 * @param array  $referrer
+		 * @param array  $entry_description
+		 * @param object $entry
 		 */
 		$referrer = apply_filters( 'frm_user_info_referrer', $referrer, $entry_description, $this->entry );
 
@@ -318,12 +308,14 @@ class FrmEntryValues {
 	 */
 	protected function is_field_included( $field ) {
 		$is_included = true;
-		if ( ! empty( $this->include_fields ) ) {
+
+		if ( $this->include_fields ) {
 			$is_included = $this->is_field_in_array( $field, $this->include_fields );
 		}
 
-		if ( ! empty( $this->exclude_fields ) ) {
+		if ( $this->exclude_fields ) {
 			$is_excluded = $this->is_field_in_array( $field, $this->exclude_fields );
+
 			if ( $is_excluded ) {
 				$is_included = false;
 			}
@@ -338,11 +330,12 @@ class FrmEntryValues {
 	 * @since 2.04
 	 *
 	 * @param stdClass $field
-	 * @param array $array
+	 * @param array    $array
 	 *
 	 * @return bool
 	 */
 	protected function is_field_in_array( $field, $array ) {
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		return in_array( $field->id, $array ) || in_array( (string) $field->field_key, $array, true );
 	}
 

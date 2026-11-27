@@ -6,11 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmTransLiteAppHelper {
 
 	/**
-	 * @var bool|null
-	 */
-	private static $should_fallback_to_paypal;
-
-	/**
 	 * @return string
 	 */
 	public static function plugin_path() {
@@ -44,12 +39,14 @@ class FrmTransLiteAppHelper {
 	public static function payments_table_exists() {
 		$db     = new FrmTransLiteDb();
 		$option = get_option( $db->db_opt_name );
+
 		if ( false !== $option ) {
 			return true;
 		}
 
 		if ( class_exists( 'FrmPaymentsController' ) && isset( FrmPaymentsController::$db_opt_name ) ) {
 			$option = get_option( FrmPaymentsController::$db_opt_name );
+
 			if ( false !== $option ) {
 				return true;
 			}
@@ -62,21 +59,23 @@ class FrmTransLiteAppHelper {
 	 * Get a payment status label.
 	 *
 	 * @param string $status The lowercase payment status value.
+	 *
 	 * @return string
 	 */
 	public static function show_status( $status ) {
 		$statuses = array_merge( self::get_payment_statuses(), self::get_subscription_statuses() );
-		return isset( $statuses[ $status ] ) ? $statuses[ $status ] : $status;
+		return $statuses[ $status ] ?? $status;
 	}
 
 	/**
 	 * Get Payment status from a payment with support for PayPal backward compatibility.
 	 *
 	 * @param stdClass $payment
+	 *
 	 * @return string
 	 */
 	public static function get_payment_status( $payment ) {
-		if ( $payment->status ) {
+		if ( ! empty( $payment->status ) ) {
 			return $payment->status;
 		}
 		// PayPal fallback.
@@ -117,6 +116,7 @@ class FrmTransLiteAppHelper {
 	 *
 	 * @param array  $payment_values
 	 * @param string $message
+	 *
 	 * @return void
 	 */
 	public static function add_note_to_payment( &$payment_values, $message = '' ) {
@@ -127,12 +127,13 @@ class FrmTransLiteAppHelper {
 				$payment_values['status']
 			);
 		}
-		$payment_values['meta_value'] = isset( $payment_values['meta_value'] ) ? $payment_values['meta_value'] : array();
+		$payment_values['meta_value'] = $payment_values['meta_value'] ?? array();
 		$payment_values['meta_value'] = self::add_meta_to_payment( $payment_values['meta_value'], $message );
 	}
 
 	/**
-	 * @param string $note
+	 * @param array|string $meta_value
+	 * @param string       $note
 	 *
 	 * @return array
 	 */
@@ -147,16 +148,19 @@ class FrmTransLiteAppHelper {
 
 	/**
 	 * @param string $option
-	 * @param array $atts
+	 * @param array  $atts
+	 *
+	 * @return mixed
 	 */
 	public static function get_action_setting( $option, $atts ) {
 		$settings = self::get_action_settings( $atts );
-		$value    = isset( $settings[ $option ] ) ? $settings[ $option ] : '';
-		return $value;
+		return $settings[ $option ] ?? '';
 	}
 
 	/**
 	 * @param array $atts
+	 *
+	 * @return array
 	 */
 	public static function get_action_settings( $atts ) {
 		if ( ! isset( $atts['payment'] ) ) {
@@ -164,27 +168,27 @@ class FrmTransLiteAppHelper {
 		}
 
 		$atts['payment'] = (array) $atts['payment'];
+
 		if ( empty( $atts['payment']['action_id'] ) ) {
 			return array();
 		}
 
 		$form_action = FrmTransLiteAction::get_single_action_type( $atts['payment']['action_id'], 'payment' );
-		if ( ! $form_action ) {
-			return array();
-		}
 
-		return $form_action->post_content;
+		return $form_action ? $form_action->post_content : array();
 	}
 
 	/**
 	 * Allow entry values, default values, and other shortcodes
 	 *
-	 * @param array $atts - Includes value (required), form, entry
-	 * @return string|int
+	 * @param array $atts Includes value (required), form, entry.
+	 *
+	 * @return int|string
 	 */
 	public static function process_shortcodes( $atts ) {
 		$value = $atts['value'];
-		if ( strpos( $value, '[' ) === false ) {
+
+		if ( ! str_contains( $value, '[' ) ) {
 			return $value;
 		}
 
@@ -196,26 +200,27 @@ class FrmTransLiteAppHelper {
 			if ( ! isset( $atts['form'] ) ) {
 				$atts['form'] = FrmForm::getOne( $atts['entry']->form_id );
 			}
+
 			$value = apply_filters( 'frm_content', $value, $atts['form'], $atts['entry'] );
 		}
 
-		$value = do_shortcode( $value );
-		return $value;
+		return do_shortcode( $value );
 	}
 
 	/**
 	 * @param object $sub
+	 *
 	 * @return string
 	 */
 	public static function format_billing_cycle( $sub ) {
 		$amount   = self::formatted_amount( $sub );
 		$interval = self::get_repeat_label_from_value( $sub->time_interval, $sub->interval_count );
-		if ( $sub->interval_count == 1 ) {
-			$amount = $amount . '/' . $interval;
-		} else {
-			$amount = $amount . ' every ' . $sub->interval_count . ' ' . $interval;
+
+		if ( (int) $sub->interval_count === 1 ) {
+			return $amount . '/' . $interval;
 		}
-		return $amount;
+
+		return $amount . ' every ' . $sub->interval_count . ' ' . $interval;
 	}
 
 	/**
@@ -234,6 +239,7 @@ class FrmTransLiteAppHelper {
 	 * @since 6.5, introduced in v1.16 of the Payments submodule.
 	 *
 	 * @param int $number
+	 *
 	 * @return array
 	 */
 	private static function get_plural_repeat_times( $number ) {
@@ -249,17 +255,20 @@ class FrmTransLiteAppHelper {
 	 * @since 6.5, introduced in v1.16 of the Payments submodule.
 	 *
 	 * @param string $value
-	 * @param int $number
+	 * @param int    $number
+	 *
 	 * @return string
 	 */
 	public static function get_repeat_label_from_value( $value, $number ) {
 		$times = self::get_plural_repeat_times( $number );
-		if ( isset( $times[ $value ] ) ) {
-			$value = $times[ $value ];
-		}
-		return $value;
+		return $times[ $value ] ?? $value;
 	}
 
+	/**
+	 * @param array|float|int|object $payment
+	 *
+	 * @return string
+	 */
 	public static function formatted_amount( $payment ) {
 		$currency = '';
 		$amount   = $payment;
@@ -282,8 +291,35 @@ class FrmTransLiteAppHelper {
 	}
 
 	/**
+	 * Gets amount and currency from payment object or amount.
+	 *
+	 * @since 6.7
+	 *
+	 * @param array|float|object|string $payment Payment object, payment array or amount.
+	 *
+	 * @return array Return the array with the first element is the amount, the second one is the currency value.
+	 */
+	public static function get_amount_and_currency_from_payment( $payment ) {
+		$currency = '';
+		$amount   = $payment;
+
+		if ( is_object( $payment ) || is_array( $payment ) ) {
+			$payment  = (array) $payment;
+			$amount   = $payment['amount'];
+			$currency = self::get_action_setting( 'currency', array( 'payment' => $payment ) );
+		}
+
+		if ( ! $currency ) {
+			$currency = 'usd';
+		}
+
+		return array( $amount, $currency );
+	}
+
+	/**
 	 * @param array $currency
 	 * @param float $amount
+	 *
 	 * @return void
 	 */
 	public static function format_amount_for_currency( $currency, &$amount ) {
@@ -297,26 +333,24 @@ class FrmTransLiteAppHelper {
 	 * @return string
 	 */
 	public static function get_date_format() {
-		$date_format = 'm/d/Y';
-		if ( class_exists( 'FrmProAppHelper' ) ) {
-			$frmpro_settings = FrmProAppHelper::get_settings();
-			if ( $frmpro_settings ) {
-				$date_format = $frmpro_settings->date_format;
-			}
-		} else {
-			$date_format = get_option( 'date_format' );
+		if ( ! class_exists( 'FrmProAppHelper' ) ) {
+			return get_option( 'date_format' );
 		}
 
-		return $date_format;
+		$date_format     = 'm/d/Y';
+		$frmpro_settings = FrmProAppHelper::get_settings();
+
+		return $frmpro_settings ? $frmpro_settings->date_format : $date_format;
 	}
 
 	/**
 	 * @param string $date
 	 * @param string $format
+	 *
 	 * @return string
 	 */
 	public static function format_the_date( $date, $format = '' ) {
-		if ( empty( $format ) ) {
+		if ( ! $format ) {
 			$format = self::get_date_format();
 		}
 		return date_i18n( $format, strtotime( $date ) );
@@ -328,43 +362,60 @@ class FrmTransLiteAppHelper {
 	 * @return int
 	 */
 	public static function get_user_id_for_current_payment() {
-		$user_id = 0;
-		if ( is_user_logged_in() ) {
-			$user_id = get_current_user_id();
-		}
-		return $user_id;
+		$user_id = is_user_logged_in() ? get_current_user_id() : 0;
+
+		/**
+		 * Set the user who owns the payment being made.
+		 * This makes it possible for an add on to claim the payment for a user who isn't logged in yet,
+		 * for example when the same submission registers them.
+		 *
+		 * @since 6.35
+		 *
+		 * @param int $user_id The logged in user, or 0 for a guest.
+		 */
+		$user_id = (int) apply_filters( 'frm_payment_user_id', $user_id );
+
+		return max( 0, $user_id );
 	}
 
 	/**
 	 * @param int $user_id
+	 *
 	 * @return string
 	 */
 	public static function get_user_link( $user_id ) {
-		$user_link = esc_html__( 'Guest', 'formidable' );
 		if ( $user_id ) {
 			$user = get_userdata( $user_id );
+
 			if ( $user ) {
-				$user_link = '<a href="' . esc_url( admin_url( 'user-edit.php?user_id=' . $user_id ) ) . '">' . esc_html( $user->display_name ) . '</a>';
+				return '<a href="' . esc_url( admin_url( 'user-edit.php?user_id=' . $user_id ) ) . '">' . esc_html( $user->display_name ) . '</a>';
 			}
 		}
-		return $user_link;
+
+		return esc_html__( 'Guest', 'formidable' );
 	}
 
 	/**
 	 * @param mixed  $value
 	 * @param string $label
+	 *
 	 * @return void
 	 */
 	public static function show_in_table( $value, $label ) {
-		if ( ! empty( $value ) ) { ?>
-			<tr>
-				<th scope="row"><?php echo esc_html( $label ); ?>:</th>
-				<td>
-					<?php echo esc_html( $value ); ?>
-				</td>
-			</tr>
-			<?php
+		if ( ! $value ) {
+			return;
 		}
+
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
+		?>
+		<tr>
+			<th scope="row"><?php echo esc_html( $label ); ?>:</th>
+			<td>
+				<?php echo esc_html( $value ); ?>
+			</td>
+		</tr>
+		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -374,12 +425,13 @@ class FrmTransLiteAppHelper {
 	 * @since 6.5
 	 *
 	 * @param string $link
+	 *
 	 * @return void
 	 */
 	public static function echo_confirmation_link( $link ) {
-		$filter = __CLASS__ . '::allow_deleteconfirm_data_attribute';
+		$filter = self::class . '::allow_deleteconfirm_data_attribute';
 		add_filter( 'frm_striphtml_allowed_tags', $filter );
-		echo FrmAppHelper::kses( $link, array( 'a' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		FrmAppHelper::kses_echo( $link, array( 'a' ) );
 		remove_filter( 'frm_striphtml_allowed_tags', $filter );
 	}
 
@@ -390,6 +442,7 @@ class FrmTransLiteAppHelper {
 	 * @since 6.5
 	 *
 	 * @param array $allowed
+	 *
 	 * @return array
 	 */
 	public static function allow_deleteconfirm_data_attribute( $allowed ) {
@@ -404,7 +457,7 @@ class FrmTransLiteAppHelper {
 	 *
 	 * @since 6.5
 	 *
-	 * @param string|int $amount
+	 * @param int|string $amount
 	 * @param WP_Post    $action
 	 *
 	 * @return string
@@ -415,37 +468,419 @@ class FrmTransLiteAppHelper {
 		}
 
 		$currency = FrmCurrencyHelper::get_currency( $action->post_content['currency'] );
+
 		if ( ! empty( $currency['decimals'] ) ) {
-			$amount = number_format( ( $amount / 100 ), 2, '.', '' );
+			return number_format( $amount / 100, 2, '.', '' );
 		}
 
 		return $amount;
 	}
 
 	/**
+	 * Get a human readable translated 'Test' or 'Live' string if the column value is defined.
+	 * Old payments will just output an empty string.
+	 *
+	 * @since 6.6
+	 *
+	 * @param stdClass $payment
+	 *
+	 * @return string
+	 */
+	public static function get_test_mode_display_string( $payment ) {
+		if ( ! isset( $payment->test ) ) {
+			return '';
+		}
+		return $payment->test ? __( 'Test', 'formidable' ) : __( 'Live', 'formidable' );
+	}
+
+	/**
+	 * Returns the count of completed payments.
+	 *
+	 * @since 6.11
+	 *
+	 * @param array $payments
+	 *
+	 * @return int
+	 */
+	public static function count_completed_payments( $payments ) {
+		$count = 0;
+
+		foreach ( $payments as $payment ) {
+			if ( $payment->status === 'complete' ) {
+				$count++;
+			}
+		}
+
+		return $count;
+	}
+
+	/**
+	 * @return array
+	 */
+	public static function get_gateways() {
+		return apply_filters( 'frm_payment_gateways', array() );
+	}
+
+	/**
+	 * @param array|string $gateway
+	 * @param string       $setting
+	 *
+	 * @return mixed
+	 */
+	public static function get_setting_for_gateway( $gateway, $setting ) {
+		$gateways = self::get_gateways();
+		$value    = '';
+
+		if ( is_array( $gateway ) ) {
+			$gateway = reset( $gateway );
+		}
+
+		if ( isset( $gateways[ $gateway ] ) ) {
+			return $gateways[ $gateway ][ $setting ];
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Show the currency dropdown for a Payment action.
+	 * When Square is selected, this dropdown is disabled and will always use "Use Square Merchant Currency".
+	 *
+	 * @since 6.22
+	 *
+	 * @param string $id
+	 * @param string $name
+	 * @param array  $action_settings
+	 *
+	 * @return void
+	 */
+	public static function show_currency_dropdown( $id, $name, $action_settings ) {
+		$selected     = $action_settings['currency'];
+		$gateways     = (array) $action_settings['gateway'];
+		$select_attrs = array(
+			'id'   => $id,
+			'name' => $name,
+		);
+
+		if ( in_array( 'square', $gateways, true ) ) {
+			$select_attrs['disabled'] = 'disabled';
+			$selected                 = '';
+		}
+
+		$currencies = FrmCurrencyHelper::get_currencies();
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
+		?>
+		<select <?php FrmAppHelper::array_to_html_params( $select_attrs, true ); ?>>
+			<?php
+			if ( in_array( 'square', $gateways, true ) ) {
+				$option_params = array(
+					'class'    => 'square-currency',
+					'selected' => 'selected',
+					'value'    => 'square',
+				);
+				?>
+				<option <?php FrmAppHelper::array_to_html_params( $option_params, true ); ?>><?php esc_html_e( 'Use Square Merchant Currency', 'formidable' ); ?></option>
+				<?php
+			}
+
+			foreach ( $currencies as $code => $currency ) {
+				FrmHtmlHelper::echo_dropdown_option(
+					$currency['name'] . ' (' . strtoupper( $code ) . ')',
+					$selected === strtolower( $code ),
+					array(
+						'value' => strtolower( $code ),
+					)
+				);
+				unset( $currency, $code );
+			}
+			?>
+		</select>
+		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+	}
+
+	/**
+	 * @since 6.27
+	 *
+	 * @return bool
+	 */
+	public static function payments_submodule_or_paypal_is_active() {
+		return class_exists( 'FrmTransAppController' ) || class_exists( 'FrmPaymentsController' );
+	}
+
+	/**
+	 * @deprecated 6.27
+	 *
 	 * @return bool
 	 */
 	public static function should_fallback_to_paypal() {
-		if ( isset( self::$should_fallback_to_paypal ) ) {
-			return self::$should_fallback_to_paypal;
+		_deprecated_function( __METHOD__, '6.27' );
+		return false;
+	}
+
+	/**
+	 * Render the gateway icon buttons for the payment action settings.
+	 *
+	 * @param array         $gateways
+	 * @param WP_Post       $form_action
+	 * @param FrmFormAction $action_control
+	 *
+	 * @return void
+	 */
+	public static function show_gateway_buttons( $gateways, $form_action, $action_control ) {
+		$gateway_order = array( 'stripe', 'square', 'paypal' );
+		$gateways      = self::sort_gateways( $gateways, $gateway_order );
+
+		include self::plugin_path() . '/views/action-settings/gateway-buttons.php';
+	}
+
+	/**
+	 * Sort gateways by a predefined order.
+	 * Unlisted gateways are appended at the end.
+	 *
+	 * @param array $gateways
+	 * @param array $order Gateway keys in desired order.
+	 *
+	 * @return array
+	 */
+	private static function sort_gateways( $gateways, $order ) {
+		$sorted = array();
+
+		foreach ( $order as $key ) {
+			if ( isset( $gateways[ $key ] ) ) {
+				$sorted[ $key ] = $gateways[ $key ];
+			}
 		}
 
-		if ( ! class_exists( 'FrmPaymentsController' ) || ! isset( FrmPaymentsController::$db_opt_name ) ) {
-			self::$should_fallback_to_paypal = false;
-			return false;
+		return $sorted + $gateways;
+	}
+
+	/**
+	 * @since 6.32.1
+	 *
+	 * @param string $gateway 'stripe', 'square', or 'paypal'.
+	 * @param string $mode 'test' or 'live'.
+	 *
+	 * @return void
+	 */
+	public static function trigger_gateway_disconnected_hook( $gateway, $mode ) {
+		/**
+		 * @since 6.32.1
+		 *
+		 * @param string $gateway 'stripe', 'square', or 'paypal'.
+		 * @param string $mode 'test' or 'live'.
+		 */
+		do_action( 'frm_disconnected_gateway', $gateway, $mode );
+	}
+
+	/**
+	 * Get the connection state of a payment gateway for a single mode.
+	 *
+	 * Every gateway stores its credentials per mode, so a site can be connected in test mode
+	 * and disconnected in live mode at the same time.
+	 *
+	 * @since 7.0
+	 *
+	 * @param string $gateway 'stripe', 'square', or 'paypal'.
+	 * @param string $mode    'auto', 'test', or 'live'. 'auto' uses the mode the gateway is currently set to.
+	 *
+	 * @return string 'connected' when the gateway can take a payment in this mode, 'incomplete' when the
+	 *                account was created but never finished onboarding, 'disconnected' when there are no
+	 *                credentials at all. An unknown gateway is reported as 'connected' so nothing is blocked.
+	 */
+	public static function get_gateway_connection_state( $gateway, $mode = 'auto' ) {
+		switch ( $gateway ) {
+			case 'stripe':
+				if ( FrmStrpLiteConnectHelper::stripe_connect_is_setup( $mode ) ) {
+					return 'connected';
+				}
+
+				return FrmStrpLiteConnectHelper::get_account_id( $mode ) ? 'incomplete' : 'disconnected';
+
+			case 'square':
+				return FrmSquareLiteConnectHelper::get_merchant_id( $mode ) ? 'connected' : 'disconnected';
+
+			case 'paypal':
+				return FrmPayPalLiteConnectHelper::get_merchant_id( $mode ) ? 'connected' : 'disconnected';
 		}
 
-		$db     = new FrmTransLiteDb();
-		$option = get_option( $db->db_opt_name );
-		if ( false !== $option ) {
-			// Don't fallback to PayPal if Stripe migrations have run.
-			self::$should_fallback_to_paypal = false;
-			return false;
+		return 'connected';
+	}
+
+	/**
+	 * Explain why a gateway cannot take a payment right now.
+	 *
+	 * This is used both before sending anything to the connect server and when a payment action runs,
+	 * so an unconnected site gets a message about the connection instead of an unrelated API error.
+	 *
+	 * @since 7.0
+	 *
+	 * @param string $gateway 'stripe', 'square', or 'paypal'.
+	 * @param string $mode    'auto', 'test', or 'live'. 'auto' uses the mode the gateway is currently set to.
+	 *
+	 * @return string An empty string when the gateway is connected in this mode.
+	 */
+	public static function get_gateway_connection_error( $gateway, $mode = 'auto' ) {
+		$mode  = self::get_gateway_mode( $gateway, $mode );
+		$state = self::get_gateway_connection_state( $gateway, $mode );
+
+		if ( 'connected' === $state ) {
+			return '';
 		}
 
-		$option = get_option( FrmPaymentsController::$db_opt_name );
-		self::$should_fallback_to_paypal = false !== $option;
+		$label = self::get_gateway_label( $gateway );
 
-		return self::$should_fallback_to_paypal;
+		if ( 'incomplete' === $state ) {
+			return self::add_settings_hint( self::get_incomplete_connection_message( $label, $mode ), $label, false );
+		}
+
+		$other_mode = 'test' === $mode ? 'live' : 'test';
+
+		if ( 'connected' === self::get_gateway_connection_state( $gateway, $other_mode ) ) {
+			return self::add_settings_hint( self::get_wrong_mode_message( $label, $mode ), $label, false );
+		}
+
+		$message = sprintf(
+			/* translators: %1$s: The payment gateway name, for example Stripe */
+			__( '%1$s is not connected. Please connect your %1$s account to process payments.', 'formidable' ),
+			$label
+		);
+
+		return self::add_settings_hint( $message, $label, true );
+	}
+
+	/**
+	 * Get the message for a gateway that is connected in the mode it is not currently using.
+	 *
+	 * @since 7.0
+	 *
+	 * @param string $label The gateway name, for example 'Stripe'.
+	 * @param string $mode  The mode the gateway is currently set to, either 'test' or 'live'.
+	 *
+	 * @return string
+	 */
+	private static function get_wrong_mode_message( $label, $mode ) {
+		if ( 'test' === $mode ) {
+			return sprintf(
+				/* translators: %1$s: The payment gateway name, for example Stripe */
+				__( '%1$s is set to test mode, but it is only connected in live mode. Connect %1$s in test mode, or turn off test mode to use the live connection.', 'formidable' ),
+				$label
+			);
+		}
+
+		return sprintf(
+			/* translators: %1$s: The payment gateway name, for example Stripe */
+			__( '%1$s is set to live mode, but it is only connected in test mode. Connect %1$s in live mode, or turn on test mode to use the test connection.', 'formidable' ),
+			$label
+		);
+	}
+
+	/**
+	 * Get the message for a gateway with credentials that never finished onboarding.
+	 *
+	 * @since 7.0
+	 *
+	 * @param string $label The gateway name, for example 'Stripe'.
+	 * @param string $mode  The mode the gateway is currently set to, either 'test' or 'live'.
+	 *
+	 * @return string
+	 */
+	private static function get_incomplete_connection_message( $label, $mode ) {
+		if ( 'test' === $mode ) {
+			return sprintf(
+				/* translators: %s: The payment gateway name, for example Stripe */
+				__( 'The %s connection for test mode was started but never finished. Complete the connection to process payments.', 'formidable' ),
+				$label
+			);
+		}
+
+		return sprintf(
+			/* translators: %s: The payment gateway name, for example Stripe */
+			__( 'The %s connection for live mode was started but never finished. Complete the connection to process payments.', 'formidable' ),
+			$label
+		);
+	}
+
+	/**
+	 * Tell users who can change settings where to fix the connection.
+	 *
+	 * Everyone else gets the reason without the pointer to an admin page they cannot open.
+	 *
+	 * @since 7.0
+	 *
+	 * @param string $message       The message explaining the connection problem.
+	 * @param string $label         The gateway name, for example 'Stripe'.
+	 * @param bool   $needs_connect True to point at connecting the account, false to point at the existing settings.
+	 *
+	 * @return string
+	 */
+	private static function add_settings_hint( $message, $label, $needs_connect ) {
+		if ( ! current_user_can( 'frm_change_settings' ) ) {
+			return $message;
+		}
+
+		if ( $needs_connect ) {
+			$hint = sprintf(
+				/* translators: %s: The payment gateway name, for example Stripe */
+				__( 'You can connect %s in Global Settings, under the Payments section.', 'formidable' ),
+				$label
+			);
+		} else {
+			$hint = sprintf(
+				/* translators: %s: The payment gateway name, for example Stripe */
+				__( 'You can update the %s connection in Global Settings, under the Payments section.', 'formidable' ),
+				$label
+			);
+		}
+
+		return $message . ' ' . $hint;
+	}
+
+	/**
+	 * Get the mode a gateway is currently set to use.
+	 *
+	 * @since 7.0
+	 *
+	 * @param string $gateway 'stripe', 'square', or 'paypal'.
+	 * @param string $mode    'auto', 'test', or 'live'.
+	 *
+	 * @return string Either 'test' or 'live'.
+	 */
+	private static function get_gateway_mode( $gateway, $mode ) {
+		if ( 'auto' !== $mode ) {
+			return 'test' === $mode ? 'test' : 'live';
+		}
+
+		switch ( $gateway ) {
+			case 'stripe':
+				return FrmStrpLiteAppHelper::active_mode();
+
+			case 'square':
+				return FrmSquareLiteAppHelper::active_mode();
+
+			case 'paypal':
+				return FrmPayPalLiteAppHelper::active_mode();
+		}
+
+		return 'live';
+	}
+
+	/**
+	 * Get the display name for a gateway.
+	 *
+	 * @since 7.0
+	 *
+	 * @param string $gateway 'stripe', 'square', or 'paypal'.
+	 *
+	 * @return string
+	 */
+	private static function get_gateway_label( $gateway ) {
+		$labels = array(
+			'stripe' => 'Stripe',
+			'square' => 'Square',
+			'paypal' => 'PayPal',
+		);
+
+		return $labels[ $gateway ] ?? ucfirst( $gateway );
 	}
 }

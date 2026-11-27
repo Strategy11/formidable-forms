@@ -1,0 +1,708 @@
+/**
+ * Internal dependencies
+ */
+import { HIDDEN_CLASS } from 'core/constants';
+import frmDependentUpdaterComponent from '../../admin/components/dependent-updater-component';
+import { __ } from '@wordpress/i18n';
+
+// Units that describe a length and can be announced next to the number.
+const MEASUREMENT_UNITS = [ 'px', 'em', '%' ];
+
+// Group membership never changes after setup, so getSliderGroupItems() below memoizes per
+// element here rather than re-running querySelectorAll on every caller, including drag ticks.
+const groupItemsCache = new WeakMap();
+
+/**
+ * Represents a slider component.
+ *
+ * @class frmSliderComponent
+ */
+export default class frmSliderComponent {
+	constructor( sliderElements = [], settings = {} ) {
+		this.loadedByWebComponent = sliderElements.length > 0;
+		this.sliderElements = sliderElements.length > 0 ? sliderElements : document.querySelectorAll( '.frm-slider-component' );
+		this.settings = settings;
+
+		if ( 0 === this.sliderElements.length ) {
+			return;
+		}
+
+		this.eventsChange = [];
+
+		this.initOptions();
+		this.init();
+	}
+
+	/**
+	 * Initializes the options for the slider component.
+	 */
+	initOptions() {
+		this.options = [];
+		this.sliderElements.forEach( ( element, index ) => {
+			const parentWrapper = element.classList.contains( 'frm-has-multiple-values' ) ? element.closest( '.frm-style-component' ) : element;
+			const steps = this.settings.steps || ( element.dataset.steps ? JSON.parse( element.dataset.steps ) : null );
+			this.options.push( {
+				maxValue: parseInt( element.dataset.maxValue, 10 ),
+				element,
+				index,
+				steps,
+				dependentUpdater: parentWrapper.classList.contains( 'frm-style-dependent-updater-component' ) ? new frmDependentUpdaterComponent( parentWrapper ) : null
+			} );
+		} );
+	}
+
+	/**
+	 * Initializes the slider component.
+	 */
+	init() {
+		this.initListeners();
+		this.initFill();
+	}
+
+	/**
+	 * Attaches event listeners to each slider element.
+	 */
+	initListeners() {
+		this.sliderElements.forEach( ( element, index ) => {
+			this.eventsChange[ index ] = new Event( 'change', {
+				bubbles: true,
+				cancelable: true
+			} );
+
+			const rangeInput = element.querySelector( '.frm-slider' );
+			const valueInput = element.querySelector( '.frm-slider-value input[type="text"]' );
+
+			if ( ! rangeInput || ! valueInput ) {
+				return;
+			}
+
+			this.initSteps( rangeInput, index );
+
+			// Update the display and preview while dragging.
+			rangeInput.addEventListener( 'input', () => {
+				const value = this.getRangeValue( rangeInput, index );
+				valueInput.value = value;
+				frmSliderComponent.refreshRange( rangeInput, element, value );
+				this.syncGroupSliders( element, value );
+				this.options[ index ].fullValue = this.updateValue( element, value + frmSliderComponent.getUnit( element ) );
+				this.triggerValueChange( index );
+			} );
+
+			// Also handle committed changes from other input methods.
+			rangeInput.addEventListener( 'change', () => {
+				const value = this.getRangeValue( rangeInput, index );
+				this.options[ index ].fullValue = this.updateValue( element, value + frmSliderComponent.getUnit( element ) );
+				this.triggerValueChange( index );
+			} );
+
+			// The value the slider had before the user started typing. Each valid keystroke is
+			// previewed live, so typing "999" commits "9" before "99" is rejected. A rejected
+			// final value restores this one rather than keeping the partially typed prefix.
+			let valueBeforeEdit = null;
+			valueInput.addEventListener( 'focus', () => {
+				valueBeforeEdit = this.getRangeValue( rangeInput, index );
+			} );
+
+			// Sync text input changes back to the range.
+			const onValueChange = event => {
+				const unit = frmSliderComponent.getUnit( element );
+				const newValue = parseFloat( event.target.value );
+				const { steps } = this.options[ index ];
+
+				// With a stepped slider, initSteps() repurposes rangeInput.max to hold the index
+				// bound, not a real value bound - validate against the actual allowed values instead.
+				const isValid = steps && steps.length > 0
+					? steps.map( Number ).includes( newValue )
+					: newValue >= parseFloat( rangeInput.min || 0 ) && parseFloat( rangeInput.max ) >= newValue;
+
+				// An empty/non-numeric value falls through the check above as NaN comparisons are
+				// always false - reject it and resync the text box to the last committed value instead
+				// of leaving it showing the rejected input while the range stays unchanged.
+				if ( isNaN( newValue ) || ! isValid ) {
+					if ( 'change' !== event.type ) {
+						return;
+					}
+
+					if ( null !== valueBeforeEdit && String( valueBeforeEdit ) !== String( this.getRangeValue( rangeInput, index ) ) ) {
+						this.applyTextValue( element, rangeInput, index, valueBeforeEdit, unit );
+					}
+
+					valueInput.value = this.getRangeValue( rangeInput, index );
+					return;
+				}
+
+				this.applyTextValue( element, rangeInput, index, newValue, unit );
+
+				if ( 'change' === event.type ) {
+					valueBeforeEdit = newValue;
+				}
+			};
+			valueInput.addEventListener( 'input', onValueChange );
+			valueInput.addEventListener( 'change', onValueChange );
+
+			frmSliderComponent.expandSliderGroup( element );
+			this.updateOnUnitChange( element, rangeInput, valueInput, index );
+			frmSliderComponent.maybeDisableUnitDropdown( element );
+		} );
+	}
+
+	/**
+	 * Sets the initial fill position for all sliders.
+	 */
+	initFill() {
+		this.sliderElements.forEach( ( element, index ) => {
+			const rangeInput = element.querySelector( '.frm-slider' );
+			if ( ! rangeInput ) {
+				return;
+			}
+
+			const value = this.getRangeValue( rangeInput, index );
+			this.options[ index ].fullValue = value + frmSliderComponent.getUnit( element );
+			frmSliderComponent.refreshRange( rangeInput, element, value );
+		} );
+	}
+
+	/**
+	 * Reads the unit currently selected for a slider.
+	 *
+	 * @since 7.0
+	 *
+	 * @param {HTMLElement} element - The slider component element.
+	 * @return {string} The selected unit, or an empty string when the slider has no unit dropdown.
+	 */
+	static getUnit( element ) {
+		const select = element.querySelector( 'select' );
+		return select ? select.value : '';
+	}
+
+	/**
+	 * Switches a stepped slider over to index positions.
+	 *
+	 * A range input can only step by a fixed amount, so a slider limited to an uneven list of values
+	 * (for instance 1, 2, 3, 4, 6, 12 grid columns) is driven by the position in that list instead.
+	 * Every arrow key press then lands on an allowed value.
+	 *
+	 * @since 7.0
+	 *
+	 * @param {HTMLInputElement} rangeInput - The native range input element.
+	 * @param {number}           index      - The index of this slider in the options array.
+	 * @return {void}
+	 */
+	initSteps( rangeInput, index ) {
+		const { steps } = this.options[ index ];
+
+		if ( ! steps || 0 === steps.length ) {
+			return;
+		}
+
+		const currentValue = parseFloat( rangeInput.value );
+
+		rangeInput.min = '0';
+		rangeInput.max = String( steps.length - 1 );
+		rangeInput.step = '1';
+		rangeInput.value = String( frmSliderComponent.getClosestStepIndex( currentValue, steps ) );
+	}
+
+	/**
+	 * Finds the position in the steps array holding the value closest to the one given.
+	 *
+	 * @since 7.0
+	 *
+	 * @param {number} value - The value to look for.
+	 * @param {Array}  steps - The list of values the slider is allowed to take.
+	 * @return {number} The index of the closest step.
+	 */
+	static getClosestStepIndex( value, steps ) {
+		let closest = 0;
+		let smallestDiff = Math.abs( value - steps[ 0 ] );
+
+		for ( let i = 1; i < steps.length; i++ ) {
+			const diff = Math.abs( value - steps[ i ] );
+			if ( diff < smallestDiff ) {
+				smallestDiff = diff;
+				closest = i;
+			}
+		}
+
+		return closest;
+	}
+
+	/**
+	 * Reads the value a slider represents, resolving the step list when there is one.
+	 *
+	 * @since 7.0
+	 *
+	 * @param {HTMLInputElement} rangeInput - The native range input element.
+	 * @param {number}           index      - The index of this slider in the options array.
+	 * @return {number} The current value.
+	 */
+	getRangeValue( rangeInput, index ) {
+		const { steps } = this.options[ index ];
+
+		if ( steps && steps.length > 0 ) {
+			return steps[ parseInt( rangeInput.value, 10 ) ];
+		}
+
+		return parseFloat( rangeInput.value );
+	}
+
+	/**
+	 * Moves a slider to the position representing the given value.
+	 *
+	 * @since 7.0
+	 *
+	 * @param {HTMLInputElement} rangeInput - The native range input element.
+	 * @param {number}           index      - The index of this slider in the options array.
+	 * @param {number|string}    value      - The value to move to.
+	 * @return {void}
+	 */
+	setRangeValue( rangeInput, index, value ) {
+		const { steps } = this.options[ index ];
+
+		if ( steps && steps.length > 0 ) {
+			rangeInput.value = String( frmSliderComponent.getClosestStepIndex( parseFloat( value ), steps ) );
+			return;
+		}
+
+		frmSliderComponent.applyStep( rangeInput, value );
+		rangeInput.value = value;
+	}
+
+	/**
+	 * Moves a slider to a value typed into its text box and saves it to the hidden input.
+	 *
+	 * @since 7.1
+	 *
+	 * @param {HTMLElement}      element    - The slider component element.
+	 * @param {HTMLInputElement} rangeInput - The native range input element.
+	 * @param {number}           index      - The index of this slider in the options array.
+	 * @param {number|string}    value      - The value to apply, without the unit.
+	 * @param {string}           unit       - The unit selected for the slider.
+	 * @return {void}
+	 */
+	applyTextValue( element, rangeInput, index, value, unit ) {
+		this.setRangeValue( rangeInput, index, value );
+		frmSliderComponent.refreshRange( rangeInput, element, value );
+		this.options[ index ].fullValue = this.updateValue( element, value + unit );
+		this.triggerValueChange( index );
+	}
+
+	/**
+	 * Makes sure the range can hold the given value exactly.
+	 *
+	 * A range snaps its value to the step, so a fractional value needs a step fine enough to land
+	 * on. Whole numbers keep stepping by one so the arrow keys stay useful.
+	 *
+	 * @since 7.0
+	 *
+	 * @param {HTMLInputElement} rangeInput - The native range input element.
+	 * @param {number|string}    value      - The value about to be set.
+	 * @return {void}
+	 */
+	static applyStep( rangeInput, value ) {
+		const decimals = ( String( value ).split( '.' )[ 1 ] || '' ).length;
+		rangeInput.step = decimals > 0 ? `0.${ '0'.repeat( decimals - 1 ) }1` : '1';
+	}
+
+	/**
+	 * Updates the track fill and the value screen readers announce.
+	 *
+	 * @since 7.0
+	 *
+	 * @param {HTMLInputElement} rangeInput - The native range input element.
+	 * @param {HTMLElement}      element    - The slider component element.
+	 * @param {number|string}    value      - The value the slider now represents.
+	 * @return {void}
+	 */
+	static refreshRange( rangeInput, element, value ) {
+		frmSliderComponent.updateFill( rangeInput );
+
+		const unit = frmSliderComponent.getUnit( element );
+
+		// 'auto' has no position on the track, so announce the keyword instead of the value.
+		if ( 'auto' === unit ) {
+			rangeInput.setAttribute( 'aria-valuetext', unit );
+			return;
+		}
+
+		// A blank unit means nothing is set - announce that instead of a bare, misleading number.
+		if ( '' === unit ) {
+			rangeInput.setAttribute( 'aria-valuetext', __( 'Not set', 'formidable' ) );
+			return;
+		}
+
+		const suffix = MEASUREMENT_UNITS.includes( unit ) ? unit : '';
+		rangeInput.setAttribute( 'aria-valuetext', `${ value }${ suffix }` );
+	}
+
+	/**
+	 * Updates the CSS custom property that drives the active-track fill colour.
+	 *
+	 * The ratio is read back from the range input itself so the fill can never disagree
+	 * with where the browser paints the thumb.
+	 *
+	 * @since 7.0
+	 *
+	 * @param {HTMLInputElement} rangeInput - The native range input element.
+	 * @return {void}
+	 */
+	static updateFill( rangeInput ) {
+		const min = parseFloat( rangeInput.min ) || 0;
+		const max = parseFloat( rangeInput.max );
+		const value = parseFloat( rangeInput.value );
+		const span = max - min;
+		const ratio = span > 0 ? Math.min( Math.max( ( value - min ) / span, 0 ), 1 ) : 0;
+
+		rangeInput.style.setProperty( '--frm-fill', ratio );
+	}
+
+	/**
+	 * Syncs grouped child sliders (top/bottom or left/right) to the parent group value.
+	 *
+	 * @since 7.0
+	 *
+	 * @param {HTMLElement}   element - The parent slider component element.
+	 * @param {number|string} value   - The new numeric value (without unit).
+	 * @return {void}
+	 */
+	syncGroupSliders( element, value ) {
+		if ( ! element.classList.contains( 'frm-has-multiple-values' ) && ! element.classList.contains( 'frm-has-independent-fields' ) ) {
+			return;
+		}
+
+		const childSliders = element.classList.contains( 'frm-has-independent-fields' )
+			? element.querySelectorAll( '.frm-independent-slider-field' )
+			: frmSliderComponent.getSliderGroupItems( element );
+
+		childSliders.forEach( child => {
+			const childRange = child.querySelector( '.frm-slider' );
+			const childText = child.querySelector( '.frm-slider-value input[type="text"]' );
+			const childIndex = this.getSliderIndex( child );
+
+			if ( childRange && -1 !== childIndex ) {
+				this.setRangeValue( childRange, childIndex, value );
+				frmSliderComponent.refreshRange( childRange, child, value );
+			}
+
+			if ( childText ) {
+				childText.value = value;
+			}
+		} );
+	}
+
+	static expandSliderGroup( element ) {
+		const svgIcon = element.querySelector( '.frmsvg' );
+
+		if ( element.dataset.displaySliders === undefined || null === svgIcon ) {
+			return;
+		}
+
+		const sliderGroupItems = frmSliderComponent.getSliderGroupItems( element );
+		svgIcon.addEventListener( 'click', () => {
+			sliderGroupItems.forEach( item => {
+				item.classList.toggle( HIDDEN_CLASS );
+			} );
+		} );
+	}
+
+	/**
+	 * Updates the range max, fill, and hidden input when the unit dropdown changes.
+	 *
+	 * @param {HTMLElement}      element    - The slider component element.
+	 * @param {HTMLInputElement} rangeInput - The native range input element.
+	 * @param {HTMLInputElement} valueInput - The visible text input.
+	 * @param {number}           index      - The index of this slider in the options array.
+	 */
+	updateOnUnitChange( element, rangeInput, valueInput, index ) {
+		const select = element.querySelector( 'select' );
+
+		if ( ! select ) {
+			return;
+		}
+
+		select.addEventListener( 'change', event => {
+			const unit = event.target.value.toLowerCase();
+
+			if ( '' === unit ) {
+				element.classList.add( 'frm-disabled', 'frm-empty' );
+				rangeInput.disabled = true;
+
+				// There is no number to show or edit once the unit itself is unset.
+				valueInput.value = '';
+				valueInput.disabled = true;
+				frmSliderComponent.updateLabelFocusTarget( valueInput, false );
+
+				// Drop the old unit from what is announced, the value no longer carries one.
+				frmSliderComponent.refreshRange( rangeInput, element, this.getRangeValue( rangeInput, index ) );
+
+				// Commit the unset state, otherwise the old "<number><unit>" is left standing in the
+				// hidden input and a save silently keeps the previous value instead of clearing it.
+				// fullValue has to be kept in sync too - a dependency-updater component (e.g. the
+				// Quick Settings sliders) propagates from fullValue, not from the hidden input directly.
+				this.options[ index ].fullValue = this.updateValue( element, '' );
+				this.triggerValueChange( index );
+
+				return;
+			}
+
+			if ( 'auto' === unit ) {
+				element.classList.add( 'frm-disabled' );
+				rangeInput.disabled = true;
+
+				// 'auto' is a keyword, not a measurement - the unit dropdown already says so, so leave
+				// the text box blank rather than duplicating the word or coercing it into a number.
+				valueInput.value = '';
+				valueInput.disabled = true;
+				frmSliderComponent.updateLabelFocusTarget( valueInput, false );
+
+				// The slider no longer stands for a number, so announce the keyword that replaced it.
+				rangeInput.setAttribute( 'aria-valuetext', unit );
+				this.options[ index ].fullValue = this.updateValue( element, 'auto' );
+				this.triggerValueChange( index );
+
+				return;
+			}
+
+			element.classList.remove( 'frm-disabled', 'frm-empty' );
+			rangeInput.disabled = false;
+			valueInput.disabled = false;
+			frmSliderComponent.updateLabelFocusTarget( valueInput, true );
+
+			if ( ! this.options[ index ].steps ) {
+				rangeInput.max = this.getMaxValue( unit, index, this.getRangeValue( rangeInput, index ) );
+			}
+
+			// Lowering the max makes the browser clamp the range, so read the value back rather than
+			// trusting the text input, which would otherwise save a number the new unit does not allow.
+			const value = this.getRangeValue( rangeInput, index );
+			valueInput.value = value;
+
+			this.options[ index ].fullValue = value + unit;
+			this.updateValue( element, this.options[ index ].fullValue );
+			frmSliderComponent.refreshRange( rangeInput, element, value );
+			this.triggerValueChange( index );
+		} );
+	}
+
+	/**
+	 * Keep a slider label's `for` on its value input only while the input is enabled, since a label click never focuses a disabled control.
+	 * The label is found by `data-slider-label-for`, printed by `FrmSliderStyleComponent::echo_label_attributes()`.
+	 *
+	 * @since 7.0
+	 *
+	 * @param {HTMLInputElement} valueInput - The visible text input the label may target.
+	 * @param {boolean}          isMeasured - Whether the input is now enabled (a measured unit).
+	 * @return {void}
+	 */
+	static updateLabelFocusTarget( valueInput, isMeasured ) {
+		if ( ! valueInput.id ) {
+			return;
+		}
+
+		const label = document.querySelector( `[data-slider-label-for="${ valueInput.id }"]` );
+		if ( ! label ) {
+			return;
+		}
+
+		if ( isMeasured ) {
+			label.setAttribute( 'for', valueInput.id );
+		} else {
+			label.removeAttribute( 'for' );
+		}
+	}
+
+	/**
+	 * Disables the unit dropdown if there is only a single unit option.
+	 *
+	 * @param {HTMLElement} element - The slider element.
+	 */
+	static maybeDisableUnitDropdown( element ) {
+		const select = element.querySelector( 'select' );
+		if ( ! select ) {
+			return;
+		}
+
+		const options = Array.from( select.options ).filter( option => '' !== option.value );
+		if ( 1 >= options.length ) {
+			select.classList.add( 'frm-single-unit' );
+			select.addEventListener( 'mousedown', event => event.preventDefault() );
+		}
+	}
+
+	/**
+	 * Retrieves an array of slider group items based on the provided element.
+	 *
+	 * @param {HTMLElement} element - The element to retrieve slider group items from.
+	 * @return {NodeList} - An array-like object containing the slider group items.
+	 */
+	static getSliderGroupItems( element ) {
+		if ( groupItemsCache.has( element ) ) {
+			return groupItemsCache.get( element );
+		}
+
+		if ( element.dataset.displaySliders === undefined ) {
+			return [];
+		}
+
+		// A slider is not always inside a style component, and throwing here would abandon the
+		// setup of every slider that comes after this one.
+		const wrapper = element.closest( '.frm-style-component' );
+		if ( ! wrapper ) {
+			return [];
+		}
+
+		const slidersGroup = element.dataset.displaySliders.split( ',' );
+		const query = slidersGroup.map( item => {
+			return `.frm-slider-component[data-type="${ item }"]`;
+		} ).join( ', ' );
+
+		const items = wrapper.querySelectorAll( query );
+		groupItemsCache.set( element, items );
+		return items;
+	}
+
+	/**
+	 * Returns the index of the specified slider element.
+	 *
+	 * @since 7.0
+	 *
+	 * @param {HTMLElement} slider - The slider element.
+	 * @return {number} The index of the slider element, or -1 when it is not tracked.
+	 */
+	getSliderIndex( slider ) {
+		const option = this.options.find( item => item.element === slider );
+		return option ? option.index : -1;
+	}
+
+	/**
+	 * Get the maximum value based on the unit and index.
+	 * A value already saved above the plain unit max still has to stay reachable, otherwise the
+	 * range would clamp it down just from the unit being touched (mirrors get_max_for_unit() in
+	 * FrmSliderStyleComponent.php).
+	 *
+	 * @param {string}      unit         - The unit of measurement.
+	 * @param {number}      index        - The index of the option.
+	 * @param {number|null} currentValue - The value currently on the slider, if checking whether it still fits. Defaults to null (plain max only).
+	 * @return {number} The maximum value.
+	 */
+	getMaxValue( unit, index, currentValue = null ) {
+		const plainMax = '%' === unit ? 100 : this.options[ index ].maxValue;
+		return null !== currentValue && currentValue > plainMax ? Math.ceil( currentValue ) : plainMax;
+	}
+
+	/**
+	 * Triggers a value change for the specified index.
+	 *
+	 * @param {number} index - The index of the value to be changed.
+	 */
+	triggerValueChange( index ) {
+		if ( null !== this.options[ index ].dependentUpdater ) {
+			this.options[ index ].dependentUpdater.updateAllDependentElements( this.options[ index ].fullValue );
+			return;
+		}
+
+		const input = this.sliderElements[ index ].classList.contains( 'frm-has-multiple-values' ) ? this.sliderElements[ index ].closest( '.frm-style-component' ).querySelector( 'input[type="hidden"]' ) : this.sliderElements[ index ].querySelectorAll( '.frm-slider-value input[type="hidden"]' );
+		if ( input instanceof NodeList ) {
+			input.forEach( item => {
+				item.dispatchEvent( this.eventsChange[ index ] );
+			} );
+			return;
+		}
+		input.dispatchEvent( this.eventsChange[ index ] );
+	}
+
+	/**
+	 * Updates the value of a slider component.
+	 *
+	 * @param {HTMLElement} element - The slider component element.
+	 * @param {string}      value   - The new value to be set.
+	 * @return {string} - The updated value.
+	 */
+	updateValue( element, value ) {
+		// When the slider component is used for "Base Font Size", we need to update a hidden input field when change happens to indicate that the "Base Font Size" has been adjusted.
+		// Used to avoid conflicts with other possible font sizes adjustemnts in "Advanced Settings" when moving from "Quick Settings" when "Base Font Size" is not changed.
+		if ( element.classList.contains( 'frm-base-font-size' ) ) {
+			const userBaseFontSizeInput = document.querySelector( 'input[name="frm_style_setting[post_content][use_base_font_size]"]' );
+			if ( userBaseFontSizeInput ) {
+				userBaseFontSizeInput.value = 'true';
+			}
+		}
+		if ( element.classList.contains( 'frm-has-multiple-values' ) ) {
+			const input = element.closest( '.frm-style-component' ).querySelector( 'input[type="hidden"]' );
+			const inputValue = input.value.split( ' ' );
+			const { type } = element.dataset;
+
+			if ( ! inputValue[ 2 ] ) {
+				inputValue[ 2 ] = '0px';
+			}
+
+			if ( ! inputValue[ 3 ] ) {
+				inputValue[ 3 ] = '0px';
+			}
+
+			switch ( type ) {
+				case 'vertical':
+					inputValue[ 0 ] = value;
+					inputValue[ 2 ] = value;
+					break;
+
+				case 'horizontal':
+					inputValue[ 1 ] = value;
+					inputValue[ 3 ] = value;
+					break;
+
+				case 'top':
+					inputValue[ 0 ] = value;
+					break;
+
+				case 'bottom':
+					inputValue[ 2 ] = value;
+					break;
+
+				case 'left':
+					inputValue[ 3 ] = value;
+					break;
+
+				case 'right':
+					inputValue[ 1 ] = value;
+					break;
+			}
+
+			const newValue = inputValue.join( ' ' );
+			input.value = newValue;
+
+			const childSlidersGroup = frmSliderComponent.getSliderGroupItems( element );
+			childSlidersGroup.forEach( slider => {
+				const unitMeasure = this.getUnitMeasureFromValue( value );
+				slider.querySelector( '.frm-slider-value input[type="text"]' ).value = parseFloat( value );
+				slider.querySelector( 'select' ).value = unitMeasure;
+			} );
+
+			return newValue;
+		}
+
+		if ( element.classList.contains( 'frm-has-independent-fields' ) ) {
+			const inputValues = element.querySelectorAll( '.frm-slider-value input[type="hidden"]' );
+			const visibleValues = element.querySelectorAll( '.frm-slider-value input[type="text"]' );
+			inputValues.forEach( ( input, index ) => {
+				input.value = value;
+				visibleValues[ index + 1 ].value = parseFloat( value );
+			} );
+
+			return value;
+		}
+
+		element.querySelector( '.frm-slider-value input[type="hidden"]' ).value = value;
+		return value;
+	}
+
+	/**
+	 * Returns the unit of measurement used in the given value.
+	 *
+	 * @param {string} value - The value to check for the unit of measurement.
+	 * @return {string} The unit of measurement ('%', 'px', 'em') found in the value, or an empty string if none is found.
+	 */
+	getUnitMeasureFromValue( value ) {
+		return MEASUREMENT_UNITS.find( unit => value.includes( unit ) ) || '';
+	}
+}

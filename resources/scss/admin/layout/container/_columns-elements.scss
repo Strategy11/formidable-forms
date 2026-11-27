@@ -1,0 +1,60 @@
+/**
+ * Layout - Container - Columns Elements
+ */
+
+.frm-new-entry .columns-2 {
+	border: none;
+}
+
+.frm-white-body #frm_top_bar,
+.frm-white-body .columns-2 {
+	flex: 0 0 auto;
+}
+
+.columns-2 .frm-right-panel + div {
+	padding-bottom: var(--gap-md);
+	border-left: 1px solid var(--grey-300);
+}
+
+.columns-2 .frm-right-panel + div,
+.frm_wrap #post-body-content {
+	padding-bottom: 0;
+	padding-top: var(--gap-sm);
+	margin-bottom: 0;
+	background: #fff;
+	width: auto;
+	float: none;
+	flex: 2;
+}
+
+.frm-white-body .columns-2 {
+	flex: 1;
+	display: flex;
+	overflow: hidden;
+}
+
+.frm-white-body .columns-2 > div {
+	overflow-y: auto;
+	box-sizing: border-box;
+}
+
+.frm_wrap .columns-2 .frm-right-panel,
+.frm-right-panel {
+	flex: 0 0 var(--biggest-sidebar);
+	float: none;
+	width: var(--biggest-sidebar);
+	min-width: var(--biggest-sidebar);
+	background-color: var(--sidebar-color);
+	margin: 0;
+	box-shadow: none;
+	border: none;
+	padding-bottom: 25px;
+}
+
+.frm-right-panel .frm_field_list,
+.frm_wrap .frm-right-panel #frm_adv_info,
+.frm_wrap #postbox-container-1 #frm_adv_info {
+	box-shadow: none;
+	border: none;
+	margin-bottom: 26px;
+}

@@ -1,0 +1,836 @@
+<?php
+
+class FrmUnitTest extends WP_UnitTestCase {
+
+	use FrmPHPUnitCompatibility;
+
+	/**
+	 * Track if an install has happened to avoid installing too often.
+	 *
+	 * @var bool
+	 */
+	protected static $installed = false;
+
+	protected $user_id = 0;
+
+	protected $contact_form_key         = 'contact-with-email';
+	protected $contact_form_field_count = 10;
+
+	protected $all_fields_form_key   = 'all_field_types';
+	protected $all_field_types_count = 50;
+
+	protected $repeat_sec_form_key  = 'rep_sec_form';
+	protected $create_post_form_key = 'create-a-post';
+
+	protected $is_pro_active = false;
+
+	/**
+	 * Narrows the inherited property to the Formidable factory so static analysis
+	 * can resolve $this->factory->form, ->field and ->entry.
+	 *
+	 * @var FrmUnitTestFactory
+	 */
+	protected $factory;
+
+	/**
+	 * @var FrmUnitTest
+	 */
+	protected static $instance;
+
+	public static function wpSetUpBeforeClass() {
+		$_POST = array();
+	}
+
+	public static function wpTearDownAfterClass() {
+	}
+
+	/**
+	 * Keep WordPress deprecation assertions working after PHPUnit 9.
+	 *
+	 * @return void
+	 */
+	public function expectDeprecated() {
+		if ( version_compare( \PHPUnit\Runner\Version::id(), '10.0', '<' ) ) {
+			parent::expectDeprecated();
+			return;
+		}
+
+		$this->set_up_deprecation_expectations();
+	}
+
+	public function setUp(): void {
+		self::$instance = $this;
+		parent::setUp();
+
+		self::reset_shared_state();
+
+		// The JavaScript antispam check doesn't work with unit tests so turn it off.
+		add_filter( 'frm_run_antispam', '__return_false' );
+
+		$this->is_pro_active = get_option( 'frmpro-authorized' );
+
+		if ( is_multisite() && ! $this->is_pro_active ) {
+			// WP unit testing bootstrap doesn't bother hooking into `pre_site_option` so we need to get_option() instead.
+			$this->is_pro_active = get_site_option( 'frmpro-authorized' );
+		}
+
+		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
+
+		$this->factory        = new FrmUnitTestFactory();
+		$this->factory->form  = new Form_Factory( $this );
+		$this->factory->field = new Field_Factory( $this );
+		$this->factory->entry = new Entry_Factory( $this );
+	}
+
+	/**
+	 * Clear state that outlives a single test.
+	 *
+	 * PHPUnit gives each test its own database transaction, but globals and singletons live
+	 * for the whole process, so one test can leave another reading values it never set. A
+	 * test that needs any of this state should set it up itself; anything that passes only
+	 * because a previous test set it up is relying on the suite's ordering.
+	 *
+	 * @return void
+	 */
+	public static function reset_shared_state() {
+		// Read by FrmXMLHelper::populate_postmeta(), which takes a different code path when set.
+		$GLOBALS['frm_duplicate_ids'] = array();
+
+		// Populated in production only when a form renders, via FrmHoneypot::maybe_render_field().
+		foreach ( array( 'FrmFormState', 'FrmProFormState' ) as $state_class ) {
+			if ( ! class_exists( $state_class ) ) {
+				continue;
+			}
+
+			$instance = new ReflectionProperty( $state_class, 'instance' );
+			$instance->setAccessible( true );
+			$instance->setValue( null, null );
+		}
+	}
+
+	/**
+	 * Some of the tests for FrmDb are triggering a transaction commit, preventing further tests from working.
+	 * This is a temporary workaround until we review FrmDb tests in detail.
+	 */
+	public static function empty_tables() {
+		global $wpdb;
+
+		foreach ( self::get_table_names() as $table ) {
+			$exists = $wpdb->get_var( 'DESCRIBE ' . $table );
+
+			if ( $exists ) {
+				$wpdb->query( "TRUNCATE $table" );
+			}
+		}
+	}
+
+	public static function frm_install() {
+		if ( ! defined( 'WP_IMPORTING' ) ) {
+			// Set this to false so all our tests won't be done with this active
+			define( 'WP_IMPORTING', false );
+		}
+
+		if ( self::$installed ) {
+			/**
+			 * Empty the tables before re-importing.
+			 *
+			 * Importing over forms that already exist updates those forms but skips their
+			 * entries, so a re-import on its own leaves the fixture set with forms and no
+			 * entries. Every class that runs later in the same process then inherits that,
+			 * and which classes those are depends on how the suite happens to be ordered.
+			 * Truncating first makes the re-import restore entries too, so a class gets the
+			 * same fixture data no matter what ran before it.
+			 */
+			self::empty_tables();
+			self::import_xml();
+			return;
+		}
+
+		$allow_xml_mime_types_function = function ( $mimes ) {
+			$mimes['xml'] = 'application/xml';
+			return $mimes;
+		};
+
+		// Allow XML files in import as we're importing several XML files below.
+		add_filter( 'mime_types', $allow_xml_mime_types_function );
+
+		if ( is_multisite() ) {
+			// Mimes get changed because of add_filter( 'upload_mimes', 'check_upload_mimes' ); in ms-default-filters.php (A WordPress file).
+			add_filter( 'upload_mimes', $allow_xml_mime_types_function, 11 );
+		}
+
+		/**
+		 * This is required to run on newer versions of WP without triggering an error:
+		 * file_get_contents(/tmp/wordpress/src/wp-includes/js/wp-emoji-loader.min.js): failed to open stream: No such file or directory
+		 * Our tests do not require the emoji scripts so we can just disable them.
+		 */
+		remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+
+		self::isolate_install_from_plugin_folder();
+
+		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
+		FrmAppController::install();
+		self::do_tables_exist();
+
+		/**
+		 * Start from empty tables even on the first install of the process.
+		 *
+		 * WordPress' install.php drops and recreates the tables it knows about on every process,
+		 * but Formidable's tables are not among them, so rows from a previous run survive. The
+		 * import below would then update the existing forms and skip their entries, leaving a
+		 * fixture set with forms and no entries. That is what makes a re-used database produce
+		 * failures unrelated to the code under test, and what breaks a parallel run as soon as
+		 * one worker runs a second process.
+		 */
+		self::empty_tables();
+
+		self::import_xml();
+
+		do_action( 'frm_unit_test_install' );
+
+		self::$installed = true;
+	}
+
+	/**
+	 * Keep the install from writing into the plugin folder or reaching for the network.
+	 *
+	 * FrmAppHelper::plugin_path() and plugin_url() are derived from __DIR__, which PHP
+	 * resolves through symlinks, so they point at the real plugin folder rather than the
+	 * copy inside the wordpress-develop checkout the tests run against. Everything the
+	 * install writes relative to those therefore lands in the working tree of whoever is
+	 * running the suite, and is picked up by the site they develop against. Two writes do
+	 * that, and both are redirected here rather than skipped, so the code under test still
+	 * runs the same path it runs in production.
+	 *
+	 * @since 6.35
+	 *
+	 * @return void
+	 */
+	private static function isolate_install_from_plugin_folder() {
+		// Generate the stylesheet under uploads, which is disposable, instead of over css/formidableforms.css.
+		add_filter( 'frm_add_css_to_uploads_dir', '__return_true' );
+
+		// Answer the request FrmMigrate makes before deciding to delete the plugin's .htaccess.
+		add_filter( 'pre_http_request', 'FrmUnitTest::respond_to_plugin_asset_request', 10, 3 );
+	}
+
+	/**
+	 * Serve requests for the plugin's own assets from here instead of over HTTP.
+	 *
+	 * A test run has no web server able to serve the plugin, so a request for one of its
+	 * files can only fail. FrmMigrate::maybe_delete_htaccess_file() reads that failure as a
+	 * server that cannot be trusted with the file and deletes the plugin's .htaccess, which
+	 * is tracked in the repository. Requests to anywhere else are left alone.
+	 *
+	 * @since 6.35
+	 *
+	 * @param array|false|WP_Error $response A preemptive response, or false to let the request run.
+	 * @param array                $args     Request arguments.
+	 * @param string               $url      The request URL.
+	 *
+	 * @return array|false|WP_Error
+	 */
+	public static function respond_to_plugin_asset_request( $response, $args, $url ) {
+		if ( ! str_starts_with( $url, FrmAppHelper::plugin_url() . '/' ) ) {
+			return $response;
+		}
+
+		return array(
+			'headers'  => array(),
+			'body'     => '',
+			'response' => array(
+				'code'    => 200,
+				'message' => 'OK',
+			),
+			'cookies'  => array(),
+			'filename' => null,
+		);
+	}
+
+	public static function get_table_names() {
+		global $wpdb;
+
+		$tables = array(
+			$wpdb->prefix . 'frm_fields',
+			$wpdb->prefix . 'frm_forms',
+			$wpdb->prefix . 'frm_items',
+			$wpdb->prefix . 'frm_item_metas',
+		);
+
+		if ( is_multisite() && is_callable( 'FrmProCopy::table_name' ) ) {
+			$tables[] = FrmProCopy::table_name();
+		}
+
+		return $tables;
+	}
+
+	public static function do_tables_exist( $should_exist = true ) {
+		global $wpdb;
+		$method = $should_exist ? 'assertNotEmpty' : 'assertEmpty';
+
+		foreach ( self::get_table_names() as $table_name ) {
+			$message = $table_name . ' table failed to ' . ( $should_exist ? 'install' : 'uninstall' );
+			self::$method( $wpdb->query( 'DESCRIBE ' . $table_name ), $message );
+		}
+	}
+
+	public static function import_xml() {
+		// Install test data in older format
+		add_filter( 'frm_default_templates_files', 'FrmUnitTest::install_data' );
+		FrmXMLController::add_default_templates();
+
+		$form = FrmForm::getOne( 'contact-db12' );
+		self::assertSame( 'contact-db12', $form->form_key );
+	}
+
+	public function get_all_fields_for_form_key( $form_key ) {
+		$field_totals       = array(
+			$this->all_fields_form_key  => $this->is_pro_active ? $this->all_field_types_count : $this->all_field_types_count - 3,
+			$this->create_post_form_key => 10,
+			$this->contact_form_key     => $this->contact_form_field_count,
+			$this->repeat_sec_form_key  => 3,
+		);
+		$expected_field_num = $field_totals[ $form_key ] ?? 0;
+		$form_id            = $this->factory->form->get_id_by_key( $form_key );
+		$fields             = FrmField::get_all_for_form( $form_id, '', 'include' );
+		$actual_field_num   = count( $fields );
+		$this->assertSame( $expected_field_num, $actual_field_num, $actual_field_num . ' fields were retrieved for ' . $form_key . ' form, but ' . $expected_field_num . ' were expected. This could mean that certain fields were not imported correctly.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+
+		return $fields;
+	}
+
+	/**
+	 * Set the current user to 1
+	 */
+	public function set_current_user_to_1() {
+		$this->set_user_by_role( 'administrator' );
+	}
+
+	public function set_current_user_to_username( $login ) {
+		$user = get_user_by( 'login', $login );
+
+		if ( $user ) {
+			wp_set_current_user( $user->ID );
+		}
+	}
+
+	/**
+	 * Get a user by the specified role and set them as the current user
+	 *
+	 * @param string $role
+	 *
+	 * @return WP_User
+	 */
+	public function set_user_by_role( $role ) {
+		$user = $this->get_user_by_role( $role );
+		wp_set_current_user( $user->ID );
+
+		$this->assertTrue( current_user_can( $role ), 'Failed setting the current user role' );
+
+		FrmAppHelper::maybe_add_permissions();
+
+		return $user->ID;
+	}
+
+	/**
+	 * Get a user of a specific role
+	 *
+	 * @param string $role
+	 *
+	 * @return WP_User
+	 */
+	public function get_user_by_role( $role ) {
+		$users = get_users(
+			array(
+				'role'   => $role,
+				'number' => 1,
+			)
+		);
+
+		if ( ! $users ) {
+			$this->fail( 'No users with this role currently exist.' );
+			return null;
+		}
+
+		return reset( $users );
+	}
+
+	public function go_to_new_post() {
+		$new_post = $this->factory->post->create_and_get();
+		$page     = get_permalink( $new_post->ID );
+
+		$this->set_front_end( $page );
+		return $new_post->ID;
+	}
+
+	public function set_front_end( $page = '' ) {
+		if ( $page === '' ) {
+			$page = home_url( '/' );
+		}
+
+		$this->clean_up_global_scope();
+		$this->go_to( $page );
+		$this->assertFalse( is_admin(), 'Failed to switch to the front-end' );
+	}
+
+	public function set_admin_screen( $page = 'index.php' ) {
+		global $current_screen;
+
+		$screens = array(
+			'index.php'                 => array(
+				'base' => 'dashboard',
+				'id'   => 'dashboard',
+			),
+			'admin.php?page=formidable' => array(
+				'base' => 'admin',
+				'id'   => 'toplevel_page_formidable',
+			),
+		);
+
+		if ( $page === 'formidable-edit' ) {
+			$form             = $this->factory->form->get_object_by_id( $this->contact_form_key );
+			$page             = 'admin.php?page=formidable&frm_action=edit&id=' . $form->id;
+			$screens[ $page ] = $screens['admin.php?page=formidable'];
+		} elseif ( ! isset( $screens[ $page ] ) ) {
+			$base             = explode( '.php', $page );
+			$screens[ $page ] = array( 'base' => reset( $base ) );
+		}
+
+		$_GET               = array();
+		$_POST              = array();
+		$_REQUEST           = array();
+		$GLOBALS['taxnow']  = '';
+		$GLOBALS['typenow'] = '';
+		$screen             = (object) $screens[ $page ];
+		$hook               = parse_url( $page );
+
+		$GLOBALS['hook_suffix'] = $hook['path'];
+		set_current_screen();
+
+		$this->set_get_params( $page );
+		$this->assertTrue( $current_screen->in_admin(), 'Failed to switch to the back-end' );
+		$this->assertTrue( is_admin(), 'Failed to switch to the back-end' );
+		$this->assertSame( $screen->base, $current_screen->base, $page );
+
+		FrmHooksController::trigger_load_hook();
+	}
+
+	/**
+	 * Set the admin page parameters for the later code to use
+	 *
+	 * @since 3.0
+	 *
+	 * @param string $url
+	 *
+	 * @return void
+	 */
+	protected function set_get_params( $url ) {
+		if ( ! str_contains( $url, '?' ) ) {
+			return;
+		}
+
+		list( $base, $url_params ) = explode( '?', $url );
+
+		global $pagenow;
+		$pagenow          = $base;
+		$_GET['pagenow']  = $base;
+		$_POST['pagenow'] = $base;
+
+		if ( empty( $url_params ) ) {
+			return;
+		}
+
+		$url_params = explode( '&', $url_params );
+
+		foreach ( $url_params as $param ) {
+			list( $name, $value ) = explode( '=', $param );
+			$_GET[ $name ]        = $value;
+			$_REQUEST[ $name ]    = $value;
+
+			if ( $name !== 'post' ) {
+				continue;
+			}
+
+			global $post;
+			$post = $this->factory->post->get_object_by_id( $value );
+		}
+	}
+
+	public function clean_up_global_scope() {
+		parent::clean_up_global_scope();
+
+		if ( isset( $GLOBALS['current_screen'] ) ) {
+			unset( $GLOBALS['current_screen'] );
+		}
+
+		global $frm_vars;
+
+		$frm_vars = array(
+			'load_css'          => false,
+			'forms_loaded'      => array(),
+			'created_entries'   => array(),
+			'pro_is_authorized' => false,
+			'next_page'         => array(),
+			'prev_page'         => array(),
+		);
+
+		// phpcs:ignore SlevomatCodingStandard.ControlStructures.EarlyExit.EarlyExitNotUsed
+		if ( class_exists( 'FrmProEddController' ) ) {
+			$frmedd_update                 = new FrmProEddController();
+			$frm_vars['pro_is_authorized'] = $frmedd_update->pro_is_authorized();
+		}
+	}
+
+	public function get_footer_output() {
+		ob_start();
+		do_action( 'wp_footer' );
+		return ob_get_clean();
+	}
+
+	/**
+	 * @return array
+	 */
+	public static function install_data() {
+		return array(
+			__DIR__ . '/testdata.xml',
+			__DIR__ . '/free-form.xml',
+			__DIR__ . '/editform.xml',
+			__DIR__ . '/file-upload.xml',
+		);
+	}
+
+	/**
+	 * @param array $type
+	 */
+	public static function generate_xml( $type, $xml_args ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
+		// Code copied from FrmXMLController::generate_xml
+		global $wpdb;
+
+		$type = (array) $type;
+
+		if ( in_array( 'items', $type, true ) && ! in_array( 'forms', $type, true ) ) {
+			// Make sure the form is included if there are entries
+			$type[] = 'forms';
+		}
+
+		if ( in_array( 'forms', $type, true ) ) {
+			// Include actions with forms
+			$type[] = 'actions';
+		}
+
+		$tables = array(
+			'items'   => $wpdb->prefix . 'frm_items',
+			'forms'   => $wpdb->prefix . 'frm_forms',
+			'posts'   => $wpdb->posts,
+			'styles'  => $wpdb->posts,
+			'actions' => $wpdb->posts,
+		);
+
+		$defaults = array( 'ids' => false );
+		$args     = wp_parse_args( $xml_args, $defaults );
+
+		// Make sure ids are numeric.
+		if ( is_array( $args['ids'] ) && $args['ids'] ) {
+			$args['ids'] = array_filter( $args['ids'], 'is_numeric' );
+		}
+
+		$records = array();
+
+		foreach ( $type as $tb_type ) {
+			$where      = array();
+			$join       = '';
+			$table      = $tables[ $tb_type ];
+			$select     = $table . '.id';
+			$query_vars = array();
+
+			switch ( $tb_type ) {
+				case 'forms':
+					// Add forms.
+					if ( $args['ids'] ) {
+						$where[] = array(
+							'or'                       => 1,
+							$table . '.id'             => $args['ids'],
+							$table . '.parent_form_id' => $args['ids'],
+						);
+					} else {
+						$where[ $table . '.status !' ] = 'draft';
+					}
+					break;
+				case 'actions':
+					$select             = $table . '.ID';
+					$where['post_type'] = FrmFormActionsController::$action_post_type;
+
+					if ( ! empty( $args['ids'] ) ) {
+						$where['menu_order'] = $args['ids'];
+					}
+					break;
+				case 'items':
+					// $join = "INNER JOIN {$wpdb->prefix}frm_item_metas im ON ($table.id = im.item_id)";
+					if ( $args['ids'] ) {
+						$where[ $table . '.form_id' ] = $args['ids'];
+					}
+					break;
+				case 'styles':
+					// Loop through all exported forms and get their selected style IDs
+					$form_ids  = $args['ids'];
+					$style_ids = array();
+
+					foreach ( $form_ids as $form_id ) {
+						$form_data = FrmForm::getOne( $form_id );
+
+						// For forms that have not been updated while running 2.0, check if custom_style is set
+						if ( isset( $form_data->options['custom_style'] ) ) {
+							$style_ids[] = $form_data->options['custom_style'];
+						}
+						unset( $form_id, $form_data );
+					}
+
+					$select             = $table . '.ID';
+					$where['post_type'] = 'frm_styles';
+
+					// Only export selected styles
+					if ( $style_ids ) {
+						$where['ID'] = $style_ids;
+					}
+					break;
+				default:
+					$select               = $table . '.ID';
+					$join                 = ' INNER JOIN ' . $wpdb->postmeta . ' pm ON (pm.post_id=' . $table . '.ID)';
+					$where['pm.meta_key'] = 'frm_form_id';
+
+					if ( empty( $args['ids'] ) ) {
+						$where['pm.meta_value >'] = 1;
+					} else {
+						$where['pm.meta_value'] = $args['ids'];
+					}
+					break;
+			}
+
+			$records[ $tb_type ] = FrmDb::get_col( $table . $join, $where, $select );
+			unset( $tb_type );
+		}
+
+		$xml_header = '<?xml version="1.0" encoding="' . esc_attr( get_bloginfo( 'charset' ) ) . "\" ?>\n";
+		ob_start();
+		include FrmAppHelper::plugin_path() . '/classes/views/xml/xml.php';
+		$xml_body = ob_get_clean();
+		$xml      = $xml_header . $xml_body;
+		$cwd      = getcwd();
+		$path     = "{$cwd}/temp.xml";
+		@chmod( $path, 0755 );
+		$fw = fopen( $path, 'w' );
+		fwrite( $fw, $xml, strlen( $xml ) );
+		fclose( $fw );
+
+		return $path;
+	}
+
+	/**
+	 * Create an administrator, editor, and subscriber
+	 *
+	 * @since 2.0
+	 *
+	 * @return void
+	 */
+	protected function create_users() {
+		$roles = array(
+			'admin'      => 'administrator',
+			'editor'     => 'editor',
+			'subscriber' => 'subscriber',
+		);
+
+		foreach ( $roles as $login => $role ) {
+			// The WP test install already creates the admin user, and the factory
+			// throws when a login is taken, so only add the users that are missing.
+			if ( username_exists( $login ) ) {
+				continue;
+			}
+
+			$user_id = $this->factory->user->create_object(
+				array(
+					'user_login' => $login,
+					'user_email' => $login . '@mail.com',
+					'user_pass'  => $login,
+					'role'       => $role,
+				)
+			);
+			$this->assertNotEmpty( $user_id );
+		}
+	}
+
+	/**
+	 * @param array $method
+	 * @param array $args
+	 */
+	protected function run_private_method( $method, $args = array() ) {
+		$m = new ReflectionMethod( $method[0], $method[1] );
+		$m->setAccessible( true );
+		return $m->invokeArgs( is_string( $method[0] ) ? null : $method[0], $args );
+	}
+
+	/**
+	 * Skip this if running < php 5.3
+	 *
+	 * @param mixed $object
+	 * @param string $property
+	 *
+	 * @return ReflectionProperty
+	 */
+	protected function get_accessible_property( $object, $property ) {
+		$rc = new ReflectionClass( $object );
+		$p  = $rc->getProperty( $property );
+		$p->setAccessible( true );
+		return $p;
+	}
+
+	protected function get_private_property( $object, $property ) {
+		$p = $this->get_accessible_property( $object, $property );
+		return $p->getValue( is_object( $object ) ? $object : null );
+	}
+
+	protected function set_private_property( $object, $property, $value ) {
+		$p = $this->get_accessible_property( $object, $property );
+
+		if ( ! is_object( $object ) && null !== $object ) {
+			// Avoid passing a non-object, non-null value to setValue.
+			// Otherwise a ReflectionProperty::setValue() with a 1st argument which is not null or an object message will get logged.
+			$object = null;
+		}
+		$p->setValue( $object, $value );
+	}
+
+	protected function check_php_version( $required ) {
+		if ( version_compare( phpversion(), $required, '<' ) ) {
+			$this->markTestSkipped( 'Test requires PHP > ' . $required );
+		}
+	}
+
+	/**
+	 * @param string $role
+	 */
+	protected function use_frm_role( $role ) {
+		switch ( $role ) {
+			case 'loggedout':
+				wp_set_current_user( null );
+				break;
+
+			case 'formidable_custom_role':
+				$user = wp_get_current_user();
+
+				// Remove any standard roles to make room for a custom one
+				foreach ( array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' ) as $role ) {
+					$user->remove_role( $role );
+				}
+
+				add_role( 'formidable_custom_role', 'Custom Role' );
+				$user->add_role( 'formidable_custom_role' );
+
+				wp_set_current_user( $user->ID );
+				break;
+
+			default:
+				$this->set_user_by_role( $role );
+				break;
+		}
+	}
+
+	/**
+	 * Assert that every <aside> tag in some rendered HTML has a non-empty aria-label.
+	 * <aside> carries an implicit role="complementary", which the IBM Equal Access
+	 * checker flags as unlabelled complementary content otherwise (aria_complementary_labelled).
+	 *
+	 * @since 7.0
+	 *
+	 * @param string $html
+	 * @param int    $expected_count Required so an empty/short match list fails loudly instead of
+	 *                               passing vacuously (assertNotContains passes on an empty array).
+	 *
+	 * @return void
+	 */
+	protected function assert_complementary_landmarks_are_labelled( $html, $expected_count ) {
+		preg_match_all( '/<aside\b[^>]*>/', $html, $matches );
+		$this->assertCount( $expected_count, $matches[0], 'Unexpected number of <aside> elements' );
+
+		$labels = array();
+
+		foreach ( $matches[0] as $aside_tag ) {
+			preg_match( '/aria-label="([^"]*)"/', $aside_tag, $label_match );
+			$labels[] = $label_match[1] ?? '';
+		}
+
+		$this->assertNotContains( '', $labels, 'Every complementary landmark needs a non-empty accessible name' );
+	}
+
+	/**
+	 * Assert that none of the given HTML element ids appears more than once in some
+	 * rendered HTML (aria_id_unique — a duplicate id breaks any ARIA property that
+	 * references it, since the reference can no longer resolve to a single element).
+	 *
+	 * @since 7.0
+	 *
+	 * @param string $html
+	 * @param array  $ids
+	 *
+	 * @return void
+	 */
+	protected function assert_no_duplicate_element_ids( $html, $ids ) {
+		foreach ( $ids as $id ) {
+			$count = preg_match_all( '/\bid=["\']' . preg_quote( $id, '/' ) . '["\']/', $html );
+			$this->assertSame( 1, $count, 'Expected exactly one element with id "' . $id . '"' );
+		}
+	}
+
+	/**
+	 * Assert that every <form> tag in some rendered HTML has a non-empty aria-label,
+	 * and that no two forms share the same one (aria_landmark_name_unique).
+	 *
+	 * @since 7.0
+	 *
+	 * @param string $html
+	 * @param int    $expected_count Required so an empty/short match list fails loudly instead of
+	 *                               passing vacuously (assertNotContains/assertSame both pass on an
+	 *                               empty array).
+	 *
+	 * @return void
+	 */
+	protected function assert_form_landmarks_have_unique_names( $html, $expected_count ) {
+		preg_match_all( '/<form\b[^>]*>/', $html, $matches );
+		$this->assertCount( $expected_count, $matches[0], 'Unexpected number of <form> elements' );
+
+		$labels = array();
+
+		foreach ( $matches[0] as $form_tag ) {
+			preg_match( '/aria-label="([^"]*)"/', $form_tag, $label_match );
+			$labels[] = $label_match[1] ?? '';
+		}
+
+		$this->assertNotContains( '', $labels, 'Every form landmark needs a non-empty accessible name' );
+		$this->assertSame( array_unique( $labels ), $labels, 'Form landmarks must have distinct accessible names' );
+	}
+
+	/**
+	 * Assert that a checkbox-type input's wrapping <label> does not also carry a
+	 * `for` attribute -- the wrap alone already associates label and input, so a
+	 * redundant `for`/id pair makes Safari VoiceOver announce the label twice
+	 * (label_name_visible / duplicate association).
+	 *
+	 * @since 7.0
+	 *
+	 * @param string $html
+	 * @param string $field_description Used only in the failure message, e.g. "checkbox option" or "GDPR".
+	 *
+	 * @return void
+	 */
+	protected function assert_label_wraps_input_without_for( $html, $field_description ) {
+		$this->assertMatchesRegularExpression(
+			'/<label[^>]*>\s*<input type="checkbox"/',
+			$html,
+			"Expected the {$field_description} label to wrap the checkbox input"
+		);
+		$this->assertDoesNotMatchRegularExpression(
+			'/<label[^>]*\sfor="[^"]*"[^>]*>\s*<input type="checkbox"/',
+			$html,
+			"The {$field_description} label should not also carry a for attribute when it already wraps the input -- Safari VoiceOver double-announces it"
+		);
+	}
+}

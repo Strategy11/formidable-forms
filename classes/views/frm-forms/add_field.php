@@ -2,13 +2,39 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+/**
+ * Filters the builder container presentation. Defaults preserve section markup.
+ *
+ * @since 7.1
+ *
+ * @param string $container_type The presentation type.
+ * @param array $field The builder field.
+ */
+$container_type = apply_filters( 'frm_builder_container_type', $field['type'], $field );
 ?>
-<li id="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" class="<?php echo esc_attr( $li_classes ); ?>" data-fid="<?php echo esc_attr( $field['id'] ); ?>" data-formid="<?php echo esc_attr( 'divider' === $field['type'] ? $field['form_select'] : $field['form_id'] ); ?>" data-ftype="<?php echo esc_attr( $display['type'] ); ?>" data-type="<?php echo esc_attr( $field['type'] ); ?>">
-<?php if ( $field['type'] === 'divider' ) { ?>
+<li id="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" class="<?php echo esc_attr( $li_classes ); ?>" data-fid="<?php echo esc_attr( $field['id'] ); ?>" data-formid="<?php echo esc_attr( 'divider' === $field['type'] && isset( $field['form_select'] ) ? $field['form_select'] : $field['form_id'] ); ?>" data-ftype="<?php echo esc_attr( $display['type'] ); ?>" data-type="<?php echo esc_attr( $field['type'] ); ?>" <?php FrmAppHelper::array_to_html_params( $extra_field_attributes, true ); ?>>
+<?php
+if ( $container_type === 'divider' ) {
+	$icon_class = ! empty( $field['form_select'] ) ? 'frm_repeat_icon' : 'frm-form-title-style';
+	/**
+	 * Filters the icon shown at the start of a builder container.
+	 *
+	 * @since 7.1
+	 *
+	 * @param string $icon_class The icon class without the frmfont marker.
+	 * @param array  $field      The builder field.
+	 */
+	$icon_class = apply_filters( 'frm_builder_container_icon', $icon_class, $field );
+	FrmAppHelper::icon_by_class( "frmfont $icon_class frm-divider-icon" );
+	?>
 <div class="divider_section_only">
 <?php } ?>
 
-	<?php do_action( 'frm_extra_field_actions', $field['id'] ); ?>
+<?php
+FrmSubmitHelper::print_last_row_fields_order_input();
+
+do_action( 'frm_extra_field_actions', $field['id'] );
+?>
 
 <div id="field_<?php echo esc_attr( $field['id'] ); ?>_inner_container" class="frm_inner_field_container">
 	<div class="frm-field-action-icons frm-show-hover">
@@ -17,7 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			(ID <?php echo esc_html( $field['id'] ); ?>)
 		</div>
 
-		<?php if ( $field['type'] === 'divider' ) : ?>
+		<?php if ( $container_type === 'divider' ) : ?>
 			<a href="#" class="frm-collapse-section" title="<?php esc_attr_e( 'Expand/Collapse Section', 'formidable' ); ?>">
 				<?php
 				FrmAppHelper::icon_by_class(
@@ -29,27 +55,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php endif; ?>
 
 		<a href="#" class="frm_bstooltip frm-move frm-hover-icon" title="<?php esc_attr_e( 'Move Field', 'formidable' ); ?>" data-container="body" aria-label="<?php esc_attr_e( 'Move Field', 'formidable' ); ?>">
-			<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_thick_move_icon' ); ?>
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_thick_move_icon' ); ?>
 		</a>
 
 		<div class="dropdown">
-			<a href="#" class="frm_bstooltip frm-hover-icon frm-dropdown-toggle dropdown-toggle" title="<?php esc_attr_e( 'More Options', 'formidable' ); ?>" data-toggle="dropdown" data-container="body" aria-expanded="false">
-				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_thick_more_vert_icon' ); ?>
+			<a href="#" class="frm_bstooltip frm-hover-icon frm-dropdown-toggle dropdown-toggle" title="<?php esc_attr_e( 'More Options', 'formidable' ); ?>" data-toggle="dropdown" data-container="body" data-trigger="hover" aria-expanded="false" data-bs-display="static">
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_thick_more_vert_icon' ); ?>
+				<span class="screen-reader-text"><?php esc_html_e( 'Toggle More Options Dropdown', 'formidable' ); ?></span>
 			</a>
 			<ul class="frm-dropdown-menu frm-p-1 <?php echo esc_attr( is_rtl() ? 'dropdown-menu-left' : 'dropdown-menu-right' ); ?>" role="menu"></ul>
 		</div>
 
 	</div>
 
-	<label class="frm_primary_label" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
-		<?php echo FrmAppHelper::kses( force_balance_tags( $field['name'] ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-		<span class="frm_required <?php echo esc_attr( FrmField::is_required( $field ) ? '' : 'frm_hidden' ); ?>">
-			<?php echo esc_html( $field['required_indicator'] ); ?>
-		</span>
-		<span class="frm-sub-label frm-collapsed-label">
-			<?php esc_html_e( '(Collapsed)', 'formidable' ); ?>
-		</span>
-	</label>
+	<?php $field_obj->show_label_on_form_builder(); ?>
 
 	<div class="frm_form_fields frm_opt_container" data-ftype="<?php echo esc_attr( $display['type'] ); ?>">
 		<?php $field_obj->show_on_form_builder(); ?>
@@ -57,12 +76,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 	<?php if ( $display['description'] || in_array( $field['type'], array( 'address', 'credit_card' ), true ) ) { ?>
 		<div class="frm_description" id="field_description_<?php echo esc_attr( $field['id'] ); ?>">
-			<?php echo FrmAppHelper::kses( force_balance_tags( $field['description'] ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php FrmAppHelper::kses_echo( force_balance_tags( $field['description'] ), 'all' ); ?>
 		</div>
 	<?php } ?>
 </div>
 <?php
-if ( $display['conf_field'] ) {
+/**
+ * Fires after a field's box in the form builder, before the field settings.
+ *
+ * @since 6.32
+ *
+ * @param array{field:array, display:array} $args Contains the `field` and `display` arrays.
+ */
+do_action( 'frm_builder_preview_after_field', compact( 'field', 'display' ) );
+
+if ( $display['conf_field'] && ! is_callable( 'FrmProFieldsController::add_confirmation_field_preview' ) ) {
+	// Backward compatibility for Pro versions that render the confirmation field
+	// preview from here instead of via the frm_builder_preview_after_field hook.
 	$input_html = sprintf(
 		'<input type="text" id="conf_field_%1$s" name="field_options[conf_input_%2$s]" placeholder="%3$s" class="dyn_default_value" />',
 		esc_attr( $field['field_key'] ),
@@ -87,17 +117,43 @@ if ( $display['conf_field'] ) {
 				?>
 			</div>
 			<div id="conf_field_description_<?php echo esc_attr( $field['id'] ); ?>" class="frm_description"><?php
-				echo FrmAppHelper::kses( force_balance_tags( $field['conf_desc'] ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				FrmAppHelper::kses_echo( force_balance_tags( $field['conf_desc'] ), 'all' );
 			?></div>
 	</div>
 	</div>
 	<div class="clear"></div>
 	<?php
+}//end if
+
+if ( isset( $values['deferred_settings'] ) ) {
+	ob_start();
 }
 
 FrmFieldsController::load_single_field_settings( compact( 'field', 'field_obj', 'values', 'display' ) );
 
-if ( 'divider' === $field['type'] ) {
+if ( isset( $values['deferred_settings'] ) ) {
+	$values['deferred_settings']->html = ob_get_clean();
+	$values['deferred_settings']->meta = array(
+		'name'    => $field['name'],
+		'type'    => $field['type'],
+		'key'     => $field['field_key'],
+		'order'   => $field['field_order'],
+		'classes' => $display['css'] ? $field['classes'] : null,
+		'align'   => $field['align'] ?? null,
+	);
+}
+
+/**
+ * Lets field providers render their builder child list, retaining the legacy fallback.
+ *
+ * @since 7.1
+ *
+ * @param bool $handled Whether a provider rendered the child list boundary.
+ * @param array $field The builder field.
+ */
+$boundary_rendered = apply_filters( 'frm_builder_container_boundary', false, $field );
+
+if ( ! $boundary_rendered && 'divider' === $field['type'] ) {
 	?>
 </div>
 <div class="frm_no_section_fields">
@@ -105,13 +161,14 @@ if ( 'divider' === $field['type'] ) {
 </div>
 <ul class="start_divider frm_sorting frm_grid_container">
 	<?php
-} elseif ( 'end_divider' === $field['type'] ) {
+	FrmAppHelper::icon_by_class( 'frmfont frm-circle frm-divider-icon' );
+} elseif ( ! $boundary_rendered && 'end_divider' === $field['type'] ) {
 	?>
 </ul>
 	<?php
 }
 
-if ( $field['type'] !== 'divider' ) {
+if ( $container_type !== 'divider' ) {
 	?>
 </li>
 	<?php

@@ -43,10 +43,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</label>
 	</p>
 
-<?php if ( ! $values['is_template'] ) { ?>
-	<?php $first_h3 = ''; ?>
+<?php
+/**
+ * Fires after the form description field.
+ *
+ * @since 6.18
+ *
+ * @param array $values The form values.
+ */
+do_action( 'frm_settings_after_form_description', $values );
 
-	<?php if ( has_action( 'frm_settings_buttons' ) ) { ?>
+if ( ! $values['is_template'] ) {
+	$first_h3 = '';
+
+	if ( has_action( 'frm_settings_buttons' ) ) {
+		?>
 		<h3 class="<?php echo esc_attr( $first_h3 ); ?>">
 			<?php esc_html_e( 'Form Settings', 'formidable' ); ?>
 		</h3>
@@ -54,16 +65,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php do_action( 'frm_settings_buttons', $values ); ?>
 			<div class="clear"></div>
 		</div>
-		<?php $first_h3 = ''; ?>
-	<?php } ?>
-<?php } ?>
+		<?php
+		$first_h3 = '';
+	}
+}
+?>
 
 <h3 class="<?php echo esc_attr( $first_h3 ); ?>">
 	<?php esc_html_e( 'On Submit', 'formidable' ); ?>
-	<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Choose what will happen after the user submits this form.', 'formidable' ); ?>"></span>
+	<?php FrmAppHelper::tooltip_icon( __( 'Choose what will happen after the user submits this form.', 'formidable' ) ); ?>
 </h3>
 
-<input type="hidden" name="options[on_submit_migrated]" value="<?php echo empty( $values['on_submit_migrated'] ) ? '' : intval( $values['on_submit_migrated'] ); ?>" />
+<input type="hidden" name="options[on_submit_migrated]" value="<?php echo ! empty( $values['on_submit_migrated'] ) ? (int) $values['on_submit_migrated'] : ''; ?>" />
 
 <p class="frm8 frm_form_field">
 	<label for="no_save" class="frm_inline_block">
@@ -72,52 +85,78 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</label>
 </p>
 
+<div class="frm_note_style">
+	<?php esc_html_e( 'Spam settings have been moved to a new section.', 'formidable' ); ?>
+	<a href="#spam_settings"><?php esc_html_e( 'Click here to jump to Spam settings.', 'formidable' ); ?></a>
+</div>
+
 <?php
-is_callable( 'FrmFormsController::render_spam_settings' ) && FrmFormsController::render_spam_settings( $values );
 FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' );
 ?>
 
 <!--AJAX Section-->
 <h3><?php esc_html_e( 'AJAX', 'formidable' ); ?>
-	<span class="frm_help frm_icon_font frm_tooltip_icon" data-placement="right" title="<?php esc_attr_e( 'Make stuff happen in the background without a page refresh', 'formidable' ); ?>" ></span>
+	<?php FrmAppHelper::tooltip_icon( __( 'Make stuff happen in the background without a page refresh', 'formidable' ), array( 'data-placement' => 'right' ) ); ?>
 </h3>
 
 <table class="form-table">
+	<?php
+	// Temporary notice where the removed "Load and save form builder page with AJAX" setting used to be.
+	$builder_field_count = FrmFormsHelper::count_fields_without_submit( $values['fields'] );
+	?>
 	<tr>
 		<td>
-			<label for="ajax_load" class="frm_inline_block">
-				<input type="checkbox" name="options[ajax_load]" id="ajax_load" value="1"<?php echo ( $values['ajax_load'] ) ? ' checked="checked"' : ''; ?> /> <?php esc_html_e( 'Load and save form builder page with AJAX', 'formidable' ); ?>
-				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Recommended for long forms.', 'formidable' ); ?>"></span>
-			</label>
+			<div id="frm_ajax_load_notice" class="frm_note_style">
+				<?php
+				echo esc_html(
+					sprintf(
+						/* translators: %d: Number of fields */
+						__( 'The form builder now loads and saves with AJAX automatically once a form has more than %d fields.', 'formidable' ),
+						FrmFormsHelper::AJAX_BUILDER_FIELD_THRESHOLD
+					)
+				);
+				echo ' ';
+
+				if ( FrmFormsHelper::should_ajax_load_builder( $builder_field_count, (int) $values['id'] ) ) {
+					/* translators: %d: Number of fields */
+					$ajax_load_status = _n( 'This form has %d field, so AJAX loading is on.', 'This form has %d fields, so AJAX loading is on.', $builder_field_count, 'formidable' );
+				} else {
+					/* translators: %d: Number of fields */
+					$ajax_load_status = _n( 'This form has %d field, so AJAX loading is off.', 'This form has %d fields, so AJAX loading is off.', $builder_field_count, 'formidable' );
+				}
+
+				echo esc_html( sprintf( $ajax_load_status, $builder_field_count ) );
+				?>
+			</div>
 		</td>
 	</tr>
 	<?php do_action( 'frm_add_form_ajax_options', $values ); ?>
-	<?php if ( ! FrmFormsHelper::should_use_pro_for_ajax_submit() ) { ?>
-		<tr>
-			<td>
-				<label for="ajax_submit">
-					<input type="checkbox" name="options[ajax_submit]" id="ajax_submit" value="1" <?php checked( $values['ajax_submit'], 1 ); ?> />
-					<?php esc_html_e( 'Submit this form with AJAX', 'formidable' ); ?>
-					<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Submit the form without refreshing the page.', 'formidable' ); ?>"></span>
-				</label>
-			</td>
-		</tr>
-	<?php } ?>
+	<tr>
+		<td>
+			<label for="ajax_submit">
+				<input type="checkbox" name="options[ajax_submit]" id="ajax_submit" value="1" <?php checked( $values['ajax_submit'], 1 ); ?> />
+				<?php esc_html_e( 'Submit this form with AJAX', 'formidable' ); ?>
+				<?php FrmAppHelper::tooltip_icon( __( 'Submit the form without refreshing the page.', 'formidable' ) ); ?>
+			</label>
+		</td>
+	</tr>
 	<tr>
 		<td>
 			<label for="js_validate" class="frm_inline_block">
 				<input type="checkbox" name="options[js_validate]" id="js_validate" value="1" <?php checked( $values['js_validate'], 1 ); ?> />
 				<?php esc_html_e( 'Validate this form with javascript', 'formidable' ); ?>
-				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Required fields, email format, and number format can be checked instantly in your browser. You may want to turn this option off if you have any customizations to remove validation messages on certain fields.', 'formidable' ); ?>" data-container="body"></span>
+				<?php FrmAppHelper::tooltip_icon( __( 'Required fields, email format, and number format can be checked instantly in your browser. You may want to turn this option off if you have any customizations to remove validation messages on certain fields.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
 			</label>
 		</td>
 	</tr>
 </table>
 
-<!--Permissions Section-->
-<?php do_action( 'frm_add_form_perm_options', $values ); ?>
+<input type="hidden" name="options[custom_style]" value="<?php echo esc_attr( $values['custom_style'] ); ?>" />
 
+<!--Permissions Section-->
 <?php
+do_action( 'frm_add_form_perm_options', $values );
+
 /*
  * We keep this section to make the frm_add_form_msg_options hook still work after we moved the Success message option
  * to the On Submit action, and moved the Draft message option to the below of its checkbox.

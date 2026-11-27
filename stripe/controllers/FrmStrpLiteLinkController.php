@@ -50,19 +50,23 @@ class FrmStrpLiteLinkController {
 	 *
 	 * @param string $intent_id
 	 * @param string $client_secret
+	 *
 	 * @return void
 	 */
 	private static function handle_one_time_stripe_link_return_url( $intent_id, $client_secret ) {
 		$redirect_helper = new FrmStrpLiteLinkRedirectHelper( $intent_id, $client_secret );
 		$frm_payment     = new FrmTransLitePayment();
+		$payment         = $frm_payment->get_one_by( $intent_id, 'receipt_id' );
 
-		$payment = $frm_payment->get_one_by( $intent_id, 'receipt_id' );
 		if ( ! $payment ) {
 			$redirect_helper->handle_error( 'no_payment_record' );
 			die();
 		}
 
+		self::use_payment_mode( $payment );
+
 		$intent = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_intent', $intent_id );
+
 		if ( ! is_object( $intent ) ) {
 			$redirect_helper->handle_error( 'intent_does_not_exist' );
 			die();
@@ -74,8 +78,9 @@ class FrmStrpLiteLinkController {
 			die();
 		}
 
-		$status             = 'succeeded' === $intent->status ? 'complete' : 'authorized';
-		$new_payment_values = compact( 'status' );
+		$status                       = 'succeeded' === $intent->status ? 'complete' : 'authorized';
+		$new_payment_values           = (array) $payment;
+		$new_payment_values['status'] = $status;
 
 		if ( 'complete' === $status ) {
 			$charge                           = reset( $intent->charges->data );
@@ -92,9 +97,28 @@ class FrmStrpLiteLinkController {
 
 		$redirect_helper->set_entry_id( $entry->id );
 
-		$action = FrmStrpLiteActionsController::get_stripe_link_action( $entry->form_id );
+		$action = self::get_action_for_payment( $payment, $entry );
+
 		if ( ! $action ) {
 			$redirect_helper->handle_error( 'no_stripe_link_action' );
+			die();
+		}
+
+		$currency        = FrmTransLiteAppHelper::get_action_setting( 'currency', array( 'payment' => $payment ) );
+		$currency        = FrmCurrencyHelper::get_currency( $currency );
+		$actual_amount   = (int) $intent->amount;
+		$expected_amount = round( (float) $payment->amount, 2 );
+
+		if ( 0 !== $currency['decimals'] ) {
+			// Convert 10 to 1000 for example for Stripe.
+			// But avoid for this a 0-decimal currency like JPY.
+			$expected_amount *= 100;
+		}
+
+		$expected_amount = (int) round( $expected_amount );
+
+		if ( $expected_amount !== $actual_amount ) {
+			$redirect_helper->handle_error( 'amount_mismatch' );
 			die();
 		}
 
@@ -124,33 +148,72 @@ class FrmStrpLiteLinkController {
 
 		self::maybe_update_intent( $intent, $action, $entry );
 
-		$frm_payment->update( $payment->id, $new_payment_values );
-		FrmTransLiteActionsController::trigger_payment_status_change( compact( 'status', 'payment' ) );
+		// A webhook event may have already updated this payment, so check the status again before running triggers.
+		$needs_triggers = $status !== $payment->status && self::payment_status_still_needs_to_update( $payment->id, $status );
+		$updated        = $frm_payment->update( $payment->id, $new_payment_values );
+
+		if ( $needs_triggers && $updated ) {
+			FrmTransLiteActionsController::trigger_payment_status_change( compact( 'status', 'payment' ) );
+		}
 
 		$redirect_helper->handle_success( $entry, isset( $charge ) ? $charge->id : '' );
 		die();
 	}
 
 	/**
+	 * Check that the payment status has not been updated by another request already.
+	 * This is to avoid running the payment actions twice.
+	 *
+	 * @since 6.35
+	 *
+	 * @param int    $payment_id The id of the payment to check.
+	 * @param string $status     The status the payment is about to be updated to.
+	 *
+	 * @return bool
+	 */
+	private static function payment_status_still_needs_to_update( $payment_id, $status ) {
+		$frm_payment = new FrmTransLitePayment();
+		$payment     = $frm_payment->get_one( $payment_id );
+
+		return $payment && $payment->status !== $status;
+	}
+
+	/**
+	 * Use the Stripe mode a payment was made in for the rest of a return URL request.
+	 *
+	 * The return URL does not carry the form preview state, so a payment made while the
+	 * Test Mode add-on overrides the mode would otherwise be looked up with the site's
+	 * configured mode, and Stripe would report that the intent does not exist.
+	 *
+	 * @since 7.0
+	 *
+	 * @param object $payment The payment row for the intent being returned to.
+	 *
+	 * @return void
+	 */
+	private static function use_payment_mode( $payment ) {
+		$mode = ! empty( $payment->test ) ? 'test' : 'live';
+
+		add_filter(
+			'frm_strp_active_mode',
+			function () use ( $mode ) {
+				return $mode;
+			},
+			99
+		);
+	}
+
+	/**
 	 * Try to add the description to a Stripe link payment after it was confirmed.
 	 *
 	 * @param object           $intent
-	 * @param WP_Post|stdClass $action
+	 * @param stdClass|WP_Post $action
 	 * @param stdClass         $entry
+	 *
 	 * @return void
 	 */
 	private static function maybe_update_intent( $intent, $action, $entry ) {
-		if ( empty( $action->post_content['description'] ) ) {
-			return;
-		}
-
-		$shortcode_atts = array(
-			'entry' => $entry,
-			'form'  => $entry->form_id,
-			'value' => $action->post_content['description'],
-		);
-		$new_values = array( 'description' => FrmTransLiteAppHelper::process_shortcodes( $shortcode_atts ) );
-		FrmStrpLiteAppHelper::call_stripe_helper_class( 'update_intent', $intent->id, $new_values );
+		self::maybe_update_intent_description( $intent->id, $action, $entry );
 	}
 
 	/**
@@ -162,6 +225,7 @@ class FrmStrpLiteLinkController {
 	 *
 	 * @param string $setup_id
 	 * @param string $client_secret
+	 *
 	 * @return void
 	 */
 	private static function handle_recurring_stripe_link_return_url( $setup_id, $client_secret ) {
@@ -174,8 +238,11 @@ class FrmStrpLiteLinkController {
 			die();
 		}
 
+		self::use_payment_mode( $payment );
+
 		// Verify the setup intent.
 		$setup_intent = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_setup_intent', $setup_id );
+
 		if ( ! is_object( $setup_intent ) ) {
 			$redirect_helper->handle_error( 'intent_does_not_exist' );
 			die();
@@ -189,6 +256,7 @@ class FrmStrpLiteLinkController {
 
 		// Verify the entry.
 		$entry = FrmEntry::getOne( $payment->item_id );
+
 		if ( ! is_object( $entry ) ) {
 			$redirect_helper->handle_error( 'no_entry_found' );
 			die();
@@ -197,7 +265,8 @@ class FrmStrpLiteLinkController {
 		$redirect_helper->set_entry_id( $entry->id );
 
 		// Verify it's an action with Stripe link enabled.
-		$action = FrmStrpLiteActionsController::get_stripe_link_action( $entry->form_id );
+		$action = self::get_action_for_payment( $payment, $entry );
+
 		if ( ! is_object( $action ) ) {
 			$redirect_helper->handle_error( 'no_stripe_link_action' );
 			die();
@@ -205,6 +274,7 @@ class FrmStrpLiteLinkController {
 
 		$customer_id       = $setup_intent->customer;
 		$payment_method_id = self::get_link_payment_method( $setup_intent );
+
 		if ( ! $payment_method_id ) {
 			FrmTransLitePaymentsController::change_payment_status( $payment, 'failed' );
 			$redirect_helper->handle_error( 'did_not_complete' );
@@ -215,13 +285,13 @@ class FrmStrpLiteLinkController {
 		$new_charge = array(
 			'customer'               => $customer_id,
 			'default_payment_method' => $payment_method_id,
-			'plan' => FrmStrpLiteSubscriptionHelper::get_plan_from_atts(
+			'plan'                   => FrmStrpLiteSubscriptionHelper::get_plan_from_atts(
 				array(
 					'action' => $action,
 					'amount' => $amount,
 				)
 			),
-			'expand'           => array( 'latest_invoice.charge' ),
+			'expand'                 => array( 'latest_invoice.charge' ),
 		);
 
 		if ( ! FrmStrpLitePaymentTypeHandler::should_use_automatic_payment_methods( $action ) ) {
@@ -236,6 +306,7 @@ class FrmStrpLiteLinkController {
 		);
 
 		$trial_end = FrmStrpLiteActionsController::get_trial_end_time( $atts );
+
 		if ( $trial_end ) {
 			$new_charge['trial_end'] = $trial_end;
 		}
@@ -249,20 +320,32 @@ class FrmStrpLiteLinkController {
 		}
 
 		if ( 'succeeded' !== $setup_intent->status ) {
+			FrmTransLitePaymentsController::change_payment_status( $payment, 'failed' );
 			$redirect_helper->handle_error( 'payment_failed' );
 			die();
 		}
 
 		$customer_has_been_charged = ! empty( $subscription->latest_invoice->charge );
 		$atts['charge']            = FrmStrpLiteSubscriptionHelper::prepare_charge_object_for_subscription( $subscription, $amount );
-		$new_payment_values        = array();
+		$new_payment_values        = (array) $payment;
 
 		if ( $customer_has_been_charged ) {
 			$charge                           = $subscription->latest_invoice->charge;
 			$new_payment_values['receipt_id'] = $charge->id;
-			$new_payment_values['status']     = 'pending' === $charge->status ? 'processing' : 'complete';
+
+			if ( 'failed' === $charge->status ) {
+				FrmTransLitePaymentsController::change_payment_status( $payment, 'failed' );
+
+				$new_payment_values['receipt_id'] = $charge->id;
+				$frm_payment->update( $payment->id, $new_payment_values );
+
+				$redirect_helper->handle_error( 'payment_failed', $charge->id );
+			}
+
+			$new_payment_values['status'] = 'pending' === $charge->status ? 'processing' : 'complete';
 
 			$new_payment_values['expire_date'] = '0000-00-00';
+
 			foreach ( $subscription->latest_invoice->lines->data as $line ) {
 				$new_payment_values['expire_date'] = gmdate( 'Y-m-d', $line->period->end );
 			}
@@ -270,7 +353,7 @@ class FrmStrpLiteLinkController {
 			$new_payment_values['amount']      = 0;
 			$new_payment_values['begin_date']  = gmdate( 'Y-m-d', time() );
 			$new_payment_values['expire_date'] = gmdate( 'Y-m-d', $trial_end );
-		}
+		}//end if
 
 		$new_payment_values['sub_id'] = FrmStrpLiteSubscriptionHelper::create_new_subscription( $atts );
 
@@ -283,6 +366,7 @@ class FrmStrpLiteLinkController {
 
 			// Update the next billing date.
 			$next_bill_date = gmdate( 'Y-m-d' );
+
 			foreach ( $subscription->latest_invoice->lines->data as $line ) {
 				$next_bill_date = gmdate( 'Y-m-d', $line->period->end );
 			}
@@ -306,11 +390,13 @@ class FrmStrpLiteLinkController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param object $setup_intent
-	 * @return string|false
+	 *
+	 * @return false|string
 	 */
 	private static function get_link_payment_method( $setup_intent ) {
 		if ( is_object( $setup_intent->latest_attempt ) && ! empty( $setup_intent->latest_attempt->payment_method_details ) ) {
 			$payment_method_details = $setup_intent->latest_attempt->payment_method_details;
+
 			foreach ( array( 'ideal', 'sofort', 'bancontact' ) as $payment_method_type ) {
 				if ( ! empty( $payment_method_details->$payment_method_type ) ) {
 					return $payment_method_details->$payment_method_type->generated_sepa_debit;
@@ -333,35 +419,38 @@ class FrmStrpLiteLinkController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param array $atts {
+	 *     The details needs to create a payment.
+	 *
 	 *     @type stdClass $form
 	 *     @type stdClass $entry
 	 *     @type WP_Post  $action
 	 *     @type string   $amount
 	 *     @type object   $customer
 	 * }
-	 * @return void
+	 *
+	 * @return bool True on success, false on failure.
 	 */
 	public static function create_pending_stripe_link_payment( $atts ) {
 		if ( empty( $atts['form'] ) || empty( $atts['entry'] ) || empty( $atts['action'] ) || ! isset( $atts['amount'] ) || empty( $atts['customer'] ) ) {
-			return;
+			return false;
 		}
 
 		$form      = $atts['form'];
-		$intent_id = self::verify_intent( $form->id );
+		$action    = $atts['action'];
+		$intent_id = self::verify_intent( $form->id, $action, $atts['setup_intent'] ?? false );
 
 		if ( ! $intent_id ) {
-			return;
+			return false;
 		}
 
-		$is_setup_intent = 0 === strpos( $intent_id, 'seti_' );
+		$is_setup_intent = str_starts_with( $intent_id, 'seti_' );
 		$entry           = $atts['entry'];
-		$action          = $atts['action'];
 		$amount          = $atts['amount'];
 		$customer        = $atts['customer'];
 
 		if ( ! $is_setup_intent ) {
 			// Update the amount and set the customer before confirming the payment.
-			FrmStrpLiteAppHelper::call_stripe_helper_class(
+			$updated = FrmStrpLiteAppHelper::call_stripe_helper_class(
 				'update_intent',
 				$intent_id,
 				array(
@@ -369,12 +458,16 @@ class FrmStrpLiteLinkController {
 					'customer' => $customer->id,
 				)
 			);
+
+			if ( ! $updated ) {
+				return false;
+			}
 		}
 
 		self::add_temporary_referer_meta( (int) $entry->id );
 
 		$frm_payment = new FrmTransLitePayment();
-		$frm_payment->create(
+		$payment_id  = $frm_payment->create(
 			array(
 				'paysys'     => 'stripe',
 				'amount'     => FrmTransLiteAppHelper::get_formatted_amount_for_currency( $amount, $action ),
@@ -383,38 +476,93 @@ class FrmStrpLiteLinkController {
 				'action_id'  => $action->ID,
 				'receipt_id' => $intent_id,
 				'sub_id'     => '',
+				'test'       => 'test' === FrmStrpLiteAppHelper::active_mode() ? 1 : 0,
 			)
 		);
+
+		return (bool) $payment_id;
 	}
 
 	/**
 	 * Verify a payment intent or setup intent client secret is in the POST data and is valid.
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
+	 * @since 7.0 Picks the posted intent that belongs to the running action instead of the first one.
 	 *
-	 * @param string|int $form_id
-	 * @return string|false String intent id on success, False if intent is missing or cannot be verified.
+	 * @param int|string   $form_id
+	 * @param WP_Post      $action       The payment action being verified.
+	 * @param false|object $setup_intent A SetupIntent already retrieved in this request.
+	 *
+	 * @return false|string String intent id on success, False if intent is missing or cannot be verified.
 	 */
-	private static function verify_intent( $form_id ) {
+	private static function verify_intent( $form_id, $action, $setup_intent = false ) {
 		$client_secrets = FrmAppHelper::get_post_param( 'frmintent' . $form_id, array(), 'sanitize_text_field' );
+
 		if ( ! $client_secrets ) {
 			return false;
 		}
 
-		$client_secret              = reset( $client_secrets );
-		list( $prefix, $intent_id ) = explode( '_', $client_secret );
-		$intent_id                  = $prefix . '_' . $intent_id;
+		$client_secret = FrmStrpLiteFormIntentHelper::find_posted_client_secret( $client_secrets, $action );
 
-		$is_setup_intent = 0 === strpos( $intent_id, 'seti_' );
-
-		$function_name = $is_setup_intent ? 'get_setup_intent' : 'get_intent';
-		$intent        = FrmStrpLiteAppHelper::call_stripe_helper_class( $function_name, $intent_id );
-
-		if ( ! $intent || $intent->client_secret !== $client_secret ) {
+		if ( ! $client_secret ) {
 			return false;
 		}
 
+		$intent_id       = FrmStrpLiteFormIntentHelper::get_intent_id( $client_secret );
+		$is_setup_intent = FrmStrpLiteFormIntentHelper::SETUP_TYPE === FrmStrpLiteFormIntentHelper::get_intent_type_for_id( $intent_id );
+
+		if ( $is_setup_intent && is_object( $setup_intent ) && $setup_intent->id === $intent_id ) {
+			$intent = $setup_intent;
+		} else {
+			$method = $is_setup_intent ? 'get_setup_intent' : 'get_intent';
+			$intent = FrmStrpLiteAppHelper::call_stripe_helper_class( $method, $intent_id );
+		}
+
+		if ( ! $intent || $intent->client_secret !== $client_secret || ! self::intent_matches_form_action( $intent, $action ) ) {
+			return false;
+		}
+
+		if ( self::intent_already_charged( $intent ) ) {
+			return false;
+		}
+
+		$frm_payment = new FrmTransLitePayment();
+		$payment     = $frm_payment->get_one_by( $intent_id, 'receipt_id' );
+
+		if ( $payment ) {
+			if ( ! in_array( $payment->status, array( 'pending', 'failed' ), true ) ) {
+				// A payment for this intent already went through; it should not be reused.
+				return false;
+			}
+
+			if ( 'failed' !== $payment->status ) {
+				// An earlier attempt with this intent didn't go through, most likely a card decline
+				// that never redirected back to mark the payment failed. Update it instead of leaving
+				// it pending forever and blocking every retry that reuses the same intent.
+				$frm_payment->update( $payment->id, array( 'status' => 'failed' ) );
+			}
+		}
+
 		return $intent_id;
+	}
+
+	/**
+	 * Check if an intent matches a form action.
+	 *
+	 * @since 6.29
+	 *
+	 * @param object  $intent
+	 * @param WP_Post $action
+	 *
+	 * @return bool
+	 */
+	private static function intent_matches_form_action( $intent, $action ) {
+		if ( ! isset( $intent->metadata ) || ! is_object( $intent->metadata ) || empty( $intent->metadata->action ) ) {
+			// Avoid false positive if the intent is missing metadata.
+			return true;
+		}
+
+		return (int) $intent->metadata->action === $action->ID;
 	}
 
 	/**
@@ -424,6 +572,7 @@ class FrmStrpLiteLinkController {
 	 * It is deleted after the redirect happens.
 	 *
 	 * @param int $entry_id
+	 *
 	 * @return void
 	 */
 	private static function add_temporary_referer_meta( $entry_id ) {
@@ -435,6 +584,7 @@ class FrmStrpLiteLinkController {
 			'setup_intent',
 			'setup_intent_client_secret',
 		);
+
 		foreach ( $query_args_to_strip_from_referer as $arg ) {
 			$referer = remove_query_arg( $arg, $referer );
 		}
@@ -449,6 +599,7 @@ class FrmStrpLiteLinkController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param stdClass $form
+	 *
 	 * @return void
 	 */
 	public static function add_form_classes( $form ) {
@@ -465,6 +616,7 @@ class FrmStrpLiteLinkController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param mixed $form
+	 *
 	 * @return mixed
 	 */
 	public static function force_ajax_submit_for_stripe_link( $form ) {
@@ -477,10 +629,84 @@ class FrmStrpLiteLinkController {
 			return $form;
 		}
 
+		if ( FrmAppHelper::is_admin() ) {
+			// Admin pages like the entries list load form objects without submitting them with Stripe link.
+			// Skip the payment action query there. AJAX requests still pass through.
+			return $form;
+		}
+
 		if ( false !== FrmStrpLiteActionsController::get_stripe_link_action( $form->id ) ) {
 			$form->options['ajax_submit'] = '1';
 		}
 
 		return $form;
+	}
+
+	/**
+	 * Get the action a returning payment belongs to.
+	 *
+	 * Use the recorded action when available. Older rows or deleted actions fall back to the form action.
+	 *
+	 * @since 7.0
+	 *
+	 * @param object   $payment
+	 * @param stdClass $entry
+	 *
+	 * @return false|WP_Post
+	 */
+	private static function get_action_for_payment( $payment, $entry ) {
+		$action = FrmStrpLiteActionsController::get_action_for_payment( $payment );
+
+		if ( $action ) {
+			return $action;
+		}
+
+		return FrmStrpLiteActionsController::get_stripe_link_action( $entry->form_id );
+	}
+
+	/**
+	 * Check if an intent already has a charge that succeeded or is in progress.
+	 *
+	 * A form now reuses one intent across a failed attempt and a retry, so a failed charge from an
+	 * earlier attempt can still be listed in the intent's charges. The intent's own status says
+	 * whether money has actually moved, so check that instead of whether any charge exists at all.
+	 *
+	 * @since 7.0
+	 *
+	 * @param object $intent
+	 *
+	 * @return bool
+	 */
+	private static function intent_already_charged( $intent ) {
+		return in_array( $intent->status, array( 'succeeded', 'requires_capture', 'processing' ), true );
+	}
+
+	/**
+	 * Try to add the description to a Stripe link payment after it was confirmed.
+	 * The intent is created when the form loads, before there is an entry to read shortcode values from,
+	 * so the description can only be filled in once the payment is confirmed.
+	 *
+	 * @since 7.0
+	 *
+	 * @param string           $intent_id
+	 * @param stdClass|WP_Post $action
+	 * @param stdClass         $entry
+	 * @param string           $mode      'auto', 'live', or 'test'.
+	 *
+	 * @return bool True if Stripe accepted the new description.
+	 */
+	public static function maybe_update_intent_description( $intent_id, $action, $entry, $mode = 'auto' ) {
+		if ( empty( $action->post_content['description'] ) ) {
+			return false;
+		}
+
+		$shortcode_atts = array(
+			'entry' => $entry,
+			'form'  => $entry->form_id,
+			'value' => $action->post_content['description'],
+		);
+		$new_values     = array( 'description' => FrmTransLiteAppHelper::process_shortcodes( $shortcode_atts ) );
+
+		return true === FrmStrpLiteAppHelper::call_stripe_helper_class( 'update_intent', $intent_id, $new_values, $mode );
 	}
 }

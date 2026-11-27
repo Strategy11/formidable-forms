@@ -4,28 +4,27 @@
  * @class S11FloatingLinks
  */
 class S11FloatingLinks {
-
 	/**
 	 * Create a new S11FloatingLinks instance.
 	 *
-	 * @constructor
+	 * @class
 	 */
 	constructor() {
-		wp.hooks.addAction( 'set_floating_links_config', 'S11FloatingLinks', ({ links, options }) => {
+		wp.hooks.addAction( 'set_floating_links_config', 'S11FloatingLinks', ( { links, options } ) => {
 			this.validateInputs( links, options );
 
 			this.links = links;
 			this.options = options;
 
 			this.initComponent();
-		});
+		} );
 	}
 
 	/**
 	 * Validate the input parameters.
 	 *
-	 * @param {Array<Object>} links - The links array.
-	 * @param {Object} options - The options object.
+	 * @param {Array<Object>} links   The links array.
+	 * @param {Object}        options The options object.
 	 *
 	 * @throws {Error} If the links array is empty or not provided.
 	 * @throws {Error} If the options.logoIcon is not provided or is an empty string.
@@ -46,6 +45,11 @@ class S11FloatingLinks {
 	 * @memberof S11FloatingLinks
 	 */
 	initComponent() {
+		if ( document.querySelector( '.frm-review-notice' ) ) {
+			// Do not load if the review notice is being shown.
+			return;
+		}
+
 		// Create and append elements
 		this.createWrapper();
 		this.createNavMenu();
@@ -59,6 +63,84 @@ class S11FloatingLinks {
 
 		// Apply styles
 		this.setCSSVariables();
+
+		// Use a timeout to give time for Pro to add hooks.
+		setTimeout( () => this.setupInboxSlideIn(), 0 );
+	}
+
+	setupInboxSlideIn() {
+		if ( 'object' !== typeof frmGlobal.inboxSlideIn || ! window.frmDom || ! window.wp ) {
+			return;
+		}
+
+		const slideIn = this.getInboxSlideIn();
+		slideIn.classList.add( 's11-fadein' );
+		document.body.append( slideIn );
+
+		// Make sure the events are set for dismissing the inbox message.
+		if ( ! document.querySelector( '.frm-inbox-wrapper' ) ) {
+			frmAdminBuild.inboxInit();
+		}
+	}
+
+	/**
+	 * @return {HTMLElement} The inbox slide-in element.
+	 */
+	getInboxSlideIn() {
+		const h3 = frmDom.tag(
+			'h3',
+			{ id: 'frm_inbox_slidein_title' }
+		);
+		h3.innerHTML = frmAdminBuild.purifyHtml( frmGlobal.inboxSlideIn.subject );
+		const messageSpan = frmDom.span( {
+			id: 'frm_inbox_slidein_message',
+			text: frmGlobal.inboxSlideIn.slidein
+		} );
+		const dismissIcon = frmDom.a( {
+			className: 'dismiss frm_inbox_dismiss',
+			child: frmDom.svg( { href: '#frm_close_icon' } )
+		} );
+		dismissIcon.setAttribute( 'aria-label', wp.i18n.__( 'Dismiss this notice', 'formidable' ) );
+		dismissIcon.setAttribute( 'role', 'button' );
+		const children = frmAdminBuild.hooks.applyFilters(
+			'frm_inbox_slidein_children',
+			[ h3, messageSpan ]
+		);
+		const slideIn = frmDom.div( {
+			id: 'frm_inbox_slide_in',
+			className: 'frm-card-item frm-compact-card-item frm-dismissible frm-box-shadow-xxl',
+			children
+		} );
+		slideIn.setAttribute( 'data-message', frmGlobal.inboxSlideIn.key );
+		slideIn.setAttribute( 'role', 'alert' );
+		slideIn.insertAdjacentHTML( 'beforeend', frmAdminBuild.purifyHtml( frmGlobal.inboxSlideIn.cta ) );
+		slideIn.querySelector( '.frm-button-secondary' )?.remove();
+		this.updateSlideInCtaUtm( slideIn );
+		slideIn.append( frmDom.span( { child: dismissIcon } ) );
+		slideIn.querySelector( 'a[href].frm-button-primary' )?.setAttribute(
+			'aria-description',
+			`${ frmGlobal.inboxSlideIn.subject } ${ frmGlobal.inboxSlideIn.slidein }`.replace( '&amp;', '&' )
+		);
+		this.slideIn = slideIn;
+		return slideIn;
+	}
+
+	updateSlideInCtaUtm( slideIn ) {
+		slideIn.querySelectorAll( 'a[href]' ).forEach(
+			anchor => {
+				if ( '#' === anchor.href ) {
+					return;
+				}
+
+				const urlObj = new URL( anchor.href );
+				const searchParams = new URLSearchParams( urlObj.search );
+
+				searchParams.set( 'utm_medium', 'slidein' );
+
+				urlObj.search = searchParams.toString();
+				anchor.href = urlObj.toString();
+			}
+		);
 	}
 
 	/**
@@ -72,7 +154,7 @@ class S11FloatingLinks {
 		this.wrapperElement.classList.add( 's11-floating-links', 's11-fadein' );
 
 		// Add the wrapper to the DOM
-		document.body.appendChild( this.wrapperElement );
+		document.body.append( this.wrapperElement );
 	}
 
 	/**
@@ -86,7 +168,7 @@ class S11FloatingLinks {
 		this.navMenuElement.classList.add( 's11-floating-links-nav-menu', 's11-fadeout' );
 
 		// Create and append link elements
-		this.links.forEach( ( link ) => {
+		this.links.forEach( link => {
 			if ( ! this.linkHasRequiredProperties( link ) ) {
 				return;
 			}
@@ -97,21 +179,21 @@ class S11FloatingLinks {
 			linkElement.href = link.url;
 			linkElement.title = link.title;
 
-			if ( link.openInNewTab ===  true ) {
+			if ( link.openInNewTab === true ) {
 				linkElement.target = '_blank';
 				linkElement.rel = 'noopener noreferrer';
 			}
 
 			linkElement.innerHTML = `
-				<span class="s11-floating-links-nav-text">${link.title}</span>
-				<span class="s11-floating-links-nav-icon">${link.icon}</span>
+				<span class="s11-floating-links-nav-text">${ link.title }</span>
+				<span class="s11-floating-links-nav-icon">${ link.icon }</span>
 			`;
 
-			this.navMenuElement.appendChild( linkElement );
-		});
+			this.navMenuElement.append( linkElement );
+		} );
 
 		// Append the navigation menu to the wrapper element
-		this.wrapperElement.appendChild( this.navMenuElement );
+		this.wrapperElement.append( this.navMenuElement );
 	}
 
 	linkHasRequiredProperties( link ) {
@@ -128,26 +210,44 @@ class S11FloatingLinks {
 		// Create the icon button element
 		this.iconButtonElement = document.createElement( 'div' );
 		this.iconButtonElement.classList.add( 's11-floating-links-logo-icon' );
+		this.iconButtonElement.setAttribute( 'role', 'button' );
+		this.iconButtonElement.setAttribute( 'tabindex', '0' );
+		this.iconButtonElement.setAttribute( 'aria-label', wp.i18n.__( 'Formidable support and links', 'formidable' ) );
+		this.iconButtonElement.setAttribute( 'aria-expanded', 'false' );
 		this.iconButtonElement.innerHTML = this.options.logoIcon.trim();
 
 		// Define close icon
 		const closeIcon = `
-			<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 32 32">
+			<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 32 32" aria-hidden="true">
 				<path fill="#1D2939" d="M23.625 21.957c.47.467.47 1.225 0 1.693a1.205 1.205 0 0 1-1.699 0l-5.915-5.937-5.958 5.935c-.47.467-1.23.467-1.7 0a1.194 1.194 0 0 1 0-1.693l5.96-5.933-5.961-5.979a1.194 1.194 0 0 1 0-1.693 1.205 1.205 0 0 1 1.699 0l5.96 5.982 5.957-5.935a1.205 1.205 0 0 1 1.7 0 1.194 1.194 0 0 1 0 1.693l-5.96 5.932 5.917 5.935Z"/>
 			</svg>
 		`;
 
-		// Add a click event listener
-		this.iconButtonElement.addEventListener( 'click', () => {
+		const toggleIconButton = () => {
 			// Toggle the navigation menu element
 			this.toggleFade( this.navMenuElement );
 
+			if ( this.slideIn ) {
+				this.toggleFade( this.slideIn );
+			}
+
 			// Switch the icon of the icon button element
 			this.switchIconButton( closeIcon );
-		});
+		};
+
+		// Add a click event listener
+		this.iconButtonElement.addEventListener( 'click', toggleIconButton );
+
+		// Support activating the button with the keyboard, since it's a <div> with role="button".
+		this.iconButtonElement.addEventListener( 'keydown', event => {
+			if ( event.key === 'Enter' || event.key === ' ' ) {
+				event.preventDefault();
+				toggleIconButton();
+			}
+		} );
 
 		// Append the icon button to the wrapper element
-		this.wrapperElement.appendChild( this.iconButtonElement );
+		this.wrapperElement.append( this.iconButtonElement );
 	}
 
 	/**
@@ -161,7 +261,10 @@ class S11FloatingLinks {
 	switchIconButton( closeIcon ) {
 		this.iconButtonElement.classList.toggle( 's11-show-close-icon' );
 
-		if ( this.iconButtonElement.classList.contains( 's11-show-close-icon' ) ) {
+		const isOpen = this.iconButtonElement.classList.contains( 's11-show-close-icon' );
+		this.iconButtonElement.setAttribute( 'aria-expanded', isOpen ? 'true' : 'false' );
+
+		if ( isOpen ) {
 			this.iconButtonElement.innerHTML = closeIcon.trim();
 			return;
 		}
@@ -188,7 +291,7 @@ class S11FloatingLinks {
 
 		element.addEventListener( 'animationend', () => {
 			element.classList.remove( 's11-fading' );
-		}, { once: true });
+		}, { once: true } );
 	}
 
 	/**
@@ -198,20 +301,24 @@ class S11FloatingLinks {
 	 * @memberof S11FloatingLinks
 	 */
 	addOutsideClickListener() {
-		document.body.addEventListener( 'click', ( e ) => {
+		document.body.addEventListener( 'click', e => {
 			if ( ! this.wrapperElement.contains( e.target ) && this.navMenuElement.classList.contains( 's11-fadein' ) ) {
 				// Toggle the navigation menu element
 				this.toggleFade( this.navMenuElement );
 
+				if ( this.slideIn ) {
+					this.toggleFade( this.slideIn );
+				}
+
 				// Switch the icon of the icon button element
 				this.switchIconButton( this.options.logoIcon.trim() );
 			}
-		});
+		} );
 
 		// Prevent click event from bubbling up to the body when clicking on the wrapper element
-		this.wrapperElement.addEventListener( 'click', ( e ) => {
+		this.wrapperElement.addEventListener( 'click', e => {
 			e.stopPropagation();
-		});
+		} );
 	}
 
 	/**
@@ -229,15 +336,20 @@ class S11FloatingLinks {
 				if ( ! this.wrapperElement.classList.contains( 's11-fadein' ) ) {
 					this.toggleFade( this.wrapperElement );
 				}
-			} else {
+			} else if ( ! this.wrapperElement.classList.contains( 's11-fadeout' ) && ! this.inboxSlideInIsVisible() ) {
 				// When scrolling down hide the Floating Links
-				if ( ! this.wrapperElement.classList.contains( 's11-fadeout' ) ) {
-					this.toggleFade( this.wrapperElement );
-				}
+				this.toggleFade( this.wrapperElement );
 			}
 
 			this.lastScrollPosition = currentScrollPosition;
-		});
+		} );
+	}
+
+	inboxSlideInIsVisible() {
+		if ( ! this.slideIn ) {
+			return 'object' === typeof frmGlobal.inboxSlideIn;
+		}
+		return null === this.wrapperElement.querySelector( '.s11-show-close-icon' );
 	}
 
 	/**
@@ -246,8 +358,8 @@ class S11FloatingLinks {
 	 * @memberof S11FloatingLinks
 	 */
 	setCSSVariables() {
-		const hoverColor = this.options?.hoverColor ? this.options.hoverColor : '#4199FD';
-		const bgHoverColor = this.options?.bgHoverColor ? this.options.bgHoverColor : '#F5FAFF';
+		const hoverColor = this.options?.hoverColor ? this.options.hoverColor : '#026EE8';
+		const bgHoverColor = this.options?.bgHoverColor ? this.options.bgHoverColor : '#F6FAFF';
 
 		// Set the CSS variables on the wrapper element
 		this.wrapperElement.style.setProperty( '--floating-links-hover-color', hoverColor );

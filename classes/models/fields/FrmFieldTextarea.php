@@ -10,6 +10,7 @@ class FrmFieldTextarea extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'textarea';
@@ -44,19 +45,24 @@ class FrmFieldTextarea extends FrmFieldType {
 	 * @return void
 	 */
 	public function show_on_form_builder( $name = '' ) {
-		$size = FrmField::get_option( $this->field, 'size' );
-		$max  = FrmField::get_option( $this->field, 'max' );
+		$max = FrmField::get_option( $this->field, 'max' );
 
-		echo '<textarea name="' . esc_attr( $this->html_name( $name ) ) . '" rows="' . esc_attr( $max ) . '" id="' . esc_attr( $this->html_id() ) . '" class="dyn_default_value"';
+		$html_atts = array(
+			'name'        => $this->html_name( $name ),
+			'id'          => $this->html_id(),
+			'rows'        => $max,
+			'class'       => 'dyn_default_value',
+			'placeholder' => FrmField::get_option( $this->field, 'placeholder' ),
+		);
 
-		if ( $size ) {
-			if ( is_numeric( $size ) ) {
-				$size .= 'px';
-			}
-			$style = 'width:' . $size . ';';
-			echo ' style="' . esc_attr( $style ) . '"';
+		$size_style = $this->get_builder_size_style();
+
+		if ( $size_style ) {
+			$html_atts['style'] = $size_style;
 		}
 
+		echo '<textarea';
+		FrmAppHelper::array_to_html_params( $html_atts, true );
 		echo '>';
 		echo FrmAppHelper::esc_textarea( force_balance_tags( $this->get_field_column( 'default_value' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '</textarea>';
@@ -64,7 +70,6 @@ class FrmFieldTextarea extends FrmFieldType {
 
 	protected function prepare_display_value( $value, $atts ) {
 		FrmFieldsHelper::run_wpautop( $atts, $value );
-
 		return $value;
 	}
 
@@ -89,12 +94,13 @@ class FrmFieldTextarea extends FrmFieldType {
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
 		$input_html = $this->get_field_input_html_hook( $this->field );
-		$this->add_aria_description( $args, $input_html );
-		$rows = ( $this->field['max'] ) ? 'rows="' . esc_attr( $this->field['max'] ) . '" ' : '';
+		$rows       = $this->field['max'] ? 'rows="' . esc_attr( $this->field['max'] ) . '" ' : '';
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		return '<textarea name="' . esc_attr( $args['field_name'] ) . '" id="' . esc_attr( $args['html_id'] ) . '" ' .
 			$rows . $input_html . '>' .
 			FrmAppHelper::esc_textarea( $this->field['value'] ) .
 			'</textarea>';
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 }

@@ -17,28 +17,32 @@ class FrmStrpLiteHooksController {
 		// Actions.
 		add_action( 'frm_entry_form', 'FrmStrpLiteAuth::add_hidden_token_field' );
 		add_action( 'frm_enqueue_form_scripts', 'FrmStrpLiteActionsController::maybe_load_scripts' );
-		add_action( 'init', 'FrmStrpLiteConnectHelper::check_for_stripe_connect_webhooks' );
+
+		// Only hook this up on requests it can act on. Registering it unconditionally made
+		// WordPress autoload FrmStrpLiteConnectHelper on every front end page view.
+		if ( self::request_may_be_for_stripe_connect() ) {
+			add_action( 'init', 'FrmStrpLiteConnectHelper::check_for_stripe_connect_webhooks' );
+		}
 
 		// Filters.
 		add_filter( 'frm_saved_errors', 'FrmStrpLiteAppController::maybe_add_payment_error', 10, 2 );
 		add_filter( 'frm_filter_final_form', 'FrmStrpLiteAuth::maybe_show_message' );
 		add_filter( 'frm_setup_edit_entry_vars', 'FrmStrpLiteAppController::maybe_delete_pay_entry', 20, 2 );
 
-		// This filter flags the Pro credit card field that Stripe is enabled.
-		add_filter(
-			'frm_pro_show_card_callback',
-			function() {
-				return 'FrmStrpLiteActionsController::show_card';
-			}
-		);
+		add_filter( 'frm_pro_show_card_callback', 'FrmStrpLiteActionsController::maybe_show_card', 10, 2 );
 
 		// This filter hides gateway fields from the entries list.
 		add_filter(
 			'frm_fields_in_entries_list_table',
-			function( $form_cols ) {
+			function ( $form_cols ) {
 				return array_filter(
 					$form_cols,
-					function( $form_col ) {
+					/**
+					 * @param stdClass $form_col
+					 *
+					 * @return bool
+					 */
+					function ( $form_col ) {
 						return 'gateway' !== $form_col->type;
 					}
 				);
@@ -46,10 +50,29 @@ class FrmStrpLiteHooksController {
 		);
 
 		add_filter( 'frm_payment_gateways', 'FrmStrpLiteAppController::add_gateway' );
+		add_filter( 'frm_validate_credit_card_field_entry', 'FrmStrpLiteActionsController::remove_cc_validation', 20, 3 );
 
 		// Stripe link.
 		add_filter( 'frm_form_object', 'FrmStrpLiteLinkController::force_ajax_submit_for_stripe_link' );
-		add_filter( 'frm_form_classes', 'FrmStrpLiteLinkController::add_form_classes' );
+		add_action( 'frm_form_classes', 'FrmStrpLiteLinkController::add_form_classes' );
+	}
+
+	/**
+	 * Could this request be a Stripe Connect return trip or one of the Connect AJAX actions?
+	 *
+	 * Used to keep FrmStrpLiteConnectHelper out of ordinary page views. The helper still runs
+	 * its own narrower checks, this only decides whether it is worth loading at all.
+	 *
+	 * @since 7.0
+	 *
+	 * @return bool
+	 */
+	private static function request_may_be_for_stripe_connect() {
+		// These two query arguments are also checked in FrmStrpLiteConnectHelper, by
+		// user_landed_on_the_return_url and user_landed_on_the_oauth_return_url.
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		return wp_doing_ajax() || isset( $_GET['frm_stripe_connect_return'] ) || isset( $_GET['frm_stripe_connect_return_oauth'] );
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 	}
 
 	/**
@@ -63,8 +86,7 @@ class FrmStrpLiteHooksController {
 
 		// Actions.
 		add_action( 'frm_after_uninstall', 'FrmStrpLiteAppController::uninstall' );
-		add_action( 'frm_add_settings_section', 'FrmStrpLiteSettingsController::add_settings_section' );
-		add_action( 'admin_init', 'FrmStrpLiteAppController::maybe_redirect_to_stripe_settings' );
+		add_filter( 'frm_add_settings_section', 'FrmStrpLiteSettingsController::add_settings_section' );
 		add_action( 'frm_update_settings', 'FrmStrpLiteSettingsController::process_form' );
 
 		// Filters.
@@ -83,6 +105,8 @@ class FrmStrpLiteHooksController {
 	 */
 	private static function load_ajax_hooks() {
 		$frm_strp_events_controller = new FrmStrpLiteEventsController();
+		add_action( 'wp_ajax_nopriv_frm_failed_payment', 'FrmStrpLiteAuth::check_payment_status' );
+		add_action( 'wp_ajax_frm_failed_payment', 'FrmStrpLiteAuth::check_payment_status' );
 		add_action( 'wp_ajax_nopriv_frm_strp_process_events', array( &$frm_strp_events_controller, 'process_connect_events' ) );
 		add_action( 'wp_ajax_frm_strp_process_events', array( &$frm_strp_events_controller, 'process_connect_events' ) );
 		add_action( 'wp_ajax_nopriv_frm_strp_amount', 'FrmStrpLiteAuth::update_intent_ajax' );
@@ -92,7 +116,7 @@ class FrmStrpLiteHooksController {
 		add_action( 'wp_ajax_nopriv_frmstrplinkreturn', 'FrmStrpLiteLinkController::handle_return_url' );
 		add_action( 'wp_ajax_frmstrplinkreturn', 'FrmStrpLiteLinkController::handle_return_url' );
 
-		// Stripe Lite
+		// Stripe Lite.
 		add_action( 'wp_ajax_nopriv_frm_strp_lite_verify', 'FrmStrpLiteConnectHelper::verify' );
 	}
 }

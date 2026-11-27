@@ -26,11 +26,11 @@ class FrmFieldValueSelector {
 	protected $field_key = '';
 
 	/**
-	 * @var null
+	 * @var FrmProFieldSettings|null
 	 *
 	 * @since 2.03.05
 	 */
-	protected $field_settings = null;
+	protected $field_settings;
 
 	/**
 	 * @var array
@@ -68,34 +68,48 @@ class FrmFieldValueSelector {
 	protected $blank_option_label = '';
 
 	/**
-	 * @var object
+	 * @var object|null
 	 *
 	 * @since 2.03.05
 	 */
-	protected $db_row = null;
+	protected $db_row;
+
+	/**
+	 * Field dropdowns will truncate at 25 characters by default.
+	 *
+	 * @var int|null
+	 *
+	 * @since 6.16.2
+	 */
+	protected $truncate;
 
 	/**
 	 * FrmFieldValueSelector constructor
 	 *
-	 * @param int|string $field_id
+	 * @param int|string $field_id Field ID.
+	 * @param array      $args     Arguments for configuring the value selector.
 	 */
 	public function __construct( $field_id, $args ) {
 		$this->set_html_name( $args );
 		$this->set_value( $args );
 		$this->set_source( $args );
+		$this->set_truncate( $args );
 
 		$this->field_id = (int) $field_id;
+
 		if ( $this->field_id === 0 ) {
 			return;
 		}
 
 		$this->set_db_row();
 
-		if ( $this->has_db_row() ) {
-			$this->set_field_key();
-			$this->set_field_settings();
-			$this->set_options();
+		if ( ! $this->has_db_row() ) {
+			return;
 		}
+
+		$this->set_field_key();
+		$this->set_field_settings();
+		$this->set_options();
 	}
 
 	/**
@@ -197,6 +211,19 @@ class FrmFieldValueSelector {
 	}
 
 	/**
+	 * @since 6.16.2
+	 *
+	 * @param array $args
+	 *
+	 * @return void
+	 */
+	protected function set_truncate( $args ) {
+		if ( isset( $args['truncate'] ) && is_numeric( $args['truncate'] ) ) {
+			$this->truncate = (int) $args['truncate'];
+		}
+	}
+
+	/**
 	 * Check if object has any options
 	 *
 	 * @since 2.03.05
@@ -253,20 +280,34 @@ class FrmFieldValueSelector {
 	 */
 	protected function display_dropdown() {
 		echo '<select name="' . esc_attr( $this->html_name ) . '">';
-		echo '<option value="">' . esc_attr( $this->blank_option_label ) . '</option>';
+		echo '<option value="">' . esc_html( $this->blank_option_label ) . '</option>';
 
-		if ( ! empty( $this->options ) ) {
+		if ( $this->options ) {
+			$truncate = $this->truncate ?? 25;
+
 			foreach ( $this->options as $key => $value ) {
+				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( $value == '' ) {
 					continue;
 				}
 
 				$option = $this->get_single_field_option( $key, $value );
-				$option->print_single_option( $this->value, 25 );
+				$option->print_single_option( $this->value, $truncate, $this->use_value_as_label_in_dropdown() );
 			}
 		}
 
 		echo '</select>';
+	}
+
+	/**
+	 * Whether to use the field value as the option label in the dropdown when the label is empty.
+	 *
+	 * @since 6.25.1
+	 *
+	 * @return bool
+	 */
+	protected function use_value_as_label_in_dropdown() {
+		return false;
 	}
 
 	/**

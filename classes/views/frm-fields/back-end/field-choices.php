@@ -1,12 +1,21 @@
 <?php
+/**
+ * Field choices wrapper in the form builder.
+ *
+ * @package Formidable
+ *
+ * @var FrmFieldType $this Field type handler that included this template.
+ * @var array        $args Arguments including 'field' (with 'post_field', 'id', 'taxonomy' keys).
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-if ( isset( $args['field']['post_field'] ) && $args['field']['post_field'] == 'post_category' ) {
+if ( isset( $args['field']['post_field'] ) && $args['field']['post_field'] === 'post_category' ) {
 	?>
 	<div class="frm-inline-message" id="frm_has_hidden_options_<?php echo esc_attr( $args['field']['id'] ); ?>">
-		<?php echo FrmAppHelper::kses( FrmFieldsHelper::get_term_link( $args['field']['taxonomy'] ), array( 'a' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+		<?php FrmAppHelper::kses_echo( FrmFieldsHelper::get_term_link( $args['field']['taxonomy'] ), array( 'a' ) ); ?>
 	</div>
 	<?php
 } else {

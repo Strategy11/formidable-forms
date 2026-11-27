@@ -10,20 +10,149 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmCurrencyHelper {
 
 	/**
-	 * @param string $currency
+	 * Gets the currency data from the currency code.
+	 *
+	 * @since 6.30 The first parameter is optional.
+	 *
+	 * @param string|null $currency Currency code. Default is `null`, which use the currency in the global settings.
+	 *
 	 * @return array
 	 */
-	public static function get_currency( $currency ) {
+	public static function get_currency( $currency = null ) {
+		if ( ! $currency ) {
+			$currency = trim( FrmAppHelper::get_settings()->currency );
+		}
+
+		if ( ! $currency ) {
+			$currency = 'USD';
+		}
+
 		$currency   = strtoupper( $currency );
 		$currencies = self::get_currencies();
+
 		if ( isset( $currencies[ $currency ] ) ) {
 			$currency = $currencies[ $currency ];
 		} elseif ( isset( $currencies[ strtolower( $currency ) ] ) ) {
 			$currency = $currencies[ strtolower( $currency ) ];
 		} else {
-			$currency = $currencies['usd'];
+			$currency = $currencies['USD'];
 		}
+
 		return $currency;
+	}
+
+	/**
+	 * Checks if the given format is a valid currency format.
+	 *
+	 * @since 6.18
+	 *
+	 * @param string $format_value The format value to check.
+	 *
+	 * @return bool
+	 */
+	public static function is_currency_format( $format_value ) {
+		return in_array( $format_value, array( 'currency', 'number' ), true );
+	}
+
+	/**
+	 * Adds the currency symbol to the given amount.
+	 *
+	 * @param float|string $amount
+	 * @param array|null   $currency
+	 *
+	 * @return string
+	 */
+	public static function format_price( $amount, $currency = null ) {
+		if ( ! $currency ) {
+			$currency = self::get_currency();
+		}
+
+		if ( is_string( $amount ) ) {
+			$amount = (float) self::prepare_price( $amount, $currency );
+		}
+
+		$amount = number_format( $amount, $currency['decimals'], $currency['decimal_separator'], $currency['thousand_separator'] );
+
+		if ( '' !== $currency['symbol_left'] ) {
+			$amount = $currency['symbol_left'] . $currency['symbol_padding'] . $amount;
+		}
+
+		if ( '' !== $currency['symbol_right'] ) {
+			$amount .= $currency['symbol_padding'] . $currency['symbol_right'];
+		}
+
+		return $amount;
+	}
+
+	/**
+	 * @since 6.30
+	 *
+	 * @param string $price
+	 * @param array  $currency
+	 *
+	 * @return float|string
+	 */
+	public static function prepare_price( $price, $currency ) {
+		$price = trim( $price );
+
+		if ( ! $price ) {
+			return 0;
+		}
+
+		preg_match_all( '/[\-]*[0-9,.]*\.?\,?[0-9]+/', $price, $matches );
+		$price = $matches ? end( $matches[0] ) : 0;
+
+		if ( ! $price ) {
+			return 0;
+		}
+
+		$price = self::maybe_use_decimal( $price, $currency );
+		return str_replace( $currency['decimal_separator'], '.', str_replace( $currency['thousand_separator'], '', $price ) );
+	}
+
+	/**
+	 * @since 6.30
+	 *
+	 * @param string $amount
+	 * @param array  $currency
+	 *
+	 * @return string
+	 */
+	private static function maybe_use_decimal( $amount, $currency ) {
+		if ( $currency['thousand_separator'] !== '.' ) {
+			return $amount;
+		}
+
+		$amount_parts     = explode( '.', $amount );
+		$used_for_decimal = count( $amount_parts ) === 2 && in_array( strlen( $amount_parts[1] ), array( 1, 2 ), true );
+
+		if ( $used_for_decimal ) {
+			return str_replace( '.', $currency['decimal_separator'], $amount );
+		}
+
+		return $amount;
+	}
+
+	/**
+	 * If the currency is needed for this form, add it to the global.
+	 * This is later included in the footer.
+	 *
+	 * @since 6.30
+	 *
+	 * @param int|string $form_id Form ID. This is used for Pro compatibility.
+	 *
+	 * @return void
+	 */
+	public static function add_currency_to_global( $form_id ) {
+		global $frm_vars;
+
+		if ( ! isset( $frm_vars['currency'] ) ) {
+			$frm_vars['currency'] = array();
+		}
+
+		if ( ! isset( $frm_vars['currency'][ $form_id ] ) ) {
+			$frm_vars['currency'][ $form_id ] = self::get_currency();
+		}
 	}
 
 	/**
@@ -45,7 +174,7 @@ class FrmCurrencyHelper {
 				'decimals'           => 2,
 			),
 			'BDT' => array(
-				'name' => __( 'Bangladeshi Taka', 'formidable' ),
+				'name'               => __( 'Bangladeshi Taka', 'formidable' ),
 				'symbol_left'        => '৳',
 				'symbol_right'       => '',
 				'symbol_padding'     => ' ',
@@ -54,7 +183,7 @@ class FrmCurrencyHelper {
 				'decimals'           => 2,
 			),
 			'BRL' => array(
-				'name' => __( 'Brazilian Real', 'formidable' ),
+				'name'               => __( 'Brazilian Real', 'formidable' ),
 				'symbol_left'        => 'R$',
 				'symbol_right'       => '',
 				'symbol_padding'     => ' ',
@@ -171,7 +300,7 @@ class FrmCurrencyHelper {
 				'decimals'           => 2,
 			),
 			'NOK' => array(
-				'name' => __( 'Norwegian Krone', 'formidable' ),
+				'name'               => __( 'Norwegian Krone', 'formidable' ),
 				'symbol_left'        => 'Kr',
 				'symbol_right'       => '',
 				'symbol_padding'     => ' ',
@@ -252,22 +381,22 @@ class FrmCurrencyHelper {
 				'decimals'           => 2,
 			),
 			'SEK' => array(
-				'name' => __( 'Swedish Krona', 'formidable' ),
-				'symbol_left' => '',
-				'symbol_right' => 'Kr',
-				'symbol_padding' => ' ',
+				'name'               => __( 'Swedish Krona', 'formidable' ),
+				'symbol_left'        => '',
+				'symbol_right'       => 'Kr',
+				'symbol_padding'     => ' ',
 				'thousand_separator' => ' ',
-				'decimal_separator' => ',',
-				'decimals' => 2,
+				'decimal_separator'  => ',',
+				'decimals'           => 2,
 			),
 			'CHF' => array(
-				'name' => __( 'Swiss Franc', 'formidable' ),
-				'symbol_left' => 'Fr.',
-				'symbol_right' => '',
-				'symbol_padding' => ' ',
+				'name'               => __( 'Swiss Franc', 'formidable' ),
+				'symbol_left'        => 'Fr.',
+				'symbol_right'       => '',
+				'symbol_padding'     => ' ',
 				'thousand_separator' => "'",
-				'decimal_separator' => '.',
-				'decimals' => 2,
+				'decimal_separator'  => '.',
+				'decimals'           => 2,
 			),
 			'TWD' => array(
 				'name'               => __( 'Taiwan New Dollar', 'formidable' ),
@@ -279,18 +408,18 @@ class FrmCurrencyHelper {
 				'decimals'           => 2,
 			),
 			'THB' => array(
-				'name' => __( 'Thai Baht', 'formidable' ),
-				'symbol_left' => '&#3647;',
-				'symbol_right' => '',
-				'symbol_padding' => ' ',
+				'name'               => __( 'Thai Baht', 'formidable' ),
+				'symbol_left'        => '&#3647;',
+				'symbol_right'       => '',
+				'symbol_padding'     => ' ',
 				'thousand_separator' => ',',
-				'decimal_separator' => '.',
-				'decimals' => 2,
+				'decimal_separator'  => '.',
+				'decimals'           => 2,
 			),
 			'TRY' => array(
 				'name'               => __( 'Turkish Liras', 'formidable' ),
 				'symbol_left'        => '',
-				'symbol_right'       => '&#8364;',
+				'symbol_right'       => '&#8378;',
 				'symbol_padding'     => ' ',
 				'thousand_separator' => '.',
 				'decimal_separator'  => ',',
@@ -326,7 +455,7 @@ class FrmCurrencyHelper {
 		if ( is_array( $filtered_currencies ) ) {
 			$currencies = $filtered_currencies;
 		} else {
-			_doing_it_wrong( __FUNCTION__, 'Only arrays should be returned when using the frm_currencies filter.', 'x.x' );
+			_doing_it_wrong( __METHOD__, 'Only arrays should be returned when using the frm_currencies filter.', '6.5' );
 		}
 
 		return $currencies;

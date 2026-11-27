@@ -10,17 +10,14 @@ class FrmFieldEmail extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'email';
 
 	/**
-	 * @var string
-	 */
-	protected $display_type = 'text';
-
-	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $holds_email_values = true;
@@ -38,7 +35,28 @@ class FrmFieldEmail extends FrmFieldType {
 			'size'           => true,
 			'clear_on_focus' => true,
 			'invalid'        => true,
+			'autocomplete'   => true,
 		);
+	}
+
+	/**
+	 * @since 7.0
+	 *
+	 * @return array<string>
+	 */
+	protected function get_autocomplete_filter_keys() {
+		return array( 'on', 'off', 'email' );
+	}
+
+	/**
+	 * @since 7.0
+	 *
+	 * @return array
+	 */
+	public function get_new_field_defaults() {
+		$field                                  = parent::get_new_field_defaults();
+		$field['field_options']['autocomplete'] = 'email';
+		return $field;
 	}
 
 	/**
@@ -49,8 +67,13 @@ class FrmFieldEmail extends FrmFieldType {
 	 * @return array
 	 */
 	public function validate( $args ) {
+		if ( ! $args['value'] ) {
+			return array();
+		}
+
 		$errors = array();
-		if ( $args['value'] != '' && ! is_email( $args['value'] ) ) {
+
+		if ( str_contains( $args['value'], '.@' ) || ! is_email( $args['value'] ) ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
 		}
 
@@ -59,6 +82,8 @@ class FrmFieldEmail extends FrmFieldType {
 
 	/**
 	 * @since 4.0.04
+	 *
+	 * @param array|string $value Email value passed by reference.
 	 *
 	 * @return void
 	 */

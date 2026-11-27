@@ -1,0 +1,31 @@
+/**
+ * Components - Links
+ */
+
+a h1 .frmsvg {
+	color: var(--grey-400);
+	vertical-align: middle;
+	min-width: var(--text-sm);
+}
+
+a .frmsvg {
+	color: currentColor;
+}
+
+.frm_wrap .view-switch a.current::before,
+.frm-white-body a,
+.frm_wrap a,
+.frm_wrap a i {
+	color: var(--primary-color);
+}
+
+.frm_wrap a:active,
+.frm_wrap a:hover {
+	color: var(--primary-700);
+	box-shadow: none;
+}
+
+.post-type-frm_display a:focus,
+.frm_wrap a:focus {
+	box-shadow: none;
+}

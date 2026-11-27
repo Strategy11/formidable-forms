@@ -4,12 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <p class="frm_grid_container">
-	<label for="frm_currency" class="frm4 frm_form_field frm_help" title="<?php esc_attr_e( 'Select the currency to be used by Formidable globally.', 'formidable' ); ?>">
+	<label for="frm_currency" class="frm4 frm_form_field frm_help">
 		<?php esc_html_e( 'Currency', 'formidable' ); ?>
+		<?php FrmAppHelper::tooltip_icon( __( 'Select the currency to be used by Formidable globally.', 'formidable' ) ); ?>
 	</label>
 	<select id="frm_currency" name="frm_currency" class="frm8 frm_form_field">
 		<?php
 		$selected_currency = ! empty( $frm_settings->currency ) ? strtoupper( $frm_settings->currency ) : 'USD';
+
 		foreach ( $currencies as $code => $currency ) {
 			?>
 			<option value="<?php echo esc_attr( $code ); ?>"<?php selected( $selected_currency, strtoupper( $code ) ); ?>>

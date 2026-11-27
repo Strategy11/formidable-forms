@@ -6,7 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * @since 2.02.12
  */
-
 class FrmShortcodeHelper {
 
 	/**
@@ -20,15 +19,63 @@ class FrmShortcodeHelper {
 	 */
 	public static function get_shortcode_attribute_array( $text ) {
 		$atts = array();
+
 		if ( $text !== '' ) {
 			$atts = shortcode_parse_atts( $text );
 		}
 
-		if ( ! is_array( $atts ) ) {
-			$atts = array();
+		return is_array( $atts ) ? $atts : array();
+	}
+
+	/**
+	 * Returns shortcodes that are shown/hidden based on the context.
+	 *
+	 * @since 6.16.3
+	 *
+	 * @return array
+	 */
+	public static function get_contextual_shortcodes() {
+		return array(
+			'address' => array(
+				'admin_email'        => __( 'Admin email', 'formidable' ),
+				'default-from-email' => __( 'Default from email', 'formidable' ),
+				'default-email'      => __( 'Default email', 'formidable' ),
+			),
+			'body'    => array(
+				'default-message' => __( 'Default Msg', 'formidable' ),
+				'default-html'    => __( 'Default HTML', 'formidable' ),
+				'default-plain'   => __( 'Default Plain', 'formidable' ),
+			),
+		);
+	}
+
+	/**
+	 * Get contextual shortcodes.
+	 *
+	 * @since 6.16.3
+	 *
+	 * @return array
+	 */
+	public static function get_contextual_shortcode_values() {
+		$contextual_shortcodes = self::get_contextual_shortcodes();
+		return array_merge( $contextual_shortcodes['address'], $contextual_shortcodes['body'] );
+	}
+
+	/**
+	 * Get flattened format of contextual shortcodes.
+	 *
+	 * @since 6.16.3
+	 *
+	 * @return array
+	 */
+	public static function get_contextual_codes() {
+		$result = array();
+
+		foreach ( self::get_contextual_shortcodes() as $type => $shortcodes ) {
+			$result[ $type ] = array_keys( $shortcodes );
 		}
 
-		return $atts;
+		return $result;
 	}
 
 	/**
@@ -37,7 +84,7 @@ class FrmShortcodeHelper {
 	 * @since 3.0
 	 *
 	 * @param array $shortcodes
-	 * @param int $short_key The position in the shortcodes array
+	 * @param int   $short_key  The position in the shortcodes array.
 	 * @param array $args
 	 *
 	 * @return string
@@ -51,11 +98,13 @@ class FrmShortcodeHelper {
 				'foreach'           => false,
 			)
 		);
+
 		if ( ( $args['conditional'] || $args['foreach'] ) && ! $args['conditional_check'] ) {
 			$args['conditional_check'] = true;
 		}
 
 		$prefix = '';
+
 		if ( $args['conditional_check'] ) {
 			if ( $args['conditional'] ) {
 				$prefix = 'if ';
@@ -65,21 +114,27 @@ class FrmShortcodeHelper {
 		}
 
 		$with_tags = $args['conditional_check'] ? 3 : 2;
-		if ( ! empty( $shortcodes[ $with_tags ][ $short_key ] ) ) {
-			$tag  = str_replace( '[' . $prefix, '', $shortcodes[0][ $short_key ] );
-			$tag  = str_replace( ']', '', $tag );
-			$tag  = str_replace( chr( 194 ) . chr( 160 ), ' ', $tag );
-			$tags = preg_split( '/\s+/', $tag, 2 );
-			if ( is_array( $tags ) ) {
-				$tag = $tags[0];
-			}
-		} else {
-			$tag = $shortcodes[ $with_tags - 1 ][ $short_key ];
+
+		if ( empty( $shortcodes[ $with_tags ][ $short_key ] ) ) {
+			return $shortcodes[ $with_tags - 1 ][ $short_key ];
 		}
 
-		return $tag;
+		$tag  = str_replace( '[' . $prefix, '', $shortcodes[0][ $short_key ] );
+		$tag  = str_replace( ']', '', $tag );
+		$tag  = str_replace( chr( 194 ) . chr( 160 ), ' ', $tag );
+		$tags = preg_split( '/\s+/', $tag, 2 );
+
+		return is_array( $tags ) ? $tags[0] : $tag;
 	}
 
+	/**
+	 * @param bool   $no_vars
+	 * @param string $code
+	 * @param string $replace_with
+	 * @param string $html
+	 *
+	 * @return void
+	 */
 	public static function remove_inline_conditions( $no_vars, $code, $replace_with, &$html ) {
 		if ( $no_vars ) {
 			$html = str_replace( '[if ' . $code . ']', '', $html );

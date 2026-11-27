@@ -1,0 +1,65 @@
+/**
+ * Components - Multiselect
+ */
+
+.frm-btn-group .multiselect.dropdown-toggle {
+	box-sizing: border-box;
+	min-height: unset;
+	cursor: pointer;
+}
+
+.multiselect-container {
+	position: absolute;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	max-width: 250px;
+}
+
+.multiselect-container button.multiselect-option {
+	width: 100%;
+	text-align: left;
+	border: none;
+	margin-bottom: 4px;
+}
+
+.multiselect-container button.multiselect-option label {
+	margin-left: 5px;
+}
+
+.accordion-container .multiselect-container label {
+	padding: 3px 19px 3px 7px;
+}
+
+.frm-btn-group.btn-group > .btn-group:nth-child(2) > .multiselect.btn {
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+
+.frm-btn-group.btn-group,
+.frm-btn-group.btn-group-vertical {
+	display: block;
+}
+
+.multiselect-option label {
+	max-width: calc(100% - 22px);
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+/*
+ * bootstrap-multiselect swaps the native <select multiple> for a toggle button on DOM ready, from a
+ * footer script. Until then the browser paints a tall listbox that collapses once the script runs.
+ * Give the native select the toggle's closed footprint, with its options hidden, so nothing jumps.
+ */
+.wp-admin .frm_wrap select.frm_multiselect[multiple] {
+	height: var(--h-md);
+	min-height: 0;
+	overflow: hidden;
+
+	option {
+		visibility: hidden;
+	}
+}

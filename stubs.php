@@ -21,13 +21,70 @@ namespace {
 	define( 'WP_IMPORTING', false );
 	define( 'ICL_PLUGIN_INACTIVE', false );
 
+	class WP_HTML_Decoder {
+		/**
+		 * @param string $text Raw attribute text.
+		 *
+		 * @return string
+		 */
+		public static function decode_attribute( $text ) {
+			return '';
+		}
+	}
+
+	class WP_HTML_Tag_Processor {
+		/** @var string */
+		public $html;
+
+		/**
+		 * @param string $html HTML to process.
+		 */
+		public function __construct( $html ) {
+			$this->html = $html;
+		}
+
+		/**
+		 * @param array|string|null $query Tag query.
+		 *
+		 * @return bool
+		 */
+		public function next_tag( $query = null ) {
+			return false;
+		}
+
+		/**
+		 * @param string $name Attribute name.
+		 *
+		 * @return bool|string|null
+		 */
+		public function get_attribute( $name ) {
+			return null;
+		}
+	}
+
+	class FrmProFormState {
+		public static function get_from_request( $key, $default ) {}
+		/**
+		 * @param string $key
+		 * @param mixed  $value
+		 *
+		 * @return void
+		 */
+		public static function set_initial_value( $key, $value ) {
+		}
+	}
+
 	class FrmProEntryShortcodeFormatter extends FrmEntryShortcodeFormatter {
 	}
 	class FrmProSettings extends FrmSettings {
 	}
 	class FrmProApplicationsHelper {
-		public static function get_required_templates_capability() {}
 		public static function get_custom_applications_capability() {}
+		/**
+		 * @return string
+		 */
+		public static function get_required_templates_capability() {
+		}
 	}
 	class FrmProFileImport {
 		public static function import_attachment( $val, $field ) {
@@ -36,58 +93,342 @@ namespace {
 	class FrmProAppHelper {
 		public static function get_settings() {
 		}
+		public static function convert_date( $date_str, $from_format, $to_format ) {
+		}
+		/**
+		 * @return bool
+		 */
+		public static function views_is_installed() {
+		}
+		/**
+		 * @return string
+		 */
+		public static function plugin_path() {
+		}
+		/**
+		 * @return bool
+		 */
+		public static function use_chosen_js() {
+		}
+		/**
+		 * @param array|string $selected
+		 * @param string       $current
+		 * @param bool         $echo
+		 *
+		 * @return string
+		 */
+		public static function selected( $selected, $current, $echo = true ) {
+		}
+		/**
+		 * @return string
+		 */
+		public static function plugin_url() {
+		}
+		/**
+		 * @return FrmProEddController
+		 */
+		public static function get_updater() {
+		}
+		public static function use_jquery_datepicker() {
+		}
 	}
 	class FrmProEntryMetaHelper {
 		public static function get_post_or_meta_value( $entry, $field, $atts = array() ) {
 		}
+		/**
+		 * @param int|object|string $field_id
+		 * @param array|string      $value
+		 * @param false|int|string  $entry_id
+		 *
+		 * @return array|object|string|null
+		 */
+		public static function value_exists( $field_id, $value, $entry_id = false ) {
+		}
+		public static function get_post_value( $post_id, $post_field, $custom_field, $atts ) {
+		}
 	}
 	class FrmProFormActionsController {
+		/**
+		 * @param WP_Post  $action
+		 * @param stdClass $entry
+		 *
+		 * @return bool
+		 */
+		public static function action_conditions_met( $action, $entry ) {
+		}
 	}
 	class FrmViewsLayout {
+		/**
+		 * @param int    $view_id
+		 * @param string $listing_layout
+		 * @param string $detail_layout
+		 */
+		public static function maybe_create_layouts_for_view( $view_id, $listing_layout, $detail_layout ) {
+		}
+		/**
+		 * @param int          $view_id
+		 * @param false|string $type
+		 *
+		 * @return array|false|object
+		 */
+		public static function get_layouts_for_view( $view_id, $type = false ) {
+		}
 	}
 	class FrmProDisplaysHelper {
 		public static function get_shortcodes( $content, $form_id ) {
 		}
 	}
 	class FrmProAddonsController {
+		/**
+		 * @param bool $force_type
+		 *
+		 * @return string
+		 */
+		public static function license_type( $force_type = false ) {
+		}
+		/**
+		 * @return bool|int
+		 */
+		public static function is_license_expiring() {
+		}
+		/**
+		 * @param string       $plugin
+		 * @param array|string $upgrade_link_args
+		 *
+		 * @return void
+		 */
+		public static function conditional_action_button( $plugin, $upgrade_link_args ) {
+		}
+		/**
+		 * @param array $atts
+		 *
+		 * @return void
+		 */
+		public static function show_conditional_action_button( $atts ) {
+		}
+		/**
+		 * @return bool
+		 */
+		public static function admin_banner() {
+		}
+		/**
+		 * @return string
+		 */
+		public static function get_readable_license_type() {
+		}
+		/**
+		 * @return string Either grace, expired, expiring, or active.
+		 */
+		public static function get_license_status() {
+		}
+	}
+	class FrmProCurrencyHelper {
+		public static function normalize_formatted_numbers( $field, $formatted_value ) {}
 	}
 	class FrmProDb {
+		/**
+		 * @var string
+		 */
 		public static $plug_version;
 	}
 	class FrmProStylesController extends FrmStylesController {
+		/**
+		 * @param int $form_id
+		 *
+		 * @return WP_Post
+		 */
+		public static function get_active_style_for_form( $form_id ) {
+		}
+		/**
+		 * @param stdClass|WP_Post $active_style
+		 *
+		 * @return array<WP_Post>
+		 */
+		public static function get_styles_for_styler( $active_style ) {
+		}
+		/**
+		 * @return array<string>
+		 */
+		public static function get_notes_for_styler_preview() {
+		}
+		/**
+		 * @return false|string
+		 */
+		public static function get_disabled_javascript_features() {
+		}
 	}
 	class FrmProPost {
+		/**
+		 * @param array $field
+		 * @param array $args
+		 *
+		 * @return string
+		 */
+		public static function get_category_dropdown( $field, $args ) {
+		}
 	}
 	class FrmProEntriesController {
 		public static function show_entry_shortcode( $atts ) {
 		}
+		/**
+		 * @param array $atts
+		 *
+		 * @return string
+		 */
+		public static function entry_delete_link( $atts ) {
+		}
+		/**
+		 * @param string   $method
+		 * @param stdClass $form
+		 * @param int      $entry_id
+		 * @param array    $args
+		 * @param array    $form_options
+		 */
+		public static function confirmation( $method, $form, $form_options, $entry_id, $args = array() ) {
+		}
+		/**
+		 * @param object $form
+		 *
+		 * @return bool
+		 */
+		public static function is_form_displayed_after_edit( $form ) {
+		}
+		/**
+		 * @param object $entry
+		 * @param array  $args
+		 *
+		 * @return void
+		 */
+		public static function show_front_end_form_with_entry( $entry, $args ) {
+		}
 	}
 	class FrmProFormsHelper {
-		public static function &post_type( $form ) {
+		public static function post_type( $form ) {
+		}
+		/**
+		 * @return array
+		 */
+		public static function get_default_opts() {
 		}
 	}
 	class FrmProEntry {
+		/**
+		 * @param array|false $values
+		 * @param string      $location
+		 *
+		 * @return array
+		 */
+		public static function mod_other_vals( $values = false, $location = 'front' ) {
+		}
 	}
 	class FrmProEntryFormatter extends FrmEntryFormatter {
 	}
+	class FrmProFieldText extends FrmFieldText {
+	}
+	class FrmProCopy {
+		/**
+		 * @param bool $force Whether to run the install even when the database is current.
+		 *
+		 * @return void
+		 */
+		public static function install( $force = false ) {
+		}
+	}
+	/**
+	 * The Registration add-on's entry controller. Constructing it is what lets a
+	 * registration form's entry run its user creation, and the abilities do that
+	 * behind a class_exists() guard.
+	 */
+	class FrmRegEntryController {
+	}
+	class FrmProField {
+		/**
+		 * @param int   $field_id ID of the repeater field, or 0 while it is being created.
+		 * @param array $args     Accepts parent_form_id and field_name.
+		 *
+		 * @return int ID of the child form that holds the repeater's fields.
+		 */
+		public static function create_repeat_form( $field_id, $args = array() ) {
+		}
+	}
 	class FrmProEntriesHelper {
+		public static function get_search_str( $where_clause, $search_str, $form_id = 0, $fid = '' ) {
+		}
+		/**
+		 * @param string     $search  The search term.
+		 * @param int|string $form_id The form to search in.
+		 * @param array      $args    Extra query args, such as is_draft.
+		 *
+		 * @return array Entry IDs matching the search.
+		 */
+		public static function get_search_ids( $search, $form_id, $args = array() ) {
+		}
+		/**
+		 * @param object           $field
+		 * @param object           $entry
+		 * @param array|int|string $field_value
+		 *
+		 * @return void
+		 */
+		public static function get_dynamic_list_values( $field, $entry, &$field_value ) {
+		}
+
+		/**
+		 * @param object $entry
+		 * @param object $field
+		 * @param array  $atts
+		 *
+		 * @return string
+		 */
+		public static function prepare_child_display_value( $entry, $field, $atts ) {
+		}
 	}
 	class FrmProFieldsHelper {
 		/**
 		 * @param array  $args
 		 * @param string $value
+		 *
 		 * @return void
 		 */
 		public static function replace_non_standard_formidable_shortcodes( $args, &$value ) {
 		}
+		/**
+		 * @param array|object $field
+		 *
+		 * @return bool
+		 */
+		public static function is_field_visible_to_user( $field ) {
+		}
+		/**
+		 * @param array|int|object $field
+		 *
+		 * @return bool
+		 */
+		public static function field_on_current_page( $field ) {
+		}
 	}
 	class FrmViewsAppHelper {
+		/**
+		 * @return string
+		 */
+		public static function plugin_version() {
+		}
+	}
+	class FrmViewsDisplay {
+		/**
+		 * @param int $form_id
+		 *
+		 * @return array
+		 */
+		public static function get_display_ids_by_form( $form_id ) {
+		}
 	}
 	class FrmProCreditCardsController {
 		/**
 		 * @param array  $field
 		 * @param string $field_name
 		 * @param array  $atts
+		 *
 		 * @return void
 		 */
 		public static function show_in_form( $field, $field_name, $atts ) {
@@ -101,28 +442,508 @@ namespace {
 		}
 	}
 	class Akismet {
+		/**
+		 * @param string $request
+		 * @param string $path
+		 * @param string $ip
+		 *
+		 * @return array
+		 */
+		public static function http_post( $request, $path, $ip = null ) {
+		}
+		public static function get_user_roles( $user_id ) {
+		}
 	}
 	class PHPMailer {
 		public function __construct( $exceptions = null ) {
 		}
 	}
 	class FrmPaymentsController {
+		/**
+		 * @var string
+		 */
 		public static $db_opt_name = 'frm_pay_db_version';
+		/**
+		 * @param array $cols
+		 *
+		 * @return array
+		 */
+		public static function payment_columns( $cols = array() ) {
+		}
 	}
-	/**
-	 * @return void
-	 */
+	class FrmProDashboardHelper {
+		/**
+		 * @return bool
+		 */
+		public static function should_display_videos() {
+		}
+		/**
+		 * @param array $entries_template
+		 *
+		 * @return void
+		 */
+		public static function get_main_widget( $entries_template ) {
+		}
+		/**
+		 * @param array $entries_template
+		 *
+		 * @return void
+		 */
+		public static function get_bottom_widget( $entries_template ) {
+		}
+		/**
+		 * @param array $template
+		 *
+		 * @return void
+		 */
+		public static function load_license_management( $template ) {
+		}
+	}
+	class FrmProEddController extends FrmAddon {
+	}
+	class FrmProFieldSettings {
+	}
 	function load_formidable_pro() {
 	}
 	/**
-	* @return WPMailSMTP\Core
-	*/
+	 * @return WPMailSMTP\Core
+	 */
 	function wp_mail_smtp() {
 	}
 	/**
 	 * @return bool
 	 */
 	function akismet_test_mode() {
+	}
+
+	/** WP Optimize plugin */
+	class WP_Optimize {
+		/**
+		 * @return WPO_Page_Cache
+		 */
+		public function get_page_cache() {
+		}
+	}
+	class WPO_Page_Cache {
+		/**
+		 * @return bool
+		 */
+		public function purge() {
+		}
+	}
+	class FrmLog {
+		/**
+		 * @param array<string> $values values.
+		 *
+		 * @return void
+		 */
+		public function add( $values ) {
+		}
+	}
+	/**
+	 * @return WP_Optimize
+	 */
+	function WP_Optimize() {
+	}
+
+	/**
+	 * Function from W3 Total cache.
+	 *
+	 * @param array|null $extras Extras.
+	 *
+	 * @return void
+	 */
+	function w3tc_flush_all( $extras = null ) {
+	}
+	class FrmTransListsController {
+		/**
+		 * @param array $columns
+		 *
+		 * @return array
+		 */
+		public static function payment_columns( $columns = array() ) {
+		}
+	}
+	class FrmTransActionsController {
+		/**
+		 * @param array $atts
+		 *
+		 * @return void
+		 */
+		public static function trigger_payment_status_change( $atts ) {
+		}
+	}
+	class FrmProSettingsController {
+		/**
+		 * @param string $count
+		 *
+		 * @return string
+		 */
+		public static function inbox_badge( $count ) {}
+		/**
+		 * @return void
+		 */
+		public static function add_currency_settings() {}
+	}
+	class FrmProAddressesController extends FrmProComboFieldsController {
+		/**
+		 * @param string $country
+		 *
+		 * @return string
+		 */
+		public static function get_country_code( $country ) {
+		}
+	}
+
+	class FrmProComboFieldsController {
+	}
+
+	class FrmProEntryMeta {
+		/**
+		 * @param object $field
+		 *
+		 * @return bool
+		 */
+		public static function skip_required_validation( $field ) {
+		}
+	}
+
+	class FrmProDashboardController {
+		/**
+		 * @return array
+		 */
+		public static function get_counters() {
+		}
+	}
+
+	class FrmProFormsController{
+		public static function enqueue_pro_web_components_script(){
+		}
+	}
+
+	/**
+	 * This class is in the PayPal add-on.
+	 */
+	class FrmPaymentSettingsController {
+		/**
+		 * @return void
+		 */
+		public static function route() {
+
+		}
+	}
+
+	class WP_UnitTest_Factory {
+		/**
+		 * @var WP_UnitTest_Factory_For_Post
+		 */
+		public $post;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Attachment
+		 */
+		public $attachment;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Comment
+		 */
+		public $comment;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_User
+		 */
+		public $user;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Term
+		 */
+		public $term;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Term
+		 */
+		public $category;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Term
+		 */
+		public $tag;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Bookmark
+		 */
+		public $bookmark;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Blog
+		 */
+		public $blog;
+
+		/**
+		 * @var WP_UnitTest_Factory_For_Network
+		 */
+		public $network;
+	}
+
+	/**
+	 * The leaf *_For_* classes below are deliberately left abstract with no override of
+	 * create_object()/update_object()/get_object_by_id(): they exist only so property access
+	 * like $factory->post resolves to a type that inherits create()/create_and_get(), and an
+	 * abstract class is never instantiated from this file, so leaving them unimplemented is
+	 * fine for static analysis and avoids stubbing empty method bodies DeepSource flags as
+	 * PHP-W1080 (no body) with unused-parameter findings on top.
+	 */
+	abstract class WP_UnitTest_Factory_For_Thing {
+		public $default_generation_definitions;
+		public $factory;
+
+		public function __construct( $factory, $default_generation_definitions = array() ) {
+			$this->factory                        = $factory;
+			$this->default_generation_definitions = $default_generation_definitions;
+		}
+
+		abstract public function create_object( $args );
+		abstract public function update_object( $object_id, $fields );
+		abstract public function get_object_by_id( $object_id );
+
+		public function create( $args = array(), $generation_definitions = null ) {
+			if ( $generation_definitions === null ) {
+				$generation_definitions = $this->default_generation_definitions;
+			}
+
+			return $this->create_object( array_merge( (array) $generation_definitions, $args ) );
+		}
+
+		public function create_and_get( $args = array(), $generation_definitions = null ) {
+			return $this->get_object_by_id( $this->create( $args, $generation_definitions ) );
+		}
+
+		public function create_many( $count, $args = array(), $generation_definitions = null ) {
+			return array_fill( 0, $count, $this->create( $args, $generation_definitions ) );
+		}
+	}
+
+	abstract class WP_UnitTest_Factory_For_Post extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Attachment extends WP_UnitTest_Factory_For_Post {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Comment extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_User extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Term extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Bookmark extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Blog extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	abstract class WP_UnitTest_Factory_For_Network extends WP_UnitTest_Factory_For_Thing {
+	}
+
+	/**
+	 * frm_factory.php uses this to generate unique default values (field names, entry names).
+	 * mago.toml's [source] paths includes "tests" directly - unlike PHPStan, mago analyzes that
+	 * file itself and needs this class to exist, not just its name.
+	 */
+	class WP_UnitTest_Generator_Sequence {
+		public static $incr = -1;
+		public $next;
+		public $template_string;
+
+		public function __construct( $template_string = '%s', $start = null ) {
+		}
+
+		public function next() {
+		}
+
+		public function get_incr() {
+		}
+
+		public function get_template_string() {
+		}
+	}
+
+	/**
+	 * frm_factory.php uses this to generate a random entry value, for the same reason as
+	 * WP_UnitTest_Generator_Sequence above.
+	 */
+	function rand_str( $length = 32 ) {
+	}
+	/**
+	 * The WordPress Abilities API, added in WordPress 7.0 and so absent from the
+	 * wordpress-stubs release this plugin pins.
+	 */
+	class WP_Ability {
+		/**
+		 * @return string
+		 */
+		public function get_name() {
+		}
+		/**
+		 * @return array
+		 */
+		public function get_input_schema() {
+		}
+		/**
+		 * @param array $input Ability input parameters.
+		 *
+		 * @return mixed
+		 */
+		public function execute( $input = array() ) {
+		}
+	}
+	class WP_Ability_Category {
+	}
+	class WP_Abilities_Registry {
+		/**
+		 * @return WP_Abilities_Registry|null
+		 */
+		public static function get_instance() {
+		}
+		/**
+		 * @param string $name Ability name.
+		 *
+		 * @return bool
+		 */
+		public function is_registered( $name ) {
+		}
+	}
+	class WP_Ability_Categories_Registry {
+		/**
+		 * @return WP_Ability_Categories_Registry|null
+		 */
+		public static function get_instance() {
+		}
+		/**
+		 * @param string $slug Category slug.
+		 *
+		 * @return bool
+		 */
+		public function is_registered( $slug ) {
+		}
+	}
+	/**
+	 * @param string $name Ability name, including its namespace prefix.
+	 * @param array  $args Ability definition.
+	 *
+	 * @return WP_Ability|null
+	 */
+	function wp_register_ability( $name, $args ) {
+	}
+	/**
+	 * @param string $slug Category slug.
+	 * @param array  $args Category definition.
+	 *
+	 * @return WP_Ability_Category|null
+	 */
+	function wp_register_ability_category( $slug, $args ) {
+	}
+	/**
+	 * @param string $name Ability name.
+	 *
+	 * @return bool
+	 */
+	function wp_has_ability( $name ) {
+	}
+	/**
+	 * @param string $name Ability name.
+	 *
+	 * @return WP_Ability|null
+	 */
+	function wp_get_ability( $name ) {
+	}
+	/**
+	 * @return array<string, WP_Ability>
+	 */
+	function wp_get_abilities() {
+	}
+	/**
+	 * @param string $slug Category slug.
+	 *
+	 * @return WP_Ability_Category|null
+	 */
+	function wp_get_ability_category( $slug ) {
+	}
+	/**
+	 * @param string $name Ability name.
+	 *
+	 * @return bool
+	 */
+	function wp_unregister_ability( $name ) {
+	}
+	/**
+	 * @param string $slug Category slug.
+	 *
+	 * @return WP_Ability_Category|null
+	 */
+	function wp_unregister_ability_category( $slug ) {
+	}
+	/**
+	 * Added in WordPress 6.1, after the wordpress-stubs release this plugin pins.
+	 *
+	 * @param string $hook_name The name of the filter hook.
+	 *
+	 * @return int The number of times the filter hook has been applied.
+	 */
+	function did_filter( $hook_name ) {
+	}
+	/**
+	 * The exception the WordPress test suite throws from wp_die(). Tests catch it,
+	 * and mago analyzes the tests without loading the WordPress test library.
+	 */
+	class WPDieException extends Exception {
+	}
+}
+
+/**
+ * The MCP adapter vendored in lib/vendor. Only what FrmMcpController and FrmMcpConnection call is
+ * stubbed: the adapter is loaded conditionally at runtime, so analysis cannot
+ * see it, and FrmMcpCompat checks for the real thing before any of this is used.
+ */
+namespace WP\MCP\Core {
+	class McpAdapter {
+		const VERSION = '';
+		/**
+		 * @return McpAdapter
+		 */
+		public static function instance() {
+		}
+		/**
+		 * @param string      $server_id             Unique server ID.
+		 * @param string      $server_route_namespace REST namespace to serve on.
+		 * @param string      $server_route          Route within the namespace.
+		 * @param string      $server_name           Human readable server name.
+		 * @param string      $server_description    Human readable server description.
+		 * @param string      $server_version        Server version string.
+		 * @param array       $mcp_transports        Transport class names.
+		 * @param string|null $error_handler         Error handler class name.
+		 * @param string|null $observability_handler Observability handler class name.
+		 * @param array       $tools                 Ability names exposed as tools.
+		 *
+		 * @return mixed True on success, or WP_Error on failure.
+		 */
+		public function create_server( $server_id, $server_route_namespace, $server_route, $server_name, $server_description, $server_version, $mcp_transports, $error_handler, $observability_handler = null, $tools = array() ) {
+		}
+	}
+}
+
+namespace WP\MCP\Transport\Infrastructure {
+	class SessionManager {
+		/**
+		 * @param int    $user_id    The user ID.
+		 * @param string $session_id The session ID.
+		 *
+		 * @return array|false|\WP_Error Session data on success, WP_Error on invalid input, false if not found or inactive.
+		 */
+		public static function get_session( int $user_id, string $session_id ) {
+		}
 	}
 }
 
@@ -139,11 +960,36 @@ namespace Elementor {
 	}
 
 	class Plugin {
+		/**
+		 * @return Plugin
+		 */
+		public static function instance() {
+		}
+	}
+
+	class Controls_Manager {
+		const TAB_CONTENT = 'content';
+		const SELECT2     = 'select2';
+		const SWITCHER    = 'switcher';
 	}
 }
 
 namespace WPMailSMTP {
 	class Options {
+	   /**
+	    * @return Options
+	    */
+	   public static function init() {
+	   }
+		/**
+		 * @param string $group
+		 * @param string $key
+		 * @param bool   $strip_slashes
+		 *
+		 * @return mixed|null
+		 */
+		public function get( $group, $key, $strip_slashes = true ) {
+		}
 	}
 	class Core {
 		/**

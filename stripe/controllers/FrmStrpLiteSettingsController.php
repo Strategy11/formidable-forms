@@ -9,22 +9,24 @@ class FrmStrpLiteSettingsController {
 	 * Add Stripe section to Global Settings.
 	 *
 	 * @param array $sections
+	 *
 	 * @return array
 	 */
 	public static function add_settings_section( $sections ) {
 		$sections['stripe'] = array(
-			'class'    => __CLASS__,
+			'class'    => self::class,
 			'function' => 'route',
-			'icon'     => 'frm_icon_font frm_stripe_icon',
+			'icon'     => 'frmfont frm_stripe_icon',
 		);
 
 		add_action(
 			'frm_messages_settings_form',
 			/**
 			 * @param object $frm_settings
+			 *
 			 * @return void
 			 */
-			function( $frm_settings ) {
+			function ( $frm_settings ) {
 				$stripe_settings = FrmStrpLiteAppHelper::get_settings()->settings;
 				require FrmStrpLiteAppHelper::plugin_path() . '/views/settings/messages.php';
 			}
@@ -46,27 +48,12 @@ class FrmStrpLiteSettingsController {
 	 * Print the Stripe section for Global settings.
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	public static function global_settings_form( $atts = array() ) {
-		$atts                          = array_merge( $atts, self::get_default_settings_atts() );
-		$errors                        = $atts['errors'];
-		$message                       = $atts['message'];
-		$settings                      = FrmStrpLiteAppHelper::get_settings();
-		$stripe_connect_is_live        = FrmStrpLiteConnectHelper::stripe_connect_is_setup( 'live' );
-		$stripe_connect_is_on_for_test = FrmStrpLiteConnectHelper::stripe_connect_is_setup( 'test' );
-
+		$settings = FrmStrpLiteAppHelper::get_settings();
 		include FrmStrpLiteAppHelper::plugin_path() . '/views/settings/form.php';
-	}
-
-	/**
-	 * @return array
-	 */
-	private static function get_default_settings_atts() {
-		return array(
-			'errors'  => array(),
-			'message' => '',
-		);
 	}
 
 	/**
@@ -75,15 +62,9 @@ class FrmStrpLiteSettingsController {
 	 * @return void
 	 */
 	public static function process_form() {
-		$atts = array(
-			'errors'  => array(),
-			'message' => '',
-		);
-
 		$settings = FrmStrpLiteAppHelper::get_settings();
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$settings->update( $_POST );
+		$settings->update( wp_unslash( $_POST ) );
 		$settings->store();
 	}
-
 }

@@ -15,7 +15,8 @@ class FrmEntriesAJAXSubmitController {
 	 * @return void
 	 */
 	public static function ajax_create() {
-		self::fix_woocommerce_conflict(); // This is called before we exit early to cover the conflict in Pro as well.
+		// This is called before we exit early to cover the conflict in Pro as well.
+		self::fix_woocommerce_conflict();
 
 		if ( is_callable( 'FrmProEntriesController::ajax_create' ) ) {
 			// Let Pro handle AJAX Submit if it's available.
@@ -40,19 +41,20 @@ class FrmEntriesAJAXSubmitController {
 		);
 
 		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
+
 		if ( ! $form_id ) {
 			echo json_encode( $response );
 			wp_die();
 		}
 
 		$form = FrmForm::getOne( $form_id );
+
 		if ( ! $form ) {
 			echo json_encode( $response );
 			wp_die();
 		}
 
-		$is_ajax_on = FrmForm::is_ajax_on( $form );
-		if ( ! $is_ajax_on ) {
+		if ( ! FrmForm::is_ajax_on( $form ) ) {
 			// This continues in the Pro version as it is required for other features including in-place edit.
 			// In Lite, if AJAX submit is not on, just exit early as this function is getting called incorrectly.
 			echo json_encode( $response );
@@ -61,7 +63,32 @@ class FrmEntriesAJAXSubmitController {
 
 		$errors = FrmEntryValidate::validate( wp_unslash( $_POST ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-		if ( ! $errors ) {
+		if ( $errors ) {
+			$obj = array();
+
+			foreach ( $errors as $field => $error ) {
+				$field_id         = str_replace( 'field', '', $field );
+				$error            = self::maybe_modify_ajax_error( $error, $field_id, $form, $errors );
+				$obj[ $field_id ] = $error;
+			}
+
+			$response['errors']        = $obj;
+			$invalid_msg               = FrmFormsHelper::get_invalid_error_message(
+				array(
+					'form'   => $form,
+					'errors' => $errors,
+				)
+			);
+			$response['error_message'] = FrmFormsHelper::get_success_message(
+				array(
+					'message'  => $invalid_msg,
+					'form'     => $form,
+					'entry_id' => 0,
+					'class'    => FrmFormsHelper::form_error_class(),
+					'role'     => 'alert',
+				)
+			);
+		} else {
 			global $frm_vars;
 			$frm_vars['ajax']       = true;
 			$frm_vars['css_loaded'] = true;
@@ -76,33 +103,14 @@ class FrmEntriesAJAXSubmitController {
 			if ( ! empty( $frm_vars['forms_loaded'] ) ) {
 				ob_start();
 				self::print_ajax_scripts();
-				$response['content'] .= ob_get_contents();
-				ob_end_clean();
+				$response['content'] .= ob_get_clean();
 
 				// Mark the end of added footer content.
 				$response['content'] .= '<span class="frm_end_ajax_' . $form->id . '"></span>';
 			}
-		} else {
-			$obj = array();
-			foreach ( $errors as $field => $error ) {
-				$field_id         = str_replace( 'field', '', $field );
-				$error            = self::maybe_modify_ajax_error( $error, $field_id, $form, $errors );
-				$obj[ $field_id ] = $error;
-			}
+		}//end if
 
-			$response['errors']        = $obj;
-			$invalid_msg               = FrmFormsHelper::get_invalid_error_message( array( 'form' => $form ) );
-			$response['error_message'] = FrmFormsHelper::get_success_message(
-				array(
-					'message'  => $invalid_msg,
-					'form'     => $form,
-					'entry_id' => 0,
-					'class'    => FrmFormsHelper::form_error_class(),
-				)
-			);
-		}
-
-		$response = self::check_for_failed_form_submission( $response, $form->id );
+		$response = self::check_for_failed_form_submission( $response, $form );
 
 		echo json_encode( $response );
 		wp_die();
@@ -118,7 +126,7 @@ class FrmEntriesAJAXSubmitController {
 	private static function fix_woocommerce_conflict() {
 		add_action(
 			'wp_print_footer_scripts',
-			function() {
+			function () {
 				if ( ! function_exists( 'get_current_screen' ) ) {
 					require_once ABSPATH . 'wp-admin/includes/screen.php';
 				}
@@ -159,21 +167,27 @@ class FrmEntriesAJAXSubmitController {
 	 * @param string   $field_id
 	 * @param stdClass $form the form being submitted (not necessarily the field's form when embedded/repeated).
 	 * @param array    $errors all errors that were caught in this form submission, passed into the frm_before_replace_shortcodes filter for reference.
+	 *
 	 * @return string
 	 */
 	private static function maybe_modify_ajax_error( $error, $field_id, $form, $errors ) {
-		if ( false !== strpos( $field_id, '-' ) ) {
-			// repeated fields look like field_id-repeater_id-iteration, so pull the first value for the field id.
-			list( $use_field_id ) = explode( '-', $field_id );
-		} else {
-			$use_field_id = $field_id;
+		$sub_field = '';
+
+		if ( ! is_numeric( $field_id ) && preg_match( '/^(\d+)-([a-z]\w*)$/', $field_id, $matches ) ) {
+			// An error for a combo sub field, like 12-first. An empty one only flags the sub field.
+			if ( '' === $error ) {
+				return $error;
+			}
+
+			$field_id  = $matches[1];
+			$sub_field = $matches[2];
 		}
 
-		if ( ! is_numeric( $use_field_id ) ) {
+		if ( ! is_numeric( $field_id ) ) {
 			return $error;
 		}
 
-		$use_field = FrmField::getOne( $use_field_id );
+		$use_field = FrmField::getOne( $field_id );
 
 		if ( ! $use_field ) {
 			return $error;
@@ -184,7 +198,7 @@ class FrmEntriesAJAXSubmitController {
 
 		if ( false !== $error_body ) {
 			$error = str_replace( '[error]', $error, $error_body );
-			$error = str_replace( '[key]', $field_id, $error );
+			$error = str_replace( '[key]', $use_field['field_key'] . ( $sub_field ? '_' . $sub_field : '' ), $error );
 		}
 
 		return $error;
@@ -193,19 +207,35 @@ class FrmEntriesAJAXSubmitController {
 	/**
 	 * Confirm that the result of calling FrmFormsController::show_form added the failed message for a duplicate entry to the HTML.
 	 * If it did, move the message to the errors key instead of returning the content.
+	 * An empty error summary is included so the message has somewhere to show in the form.
 	 *
 	 * @since 6.2
 	 *
-	 * @param array      $response
-	 * @param string|int $form_id
+	 * @param array  $response
+	 * @param object $form
+	 *
 	 * @return array
 	 */
-	private static function check_for_failed_form_submission( $response, $form_id ) {
-		$frm_settings = FrmAppHelper::get_settings( array( 'current_form' => $form_id ) );
+	private static function check_for_failed_form_submission( $response, $form ) {
+		$frm_settings = FrmAppHelper::get_settings( array( 'current_form' => $form->id ) );
 
-		if ( false !== strpos( $response['content'], $frm_settings->failed_msg ) ) {
-			$response['errors']['failed'] = $frm_settings->failed_msg;
-			$response['content']          = '';
+		if ( '' === $frm_settings->failed_msg || ! str_contains( $response['content'], $frm_settings->failed_msg ) ) {
+			return $response;
+		}
+
+		$response['errors']['failed'] = $frm_settings->failed_msg;
+		$response['content']          = '';
+
+		if ( empty( $response['error_message'] ) ) {
+			$response['error_message'] = FrmFormsHelper::get_success_message(
+				array(
+					'message'  => '',
+					'form'     => $form,
+					'entry_id' => 0,
+					'class'    => FrmFormsHelper::form_error_class(),
+					'role'     => 'alert',
+				)
+			);
 		}
 
 		return $response;

@@ -1,0 +1,45 @@
+/**
+ * Reports Page styles
+ */
+
+#form_reports_page img.frm_no_reports {
+	max-width: 100%;
+}
+
+.frm_wrap .google-visualization-table .gradient,
+.frm_wrap .google-visualization-table-tr-head,
+.frm_wrap .google-visualization-table-tr-odd,
+.frm_wrap .google-visualization-table-tr-odd.google-visualization-table-tr-over {
+	background: var(--lightest-grey);
+}
+
+.frm_wrap .google-visualization-table-tr-over {
+	background: #fff;
+}
+
+.frm_wrap .google-visualization-table-table th,
+.frm_wrap .google-visualization-table-table td {
+	border-right-width: 0;
+	padding: 10px !important;
+}
+
+.frm_wrap .google-visualization-table-tr-head,
+.frm_wrap .google-visualization-table-tr-head th {
+	white-space: pre-wrap;
+	font-size: var(--text-md);
+	font-weight: 400 !important;
+	text-align: left;
+}
+
+.frm_wrap .google-visualization-table-td-number {
+	text-align: inherit;
+}
+
+#form_reports_page .postbox {
+	text-align: center;
+	float: none;
+	display: inline-block;
+	margin-right: 2%;
+	width: 20%;
+	min-width: 175px;
+}

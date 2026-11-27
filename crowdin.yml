@@ -1,0 +1,3 @@
+files:
+  - source: /languages/formidable.pot
+    translation: /languages/formidable-%locale_with_underscore%.po

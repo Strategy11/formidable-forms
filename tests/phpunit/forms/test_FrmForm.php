@@ -1,0 +1,298 @@
+<?php
+
+/**
+ * @group forms
+ *
+ * @covers FrmForm
+ */
+#[\PHPUnit\Framework\Attributes\Group( 'forms' )]
+#[\PHPUnit\Framework\Attributes\CoversClass( FrmForm::class )]
+class test_FrmForm extends FrmUnitTest {
+
+	public function setUp(): void {
+		parent::setUp();
+		$this->create_users();
+	}
+
+	public function test_partial_builder_save_preserves_unsubmitted_field_settings() {
+		$form_id   = $this->factory->form->create();
+		$edited    = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $form_id,
+				'type'    => 'text',
+			)
+		);
+		$untouched = $this->factory->field->create_and_get(
+			array(
+				'form_id'       => $form_id,
+				'type'          => 'text',
+				'name'          => 'Untouched field',
+				'default_value' => 'Keep this default',
+				'field_options' => array(
+					'classes'     => 'frm_half',
+					'placeholder' => 'Keep this placeholder',
+				),
+			)
+		);
+		$before    = FrmField::getOne( $untouched->id );
+		FrmForm::update_fields(
+			$form_id,
+			array(
+				'frm_fields_submitted' => array( $edited->id ),
+				'field_options'        => array( 'name_' . $edited->id => 'Changed field' ),
+			)
+		);
+
+		$this->assertSame( 'Changed field', FrmField::getOne( $edited->id )->name );
+		$after = FrmField::getOne( $untouched->id );
+		$this->assertSame( $before->name, $after->name );
+		$this->assertSame( $before->default_value, $after->default_value );
+		$this->assertSame( $before->field_options, $after->field_options );
+	}
+
+	public function test_create() {
+		$values  = FrmFormsHelper::setup_new_vars( false );
+		$form_id = FrmForm::create( $values );
+		$this->assertIsNumeric( $form_id );
+		$this->assertNotEmpty( $form_id );
+	}
+
+	public function test_duplicate() {
+		$form = $this->factory->form->get_object_by_id( $this->all_fields_form_key );
+		$id   = FrmForm::duplicate( $form->id );
+		$this->assertIsNumeric( $id );
+		$this->assertNotEmpty( $id );
+
+		// Check the number of form actions
+		$original_actions = FrmFormAction::get_action_for_form( $form->id );
+		$new_actions      = FrmFormAction::get_action_for_form( $id );
+		$this->assertCount( count( $original_actions ), $new_actions );
+	}
+
+	protected function _check_if_child_fields_duplicate( $old_child_forms, $new_child_forms ) {
+		// Just check the first form
+		$old_child_form = reset( $old_child_forms );
+		$new_child_form = reset( $new_child_forms );
+
+		// Get all fields in each form
+		$old_child_form_fields = FrmField::get_all_for_form( $old_child_form->id );
+		$new_child_form_fields = FrmField::get_all_for_form( $new_child_form->id );
+
+		// Check if there are the same number of child form fields in the duplicated child form
+		$this->assertCount( count( $old_child_form_fields ), $new_child_form_fields, 'When a form is duplicated, the fields in the repeating section are not duplicated correctly.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+	}
+
+	public function test_destroy() {
+		$forms = FrmForm::getAll();
+		$this->assertNotEmpty( count( $forms ) );
+
+		foreach ( $forms as $form ) {
+			if ( $form->is_template ) {
+				continue;
+			}
+
+			FrmForm::destroy( $form->id );
+			$form_exists = FrmForm::getOne( $form->id );
+			$this->assertNotInstanceOf( \stdClass::class, $form_exists, 'Failed to delete form ' . $form->form_key );
+
+			$subforms_exist = FrmForm::getAll( array( 'parent_form_id' => $form->id ) );
+			$this->assertEmpty( $subforms_exist, 'Failed to delete child forms for parent form ' . $form->form_key );
+		}
+	}
+
+	public function test_set_status() {
+		$form_id_1 = $this->factory->form->create();
+		$form_id_2 = $this->factory->form->create();
+
+		FrmForm::set_status( $form_id_1, 'draft' );
+		FrmForm::set_status( $form_id_2, 'draft' );
+
+		$this->assertSame( 'draft', FrmForm::getOne( $form_id_1 )->status );
+		$this->assertSame( 'draft', FrmForm::getOne( $form_id_2 )->status );
+
+		// An array of ids runs a single prepared query.
+		$result = FrmForm::set_status( array( $form_id_1, $form_id_2 ), 'published' );
+
+		$this->assertNotFalse( $result );
+		$this->assertSame( 'published', FrmForm::getOne( $form_id_1 )->status );
+		$this->assertSame( 'published', FrmForm::getOne( $form_id_2 )->status );
+	}
+
+	/**
+	 * @group visibility
+	 *
+	 * @see FrmForm::is_visible_to_user
+	 */
+	#[\PHPUnit\Framework\Attributes\Group( 'visibility' )]
+	public function test_is_form_visible_to_user() {
+		$this->assert_form_is_visible( 'administrator', 'editor', 'Administrator can view a form set to editor' );
+		$this->assert_form_is_hidden( 'editor', 'administrator', 'Editor cannot view form set to administrator' );
+		$this->assert_form_is_visible( 'editor', array( 'administrator', 'editor' ), 'Editor can view form set to both administrator and editor' );
+
+		// The Logged-In Users option is actually an empty string
+		$this->assert_form_is_visible( 'editor', '', 'Editor can view form set to logged in users' );
+		$this->assert_form_is_visible( 'subscriber', '', 'Subscriber can view form set to logged in users' );
+		$this->assert_form_is_visible( 'subscriber', '', 'Subscriber can view form set to logged in users' );
+		$this->assert_form_is_hidden( 'loggedout', '', 'Logged out user cannot view form set to logged in users' );
+
+		$this->assert_form_is_hidden( 'loggedout', 'editor', 'Logged out user cannot view form set to editors' );
+
+		// Array options are expected to only match directly
+		$this->assert_form_is_hidden( 'editor', array( 'subscriber' ), 'Editors should not set a form assigned to subscribers' );
+		$this->assert_form_is_hidden( 'editor', array( 'contributor', 'author' ), 'Editors should not set a form assigned to contributors and authors' );
+		$this->assert_form_is_hidden( 'subscriber', array( 'editor', 'author' ), 'Contributors should not set a form assigned to editors and authors' );
+		$this->assert_form_is_hidden( 'subscriber', array( 'author', 'administrator' ), 'Contributors should not set a form assigned to authors and administrators' );
+
+		// Test custom roles
+		$this->assert_form_is_visible( 'formidable_custom_role', 'formidable_custom_role', 'Custom role should be able to see a form assigned to it' );
+		$this->assert_form_is_visible( 'formidable_custom_role', '', 'Custom role should be able to see a form assigned to logged in users' );
+		$this->assert_form_is_hidden( 'formidable_custom_role', array( 'administrator' ), 'Custom role should not be able to see a form not assigned to it' );
+		$this->assert_form_is_hidden( 'formidable_custom_role', array( 'editor', 'subscriber' ), 'Custom role should not be able to see a form not assigned to it' );
+	}
+
+	/**
+	 * @param string       $capability
+	 * @param array|string $visibility
+	 *
+	 * @return bool
+	 */
+	private function form_is_visible( $capability, $visibility ) {
+		$form = FrmForm::getOne( 'contact-db12' );
+
+		$this->use_frm_role( $capability );
+
+		$form->logged_in                 = 1;
+		$form->options['logged_in_role'] = $visibility;
+		return FrmForm::is_visible_to_user( $form );
+	}
+
+	/**
+	 * @param string       $capability
+	 * @param array|string $visibility
+	 * @param string       $message
+	 */
+	private function assert_form_is_visible( $capability, $visibility, $message = '' ) {
+		$this->assertTrue( $this->form_is_visible( $capability, $visibility ), $message );
+	}
+
+	/**
+	 * @param string       $capability
+	 * @param array|string $visibility
+	 * @param string       $message
+	 */
+	private function assert_form_is_hidden( $capability, $visibility, $message = '' ) {
+		$this->assertFalse( $this->form_is_visible( $capability, $visibility ), $message );
+	}
+
+	public function test_sanitize_field_opt() {
+		$this->assert_sanitize_field_opt_calc( '', '<div></div>', 'HTML should be stripped from calculations' );
+
+		$original_value = '[189] > 1 && [189] < 5 ? 20 : [189] > 5 && [189] < 8 ? 21 : 0';
+		$this->assert_sanitize_field_opt_calc( $original_value, $original_value, 'comparisons should not be detected as unsafe html tags' );
+
+		$safe_less_than_comparison = '50 < 100 ? 1 : 0';
+		$this->assert_sanitize_field_opt_calc( $safe_less_than_comparison, $safe_less_than_comparison );
+		$this->assert_sanitize_field_opt_calc( $safe_less_than_comparison, '50<100 ? 1 : 0', 'unspaced comparisons will be padded by a space to avoid strip_tags issues.' );
+		$this->assert_sanitize_field_opt_calc( $safe_less_than_comparison, '50 <100 ? 1 : 0' );
+		$this->assert_sanitize_field_opt_calc( $safe_less_than_comparison, '50< 100 ? 1 : 0' );
+
+		$original_value = '50>100 ? 1 : 0';
+		$this->assert_sanitize_field_opt_calc( $original_value, $original_value, 'greater than comparisons do not get stripped, so they do not get any additional string padding.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+
+		$original_value = '50 >100 ? 1 : 0';
+		$this->assert_sanitize_field_opt_calc( $original_value, $original_value );
+
+		$safe_less_than_equals_comparison = '50 <= 100 ? 1 : 0';
+		$this->assert_sanitize_field_opt_calc( $safe_less_than_equals_comparison, $safe_less_than_equals_comparison );
+		$this->assert_sanitize_field_opt_calc( '50 <= 100 ? 1 : 0', '50<=100 ? 1 : 0' );
+
+		$original_value = '50 >=100 ? 1 : 0';
+		$this->assert_sanitize_field_opt_calc( $original_value, $original_value );
+
+		$original_value = '50>= 100 ? 1 : 0';
+		$this->assert_sanitize_field_opt_calc( $original_value, $original_value );
+
+		$original_value = '50>=100 ? 1 : 0';
+		$this->assert_sanitize_field_opt_calc( $original_value, $original_value );
+	}
+
+	/**
+	 * @param string $expected
+	 * @param string $original_value
+	 * @param string $message
+	 */
+	private function assert_sanitize_field_opt_calc( $expected, $original_value, $message = '' ) {
+		$value = $original_value;
+		$this->sanitize_field_opt( 'calc', $value );
+		$this->assertSame( $expected, $value, $message );
+	}
+
+	/**
+	 * @param string $opt
+	 */
+	private function sanitize_field_opt( $opt, &$value ) {
+		return $this->run_private_method(
+			array( 'FrmForm', 'sanitize_field_opt' ),
+			array( $opt, &$value )
+		);
+	}
+
+	public function test_normalize_calc_spaces() {
+		$this->assertSame( '5 < 10', $this->normalize_calc_spaces( '5<10' ) );
+		$this->assertSame( '5 < 10', $this->normalize_calc_spaces( '5 <10' ) );
+		$this->assertSame( '5 < 10', $this->normalize_calc_spaces( '5< 10' ) );
+		$this->assertSame( '1 < 2 && 3 < 4 && 5 < 6', $this->normalize_calc_spaces( '1<2 && 3<4 && 5<6' ) );
+		$this->assertSame( '5 <= 10', $this->normalize_calc_spaces( '5<=10' ) );
+		$this->assertSame( '5 <= 10', $this->normalize_calc_spaces( '5 <=10' ) );
+		$this->assertSame( '5 <= 10', $this->normalize_calc_spaces( '5<= 10' ) );
+		$this->assertSame( '1 <= 2 && 3 <= 4 && 5 <= 6', $this->normalize_calc_spaces( '1<=2 && 3<=4 && 5<=6' ) );
+	}
+
+	/**
+	 * @param string $calc
+	 */
+	private function normalize_calc_spaces( $calc ) {
+		return $this->run_private_method( array( 'FrmForm', 'normalize_calc_spaces' ), array( $calc ) );
+	}
+
+	public function test_getName() {
+		$form_name = 'Test form';
+		$form_id   = $this->factory->form->create( array( 'name' => $form_name ) );
+		$name      = FrmForm::getName( (string) $form_id );
+		$this->assertSame( $form_name, $name );
+	}
+
+	public function test_getOne() {
+		// Test to make sure a form with no options column value still has an array $form->options value.
+		$form_id = $this->create_a_form_with_an_empty_options_column();
+		$form    = FrmForm::getOne( $form_id );
+		$this->assertIsArray( $form->options );
+		$this->assertArrayHasKey( 'custom_style', $form->options );
+
+		// Test a regular form. $form->options should be an array and it should not be empty.
+		$form = FrmForm::getOne( 'contact-with-email' );
+		$this->assertIsArray( $form->options );
+		$this->assertNotEmpty( $form->options );
+	}
+
+	/**
+	 * Create a form with no options column value.
+	 *
+	 * @return int
+	 */
+	private function create_a_form_with_an_empty_options_column() {
+		global $wpdb;
+		$form_id = $this->factory->form->create();
+		$wpdb->update(
+			$wpdb->prefix . 'frm_forms',
+			array(
+				'options' => '',
+			),
+			array(
+				'id' => $form_id,
+			)
+		);
+		FrmForm::clear_form_cache();
+		return $form_id;
+	}
+}
