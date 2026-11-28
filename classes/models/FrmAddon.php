@@ -239,22 +239,21 @@ class FrmAddon {
 		}
 
 		$item_id = $this->download_id;
+		$addon   = array();
 
 		if ( $item_id ) {
 			$api = new FrmFormApi( $this->license );
 
-			// Force new API info so we can pull changelog data.
 			// Change log data is intentionally omitted from the cached API response
-			// To help reduce the size of the autoloaded option.
-			$api->force_api_request();
-			$plugins = $api->get_api_info();
+			// To help reduce the size of the autoloaded option, so it is requested separately.
+			$addon = $api->get_addon_with_changelog( $item_id );
 
-			if ( $plugins ) {
-				$_data = $plugins[ $item_id ];
+			if ( $addon ) {
+				$_data = $addon;
 			}
 		}
 
-		if ( empty( $plugins ) ) {
+		if ( ! $addon ) {
 			$_data = array(
 				'name'      => $this->plugin_name,
 				'excerpt'   => '',
