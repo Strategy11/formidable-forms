@@ -27,6 +27,24 @@ class FrmTransLiteAppHelper {
 	}
 
 	/**
+	 * Check if Pro still renders an address setting that Lite is able to render itself.
+	 *
+	 * Older versions of Pro render the address and shipping settings for Lite payment actions.
+	 * Newer versions of Pro check if this method exists, and stop registering their callbacks
+	 * when it does, so Lite renders these settings instead.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $hook     The action Pro hooks into.
+	 * @param string $callback The Pro callback that renders the setting.
+	 *
+	 * @return bool
+	 */
+	public static function pro_renders_address_setting( $hook, $callback ) {
+		return false !== has_action( $hook, $callback );
+	}
+
+	/**
 	 * Check if the payments table has been created.
 	 * This includes either the frm_trans_db_version option (used in Stripe Lite and the Payments submodule) or frm_pay_db_version option (from the PayPal add on).
 	 *
