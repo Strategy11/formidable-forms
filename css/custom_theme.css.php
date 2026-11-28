@@ -761,10 +761,17 @@ legend.frm_hidden{
 <?php } ?>
 
 <?php
+$style_css_merger = new FrmStyleCssMerger();
+
 foreach ( $styles as $style ) {
+	ob_start();
 	include __DIR__ . '/_single_theme.css.php';
+	$style_css_merger->add_style( 'frm_style_' . $style->post_name, ob_get_clean() );
 	unset( $style );
 }
+
+echo $style_css_merger->get_css(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+unset( $style_css_merger );
 
 // Set it again since it may have been overridden.
 $important = ! empty( $defaults['important_style'] ) ? ' !important' : '';
