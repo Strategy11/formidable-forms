@@ -8,12 +8,14 @@ class FrmField {
 	/**
 	 * Version of the persistent field write hooks available to derived indexes.
 	 *
-	 * Version 1 covers frm_field_created and frm_field_updated, plus frm_field_order_updated for
+	 * Covers frm_field_created and frm_field_updated, plus frm_field_order_updated for
 	 * builder saves that write the field order of many fields in one query without frm_field_updated.
+	 * Version 2 passes the previous form ID to frm_field_updated, so a field moved
+	 * between forms can refresh both forms.
 	 *
 	 * @since 7.1
 	 */
-	const WRITE_HOOKS_VERSION = 1;
+	const WRITE_HOOKS_VERSION = 2;
 
 	/**
 	 * @var bool
@@ -868,6 +870,12 @@ class FrmField {
 			$values['default_value'] = json_encode( $values['default_value'] );
 		}
 
+		$previous_form_id = 0;
+
+		if ( isset( $values['form_id'] ) ) {
+			$previous_form_id = (int) self::get_type( $id, 'form_id' );
+		}
+
 		$query_results = $wpdb->update( $wpdb->prefix . 'frm_fields', $values, array( 'id' => $id ) );
 		$form_id       = 0;
 
@@ -884,11 +892,7 @@ class FrmField {
 		unset( $values );
 
 		if ( $query_results ) {
-			wp_cache_delete( $id, 'frm_field' );
-
-			if ( $form_id ) {
-				self::delete_form_transient( $form_id );
-			}
+			self::clear_cache_after_update( $id, $form_id, $previous_form_id );
 		}
 
 		if ( false !== $query_results ) {
@@ -898,11 +902,36 @@ class FrmField {
 			 * @since 7.1
 			 *
 			 * @param int $id Updated field ID.
+			 * @param int $previous_form_id Previous form ID when the update includes form_id, otherwise zero.
 			 */
-			do_action( 'frm_field_updated', $id );
+			do_action( 'frm_field_updated', $id, $previous_form_id );
 		}
 
 		return $query_results;
+	}
+
+	/**
+	 * Clear cached field data after a field row changes.
+	 *
+	 * @since x.x
+	 *
+	 * @param int        $id               Updated field ID.
+	 * @param int|string $form_id          Form ID the field belongs to after the update.
+	 * @param int        $previous_form_id Form ID before the update when form_id was updated, otherwise zero.
+	 *
+	 * @return void
+	 */
+	private static function clear_cache_after_update( $id, $form_id, $previous_form_id ) {
+		wp_cache_delete( $id, 'frm_field' );
+
+		if ( $form_id ) {
+			self::delete_form_transient( $form_id );
+		}
+
+		if ( $previous_form_id && $previous_form_id !== (int) $form_id ) {
+			// The field moved, so the source form's cached field list is stale too.
+			self::delete_form_transient( $previous_form_id );
+		}
 	}
 
 	/**
