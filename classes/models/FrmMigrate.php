@@ -440,7 +440,7 @@ class FrmMigrate {
 			return;
 		}
 
-		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98, 101, 104, 105, 107 );
+		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98, 101, 104, 105, 107, 108 );
 
 		foreach ( $migrations as $migration ) {
 			if ( FrmAppHelper::$db_version < $migration || $old_db_version >= $migration ) {
@@ -552,6 +552,17 @@ class FrmMigrate {
 		foreach ( $gateways as $gateway ) {
 			delete_option( 'frm_' . $gateway . '_lite_last_verify_attempt' );
 		}
+	}
+
+	/**
+	 * Save the site URL for Stripe connections made before it was tracked, so a copied database can be detected.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private function migrate_to_108() {
+		FrmStrpLiteConnectHelper::save_missing_connected_site_urls();
 	}
 
 	/**

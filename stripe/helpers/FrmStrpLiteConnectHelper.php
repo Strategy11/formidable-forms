@@ -148,7 +148,7 @@ class FrmStrpLiteConnectHelper {
 	}
 
 	/**
-	 * @param string $key 'account_id', 'client_password', 'server_password', 'details_submitted'.
+	 * @param string $key 'account_id', 'client_password', 'server_password', 'details_submitted', 'site_url'.
 	 * @param string $mode either 'auto', 'live', or 'test'.
 	 *
 	 * @return string
@@ -194,6 +194,55 @@ class FrmStrpLiteConnectHelper {
 	}
 
 	/**
+	 * Save the current site URL as the URL this Stripe connection belongs to.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $mode 'live' or 'test'.
+	 *
+	 * @return void
+	 */
+	private static function save_connected_site_url( $mode ) {
+		update_option( self::get_strp_connect_option_name( 'site_url', $mode ), self::get_site_url_for_connect_server(), false );
+	}
+
+	/**
+	 * Save the current site URL for connections made before it was tracked. This runs from the database upgrade.
+	 * It is best-effort, since a database copied before the update records the URL of the copy instead.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function save_missing_connected_site_urls() {
+		foreach ( array( 'test', 'live' ) as $mode ) {
+			if ( self::get_account_id( $mode ) && ! get_option( self::get_strp_connect_option_name( 'site_url', $mode ) ) ) {
+				self::save_connected_site_url( $mode );
+			}
+		}
+	}
+
+	/**
+	 * Get the site URL saved on connect when it no longer matches, usually because the database was copied from another site.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $mode 'live' or 'test'.
+	 *
+	 * @return false|string The site URL the account was connected on, or false when it matches or no URL is saved. A trailing slash (WPML can add one) is ignored.
+	 */
+	public static function get_mismatched_site_url( $mode ) {
+		$connected_url = self::get_account_id( $mode ) ? get_option( self::get_strp_connect_option_name( 'site_url', $mode ) ) : false;
+
+		// The database upgrade saves a URL for older connections. Without one there is nothing to compare.
+		if ( ! $connected_url || ! is_string( $connected_url ) ) {
+			return false;
+		}
+
+		return untrailingslashit( $connected_url ) === untrailingslashit( self::get_site_url_for_connect_server() ) ? false : $connected_url;
+	}
+
+	/**
 	 * @return string
 	 */
 	private static function get_url_to_connect_server() {
@@ -221,6 +270,7 @@ class FrmStrpLiteConnectHelper {
 		delete_option( self::get_server_side_token_option_name( $mode ) );
 		delete_option( self::get_client_side_token_option_name( $mode ) );
 		delete_option( self::get_stripe_details_submitted_option_name( $mode ) );
+		delete_option( self::get_strp_connect_option_name( 'site_url', $mode ) );
 	}
 
 	/**
@@ -331,6 +381,7 @@ class FrmStrpLiteConnectHelper {
 
 		if ( is_object( $data ) && ! empty( $data->account_id ) ) {
 			update_option( self::get_account_id_option_name( $mode ), $data->account_id, false );
+			self::save_connected_site_url( $mode );
 
 			if ( ! empty( $data->details_submitted ) ) {
 				self::set_stripe_details_as_submitted( $mode );
@@ -473,18 +524,29 @@ class FrmStrpLiteConnectHelper {
 			$password = 'lite_' . self::get_uuid();
 		}
 
+		$site_url = self::get_site_url_for_connect_server();
+
+		// $password is either a Pro license or a uuid (See FrmUsage::uuid).
+		return array(
+			'Authorization' => 'Basic ' . base64_encode( $site_url . ':' . $password ),
+		);
+	}
+
+	/**
+	 * Get the site URL the way the connect server identifies this site.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	private static function get_site_url_for_connect_server() {
 		$site_url = home_url();
 		$site_url = self::maybe_fix_wpml_url( $site_url );
 		// Remove protocol from url (our url cannot include the colon).
 		$site_url = preg_replace( '#^https?://#', '', $site_url );
 		// Remove port from url (mostly helpful in development).
 		$site_url = preg_replace( '/:[0-9]+/', '', $site_url );
-		$site_url = self::strip_lang_from_url( $site_url );
-
-		// $password is either a Pro license or a uuid (See FrmUsage::uuid).
-		return array(
-			'Authorization' => 'Basic ' . base64_encode( $site_url . ':' . $password ),
-		);
+		return self::strip_lang_from_url( $site_url );
 	}
 
 	/**
@@ -579,10 +641,12 @@ class FrmStrpLiteConnectHelper {
 		$html  = '';
 
 		foreach ( $modes as $mode ) {
-			$account_id = self::get_account_id( $mode );
-			$connected  = self::stripe_connect_is_setup( $mode );
-			$test       = 'test' === $mode;
-			$title      = $test ? __( 'TEST', 'formidable' ) : __( 'LIVE', 'formidable' );
+			$account_id     = self::get_account_id( $mode );
+			$connected      = self::stripe_connect_is_setup( $mode );
+			$test           = 'test' === $mode;
+			$title          = $test ? __( 'TEST', 'formidable' ) : __( 'LIVE', 'formidable' );
+			$mismatched_url = self::get_mismatched_site_url( $mode );
+			$current_url    = self::get_site_url_for_connect_server();
 
 			ob_start();
 			require FrmStrpLiteAppHelper::plugin_path() . '/views/settings/connect.php';
