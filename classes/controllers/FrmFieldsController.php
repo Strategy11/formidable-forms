@@ -549,8 +549,10 @@ class FrmFieldsController {
 
 		$field = FrmFieldsHelper::setup_edit_vars( $field );
 
-		$opts = FrmAppHelper::get_param( 'opts', '', 'post', 'wp_kses_post' );
+		// Sanitize line by line. An unclosed tag in one line must not drop the lines after it.
+		$opts = FrmAppHelper::get_param( 'opts', '', 'post' );
 		$opts = explode( "\n", rtrim( $opts, "\n" ) );
+		$opts = array_map( 'wp_kses_post', $opts );
 		$opts = array_map( 'trim', $opts );
 
 		$separate                = FrmAppHelper::get_param( 'separate', '', 'post', 'sanitize_text_field' );
