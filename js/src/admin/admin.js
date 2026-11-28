@@ -16,6 +16,7 @@ const { getFieldLoadBatch } = require( './fieldLoadWeights' );
 const { hydrateFieldPlaceholders } = require( './fieldPlaceholders' );
 const { renderDropdownPreview, updateComboSelectPreview, updateAddressPreview } = require( './fieldPreview' );
 const { captureFieldSettings, applyFieldSettings, restoreFieldSettingValues } = require( './duplicateFieldSettings' );
+const { groupCopiesBySourceRow, copiedRowsNeedRestore } = require( './duplicateSectionLayout' );
 const { addFieldSettingsMetadata, cacheFieldSettings, forgetFieldSettings, materializeFieldSettings, materializeAllFieldSettings, setPendingFieldSetting } = require( './deferredFieldSettings' );
 const { hydrateFieldPreviews, renderFieldPreviews, getFieldsWithLogicOn, PENDING_PREVIEW_CLASS } = require( './fieldPreviews' );
 const { queueFieldPreview, renderFieldPreviewNow, forgetFieldPreview, setInitialFieldPreviews } = require( './fieldPreviewQueue' );
@@ -3571,6 +3572,13 @@ window.frmAdminBuildJS = function() {
 		closeOpenFieldDropdowns();
 		const fieldId = $field.data( 'fid' );
 		const children = fieldsInSection( fieldId );
+		const childLayouts = new Map( children.map( id => [
+			String( id ),
+			{
+				row: document.getElementById( `frm_field_id_${ id }` )?.parentElement,
+				classes: document.getElementById( `frm_classes_${ id }` )?.value
+			}
+		] ) );
 		const originalSettings = ensureFieldSettings( fieldId );
 		if ( originalSettings ) {
 			hydrateBuilderSelectsIn( originalSettings );
@@ -3616,6 +3624,7 @@ window.frmAdminBuildJS = function() {
 						}
 						afterAddField( msg, false );
 						maybeDuplicateUnsavedSettings( settingsSnapshot, duplicatedFieldId );
+						restoreDuplicatedSectionLayout( duplicatedFieldId, childLayouts );
 						setLayoutClassesForDuplicatedFieldInGroup( $field[ 0 ], document.getElementById( `frm_field_id_${ duplicatedFieldId }` ) );
 						jQuery( newRow ).trigger(
 							'frm_added_duplicated_field_to_row',
@@ -3642,12 +3651,78 @@ window.frmAdminBuildJS = function() {
 
 				afterAddField( msg, false );
 				maybeDuplicateUnsavedSettings( settingsSnapshot, duplicatedFieldId );
+				restoreDuplicatedSectionLayout( duplicatedFieldId, childLayouts );
 				toggleOneSectionHolder( replaceWith.find( '.start_divider' ) );
 				$field[ 0 ].querySelector( '.frm-dropdown-menu.dropdown-menu-right' )?.classList.remove( 'show' );
 				setLayoutClassesForDuplicatedFieldInGroup( $field[ 0 ], document.getElementById( `frm_field_id_${ duplicatedFieldId }` ) );
 			}
 		} );
 		return false;
+	}
+
+	/**
+	 * Restore the live row layout and CSS classes on the copied Section's children.
+	 *
+	 * @since x.x
+	 * @param {number} sectionId The copied Section ID.
+	 * @param {Map}    layouts   Source child IDs and their builder layout at duplication time.
+	 * @return {void}
+	 */
+	function restoreDuplicatedSectionLayout( sectionId, layouts ) {
+		if ( ! layouts.size ) {
+			return;
+		}
+
+		const section = document.getElementById( `frm_field_id_${ sectionId }` );
+		if ( ! section ) {
+			return;
+		}
+
+		const copies = new Map();
+		section.querySelectorAll( 'li.form-field[data-duplicated-from-id]' ).forEach( field => {
+			copies.set( field.dataset.duplicatedFromId, field );
+		} );
+
+		restoreDuplicatedSectionRows( layouts, copies );
+
+		copies.forEach( ( field, sourceId ) => {
+			const classes = layouts.get( sourceId )?.classes;
+			const input = document.getElementById( `frm_classes_${ field.dataset.fid }` );
+			if ( classes !== undefined && input && input.value !== classes ) {
+				moveFieldSettings( input.closest( '.frm-single-settings' ) );
+				input.value = classes;
+				input.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+			}
+		} );
+	}
+
+	/**
+	 * Match the copied rows to the source rows when the builder has unsaved moves.
+	 *
+	 * @since x.x
+	 * @param {Map} layouts Source child IDs and their builder layout.
+	 * @param {Map} copies  Source child IDs and their copied fields.
+	 * @return {void}
+	 */
+	function restoreDuplicatedSectionRows( layouts, copies ) {
+		groupCopiesBySourceRow( layouts, copies, isFieldGroup ).forEach( ( rows, section ) => {
+			const currentRows = [ ...section.querySelectorAll(
+				':scope > li.frm_field_box:not(.form-field) > ul.frm_sorting'
+			) ];
+			const desiredRows = [ ...rows.values() ];
+			const currentFields = currentRows.map( row => [ ...row.querySelectorAll( ':scope > li.form-field' ) ] );
+			if ( ! copiedRowsNeedRestore( currentFields, desiredRows ) ) {
+				return;
+			}
+
+			desiredRows.forEach( ( [ first, ...remaining ] ) => {
+				currentRows[ 0 ].parentElement.before( first );
+				wrapFieldLiInPlace( first );
+				first.after( ...remaining );
+			} );
+			currentRows.forEach( row => row.parentElement.remove() );
+			updateFieldOrder();
+		} );
 	}
 
 	/**
